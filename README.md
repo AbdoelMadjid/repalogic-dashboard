@@ -36,6 +36,14 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+<table align="center" width="100%" height="100%" >
+   <tr>
+     <td>
+<p align="center"><a href="https://webapplayers.com/inspinia/" target="_blank"><img src="https://webapplayers.com/inspinia/bootstrap/assets/images/logo-black.png" width="400" alt="Inspinia Logo"></a></p>
+     </td>
+   </tr>
+</table>
+
 ## About Repalogic Dashboard
 
 ## License
