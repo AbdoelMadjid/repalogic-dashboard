@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="sidebar-with-line">
 
 <head>
     <meta charset="utf-8" />
@@ -1073,10 +1073,15 @@
                                 </a>
 
                                 <!-- Logout -->
-                                <a href="javascript:void(0);" class="dropdown-item text-danger fw-semibold">
-                                    <i class="ti ti-logout me-1 fs-lg align-middle"></i>
-                                    <span class="align-middle">Log Out</span>
+                                <a href="javascript:void(0);" class="dropdown-item text-danger fw-semibold"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="ti ti-logout-2 me-2 fs-17 align-middle"></i>
+                                    <span class="align-middle" data-lang="topbar-user-log-out">Log Out</span>
                                 </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                    style="display: none;">
+                                    @csrf
+                                </form>
                             </div>
                         </div>
                     </div>

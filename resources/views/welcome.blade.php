@@ -64,7 +64,7 @@
     @include('website.partials._offcanvas')
 
     <!-- end offcanvas-->
-
+    @include('website.partials._js')
 </body>
 
 </html>
