@@ -24,6 +24,8 @@
 <br/>
 <img src="https://cdn.jsdelivr.net/gh/ViratiAkiraNandhanReddy/pixel-art-readme-gifs@v1.0.0/gifs/hrzn/365cfaf1-c31d-468b-b276-8c39756b5951.gif" width="100%" alt="pixel-art-readme-gifs">
 
+<img src="https://user-images.githubusercontent.com/74038190/212747919-84b68444-0d81-46db-a338-7ec50e9dd4cd.gif" width="100%" alt="pixel-art-readme-gifs">
+
 <table align="center" width="100%" height="100%" >
    <tr>
      <td><p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p></td>
