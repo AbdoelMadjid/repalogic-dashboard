@@ -25,6 +25,7 @@
 <p align="center"><a href="https://webapplayers.com/inspinia/" target="_blank"><img src="https://webapplayers.com/inspinia/bootstrap/assets/images/logo-black.png" width="400" alt="Inspinia Logo"></a></p>
 
 <br/>
+<img src="https://cdn.jsdelivr.net/gh/ViratiAkiraNandhanReddy/pixel-art-readme-gifs@v1.0.0/gifs/hrzn/055ac52e-9391-4728-ba18-01d41fe302cc.gif" width="100%" alt="pixel-art-readme-gifs">
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
