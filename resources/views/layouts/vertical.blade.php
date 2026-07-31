@@ -11,6 +11,7 @@
     <head>
         @include('layouts.partials/title-meta')
 
+        @yield('css')
         @yield('styles')
 
         @include('layouts.partials/head-css')
