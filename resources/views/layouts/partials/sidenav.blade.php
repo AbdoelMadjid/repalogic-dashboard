@@ -98,12 +98,11 @@
                         <span class="menu-text" data-lang="dashboards">Dashboard</span>
                     </a>
                 </li>
-                @include('layouts.partials.mainmenu.main')
-                @include('layouts.partials.mainmenu.apps')
-                @include('layouts.partials.mainmenu.custom-pages')
-                @include('layouts.partials.mainmenu.layouts')
-                @include('layouts.partials.mainmenu.components')
-                @include('layouts.partials.mainmenu.menu-item')
+                @foreach (['main', 'apps', 'custom-pages', 'layouts', 'components', 'menu-item'] as $groupKey)
+                    @if ($groupConfig = config("sidenav-template.$groupKey"))
+                        @include('layouts.partials.mainmenu._render', ['menuGroup' => $groupConfig])
+                    @endif
+                @endforeach
 
                 <li class="side-nav-item">
                     <a href="#" class="side-nav-link disabled">

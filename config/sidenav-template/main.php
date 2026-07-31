@@ -32,6 +32,7 @@ return [
             'data_lang' => 'landing',
             'icon' => 'ti ti-rocket',
             'route' => 'template.main.landing',
+            'target' => '_blank',
         ],
     ],
 ];
