@@ -282,5 +282,35 @@
                 emptyState.classList.toggle('d-none', hasVisibleItem);
             }
         });
+
+        const centerActiveMenuItem = () => {
+            const activeLinks = Array.from(sideNav.querySelectorAll('a.active, a.side-nav-link.active'));
+            if (activeLinks.length === 0) return;
+
+            const targetActiveLink = activeLinks[activeLinks.length - 1];
+            const scrollContainer = document.querySelector('.sidenav-menu .simplebar-content-wrapper') ||
+                                    document.querySelector('.sidenav-menu .scrollbar') ||
+                                    document.querySelector('.sidenav-menu');
+
+            if (!targetActiveLink || !scrollContainer) return;
+
+            const containerRect = scrollContainer.getBoundingClientRect();
+            const itemRect = targetActiveLink.getBoundingClientRect();
+
+            const relativeItemTop = itemRect.top - containerRect.top + scrollContainer.scrollTop;
+            const targetScrollTop = relativeItemTop - (containerRect.height / 2) + (itemRect.height / 2);
+
+            scrollContainer.scrollTo({
+                top: Math.max(0, targetScrollTop),
+                behavior: 'smooth'
+            });
+        };
+
+        setTimeout(centerActiveMenuItem, 350);
+        setTimeout(centerActiveMenuItem, 700);
+
+        window.addEventListener('resize', () => {
+            setTimeout(centerActiveMenuItem, 150);
+        });
     });
 </script>
