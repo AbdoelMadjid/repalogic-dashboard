@@ -1,6 +1,10 @@
-<!DOCTYPE html>
-
-<html @yield('html_attribute') data-layout="topnav">
+@php
+    $htmlAttributeSection = trim($__env->yieldContent('html_attribute'));
+    $htmlAttributes = str_contains($htmlAttributeSection, 'data-layout=')
+        ? $htmlAttributeSection
+        : trim('data-layout="topnav" ' . $htmlAttributeSection);
+@endphp
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" {!! $htmlAttributes !!}>
 
 <head>
     @include('layouts.partials/title-meta')
