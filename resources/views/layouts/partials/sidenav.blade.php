@@ -169,6 +169,19 @@
         font-size: 12px;
         line-height: 1.2;
     }
+
+    .side-nav-item .side-nav-link {
+        position: relative;
+    }
+
+    .side-nav-item .side-nav-link .menu-badge-has-arrow,
+    .side-nav-item .side-nav-link .menu-badge-single,
+    .side-nav-item .side-nav-link .badge {
+        position: absolute;
+        right: 36px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
 </style>
 
 <script>

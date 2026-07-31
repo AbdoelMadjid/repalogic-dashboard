@@ -313,7 +313,7 @@
                                             <!-- end col-->
 
                                             <div class="col-sm-4">
-                                                <div class="h-100 position-relative rounded-end rounded-0 overflow-hidden" style="background: url(assets/images/stock/small-8.jpg); background-size: cover">
+                                                <div class="h-100 position-relative rounded-end rounded-0 overflow-hidden" style="background: url('{{ asset('assets/images/stock/small-8.jpg') }}'); background-size: cover">
                                                     <div class="p-3 card-img-overlay bg-gradient bg-secondary bg-opacity-90 d-flex align-items-center justify-content-center">
                                                         <div class="text-center text-white">
                                                             <i class="ti ti-atom fs-36"></i>
@@ -1008,7 +1008,7 @@
     </button>
 
     <div class="scrollbar" data-simplebar="">
-        <div id="user-profile-settings" class="sidenav-user" style="background: url(assets/images/user-bg-pattern.svg)">
+        <div id="user-profile-settings" class="sidenav-user" style="background: url('{{ asset('assets/images/user-bg-pattern.svg') }}')">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <a href="#!" class="link-reset">
@@ -2894,7 +2894,7 @@
         <!-- END wrapper -->
 
         <div class="offcanvas offcanvas-end overflow-hidden" tabindex="-1" id="theme-settings-offcanvas">
-            <div class="d-flex justify-content-between text-bg-primary gap-2 p-3" style="background-image: url(assets/images/settings-bg.png)">
+            <div class="d-flex justify-content-between text-bg-primary gap-2 p-3" style="background-image: url('{{ asset('assets/images/settings-bg.png') }}')">
                 <div>
                     <h5 class="mb-1 fw-bold text-white text-uppercase">Admin Customizer</h5>
                     <p class="text-white text-opacity-75 fst-italic fw-medium mb-0">Easily configure layout, styles, and preferences for your admin interface.</p>

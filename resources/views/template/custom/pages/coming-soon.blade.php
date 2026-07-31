@@ -90,7 +90,7 @@
                     <!-- End Content -->
                 </div>
                 <div class="col">
-                    <div class="h-100 position-relative card-side-img rounded-0 overflow-hidden" style="background-image: url(&quot;assets/images/auth.jpg&quot;)">
+                    <div class="h-100 position-relative card-side-img rounded-0 overflow-hidden" style="background-image: url('{{ asset('assets/images/auth.jpg') }}')">
                         <div class="p-4 card-img-overlay auth-overlay d-flex align-items-end justify-content-center"></div>
                     </div>
                 </div>

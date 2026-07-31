@@ -876,7 +876,7 @@
 
     <section>
         <div class="section-cta position-relative card-side-img overflow-hidden"
-            style="background-image: url(assets/images/landing-cta.jpg)">
+            style="background-image: url('{{ asset('assets/images/landing-cta.jpg') }}')">
             <div
                 class="card-img-overlay d-flex align-items-center flex-column gap-3 justify-content-center auth-overlay text-center">
                 <h3 class="text-white fs-24 mb-0 fw-bold">Build Faster with Our Premium Admin Template</h3>
@@ -1437,7 +1437,7 @@
 
     <div class="offcanvas offcanvas-end overflow-hidden" tabindex="-1" id="theme-settings-offcanvas">
         <div class="d-flex justify-content-between text-bg-primary gap-2 p-3"
-            style="background-image: url(assets/images/settings-bg.png)">
+            style="background-image: url('{{ asset('assets/images/settings-bg.png') }}')">
             <div>
                 <h5 class="mb-1 fw-bold text-white text-uppercase">Admin Customizer</h5>
                 <p class="text-white text-opacity-75 fst-italic fw-medium mb-0">Easily configure layout, styles, and

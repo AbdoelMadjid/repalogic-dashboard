@@ -318,7 +318,7 @@
                                             <!-- end col-->
 
                                             <div class="col-sm-4">
-                                                <div class="h-100 position-relative rounded-end rounded-0 overflow-hidden" style="background: url(assets/images/stock/small-8.jpg); background-size: cover">
+                                                <div class="h-100 position-relative rounded-end rounded-0 overflow-hidden" style="background: url('{{ asset('assets/images/stock/small-8.jpg') }}'); background-size: cover">
                                                     <div class="p-3 card-img-overlay bg-gradient bg-secondary bg-opacity-90 d-flex align-items-center justify-content-center">
                                                         <div class="text-center text-white">
                                                             <i class="ti ti-atom fs-36"></i>
@@ -1013,7 +1013,7 @@
     </button>
 
     <div class="scrollbar" data-simplebar="">
-        <div id="user-profile-settings" class="sidenav-user" style="background: url(assets/images/user-bg-pattern.svg)">
+        <div id="user-profile-settings" class="sidenav-user" style="background: url('{{ asset('assets/images/user-bg-pattern.svg') }}')">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <a href="#!" class="link-reset">
@@ -2714,7 +2714,7 @@
                                     </div>
                                     <div class="card-body">
                                         <video id="player1" class="plyr w-100" playsinline="" controls="" poster="{{ asset('assets/media/sintel/poster.png') }}" style="--plyr-color-main: #1ac266">
-                                            <source src="assets/media/sintel/trailer_hd.mp4" type="video/mp4">
+                                            <source src="{{ asset('assets/media/sintel/trailer_hd.mp4') }}" type="video/mp4">
                                         </video>
                                     </div>
                                 </div>
@@ -2728,7 +2728,7 @@
                                     </div>
                                     <div class="card-body">
                                         <video id="player3" class="plyr w-100" playsinline="" controls="" muted="" autoplay="" loop="" poster="{{ asset('assets/media/sintel/poster.png') }}" style="--plyr-color-main: #1c84c6">
-                                            <source src="assets/media/sintel/trailer_hd.mp4" type="video/mp4">
+                                            <source src="{{ asset('assets/media/sintel/trailer_hd.mp4') }}" type="video/mp4">
                                         </video>
                                     </div>
                                 </div>
@@ -2766,8 +2766,8 @@
                                     </div>
                                     <div class="card-body">
                                         <audio class="w-100" id="player-audio" controls="" style="--plyr-color-main: #7b70ef">
-                                            <source src="assets/media/Kishi_Bashi_-_It_All_Began_With_a_Burst.mp3" type="audio/mp3">
-                                            <source src="assets/media/Kishi_Bashi_-_It_All_Began_With_a_Burst.ogg" type="audio/ogg">
+                                            <source src="{{ asset('assets/media/Kishi_Bashi_-_It_All_Began_With_a_Burst.mp3') }}" type="audio/mp3">
+                                            <source src="{{ asset('assets/media/Kishi_Bashi_-_It_All_Began_With_a_Burst.ogg') }}" type="audio/ogg">
                                         </audio>
                                     </div>
                                 </div>
@@ -2810,7 +2810,7 @@
         <!-- END wrapper -->
 
         <div class="offcanvas offcanvas-end overflow-hidden" tabindex="-1" id="theme-settings-offcanvas">
-            <div class="d-flex justify-content-between text-bg-primary gap-2 p-3" style="background-image: url(assets/images/settings-bg.png)">
+            <div class="d-flex justify-content-between text-bg-primary gap-2 p-3" style="background-image: url('{{ asset('assets/images/settings-bg.png') }}')">
                 <div>
                     <h5 class="mb-1 fw-bold text-white text-uppercase">Admin Customizer</h5>
                     <p class="text-white text-opacity-75 fst-italic fw-medium mb-0">Easily configure layout, styles, and preferences for your admin interface.</p>
