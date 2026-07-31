@@ -35,8 +35,8 @@ Route::prefix('template')->name('template.')->middleware(['web'])->group(functio
 
                 // If under custom/, also register custom-pages alias route
                 if (str_starts_with($normalizedPath, 'custom/')) {
-                    $aliasPath = 'custom-pages/' . substr($normalizedPath, 7);
-                    $aliasDotName = 'custom-pages.' . substr($viewDotName, 7);
+                    $aliasPath = 'custom-pages/'.substr($normalizedPath, 7);
+                    $aliasDotName = 'custom-pages.'.substr($viewDotName, 7);
 
                     Route::get($aliasPath, function () use ($viewDotName) {
                         return view("template.{$viewDotName}");
@@ -48,9 +48,9 @@ Route::prefix('template')->name('template.')->middleware(['web'])->group(functio
                 $filenamePart = array_pop($pathParts);
                 $parentDirPart = end($pathParts);
 
-                if ($parentDirPart && str_starts_with($filenamePart, $parentDirPart . '-')) {
+                if ($parentDirPart && str_starts_with($filenamePart, $parentDirPart.'-')) {
                     $cleanFilenamePart = substr($filenamePart, strlen($parentDirPart) + 1);
-                    $cleanNormalizedPath = implode('/', $pathParts) . '/' . $cleanFilenamePart;
+                    $cleanNormalizedPath = implode('/', $pathParts).'/'.$cleanFilenamePart;
                     $cleanViewDotName = str_replace('/', '.', $cleanNormalizedPath);
 
                     Route::get($cleanNormalizedPath, function () use ($viewDotName) {
@@ -58,8 +58,8 @@ Route::prefix('template')->name('template.')->middleware(['web'])->group(functio
                     })->name($cleanViewDotName);
 
                     if (str_starts_with($cleanNormalizedPath, 'custom/')) {
-                        $aliasPath = 'custom-pages/' . substr($cleanNormalizedPath, 7);
-                        $aliasDotName = 'custom-pages.' . substr($cleanViewDotName, 7);
+                        $aliasPath = 'custom-pages/'.substr($cleanNormalizedPath, 7);
+                        $aliasDotName = 'custom-pages.'.substr($cleanViewDotName, 7);
 
                         Route::get($aliasPath, function () use ($viewDotName) {
                             return view("template.{$viewDotName}");
