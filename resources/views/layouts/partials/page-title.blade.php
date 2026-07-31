@@ -1,58 +1,117 @@
 @php
     $breadcrumbItems = [];
+    $pageMainTitle = $title ?? null;
 
     if (isset($breadcrumbs) && is_array($breadcrumbs)) {
         $breadcrumbItems = $breadcrumbs;
-        $pageMainTitle = $title ?? 'Dashboard';
+        $pageMainTitle = $pageMainTitle ?? 'Dashboard';
     } else {
         $routeName = Route::currentRouteName();
-        if ($routeName && str_contains($routeName, '.')) {
-            $rawSegments = explode('.', $routeName);
-        } else {
-            $path = trim(request()->path(), '/');
-            $rawSegments = array_filter(explode('/', $path));
+        $currentPath = trim(request()->path(), '/');
+
+        // Search config/sidenav-template for matching route/URL hierarchy
+        $findHierarchy = function ($items, $ancestors) use (&$findHierarchy, $routeName, $currentPath) {
+            if (!is_array($items)) return null;
+            foreach ($items as $item) {
+                if (!is_array($item)) continue;
+                $currentAncestors = array_merge($ancestors, [$item]);
+
+                if (!empty($item['route']) && $routeName && ($item['route'] === $routeName || request()->routeIs($item['route']))) {
+                    return $currentAncestors;
+                }
+                if (!empty($item['url']) && ($item['url'] === $currentPath || $item['url'] === '/' . $currentPath)) {
+                    return $currentAncestors;
+                }
+                if (!empty($item['children']) && is_array($item['children'])) {
+                    $found = $findHierarchy($item['children'], $currentAncestors);
+                    if ($found) return $found;
+                }
+            }
+            return null;
+        };
+
+        $sidenavConfigs = config('sidenav-template', []);
+        $hierarchy = null;
+        foreach ($sidenavConfigs as $groupKey => $group) {
+            if (!empty($group['items']) && is_array($group['items'])) {
+                $groupTitle = $group['title'] ?? Str::title(str_replace(['-', '_'], ' ', $groupKey));
+                $found = $findHierarchy($group['items'], [['title' => $groupTitle, 'is_group' => true]]);
+                if ($found) {
+                    $hierarchy = $found;
+                    break;
+                }
+            }
         }
 
-        $knownAcronyms = [
-            'ui' => 'UI',
-            'faq' => 'FAQ',
-            'api' => 'API',
-            'pdf' => 'PDF',
-            'i18' => 'i18n',
-            'auth' => 'Auth',
-        ];
-
-        $segments = [];
-        $accumulated = [];
-        foreach ($rawSegments as $seg) {
-            $accumulated[] = $seg;
-            $cleanSeg = str_replace(['-', '_'], ' ', $seg);
-            $lowerSeg = strtolower($cleanSeg);
-            $formatted = $knownAcronyms[$lowerSeg] ?? Str::title($cleanSeg);
-
-            $accRoute = implode('.', $accumulated);
-            $url = 'javascript:void(0);';
-            if (Route::has($accRoute)) {
-                $url = route($accRoute);
-            } elseif (Route::has($accRoute . '.index')) {
-                $url = route($accRoute . '.index');
+        if ($hierarchy && count($hierarchy) > 0) {
+            $activeLeaf = end($hierarchy);
+            if (!$pageMainTitle) {
+                $pageMainTitle = $activeLeaf['title'] ?? 'Dashboard';
             }
 
-            $segments[] = [
-                'title' => $formatted,
-                'url' => $url,
+            // Omit active leaf node from breadcrumb items, since active title is rendered as Main Title on the left
+            $ancestors = (count($hierarchy) > 1) ? array_slice($hierarchy, 0, -1) : $hierarchy;
+
+            $breadcrumbItems = [];
+            $breadcrumbItems[] = [
+                'title' => 'Template',
+                'url' => Route::has('dashboard') ? route('dashboard') : url('/'),
             ];
-        }
-
-        // Determine Page Main Title (last segment or passed $title)
-        $lastSegment = end($segments);
-        $pageMainTitle = $title ?? (is_array($lastSegment) ? ($lastSegment['title'] ?? 'Dashboard') : ($lastSegment ?: 'Dashboard'));
-
-        // Breadcrumbs: omit the last item if multiple segments exist, since the last item is rendered as the Main Title
-        if (count($segments) > 1) {
-            $breadcrumbItems = array_slice($segments, 0, -1);
+            foreach ($ancestors as $node) {
+                $nodeTitle = $node['title'] ?? '';
+                $nodeUrl = 'javascript:void(0);';
+                if (!empty($node['route']) && Route::has($node['route'])) {
+                    $nodeUrl = route($node['route']);
+                } elseif (!empty($node['url'])) {
+                    $nodeUrl = url($node['url']);
+                }
+                $breadcrumbItems[] = [
+                    'title' => $nodeTitle,
+                    'url' => $nodeUrl,
+                ];
+            }
         } else {
-            $breadcrumbItems = $segments;
+            // Fallback: format route/path segments
+            $rawSegments = $routeName && str_contains($routeName, '.')
+                ? explode('.', $routeName)
+                : array_filter(explode('/', $currentPath));
+
+            if (count($rawSegments) > 0 && strtolower($rawSegments[0]) === 'template') {
+                array_shift($rawSegments);
+            }
+
+            $knownAcronyms = ['ui' => 'UI', 'faq' => 'FAQ', 'api' => 'API', 'pdf' => 'PDF', 'i18' => 'i18n', 'auth' => 'Auth'];
+
+            $segments = [];
+            $accumulated = ['template'];
+            foreach ($rawSegments as $seg) {
+                $accumulated[] = $seg;
+                $cleanSeg = str_replace(['-', '_'], ' ', $seg);
+                $lowerSeg = strtolower($cleanSeg);
+                $formatted = $knownAcronyms[$lowerSeg] ?? Str::title($cleanSeg);
+
+                $accRoute = implode('.', $accumulated);
+                $url = 'javascript:void(0);';
+                if (Route::has($accRoute)) {
+                    $url = route($accRoute);
+                }
+
+                $segments[] = [
+                    'title' => $formatted,
+                    'url' => $url,
+                ];
+            }
+
+            $lastSegment = end($segments);
+            if (!$pageMainTitle) {
+                $pageMainTitle = is_array($lastSegment) ? ($lastSegment['title'] ?? 'Dashboard') : 'Dashboard';
+            }
+
+            $ancestorSegments = (count($segments) > 1) ? array_slice($segments, 0, -1) : $segments;
+
+            $breadcrumbItems = array_merge([
+                ['title' => 'Template', 'url' => Route::has('dashboard') ? route('dashboard') : url('/')]
+            ], $ancestorSegments);
         }
     }
 
