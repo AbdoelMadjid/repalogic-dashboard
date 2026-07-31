@@ -98,7 +98,7 @@
                         <span class="menu-text" data-lang="dashboards">Dashboard</span>
                     </a>
                 </li>
-                @foreach (['main', 'apps', 'custom-pages', 'layouts', 'components', 'menu-item'] as $groupKey)
+                @foreach (['main', 'apps', 'custom-pages', 'layouts', 'components', 'documentation', 'menu-item'] as $groupKey)
                     @if ($groupConfig = config("sidenav-template.$groupKey"))
                         @include('layouts.partials.mainmenu._render', ['menuGroup' => $groupConfig])
                     @endif
