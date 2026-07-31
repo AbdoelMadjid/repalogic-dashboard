@@ -1,28 +1,7 @@
-﻿<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>Success Mail | INSPINIA - Responsive Bootstrap 5 Admin Dashboard Template</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Inspinia is the #1 best-selling admin dashboard template on Wrapmarket. Perfect for building CRM, CMS, project management tools, and custom web apps with clean UI, responsive design, and powerful features.">
-        <meta name="keywords" content="Inspinia, admin dashboard, Wrapmarket, Wrapbootstrap, HTML template, Bootstrap admin, CRM template, CMS template, responsive admin, web app UI, admin theme, best admin template">
-        <meta name="author" content="WebAppLayers">
+@extends('layouts.base')
 
-        <!-- App favicon -->
-        <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
- <!-- Theme Config Js -->
-<script src="{{ asset('assets/js/config.js') }}"></script>
-
-<!-- Vendor css -->
-<link href="{{ asset('assets/css/vendors.min.css') }}" rel="stylesheet" type="text/css">
-
-<!-- App css -->
-<link id="app-style" href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css">
-
-    </head>
-
-    <body>
-        <div class="auth-box d-flex align-items-center">
+@section('content')
+<div class="auth-box d-flex align-items-center">
             <div class="container-xxl">
                 <div class="row align-items-center justify-content-center">
                     <div class="col-xl-10">
@@ -37,23 +16,40 @@
                                             <a href="{{ asset('index.html') }}" class="logo-light">
                                                 <img src="{{ asset('assets/images/logo.png') }}" alt="logo">
                                             </a>
+                                            <h4 class="fw-bold mt-4">Forgot Password ?</h4>
+                                            <p class="text-muted w-lg-75 mx-auto">Enter your email address and we'll send you a link to reset your password.</p>
                                         </div>
 
                                         <form>
-                                            <div class="mb-4">
-                                                <div class="avatar-xxl mx-auto mt-2">
-                                                    <div class="avatar-title bg-light-subtle border border-light border-dashed rounded-circle">
-                                                        <img src="{{ asset('assets/images/checkmark.png') }}" alt="dark logo" height="64">
-                                                    </div>
+                                            <div class="mb-3">
+                                                <label for="userEmail" class="form-label">
+                                                    Email address
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light">
+                                                        <i class="ti ti-mail fs-xl text-muted"></i>
+                                                    </span>
+                                                    <input type="email" class="form-control" id="userEmail" placeholder="you@example.com" required="">
                                                 </div>
                                             </div>
 
-                                            <h4 class="fw-bold text-center mb-4">Well Done! Email verified Successfully</h4>
+                                            <div class="mb-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input form-check-input-light fs-14" type="checkbox" id="termAndPolicy">
+                                                    <label class="form-check-label" for="termAndPolicy">Agree the Terms & Policy</label>
+                                                </div>
+                                            </div>
 
                                             <div class="d-grid">
-                                                <button type="submit" class="btn btn-primary fw-semibold py-2">Back to Dashboard</button>
+                                                <button type="submit" class="btn btn-primary fw-semibold py-2">Send Request</button>
                                             </div>
                                         </form>
+
+                                        <p class="text-muted text-center mt-4 mb-0">
+                                            Return to
+                                            <a href="{{ asset('auth-card-sign-in.html') }}" class="text-decoration-underline link-offset-3 fw-semibold">Sign in</a>
+                                        </p>
 
                                         <p class="text-center text-muted mt-4 mb-0">
                                             ©
@@ -77,11 +73,8 @@
         </div>
 
         <!-- end auth-fluid-->
-        <!-- Vendor js -->
-        <script src="{{ asset('assets/js/vendors.min.js') }}"></script>
+@endsection
 
-        <!-- App js -->
-        <script src="{{ asset('assets/js/app.js') }}"></script>
-
-    </body>
-</html>
+@section('scripts')
+    <script src="{{ asset('assets/js/app.js') }}"></script>
+@endsection

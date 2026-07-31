@@ -1,34 +1,14 @@
-﻿<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>Sign In | INSPINIA - Responsive Bootstrap 5 Admin Dashboard Template</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Inspinia is the #1 best-selling admin dashboard template on Wrapmarket. Perfect for building CRM, CMS, project management tools, and custom web apps with clean UI, responsive design, and powerful features.">
-        <meta name="keywords" content="Inspinia, admin dashboard, Wrapmarket, Wrapbootstrap, HTML template, Bootstrap admin, CRM template, CMS template, responsive admin, web app UI, admin theme, best admin template">
-        <meta name="author" content="WebAppLayers">
+@extends('layouts.base')
 
-        <!-- App favicon -->
-        <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
- <!-- Theme Config Js -->
-<script src="{{ asset('assets/js/config.js') }}"></script>
-
-<!-- Vendor css -->
-<link href="{{ asset('assets/css/vendors.min.css') }}" rel="stylesheet" type="text/css">
-
-<!-- App css -->
-<link id="app-style" href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css">
-
-    </head>
-
-    <body>
-        <div class="auth-box p-0 w-100">
+@section('content')
+<div class="auth-box p-0 w-100">
             <div class="row w-100 g-0">
                 <div class="col">
                     <div class="h-100 position-relative card-side-img rounded-0 overflow-hidden" style="background-image: url('{{ asset('assets/images/auth.jpg') }}')">
                         <div class="p-4 card-img-overlay auth-overlay d-flex align-items-end justify-content-center"></div>
                     </div>
                 </div>
+
                 <div class="col-md-auto">
                     <!--Auth Box content -->
                     <div class="card auth-box-form border-0 mb-0">
@@ -43,40 +23,46 @@
                             </div>
 
                             <div class="mt-auto text-center">
-                                <h4 class="fw-bold">Welcome to Admin</h4>
-                                <p class="text-muted auth-sub-text mx-auto">Let’s get you signed in. Enter your email and password to continue.</p>
+                                <h4 class="fw-bold">Create New Account</h4>
+                                <p class="text-muted auth-sub-text mx-auto">Let’s get you Sign Up. Enter your email and password to continue.</p>
 
                                 <form class="mt-4">
                                     <div class="mb-3">
                                         <div class="input-group">
-                                            <input type="email" class="form-control py-2 px-3 bg-light bg-opacity-40 border-light" id="userEmail" placeholder="Enter username or email" required="">
+                                            <input type="text" class="form-control py-2 px-3 bg-light bg-opacity-40 border-light" id="userName" placeholder="Enter name" required="">
                                         </div>
                                     </div>
 
                                     <div class="mb-3">
                                         <div class="input-group">
+                                            <input type="email" class="form-control py-2 px-3 bg-light bg-opacity-40 border-light" id="userEmail" placeholder="Enter email" required="">
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3" data-password="bar">
+                                        <div class="input-group">
                                             <input type="password" class="form-control py-2 px-3 bg-light bg-opacity-40 border-light" id="userPassword" placeholder="Enter password" required="">
                                         </div>
+                                        <div class="password-bar my-2"></div>
+                                        <p class="text-muted fs-xs mb-0">Use 8+ characters with letters, numbers & symbols.</p>
                                     </div>
 
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <div class="form-check">
-                                            <input class="form-check-input form-check-input-light fs-14" type="checkbox" id="rememberMe">
-                                            <label class="form-check-label" for="rememberMe">Keep me signed in</label>
+                                            <input class="form-check-input form-check-input-light fs-14" type="checkbox" id="termAndPolicy">
+                                            <label class="form-check-label" for="termAndPolicy">Agree the Terms & Policy</label>
                                         </div>
-
-                                        <a href="{{ asset('auth-split-reset-pass.html') }}" class="text-decoration-underline link-offset-3 text-muted">Forgot Password?</a>
                                     </div>
 
                                     <div class="d-grid">
-                                        <button type="submit" class="btn btn-primary fw-bold py-2">Sign In</button>
+                                        <button type="submit" class="btn btn-primary fw-semibold py-2">Create Account</button>
                                     </div>
                                 </form>
                             </div>
 
                             <p class="text-muted text-center mt-4 mb-0">
-                                New here?
-                                <a href="{{ asset('auth-split-sign-up.html') }}" class="text-decoration-underline link-offset-3 fw-semibold">Create an account</a>
+                                Already have an account?
+                                <a href="{{ asset('auth-split-sign-in.html') }}" class="text-decoration-underline link-offset-3 fw-semibold">Login</a>
                             </p>
 
                             <p class="text-center text-muted mt-auto mb-0">
@@ -92,11 +78,19 @@
             </div>
         </div>
 
-        <!-- Vendor js -->
-        <script src="{{ asset('assets/js/vendors.min.js') }}"></script>
+        
 
-        <!-- App js -->
-        <script src="{{ asset('assets/js/app.js') }}"></script>
+        
 
-    </body>
-</html>
+
+        <!-- Password Suggestion Js -->
+        <script src="{{ asset('assets/js/pages/auth-password.js') }}"></script>
+@endsection
+
+@section('scripts')
+    <script src="{{ asset('assets/js/app.js') }}"></script>
+
+
+        <!-- Password Suggestion Js -->
+        <script src="{{ asset('assets/js/pages/auth-password.js') }}"></script>
+@endsection

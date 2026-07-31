@@ -1,28 +1,7 @@
-﻿<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>New Password | INSPINIA - Responsive Bootstrap 5 Admin Dashboard Template</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Inspinia is the #1 best-selling admin dashboard template on Wrapmarket. Perfect for building CRM, CMS, project management tools, and custom web apps with clean UI, responsive design, and powerful features.">
-        <meta name="keywords" content="Inspinia, admin dashboard, Wrapmarket, Wrapbootstrap, HTML template, Bootstrap admin, CRM template, CMS template, responsive admin, web app UI, admin theme, best admin template">
-        <meta name="author" content="WebAppLayers">
+@extends('layouts.base')
 
-        <!-- App favicon -->
-        <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
- <!-- Theme Config Js -->
-<script src="{{ asset('assets/js/config.js') }}"></script>
-
-<!-- Vendor css -->
-<link href="{{ asset('assets/css/vendors.min.css') }}" rel="stylesheet" type="text/css">
-
-<!-- App css -->
-<link id="app-style" href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css">
-
-    </head>
-
-    <body>
-        <div class="auth-box p-0 w-100">
+@section('content')
+<div class="auth-box p-0 w-100">
             <div class="row w-100 g-0">
                 <div class="col">
                     <div class="h-100 position-relative card-side-img rounded-0 overflow-hidden" style="background-image: url('{{ asset('assets/images/auth.jpg') }}')">
@@ -121,11 +100,9 @@
             </div>
         </div>
 
-        <!-- Vendor js -->
-        <script src="{{ asset('assets/js/vendors.min.js') }}"></script>
+        
 
-        <!-- App js -->
-        <script src="{{ asset('assets/js/app.js') }}"></script>
+        
 
 
         <!-- Two Factor Validator Js -->
@@ -133,5 +110,15 @@
 
         <!-- Password Suggestion Js -->
         <script src="{{ asset('assets/js/pages/auth-password.js') }}"></script>
-    </body>
-</html>
+@endsection
+
+@section('scripts')
+    <script src="{{ asset('assets/js/app.js') }}"></script>
+
+
+        <!-- Two Factor Validator Js -->
+        <script src="{{ asset('assets/js/pages/auth-two-factor.js') }}"></script>
+
+        <!-- Password Suggestion Js -->
+        <script src="{{ asset('assets/js/pages/auth-password.js') }}"></script>
+@endsection

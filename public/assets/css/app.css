@@ -20023,6 +20023,7 @@ html[data-bs-theme=dark] .btn-ghost-dark {
 }
 
 .card-out-of-container {
+  margin-top: calc((1.25rem + 1px) * -1);
   -webkit-margin-start: calc((1.25rem + 1px) * -1);
           margin-inline-start: calc((1.25rem + 1px) * -1);
   -webkit-margin-end: calc((1.25rem + 1px) * -1);

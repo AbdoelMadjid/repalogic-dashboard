@@ -8,7 +8,6 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
         @include('layouts.partials.page-title')
 
 
@@ -111,5 +110,4 @@
                                 <div class="card-body">
                                     <blockquote class="card-bodyquote mb-0">
                                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-    </div>
 @endsection

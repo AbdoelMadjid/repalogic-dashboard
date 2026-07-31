@@ -1,7 +1,6 @@
 @extends('layouts.vertical')
 
 @section('content')
-    <div class="container-fluid">
         <div class="row mt-3">
             <div class="col-12">
                 <div class="card">
@@ -747,8 +746,6 @@
             <!-- end col-->
         </div>
         <!-- end row-->
-    </div>
-    <!-- container -->
 @endsection
 @section('scripts')
     <!-- E Charts js -->

@@ -8,7 +8,6 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
         @include('layouts.partials.page-title')
 
 
@@ -1934,5 +1933,4 @@
                     <!-- container -->
                 </div>
                 <!-- end container-fluid-->
-    </div>
 @endsection

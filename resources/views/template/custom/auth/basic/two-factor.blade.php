@@ -1,28 +1,7 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>Login with Pin | INSPINIA - Responsive Bootstrap 5 Admin Dashboard Template</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Inspinia is the #1 best-selling admin dashboard template on Wrapmarket. Perfect for building CRM, CMS, project management tools, and custom web apps with clean UI, responsive design, and powerful features." />
-        <meta name="keywords" content="Inspinia, admin dashboard, Wrapmarket, Wrapbootstrap, HTML template, Bootstrap admin, CRM template, CMS template, responsive admin, web app UI, admin theme, best admin template" />
-        <meta name="author" content="WebAppLayers" />
+@extends('layouts.base')
 
-        <!-- App favicon -->
-        <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}" />
- <!-- Theme Config Js -->
-<script src="{{ asset('assets/js/config.js') }}"></script>
-
-<!-- Vendor css -->
-<link href="{{ asset('assets/css/vendors.min.css') }}" rel="stylesheet" type="text/css" />
-
-<!-- App css -->
-<link id="app-style" href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
-
-    </head>
-
-    <body>
-        <div class="auth-box overflow-hidden align-items-center d-flex">
+@section('content')
+<div class="auth-box overflow-hidden align-items-center d-flex">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-xxl-4 col-md-6 col-sm-8">
@@ -33,14 +12,15 @@
                             <a href="{{ asset('index.html') }}" class="logo-light">
                                 <img src="{{ asset('assets/images/logo.png') }}" alt="logo" />
                             </a>
-                            <h4 class="fw-bold mt-3">Login with PIN!</h4>
-                            <p class="text-muted w-lg-75 mx-auto">This screen is locked. Enter your PIN to continue.</p>
+                            <h4 class="fw-bold mt-3">Two-Factor Verification!</h4>
+                            <p class="text-muted w-lg-75 mx-auto">Let’s get you signed in. Enter your PIN to continue</p>
                         </div>
 
                         <div class="card p-4">
                             <div class="text-center mb-4">
-                                <img src="{{ asset('assets/images/users/user-1.jpg') }}" class="rounded-circle img-thumbnail avatar-xxl mb-2" alt="thumbnail" />
-                                <h5 class="fs-md">Damian D.</h5>
+                                <h5 class="text-muted fs-base mb-3">We've emailed you a 6-digit verification code we sent to</h5>
+
+                                <div class="fw-bold fs-3">******6789</div>
                             </div>
 
                             <form>
@@ -62,8 +42,14 @@
                                 </div>
                             </form>
 
-                            <p class="text-muted text-center mt-4 mb-0">
-                                Not you? Return to
+                            <p class="mt-4 text-muted text-center mb-4">
+                                Don’t have a code?
+                                <a href="#" class="text-decoration-underline link-offset-2 fw-semibold">Resend</a>
+                                or
+                                <a href="#" class="text-decoration-underline link-offset-2 fw-semibold">Call Us</a>
+                            </p>
+                            <p class="text-muted text-center mb-0">
+                                Return to
                                 <a href="{{ asset('auth-sign-in.html') }}" class="text-decoration-underline link-offset-3 fw-semibold">Sign in</a>
                             </p>
                         </div>
@@ -80,14 +66,19 @@
         </div>
         <!-- end auth-fluid-->
 
-        <!-- Vendor js -->
-        <script src="{{ asset('assets/js/vendors.min.js') }}"></script>
+        
 
-        <!-- App js -->
-        <script src="{{ asset('assets/js/app.js') }}"></script>
+        
 
 
         <!-- Two Factor Validator Js -->
         <script src="{{ asset('assets/js/pages/auth-two-factor.js') }}"></script>
-    </body>
-</html>
+@endsection
+
+@section('scripts')
+    <script src="{{ asset('assets/js/app.js') }}"></script>
+
+
+        <!-- Two Factor Validator Js -->
+        <script src="{{ asset('assets/js/pages/auth-two-factor.js') }}"></script>
+@endsection

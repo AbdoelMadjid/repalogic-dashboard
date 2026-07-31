@@ -8,7 +8,6 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid">
         @include('layouts.partials.page-title')
         
         
@@ -687,7 +686,6 @@
                         <!-- container -->
         
                         <!-- Footer Start -->
-    </div>
 @endsection
 
 @section('scripts')
