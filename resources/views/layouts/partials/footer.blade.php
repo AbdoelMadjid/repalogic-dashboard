@@ -4,9 +4,7 @@
         <div class="row">
             <div class="col-md-6 text-center text-md-start">
                 ©
-                <script>
-                    document.write(new Date().getFullYear())
-                </script>
+                <span data-current-year></span>
                 Inspinia By
                 <span class="fw-semibold">WebAppLayers</span>
             </div>

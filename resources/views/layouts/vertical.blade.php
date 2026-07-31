@@ -1,39 +1,45 @@
 <!DOCTYPE html>
 
-<html @yield('html_attribute')>
+@php
+    $htmlAttributeSection = trim($__env->yieldContent('html_attribute'));
+    $htmlAttributes = str_contains($htmlAttributeSection, 'class=')
+        ? $htmlAttributeSection
+        : trim('class="sidebar-with-line" ' . $htmlAttributeSection);
+@endphp
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" {!! $htmlAttributes !!}>
 
-<head>
-    @include('layouts.partials/title-meta')
+    <head>
+        @include('layouts.partials/title-meta')
 
-    @yield('styles')
+        @yield('styles')
 
-    @include('layouts.partials/head-css')
-</head>
+        @include('layouts.partials/head-css')
+    </head>
 
-<body>
-    <div class="wrapper">
+    <body>
+        <div class="wrapper">
 
-        @include('layouts.partials/topbar')
+            @include('layouts.partials/topbar')
 
-        @include('layouts.partials/sidenav')
+            @include('layouts.partials/sidenav')
 
-        <div class="content-page">
-            <div class="container-fluid">
+            <div class="content-page">
+                <div class="container-fluid">
 
-                @yield('content')
+                    @yield('content')
+
+                </div>
+
+                @include('layouts.partials/footer')
 
             </div>
 
-            @include('layouts.partials/footer')
+            @include('layouts.partials/customizer')
 
         </div>
 
-        @include('layouts.partials/customizer')
+        @include('layouts.partials/footer-scripts')
 
-    </div>
-
-    @yield('scripts')
-
-</body>
+    </body>
 
 </html>
