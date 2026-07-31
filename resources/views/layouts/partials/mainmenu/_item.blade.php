@@ -25,6 +25,9 @@
     if (!empty($item['special'])) {
         $linkClasses .= ' special-menu';
     }
+    if ($isActive) {
+        $linkClasses .= ' active';
+    }
 
     // Compute badge class positioning
     $badgeClass = 'badge bg-primary';
