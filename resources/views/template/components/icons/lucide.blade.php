@@ -400,7 +400,7 @@
                                     <!-- end display-->
 
                                     <div class="text-center mt-3">
-                                        <a href="https://lucide.dev/icons/" target="_blank" class="btn btn-danger">View All Icons</a>
+                                        <a href="<?php echo route('template.components.icons.lucide-full'); ?>" class="btn btn-danger">View All Icons</a>
                                     </div>
                                 </div>
                                 <!-- end card-body-->

@@ -12,11 +12,39 @@
             : asset($item['url']);
     }
 
-    // Active route checking
-    $isActive = false;
-    if (!empty($item['route']) && Route::has($item['route'])) {
-        $isActive = request()->routeIs($item['route']) || request()->routeIs($item['route'] . '.*');
-    }
+    // Active route checking (supports recursive children & sub-route matching)
+    $checkIsActive = function ($menuItem) use (&$checkIsActive) {
+        if (!is_array($menuItem)) return false;
+
+        if (!empty($menuItem['route']) && Route::has($menuItem['route'])) {
+            $currentRoute = Route::currentRouteName();
+            if (request()->routeIs($menuItem['route']) ||
+                request()->routeIs($menuItem['route'] . '.*') ||
+                ($currentRoute && str_starts_with($currentRoute, $menuItem['route'] . '-'))) {
+                return true;
+            }
+        }
+
+        if (!empty($menuItem['url'])) {
+            $currentPath = trim(request()->path(), '/');
+            $itemUrl = trim($menuItem['url'], '/');
+            if ($itemUrl && ($itemUrl === $currentPath || str_starts_with($currentPath, $itemUrl . '-'))) {
+                return true;
+            }
+        }
+
+        if (!empty($menuItem['children']) && is_array($menuItem['children'])) {
+            foreach ($menuItem['children'] as $childItem) {
+                if ($checkIsActive($childItem)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    };
+
+    $isActive = $checkIsActive($item);
 
     $linkClasses = 'side-nav-link';
     if (!empty($item['disabled'])) {

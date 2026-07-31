@@ -380,7 +380,7 @@
                                     <!-- end display-->
 
                                     <div class="text-center mt-3">
-                                        <a href="https://tabler.io/icons" target="_blank" class="btn btn-danger">View All Icons</a>
+                                        <a href="<?php echo route('template.components.icons.tabler-full'); ?>" class="btn btn-danger">View All Icons</a>
                                     </div>
                                 </div>
                                 <!-- end card-body-->
