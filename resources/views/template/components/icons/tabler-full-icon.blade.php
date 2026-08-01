@@ -96,13 +96,20 @@
         }
 
         .snippet-preview {
-            font-size: 48px;
-            color: #000000;
+            font-size: var(--tabler-icon-size, 24px);
+            color: var(--tabler-icon-color, #000000);
             line-height: 1;
             min-height: 28px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .snippet-preview i {
+            font-size: var(--tabler-icon-size, 24px) !important;
+            color: currentColor;
+            transition: font-size 0.2s ease-in-out;
         }
 
         .snippet-cell.centered {
@@ -115,6 +122,8 @@
             font-size: 0.78rem;
             color: #6c757d;
             font-weight: 600;
+            word-break: break-word;
+            text-align: center;
         }
 
         .snippet-placeholder {
@@ -274,11 +283,9 @@
                                 <div class="col-lg-3">
                                     <div class="snippet-cell centered">
                                         <div class="snippet-title">Preview Icon</div>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div id="snippetPreview" class="snippet-preview me-3"></div>
-                                            <div>
-                                                <div id="snippetIconName" class="snippet-icon-name snippet-placeholder">Belum dipilih</div>
-                                            </div>
+                                        <div class="d-flex flex-column align-items-center justify-content-center text-center gap-2">
+                                            <div id="snippetPreview" class="snippet-preview"></div>
+                                            <div id="snippetIconName" class="snippet-icon-name snippet-placeholder">Belum dipilih</div>
                                         </div>
                                     </div>
                                 </div>
@@ -48637,16 +48644,24 @@
             }
 
             function applySize(value) {
-                if (!iconGrid) return;
-                iconGrid.style.setProperty('--tabler-icon-size', `${value}px`);
+                if (iconGrid) {
+                    iconGrid.style.setProperty('--tabler-icon-size', `${value}px`);
+                }
+                if (snippetBoard) {
+                    snippetBoard.style.setProperty('--tabler-icon-size', `${value}px`);
+                }
                 if (selectedIconClass) {
                     setSnippet(selectedIconClass);
                 }
             }
 
             function applyColor(value) {
-                if (!iconGrid) return;
-                iconGrid.style.setProperty('--tabler-icon-color', value);
+                if (iconGrid) {
+                    iconGrid.style.setProperty('--tabler-icon-color', value);
+                }
+                if (snippetBoard) {
+                    snippetBoard.style.setProperty('--tabler-icon-color', value);
+                }
                 if (snippetPreview) {
                     snippetPreview.style.color = value;
                 }

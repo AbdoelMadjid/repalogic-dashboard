@@ -95,21 +95,23 @@
         }
 
         .snippet-preview {
-            font-size: 48px;
-            color: #000000;
+            font-size: var(--lucide-icon-size, 24px);
+            color: var(--lucide-icon-color, #000000);
             line-height: 1;
             min-height: 28px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.2s ease-in-out;
         }
 
         .snippet-preview svg,
         .snippet-preview [data-lucide] {
-            width: 48px !important;
-            height: 48px !important;
+            width: var(--lucide-icon-size, 24px) !important;
+            height: var(--lucide-icon-size, 24px) !important;
             color: currentColor;
             stroke: currentColor;
+            transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
         }
 
         .snippet-cell.centered {
@@ -122,6 +124,8 @@
             font-size: 0.78rem;
             color: #6c757d;
             font-weight: 600;
+            word-break: break-word;
+            text-align: center;
         }
 
         .snippet-placeholder {
@@ -279,11 +283,9 @@
                                 <div class="col-lg-3">
                                     <div class="snippet-cell centered">
                                         <div class="snippet-title">Preview Icon</div>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div id="snippetPreview" class="snippet-preview me-3"></div>
-                                            <div>
-                                                <div id="snippetIconName" class="snippet-icon-name snippet-placeholder">Belum dipilih</div>
-                                            </div>
+                                        <div class="d-flex flex-column align-items-center justify-content-center text-center gap-2">
+                                            <div id="snippetPreview" class="snippet-preview"></div>
+                                            <div id="snippetIconName" class="snippet-icon-name snippet-placeholder">Belum dipilih</div>
                                         </div>
                                     </div>
                                 </div>
@@ -2968,13 +2970,21 @@
             }
 
             function applySize(value) {
-                if (!iconGrid) return;
-                iconGrid.style.setProperty('--lucide-icon-size', `${value}px`);
+                if (iconGrid) {
+                    iconGrid.style.setProperty('--lucide-icon-size', `${value}px`);
+                }
+                if (snippetBoard) {
+                    snippetBoard.style.setProperty('--lucide-icon-size', `${value}px`);
+                }
             }
 
             function applyColor(value) {
-                if (!iconGrid) return;
-                iconGrid.style.setProperty('--lucide-icon-color', value);
+                if (iconGrid) {
+                    iconGrid.style.setProperty('--lucide-icon-color', value);
+                }
+                if (snippetBoard) {
+                    snippetBoard.style.setProperty('--lucide-icon-color', value);
+                }
                 if (snippetPreview) {
                     snippetPreview.style.color = value;
                 }
