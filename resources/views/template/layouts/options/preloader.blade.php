@@ -1,29 +1,28 @@
 @extends('layouts.vertical')
 
 @section('content')
-
-                    @include('layouts.partials.page-title')
-
+    @include('layouts.partials.page-title')
 
 
-                    <!-- Preloader -->
-                    <div id="preloader">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-body text-center">
-                                    <h4 class="m-0">Your custom content here</h4>
-                                </div>
-                                <!-- end card-body-->
-                            </div>
-                            <!-- end card-->
-                        </div>
-                        <!-- end col-->
-                    </div>
-                    <!-- end row-->
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4 class="m-0">Your custom content here</h4>
+                </div>
+                <!-- end card-body-->
+            </div>
+            <!-- end card-->
+        </div>
+        <!-- end col-->
+    </div>
+    <!-- end row-->
 @endsection

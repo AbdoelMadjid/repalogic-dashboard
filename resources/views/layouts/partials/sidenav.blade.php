@@ -81,8 +81,7 @@
                 <i
                     class="ti ti-search position-absolute top-50 start-0 translate-middle-y ms-3 sidenav-search-icon"></i>
                 <input type="text" id="sidenav-menu-search"
-                    class="form-control form-control-sm ps-5 sidenav-search-input"
-                    placeholder="Search menu..."
+                    class="form-control form-control-sm ps-5 sidenav-search-input" placeholder="Search menu..."
                     data-lang-placeholder="sidenav-search-placeholder">
             </div>
             <div id="sidenav-search-empty" class="sidenav-search-empty mt-2 d-none" data-lang="sidenav-search-empty">
@@ -289,8 +288,8 @@
 
             const targetActiveLink = activeLinks[activeLinks.length - 1];
             const scrollContainer = document.querySelector('.sidenav-menu .simplebar-content-wrapper') ||
-                                    document.querySelector('.sidenav-menu .scrollbar') ||
-                                    document.querySelector('.sidenav-menu');
+                document.querySelector('.sidenav-menu .scrollbar') ||
+                document.querySelector('.sidenav-menu');
 
             if (!targetActiveLink || !scrollContainer) return;
 

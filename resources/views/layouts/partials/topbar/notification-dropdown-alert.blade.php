@@ -13,7 +13,8 @@
                         <h6 class="m-0 fs-md fw-semibold" data-lang="topbar-notifications-title">Notifications</h6>
                     </div>
                     <div class="col text-end">
-                        <a href="#!" class="badge text-bg-light badge-label py-1" data-lang="topbar-notifications-alerts-badge">12 Alerts</a>
+                        <a href="#!" class="badge text-bg-light badge-label py-1"
+                            data-lang="topbar-notifications-alerts-badge">12 Alerts</a>
                     </div>
                 </div>
             </div>
@@ -271,7 +272,8 @@
 
             <!-- All-->
             <a href="javascript:void(0);"
-                class="dropdown-item text-center text-reset text-decoration-underline link-offset-2 fw-bold notify-item border-top border-light py-2" data-lang="topbar-notifications-view-all">View All Alerts</a>
+                class="dropdown-item text-center text-reset text-decoration-underline link-offset-2 fw-bold notify-item border-top border-light py-2"
+                data-lang="topbar-notifications-view-all">View All Alerts</a>
         </div>
     </div>
 </div>

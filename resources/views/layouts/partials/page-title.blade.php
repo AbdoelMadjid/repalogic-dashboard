@@ -11,12 +11,20 @@
 
         // Search config/sidenav-template for matching route/URL hierarchy
         $findHierarchy = function ($items, $ancestors) use (&$findHierarchy, $routeName, $currentPath) {
-            if (!is_array($items)) return null;
+            if (!is_array($items)) {
+                return null;
+            }
             foreach ($items as $item) {
-                if (!is_array($item)) continue;
+                if (!is_array($item)) {
+                    continue;
+                }
                 $currentAncestors = array_merge($ancestors, [$item]);
 
-                if (!empty($item['route']) && $routeName && ($item['route'] === $routeName || request()->routeIs($item['route']))) {
+                if (
+                    !empty($item['route']) &&
+                    $routeName &&
+                    ($item['route'] === $routeName || request()->routeIs($item['route']))
+                ) {
                     return $currentAncestors;
                 }
                 if (!empty($item['url']) && ($item['url'] === $currentPath || $item['url'] === '/' . $currentPath)) {
@@ -24,7 +32,9 @@
                 }
                 if (!empty($item['children']) && is_array($item['children'])) {
                     $found = $findHierarchy($item['children'], $currentAncestors);
-                    if ($found) return $found;
+                    if ($found) {
+                        return $found;
+                    }
                 }
             }
             return null;
@@ -36,7 +46,9 @@
             if (!empty($group['items']) && is_array($group['items'])) {
                 $groupTitle = $group['title'] ?? Str::title(str_replace(['-', '_'], ' ', $groupKey));
                 $groupDataLang = $group['data_lang'] ?? null;
-                $found = $findHierarchy($group['items'], [['title' => $groupTitle, 'data_lang' => $groupDataLang, 'is_group' => true]]);
+                $found = $findHierarchy($group['items'], [
+                    ['title' => $groupTitle, 'data_lang' => $groupDataLang, 'is_group' => true],
+                ]);
                 if ($found) {
                     $hierarchy = $found;
                     break;
@@ -53,7 +65,7 @@
             }
 
             // Omit active leaf node from breadcrumb items, since active title is rendered as Main Title on the left
-            $ancestors = (count($hierarchy) > 1) ? array_slice($hierarchy, 0, -1) : $hierarchy;
+            $ancestors = count($hierarchy) > 1 ? array_slice($hierarchy, 0, -1) : $hierarchy;
 
             $breadcrumbItems = [];
             $breadcrumbItems[] = [
@@ -77,15 +89,23 @@
             }
         } else {
             // Fallback: format route/path segments
-            $rawSegments = $routeName && str_contains($routeName, '.')
-                ? explode('.', $routeName)
-                : array_filter(explode('/', $currentPath));
+            $rawSegments =
+                $routeName && str_contains($routeName, '.')
+                    ? explode('.', $routeName)
+                    : array_filter(explode('/', $currentPath));
 
             if (count($rawSegments) > 0 && strtolower($rawSegments[0]) === 'template') {
                 array_shift($rawSegments);
             }
 
-            $knownAcronyms = ['ui' => 'UI', 'faq' => 'FAQ', 'api' => 'API', 'pdf' => 'PDF', 'i18' => 'i18n', 'auth' => 'Auth'];
+            $knownAcronyms = [
+                'ui' => 'UI',
+                'faq' => 'FAQ',
+                'api' => 'API',
+                'pdf' => 'PDF',
+                'i18' => 'i18n',
+                'auth' => 'Auth',
+            ];
 
             $segments = [];
             $accumulated = ['template'];
@@ -109,14 +129,15 @@
 
             $lastSegment = end($segments);
             if (!$pageMainTitle) {
-                $pageMainTitle = is_array($lastSegment) ? ($lastSegment['title'] ?? 'Dashboard') : 'Dashboard';
+                $pageMainTitle = is_array($lastSegment) ? $lastSegment['title'] ?? 'Dashboard' : 'Dashboard';
             }
 
-            $ancestorSegments = (count($segments) > 1) ? array_slice($segments, 0, -1) : $segments;
+            $ancestorSegments = count($segments) > 1 ? array_slice($segments, 0, -1) : $segments;
 
-            $breadcrumbItems = array_merge([
-                ['title' => 'Template', 'url' => Route::has('dashboard') ? route('dashboard') : url('/')]
-            ], $ancestorSegments);
+            $breadcrumbItems = array_merge(
+                [['title' => 'Template', 'url' => Route::has('dashboard') ? route('dashboard') : url('/')]],
+                $ancestorSegments,
+            );
         }
     }
 
@@ -127,21 +148,25 @@
 
 <div class="page-title-head d-flex align-items-center">
     <div class="flex-grow-1">
-        <h4 class="page-main-title m-0" style="text-transform: none !important;" @if(!empty($activeDataLang)) data-lang="{{ $activeDataLang }}" @endif>{{ $pageMainTitle }}</h4>
+        <h4 class="page-main-title m-0" style="text-transform: none !important;"
+            @if (!empty($activeDataLang)) data-lang="{{ $activeDataLang }}" @endif>{{ $pageMainTitle }}</h4>
     </div>
     <div class="text-end">
         <ol class="breadcrumb m-0 py-0" style="text-transform: none !important;">
             @foreach ($breadcrumbItems as $item)
                 @php
                     $itemTitle = is_array($item) ? $item['title'] : $item;
-                    $itemUrl = is_array($item) ? ($item['url'] ?? 'javascript:void(0);') : 'javascript:void(0);';
-                    $itemDataLang = is_array($item) ? ($item['data_lang'] ?? null) : null;
+                    $itemUrl = is_array($item) ? $item['url'] ?? 'javascript:void(0);' : 'javascript:void(0);';
+                    $itemDataLang = is_array($item) ? $item['data_lang'] ?? null : null;
                 @endphp
                 @if ($loop->last)
-                    <li class="breadcrumb-item active" aria-current="page" @if(!empty($itemDataLang)) data-lang="{{ $itemDataLang }}" @endif>{{ $itemTitle }}</li>
+                    <li class="breadcrumb-item active" aria-current="page"
+                        @if (!empty($itemDataLang)) data-lang="{{ $itemDataLang }}" @endif>{{ $itemTitle }}
+                    </li>
                 @else
                     <li class="breadcrumb-item">
-                        <a href="{{ $itemUrl }}" @if(!empty($itemDataLang)) data-lang="{{ $itemDataLang }}" @endif>{{ $itemTitle }}</a>
+                        <a href="{{ $itemUrl }}"
+                            @if (!empty($itemDataLang)) data-lang="{{ $itemDataLang }}" @endif>{{ $itemTitle }}</a>
                     </li>
                 @endif
             @endforeach

@@ -8,45 +8,45 @@
 @endsection
 
 @section('content')
-        @include('layouts.partials.page-title')
+    @include('layouts.partials.page-title')
 
 
-                    <div class="row">
-                        <div class="col-xl-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">Basic Slope</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div dir="ltr">
-                                        <div id="basic-slope" class="apex-charts"></div>
-                                    </div>
-                                </div>
-                                <!-- end card body-->
-                            </div>
-                            <!-- end card -->
-                        </div>
-                        <!-- end col-->
-
-                        <div class="col-xl-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">Multi Slope</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div dir="ltr">
-                                        <div id="multi-slope" class="apex-charts"></div>
-                                    </div>
-                                </div>
-                                <!-- end card body-->
-                            </div>
-                            <!-- end card -->
-                        </div>
-                        <!-- end col-->
-                    </div>
-                    <!-- end row-->
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Basic Slope</h4>
                 </div>
-                <!-- container -->
+                <div class="card-body">
+                    <div dir="ltr">
+                        <div id="basic-slope" class="apex-charts"></div>
+                    </div>
+                </div>
+                <!-- end card body-->
+            </div>
+            <!-- end card -->
+        </div>
+        <!-- end col-->
+
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Multi Slope</h4>
+                </div>
+                <div class="card-body">
+                    <div dir="ltr">
+                        <div id="multi-slope" class="apex-charts"></div>
+                    </div>
+                </div>
+                <!-- end card body-->
+            </div>
+            <!-- end card -->
+        </div>
+        <!-- end col-->
+    </div>
+    <!-- end row-->
+    </div>
+    <!-- container -->
 @endsection
 
 @section('scripts')

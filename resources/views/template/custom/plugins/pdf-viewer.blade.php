@@ -1,58 +1,58 @@
 @extends('layouts.vertical')
 
 @section('content')
-
-                    @include('layouts.partials.page-title')
-
+    @include('layouts.partials.page-title')
 
 
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="text-center">
-                                            <div class="btn-group text-nowrap">
-                                                <button id="prev" class="btn btn-dark">
-                                                    <i class="ti ti-arrow-left"></i>
-                                                    <span class="d-none d-sm-inline ms-2">Previous</span>
-                                                </button>
 
-                                                <button id="next" class="btn btn-dark">
-                                                    <i class="ti ti-arrow-right"></i>
-                                                    <span class="d-none d-sm-inline ms-2">Next</span>
-                                                </button>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="text-center">
+                            <div class="btn-group text-nowrap">
+                                <button id="prev" class="btn btn-dark">
+                                    <i class="ti ti-arrow-left"></i>
+                                    <span class="d-none d-sm-inline ms-2">Previous</span>
+                                </button>
 
-                                                <button id="zoomin" class="btn btn-dark">
-                                                    <i class="ti ti-zoom-in"></i>
-                                                    <span class="d-none d-sm-inline ms-2">Zoom In</span>
-                                                </button>
+                                <button id="next" class="btn btn-dark">
+                                    <i class="ti ti-arrow-right"></i>
+                                    <span class="d-none d-sm-inline ms-2">Next</span>
+                                </button>
 
-                                                <button id="zoomout" class="btn btn-dark">
-                                                    <i class="ti ti-zoom-out"></i>
-                                                    <span class="d-none d-sm-inline ms-2">Zoom Out</span>
-                                                </button>
+                                <button id="zoomin" class="btn btn-dark">
+                                    <i class="ti ti-zoom-in"></i>
+                                    <span class="d-none d-sm-inline ms-2">Zoom In</span>
+                                </button>
 
-                                                <button id="zoomfit" class="btn btn-dark rounded-end-3">100%</button>
+                                <button id="zoomout" class="btn btn-dark">
+                                    <i class="ti ti-zoom-out"></i>
+                                    <span class="d-none d-sm-inline ms-2">Zoom Out</span>
+                                </button>
 
-                                                <input type="text" class="form-control rounded-end-0 ms-1" id="page_num" style="width: 50px" />
-                                                <span class="input-group-text rounded-start-0 border-start-0" id="page_count">/ 00</span>
-                                            </div>
-                                        </div>
+                                <button id="zoomfit" class="btn btn-dark rounded-end-3">100%</button>
 
-                                        <div class="text-center overflow-auto mt-3">
-                                            <canvas id="the-canvas" class="pdfcanvas border rounded-3"></canvas>
-                                        </div>
-                                    </div>
-                                    <!--end card-body -->
-                                </div>
-                                <!-- end card-->
+                                <input type="text" class="form-control rounded-end-0 ms-1" id="page_num"
+                                    style="width: 50px" />
+                                <span class="input-group-text rounded-start-0 border-start-0" id="page_count">/ 00</span>
                             </div>
-                            <!-- end col-->
                         </div>
-                        <!-- end row-->
+
+                        <div class="text-center overflow-auto mt-3">
+                            <canvas id="the-canvas" class="pdfcanvas border rounded-3"></canvas>
+                        </div>
                     </div>
-                    <!-- end container-->
+                    <!--end card-body -->
+                </div>
+                <!-- end card-->
+            </div>
+            <!-- end col-->
+        </div>
+        <!-- end row-->
+    </div>
+    <!-- end container-->
 @endsection
 
 @section('scripts')

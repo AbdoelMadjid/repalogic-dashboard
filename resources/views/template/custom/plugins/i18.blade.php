@@ -1,57 +1,62 @@
 @extends('layouts.vertical')
 
 @section('content')
-
-                    @include('layouts.partials.page-title')
-
+    @include('layouts.partials.page-title')
 
 
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title">Example</h4>
-                                    </div>
 
-                                    <div class="card-body">
-                                        <h5 class="mb-2">You can change the language of demo text as well as the menu with simple function fire on buttons click. Try it:</h5>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Example</h4>
+                    </div>
 
-                                        <div class="d-flex flex-wrap gap-2">
-                                            <button class="btn btn-light gap-1 d-inline-flex align-items-center" data-translator-lang="id">
-                                                <img src="{{ asset('assets/images/flags/id.svg') }}" alt="user-image" class="me-1 rounded" height="18" data-translator-image />
-                                                <span class="align-middle" data-lang="lang-indonesia">Indonesia</span>
-                                            </button>
+                    <div class="card-body">
+                        <h5 class="mb-2">You can change the language of demo text as well as the menu with simple function
+                            fire on buttons click. Try it:</h5>
 
-                                            <button class="btn btn-light gap-1 d-inline-flex align-items-center" data-translator-lang="en">
-                                                <img src="{{ asset('assets/images/flags/us.svg') }}" alt="user-image" class="me-1 rounded" height="18" data-translator-image />
-                                                <span class="align-middle" data-lang="lang-english">English</span>
-                                            </button>
-                                        </div>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button class="btn btn-light gap-1 d-inline-flex align-items-center" data-translator-lang="id">
+                                <img src="{{ asset('assets/images/flags/id.svg') }}" alt="user-image" class="me-1 rounded"
+                                    height="18" data-translator-image />
+                                <span class="align-middle" data-lang="lang-indonesia">Indonesia</span>
+                            </button>
 
-                                        <h5 class="mt-3">Example:</h5>
+                            <button class="btn btn-light gap-1 d-inline-flex align-items-center" data-translator-lang="en">
+                                <img src="{{ asset('assets/images/flags/us.svg') }}" alt="user-image" class="me-1 rounded"
+                                    height="18" data-translator-image />
+                                <span class="align-middle" data-lang="lang-english">English</span>
+                            </button>
+                        </div>
 
-                                        <div class="bg-light-subtle border border-dashed p-3 rounded-3" style="height: 85px">
-                                            <p class="mb-0" data-lang="demo-text"></p>
-                                        </div>
-                                    </div>
-                                </div>
+                        <h5 class="mt-3">Example:</h5>
 
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title">i18support Configuration</h5>
-                                    </div>
+                        <div class="bg-light-subtle border border-dashed p-3 rounded-3" style="height: 85px">
+                            <p class="mb-0" data-lang="demo-text"></p>
+                        </div>
+                    </div>
+                </div>
 
-                                    <div class="card-body">
-                                        <div class="mb-3">
-                                            <span class="badge badge-soft-success py-1 badge-label fs-base text-uppercase mb-2">Step 1</span>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">i18support Configuration</h5>
+                    </div>
 
-                                            <p class="text-muted">To enable i18n support in your application, you need to define all translatable text. The most effective way to do this is by storing the text in an external JSON file. For example:</p>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <span class="badge badge-soft-success py-1 badge-label fs-base text-uppercase mb-2">Step
+                                1</span>
 
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <h5>id.json</h5>
-                                                    <pre class="bg-light-subtle border border-dashed rounded">
+                            <p class="text-muted">To enable i18n support in your application, you need to define all
+                                translatable text. The most effective way to do this is by storing the text in an external
+                                JSON file. For example:</p>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>id.json</h5>
+                                    <pre class="bg-light-subtle border border-dashed rounded">
                                                 <code class="language-javascript">
                                                     {
                                                         "dashboards": "Dashboard",
@@ -60,11 +65,11 @@
                                                     }
                                                 </code>
                                             </pre>
-                                                </div>
+                                </div>
 
-                                                <div class="col-md-6">
-                                                    <h5>en.json</h5>
-                                                    <pre class="bg-light-subtle border border-dashed rounded">
+                                <div class="col-md-6">
+                                    <h5>en.json</h5>
+                                    <pre class="bg-light-subtle border border-dashed rounded">
                                                 <code class="language-javascript">
                                                     {
                                                         "dashboards": "Dashboards",
@@ -73,18 +78,19 @@
                                                     }
                                                 </code>
                                             </pre>
-                                                </div>
-                                            </div>
-                                        </div>
+                                </div>
+                            </div>
+                        </div>
 
-                                        <div class="mb-3">
-                                            <span class="badge badge-soft-success py-1 badge-label fs-base text-uppercase mb-2">Step 2</span>
-                                            <p class="text-muted">
-                                                Next you need to add html indicators in all place you want to use
-                                                <code>data-lang</code>
-                                                .
-                                            </p>
-                                            <pre class="bg-light-subtle border border-dashed rounded">
+                        <div class="mb-3">
+                            <span class="badge badge-soft-success py-1 badge-label fs-base text-uppercase mb-2">Step
+                                2</span>
+                            <p class="text-muted">
+                                Next you need to add html indicators in all place you want to use
+                                <code>data-lang</code>
+                                .
+                            </p>
+                            <pre class="bg-light-subtle border border-dashed rounded">
                                             <code class="language-markup">
                                             &lt;div&gt;
                                                 &lt;span data-lang="dashboards"&gt; Dashboards &lt;/span&gt;
@@ -93,20 +99,21 @@
                                             &lt;/div&gt;
                                             </code>
                                         </pre>
-                                        </div>
+                        </div>
 
-                                        <div>
-                                            <span class="badge badge-soft-success py-1 badge-label fs-base text-uppercase mb-2">Step 3</span>
-                                            <p class="text-muted">
-                                                After that if you want to change the language you just need to add buttons and fire the
-                                                <code>selectedLanguage</code>
-                                                .
-                                            </p>
+                        <div>
+                            <span class="badge badge-soft-success py-1 badge-label fs-base text-uppercase mb-2">Step
+                                3</span>
+                            <p class="text-muted">
+                                After that if you want to change the language you just need to add buttons and fire the
+                                <code>selectedLanguage</code>
+                                .
+                            </p>
 
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <h5 class="mb-2">HTML Code</h5>
-                                                    <pre class="bg-light-subtle border border-dashed rounded">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5 class="mb-2">HTML Code</h5>
+                                    <pre class="bg-light-subtle border border-dashed rounded">
                                                 <code class="language-markup">
                                                 &lt;a class="btn btn-light" data-translator-lang="id"&gt; Set ID language&lt;/a&gt;
 
@@ -114,23 +121,23 @@
                                                 </code>
                                             </pre>
 
-                                                    <h5 class="mt-3 mb-2">Javascript Code</h5>
-                                                    <pre class="bg-light-subtle border border-dashed rounded">
+                                    <h5 class="mt-3 mb-2">Javascript Code</h5>
+                                    <pre class="bg-light-subtle border border-dashed rounded">
                                                 <code class="language-javascript">
                                                     let selectedLanguage = "en";
                                                 </code>
                                             </pre>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end card-body-->
                                 </div>
-                                <!-- edn card-->
                             </div>
-                            <!-- end col-->
                         </div>
-                        <!-- end row-->
                     </div>
-                    <!-- end container-->
+                    <!-- end card-body-->
+                </div>
+                <!-- edn card-->
+            </div>
+            <!-- end col-->
+        </div>
+        <!-- end row-->
+    </div>
+    <!-- end container-->
 @endsection

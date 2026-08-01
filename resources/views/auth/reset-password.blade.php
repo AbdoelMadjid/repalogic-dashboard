@@ -115,7 +115,8 @@
                         </p>
                         <p class="text-muted text-center mb-0">
                             Return to
-                            <a href="{{ asset('auth-sign-in.html') }}" class="text-decoration-underline link-offset-3 fw-semibold">Sign
+                            <a href="{{ asset('auth-sign-in.html') }}"
+                                class="text-decoration-underline link-offset-3 fw-semibold">Sign
                                 in</a>
                         </p>
                     </div>

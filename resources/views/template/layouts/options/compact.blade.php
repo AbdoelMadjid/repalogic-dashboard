@@ -1,40 +1,38 @@
 @extends('layouts.vertical')
 
 @section('content')
+    @include('layouts.partials.page-title')
 
-                @include('layouts.partials.page-title')
+    </div>
+    <!-- container -->
 
+    <div class="container-xl">
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-info alert-bordered border-start border-info d-flex align-items-start gap-2">
+                    <i class="ti ti-info-circle fs-xxl"></i>
+                    <div>
+                        To use the compact layout, follow this structure: wrap your page title in
+                        <code>&lt;div class="container-fluid"&gt;</code>
+                        and place your main content inside
+                        <code>&lt;div class="container-xl"&gt;</code>
+                        . This ensures proper spacing and alignment.
+                    </div>
+                </div>
             </div>
-            <!-- container -->
+        </div>
 
-            <div class="container-xl">
-                <div class="row">
-                    <div class="col-12">
-                        <div
-                            class="alert alert-info alert-bordered border-start border-info d-flex align-items-start gap-2">
-                            <i class="ti ti-info-circle fs-xxl"></i>
-                            <div>
-                                To use the compact layout, follow this structure: wrap your page title in
-                                <code>&lt;div class="container-fluid"&gt;</code>
-                                and place your main content inside
-                                <code>&lt;div class="container-xl"&gt;</code>
-                                . This ensures proper spacing and alignment.
-                            </div>
-                        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h4 class="m-0">Your custom content here</h4>
                     </div>
+                    <!-- end card-body-->
                 </div>
-
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <h4 class="m-0">Your custom content here</h4>
-                            </div>
-                            <!-- end card-body-->
-                        </div>
-                        <!-- end card-->
-                    </div>
-                    <!-- end col-->
-                </div>
-                <!-- end row-->
-@endsection
+                <!-- end card-->
+            </div>
+            <!-- end col-->
+        </div>
+        <!-- end row-->
+    @endsection

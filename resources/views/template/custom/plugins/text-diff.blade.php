@@ -1,28 +1,27 @@
 @extends('layouts.vertical')
 
 @section('content')
-
-                    @include('layouts.partials.page-title')
-
+    @include('layouts.partials.page-title')
 
 
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">jsdiff</h4>
 
-                            <div class="card-action">
-                                <a href="#!" class="card-action-item" data-action="card-toggle">
-                                    <i class="ti ti-chevron-up align-middle"></i>
-                                </a>
-                                <a href="#!" class="card-action-item" data-action="code-collapse">
-                                    <i class="ti ti-code align-middle"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <!-- end card-header -->
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">jsdiff</h4>
 
-                        <div class="code-body">
-                            <pre>
+            <div class="card-action">
+                <a href="#!" class="card-action-item" data-action="card-toggle">
+                    <i class="ti ti-chevron-up align-middle"></i>
+                </a>
+                <a href="#!" class="card-action-item" data-action="code-collapse">
+                    <i class="ti ti-code align-middle"></i>
+                </a>
+            </div>
+        </div>
+        <!-- end card-header -->
+
+        <div class="code-body">
+            <pre>
                            <code class="language-markup">
                             &lt;div class=&quot;row&quot;&gt;
                                 &lt;div class=&quot;col-md-4&quot;&gt;
@@ -46,41 +45,39 @@
                             &lt;!-- Check Docs here:https://github.com/kpdecker/jsdiff --&gt;
                            </code>
                         </pre>
-                        </div>
-                        <!-- end code view -->
+        </div>
+        <!-- end code view -->
 
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h5 class="mb-2 text-uppercase">Original Text</h5>
-                                    <textarea class="diff-original form-control" rows="8">
-On a rainy Monday morning in a small town, Emma walked into her favorite café, her umbrella dripping and her hair slightly frizzy from the storm. She always ordered the same thing: black coffee, two sugars, and a blueberry muffin. But today, someone was already sitting at her usual table by the window. It was Jack — a quiet man with a book in hand and headphones around his neck. Their eyes met for a second. He smiled and motioned for her to join him. Hesitant but intrigued, Emma accepted.
-                                </textarea
-                                    >
-                                </div>
-                                <!-- end col -->
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="mb-2 text-uppercase">Original Text</h5>
+                    <textarea class="diff-original form-control" rows="8">
+    On a rainy Monday morning in a small town, Emma walked into her favorite café, her umbrella dripping and her hair slightly frizzy from the storm. She always ordered the same thing: black coffee, two sugars, and a blueberry muffin. But today, someone was already sitting at her usual table by the window. It was Jack — a quiet man with a book in hand and headphones around his neck. Their eyes met for a second. He smiled and motioned for her to join him. Hesitant but intrigued, Emma accepted.
+                                    </textarea>
+                </div>
+                <!-- end col -->
 
-                                <div class="col-md-6">
-                                    <h5 class="mb-2 text-uppercase">Changed Text</h5>
-                                    <textarea class="diff-changed form-control" rows="8">
-On a rainy Monday morning in a small town, Emma stepped into her favorite café, her umbrella dripping and her hair slightly frizzy from the damp weather. She always ordered the same thing: black coffee with two sugars and a blueberry muffin. But today, someone was already seated at her usual window table. It was Jack — a quiet man with a book in one hand and headphones resting around his neck. Their eyes met briefly. He smiled and gestured for her to join him. Hesitant but curious, Emma agreed.</textarea
-                                    >
-                                </div>
-                                <!-- end col -->
+                <div class="col-md-6">
+                    <h5 class="mb-2 text-uppercase">Changed Text</h5>
+                    <textarea class="diff-changed form-control" rows="8">
+    On a rainy Monday morning in a small town, Emma stepped into her favorite café, her umbrella dripping and her hair slightly frizzy from the damp weather. She always ordered the same thing: black coffee with two sugars and a blueberry muffin. But today, someone was already seated at her usual window table. It was Jack — a quiet man with a book in one hand and headphones resting around his neck. Their eyes met briefly. He smiled and gestured for her to join him. Hesitant but curious, Emma agreed.</textarea>
+                </div>
+                <!-- end col -->
 
-                                <div class="col-md-12">
-                                    <h5 class="mb-2 mt-3 text-uppercase">Results</h5>
-                                    <div class="p-3 bg-light-subtle border border-dashed rounded lh-lg">
-                                        <div class="diff-output diff"></div>
-                                    </div>
-                                </div>
-                                <!-- end col -->
-                            </div>
-                            <!-- end row -->
-                        </div>
-                        <!-- end card-body -->
+                <div class="col-md-12">
+                    <h5 class="mb-2 mt-3 text-uppercase">Results</h5>
+                    <div class="p-3 bg-light-subtle border border-dashed rounded lh-lg">
+                        <div class="diff-output diff"></div>
                     </div>
-                    <!-- end card -->
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- end card-body -->
+    </div>
+    <!-- end card -->
 @endsection
 
 @section('scripts')

@@ -8,126 +8,129 @@
 @endsection
 
 @section('content')
-        @include('layouts.partials.page-title')
+    @include('layouts.partials.page-title')
 
 
-                    <div class="container-xxl">
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title">Embed Videos</h4>
-                                    </div>
-
-                                    <div class="card-body">
-                                        <p class="text-muted mb-2">Use generated pseudo elements to make an element maintain the aspect ratio of your choosing. Perfect for responsively handling video or slideshow embeds based on the width of the parent.</p>
-
-                                        <a class="btn btn-link p-0 fw-semibold" href="https://getbootstrap.com/docs/5.3/helpers/ratio/" target="_blank">
-                                            Ratios on Bootstrap
-                                            <i class="ti ti-chevron-right ms-1"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- end col -->
-
-                            <div class="col-xl-6">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <div class="flex-grow-1">
-                                            <h4 class="card-title">Responsive embed video 21:9</h4>
-                                        </div>
-                                        <div class="card-action">
-                                            <a href="#!" class="card-action-item" data-action="card-toggle">
-                                                <i class="ti ti-chevron-up align-middle"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="card-body">
-                                        <!-- 21:9 aspect ratio -->
-                                        <div class="ratio ratio-21x9">
-                                            <iframe src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0"></iframe>
-                                        </div>
-                                    </div>
-                                    <!-- end card-body-->
-                                </div>
-                                <!-- end card-->
-
-                                <div class="card">
-                                    <div class="card-header">
-                                        <div class="flex-grow-1">
-                                            <h4 class="card-title">Responsive embed video 1:1</h4>
-                                        </div>
-                                        <div class="card-action">
-                                            <a href="#!" class="card-action-item" data-action="card-toggle">
-                                                <i class="ti ti-chevron-up align-middle"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="card-body">
-                                        <!-- 21:9 aspect ratio -->
-                                        <div class="ratio ratio-1x1">
-                                            <iframe src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0"></iframe>
-                                        </div>
-                                    </div>
-                                    <!-- end card-body-->
-                                </div>
-                                <!-- end card-->
-                            </div>
-                            <!-- end col -->
-
-                            <div class="col-xl-6">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <div class="flex-grow-1">
-                                            <h4 class="card-title">Responsive embed video 16:9</h4>
-                                        </div>
-                                        <div class="card-action">
-                                            <a href="#!" class="card-action-item" data-action="card-toggle">
-                                                <i class="ti ti-chevron-up align-middle"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="card-body">
-                                        <!-- 21:9 aspect ratio -->
-                                        <div class="ratio ratio-16x9">
-                                            <iframe src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0"></iframe>
-                                        </div>
-                                    </div>
-                                    <!-- end card-body-->
-                                </div>
-                                <!-- end card-->
-
-                                <div class="card">
-                                    <div class="card-header">
-                                        <div class="flex-grow-1">
-                                            <h4 class="card-title">Responsive embed video 4:3</h4>
-                                        </div>
-                                        <div class="card-action">
-                                            <a href="#!" class="card-action-item" data-action="card-toggle">
-                                                <i class="ti ti-chevron-up align-middle"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="card-body">
-                                        <!-- 21:9 aspect ratio -->
-                                        <div class="ratio ratio-4x3">
-                                            <iframe src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0"></iframe>
-                                        </div>
-                                    </div>
-                                    <!-- end card-body-->
-                                </div>
-                                <!-- end card-->
-                            </div>
-                            <!-- end col -->
-                        </div>
-                        <!-- end row -->
+    <div class="container-xxl">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Embed Videos</h4>
                     </div>
-                    <!-- container -->
+
+                    <div class="card-body">
+                        <p class="text-muted mb-2">Use generated pseudo elements to make an element maintain the aspect ratio
+                            of your choosing. Perfect for responsively handling video or slideshow embeds based on the width
+                            of the parent.</p>
+
+                        <a class="btn btn-link p-0 fw-semibold" href="https://getbootstrap.com/docs/5.3/helpers/ratio/"
+                            target="_blank">
+                            Ratios on Bootstrap
+                            <i class="ti ti-chevron-right ms-1"></i>
+                        </a>
+                    </div>
                 </div>
-                <!-- container-fluid -->
+            </div>
+            <!-- end col -->
+
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="flex-grow-1">
+                            <h4 class="card-title">Responsive embed video 21:9</h4>
+                        </div>
+                        <div class="card-action">
+                            <a href="#!" class="card-action-item" data-action="card-toggle">
+                                <i class="ti ti-chevron-up align-middle"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <!-- 21:9 aspect ratio -->
+                        <div class="ratio ratio-21x9">
+                            <iframe src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0"></iframe>
+                        </div>
+                    </div>
+                    <!-- end card-body-->
+                </div>
+                <!-- end card-->
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="flex-grow-1">
+                            <h4 class="card-title">Responsive embed video 1:1</h4>
+                        </div>
+                        <div class="card-action">
+                            <a href="#!" class="card-action-item" data-action="card-toggle">
+                                <i class="ti ti-chevron-up align-middle"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <!-- 21:9 aspect ratio -->
+                        <div class="ratio ratio-1x1">
+                            <iframe src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0"></iframe>
+                        </div>
+                    </div>
+                    <!-- end card-body-->
+                </div>
+                <!-- end card-->
+            </div>
+            <!-- end col -->
+
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="flex-grow-1">
+                            <h4 class="card-title">Responsive embed video 16:9</h4>
+                        </div>
+                        <div class="card-action">
+                            <a href="#!" class="card-action-item" data-action="card-toggle">
+                                <i class="ti ti-chevron-up align-middle"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <!-- 21:9 aspect ratio -->
+                        <div class="ratio ratio-16x9">
+                            <iframe src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0"></iframe>
+                        </div>
+                    </div>
+                    <!-- end card-body-->
+                </div>
+                <!-- end card-->
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="flex-grow-1">
+                            <h4 class="card-title">Responsive embed video 4:3</h4>
+                        </div>
+                        <div class="card-action">
+                            <a href="#!" class="card-action-item" data-action="card-toggle">
+                                <i class="ti ti-chevron-up align-middle"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <!-- 21:9 aspect ratio -->
+                        <div class="ratio ratio-4x3">
+                            <iframe src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0"></iframe>
+                        </div>
+                    </div>
+                    <!-- end card-body-->
+                </div>
+                <!-- end card-->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- container -->
+    </div>
+    <!-- container-fluid -->
 @endsection

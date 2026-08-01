@@ -20,8 +20,8 @@
                     </figure>
 
                     <!-- Main image -->
-                    <img src="{{ asset('assets/images/chat.png') }}" class="rounded-3 shadow-lg img-fluid mt-5 z-1 position-relative"
-                        alt="saas-img" />
+                    <img src="{{ asset('assets/images/chat.png') }}"
+                        class="rounded-3 shadow-lg img-fluid mt-5 z-1 position-relative" alt="saas-img" />
 
                     <figure class="position-absolute bottom-0 end-0 me-n5 mb-n5 opacity-25">
                         <svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
@@ -247,8 +247,8 @@
                     </figure>
 
                     <!-- Main image -->
-                    <img src="{{ asset('assets/images/team.png') }}" class="rounded-3 shadow-lg img-fluid mt-5 z-1 position-relative"
-                        alt="saas-img" />
+                    <img src="{{ asset('assets/images/team.png') }}"
+                        class="rounded-3 shadow-lg img-fluid mt-5 z-1 position-relative" alt="saas-img" />
 
                     <figure class="position-absolute bottom-0 end-0 me-n5 mb-n5 opacity-25">
                         <svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">

@@ -8,9 +8,13 @@
         <div class="col-12 mb-4">
             <div class="card border-0 bg-dark text-white shadow-sm rounded-4 overflow-hidden position-relative">
                 <div class="card-body p-4 p-lg-5">
-                    <span class="badge bg-primary text-white fw-semibold px-3 py-1.5 rounded-pill mb-3">Quick Setup Guide</span>
-                    <h2 class="fw-bold text-white mb-2" data-lang="doc-quick-setup">Getting Started with Repalogic & INSPINIA</h2>
-                    <p class="text-white-50 fs-16 mb-0" data-lang="doc-quick-setup-desc">Follow this step-by-step setup guide to install dependencies, configure environment variables, and run your development server in minutes.</p>
+                    <span class="badge bg-primary text-white fw-semibold px-3 py-1.5 rounded-pill mb-3">Quick Setup
+                        Guide</span>
+                    <h2 class="fw-bold text-white mb-2" data-lang="doc-quick-setup">Getting Started with Repalogic & INSPINIA
+                    </h2>
+                    <p class="text-white-50 fs-16 mb-0" data-lang="doc-quick-setup-desc">Follow this step-by-step setup guide
+                        to install dependencies, configure environment variables, and run your development server in
+                        minutes.</p>
                 </div>
             </div>
         </div>
@@ -19,7 +23,8 @@
         <div class="col-12 mb-4">
             <div class="card border shadow-sm">
                 <div class="card-header bg-transparent py-3">
-                    <h5 class="card-title mb-0 fw-bold"><i class="ti ti-checklist me-2 text-primary"></i><span data-lang="doc-prerequisites">System Prerequisites</span></h5>
+                    <h5 class="card-title mb-0 fw-bold"><i class="ti ti-checklist me-2 text-primary"></i><span
+                            data-lang="doc-prerequisites">System Prerequisites</span></h5>
                 </div>
                 <div class="card-body">
                     <div class="row g-3 text-center">
@@ -64,10 +69,13 @@
                 <div class="card border">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-start gap-3">
-                            <span class="badge bg-primary rounded-circle p-2 fs-16 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">1</span>
+                            <span
+                                class="badge bg-primary rounded-circle p-2 fs-16 d-flex align-items-center justify-content-center"
+                                style="width: 36px; height: 36px;">1</span>
                             <div class="w-100">
                                 <h5 class="fw-bold mb-1">Install PHP & Node Dependencies</h5>
-                                <p class="text-muted fs-14 mb-3">Open your terminal in the project root directory and run the following commands to install PHP vendor packages and Node npm modules:</p>
+                                <p class="text-muted fs-14 mb-3">Open your terminal in the project root directory and run
+                                    the following commands to install PHP vendor packages and Node npm modules:</p>
                                 <div class="bg-dark text-white p-3 rounded-3 font-monospace fs-13">
                                     <div class="text-success"># Install PHP packages</div>
                                     <div>composer install</div>
@@ -83,10 +91,13 @@
                 <div class="card border">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-start gap-3">
-                            <span class="badge bg-primary rounded-circle p-2 fs-16 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">2</span>
+                            <span
+                                class="badge bg-primary rounded-circle p-2 fs-16 d-flex align-items-center justify-content-center"
+                                style="width: 36px; height: 36px;">2</span>
                             <div class="w-100">
                                 <h5 class="fw-bold mb-1">Configure Environment File & App Key</h5>
-                                <p class="text-muted fs-14 mb-3">Duplicate the `.env.example` file to create your `.env` configuration file, then generate an application encryption key:</p>
+                                <p class="text-muted fs-14 mb-3">Duplicate the `.env.example` file to create your `.env`
+                                    configuration file, then generate an application encryption key:</p>
                                 <div class="bg-dark text-white p-3 rounded-3 font-monospace fs-13">
                                     <div class="text-success"># Copy environment template</div>
                                     <div>cp .env.example .env</div>
@@ -102,10 +113,13 @@
                 <div class="card border">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-start gap-3">
-                            <span class="badge bg-primary rounded-circle p-2 fs-16 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">3</span>
+                            <span
+                                class="badge bg-primary rounded-circle p-2 fs-16 d-flex align-items-center justify-content-center"
+                                style="width: 36px; height: 36px;">3</span>
                             <div class="w-100">
                                 <h5 class="fw-bold mb-1">Run Development Server</h5>
-                                <p class="text-muted fs-14 mb-3">Start the Vite development server and Laravel local web server:</p>
+                                <p class="text-muted fs-14 mb-3">Start the Vite development server and Laravel local web
+                                    server:</p>
                                 <div class="bg-dark text-white p-3 rounded-3 font-monospace fs-13">
                                     <div class="text-success"># Start Vite HMR server</div>
                                     <div>npm run dev</div>
@@ -113,7 +127,9 @@
                                     <div>php artisan serve</div>
                                 </div>
                                 <div class="mt-3">
-                                    <a href="http://127.0.0.1:8000" target="_blank" class="btn btn-sm btn-primary fw-semibold"><i class="ti ti-external-link me-1"></i> Open http://127.0.0.1:8000</a>
+                                    <a href="http://127.0.0.1:8000" target="_blank"
+                                        class="btn btn-sm btn-primary fw-semibold"><i class="ti ti-external-link me-1"></i>
+                                        Open http://127.0.0.1:8000</a>
                                 </div>
                             </div>
                         </div>

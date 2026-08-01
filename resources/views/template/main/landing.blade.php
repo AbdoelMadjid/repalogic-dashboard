@@ -1,17 +1,19 @@
 @extends('layouts.base')
 
-@section('body_attribute') class="bg-body-secondary" data-bs-spy="scroll" data-bs-target="#navbar-example" @endsection
+@section('body_attribute')
+    class="bg-body-secondary" data-bs-spy="scroll" data-bs-target="#navbar-example"
+@endsection
 
 @section('content')
-<!-- Top Alert -->
+    <!-- Top Alert -->
     <div class="alert alert-primary top-alert text-center mb-0 rounded-0 alert-dismissible" role="alert">
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
         <div class="fst-italic fw-medium">
             🚀 Inspinia is here! Now with Bootstrap 5, dark mode, and a refreshed UI. Upgrade today for the best
             experience!
             <a href="https://wrapbootstrap.com/theme/inspinia-multipurpose-admin-dashboard-template-WB0R5L90S?ref=inspinia"
-                target="_blank"
-                class="fw-semibold fst-normal text-white text-decoration-underline link-offset-3 ms-2">Buy Now!</a>
+                target="_blank" class="fw-semibold fst-normal text-white text-decoration-underline link-offset-3 ms-2">Buy
+                Now!</a>
         </div>
     </div>
 
@@ -29,8 +31,8 @@
                     </a>
                 </div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -76,8 +78,8 @@
     <!-- Header END -->
 
     <!-- =======================
-            HERO SECTION
-    ======================= -->
+                HERO SECTION
+        ======================= -->
     <section class="bg-light bg-opacity-50 border-top border-light position-relative" id="hero">
         <!-- Background Pattern -->
         <div class="position-absolute top-0 start-50 translate-middle-x mt-5">
@@ -170,12 +172,12 @@
         </div>
     </section>
     <!-- =======================
-            HERO SECTION END
-    ======================= -->
+                HERO SECTION END
+        ======================= -->
 
     <!-- =======================
-        SERVICES SECTION
-    ======================= -->
+            SERVICES SECTION
+        ======================= -->
     <section class="section-custom pb-5" id="services">
         <div class="container">
             <!-- Section Heading -->
@@ -358,12 +360,12 @@
         <!-- end container-->
     </section>
     <!-- =======================
-        SERVICES SECTION END
-    ======================= -->
+            SERVICES SECTION END
+        ======================= -->
 
     <!-- =======================
-        Features SECTION
-    ======================= -->
+            Features SECTION
+        ======================= -->
     <section class="section-custom bg-light bg-opacity-30 border-top border-light border-bottom" id="features">
         <div class="container">
             <div class="row align-items-center pb-5">
@@ -709,12 +711,12 @@
         <!-- end container-->
     </section>
     <!-- =======================
-        Features SECTION END
-    ======================= -->
+            Features SECTION END
+        ======================= -->
 
     <!-- =======================
-        PLANS SECTION
-    ======================= -->
+            PLANS SECTION
+        ======================= -->
     <section class="section-custom" id="plans">
         <div class="container">
             <div class="row">
@@ -845,12 +847,12 @@
         <!-- end container-->
     </section>
     <!-- =======================
-        PLANS SECTION END
-    ======================= -->
+            PLANS SECTION END
+        ======================= -->
 
     <!-- =======================
-        CTA SECTION
-    ======================= -->
+            CTA SECTION
+        ======================= -->
 
     <section>
         <div class="section-cta position-relative card-side-img overflow-hidden"
@@ -868,12 +870,12 @@
     </section>
 
     <!-- =======================
-        CTA SECTION END
-    ======================= -->
+            CTA SECTION END
+        ======================= -->
 
     <!-- =======================
-        REVIEWS SECTION
-    ======================= -->
+            REVIEWS SECTION
+        ======================= -->
     <section class="section-custom position-relative overflow-hidden" id="reviews">
         <!-- background pattern -->
         <div class="position-absolute top-0 start-50 translate-middle-x mt-5 opacity-50">
@@ -1003,44 +1005,37 @@
                     <div class="d-flex justify-content-center align-items-center flex-wrap gap-5 mt-4">
                         <div>
                             <a href="#!" class="d-block">
-                                <img src="{{ asset('assets/images/clients/01.svg') }}" alt="logo"
-                                    height="42" />
+                                <img src="{{ asset('assets/images/clients/01.svg') }}" alt="logo" height="42" />
                             </a>
                         </div>
                         <div>
                             <a href="#!" class="d-block">
-                                <img src="{{ asset('assets/images/clients/02.svg') }}" alt="logo"
-                                    height="42" />
+                                <img src="{{ asset('assets/images/clients/02.svg') }}" alt="logo" height="42" />
                             </a>
                         </div>
                         <div>
                             <a href="#!" class="d-block">
-                                <img src="{{ asset('assets/images/clients/03.svg') }}" alt="logo"
-                                    height="42" />
+                                <img src="{{ asset('assets/images/clients/03.svg') }}" alt="logo" height="42" />
                             </a>
                         </div>
                         <div>
                             <a href="#!" class="d-block">
-                                <img src="{{ asset('assets/images/clients/04.svg') }}" alt="logo"
-                                    height="42" />
+                                <img src="{{ asset('assets/images/clients/04.svg') }}" alt="logo" height="42" />
                             </a>
                         </div>
                         <div>
                             <a href="#!" class="d-block">
-                                <img src="{{ asset('assets/images/clients/05.svg') }}" alt="logo"
-                                    height="42" />
+                                <img src="{{ asset('assets/images/clients/05.svg') }}" alt="logo" height="42" />
                             </a>
                         </div>
                         <div>
                             <a href="#!" class="d-block">
-                                <img src="{{ asset('assets/images/clients/06.svg') }}" alt="logo"
-                                    height="42" />
+                                <img src="{{ asset('assets/images/clients/06.svg') }}" alt="logo" height="42" />
                             </a>
                         </div>
                         <div>
                             <a href="#!" class="d-block">
-                                <img src="{{ asset('assets/images/clients/07.svg') }}" alt="logo"
-                                    height="42" />
+                                <img src="{{ asset('assets/images/clients/07.svg') }}" alt="logo" height="42" />
                             </a>
                         </div>
                     </div>
@@ -1051,12 +1046,12 @@
         <!-- end container-->
     </section>
     <!-- =======================
-        REVIEWS SECTION END
-    ======================= -->
+            REVIEWS SECTION END
+        ======================= -->
 
     <!-- =======================
-        BLOG SECTION
-    ======================= -->
+            BLOG SECTION
+        ======================= -->
     <section class="section-custom bg-light bg-opacity-30 border-top border-bottom border-light" id="blog">
         <div class="container">
             <div class="row">
@@ -1217,12 +1212,12 @@
         <!-- end container-->
     </section>
     <!-- =======================
-        BLOG SECTION END
-    ======================= -->
+            BLOG SECTION END
+        ======================= -->
 
     <!-- =======================
-        CONTACT SECTION
-    ======================= -->
+            CONTACT SECTION
+        ======================= -->
     <section class="section-custom" id="contact">
         <div class="container">
             <div class="row">
@@ -1318,12 +1313,12 @@
         <!-- end container-->
     </section>
     <!-- =======================
-        CONTACT SECTION END
-    ======================= -->
+            CONTACT SECTION END
+        ======================= -->
 
     <!-- =======================
-        FOOTER SECTION
-    ======================= -->
+            FOOTER SECTION
+        ======================= -->
     <footer class="section-custom section-footer pb-2">
         <div class="container">
             <div class="row g-4 justify-content-between">
@@ -1410,8 +1405,8 @@
         <!-- end container-->
     </footer>
     <!-- =======================
-        FOOTER SECTION END
-    ======================= -->
+            FOOTER SECTION END
+        ======================= -->
 
     <div class="offcanvas offcanvas-end overflow-hidden" tabindex="-1" id="theme-settings-offcanvas">
         <div class="d-flex justify-content-between text-bg-primary gap-2 p-3"
@@ -1437,8 +1432,8 @@
                 <div class="row g-3">
                     <div class="col-6" id="skin-default">
                         <div class="form-check card-radio">
-                            <input class="form-check-input" type="radio" name="data-skin"
-                                id="demo-skin-default" value="default" />
+                            <input class="form-check-input" type="radio" name="data-skin" id="demo-skin-default"
+                                value="default" />
                             <label class="form-check-label p-0 w-100" for="demo-skin-default">
                                 <img src="{{ asset('assets/images/layouts/skin-default.png') }}" alt="layout-img"
                                     class="img-fluid" />
@@ -1497,8 +1492,8 @@
 
                     <div class="col-6" id="skin-galaxy">
                         <div class="form-check card-radio">
-                            <input class="form-check-input" type="radio" name="data-skin"
-                                id="demo-skin-galaxy" value="galaxy" />
+                            <input class="form-check-input" type="radio" name="data-skin" id="demo-skin-galaxy"
+                                value="galaxy" />
                             <label class="form-check-label p-0 w-100" for="demo-skin-galaxy">
                                 <img src="{{ asset('assets/images/layouts/skin-galaxy.png') }}" alt="layout-img"
                                     class="img-fluid" />
@@ -1509,8 +1504,8 @@
 
                     <div class="col-6" id="skin-material">
                         <div class="form-check card-radio">
-                            <input class="form-check-input" type="radio" name="data-skin"
-                                id="demo-skin-material" value="material" />
+                            <input class="form-check-input" type="radio" name="data-skin" id="demo-skin-material"
+                                value="material" />
                             <label class="form-check-label p-0 w-100" for="demo-skin-material">
                                 <img src="{{ asset('assets/images/layouts/skin-material.png') }}" alt="layout-img"
                                     class="img-fluid" />
@@ -1521,8 +1516,8 @@
 
                     <div class="col-6" id="skin-minimal">
                         <div class="form-check card-radio">
-                            <input class="form-check-input" type="radio" name="data-skin"
-                                id="demo-skin-minimal" value="minimal" />
+                            <input class="form-check-input" type="radio" name="data-skin" id="demo-skin-minimal"
+                                value="minimal" />
                             <label class="form-check-label p-0 w-100" for="demo-skin-minimal">
                                 <img src="{{ asset('assets/images/layouts/skin-minimal.png') }}" alt="layout-img"
                                     class="img-fluid" />
@@ -1533,8 +1528,8 @@
 
                     <div class="col-6" id="skin-modern">
                         <div class="form-check card-radio">
-                            <input class="form-check-input" type="radio" name="data-skin"
-                                id="demo-skin-modern" value="modern" />
+                            <input class="form-check-input" type="radio" name="data-skin" id="demo-skin-modern"
+                                value="modern" />
                             <label class="form-check-label p-0 w-100" for="demo-skin-modern">
                                 <img src="{{ asset('assets/images/layouts/skin-modern.png') }}" alt="layout-img"
                                     class="img-fluid" />
@@ -1619,8 +1614,8 @@
                             <input class="form-check-input" type="radio" name="data-topbar-color"
                                 id="layout-topbar-color-light" value="light" />
                             <label class="form-check-label p-0 w-100" for="layout-topbar-color-light">
-                                <img src="{{ asset('assets/images/layouts/topbar-color-light.png') }}"
-                                    alt="layout-img" class="img-fluid" />
+                                <img src="{{ asset('assets/images/layouts/topbar-color-light.png') }}" alt="layout-img"
+                                    class="img-fluid" />
                             </label>
                         </div>
                         <h5 class="text-center text-muted mt-2 mb-0">Light</h5>
@@ -1631,8 +1626,8 @@
                             <input class="form-check-input" type="radio" name="data-topbar-color"
                                 id="layout-topbar-color-dark" value="dark" />
                             <label class="form-check-label p-0 w-100" for="layout-topbar-color-dark">
-                                <img src="{{ asset('assets/images/layouts/topbar-color-dark.png') }}"
-                                    alt="layout-img" class="img-fluid" />
+                                <img src="{{ asset('assets/images/layouts/topbar-color-dark.png') }}" alt="layout-img"
+                                    class="img-fluid" />
                             </label>
                         </div>
                         <h5 class="fs-sm text-center text-muted mt-2 mb-0">Dark</h5>
@@ -1643,8 +1638,8 @@
                             <input class="form-check-input" type="radio" name="data-topbar-color"
                                 id="layout-topbar-color-gray" value="gray" />
                             <label class="form-check-label p-0 w-100" for="layout-topbar-color-gray">
-                                <img src="{{ asset('assets/images/layouts/topbar-color-gray.png') }}"
-                                    alt="layout-img" class="img-fluid" />
+                                <img src="{{ asset('assets/images/layouts/topbar-color-gray.png') }}" alt="layout-img"
+                                    class="img-fluid" />
                             </label>
                         </div>
                         <h5 class="fs-sm text-center text-muted mt-2 mb-0">Gray</h5>
@@ -1685,8 +1680,8 @@
                             <input class="form-check-input" type="radio" name="data-menu-color"
                                 id="layout-sidenav-color-dark" value="dark" />
                             <label class="form-check-label p-0 w-100" for="layout-sidenav-color-dark">
-                                <img src="{{ asset('assets/images/layouts/sidenav-color-dark.png') }}"
-                                    alt="layout-img" class="img-fluid" />
+                                <img src="{{ asset('assets/images/layouts/sidenav-color-dark.png') }}" alt="layout-img"
+                                    class="img-fluid" />
                             </label>
                         </div>
                         <h5 class="fs-sm text-center text-muted mt-2 mb-0">Dark</h5>
@@ -1697,8 +1692,8 @@
                             <input class="form-check-input" type="radio" name="data-menu-color"
                                 id="layout-sidenav-color-gray" value="gray" />
                             <label class="form-check-label p-0 w-100" for="layout-sidenav-color-gray">
-                                <img src="{{ asset('assets/images/layouts/sidenav-color-gray.png') }}"
-                                    alt="layout-img" class="img-fluid" />
+                                <img src="{{ asset('assets/images/layouts/sidenav-color-gray.png') }}" alt="layout-img"
+                                    class="img-fluid" />
                             </label>
                         </div>
                         <h5 class="fs-sm text-center text-muted mt-2 mb-0">Gray</h5>
@@ -1875,8 +1870,7 @@
                         <div id="position-fixed">
                             <input type="radio" class="btn-check" name="data-layout-position"
                                 id="layout-position-fixed" value="fixed" />
-                            <label class="btn btn-sm btn-soft-warning w-sm"
-                                for="layout-position-fixed">Fixed</label>
+                            <label class="btn btn-sm btn-soft-warning w-sm" for="layout-position-fixed">Fixed</label>
                         </div>
                         <div id="position-scrollable">
                             <input type="radio" class="btn-check" name="data-layout-position"
@@ -1916,10 +1910,10 @@
         </div>
     </div>
     <!-- end offcanvas-->
-    
+
     <script src="{{ asset('assets/js/vendors.min.js') }}"></script>
 
-    
+
     <script src="{{ asset('assets/js/app.js') }}"></script>
 
 

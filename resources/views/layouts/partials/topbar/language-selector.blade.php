@@ -7,12 +7,14 @@
             <span id="selected-language-code">EN</span>
         </button>
         <div class="dropdown-menu dropdown-menu-end">
-            <a href="javascript:void(0);" class="dropdown-item" data-translator-lang="id" data-lang-title="lang-indonesia" title="Indonesia">
+            <a href="javascript:void(0);" class="dropdown-item" data-translator-lang="id"
+                data-lang-title="lang-indonesia" title="Indonesia">
                 <img src="{{ asset('assets/images/flags/id.svg') }}" alt="Indonesia" class="me-1 rounded" height="18"
                     data-translator-image="" />
                 <span class="align-middle" data-lang="lang-indonesia">Indonesia</span>
             </a>
-            <a href="javascript:void(0);" class="dropdown-item" data-translator-lang="en" data-lang-title="lang-english" title="English">
+            <a href="javascript:void(0);" class="dropdown-item" data-translator-lang="en" data-lang-title="lang-english"
+                title="English">
                 <img src="{{ asset('assets/images/flags/us.svg') }}" alt="English" class="me-1 rounded" height="18"
                     data-translator-image="" />
                 <span class="align-middle" data-lang="lang-english">English</span>

@@ -7,20 +7,27 @@
     if (!empty($item['route'])) {
         $routeUrl = Route::has($item['route']) ? route($item['route']) : '#';
     } elseif (isset($item['url'])) {
-        $routeUrl = str_starts_with($item['url'], 'http') || str_starts_with($item['url'], '#') || str_starts_with($item['url'], '/')
-            ? $item['url']
-            : asset($item['url']);
+        $routeUrl =
+            str_starts_with($item['url'], 'http') ||
+            str_starts_with($item['url'], '#') ||
+            str_starts_with($item['url'], '/')
+                ? $item['url']
+                : asset($item['url']);
     }
 
     // Active route checking (supports recursive children & sub-route matching)
     $checkIsActive = function ($menuItem) use (&$checkIsActive) {
-        if (!is_array($menuItem)) return false;
+        if (!is_array($menuItem)) {
+            return false;
+        }
 
         if (!empty($menuItem['route']) && Route::has($menuItem['route'])) {
             $currentRoute = Route::currentRouteName();
-            if (request()->routeIs($menuItem['route']) ||
+            if (
+                request()->routeIs($menuItem['route']) ||
                 request()->routeIs($menuItem['route'] . '.*') ||
-                ($currentRoute && str_starts_with($currentRoute, $menuItem['route'] . '-'))) {
+                ($currentRoute && str_starts_with($currentRoute, $menuItem['route'] . '-'))
+            ) {
                 return true;
             }
         }
@@ -68,11 +75,8 @@
 
 <li class="side-nav-item{{ $isActive ? ' active' : '' }}">
     @if ($hasChildren)
-        <a data-bs-toggle="collapse"
-           href="#{{ $collapseId }}"
-           aria-expanded="{{ $isActive ? 'true' : 'false' }}"
-           aria-controls="{{ $collapseId }}"
-           class="{{ $linkClasses }}">
+        <a data-bs-toggle="collapse" href="#{{ $collapseId }}" aria-expanded="{{ $isActive ? 'true' : 'false' }}"
+            aria-controls="{{ $collapseId }}" class="{{ $linkClasses }}">
             @if (!empty($item['icon']))
                 <span class="menu-icon"><i class="{{ $item['icon'] }}"></i></span>
             @endif
@@ -94,9 +98,8 @@
             </ul>
         </div>
     @else
-        <a href="{{ $routeUrl }}"
-           class="{{ $linkClasses }}"
-           @if (!empty($item['target'])) target="{{ $item['target'] }}" @endif>
+        <a href="{{ $routeUrl }}" class="{{ $linkClasses }}"
+            @if (!empty($item['target'])) target="{{ $item['target'] }}" @endif>
             @if (!empty($item['icon']))
                 <span class="menu-icon"><i class="{{ $item['icon'] }}"></i></span>
             @endif

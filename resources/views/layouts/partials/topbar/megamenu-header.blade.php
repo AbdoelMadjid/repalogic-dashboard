@@ -21,22 +21,28 @@
                 <div class="row g-0">
                     <div class="col-md-4">
                         <div class="p-3">
-                            <h5 class="mb-2 fw-semibold fs-sm dropdown-header" data-lang="topbar-megamenu-dashboards">Dashboard &amp; Analytics</h5>
+                            <h5 class="mb-2 fw-semibold fs-sm dropdown-header" data-lang="topbar-megamenu-dashboards">
+                                Dashboard &amp; Analytics</h5>
                             <ul class="list-unstyled megamenu-list">
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item" data-lang="topbar-megamenu-sales-dashboard">Sales Dashboard</a>
+                                    <a href="javascript:void(0);" class="dropdown-item"
+                                        data-lang="topbar-megamenu-sales-dashboard">Sales Dashboard</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item" data-lang="topbar-megamenu-marketing-dashboard">Marketing Dashboard</a>
+                                    <a href="javascript:void(0);" class="dropdown-item"
+                                        data-lang="topbar-megamenu-marketing-dashboard">Marketing Dashboard</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item" data-lang="topbar-megamenu-finance-overview">Finance Overview</a>
+                                    <a href="javascript:void(0);" class="dropdown-item"
+                                        data-lang="topbar-megamenu-finance-overview">Finance Overview</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item" data-lang="topbar-megamenu-user-analytics">User Analytics</a>
+                                    <a href="javascript:void(0);" class="dropdown-item"
+                                        data-lang="topbar-megamenu-user-analytics">User Analytics</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item" data-lang="topbar-megamenu-traffic-insights">Traffic Insights</a>
+                                    <a href="javascript:void(0);" class="dropdown-item"
+                                        data-lang="topbar-megamenu-traffic-insights">Traffic Insights</a>
                                 </li>
                             </ul>
                         </div>
@@ -44,22 +50,28 @@
 
                     <div class="col-md-4">
                         <div class="p-3">
-                            <h5 class="mb-2 fw-semibold fs-sm dropdown-header" data-lang="topbar-megamenu-project-mgmt">Project Management</h5>
+                            <h5 class="mb-2 fw-semibold fs-sm dropdown-header" data-lang="topbar-megamenu-project-mgmt">
+                                Project Management</h5>
                             <ul class="list-unstyled megamenu-list">
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item" data-lang="topbar-megamenu-task-overview">Task Overview</a>
+                                    <a href="javascript:void(0);" class="dropdown-item"
+                                        data-lang="topbar-megamenu-task-overview">Task Overview</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item" data-lang="topbar-megamenu-kanban-board">Kanban Board</a>
+                                    <a href="javascript:void(0);" class="dropdown-item"
+                                        data-lang="topbar-megamenu-kanban-board">Kanban Board</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item" data-lang="topbar-megamenu-gantt-chart">Gantt Chart</a>
+                                    <a href="javascript:void(0);" class="dropdown-item"
+                                        data-lang="topbar-megamenu-gantt-chart">Gantt Chart</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item" data-lang="topbar-megamenu-team-collab">Team Collaboration</a>
+                                    <a href="javascript:void(0);" class="dropdown-item"
+                                        data-lang="topbar-megamenu-team-collab">Team Collaboration</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item" data-lang="topbar-megamenu-project-milestones">Project Milestones</a>
+                                    <a href="javascript:void(0);" class="dropdown-item"
+                                        data-lang="topbar-megamenu-project-milestones">Project Milestones</a>
                                 </li>
                             </ul>
                         </div>
@@ -67,22 +79,28 @@
 
                     <div class="col-md-4">
                         <div class="p-3">
-                            <h5 class="mb-2 fw-semibold fs-sm dropdown-header" data-lang="topbar-megamenu-user-mgmt">User Management</h5>
+                            <h5 class="mb-2 fw-semibold fs-sm dropdown-header" data-lang="topbar-megamenu-user-mgmt">
+                                User Management</h5>
                             <ul class="list-unstyled megamenu-list">
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item" data-lang="topbar-megamenu-user-profiles">User Profiles</a>
+                                    <a href="javascript:void(0);" class="dropdown-item"
+                                        data-lang="topbar-megamenu-user-profiles">User Profiles</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item" data-lang="topbar-megamenu-access-control">Access Control</a>
+                                    <a href="javascript:void(0);" class="dropdown-item"
+                                        data-lang="topbar-megamenu-access-control">Access Control</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item" data-lang="topbar-megamenu-role-permissions">Role Permissions</a>
+                                    <a href="javascript:void(0);" class="dropdown-item"
+                                        data-lang="topbar-megamenu-role-permissions">Role Permissions</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item" data-lang="topbar-megamenu-activity-logs">Activity Logs</a>
+                                    <a href="javascript:void(0);" class="dropdown-item"
+                                        data-lang="topbar-megamenu-activity-logs">Activity Logs</a>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" class="dropdown-item" data-lang="topbar-megamenu-security-settings">Security Settings</a>
+                                    <a href="javascript:void(0);" class="dropdown-item"
+                                        data-lang="topbar-megamenu-security-settings">Security Settings</a>
                                 </li>
                             </ul>
                         </div>

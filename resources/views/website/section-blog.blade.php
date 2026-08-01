@@ -24,7 +24,8 @@
                         <div class="card-body">
                             <!-- Title -->
                             <h6 class="card-title fs-lg lh-base mb-2">
-                                <a href="{{ asset('article.html') }}" class="link-reset">The Future of Artificial Intelligence</a>
+                                <a href="{{ asset('article.html') }}" class="link-reset">The Future of Artificial
+                                    Intelligence</a>
                             </h6>
                             <p class="mb-3 text-muted">Discover how AI is transforming industries and what the future
                                 holds for this cutting-edge technology.</p>
@@ -71,7 +72,8 @@
                         <div class="card-body">
                             <!-- Title -->
                             <h6 class="card-title fs-lg lh-base mb-2">
-                                <a href="{{ asset('article.html') }}" class="link-reset">Top Data Science Trends in 2025</a>
+                                <a href="{{ asset('article.html') }}" class="link-reset">Top Data Science Trends in
+                                    2025</a>
                             </h6>
                             <p class="mb-3 text-muted">Get ahead in the data science field with the latest trends,
                                 technologies, and tools that are reshaping the industry.</p>
@@ -117,7 +119,8 @@
                         <div class="card-body">
                             <!-- Title -->
                             <h6 class="card-title fs-lg lh-base mb-2">
-                                <a href="{{ asset('article.html') }}" class="link-reset">5 Key Tips for New Entrepreneurs</a>
+                                <a href="{{ asset('article.html') }}" class="link-reset">5 Key Tips for New
+                                    Entrepreneurs</a>
                             </h6>
                             <p class="mb-3 text-muted">Start your entrepreneurial journey with these 5 essential tips
                                 that will guide you through the first year of business.</p>

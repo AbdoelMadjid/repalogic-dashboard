@@ -21,8 +21,11 @@
                                                 </span>
                                             </span>
                                             <span>
-                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-ecommerce">eCommerce</h5>
-                                                <span class="text-muted fs-12" data-lang="topbar-apps-ecommerce-desc">Products, orders &amp; etc.</span>
+                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-ecommerce">
+                                                    eCommerce</h5>
+                                                <span class="text-muted fs-12"
+                                                    data-lang="topbar-apps-ecommerce-desc">Products, orders &amp;
+                                                    etc.</span>
                                             </span>
                                         </span>
                                     </a>
@@ -37,7 +40,8 @@
                                             </span>
                                             <span>
                                                 <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-chat">Chat</h5>
-                                                <span class="text-muted fs-12" data-lang="topbar-apps-chat-desc">Team conversations</span>
+                                                <span class="text-muted fs-12" data-lang="topbar-apps-chat-desc">Team
+                                                    conversations</span>
                                             </span>
                                         </span>
                                     </a>
@@ -52,7 +56,8 @@
                                             </span>
                                             <span>
                                                 <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-task">Task</h5>
-                                                <span class="text-muted fs-12" data-lang="topbar-apps-task-desc">Plan and track work</span>
+                                                <span class="text-muted fs-12" data-lang="topbar-apps-task-desc">Plan
+                                                    and track work</span>
                                             </span>
                                         </span>
                                     </a>
@@ -66,8 +71,10 @@
                                                 </span>
                                             </span>
                                             <span>
-                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-email">Email</h5>
-                                                <span class="text-muted fs-12" data-lang="topbar-apps-email-desc">Messages and inbox</span>
+                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-email">Email
+                                                </h5>
+                                                <span class="text-muted fs-12"
+                                                    data-lang="topbar-apps-email-desc">Messages and inbox</span>
                                             </span>
                                         </span>
                                     </a>
@@ -85,8 +92,10 @@
                                                 </span>
                                             </span>
                                             <span>
-                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-companies">Companies</h5>
-                                                <span class="text-muted fs-12" data-lang="topbar-apps-companies-desc">Business profiles</span>
+                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-companies">
+                                                    Companies</h5>
+                                                <span class="text-muted fs-12"
+                                                    data-lang="topbar-apps-companies-desc">Business profiles</span>
                                             </span>
                                         </span>
                                     </a>
@@ -100,8 +109,10 @@
                                                 </span>
                                             </span>
                                             <span>
-                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-contacts">Contacts Diary</h5>
-                                                <span class="text-muted fs-12" data-lang="topbar-apps-contacts-desc">People and connections</span>
+                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-contacts">
+                                                    Contacts Diary</h5>
+                                                <span class="text-muted fs-12"
+                                                    data-lang="topbar-apps-contacts-desc">People and connections</span>
                                             </span>
                                         </span>
                                     </a>
@@ -115,8 +126,10 @@
                                                 </span>
                                             </span>
                                             <span>
-                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-calendar">Calendar</h5>
-                                                <span class="text-muted fs-12" data-lang="topbar-apps-calendar-desc">Events and reminders</span>
+                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-calendar">
+                                                    Calendar</h5>
+                                                <span class="text-muted fs-12"
+                                                    data-lang="topbar-apps-calendar-desc">Events and reminders</span>
                                             </span>
                                         </span>
                                     </a>
@@ -130,8 +143,10 @@
                                                 </span>
                                             </span>
                                             <span>
-                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-support">Support</h5>
-                                                <span class="text-muted fs-12" data-lang="topbar-apps-support-desc">Help and assistance</span>
+                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-support">Support
+                                                </h5>
+                                                <span class="text-muted fs-12"
+                                                    data-lang="topbar-apps-support-desc">Help and assistance</span>
                                             </span>
                                         </span>
                                     </a>
@@ -170,10 +185,12 @@
                                 <div class="text-center text-white">
                                     <i class="ti ti-atom fs-36"></i>
 
-                                    <p class="text-white text-opacity-75 mb-3 text-uppercase" data-lang="topbar-apps-limited-offer">
+                                    <p class="text-white text-opacity-75 mb-3 text-uppercase"
+                                        data-lang="topbar-apps-limited-offer">
                                         Limited Offer</p>
 
-                                    <h3 class="fw-semibold text-white mb-2 fs-20" data-lang="topbar-apps-unlock-savings">Unlock
+                                    <h3 class="fw-semibold text-white mb-2 fs-20"
+                                        data-lang="topbar-apps-unlock-savings">Unlock
                                         Exclusive
                                         Savings</h3>
 

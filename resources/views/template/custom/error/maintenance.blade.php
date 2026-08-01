@@ -1,54 +1,55 @@
 @extends('layouts.base')
 
 @section('content')
-<div class="auth-box d-flex align-items-center">
-            <div class="container-xxl">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-xl-6">
-                        <div class="card mb-0 rounded-4">
-                            <div class="card-body">
-                                <div class="auth-brand text-center mb-0">
-                                    <a href="{{ asset('index.html') }}" class="logo-dark">
-                                        <img src="{{ asset('assets/images/logo-black.png') }}" alt="dark logo" />
-                                    </a>
-                                    <a href="{{ asset('index.html') }}" class="logo-light">
-                                        <img src="{{ asset('assets/images/logo.png') }}" alt="logo" />
-                                    </a>
-                                </div>
-
-                                <div class="p-2 text-center">
-                                    <div class="w-md-50 mx-auto">
-                                        <img src="{{ asset('assets/images/maintenance.svg') }}" alt="Maintenance" class="img-fluid" />
-                                    </div>
-
-                                    <h3 class="fw-bold text-uppercase">Site Under Maintenance</h3>
-                                    <p class="text-muted">
-                                        We’re currently performing scheduled maintenance.
-                                        <br />
-                                        Please check back soon.
-                                    </p>
-
-                                    <button class="btn btn-primary mt-3 rounded-pill me-1">Call Now</button>
-                                    <button class="btn btn-info mt-3 rounded-pill">Email Us</button>
-                                </div>
-
-                                <p class="text-center text-muted mt-5 mb-0">
-                                    ©
-                                    <span data-current-year></span>
-                                    Inspinia — by
-                                    <span class="fw-bold">WebAppLayers</span>
-                                </p>
+    <div class="auth-box d-flex align-items-center">
+        <div class="container-xxl">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-xl-6">
+                    <div class="card mb-0 rounded-4">
+                        <div class="card-body">
+                            <div class="auth-brand text-center mb-0">
+                                <a href="{{ asset('index.html') }}" class="logo-dark">
+                                    <img src="{{ asset('assets/images/logo-black.png') }}" alt="dark logo" />
+                                </a>
+                                <a href="{{ asset('index.html') }}" class="logo-light">
+                                    <img src="{{ asset('assets/images/logo.png') }}" alt="logo" />
+                                </a>
                             </div>
+
+                            <div class="p-2 text-center">
+                                <div class="w-md-50 mx-auto">
+                                    <img src="{{ asset('assets/images/maintenance.svg') }}" alt="Maintenance"
+                                        class="img-fluid" />
+                                </div>
+
+                                <h3 class="fw-bold text-uppercase">Site Under Maintenance</h3>
+                                <p class="text-muted">
+                                    We’re currently performing scheduled maintenance.
+                                    <br />
+                                    Please check back soon.
+                                </p>
+
+                                <button class="btn btn-primary mt-3 rounded-pill me-1">Call Now</button>
+                                <button class="btn btn-info mt-3 rounded-pill">Email Us</button>
+                            </div>
+
+                            <p class="text-center text-muted mt-5 mb-0">
+                                ©
+                                <span data-current-year></span>
+                                Inspinia — by
+                                <span class="fw-bold">WebAppLayers</span>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- end auth-fluid-->
-        
-        <script src="{{ asset('assets/js/vendors.min.js') }}"></script>
+    <!-- end auth-fluid-->
 
-        
-        <script src="{{ asset('assets/js/app.js') }}"></script>
+    <script src="{{ asset('assets/js/vendors.min.js') }}"></script>
+
+
+    <script src="{{ asset('assets/js/app.js') }}"></script>
 @endsection

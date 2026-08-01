@@ -8,134 +8,136 @@
 @endsection
 
 @section('content')
-        @include('layouts.partials.page-title')
+    @include('layouts.partials.page-title')
 
 
-                    <div class="container-xxl">
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title">Examples</h4>
-                                    </div>
-
-                                    <div class="card-body">
-                                        <p class="text-muted mb-2">Indicate the current page’s location within a navigational hierarchy that automatically adds separators via CSS.</p>
-
-                                        <a class="btn btn-link p-0 fw-semibold" href="https://getbootstrap.com/docs/5.3/components/breadcrumb/" target="_blank">
-                                            Breadcrumb on Bootstrap
-                                            <i class="ti ti-chevron-right ms-1"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-xl-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <div class="flex-grow-1">
-                                            <h4 class="card-title">Basic</h4>
-                                        </div>
-                                        <div class="card-action">
-                                            <a href="#!" class="card-action-item" data-action="card-toggle">
-                                                <i class="ti ti-chevron-up align-middle"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="card-body">
-                                        <nav aria-label="breadcrumb">
-                                            <ol class="breadcrumb mb-0 py-2">
-                                                <li class="breadcrumb-item active" aria-current="page">Home</li>
-                                            </ol>
-                                        </nav>
-
-                                        <nav aria-label="breadcrumb">
-                                            <ol class="breadcrumb mb-0 py-2">
-                                                <li class="breadcrumb-item">
-                                                    <a href="#">Home</a>
-                                                </li>
-                                                <li class="breadcrumb-item active" aria-current="page">Library</li>
-                                            </ol>
-                                        </nav>
-
-                                        <nav aria-label="breadcrumb">
-                                            <ol class="breadcrumb mb-0 py-2">
-                                                <li class="breadcrumb-item">
-                                                    <a href="#">Home</a>
-                                                </li>
-                                                <li class="breadcrumb-item">
-                                                    <a href="#">Library</a>
-                                                </li>
-                                                <li class="breadcrumb-item active" aria-current="page">Data</li>
-                                            </ol>
-                                        </nav>
-                                    </div>
-                                    <!-- end code body-->
-                                </div>
-                                <!-- end card-->
-                            </div>
-                            <!-- end col -->
-
-                            <div class="col-xl-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <div class="flex-grow-1">
-                                            <h4 class="card-title">With Icons</h4>
-                                        </div>
-                                        <div class="card-action">
-                                            <a href="#!" class="card-action-item" data-action="card-toggle">
-                                                <i class="ti ti-chevron-up align-middle"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="card-body">
-                                        <nav aria-label="breadcrumb">
-                                            <ol class="breadcrumb bg-light bg-opacity-50 p-2 mb-2">
-                                                <li class="breadcrumb-item active" aria-current="page">
-                                                    <i class="ti ti-smart-home me-1"></i>
-                                                    Home
-                                                </li>
-                                            </ol>
-                                        </nav>
-
-                                        <nav aria-label="breadcrumb">
-                                            <ol class="breadcrumb bg-light bg-opacity-50 p-2 mb-2">
-                                                <li class="breadcrumb-item">
-                                                    <a href="#">
-                                                        <i class="ti ti-smart-home"></i>
-                                                        Home
-                                                    </a>
-                                                </li>
-                                                <li class="breadcrumb-item active" aria-current="page">Library</li>
-                                            </ol>
-                                        </nav>
-
-                                        <nav aria-label="breadcrumb">
-                                            <ol class="breadcrumb bg-light bg-opacity-50 p-2 mb-0">
-                                                <li class="breadcrumb-item">
-                                                    <a href="#">
-                                                        <i class="ti ti-smart-home"></i>
-                                                        Home
-                                                    </a>
-                                                </li>
-                                                <li class="breadcrumb-item">
-                                                    <a href="#">Library</a>
-                                                </li>
-                                                <li class="breadcrumb-item active" aria-current="page">Data</li>
-                                            </ol>
-                                        </nav>
-                                    </div>
-                                    <!-- end card body-->
-                                </div>
-                                <!-- end card-->
-                            </div>
-                            <!-- end col -->
-                        </div>
-                        <!-- end row -->
+    <div class="container-xxl">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Examples</h4>
                     </div>
-                    <!-- container -->
+
+                    <div class="card-body">
+                        <p class="text-muted mb-2">Indicate the current page’s location within a navigational hierarchy that
+                            automatically adds separators via CSS.</p>
+
+                        <a class="btn btn-link p-0 fw-semibold"
+                            href="https://getbootstrap.com/docs/5.3/components/breadcrumb/" target="_blank">
+                            Breadcrumb on Bootstrap
+                            <i class="ti ti-chevron-right ms-1"></i>
+                        </a>
+                    </div>
                 </div>
-                <!-- container-fluid -->
+            </div>
+
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="flex-grow-1">
+                            <h4 class="card-title">Basic</h4>
+                        </div>
+                        <div class="card-action">
+                            <a href="#!" class="card-action-item" data-action="card-toggle">
+                                <i class="ti ti-chevron-up align-middle"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0 py-2">
+                                <li class="breadcrumb-item active" aria-current="page">Home</li>
+                            </ol>
+                        </nav>
+
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0 py-2">
+                                <li class="breadcrumb-item">
+                                    <a href="#">Home</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">Library</li>
+                            </ol>
+                        </nav>
+
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0 py-2">
+                                <li class="breadcrumb-item">
+                                    <a href="#">Home</a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="#">Library</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">Data</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <!-- end code body-->
+                </div>
+                <!-- end card-->
+            </div>
+            <!-- end col -->
+
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="flex-grow-1">
+                            <h4 class="card-title">With Icons</h4>
+                        </div>
+                        <div class="card-action">
+                            <a href="#!" class="card-action-item" data-action="card-toggle">
+                                <i class="ti ti-chevron-up align-middle"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb bg-light bg-opacity-50 p-2 mb-2">
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    <i class="ti ti-smart-home me-1"></i>
+                                    Home
+                                </li>
+                            </ol>
+                        </nav>
+
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb bg-light bg-opacity-50 p-2 mb-2">
+                                <li class="breadcrumb-item">
+                                    <a href="#">
+                                        <i class="ti ti-smart-home"></i>
+                                        Home
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">Library</li>
+                            </ol>
+                        </nav>
+
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb bg-light bg-opacity-50 p-2 mb-0">
+                                <li class="breadcrumb-item">
+                                    <a href="#">
+                                        <i class="ti ti-smart-home"></i>
+                                        Home
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="#">Library</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">Data</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <!-- end card body-->
+                </div>
+                <!-- end card-->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- container -->
+    </div>
+    <!-- container-fluid -->
 @endsection

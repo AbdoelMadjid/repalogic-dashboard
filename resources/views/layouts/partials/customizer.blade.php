@@ -3,7 +3,8 @@
         style="background-image: url(assets/images/settings-bg.png)">
         <div>
             <h5 class="mb-1 fw-bold text-white text-uppercase" data-lang="customizer-title">Admin Customizer</h5>
-            <p class="text-white text-opacity-75 fst-italic fw-medium mb-0" data-lang="customizer-desc">Easily configure layout, styles,
+            <p class="text-white text-opacity-75 fst-italic fw-medium mb-0" data-lang="customizer-desc">Easily configure
+                layout, styles,
                 and
                 preferences for your admin interface.</p>
         </div>
@@ -244,7 +245,8 @@
                                 alt="layout-img" class="img-fluid" />
                         </label>
                     </div>
-                    <h5 class="fs-sm text-center text-muted mt-2 mb-0" data-lang="customizer-color-gradient">Gradient</h5>
+                    <h5 class="fs-sm text-center text-muted mt-2 mb-0" data-lang="customizer-color-gradient">Gradient
+                    </h5>
                 </div>
             </div>
         </div>
@@ -298,7 +300,8 @@
                                 alt="layout-img" class="img-fluid" />
                         </label>
                     </div>
-                    <h5 class="fs-sm text-center text-muted mt-2 mb-0" data-lang="customizer-color-gradient">Gradient</h5>
+                    <h5 class="fs-sm text-center text-muted mt-2 mb-0" data-lang="customizer-color-gradient">Gradient
+                    </h5>
                 </div>
                 <div class="col-4" id="sidenav-color-image">
                     <div class="form-check sidebar-setting card-radio">
@@ -375,7 +378,8 @@
                                 alt="layout-img" class="img-fluid" />
                         </label>
                     </div>
-                    <h5 class="mb-0 fs-base text-center text-muted mt-2" data-lang="customizer-size-on-hover-show">On Hover - Show</h5>
+                    <h5 class="mb-0 fs-base text-center text-muted mt-2" data-lang="customizer-size-on-hover-show">On
+                        Hover - Show</h5>
                 </div>
 
                 <div class="col-4" id="sidenav-size-offcanvas">
@@ -460,13 +464,14 @@
                     <div id="position-fixed">
                         <input type="radio" class="btn-check" name="data-layout-position"
                             id="layout-position-fixed" value="fixed" />
-                        <label class="btn btn-sm btn-soft-warning w-sm" for="layout-position-fixed" data-lang="customizer-position-fixed">Fixed</label>
+                        <label class="btn btn-sm btn-soft-warning w-sm" for="layout-position-fixed"
+                            data-lang="customizer-position-fixed">Fixed</label>
                     </div>
                     <div id="position-scrollable">
                         <input type="radio" class="btn-check" name="data-layout-position"
                             id="layout-position-scrollable" value="scrollable" />
-                        <label class="btn btn-sm btn-soft-warning w-sm ms-0"
-                            for="layout-position-scrollable" data-lang="customizer-position-scrollable">Scrollable</label>
+                        <label class="btn btn-sm btn-soft-warning w-sm ms-0" for="layout-position-scrollable"
+                            data-lang="customizer-position-scrollable">Scrollable</label>
                     </div>
                 </div>
             </div>
@@ -475,7 +480,8 @@
         <div id="sidenav-user" class="p-3">
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">
-                    <label class="fw-bold m-0" for="sidebaruser-check" data-lang="customizer-sidebar-user">Sidebar User Info</label>
+                    <label class="fw-bold m-0" for="sidebaruser-check" data-lang="customizer-sidebar-user">Sidebar
+                        User Info</label>
                 </h5>
                 <div class="form-check form-switch fs-lg">
                     <input type="checkbox" class="form-check-input" name="sidebar-user" id="sidebaruser-check" />
