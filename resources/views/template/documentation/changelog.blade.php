@@ -54,6 +54,7 @@
                                 <ul class="text-muted fs-14 mb-3 ps-3">
                                     <li><strong class="text-dark">Tabler Icons Explorer (6,019 Icons):</strong> Implemented `tabler-full.blade.php` displaying full 6,019 Tabler vector icons with live search, size select (16-64px), color picker, interactive snippet board, smooth auto scroll on click, and click-to-copy HTML code.</li>
                                     <li><strong class="text-dark">Lucide Icons Explorer (309+ Icons):</strong> Implemented `lucide-full.blade.php` matching the exact Tabler pattern with SVG render, snippet preview, live search, and copy snippet action.</li>
+                                    <li><strong class="text-dark">Icon Preview UI Enhancement:</strong> Updated `tabler-full.blade.php` and `lucide-full.blade.php` Preview Icon card layout to display the icon name centered directly below the icon while scaling the preview icon with the Icon Size selector.</li>
                                     <li><strong class="text-dark">Recursive Active Menu Engine:</strong> Updated `_item.blade.php` with recursive active checking (<code>str_starts_with($currentRoute, $item['route'] . '-')</code>) so parent dropdowns (`Icons`) auto-expand and child menu items (`Tabler`, `Lucide`) stay highlighted when navigating to `-full` sub-routes.</li>
                                 </ul>
                                 <hr class="border-dashed my-3" />

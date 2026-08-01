@@ -63,11 +63,16 @@ return [
                     'data_lang' => 'sources-credit',
                     'route' => 'template.documentation.layouts.sources',
                 ],
-                [
-                    'title' => 'Changelog',
-                    'data_lang' => 'changelog',
-                    'route' => 'template.documentation.layouts.changelog',
-                ],
+            ],
+        ],
+        [
+            'title' => 'Changelog',
+            'data_lang' => 'changelog',
+            'icon' => 'ti ti-history',
+            'route' => 'template.documentation.changelog',
+            'badge' => [
+                'text' => 'v1.5.0',
+                'class' => 'badge bg-primary-subtle text-primary fs-xs',
             ],
         ],
     ],
