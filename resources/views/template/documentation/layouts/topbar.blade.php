@@ -9,7 +9,7 @@
             <div class="card border-0 bg-secondary bg-gradient text-white shadow-sm rounded-4 overflow-hidden">
                 <div class="card-body p-4 p-lg-5">
                     <span class="badge bg-white text-secondary fw-semibold px-3 py-1.5 rounded-pill mb-3">Header Navigation</span>
-                    <h2 class="fw-bold text-white mb-2">Topbar Options & Color Themes</h2>
+                    <h2 class="fw-bold text-white mb-2" data-lang="topbar-option">Topbar Options & Color Themes</h2>
                     <p class="text-white-50 fs-16 mb-0">Customize topbar headers with dark, light, gray, or gradient themes.</p>
                 </div>
             </div>

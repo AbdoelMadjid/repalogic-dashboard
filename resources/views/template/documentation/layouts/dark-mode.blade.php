@@ -9,7 +9,7 @@
             <div class="card border-0 bg-dark text-white shadow-sm rounded-4 overflow-hidden">
                 <div class="card-body p-4 p-lg-5">
                     <span class="badge bg-primary text-white fw-semibold px-3 py-1.5 rounded-pill mb-3">Bootstrap 5.3 Color Modes</span>
-                    <h2 class="fw-bold text-white mb-2">Dark Mode Integration</h2>
+                    <h2 class="fw-bold text-white mb-2" data-lang="dark-mode">Dark Mode Integration</h2>
                     <p class="text-white-50 fs-16 mb-0">Learn how native dark mode toggle functions using `data-bs-theme="dark"` attribute and CSS custom properties.</p>
                 </div>
             </div>

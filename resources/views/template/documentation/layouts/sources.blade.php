@@ -9,7 +9,7 @@
             <div class="card border-0 bg-success bg-gradient text-white shadow-sm rounded-4 overflow-hidden">
                 <div class="card-body p-4 p-lg-5">
                     <span class="badge bg-white text-success fw-semibold px-3 py-1.5 rounded-pill mb-3">Third-Party Packages</span>
-                    <h2 class="fw-bold text-white mb-2">Sources & Credits</h2>
+                    <h2 class="fw-bold text-white mb-2" data-lang="sources-credit">Sources & Credits</h2>
                     <p class="text-white-50 fs-16 mb-0">Official documentation links and licenses for third-party CSS, JS plugins, and icon libraries integrated into INSPINIA.</p>
                 </div>
             </div>

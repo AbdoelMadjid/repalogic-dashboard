@@ -62,7 +62,7 @@
                                 <i class="ti ti-calendar fs-18"></i>
                             </span>
                         </span>
-                        <span class="align-middle fw-medium">Calendar</span>
+                        <span class="align-middle fw-medium" data-lang="topbar-quick-calendar">Calendar</span>
                     </a>
                 </div>
 
@@ -73,7 +73,7 @@
                                 <i class="ti ti-folder fs-18"></i>
                             </span>
                         </span>
-                        <span class="align-middle fw-medium">Files</span>
+                        <span class="align-middle fw-medium" data-lang="topbar-quick-files">Files</span>
                     </a>
                 </div>
             </div>

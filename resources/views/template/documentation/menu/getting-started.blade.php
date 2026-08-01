@@ -9,8 +9,8 @@
             <div class="card border-0 bg-dark text-white shadow-sm rounded-4 overflow-hidden position-relative">
                 <div class="card-body p-4 p-lg-5">
                     <span class="badge bg-primary text-white fw-semibold px-3 py-1.5 rounded-pill mb-3">Quick Setup Guide</span>
-                    <h2 class="fw-bold text-white mb-2">Getting Started with Repalogic & INSPINIA</h2>
-                    <p class="text-white-50 fs-16 mb-0">Follow this step-by-step setup guide to install dependencies, configure environment variables, and run your development server in minutes.</p>
+                    <h2 class="fw-bold text-white mb-2" data-lang="doc-quick-setup">Getting Started with Repalogic & INSPINIA</h2>
+                    <p class="text-white-50 fs-16 mb-0" data-lang="doc-quick-setup-desc">Follow this step-by-step setup guide to install dependencies, configure environment variables, and run your development server in minutes.</p>
                 </div>
             </div>
         </div>
@@ -19,7 +19,7 @@
         <div class="col-12 mb-4">
             <div class="card border shadow-sm">
                 <div class="card-header bg-transparent py-3">
-                    <h5 class="card-title mb-0 fw-bold"><i class="ti ti-checklist me-2 text-primary"></i>System Prerequisites</h5>
+                    <h5 class="card-title mb-0 fw-bold"><i class="ti ti-checklist me-2 text-primary"></i><span data-lang="doc-prerequisites">System Prerequisites</span></h5>
                 </div>
                 <div class="card-body">
                     <div class="row g-3 text-center">
@@ -58,7 +58,7 @@
 
         <!-- Step-by-Step Installation -->
         <div class="col-12 mb-4">
-            <h4 class="fw-bold mb-3">Installation Steps</h4>
+            <h4 class="fw-bold mb-3" data-lang="doc-install-steps">Installation Steps</h4>
             <div class="d-flex flex-column gap-3">
                 <!-- Step 1 -->
                 <div class="card border">

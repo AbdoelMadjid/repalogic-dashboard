@@ -12,26 +12,26 @@
         <div class="dropdown-menu dropdown-menu-end">
             <!-- Header -->
             <div class="dropdown-header noti-title">
-                <h6 class="text-overflow m-0">Welcome back!</h6>
+                <h6 class="text-overflow m-0" data-lang="topbar-user-welcome">Welcome back!</h6>
             </div>
 
             <!-- My Profile -->
             <a href="#!" class="dropdown-item">
                 <i class="ti ti-user-circle me-1 fs-lg align-middle"></i>
-                <span class="align-middle">Profile</span>
+                <span class="align-middle" data-lang="topbar-user-profile">Profile</span>
             </a>
 
             <!-- Notifications -->
             <a href="javascript:void(0);" class="dropdown-item">
                 <i class="ti ti-bell-ringing me-1 fs-lg align-middle"></i>
-                <span class="align-middle">Notifications</span>
+                <span class="align-middle" data-lang="topbar-user-notifications">Notifications</span>
             </a>
 
             <!-- Wallet -->
             <a href="javascript:void(0);" class="dropdown-item">
                 <i class="ti ti-credit-card me-1 fs-lg align-middle"></i>
                 <span class="align-middle">
-                    Balance:
+                    <span data-lang="topbar-user-balance">Balance:</span>
                     <span class="fw-semibold">$985.25</span>
                 </span>
             </a>
@@ -39,13 +39,13 @@
             <!-- Settings -->
             <a href="javascript:void(0);" class="dropdown-item">
                 <i class="ti ti-settings-2 me-1 fs-lg align-middle"></i>
-                <span class="align-middle">Account Settings</span>
+                <span class="align-middle" data-lang="topbar-user-settings">Account Settings</span>
             </a>
 
             <!-- Support -->
             <a href="javascript:void(0);" class="dropdown-item">
                 <i class="ti ti-headset me-1 fs-lg align-middle"></i>
-                <span class="align-middle">Support Center</span>
+                <span class="align-middle" data-lang="topbar-user-support">Support Center</span>
             </a>
 
             <!-- Divider -->
@@ -54,7 +54,7 @@
             <!-- Lock -->
             <a href="{{ asset('auth-lock-screen.html') }}" class="dropdown-item">
                 <i class="ti ti-lock me-1 fs-lg align-middle"></i>
-                <span class="align-middle">Lock Screen</span>
+                <span class="align-middle" data-lang="topbar-user-lock-screen">Lock Screen</span>
             </a>
 
             <!-- Logout -->

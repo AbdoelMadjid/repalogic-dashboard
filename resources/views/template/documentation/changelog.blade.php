@@ -11,7 +11,7 @@
                     <div class="row align-items-center">
                         <div class="col-lg-8">
                             <span class="badge bg-white text-primary fw-semibold px-3 py-1.5 rounded-pill mb-3">Version Release History</span>
-                            <h2 class="fw-bold text-white mb-2">Changelog & Git Commit History</h2>
+                            <h2 class="fw-bold text-white mb-2" data-lang="changelog">Changelog & Git Commit History</h2>
                             <p class="text-white-50 fs-16 mb-0">
                                 Comprehensive timeline tracking of all architecture updates, menu refactoring, dynamic route integrations, and fixes synced with GitHub commits.
                             </p>

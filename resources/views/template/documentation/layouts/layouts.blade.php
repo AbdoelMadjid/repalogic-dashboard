@@ -9,7 +9,7 @@
             <div class="card border-0 bg-primary bg-gradient text-white shadow-sm rounded-4 overflow-hidden">
                 <div class="card-body p-4 p-lg-5">
                     <span class="badge bg-white text-primary fw-semibold px-3 py-1.5 rounded-pill mb-3">Layout Architecture</span>
-                    <h2 class="fw-bold text-white mb-2">Layout Options & Customization</h2>
+                    <h2 class="fw-bold text-white mb-2" data-lang="layouts-option">Layout Options & Customization</h2>
                     <p class="text-white-50 fs-16 mb-0">Learn how to customize page layouts via HTML attributes on the root `<html>` tag or Blade section wrappers.</p>
                 </div>
             </div>

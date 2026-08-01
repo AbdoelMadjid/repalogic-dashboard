@@ -35,7 +35,7 @@
                 <div class="card-header bg-transparent d-flex justify-content-between align-items-center border-bottom py-3 px-4">
                     <div class="d-flex align-items-center gap-2">
                         <i class="ti ti-sitemap fs-20 text-primary"></i>
-                        <h5 class="card-title mb-0 fw-bold">Interactive Directory Tree</h5>
+                        <h5 class="card-title mb-0 fw-bold" data-lang="doc-interactive-tree">Interactive Directory Tree</h5>
                     </div>
                     <span class="badge bg-primary-subtle text-primary fw-semibold px-2 py-1">Project Root</span>
                 </div>

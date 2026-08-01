@@ -36,7 +36,7 @@
 
             <div id="search-box" class="app-search d-none d-xl-flex">
                 <input type="search" class="form-control topbar-search" name="search"
-                    placeholder="Search for something..." />
+                    placeholder="Search for something..." data-lang-placeholder="topbar-search-placeholder" />
                 <i class="ti ti-search app-search-icon text-muted"></i>
             </div>
 

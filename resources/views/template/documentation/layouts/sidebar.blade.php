@@ -9,7 +9,7 @@
             <div class="card border-0 bg-info bg-gradient text-white shadow-sm rounded-4 overflow-hidden">
                 <div class="card-body p-4 p-lg-5">
                     <span class="badge bg-white text-info fw-semibold px-3 py-1.5 rounded-pill mb-3">Sidebar Customization</span>
-                    <h2 class="fw-bold text-white mb-2">Sidebar Options & Modes</h2>
+                    <h2 class="fw-bold text-white mb-2" data-lang="sidebars-option">Sidebar Options & Modes</h2>
                     <p class="text-white-50 fs-16 mb-0">Explore the full range of sidebar themes, sizes, hover modes, and line styles available in INSPINIA.</p>
                 </div>
             </div>

@@ -35,7 +35,8 @@
         foreach ($sidenavConfigs as $groupKey => $group) {
             if (!empty($group['items']) && is_array($group['items'])) {
                 $groupTitle = $group['title'] ?? Str::title(str_replace(['-', '_'], ' ', $groupKey));
-                $found = $findHierarchy($group['items'], [['title' => $groupTitle, 'is_group' => true]]);
+                $groupDataLang = $group['data_lang'] ?? null;
+                $found = $findHierarchy($group['items'], [['title' => $groupTitle, 'data_lang' => $groupDataLang, 'is_group' => true]]);
                 if ($found) {
                     $hierarchy = $found;
                     break;
@@ -43,8 +44,10 @@
             }
         }
 
+        $activeDataLang = null;
         if ($hierarchy && count($hierarchy) > 0) {
             $activeLeaf = end($hierarchy);
+            $activeDataLang = $activeLeaf['data_lang'] ?? null;
             if (!$pageMainTitle) {
                 $pageMainTitle = $activeLeaf['title'] ?? 'Dashboard';
             }
@@ -55,6 +58,7 @@
             $breadcrumbItems = [];
             $breadcrumbItems[] = [
                 'title' => 'Template',
+                'data_lang' => 'template',
                 'url' => Route::has('dashboard') ? route('dashboard') : url('/'),
             ];
             foreach ($ancestors as $node) {
@@ -67,6 +71,7 @@
                 }
                 $breadcrumbItems[] = [
                     'title' => $nodeTitle,
+                    'data_lang' => $node['data_lang'] ?? null,
                     'url' => $nodeUrl,
                 ];
             }
@@ -122,7 +127,7 @@
 
 <div class="page-title-head d-flex align-items-center">
     <div class="flex-grow-1">
-        <h4 class="page-main-title m-0">{{ $pageMainTitle }}</h4>
+        <h4 class="page-main-title m-0" @if(!empty($activeDataLang)) data-lang="{{ $activeDataLang }}" @endif>{{ $pageMainTitle }}</h4>
     </div>
     <div class="text-end">
         <ol class="breadcrumb m-0 py-0">
@@ -130,12 +135,13 @@
                 @php
                     $itemTitle = is_array($item) ? $item['title'] : $item;
                     $itemUrl = is_array($item) ? ($item['url'] ?? 'javascript:void(0);') : 'javascript:void(0);';
+                    $itemDataLang = is_array($item) ? ($item['data_lang'] ?? null) : null;
                 @endphp
                 @if ($loop->last)
-                    <li class="breadcrumb-item active" aria-current="page">{{ $itemTitle }}</li>
+                    <li class="breadcrumb-item active" aria-current="page" @if(!empty($itemDataLang)) data-lang="{{ $itemDataLang }}" @endif>{{ $itemTitle }}</li>
                 @else
                     <li class="breadcrumb-item">
-                        <a href="{{ $itemUrl }}">{{ $itemTitle }}</a>
+                        <a href="{{ $itemUrl }}" @if(!empty($itemDataLang)) data-lang="{{ $itemDataLang }}" @endif>{{ $itemTitle }}</a>
                     </li>
                 @endif
             @endforeach

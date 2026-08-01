@@ -10,11 +10,10 @@
             <div class="px-3 py-2 border-bottom">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h6 class="m-0 fs-md fw-semibold">Messages</h6>
+                        <h6 class="m-0 fs-md fw-semibold" data-lang="topbar-messages-title">Messages</h6>
                     </div>
                     <div class="col text-end">
-                        <a href="#!" class="badge badge-soft-success badge-label py-1">09
-                            Notifications</a>
+                        <a href="#!" class="badge badge-soft-success badge-label py-1" data-lang="topbar-messages-notifications-badge">09 Notifications</a>
                     </div>
                 </div>
             </div>
@@ -150,8 +149,7 @@
 
             <!-- All-->
             <a href="javascript:void(0);"
-                class="dropdown-item text-center text-reset text-decoration-underline link-offset-2 fw-bold notify-item border-top border-light py-2">Read
-                All Messages</a>
+                class="dropdown-item text-center text-reset text-decoration-underline link-offset-2 fw-bold notify-item border-top border-light py-2" data-lang="topbar-messages-read-all">Read All Messages</a>
         </div>
         <!-- End dropdown-menu -->
     </div>

@@ -18,29 +18,14 @@
                                         <h5 class="mb-2">You can change the language of demo text as well as the menu with simple function fire on buttons click. Try it:</h5>
 
                                         <div class="d-flex flex-wrap gap-2">
+                                            <button class="btn btn-light gap-1 d-inline-flex align-items-center" data-translator-lang="id">
+                                                <img src="{{ asset('assets/images/flags/id.svg') }}" alt="user-image" class="me-1 rounded" height="18" data-translator-image />
+                                                <span class="align-middle" data-lang="lang-indonesia">Indonesia</span>
+                                            </button>
+
                                             <button class="btn btn-light gap-1 d-inline-flex align-items-center" data-translator-lang="en">
                                                 <img src="{{ asset('assets/images/flags/us.svg') }}" alt="user-image" class="me-1 rounded" height="18" data-translator-image />
-                                                <span class="align-middle">English</span>
-                                            </button>
-
-                                            <button class="btn btn-light gap-1 d-inline-flex align-items-center" data-translator-lang="hi">
-                                                <img src="{{ asset('assets/images/flags/in.svg') }}" alt="user-image" class="me-1 rounded" height="18" data-translator-image />
-                                                <span class="align-middle">Hindi</span>
-                                            </button>
-
-                                            <button class="btn btn-light gap-1 d-inline-flex align-items-center" data-translator-lang="it">
-                                                <img src="{{ asset('assets/images/flags/it.svg') }}" alt="user-image" class="me-1 rounded" height="18" data-translator-image />
-                                                <span class="align-middle">Italian</span>
-                                            </button>
-
-                                            <button class="btn btn-light gap-1 d-inline-flex align-items-center" data-translator-lang="es">
-                                                <img src="{{ asset('assets/images/flags/es.svg') }}" alt="user-image" class="me-1 rounded" height="18" data-translator-image />
-                                                <span class="align-middle">Spanish</span>
-                                            </button>
-
-                                            <button class="btn btn-light gap-1 d-inline-flex align-items-center" data-translator-lang="ru">
-                                                <img src="{{ asset('assets/images/flags/ru.svg') }}" alt="user-image" class="me-1 rounded" height="18" data-translator-image />
-                                                <span class="align-middle">Russian</span>
+                                                <span class="align-middle" data-lang="lang-english">English</span>
                                             </button>
                                         </div>
 
@@ -64,7 +49,20 @@
                                             <p class="text-muted">To enable i18n support in your application, you need to define all translatable text. The most effective way to do this is by storing the text in an external JSON file. For example:</p>
 
                                             <div class="row">
-                                                <div class="col-md-4">
+                                                <div class="col-md-6">
+                                                    <h5>id.json</h5>
+                                                    <pre class="bg-light-subtle border border-dashed rounded">
+                                                <code class="language-javascript">
+                                                    {
+                                                        "dashboards": "Dashboard",
+                                                        "dashboard-one": "Dashboard v.1",
+                                                        "dashboard-two": "Dashboard v.2"
+                                                    }
+                                                </code>
+                                            </pre>
+                                                </div>
+
+                                                <div class="col-md-6">
                                                     <h5>en.json</h5>
                                                     <pre class="bg-light-subtle border border-dashed rounded">
                                                 <code class="language-javascript">
@@ -75,32 +73,6 @@
                                                     }
                                                 </code>
                                             </pre>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <h5>es.json</h5>
-                                                    <pre class="bg-light-subtle border border-dashed rounded">
-                                                <code class="language-javascript">
-                                                    {
-                                                        "dashboards": "Paneles",
-                                                        "dashboard-one": "Panel v.1",
-                                                        "dashboard-two": "Panel v.2"
-                                                    }
-                                                </code>
-                                            </pre>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <h5>ru.json</h5>
-                                                    <pre class="bg-light-subtle border border-dashed rounded">
-                                                    <code class="language-javascript">
-                                                        {
-                                                            "dashboards": "Панели",
-                                                            "dashboard-one": "Панель v.1",
-                                                            "dashboard-two": "Панель v.2"
-                                                        }
-                                                    </code>
-                                                </pre>
                                                 </div>
                                             </div>
                                         </div>
@@ -136,9 +108,9 @@
                                                     <h5 class="mb-2">HTML Code</h5>
                                                     <pre class="bg-light-subtle border border-dashed rounded">
                                                 <code class="language-markup">
-                                                &lt;a class="btn btn-light" data-translator-lang="en"&gt; Set EN language&lt;/a&gt;
+                                                &lt;a class="btn btn-light" data-translator-lang="id"&gt; Set ID language&lt;/a&gt;
 
-                                                &lt;a class="btn btn-light" data-translator-lang="es"&gt; Set ES language&lt;/a&gt;
+                                                &lt;a class="btn btn-light" data-translator-lang="en"&gt; Set EN language&lt;/a&gt;
                                                 </code>
                                             </pre>
 

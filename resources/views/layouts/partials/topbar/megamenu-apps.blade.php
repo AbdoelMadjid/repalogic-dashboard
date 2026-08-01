@@ -2,7 +2,7 @@
     <div class="dropdown">
         <button class="topbar-link btn fw-medium btn-link dropdown-toggle drop-arrow-none px-2" data-bs-toggle="dropdown"
             type="button" aria-haspopup="false" aria-expanded="false">
-            Apps
+            <span data-lang="topbar-apps">Apps</span>
             <i class="ti ti-chevron-down ms-1"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-xxl p-0">
@@ -14,64 +14,60 @@
                                 <div class="p-2">
                                     <a href="#!" class="dropdown-item">
                                         <span class="d-flex align-items-center">
-                                            <span class="avatar-md me-2">
+                                            <span class="avatar-md me-2 flex-shrink-0">
                                                 <span
                                                     class="avatar-title text-primary border border-light bg-light bg-opacity-50 rounded">
                                                     <i class="ti ti-basket fs-22"></i>
                                                 </span>
                                             </span>
                                             <span>
-                                                <h5 class="fs-base mb-0 lh-base">eCommerce</h5>
-                                                <span class="text-muted fs-12">Products, orders
-                                                    &amp; etc.</span>
+                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-ecommerce">eCommerce</h5>
+                                                <span class="text-muted fs-12" data-lang="topbar-apps-ecommerce-desc">Products, orders &amp; etc.</span>
                                             </span>
                                         </span>
                                     </a>
 
                                     <a href="#!" class="dropdown-item my-2">
                                         <span class="d-flex align-items-center">
-                                            <span class="avatar-md me-2">
+                                            <span class="avatar-md me-2 flex-shrink-0">
                                                 <span
                                                     class="avatar-title text-success border border-light bg-light bg-opacity-50 rounded">
                                                     <i class="ti ti-message fs-22"></i>
                                                 </span>
                                             </span>
                                             <span>
-                                                <h5 class="fs-base mb-0 lh-base">Chat</h5>
-                                                <span class="text-muted fs-12">Team
-                                                    conversations</span>
+                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-chat">Chat</h5>
+                                                <span class="text-muted fs-12" data-lang="topbar-apps-chat-desc">Team conversations</span>
                                             </span>
                                         </span>
                                     </a>
 
                                     <a href="#!" class="dropdown-item my-2">
                                         <span class="d-flex align-items-center">
-                                            <span class="avatar-md me-2">
+                                            <span class="avatar-md me-2 flex-shrink-0">
                                                 <span
                                                     class="avatar-title text-danger border border-light bg-light bg-opacity-50 rounded">
                                                     <i class="ti ti-list-check fs-22"></i>
                                                 </span>
                                             </span>
                                             <span>
-                                                <h5 class="fs-base mb-0 lh-base">Task</h5>
-                                                <span class="text-muted fs-12">Plan and track
-                                                    work</span>
+                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-task">Task</h5>
+                                                <span class="text-muted fs-12" data-lang="topbar-apps-task-desc">Plan and track work</span>
                                             </span>
                                         </span>
                                     </a>
 
                                     <a href="#!" class="dropdown-item mt-2">
                                         <span class="d-flex align-items-center">
-                                            <span class="avatar-md me-2">
+                                            <span class="avatar-md me-2 flex-shrink-0">
                                                 <span
                                                     class="avatar-title text-info border border-light bg-light bg-opacity-50 rounded">
                                                     <i class="ti ti-mailbox fs-22"></i>
                                                 </span>
                                             </span>
                                             <span>
-                                                <h5 class="fs-base mb-0 lh-base">Email</h5>
-                                                <span class="text-muted fs-12">Messages and
-                                                    inbox</span>
+                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-email">Email</h5>
+                                                <span class="text-muted fs-12" data-lang="topbar-apps-email-desc">Messages and inbox</span>
                                             </span>
                                         </span>
                                     </a>
@@ -82,65 +78,60 @@
                                 <div class="p-2">
                                     <a href="#!" class="dropdown-item">
                                         <span class="d-flex align-items-center">
-                                            <span class="avatar-md me-2">
+                                            <span class="avatar-md me-2 flex-shrink-0">
                                                 <span
                                                     class="avatar-title text-secondary border border-light bg-light bg-opacity-50 rounded">
                                                     <i class="ti ti-building fs-22"></i>
                                                 </span>
                                             </span>
                                             <span>
-                                                <h5 class="fs-base mb-0 lh-base">Companies</h5>
-                                                <span class="text-muted fs-12">Business
-                                                    profiles</span>
+                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-companies">Companies</h5>
+                                                <span class="text-muted fs-12" data-lang="topbar-apps-companies-desc">Business profiles</span>
                                             </span>
                                         </span>
                                     </a>
 
                                     <a href="#!" class="dropdown-item my-2">
                                         <span class="d-flex align-items-center">
-                                            <span class="avatar-md me-2">
+                                            <span class="avatar-md me-2 flex-shrink-0">
                                                 <span
                                                     class="avatar-title text-dark border border-light bg-light bg-opacity-50 rounded">
                                                     <i class="ti ti-id fs-22"></i>
                                                 </span>
                                             </span>
                                             <span>
-                                                <h5 class="fs-base mb-0 lh-base">Contacts Diary
-                                                </h5>
-                                                <span class="text-muted fs-12">People and
-                                                    connections</span>
+                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-contacts">Contacts Diary</h5>
+                                                <span class="text-muted fs-12" data-lang="topbar-apps-contacts-desc">People and connections</span>
                                             </span>
                                         </span>
                                     </a>
 
                                     <a href="#!" class="dropdown-item my-2">
                                         <span class="d-flex align-items-center">
-                                            <span class="avatar-md me-2">
+                                            <span class="avatar-md me-2 flex-shrink-0">
                                                 <span
                                                     class="avatar-title text-warning border border-light bg-light bg-opacity-50 rounded">
                                                     <i class="ti ti-calendar fs-22"></i>
                                                 </span>
                                             </span>
                                             <span>
-                                                <h5 class="fs-base mb-0 lh-base">Calendar</h5>
-                                                <span class="text-muted fs-12">Events and
-                                                    reminders</span>
+                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-calendar">Calendar</h5>
+                                                <span class="text-muted fs-12" data-lang="topbar-apps-calendar-desc">Events and reminders</span>
                                             </span>
                                         </span>
                                     </a>
 
                                     <a href="#!" class="dropdown-item mt-2">
                                         <span class="d-flex align-items-center">
-                                            <span class="avatar-md me-2">
+                                            <span class="avatar-md me-2 flex-shrink-0">
                                                 <span
                                                     class="avatar-title text-success border border-light bg-light bg-opacity-50 rounded">
                                                     <i class="ti ti-lifebuoy fs-22"></i>
                                                 </span>
                                             </span>
                                             <span>
-                                                <h5 class="fs-base mb-0 lh-base">Support</h5>
-                                                <span class="text-muted fs-12">Help and
-                                                    assistance</span>
+                                                <h5 class="fs-base mb-0 lh-base" data-lang="topbar-apps-support">Support</h5>
+                                                <span class="text-muted fs-12" data-lang="topbar-apps-support-desc">Help and assistance</span>
                                             </span>
                                         </span>
                                     </a>
@@ -153,7 +144,7 @@
                             <div class="col">
                                 <div class="p-3">
                                     <p class="fw-medium text-muted mb-2 fs-11 text-uppercase lh-1">
-                                        -: &nbsp; Support &nbsp;:-</p>
+                                        -: &nbsp; <span data-lang="topbar-apps-support">Support</span> &nbsp;:-</p>
                                     <h5 class="fs-15 mb-0">help@mydomain.com</h5>
                                 </div>
                             </div>
@@ -161,7 +152,7 @@
                             <div class="col">
                                 <div class="p-3">
                                     <p class="fw-medium text-muted mb-2 fs-11 text-uppercase lh-1">
-                                        -: &nbsp; Help: &nbsp;:-</p>
+                                        -: &nbsp; <span data-lang="topbar-user-support">Help:</span> &nbsp;:-</p>
                                     <h5 class="fs-15 mb-0">+(12) 3456 7890</h5>
                                 </div>
                             </div>
@@ -179,10 +170,10 @@
                                 <div class="text-center text-white">
                                     <i class="ti ti-atom fs-36"></i>
 
-                                    <p class="text-white text-opacity-75 mb-3 text-uppercase">
+                                    <p class="text-white text-opacity-75 mb-3 text-uppercase" data-lang="topbar-apps-limited-offer">
                                         Limited Offer</p>
 
-                                    <h3 class="fw-semibold text-white mb-2 fs-20">Unlock
+                                    <h3 class="fw-semibold text-white mb-2 fs-20" data-lang="topbar-apps-unlock-savings">Unlock
                                         Exclusive
                                         Savings</h3>
 
@@ -194,7 +185,7 @@
 
                                     <button type="button" class="btn btn-danger btn-sm mt-3">
                                         <i class="ti ti-shopping-cart me-1"></i>
-                                        Grab Deal
+                                        <span data-lang="topbar-apps-grab-deal">Grab Deal</span>
                                     </button>
                                 </div>
                             </div>

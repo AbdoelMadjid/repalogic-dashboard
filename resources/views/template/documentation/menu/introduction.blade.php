@@ -11,16 +11,16 @@
                     <div class="row align-items-center">
                         <div class="col-lg-8">
                             <span class="badge bg-white text-primary fw-semibold px-3 py-1.5 rounded-pill mb-3">v4.0.0 Release Candidate</span>
-                            <h2 class="fw-bold text-white mb-2">Welcome to INSPINIA Admin & Dashboard</h2>
-                            <p class="text-white-50 fs-16 mb-4">
-                                Premium Bootstrap 5 & Laravel 12 admin template crafted for building high-performance web applications, enterprise CRMs, SaaS platforms, and management dashboards.
+                            <h2 class="fw-bold text-white mb-2" data-lang="doc-welcome-title">Welcome to Repalogic & INSPINIA Documentation</h2>
+                            <p class="text-white-50 fs-16 mb-4" data-lang="doc-welcome-desc">
+                                Comprehensive guides and technical documentation for building high-performance web applications with Repalogic Dashboard.
                             </p>
                             <div class="d-flex flex-wrap gap-2">
                                 <a href="{{ route('template.documentation.menu.getting-started') }}" class="btn btn-light fw-semibold px-3.5 py-2 shadow-sm">
-                                    <i class="ti ti-rocket me-1"></i> Getting Started
+                                    <i class="ti ti-rocket me-1"></i> <span data-lang="getting-started">Getting Started</span>
                                 </a>
                                 <a href="{{ route('template.documentation.menu.folder-structure') }}" class="btn btn-outline-light fw-semibold px-3.5 py-2">
-                                    <i class="ti ti-sitemap me-1"></i> Folder Structure
+                                    <i class="ti ti-sitemap me-1"></i> <span data-lang="folder-structure">Folder Structure</span>
                                 </a>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
 
         <!-- Key Features Grid -->
         <div class="col-12 mb-4">
-            <h4 class="fw-bold mb-3">Key Features & Capabilities</h4>
+            <h4 class="fw-bold mb-3" data-lang="doc-key-features">Key Features & Capabilities</h4>
             <div class="row row-cols-xl-4 row-cols-md-2 row-cols-1 g-3">
                 <div class="col">
                     <div class="card h-100 border shadow-none p-3 rounded-3">

@@ -9,7 +9,7 @@
             <div class="card border-0 bg-warning bg-gradient text-white shadow-sm rounded-4 overflow-hidden">
                 <div class="card-body p-4 p-lg-5">
                     <span class="badge bg-white text-warning fw-semibold px-3 py-1.5 rounded-pill mb-3">SCSS Theme Engine</span>
-                    <h2 class="fw-bold text-white mb-2">Theme Skin Setup & SCSS Customization</h2>
+                    <h2 class="fw-bold text-white mb-2" data-lang="theme-skin-setup">Theme Skin Setup & SCSS Customization</h2>
                     <p class="text-white-50 fs-16 mb-0">INSPINIA features 6 built-in theme skins powered by modular SCSS variables (`resources/scss/config/`).</p>
                 </div>
             </div>

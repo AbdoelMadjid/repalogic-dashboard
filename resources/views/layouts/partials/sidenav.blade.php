@@ -82,8 +82,8 @@
                     class="ti ti-search position-absolute top-50 start-0 translate-middle-y ms-3 sidenav-search-icon"></i>
                 <input type="text" id="sidenav-menu-search"
                     class="form-control form-control-sm ps-5 sidenav-search-input"
-                    placeholder="{{ App::getLocale() === 'id' ? 'Cari menu...' : 'Search menu...' }}"
-                    data-lang="sidenav-search-placeholder">
+                    placeholder="Search menu..."
+                    data-lang-placeholder="sidenav-search-placeholder">
             </div>
             <div id="sidenav-search-empty" class="sidenav-search-empty mt-2 d-none" data-lang="sidenav-search-empty">
                 Menu tidak ditemukan.
