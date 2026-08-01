@@ -167,10 +167,6 @@ return [
             'data_lang' => 'email',
             'icon' => 'ti ti-mailbox',
             'id' => 'email',
-            'badge' => [
-                'text' => 'New',
-                'class' => 'badge bg-danger text-white',
-            ],
             'children' => [
                 [
                     'title' => 'Inbox',

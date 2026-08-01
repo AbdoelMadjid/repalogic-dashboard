@@ -10,9 +10,7 @@
             </div>
             <div class="col-md-6">
                 <div class="text-md-end d-none d-md-block">
-                    10GB of
-                    <span class="fw-bold">250GB</span>
-                    Free.
+                    Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
                 </div>
             </div>
         </div>

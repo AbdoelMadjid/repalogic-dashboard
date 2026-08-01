@@ -9,10 +9,6 @@ return [
             'data_lang' => 'base-ui',
             'icon' => 'ti ti-components',
             'id' => 'base-ui',
-            'badge' => [
-                'text' => 'New',
-                'class' => 'badge bg-danger text-white',
-            ],
             'children' => [
                 [
                     'title' => 'Accordions',
@@ -161,10 +157,6 @@ return [
             'data_lang' => 'widgets',
             'icon' => 'ti ti-stack-2',
             'route' => 'template.components.widgets',
-            'badge' => [
-                'text' => 'v 2.2',
-                'class' => 'badge bg-success',
-            ],
         ],
         [
             'title' => 'Metrics',
@@ -516,6 +508,10 @@ return [
             'data_lang' => 'icons',
             'icon' => 'ti ti-icons',
             'id' => 'icons',
+            'badge' => [
+                'text' => 'New',
+                'class' => 'badge bg-danger text-white',
+            ],
             'children' => [
                 [
                     'title' => 'Tabler',
