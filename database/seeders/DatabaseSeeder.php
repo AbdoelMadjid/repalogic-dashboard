@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,24 +15,35 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // 1. Seed Roles
+        $this->call(RoleSeeder::class);
 
-        $superAdmin = Role::create(['name' => 'superadmin']);
-        $admin = Role::create(['name' => 'admin']);
-        $operator = Role::create(['name' => 'operator']);
-
-        $user1 = User::create([
-            'name' => 'Super Admin',
+        // 2. Seed Admin Users
+        $user1 = User::firstOrCreate([
             'email' => 'superadmin@example.com',
+        ], [
+            'name' => 'Super Admin',
             'password' => bcrypt('password'),
         ]);
-        $user1->assignRole($superAdmin);
+        $user1->assignRole('superadmin');
 
-        $user2 = User::create([
-            'name' => 'Admin',
+        $user2 = User::firstOrCreate([
             'email' => 'admin@example.com',
+        ], [
+            'name' => 'Admin',
             'password' => bcrypt('password'),
         ]);
-        $user2->assignRole($admin);
+        $user2->assignRole('admin');
+
+        $user3 = User::firstOrCreate([
+            'email' => 'operator@example.com',
+        ], [
+            'name' => 'Operator',
+            'password' => bcrypt('password'),
+        ]);
+        $user3->assignRole('operator');
+
+        // 3. Seed Menus & Permissions
+        $this->call(MainMenuSeeder::class);
     }
 }

@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,16 +22,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Hanya Role 'superadmin' yang memiliki akses bebas tanpa pengaturan
         Gate::before(function (User $user, $ability) {
-            return $user->hasRole('master') ? true : null;
+            return $user->hasRole('superadmin') ? true : null;
         });
 
         $configPath = config_path('sidenav-template');
         if (is_dir($configPath)) {
-            foreach (glob($configPath.'/*.php') as $file) {
+            foreach (glob($configPath . '/*.php') as $file) {
                 $key = basename($file, '.php');
                 config()->set("sidenav-template.{$key}", require $file);
             }
         }
+
+        View::composer('layouts.partials.sidenav', \App\Http\ViewComposers\SidebarComposer::class);
     }
 }

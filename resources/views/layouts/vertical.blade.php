@@ -39,6 +39,7 @@
 
     </div>
 
+    @include('layouts.partials/notifications')
     @include('layouts.partials/footer-scripts')
 
 </body>

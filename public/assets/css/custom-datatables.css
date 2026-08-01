@@ -1,0 +1,61 @@
+/* ==========================================================================
+   Global Custom DataTables & Switch Table Design System
+   ========================================================================== */
+
+/* Form Switch Toggle Styling */
+.form-check.form-switch .form-check-input {
+    width: 2.5em !important;
+    height: 1.25em !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e") !important;
+    background-position: left center !important;
+    background-repeat: no-repeat !important;
+    border-radius: 2em !important;
+    transition: background-position .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    cursor: pointer !important;
+    border: 1px solid #ced4da !important;
+}
+
+.form-check.form-switch .form-check-input:checked {
+    background-position: right center !important;
+    background-color: #0acf97 !important;
+    border-color: #0acf97 !important;
+}
+
+/* Sortable Drag & Ghost styling */
+.sortable-ghost {
+    opacity: 0.4 !important;
+    background-color: rgba(13, 110, 253, 0.15) !important;
+}
+
+.sortable-drag {
+    opacity: 0.9 !important;
+    background-color: #fff !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15) !important;
+}
+
+.cursor-pointer {
+    cursor: grab !important;
+}
+
+.cursor-pointer:active {
+    cursor: grabbing !important;
+}
+
+/* Table Clean Alignment & Borders */
+.table-custom-datatable th, 
+.table-custom-datatable td {
+    vertical-align: middle;
+}
+
+/* DataTables & Custom Header Controls */
+.datatable-length-select {
+    width: auto !important;
+}
+
+.datatable-search-input {
+    max-width: 320px !important;
+    width: 100% !important;
+}

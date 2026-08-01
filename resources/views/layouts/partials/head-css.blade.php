@@ -74,3 +74,6 @@
 
 <!-- App css -->
 <link id="app-style" href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
+
+<!-- Global Custom DataTables & Switch Table CSS -->
+<link href="{{ asset('assets/css/custom-datatables.css') }}" rel="stylesheet" type="text/css" />

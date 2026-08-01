@@ -2,17 +2,28 @@
     $hasChildren = !empty($item['children']) && is_array($item['children']);
     $collapseId = $item['id'] ?? (isset($item['title']) ? Str::slug($item['title']) : 'menu-' . uniqid());
 
-    // Resolve route or URL
-    $routeUrl = '#';
-    if (!empty($item['route'])) {
-        $routeUrl = Route::has($item['route']) ? route($item['route']) : '#';
-    } elseif (isset($item['url'])) {
-        $routeUrl =
-            str_starts_with($item['url'], 'http') ||
-            str_starts_with($item['url'], '#') ||
-            str_starts_with($item['url'], '/')
-                ? $item['url']
-                : asset($item['url']);
+    // Resolve route or URL & detect unprepared/missing endpoints
+    $routeUrl = 'javascript:void(0);';
+    $isUnprepared = false;
+
+    if (!$hasChildren) {
+        if (!empty($item['route'])) {
+            if (Route::has($item['route'])) {
+                $routeUrl = route($item['route']);
+            } else {
+                $isUnprepared = true;
+            }
+        } elseif (!empty($item['url'])) {
+            if ($item['url'] === '#' || $item['url'] === 'javascript:void(0);') {
+                $isUnprepared = true;
+            } else {
+                $routeUrl = str_starts_with($item['url'], 'http') || str_starts_with($item['url'], '/')
+                    ? $item['url']
+                    : asset($item['url']);
+            }
+        } else {
+            $isUnprepared = true;
+        }
     }
 
     // Active route checking (supports recursive children & sub-route matching)
@@ -54,6 +65,9 @@
     $isActive = $checkIsActive($item);
 
     $linkClasses = 'side-nav-link';
+    if ($isUnprepared) {
+        $linkClasses .= ' menu-unprepared';
+    }
     if (!empty($item['disabled'])) {
         $linkClasses .= ' disabled';
     }
@@ -99,7 +113,8 @@
         </div>
     @else
         <a href="{{ $routeUrl }}" class="{{ $linkClasses }}"
-            @if (!empty($item['target'])) target="{{ $item['target'] }}" @endif>
+            data-menu-title="{{ $item['title'] }}"
+            @if (!empty($item['target']) && !$isUnprepared) target="{{ $item['target'] }}" @endif>
             @if (!empty($item['icon']))
                 <span class="menu-icon"><i class="{{ $item['icon'] }}"></i></span>
             @endif
