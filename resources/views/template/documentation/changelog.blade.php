@@ -18,7 +18,7 @@
                         </div>
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v1.5.0</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v1.6.0</strong>
                             </span>
                         </div>
                     </div>
@@ -31,12 +31,12 @@
             <div class="card border shadow-sm">
                 <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0 fw-bold"><i class="ti ti-history me-2 text-primary"></i>Git Commit Release Timeline</h5>
-                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">6 Versions Logged</span>
+                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">7 Versions Logged</span>
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
                         
-                        <!-- Version 1.5.0 -->
+                        <!-- Version 1.6.0 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -44,8 +44,33 @@
                             <div class="timeline-content ps-3.5 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v1.5.0</h5>
+                                        <h5 class="fw-bold mb-0">v1.6.0</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Bilingual i18n Engine</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-08-01</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Bilingual Internationalization Engine (ID &amp; EN), Topbar &amp; Customizer i18n</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Bilingual Language Scope (ID &amp; EN):</strong> Standardized language selection exclusively to Indonesian (<code>id</code>) and English (<code>en</code>), removing unused legacy locale files (<code>ar</code>, <code>de</code>, <code>es</code>, <code>hi</code>, <code>it</code>, <code>ru</code>). Added <code>id.json</code> matching complete translation dictionary.</li>
+                                    <li><strong class="text-dark">Extended I18nManager Engine:</strong> Enhanced <code>I18nManager</code> in <code>app.js</code> with absolute translation path resolution (<code>/assets/data/translations/</code>), cache-busting query strings, dynamic document <code>&lt;title&gt;</code> updating, and support for <code>data-lang-placeholder</code>, <code>data-lang-title</code>, and <code>data-lang-alt</code>.</li>
+                                    <li><strong class="text-dark">Topbar &amp; Search Inputs i18n:</strong> Applied bilingual translation to Topbar search input, search modal, Mega Menu, Apps dropdown, Notifications, Messages, and User Profile dropdown.</li>
+                                    <li><strong class="text-dark">Admin Customizer &amp; Sidenav i18n:</strong> Fully internationalized <code>customizer.blade.php</code> (Theme Select, Color Scheme, Topbar Color, Sidenav Color, Sidebar Size, Layout Width, Direction, Position, User Info, Buttons) and Sidenav search placeholder.</li>
+                                    <li><strong class="text-dark">Layout Flex Safety:</strong> Added <code>flex-shrink-0</code> to Topbar Apps avatar icon containers (<code>.avatar-md.flex-shrink-0</code>) to ensure icon boxes remain perfectly square across variable-length translations.</li>
+                                </ul>
+                                <hr class="border-dashed my-3" />
+                            </div>
+                        </div>
+                        
+                        <!-- Version 1.5.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-history fs-xl text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3.5 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v1.5.0</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Full Icon Explorers</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-08-01</span>
