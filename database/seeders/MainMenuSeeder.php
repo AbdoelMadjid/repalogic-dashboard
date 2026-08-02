@@ -33,6 +33,8 @@ class MainMenuSeeder extends Seeder
 
         // 3. Call Modular Menu Seeders
         $this->call([
+            MenuProfilPenggunaSeeder::class,
+            MenuManajemenPenggunaSeeder::class,
             MenuDukunganAplikasiSeeder::class,
         ]);
 

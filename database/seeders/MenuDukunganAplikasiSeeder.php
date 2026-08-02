@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Admin\DukunganAplikasi\Menu;
-
 class MenuDukunganAplikasiSeeder extends BaseMenuSeeder
 {
     /**
@@ -11,17 +9,17 @@ class MenuDukunganAplikasiSeeder extends BaseMenuSeeder
      */
     public function run(): void
     {
-        // 1. Main Parent Menu: Manajemen Sistem
+        // 1. Main Parent Menu: Dukungan Aplikasi
         $mm = $this->createMainMenu([
             'name' => 'Dukungan Aplikasi',
             'category' => 'MASTER DATA',
-            'icon' => 'ti ti-user',
+            'icon' => 'ti ti-api-app',
             'url' => 'admin/dukunganaplikasi',
             'route' => 'admin.dukunganaplikasi',
         ]);
         $this->attachMenupermission($mm, ['read'], ['superadmin', 'admin']);
 
-        // 2. Sub-menu: Kelola Menu
+        // 2. Sub-menus
         $sm1 = $this->createSubMenu($mm, [
             'name' => 'Menu',
             'url' => 'admin/dukunganaplikasi/menu',
@@ -29,11 +27,25 @@ class MenuDukunganAplikasiSeeder extends BaseMenuSeeder
         ]);
         $this->attachMenupermission($sm1, ['create', 'read', 'update', 'delete'], ['superadmin', 'admin']);
 
-        $sm1 = $this->createSubMenu($mm, [
+        $sm2 = $this->createSubMenu($mm, [
             'name' => 'Profil Aplikasi',
             'url' => 'admin/dukunganaplikasi/profil-aplikasi',
             'route' => 'admin.dukunganaplikasi.profil-aplikasi.index',
         ]);
-        $this->attachMenupermission($sm1, ['create', 'read', 'update', 'delete'], ['superadmin', 'admin']);
+        $this->attachMenupermission($sm2, ['create', 'read', 'update', 'delete'], ['superadmin', 'admin']);
+
+        $sm3 = $this->createSubMenu($mm, [
+            'name' => 'Fitur Aplikasi',
+            'url' => 'admin/dukunganaplikasi/fitu-aplikasi',
+            'route' => 'admin.dukunganaplikasi.fitur-aplikasi.index',
+        ]);
+        $this->attachMenupermission($sm3, ['create', 'read', 'update', 'delete'], ['superadmin', 'admin']);
+
+        $sm4 = $this->createSubMenu($mm, [
+            'name' => 'Backup DB',
+            'url' => 'admin/dukunganaplikasi/backup-db',
+            'route' => 'admin.dukunganaplikasi.backup-db.index',
+        ]);
+        $this->attachMenupermission($sm4, ['create', 'read', 'update', 'delete'], ['superadmin', 'admin']);
     }
 }
