@@ -129,7 +129,7 @@
                             <!-- TAB 2: IDENTITAS & META SEO -->
                             <div class="tab-pane" id="tab-meta">
                                 <div class="row g-3">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <label for="app_name" class="form-label fw-semibold">Nama Aplikasi (Title Meta Suffix) <span class="text-danger">*</span></label>
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="ti ti-app-window"></i></span>
@@ -137,13 +137,13 @@
                                                    id="app_name" name="app_name" value="{{ old('app_name', $profil->app_name) }}" 
                                                    placeholder="Contoh: REPALOGIC Dashboard" required>
                                         </div>
-                                        <div class="form-text fs-12">Nama ini akan disematkan di judul tab browser: <code>Judul Halaman | Nama Aplikasi</code></div>
+                                        <div class="form-text fs-12">Disematkan di tab browser: <code>Judul | Nama App</code></div>
                                         @error('app_name')
                                             <div class="text-danger fs-12 mt-1">{{ $message }}</div>
                                         @enderror
                                     </div>
 
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <label for="app_short_name" class="form-label fw-semibold">Nama Singkat / Brand Short Name</label>
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="ti ti-building-store"></i></span>
@@ -152,6 +152,20 @@
                                                    placeholder="Contoh: REPALOGIC">
                                         </div>
                                         @error('app_short_name')
+                                            <div class="text-danger fs-12 mt-1">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label for="app_version" class="form-label fw-semibold">Versi Aplikasi</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="ti ti-git-commit"></i></span>
+                                            <input type="text" class="form-control @error('app_version') is-invalid @enderror" 
+                                                   id="app_version" name="app_version" value="{{ old('app_version', $profil->app_version ?? 'v1.9.0') }}" 
+                                                   placeholder="Contoh: v1.9.0">
+                                        </div>
+                                        <div class="form-text fs-12">Versi rilis aktif (e.g. <code>v1.9.0</code>)</div>
+                                        @error('app_version')
                                             <div class="text-danger fs-12 mt-1">{{ $message }}</div>
                                         @enderror
                                     </div>

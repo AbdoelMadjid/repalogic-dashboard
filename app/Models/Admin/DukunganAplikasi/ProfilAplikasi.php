@@ -15,6 +15,7 @@ class ProfilAplikasi extends Model
     protected $fillable = [
         'app_name',
         'app_short_name',
+        'app_version',
         'logo_lg',
         'logo_sm',
         'favicon',
@@ -42,6 +43,7 @@ class ProfilAplikasi extends Model
                 $settings = self::create([
                     'app_name' => 'REPALOGIC Dashboard',
                     'app_short_name' => 'REPALOGIC',
+                    'app_version' => 'v1.9.0',
                     'meta_description' => 'Inspinia Admin Dashboard & Management System',
                     'meta_keywords' => 'admin, dashboard, repalogic, php, laravel',
                     'meta_author' => 'WebAppLayers',

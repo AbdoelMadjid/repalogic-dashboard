@@ -13,6 +13,7 @@
             </div>
             <div class="col-md-6">
                 <div class="text-md-end d-none d-md-block">
+                    <span class="badge bg-primary-subtle text-primary font-monospace me-1">{{ $appProfil->app_version ?? 'v1.9.0' }}</span>
                     Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
                 </div>
             </div>

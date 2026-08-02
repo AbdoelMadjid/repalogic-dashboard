@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('app_name')->nullable();
             $table->string('app_short_name')->nullable();
+            $table->string('app_version')->default('v1.9.0')->nullable();
             $table->string('logo_lg')->nullable();
             $table->string('logo_sm')->nullable();
             $table->string('favicon')->nullable();

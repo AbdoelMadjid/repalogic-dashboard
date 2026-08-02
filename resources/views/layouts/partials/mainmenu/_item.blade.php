@@ -80,10 +80,14 @@
         $linkClasses .= ' active';
     }
 
-    // Compute badge class positioning
+    // Compute badge text & class positioning
     $badgeClass = 'badge bg-primary';
+    $badgeText = $item['badge']['text'] ?? '';
     if (!empty($item['badge']['class'])) {
         $badgeClass = str_replace(['float-end', 'ms-auto', 'me-3', 'me-2'], '', $item['badge']['class']);
+    }
+    if (!empty($item['route']) && $item['route'] === 'template.documentation.changelog' && !empty($appProfil->app_version)) {
+        $badgeText = $appProfil->app_version;
     }
     $badgeClass .= $hasChildren ? ' menu-badge-has-arrow' : ' menu-badge-single';
     $badgeClass = trim(preg_replace('/\s+/', ' ', $badgeClass));
@@ -101,7 +105,7 @@
             </span>
             @if (!empty($item['badge']))
                 <span class="{{ $badgeClass }}">
-                    {{ $item['badge']['text'] }}
+                    {{ $badgeText }}
                 </span>
             @endif
             <span class="menu-arrow"></span>
@@ -125,7 +129,7 @@
             </span>
             @if (!empty($item['badge']))
                 <span class="{{ $badgeClass }}">
-                    {{ $item['badge']['text'] }}
+                    {{ $badgeText }}
                 </span>
             @endif
         </a>

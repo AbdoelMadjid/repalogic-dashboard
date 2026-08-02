@@ -24,6 +24,7 @@ class ProfilAplikasiRequest extends FormRequest
         return [
             'app_name' => 'required|string|max:255',
             'app_short_name' => 'nullable|string|max:100',
+            'app_version' => 'nullable|string|max:50',
             'logo_lg' => 'nullable|image|mimes:png,jpg,jpeg,webp,svg|max:2048',
             'logo_sm' => 'nullable|image|mimes:png,jpg,jpeg,webp,svg|max:2048',
             'favicon' => 'nullable|file|mimes:ico,png,jpg,jpeg,webp,svg|max:1024',
@@ -45,6 +46,7 @@ class ProfilAplikasiRequest extends FormRequest
         return [
             'app_name' => 'Nama Aplikasi',
             'app_short_name' => 'Nama Singkat Aplikasi',
+            'app_version' => 'Versi Aplikasi',
             'logo_lg' => 'Logo Besar',
             'logo_sm' => 'Logo Kecil',
             'favicon' => 'Favicon',
