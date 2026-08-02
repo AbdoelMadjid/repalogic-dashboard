@@ -2,7 +2,7 @@
 
 namespace App\Http\ViewComposers;
 
-use App\Models\Admin\ManajemenSistem\Menu;
+use App\Models\Admin\DukunganAplikasi\Menu;
 use Illuminate\View\View;
 
 class SidebarComposer

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin\ManajemenSistem;
+namespace App\Http\Controllers\Admin\DukunganAplikasi;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\ManajemenSistem\MenuRequest;
-use App\Models\Admin\ManajemenSistem\Menu;
+use App\Http\Requests\Admin\DukunganAplikasi\MenuRequest;
+use App\Models\Admin\DukunganAplikasi\Menu;
 use App\Traits\HasMenuPermission;
 use App\Traits\HasNotification;
 use Illuminate\Http\Request;
@@ -24,7 +24,7 @@ class MenuController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax() && $request->has('draw')) {
-            $menus = Menu::with(['parent', 'subMenus', 'permissions.roles'])
+            $menus = Menu::with(['parent', 'subMenus.permissions.roles', 'permissions.roles'])
                 ->orderBy('orders', 'asc')
                 ->get();
 
@@ -47,7 +47,7 @@ class MenuController extends Controller
                     $badges = '';
                     foreach ($row->permissions as $perm) {
                         $actionWord = explode(' ', $perm->name)[0] ?? $perm->name;
-                        $badgeColor = match($actionWord) {
+                        $badgeColor = match ($actionWord) {
                             'read' => 'bg-info',
                             'create' => 'bg-success',
                             'update' => 'bg-warning',
@@ -89,7 +89,7 @@ class MenuController extends Controller
                         $buttons .= "<button type='button' class='btn btn-sm btn-outline-warning btn-menu-action me-1' data-action='edit' data-menu='" . json_encode($row) . "' title='Edit'><i class='ti ti-edit'></i></button>";
                     }
                     if (auth()->user()->can("delete {$target}")) {
-                        $buttons .= "<form action='" . route('admin.manajemensistem.menu.destroy', $row->id) . "' method='POST' class='d-inline' onsubmit='return confirm(\"Hapus menu ini?\")'>
+                        $buttons .= "<form action='" . route('admin.dukunganaplikasi.menu.destroy', $row->id) . "' method='POST' class='d-inline' onsubmit='return confirm(\"Hapus menu ini?\")'>
                                         " . csrf_field() . method_field('DELETE') . "
                                         <button type='submit' class='btn btn-sm btn-outline-danger' title='Hapus'><i class='ti ti-trash'></i></button>
                                     </form>";
@@ -100,7 +100,7 @@ class MenuController extends Controller
                 ->make(true);
         }
 
-        $menus = Menu::with(['parent', 'subMenus', 'permissions.roles'])
+        $menus = Menu::with(['parent', 'subMenus.permissions.roles', 'permissions.roles'])
             ->parents()
             ->orderBy('orders', 'asc')
             ->get();
@@ -113,7 +113,7 @@ class MenuController extends Controller
         $permissions = Permission::all();
         $allRoles = Role::all();
 
-        return view('admin.manajemensistem.menu', compact('menus', 'groupedMenus', 'parentMenus', 'permissions', 'allRoles'));
+        return view('admin.dukunganaplikasi.menu', compact('menus', 'groupedMenus', 'parentMenus', 'permissions', 'allRoles'));
     }
 
     /**
@@ -121,7 +121,7 @@ class MenuController extends Controller
      */
     public function create()
     {
-        return redirect()->route('admin.manajemensistem.menu.index');
+        return redirect()->route('admin.dukunganaplikasi.menu.index');
     }
 
     /**
@@ -141,7 +141,7 @@ class MenuController extends Controller
 
         $this->notifySuccess('Menu berhasil ditambahkan.');
 
-        return redirect()->route('admin.manajemensistem.menu.index');
+        return redirect()->route('admin.dukunganaplikasi.menu.index');
     }
 
     /**
@@ -149,7 +149,7 @@ class MenuController extends Controller
      */
     public function edit(Menu $menu)
     {
-        return redirect()->route('admin.manajemensistem.menu.index');
+        return redirect()->route('admin.dukunganaplikasi.menu.index');
     }
 
     /**
@@ -169,7 +169,7 @@ class MenuController extends Controller
 
         $this->notifySuccess('Menu berhasil diperbarui.');
 
-        return redirect()->route('admin.manajemensistem.menu.index');
+        return redirect()->route('admin.dukunganaplikasi.menu.index');
     }
 
     /**
@@ -181,7 +181,7 @@ class MenuController extends Controller
 
         $this->notifySuccess('Menu berhasil dihapus.');
 
-        return redirect()->route('admin.manajemensistem.menu.index');
+        return redirect()->route('admin.dukunganaplikasi.menu.index');
     }
 
     /**

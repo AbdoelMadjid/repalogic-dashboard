@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Admin\ManajemenSistem\Menu;
+use App\Models\Admin\DukunganAplikasi\Menu;
 use App\Traits\HasMenuPermission;
 use Illuminate\Database\Seeder;
 

@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\Models\Admin\ManajemenSistem\Menu;
+use App\Models\Admin\DukunganAplikasi\Menu;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;

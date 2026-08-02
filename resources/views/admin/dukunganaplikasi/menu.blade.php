@@ -14,7 +14,7 @@
                                 ⚪ <i class="ti ti-dots-vertical text-secondary"></i> Drag <strong>Sub-Menu</strong> (hanya dalam menu utamanya).
                             </p>
                         </div>
-                        @can('create manajemensistem/menu')
+                        @can('create dukunganaplikasi/menu')
                             <button type="button" class="btn btn-primary btn-sm btn-menu-action" data-action="create">
                                 <i class="ti ti-plus me-1"></i> Tambah Menu Baru
                             </button>
@@ -151,7 +151,7 @@
                                                         <button type="button" class="btn btn-sm btn-outline-warning btn-menu-action" data-action="edit" data-menu='@json($menu)' title="Edit"><i class="ti ti-edit"></i></button>
                                                     @endcan
                                                     @can('delete ' . $parentTarget)
-                                                        <form action="{{ route('admin.manajemensistem.menu.destroy', $menu->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus menu ini beserta seluruh sub-menunya?')">
+                                                        <form action="{{ route('admin.dukunganaplikasi.menu.destroy', $menu->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus menu ini beserta seluruh sub-menunya?')">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="ti ti-trash"></i></button>
@@ -198,7 +198,7 @@
                                                             <button type="button" class="btn btn-sm btn-outline-warning btn-menu-action" data-action="edit" data-menu='@json($child)' title="Edit"><i class="ti ti-edit"></i></button>
                                                         @endcan
                                                         @can('delete ' . $childTarget)
-                                                            <form action="{{ route('admin.manajemensistem.menu.destroy', $child->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus sub-menu ini?')">
+                                                            <form action="{{ route('admin.dukunganaplikasi.menu.destroy', $child->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus sub-menu ini?')">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="ti ti-trash"></i></button>
@@ -261,7 +261,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        @include('admin.manajemensistem.partials.menu_form')
+                        @include('admin.dukunganaplikasi.partials.menu_form')
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
@@ -347,7 +347,7 @@
             }
 
             function postReorder(type, items, parentId = null) {
-                fetch("{{ route('admin.manajemensistem.menu.reorder') }}", {
+                fetch("{{ route('admin.dukunganaplikasi.menu.reorder') }}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -470,7 +470,7 @@
 
                     const originalState = !this.checked;
 
-                    fetch("{{ route('admin.manajemensistem.menu.toggle-status') }}", {
+                    fetch("{{ route('admin.dukunganaplikasi.menu.toggle-status') }}", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -521,7 +521,7 @@
 
                     if (action === 'create') {
                         modalTitle.innerHTML = '<i class="ti ti-plus me-1"></i> Tambah Menu Baru';
-                        menuForm.action = "{{ route('admin.manajemensistem.menu.store') }}";
+                        menuForm.action = "{{ route('admin.dukunganaplikasi.menu.store') }}";
                         btnSubmitForm.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Menu';
                         document.getElementById('form_orders').value = 0;
                         document.getElementById('form_active').checked = true;
@@ -529,7 +529,7 @@
 
                     } else if (action === 'edit' && menu) {
                         modalTitle.innerHTML = `<i class="ti ti-edit me-1"></i> Edit Menu: ${menu.name}`;
-                        menuForm.action = `{{ url('admin/manajemensistem/menu') }}/${menu.id}`;
+                        menuForm.action = `{{ url('admin/dukunganaplikasi/menu') }}/${menu.id}`;
                         methodSpoofingContainer.innerHTML = '@method("PUT")';
                         btnSubmitForm.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Perbarui Menu';
                         populateForm(menu);
@@ -563,6 +563,8 @@
                         const cb = document.getElementById(`action_${actionWord}`);
                         if (cb) cb.checked = true;
                     });
+                } else {
+                    document.querySelectorAll('.action-checkbox').forEach(cb => cb.checked = true);
                 }
 
                 document.querySelectorAll('.role-checkbox').forEach(cb => cb.checked = false);
@@ -576,6 +578,13 @@
                     assignedRoleNames.forEach(rName => {
                         const roleCb = document.getElementById(`role_${rName}`);
                         if (roleCb) roleCb.checked = true;
+                    });
+                }
+
+                const checkedRoles = document.querySelectorAll('.role-checkbox:checked');
+                if (checkedRoles.length === 0) {
+                    document.querySelectorAll('.role-checkbox').forEach(cb => {
+                        cb.checked = (cb.value === 'superadmin' || cb.value === 'admin');
                     });
                 }
 

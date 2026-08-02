@@ -79,12 +79,12 @@
 
     <div class="col-md-6 mb-3">
         <label for="form_route" class="form-label">Nama Route (Laravel Route Name)</label>
-        <input type="text" class="form-control menu-input" id="form_route" name="route" placeholder="Contoh: admin.manajemensistem.menu.index">
+        <input type="text" class="form-control menu-input" id="form_route" name="route" placeholder="Contoh: admin.dukunganaplikasi.menu.index">
     </div>
 
     <div class="col-md-6 mb-3">
         <label for="form_url" class="form-label">URL Kustom (Opsional jika Route terisi)</label>
-        <input type="text" class="form-control menu-input" id="form_url" name="url" placeholder="Contoh: admin/manajemensistem/menu">
+        <input type="text" class="form-control menu-input" id="form_url" name="url" placeholder="Contoh: admin/dukunganaplikasi/menu">
     </div>
 
     <div class="col-md-6 mb-2">

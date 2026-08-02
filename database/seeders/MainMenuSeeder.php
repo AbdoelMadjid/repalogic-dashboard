@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Admin\ManajemenSistem\Menu;
+use App\Models\Admin\DukunganAplikasi\Menu;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +33,7 @@ class MainMenuSeeder extends Seeder
 
         // 3. Call Modular Menu Seeders
         $this->call([
-            MenuManajemenPenggunaSeeder::class,
+            MenuDukunganAplikasiSeeder::class,
         ]);
 
         // 4. Normalize Menu Orders

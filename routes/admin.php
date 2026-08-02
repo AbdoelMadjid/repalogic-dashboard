@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\ManajemenSistem\MenuController;
+use App\Http\Controllers\Admin\DukunganAplikasi\MenuController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::prefix('manajemensistem')->name('manajemensistem.')->group(function () {
+    Route::prefix('dukunganaplikasi')->name('dukunganaplikasi.')->group(function () {
         Route::post('menu/toggle-status', [MenuController::class, 'toggleStatus'])->name('menu.toggle-status');
         Route::post('menu/reorder', [MenuController::class, 'reorder'])->name('menu.reorder');
         Route::resource('menu', MenuController::class);

@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class MenuManajemenPenggunaSeeder extends Seeder
+class MenuProfilPenggunaSeeder extends Seeder
 {
     /**
      * Run the database seeds.
