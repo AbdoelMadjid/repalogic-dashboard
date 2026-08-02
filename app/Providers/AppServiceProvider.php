@@ -36,5 +36,17 @@ class AppServiceProvider extends ServiceProvider
         }
 
         View::composer('layouts.partials.sidenav', \App\Http\ViewComposers\SidebarComposer::class);
+
+        View::composer(['layouts.partials.title-meta', 'layouts.partials.sidenav', 'layouts.partials.footer'], function ($view) {
+            if (class_exists(\App\Models\Admin\DukunganAplikasi\ProfilAplikasi::class)) {
+                try {
+                    $view->with('appProfil', \App\Models\Admin\DukunganAplikasi\ProfilAplikasi::getSettings());
+                } catch (\Exception $e) {
+                    $view->with('appProfil', null);
+                }
+            } else {
+                $view->with('appProfil', null);
+            }
+        });
     }
 }

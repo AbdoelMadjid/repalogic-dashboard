@@ -45,5 +45,8 @@ class DatabaseSeeder extends Seeder
 
         // 3. Seed Menus & Permissions
         $this->call(MainMenuSeeder::class);
+
+        // 4. Seed Profil Aplikasi
+        $this->call(ProfilAplikasiSeeder::class);
     }
 }

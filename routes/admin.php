@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DukunganAplikasi\MenuController;
+use App\Http\Controllers\Admin\DukunganAplikasi\ProfilAplikasiController;
 use App\Http\Controllers\Admin\ManajemenPengguna\AksesRoleController;
 use App\Http\Controllers\Admin\ManajemenPengguna\AksesUserController;
 use App\Http\Controllers\Admin\ManajemenPengguna\PermissionController;
@@ -19,6 +20,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::prefix('dukunganaplikasi')->name('dukunganaplikasi.')->group(function () {
+        Route::get('profil-aplikasi', [ProfilAplikasiController::class, 'index'])->name('profil-aplikasi.index');
+        Route::post('profil-aplikasi', [ProfilAplikasiController::class, 'update'])->name('profil-aplikasi.update');
+
         Route::post('menu/toggle-status', [MenuController::class, 'toggleStatus'])->name('menu.toggle-status');
         Route::post('menu/reorder', [MenuController::class, 'reorder'])->name('menu.reorder');
         Route::resource('menu', MenuController::class);

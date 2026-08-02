@@ -79,14 +79,13 @@
 @endphp
 
 <meta charset="utf-8" />
-<title @if (!empty($activeDataLang)) data-lang="{{ $activeDataLang }}" @endif>{{ $pageTitle }} | INSPINIA -
-    Responsive Bootstrap 5 Admin Dashboard Template</title>
+<title @if (!empty($activeDataLang)) data-lang="{{ $activeDataLang }}" @endif>{{ $pageTitle }} | {{ $appProfil->app_name ?? 'INSPINIA - Responsive Bootstrap 5 Admin Dashboard Template' }}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="description"
-    content="Inspinia is the #1 best-selling admin dashboard template on Wrapmarket. Perfect for building CRM, CMS, project management tools, and custom web apps with clean UI, responsive design, and powerful features." />
+    content="{{ $appProfil->meta_description ?? 'Inspinia is the #1 best-selling admin dashboard template on Wrapmarket. Perfect for building CRM, CMS, project management tools, and custom web apps with clean UI, responsive design, and powerful features.' }}" />
 <meta name="keywords"
-    content="Inspinia, admin dashboard, Wrapmarket, Wrapbootstrap, HTML template, Bootstrap admin, CRM template, CMS template, responsive admin, web app UI, admin theme, best admin template" />
-<meta name="author" content="WebAppLayers" />
+    content="{{ $appProfil->meta_keywords ?? 'Inspinia, admin dashboard, Wrapmarket, Wrapbootstrap, HTML template, Bootstrap admin, CRM template, CMS template, responsive admin, web app UI, admin theme, best admin template' }}" />
+<meta name="author" content="{{ $appProfil->meta_author ?? 'WebAppLayers' }}" />
 
 <!-- App favicon -->
-<link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}" />
+<link rel="shortcut icon" href="{{ !empty($appProfil->favicon) ? asset('storage/' . $appProfil->favicon) : asset('assets/images/favicon.ico') }}" />
