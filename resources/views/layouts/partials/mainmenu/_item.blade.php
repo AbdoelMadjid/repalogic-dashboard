@@ -34,10 +34,12 @@
 
         if (!empty($menuItem['route']) && Route::has($menuItem['route'])) {
             $currentRoute = Route::currentRouteName();
+            $routePrefix = Str::beforeLast($menuItem['route'], '.');
             if (
                 request()->routeIs($menuItem['route']) ||
                 request()->routeIs($menuItem['route'] . '.*') ||
-                ($currentRoute && str_starts_with($currentRoute, $menuItem['route'] . '-'))
+                ($routePrefix && request()->routeIs($routePrefix . '.*')) ||
+                ($currentRoute && (str_starts_with($currentRoute, $menuItem['route'] . '-') || str_starts_with($currentRoute, $menuItem['route'] . '.')))
             ) {
                 return true;
             }
@@ -46,7 +48,7 @@
         if (!empty($menuItem['url'])) {
             $currentPath = trim(request()->path(), '/');
             $itemUrl = trim($menuItem['url'], '/');
-            if ($itemUrl && ($itemUrl === $currentPath || str_starts_with($currentPath, $itemUrl . '-'))) {
+            if ($itemUrl && ($itemUrl === $currentPath || str_starts_with($currentPath, $itemUrl . '/') || str_starts_with($currentPath, $itemUrl . '-'))) {
                 return true;
             }
         }

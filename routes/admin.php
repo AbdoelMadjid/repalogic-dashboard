@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ManajemenPengguna\AksesUserController;
 use App\Http\Controllers\Admin\ManajemenPengguna\PermissionController;
 use App\Http\Controllers\Admin\ManajemenPengguna\RoleController;
 use App\Http\Controllers\Admin\ManajemenPengguna\UserController;
+use App\Http\Controllers\Admin\ProfilPenggunaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +22,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('profil-pengguna', [ProfilPenggunaController::class, 'index'])->name('profil-pengguna.index');
+    Route::post('profil-pengguna/update-quick', [ProfilPenggunaController::class, 'updateQuick'])->name('profil-pengguna.update-quick');
+    Route::get('profil-pengguna/edit', [ProfilPenggunaController::class, 'edit'])->name('profil-pengguna.edit');
+    Route::post('profil-pengguna/update-detail', [ProfilPenggunaController::class, 'updateDetail'])->name('profil-pengguna.update-detail');
+
     Route::prefix('dukunganaplikasi')->name('dukunganaplikasi.')->group(function () {
         Route::get('profil-aplikasi', [ProfilAplikasiController::class, 'index'])->name('profil-aplikasi.index');
         Route::post('profil-aplikasi', [ProfilAplikasiController::class, 'update'])->name('profil-aplikasi.update');
