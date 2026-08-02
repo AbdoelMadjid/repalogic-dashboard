@@ -143,10 +143,10 @@
 
                     <div class="table-responsive">
                         <table class="table table-hover align-middle border mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th class="text-nowrap" style="width: 1%; white-space: nowrap;">Rincian Identitas KTP</th>
-                                    <th>Nilai / Keterangan Data</th>
+                            <thead class="table-light align-middle text-center text-nowrap">
+                                <tr class="align-middle text-center text-nowrap">
+                                    <th class="text-center align-middle text-nowrap" style="width: 1%;">Rincian Identitas KTP</th>
+                                    <th class="text-center align-middle text-nowrap">Nilai / Keterangan Data</th>
                                 </tr>
                             </thead>
                             <tbody>

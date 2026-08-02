@@ -138,4 +138,23 @@ class Menu extends Model
         // If no permissions attached, menu is public for authenticated users
         return true;
     }
+
+    /**
+     * Get actual URL path string for this menu.
+     */
+    public function getRealUrl(): string
+    {
+        if (!empty($this->url)) {
+            return '/' . ltrim($this->url, '/');
+        }
+        if (!empty($this->route) && \Illuminate\Support\Facades\Route::has($this->route)) {
+            return route($this->route, [], false);
+        }
+        if (!empty($this->route)) {
+            $r = preg_replace('/\.index$/i', '', $this->route);
+            $r = preg_replace('/^admin\./i', 'admin/', $r);
+            return '/' . str_replace('.', '/', $r);
+        }
+        return '';
+    }
 }

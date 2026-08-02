@@ -60,13 +60,13 @@
 
                         <div class="table-responsive">
                             <table class="table table-hover align-middle table-bordered mb-0" id="users-table">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th style="width: 60px;" class="text-center">#</th>
-                                        <th>Identitas Pengguna</th>
-                                        <th style="width: 180px;" class="text-center">Peran Utama (Role)</th>
-                                        <th style="width: 160px;" class="text-center">Tanggal Terdaftar</th>
-                                        <th style="width: 140px;" class="text-center text-nowrap">Aksi</th>
+                                <thead class="table-light align-middle text-center text-nowrap">
+                                    <tr class="align-middle text-center text-nowrap">
+                                        <th style="width: 60px;" class="text-center align-middle text-nowrap">#</th>
+                                        <th class="text-center align-middle text-nowrap">Identitas Pengguna</th>
+                                        <th class="text-center align-middle text-nowrap">Peran Utama (Role)</th>
+                                        <th class="text-center align-middle text-nowrap">Tanggal Terdaftar</th>
+                                        <th style="width: 140px;" class="text-center align-middle text-nowrap">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -75,9 +75,7 @@
                                             <td class="text-center fw-semibold text-muted">{{ $loop->iteration }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <div class="avatar-sm bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold me-2">
-                                                        {{ strtoupper(substr($user->name, 0, 1)) }}
-                                                    </div>
+                                                    <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="rounded-circle me-2 object-fit-cover border" style="width: 38px; height: 38px;">
                                                     <div>
                                                         <h6 class="mb-0 fs-13 fw-semibold">{{ $user->name }}</h6>
                                                         <span class="text-muted fs-12">{{ $user->email }}</span>
@@ -117,7 +115,7 @@
                                                         @if (auth()->id() === $user->id)
                                                             <button type="button" class="btn btn-sm btn-outline-secondary disabled" title="Akun Anda yang sedang aktif tidak dapat dihapus"><i class="ti ti-lock"></i></button>
                                                         @else
-                                                            <form action="{{ route('admin.manajemenpengguna.users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus akun pengguna {{ $user->name }}?')">
+                                                            <form action="{{ route('admin.manajemenpengguna.users.destroy', $user->id) }}" method="POST" class="d-inline" data-confirm="Hapus akun pengguna {{ $user->name }}?">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="ti ti-trash"></i></button>

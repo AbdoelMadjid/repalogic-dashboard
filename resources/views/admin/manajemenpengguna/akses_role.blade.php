@@ -55,13 +55,13 @@
 
                         <div class="table-responsive">
                             <table class="table table-hover align-middle table-bordered mb-0" id="akses-role-table">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th style="width: 60px;" class="text-center">#</th>
-                                        <th>Nama Role</th>
-                                        <th style="width: 150px;" class="text-center">Pengguna Terhubung</th>
-                                        <th style="width: 180px;" class="text-center">Jumlah Permission Aktif</th>
-                                        <th style="width: 140px;" class="text-center text-nowrap">Aksi Hak Akses</th>
+                                <thead class="table-light align-middle text-center text-nowrap">
+                                    <tr class="align-middle text-center text-nowrap">
+                                        <th style="width: 60px;" class="text-center align-middle text-nowrap">#</th>
+                                        <th class="text-center align-middle text-nowrap">Nama Role</th>
+                                        <th class="text-center align-middle text-nowrap">Pengguna Terhubung</th>
+                                        <th class="text-center align-middle text-nowrap">Jumlah Permission Aktif</th>
+                                        <th style="width: 140px;" class="text-center align-middle text-nowrap">Aksi Hak Akses</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -102,7 +102,7 @@
                                                         @if ($role->name === 'superadmin')
                                                             <button type="button" class="btn btn-sm btn-outline-secondary disabled" title="Akses Superadmin tidak dapat dikosongkan"><i class="ti ti-lock"></i></button>
                                                         @else
-                                                            <form action="{{ route('admin.manajemenpengguna.akses-role.destroy', $role->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Kosongkan seluruh izin permission untuk role {{ $role->name }}?')">
+                                                            <form action="{{ route('admin.manajemenpengguna.akses-role.destroy', $role->id) }}" method="POST" class="d-inline" data-confirm="Kosongkan seluruh izin permission untuk role {{ $role->name }}?">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="submit" class="btn btn-sm btn-outline-danger" title="Kosongkan Akses"><i class="ti ti-trash"></i></button>

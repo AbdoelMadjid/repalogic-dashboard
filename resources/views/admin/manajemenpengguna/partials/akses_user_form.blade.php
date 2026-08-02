@@ -59,15 +59,15 @@
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-bordered align-middle mb-0" id="matrix-user-permission-table">
-                <thead class="table-dark fs-12 text-center text-uppercase">
-                    <tr>
-                        <th class="text-start ps-3" style="min-width: 260px;">MODUL / FITUR APLIKASI</th>
-                        <th style="width: 90px;" class="text-success">CREATE</th>
-                        <th style="width: 90px;" class="text-info">READ</th>
-                        <th style="width: 90px;" class="text-warning">UPDATE</th>
-                        <th style="width: 90px;" class="text-danger">DELETE</th>
-                        <th style="min-width: 140px;" class="text-secondary">LAINNYA</th>
-                        <th style="width: 90px;" class="bg-primary text-white">SEMUA</th>
+                <thead class="table-dark fs-12 text-center text-uppercase align-middle text-nowrap">
+                    <tr class="align-middle text-center text-nowrap">
+                        <th class="text-center align-middle text-nowrap" style="min-width: 260px;">MODUL / FITUR APLIKASI</th>
+                        <th style="width: 90px;" class="text-success text-center align-middle text-nowrap">CREATE</th>
+                        <th style="width: 90px;" class="text-info text-center align-middle text-nowrap">READ</th>
+                        <th style="width: 90px;" class="text-warning text-center align-middle text-nowrap">UPDATE</th>
+                        <th style="width: 90px;" class="text-danger text-center align-middle text-nowrap">DELETE</th>
+                        <th style="min-width: 140px;" class="text-secondary text-center align-middle text-nowrap">LAINNYA</th>
+                        <th style="width: 90px;" class="bg-primary text-white text-center align-middle text-nowrap">SEMUA</th>
                     </tr>
                 </thead>
                 <tbody class="fs-13">

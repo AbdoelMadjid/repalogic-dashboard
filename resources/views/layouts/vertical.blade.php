@@ -41,6 +41,7 @@
 
     @include('layouts.partials/notifications')
     @include('layouts.partials/footer-scripts')
+    @include('layouts.partials/back-to-top')
 
 </body>
 

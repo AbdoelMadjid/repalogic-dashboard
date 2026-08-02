@@ -16,6 +16,7 @@
     @yield('content')
 
     @yield('scripts')
+    @include('layouts.partials/back-to-top')
 
 </body>
 

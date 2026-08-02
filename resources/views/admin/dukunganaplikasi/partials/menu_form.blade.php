@@ -12,7 +12,7 @@
                 <option value="{{ $pMenu->id }}" class="fw-bold">{{ $pMenu->name }}</option>
                 @if ($pMenu->subMenus && $pMenu->subMenus->count() > 0)
                     @foreach ($pMenu->subMenus as $cMenu)
-                        <option value="{{ $cMenu->id }}">&nbsp;&nbsp;&nbsp;&nbsp;└─ {{ $cMenu->name }}</option>
+                        <option value="{{ $cMenu->id }}">&nbsp;&nbsp;&nbsp;&nbsp;└─ {{ $cMenu->name }} (Sub-Menu L2)</option>
                     @endforeach
                 @endif
             @endforeach

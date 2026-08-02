@@ -42,15 +42,15 @@
 
         <div class="border rounded bg-white">
             <table class="table table-hover align-middle mb-0" id="permission-matrix-table">
-                <thead class="table-light">
-                    <tr class="text-uppercase fs-12 fw-bold text-muted border-bottom">
-                        <th class="ps-3 py-3" style="min-width: 280px;">MODUL / FITUR</th>
-                        <th class="text-center py-3" style="width: 80px;">CREATE</th>
-                        <th class="text-center py-3" style="width: 80px;">READ</th>
-                        <th class="text-center py-3" style="width: 80px;">UPDATE</th>
-                        <th class="text-center py-3" style="width: 80px;">DELETE</th>
-                        <th class="text-center py-3" style="width: 90px;">LAINNYA</th>
-                        <th class="text-center py-3 pe-3" style="width: 80px;">SEMUA</th>
+                <thead class="table-light align-middle text-center text-nowrap">
+                    <tr class="text-uppercase fs-12 fw-bold text-muted border-bottom align-middle text-center text-nowrap">
+                        <th class="py-3 text-center align-middle text-nowrap" style="min-width: 280px;">MODUL / FITUR</th>
+                        <th class="text-center py-3 align-middle text-nowrap" style="width: 80px;">CREATE</th>
+                        <th class="text-center py-3 align-middle text-nowrap" style="width: 80px;">READ</th>
+                        <th class="text-center py-3 align-middle text-nowrap" style="width: 80px;">UPDATE</th>
+                        <th class="text-center py-3 align-middle text-nowrap" style="width: 80px;">DELETE</th>
+                        <th class="text-center py-3 align-middle text-nowrap" style="width: 90px;">LAINNYA</th>
+                        <th class="text-center py-3 align-middle text-nowrap" style="width: 80px;">SEMUA</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -60,13 +60,13 @@
 
                         <div class="table-responsive">
                             <table class="table table-hover align-middle mb-0" id="permission-table">
-                                <thead class="table-light">
-                                    <tr class="text-uppercase fs-12 fw-bold text-muted border-bottom">
-                                        <th class="ps-3 py-3" style="min-width: 250px;">MODUL / FITUR APLIKASI</th>
-                                        <th class="py-3">TIPE AKSI TERDAFTAR (CRUD)</th>
-                                        <th class="py-3" style="min-width: 180px;">DITUGASKAN KE ROLE</th>
-                                        <th class="text-center py-3" style="width: 140px;">JUMLAH IZIN</th>
-                                        <th class="text-center py-3" style="width: 150px;">AKSI</th>
+                                <thead class="table-light align-middle text-center text-nowrap">
+                                    <tr class="text-uppercase fs-12 fw-bold text-muted border-bottom align-middle text-center text-nowrap">
+                                        <th class="py-3 text-center align-middle text-nowrap" style="min-width: 250px;">MODUL / FITUR APLIKASI</th>
+                                        <th class="py-3 text-center align-middle text-nowrap">TIPE AKSI TERDAFTAR (CRUD)</th>
+                                        <th class="py-3 text-center align-middle text-nowrap" style="min-width: 180px;">DITUGASKAN KE ROLE</th>
+                                        <th class="text-center py-3 align-middle text-nowrap" style="width: 140px;">JUMLAH IZIN</th>
+                                        <th class="text-center py-3 align-middle text-nowrap" style="width: 150px;">AKSI</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -157,7 +157,7 @@
                                                     </button>
                                                 @endcan
                                                 @can('delete manajemenpengguna/permission')
-                                                    <form action="{{ route('admin.manajemenpengguna.permission.destroy', $firstPermId) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus seluruh izin permission untuk modul {{ $target }}?')">
+                                                    <form action="{{ route('admin.manajemenpengguna.permission.destroy', $firstPermId) }}" method="POST" class="d-inline" data-confirm="Hapus seluruh izin permission untuk modul {{ $target }}?">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus Modul"><i class="ti ti-trash"></i></button>

@@ -19,7 +19,7 @@
 
 <body class="bg-body-secondary" data-bs-spy="scroll" data-bs-target="#navbar-example">
     <!-- Top Alert -->
-    @include('website.partials._top-alert')
+    <!-- @include('website.partials._top-alert') -->
 
     <!-- Header START -->
     @include('website.partials._header')
@@ -61,10 +61,9 @@
     @include('website.partials._footer')
     <!-- ======================= FOOTER SECTION END ======================= -->
 
-    @include('website.partials._offcanvas')
 
-    <!-- end offcanvas-->
     @include('website.partials._js')
+    @include('layouts.partials/back-to-top')
 </body>
 
 </html>

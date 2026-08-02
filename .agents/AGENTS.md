@@ -32,3 +32,13 @@
 - NEVER use `data-target="..."` as a custom data attribute on action buttons or non-numeric HTML elements.
 - Reason: The global theme script `app.js` contains `initCounter()` which searches for ALL elements matching `[data-target]`. It attempts to parse `parseFloat(attr)` and animates the element's `innerText` to `NaN` if the attribute string is non-numeric.
 - Use `data-module="..."`, `data-role="..."`, or `data-menu="..."` instead.
+
+## 8. Table Header Alignment & Single-Line Formatting Standard
+- ALL table headers (`<thead>`) across all pages, DataTables, and modal tables MUST be centered vertically and horizontally with single-line formatting.
+- Always apply `align-middle text-center text-nowrap` to `<thead class="...">`, `<tr class="...">`, and individual `<th>` tags.
+- This prevents header text from wrapping onto multiple lines and ensures uniform, clean table styling.
+
+## 9. SweetAlert2 Universal Delete Confirmation Standard
+- NEVER use native browser `confirm('...')` popups for delete or reset actions.
+- Form submit confirmations MUST use the `data-confirm="..."` attribute on `<form data-confirm="Message text...">`.
+- The global submit event listener in `layouts/partials/notifications.blade.php` automatically intercepts forms with `data-confirm`, presenting a modern SweetAlert2 modal with a 12px button gap and custom styling.

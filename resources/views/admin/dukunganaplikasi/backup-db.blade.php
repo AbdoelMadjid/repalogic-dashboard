@@ -169,13 +169,13 @@
 
                             <div class="table-responsive" style="max-height: 450px; overflow-y: auto;">
                                 <table class="table table-hover align-middle border mb-0" id="table-selective-list">
-                                    <thead class="table-light sticky-top">
-                                        <tr>
-                                            <th style="width: 40px;" class="text-center">#</th>
-                                            <th>Nama Tabel</th>
-                                            <th>Jumlah Baris</th>
-                                            <th>Ukuran</th>
-                                            <th>Informasi Relasi (Foreign Keys)</th>
+                                    <thead class="table-light sticky-top align-middle text-center text-nowrap">
+                                        <tr class="align-middle text-center text-nowrap">
+                                            <th style="width: 40px;" class="text-center align-middle text-nowrap">#</th>
+                                            <th class="text-center align-middle text-nowrap">Nama Tabel</th>
+                                            <th class="text-center align-middle text-nowrap">Jumlah Baris</th>
+                                            <th class="text-center align-middle text-nowrap">Ukuran</th>
+                                            <th class="text-center align-middle text-nowrap">Informasi Relasi (Foreign Keys)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -251,13 +251,13 @@
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th style="width: 50px;" class="text-center">#</th>
-                                    <th>Nama Berkas .SQL</th>
-                                    <th>Ukuran Berkas</th>
-                                    <th>Waktu Dibuat</th>
-                                    <th class="text-end pe-4" style="width: 180px;">Aksi</th>
+                            <thead class="table-light align-middle text-center text-nowrap">
+                                <tr class="align-middle text-center text-nowrap">
+                                    <th style="width: 50px;" class="text-center align-middle text-nowrap">#</th>
+                                    <th class="text-center align-middle text-nowrap">Nama Berkas .SQL</th>
+                                    <th class="text-center align-middle text-nowrap">Ukuran Berkas</th>
+                                    <th class="text-center align-middle text-nowrap">Waktu Dibuat</th>
+                                    <th class="text-center align-middle text-nowrap" style="width: 180px;">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -473,10 +473,6 @@
                                 form.submit();
                             }
                         });
-                    } else {
-                        if (confirm(`Apakah Anda yakin ingin menghapus berkas "${fileName}"?`)) {
-                            form.submit();
-                        }
                     }
                 }
             });

@@ -41,10 +41,59 @@
         pointer-events: auto !important;
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15) !important;
     }
+
+    /* Add proper spacing gap between SweetAlert action buttons */
+    .swal2-actions {
+        gap: 12px !important;
+    }
 </style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Global Event Delegation for Delete/Confirmation Forms (Replaces native browser confirm)
+        document.addEventListener('submit', function(e) {
+            const form = e.target;
+            const dataConfirm = form.getAttribute('data-confirm');
+            const onsubmitAttr = form.getAttribute('onsubmit');
+            
+            let confirmMsg = null;
+            if (dataConfirm) {
+                confirmMsg = dataConfirm;
+            } else if (onsubmitAttr && onsubmitAttr.includes('confirm(')) {
+                const match = onsubmitAttr.match(/confirm\(\s*['"]([^'"]+)['"]\s*\)/);
+                if (match && match[1]) {
+                    confirmMsg = match[1];
+                }
+            }
+
+            if (confirmMsg) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                Swal.fire({
+                    title: 'Konfirmasi Hapus',
+                    text: confirmMsg,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="ti ti-trash me-1"></i> Ya, Hapus!',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true,
+                    customClass: {
+                        confirmButton: 'btn btn-danger',
+                        cancelButton: 'btn btn-light'
+                    },
+                    buttonsStyling: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.removeAttribute('onsubmit');
+                        form.removeAttribute('data-confirm');
+                        delete form.dataset.confirm;
+                        form.submit();
+                    }
+                });
+            }
+        });
+
         // Intercept clicks on unprepared/unregistered menu items
         document.body.addEventListener('click', function(e) {
             const unpreparedLink = e.target.closest('.menu-unprepared');

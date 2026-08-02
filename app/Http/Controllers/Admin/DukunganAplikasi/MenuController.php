@@ -109,7 +109,7 @@ class MenuController extends Controller
             return !empty($item->category) ? strtoupper(trim($item->category)) : 'LAINNYA / UNCATEGORIZED';
         });
 
-        $parentMenus = Menu::parents()->with('subMenus')->orderBy('orders', 'asc')->get();
+        $parentMenus = Menu::parents()->with('subMenus.subMenus')->orderBy('orders', 'asc')->get();
         $permissions = Permission::all();
         $allRoles = Role::all();
 

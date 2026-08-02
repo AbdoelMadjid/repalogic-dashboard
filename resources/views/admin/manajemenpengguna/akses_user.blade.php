@@ -55,14 +55,14 @@
 
                         <div class="table-responsive">
                             <table class="table table-hover align-middle table-bordered mb-0" id="akses-user-table">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th style="width: 60px;" class="text-center">#</th>
-                                        <th>Identitas Pengguna</th>
-                                        <th style="width: 160px;" class="text-center">Peran Utama (Role)</th>
-                                        <th style="width: 160px;" class="text-center">Izin Langsung (Direct)</th>
-                                        <th style="width: 150px;" class="text-center">Total Akses Aktif</th>
-                                        <th style="width: 140px;" class="text-center text-nowrap">Aksi Hak Akses</th>
+                                <thead class="table-light align-middle text-center text-nowrap">
+                                    <tr class="align-middle text-center text-nowrap">
+                                        <th style="width: 60px;" class="text-center align-middle text-nowrap">#</th>
+                                        <th class="text-center align-middle text-nowrap">Identitas Pengguna</th>
+                                        <th class="text-center align-middle text-nowrap">Peran Utama (Role)</th>
+                                        <th class="text-center align-middle text-nowrap">Izin Langsung (Direct)</th>
+                                        <th class="text-center align-middle text-nowrap">Total Akses Aktif</th>
+                                        <th style="width: 140px;" class="text-center align-middle text-nowrap">Aksi Hak Akses</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -71,9 +71,7 @@
                                             <td class="text-center fw-semibold text-muted">{{ $loop->iteration }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <div class="avatar-sm bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold me-2">
-                                                        {{ strtoupper(substr($user->name, 0, 1)) }}
-                                                    </div>
+                                                    <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="rounded-circle me-2 object-fit-cover border" style="width: 38px; height: 38px;">
                                                     <div>
                                                         <h6 class="mb-0 fs-13 fw-semibold">{{ $user->name }}</h6>
                                                         <span class="text-muted fs-12">{{ $user->email }}</span>
@@ -117,7 +115,7 @@
                                                         <button type="button" class="btn btn-sm btn-outline-primary btn-akses-user-trigger" data-action="edit" data-user='@json($user)' title="Atur Akses Pengguna"><i class="ti ti-key"></i></button>
                                                     @endcan
                                                     @can('delete manajemenpengguna/akses-user')
-                                                        <form action="{{ route('admin.manajemenpengguna.akses-user.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Kosongkan seluruh izin khusus langsung (direct permissions) untuk user {{ $user->name }}?')">
+                                                        <form action="{{ route('admin.manajemenpengguna.akses-user.destroy', $user->id) }}" method="POST" class="d-inline" data-confirm="Kosongkan seluruh izin khusus langsung (direct permissions) untuk user {{ $user->name }}?">
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="btn btn-sm btn-outline-danger" title="Reset Izin Langsung"><i class="ti ti-trash"></i></button>

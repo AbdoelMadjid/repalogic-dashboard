@@ -37,6 +37,7 @@
     </div>
 
     @yield('scripts')
+    @include('layouts.partials/back-to-top')
 
 </body>
 
