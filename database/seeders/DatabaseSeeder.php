@@ -48,5 +48,8 @@ class DatabaseSeeder extends Seeder
 
         // 4. Seed Profil Aplikasi
         $this->call(ProfilAplikasiSeeder::class);
+
+        // 5. Seed Fitur Aplikasi
+        $this->call(FiturAplikasiSeeder::class);
     }
 }

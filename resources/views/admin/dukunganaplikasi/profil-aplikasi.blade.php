@@ -17,13 +17,6 @@
                             <i class="ti ti-settings-automation fs-22"></i>
                             <h5 class="card-title text-white mb-0">Pengaturan Profil & Branding Aplikasi</h5>
                         </div>
-                        <div>
-                            @can('update dukunganaplikasi/profil-aplikasi')
-                                <button type="submit" class="btn btn-light btn-sm text-primary fw-semibold px-3">
-                                    <i class="ti ti-device-floppy me-1 fs-16"></i> Simpan Perubahan
-                                </button>
-                            @endcan
-                        </div>
                     </div>
 
                     <div class="card-body">

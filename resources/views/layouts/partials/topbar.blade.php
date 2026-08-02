@@ -34,36 +34,59 @@
                 <i class="ti ti-menu-4"></i>
             </button>
 
+            @if(empty($appFeatures) || $appFeatures->topbar_search_box)
             <div id="search-box" class="app-search d-none d-xl-flex">
                 <input type="search" class="form-control topbar-search" name="search"
                     placeholder="Search for something..." data-lang-placeholder="topbar-search-placeholder" />
                 <i class="ti ti-search app-search-icon text-muted"></i>
             </div>
+            @endif
 
-            @include('layouts.partials.topbar.megamenu-header')
-            @include('layouts.partials.topbar.megamenu-apps')
+            @if(empty($appFeatures) || $appFeatures->topbar_megamenu_header)
+                @include('layouts.partials.topbar.megamenu-header')
+            @endif
 
-
+            @if(empty($appFeatures) || $appFeatures->topbar_megamenu_apps)
+                @include('layouts.partials.topbar.megamenu-apps')
+            @endif
         </div>
 
         <div class="d-flex align-items-center gap-2">
-            @include('layouts.partials.topbar.theme-toggler')
+            @if(empty($appFeatures) || $appFeatures->topbar_theme_toggler)
+                @include('layouts.partials.topbar.theme-toggler')
+            @endif
 
-            @include('layouts.partials.topbar.apps-dropdown-rounded')
+            @if(empty($appFeatures) || $appFeatures->topbar_apps_dropdown)
+                @include('layouts.partials.topbar.apps-dropdown-rounded')
+            @endif
 
-            @include('layouts.partials.topbar.simple-messages-dropdown')
+            @if(empty($appFeatures) || $appFeatures->topbar_messages)
+                @include('layouts.partials.topbar.simple-messages-dropdown')
+            @endif
 
-            @include('layouts.partials.topbar.notification-dropdown-alert')
+            @if(empty($appFeatures) || $appFeatures->topbar_notifications)
+                @include('layouts.partials.topbar.notification-dropdown-alert')
+            @endif
 
-            @include('layouts.partials.topbar.fullscreen-toggler')
+            @if(empty($appFeatures) || $appFeatures->topbar_fullscreen)
+                @include('layouts.partials.topbar.fullscreen-toggler')
+            @endif
 
-            @include('layouts.partials.topbar.monochrome-toggler')
+            @if(empty($appFeatures) || $appFeatures->topbar_monochrome)
+                @include('layouts.partials.topbar.monochrome-toggler')
+            @endif
 
-            @include('layouts.partials.topbar.theme-settings-offcanvas')
+            @if(empty($appFeatures) || $appFeatures->topbar_customizer)
+                @include('layouts.partials.topbar.theme-settings-offcanvas')
+            @endif
 
-            @include('layouts.partials.topbar.language-selector')
+            @if(empty($appFeatures) || $appFeatures->topbar_language)
+                @include('layouts.partials.topbar.language-selector')
+            @endif
 
-            @include('layouts.partials.topbar.simple-user-dropdown')
+            @if(empty($appFeatures) || $appFeatures->topbar_user_dropdown)
+                @include('layouts.partials.topbar.simple-user-dropdown')
+            @endif
         </div>
     </div>
 </header>

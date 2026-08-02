@@ -104,23 +104,31 @@
                 @endif
 
                 @foreach (['main', 'apps', 'custom-pages', 'layouts', 'components', 'documentation', 'menu-item'] as $groupKey)
-                    @if ($groupConfig = config("sidenav-template.$groupKey"))
+                    @php
+                        $featureKey = 'menu_group_' . str_replace('-', '_', $groupKey);
+                        $isGroupVisible = empty($appFeatures) || (!empty($appFeatures->$featureKey));
+                    @endphp
+                    @if ($isGroupVisible && ($groupConfig = config("sidenav-template.$groupKey")))
                         @include('layouts.partials.mainmenu._render', ['menuGroup' => $groupConfig])
                     @endif
                 @endforeach
 
-                <li class="side-nav-item">
-                    <a href="#" class="side-nav-link disabled">
-                        <span class="menu-icon"><i class="ti ti-ban"></i></span>
-                        <span class="menu-text" data-lang="disabled-menu">Disabled Menu</span>
-                    </a>
-                </li>
-                <li class="side-nav-item">
-                    <a href="#" class="side-nav-link special-menu">
-                        <span class="menu-icon"><i class="ti ti-star"></i></span>
-                        <span class="menu-text" data-lang="special-menu">Special Menu</span>
-                    </a>
-                </li>
+                @if (empty($appFeatures) || !empty($appFeatures->menu_group_menu_item))
+                    <li class="side-nav-item">
+                        <a href="#" class="side-nav-link disabled">
+                            <span class="menu-icon"><i class="ti ti-ban"></i></span>
+                            <span class="menu-text" data-lang="disabled-menu">Disabled Menu</span>
+                        </a>
+                    </li>
+                @endif
+                @if (empty($appFeatures) || !empty($appFeatures->menu_special_menu))
+                    <li class="side-nav-item">
+                        <a href="#" class="side-nav-link special-menu">
+                            <span class="menu-icon"><i class="ti ti-star"></i></span>
+                            <span class="menu-text" data-lang="special-menu">Special Menu</span>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>

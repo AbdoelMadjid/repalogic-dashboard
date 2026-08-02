@@ -48,5 +48,17 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('appProfil', null);
             }
         });
+
+        View::composer(['layouts.partials.topbar', 'layouts.partials.sidenav'], function ($view) {
+            if (class_exists(\App\Models\Admin\DukunganAplikasi\FiturAplikasi::class)) {
+                try {
+                    $view->with('appFeatures', \App\Models\Admin\DukunganAplikasi\FiturAplikasi::getSettings());
+                } catch (\Exception $e) {
+                    $view->with('appFeatures', null);
+                }
+            } else {
+                $view->with('appFeatures', null);
+            }
+        });
     }
 }
