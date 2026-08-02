@@ -325,45 +325,141 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const totalRows = {{ $totalMenuCount }};
+            let currentPage = 1;
+            let pageSize = 25;
 
-            // Live Instant Search Handler with Info Bar Update
             const searchInput = document.getElementById('table-search-input');
-            const infoVisibleCount = document.getElementById('info-visible-count');
+            const lengthSelect = document.getElementById('table-length-select');
+            const tableInfoBar = document.getElementById('table-info-bar');
+            const paginationUl = document.getElementById('table-pagination');
 
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    const query = this.value.toLowerCase().trim();
-                    let visibleCount = 0;
+            function updateTableDisplay() {
+                const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+                const selectedLength = lengthSelect ? lengthSelect.value : '25';
+                pageSize = selectedLength === 'all' ? Infinity : parseInt(selectedLength, 10);
 
-                    document.querySelectorAll('.category-block').forEach(block => {
-                        let hasVisibleChild = false;
-                        block.querySelectorAll('.parent-menu-row, .submenu-row').forEach(row => {
-                            const text = row.textContent.toLowerCase();
-                            if (text.includes(query)) {
-                                row.style.display = '';
-                                hasVisibleChild = true;
-                                visibleCount++;
-                            } else {
-                                row.style.display = 'none';
-                            }
-                        });
+                let matchingRows = [];
 
-                        const catHeader = block.querySelector('.category-header-row');
-                        if (catHeader) {
-                            if (query === '' || hasVisibleChild) {
-                                catHeader.style.display = '';
-                            } else {
-                                catHeader.style.display = 'none';
-                            }
+                document.querySelectorAll('.category-block').forEach(block => {
+                    let hasVisibleInBlock = false;
+                    block.querySelectorAll('.parent-menu-row, .submenu-row').forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        if (query === '' || text.includes(query)) {
+                            matchingRows.push(row);
+                            hasVisibleInBlock = true;
+                        } else {
+                            row.style.display = 'none';
                         }
                     });
 
-                    if (infoVisibleCount) {
-                        infoVisibleCount.textContent = query === '' ? totalRows : visibleCount;
+                    const catHeader = block.querySelector('.category-header-row');
+                    if (catHeader) {
+                        catHeader.style.display = (query === '' || hasVisibleInBlock) ? '' : 'none';
                     }
                 });
+
+                const totalMatching = matchingRows.length;
+                const totalPages = pageSize === Infinity ? 1 : (Math.ceil(totalMatching / pageSize) || 1);
+
+                if (currentPage > totalPages) {
+                    currentPage = totalPages;
+                }
+                if (currentPage < 1) {
+                    currentPage = 1;
+                }
+
+                const startIndex = pageSize === Infinity ? 0 : (currentPage - 1) * pageSize;
+                const endIndex = pageSize === Infinity ? totalMatching : Math.min(startIndex + pageSize, totalMatching);
+
+                matchingRows.forEach((row, index) => {
+                    if (index >= startIndex && index < endIndex) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                document.querySelectorAll('.category-block').forEach(block => {
+                    const catHeader = block.querySelector('.category-header-row');
+                    if (catHeader && catHeader.style.display !== 'none') {
+                        const visibleChildInPage = Array.from(block.querySelectorAll('.parent-menu-row, .submenu-row')).some(r => r.style.display !== 'none');
+                        if (query !== '' && !visibleChildInPage) {
+                            catHeader.style.display = 'none';
+                        }
+                    }
+                });
+
+                if (tableInfoBar) {
+                    if (totalMatching === 0) {
+                        tableInfoBar.innerHTML = 'Menampilkan <strong>0</strong> data';
+                    } else if (pageSize === Infinity) {
+                        tableInfoBar.innerHTML = `Menampilkan semua <strong>${totalMatching}</strong> data`;
+                    } else {
+                        tableInfoBar.innerHTML = `Menampilkan <strong>${startIndex + 1}</strong> sampai <strong>${endIndex}</strong> dari <strong>${totalMatching}</strong> data`;
+                    }
+                }
+
+                renderPagination(totalPages);
             }
+
+            function renderPagination(totalPages) {
+                if (!paginationUl) return;
+
+                if (totalPages <= 1 || pageSize === Infinity) {
+                    paginationUl.innerHTML = '';
+                    return;
+                }
+
+                let html = '';
+
+                const prevDisabled = currentPage === 1 ? ' disabled' : '';
+                html += `<li class="page-item${prevDisabled}" data-page="1" title="Halaman Awal"><a class="page-link" href="javascript:void(0);"><i class="ti ti-chevrons-left fs-14"></i></a></li>`;
+                html += `<li class="page-item${prevDisabled}" data-page="${currentPage - 1}" title="Sebelumnya"><a class="page-link" href="javascript:void(0);"><i class="ti ti-chevron-left fs-14"></i></a></li>`;
+
+                let startPage = Math.max(1, currentPage - 2);
+                let endPage = Math.min(totalPages, startPage + 4);
+                if (endPage - startPage < 4) {
+                    startPage = Math.max(1, endPage - 4);
+                }
+
+                for (let p = startPage; p <= endPage; p++) {
+                    const activeClass = p === currentPage ? ' active' : '';
+                    html += `<li class="page-item${activeClass}" data-page="${p}"><a class="page-link" href="javascript:void(0);">${p}</a></li>`;
+                }
+
+                const nextDisabled = currentPage === totalPages ? ' disabled' : '';
+                html += `<li class="page-item${nextDisabled}" data-page="${currentPage + 1}" title="Berikutnya"><a class="page-link" href="javascript:void(0);"><i class="ti ti-chevron-right fs-14"></i></a></li>`;
+                html += `<li class="page-item${nextDisabled}" data-page="${totalPages}" title="Halaman Akhir"><a class="page-link" href="javascript:void(0);"><i class="ti ti-chevrons-right fs-14"></i></a></li>`;
+
+                paginationUl.innerHTML = html;
+
+                paginationUl.querySelectorAll('.page-item:not(.disabled)').forEach(item => {
+                    item.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const targetPage = parseInt(this.getAttribute('data-page'), 10);
+                        if (targetPage && targetPage !== currentPage) {
+                            currentPage = targetPage;
+                            updateTableDisplay();
+                        }
+                    });
+                });
+            }
+
+            if (lengthSelect) {
+                lengthSelect.addEventListener('change', function() {
+                    currentPage = 1;
+                    updateTableDisplay();
+                });
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    currentPage = 1;
+                    updateTableDisplay();
+                });
+            }
+
+            updateTableDisplay();
 
             const menuModal = new bootstrap.Modal(document.getElementById('menuModal'));
             const menuForm = document.getElementById('menuForm');
@@ -517,6 +613,21 @@
                     const catSlug = this.getAttribute('data-cat-slug');
 
                     const originalState = !this.checked;
+
+                    // Instantly sync descendant switches visually in the DOM
+                    const syncChildSwitches = (parentId, state) => {
+                        document.querySelectorAll(`.child-of-${parentId}`).forEach(childSwitch => {
+                            childSwitch.checked = state;
+                            const childId = childSwitch.getAttribute('data-id');
+                            const label = document.querySelector(`.status-label-${childId}`);
+                            if (label) label.textContent = state ? 'Aktif' : 'Nonaktif';
+                            syncChildSwitches(childId, state);
+                        });
+                    };
+
+                    if (type === 'parent' || type === 'submenu') {
+                        syncChildSwitches(menuId, this.checked);
+                    }
 
                     fetch("{{ route('admin.dukunganaplikasi.menu.toggle-status') }}", {
                         method: 'POST',

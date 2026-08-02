@@ -208,9 +208,9 @@ class MenuController extends Controller
             // Update parent menus
             Menu::whereRaw('UPPER(category) = ?', [strtoupper($categoryName)])->update(['active' => $active]);
 
-            // Update sub-menus under these parents
-            if (!empty($parentIds)) {
-                Menu::whereIn('main_menu_id', $parentIds)->update(['active' => $active]);
+            // Recursively update all descendant sub-menus under these parents
+            foreach ($parentIds as $pId) {
+                $this->updateDescendantsStatus($pId, $active);
             }
 
             $msg = "Status seluruh menu pada Kategori \"{$categoryName}\" berhasil " . ($active ? 'diaktifkan' : 'dinonaktifkan') . '.';
@@ -218,15 +218,18 @@ class MenuController extends Controller
             $menu = Menu::findOrFail($request->input('id'));
             $menu->update(['active' => $active]);
 
-            // Cascade update all sub-menus under this main menu
-            $menu->subMenus()->update(['active' => $active]);
+            // Cascade update all descendant sub-menus under this main menu recursively
+            $this->updateDescendantsStatus($menu->id, $active);
 
             $msg = "Status Menu Utama \"{$menu->name}\" beserta seluruh sub-menunya berhasil " . ($active ? 'diaktifkan' : 'dinonaktifkan') . '.';
         } else { // submenu
             $menu = Menu::findOrFail($request->input('id'));
             $menu->update(['active' => $active]);
 
-            $msg = "Status Sub-Menu \"{$menu->name}\" berhasil " . ($active ? 'diaktifkan' : 'dinonaktifkan') . '.';
+            // Cascade update all descendant sub-menus under this sub-menu recursively
+            $this->updateDescendantsStatus($menu->id, $active);
+
+            $msg = "Status Sub-Menu \"{$menu->name}\" beserta seluruh sub-menunya berhasil " . ($active ? 'diaktifkan' : 'dinonaktifkan') . '.';
         }
 
         // Clear menu cache & permission cache
@@ -239,6 +242,20 @@ class MenuController extends Controller
             'message' => $msg,
             'active' => $active,
         ]);
+    }
+
+    /**
+     * Recursively update active status for all sub-menus under a parent menu.
+     */
+    private function updateDescendantsStatus(int $parentId, bool $active): void
+    {
+        $childIds = Menu::where('main_menu_id', $parentId)->pluck('id')->toArray();
+        if (!empty($childIds)) {
+            Menu::whereIn('id', $childIds)->update(['active' => $active]);
+            foreach ($childIds as $cId) {
+                $this->updateDescendantsStatus($cId, $active);
+            }
+        }
     }
 
     /**
