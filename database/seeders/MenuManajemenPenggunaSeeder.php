@@ -70,11 +70,11 @@ class MenuManajemenPenggunaSeeder extends BaseMenuSeeder
         $this->attachMenupermission($sm7, ['create', 'read', 'update', 'delete'], ['superadmin', 'admin']);
 
         // Sub-menu Level 3 (Di bawah Data Login)
-        $ssm1 = $this->createSubMenu($sm7, [
+        /* $ssm1 = $this->createSubMenu($sm7, [
             'name' => 'Riwayat Sesi',
             'url' => 'admin/manajemenpengguna/data-login/riwayat-sesi',
             'route' => 'admin.manajemenpengguna.data-login.riwayat-sesi.index',
         ]);
-        $this->attachMenupermission($ssm1, ['create', 'read', 'update', 'delete'], ['superadmin', 'admin']);
+        $this->attachMenupermission($ssm1, ['create', 'read', 'update', 'delete'], ['superadmin', 'admin']); */
     }
 }

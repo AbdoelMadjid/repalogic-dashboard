@@ -85,21 +85,62 @@
                         </a>
                     </li>
                 @endif
-                @if (empty($appFeatures) || !empty($appFeatures->menu_special_menu))
-                    <li class="side-nav-item">
-                        <a href="#" class="side-nav-link special-menu">
-                            <span class="menu-icon"><i class="ti ti-star"></i></span>
-                            <span class="menu-text" data-lang="special-menu">Special Menu</span>
-                        </a>
-                    </li>
-                @endif
             </ul>
         </div>
     </div>
+
+    @if (empty($appFeatures) || !empty($appFeatures->menu_special_menu))
+        <div class="sidenav-special-bottom">
+            <ul class="side-nav mb-0">
+                <li class="side-nav-item mb-0">
+                    <a href="#" class="side-nav-link special-menu">
+                        <span class="menu-icon"><i class="ti ti-star"></i></span>
+                        <span class="menu-text" data-lang="special-menu">Special Menu</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    @endif
 </div>
 <!-- Sidenav Menu End -->
 
 <style>
+    /* Pin Special Menu to Absolute Bottom of Sidenav Screen */
+    .sidenav-menu {
+        position: fixed !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        height: 100vh !important;
+    }
+
+    .sidenav-menu [data-simplebar] {
+        height: calc(100vh - var(--theme-topbar-height) - 55px) !important;
+        max-height: calc(100vh - var(--theme-topbar-height) - 55px) !important;
+    }
+
+    .sidenav-special-bottom {
+        position: absolute !important;
+        bottom: 6px !important; /* Spasi 6px persis dari tepi paling bawah layar sidebar */
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 1050 !important;
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
+
+    .sidenav-special-bottom .side-nav,
+    .sidenav-special-bottom .side-nav-item {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    html[data-sidenav-size=condensed] .sidenav-special-bottom {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
     .sidenav-search-icon {
         color: rgba(255, 255, 255, 0.55);
         text-shadow: 0 0 8px rgba(255, 255, 255, 0.25);
