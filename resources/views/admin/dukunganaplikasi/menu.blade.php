@@ -206,6 +206,54 @@
                                                         @endcan
                                                     </td>
                                                 </tr>
+                                                <!-- LEVEL 3 SUB-MENUS -->
+                                                @if ($child->subMenus && $child->subMenus->count() > 0)
+                                                    @foreach ($child->subMenus as $subChild)
+                                                        @php
+                                                            $subChildTarget = $subChild->getPermissionTarget();
+                                                        @endphp
+                                                        <tr class="submenu-row child-of-{{ $child->id }}" data-id="{{ $subChild->id }}" data-parent-id="{{ $child->id }}">
+                                                            <td class="text-center text-muted fs-12">
+                                                                <i class="ti ti-dots-vertical text-secondary fs-14 handle-submenu me-1 cursor-pointer" title="Geser untuk mengurutkan Sub-menu ini"></i>
+                                                                <span class="order-number">{{ $loop->iteration }}</span>
+                                                            </td>
+                                                            <td class="ps-5">
+                                                                <span class="text-muted me-1">└─ └─</span>
+                                                                @if ($subChild->icon)
+                                                                    <i class="{{ $subChild->icon }} me-1 fs-16"></i>
+                                                                @endif
+                                                                {{ $subChild->name }}
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-check form-switch">
+                                                                    <input class="form-check-input switch-toggle-status child-of-{{ $child->id }} cat-group-{{ $catSlug }}"
+                                                                        type="checkbox"
+                                                                        data-type="submenu"
+                                                                        data-id="{{ $subChild->id }}"
+                                                                        data-parent-id="{{ $child->id }}"
+                                                                        data-cat-slug="{{ $catSlug }}"
+                                                                        {{ $subChild->active ? 'checked' : '' }}>
+                                                                    <label class="form-check-label ms-1 fs-12 status-label-{{ $subChild->id }}">{{ $subChild->active ? 'Aktif' : 'Nonaktif' }}</label>
+                                                                </div>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                @can('read ' . $subChildTarget)
+                                                                    <button type="button" class="btn btn-sm btn-outline-info btn-menu-action" data-action="view" data-menu='@json($subChild)' title="Detail"><i class="ti ti-eye"></i></button>
+                                                                @endcan
+                                                                @can('update ' . $subChildTarget)
+                                                                    <button type="button" class="btn btn-sm btn-outline-warning btn-menu-action" data-action="edit" data-menu='@json($subChild)' title="Edit"><i class="ti ti-edit"></i></button>
+                                                                @endcan
+                                                                @can('delete ' . $subChildTarget)
+                                                                    <form action="{{ route('admin.dukunganaplikasi.menu.destroy', $subChild->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus sub-menu ini?')">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="ti ti-trash"></i></button>
+                                                                    </form>
+                                                                @endcan
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
                                             @endforeach
                                         @endforeach
                                     </tbody>

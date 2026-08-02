@@ -9,7 +9,12 @@
         <select class="form-select menu-input" id="form_main_menu_id" name="main_menu_id">
             <option value="">-- Tanpa Parent (Menu Utama) --</option>
             @foreach ($parentMenus as $pMenu)
-                <option value="{{ $pMenu->id }}">{{ $pMenu->name }}</option>
+                <option value="{{ $pMenu->id }}" class="fw-bold">{{ $pMenu->name }}</option>
+                @if ($pMenu->subMenus && $pMenu->subMenus->count() > 0)
+                    @foreach ($pMenu->subMenus as $cMenu)
+                        <option value="{{ $cMenu->id }}">&nbsp;&nbsp;&nbsp;&nbsp;└─ {{ $cMenu->name }}</option>
+                    @endforeach
+                @endif
             @endforeach
         </select>
     </div>

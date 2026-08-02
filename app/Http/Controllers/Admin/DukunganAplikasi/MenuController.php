@@ -100,7 +100,7 @@ class MenuController extends Controller
                 ->make(true);
         }
 
-        $menus = Menu::with(['parent', 'subMenus.permissions.roles', 'permissions.roles'])
+        $menus = Menu::with(['parent', 'subMenus.subMenus.permissions.roles', 'subMenus.permissions.roles', 'permissions.roles'])
             ->parents()
             ->orderBy('orders', 'asc')
             ->get();
@@ -109,7 +109,7 @@ class MenuController extends Controller
             return !empty($item->category) ? strtoupper(trim($item->category)) : 'LAINNYA / UNCATEGORIZED';
         });
 
-        $parentMenus = Menu::parents()->get();
+        $parentMenus = Menu::parents()->with('subMenus')->orderBy('orders', 'asc')->get();
         $permissions = Permission::all();
         $allRoles = Role::all();
 

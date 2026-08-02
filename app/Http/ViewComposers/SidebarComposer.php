@@ -14,11 +14,16 @@ class SidebarComposer
     {
         $user = auth()->user();
 
-        // Fetch top-level active menus with their active children and attached permissions
+        // Fetch top-level active menus with their active children recursively
         $menus = Menu::with([
             'permissions',
             'subMenus' => function ($query) {
-                $query->active()->with('permissions')->orderBy('orders', 'asc');
+                $query->active()->with([
+                    'permissions',
+                    'subMenus' => function ($subQuery) {
+                        $subQuery->active()->with('permissions')->orderBy('orders', 'asc');
+                    }
+                ])->orderBy('orders', 'asc');
             }
         ])
         ->active()
@@ -29,46 +34,46 @@ class SidebarComposer
         $groupedMenus = [];
 
         foreach ($menus as $menu) {
-            // Permission check for parent
-            if (!$menu->isPermittedFor($user)) {
-                continue;
-            }
+            $processedMenu = $this->processMenu($menu, $user, false);
+            if ($processedMenu !== null) {
+                $groupKey = $menu->category ?: 'APLIKASI';
 
-            // Filter permitted children
-            $permittedChildren = [];
-            foreach ($menu->subMenus as $child) {
-                if ($child->isPermittedFor($user)) {
-                    $permittedChildren[] = $this->formatMenuItem($child, [], true);
+                if (!isset($groupedMenus[$groupKey])) {
+                    $groupedMenus[$groupKey] = [
+                        'title' => $groupKey,
+                        'items' => [],
+                    ];
                 }
+
+                $groupedMenus[$groupKey]['items'][] = $processedMenu;
             }
-
-            // If it has no route/url and no visible children, don't show header parent
-            if (empty($menu->route) && empty($menu->url) && empty($permittedChildren)) {
-                continue;
-            }
-
-            $formattedParent = $this->formatMenuItem($menu, $permittedChildren, false);
-            $groupKey = $menu->category ?: 'APLIKASI';
-
-            if (!isset($groupedMenus[$groupKey])) {
-                $groupedMenus[$groupKey] = [
-                    'title' => $groupKey,
-                    'items' => [],
-                ];
-            }
-
-            $groupedMenus[$groupKey]['items'][] = $formattedParent;
         }
 
         $view->with('dbMenuGroups', array_values($groupedMenus));
     }
 
     /**
-     * Format menu model into array compatible with template mainmenu partials.
-     * Submenus ($isChild = true) do not render icons to match template aesthetics.
+     * Recursively process menu item and its children.
      */
-    private function formatMenuItem(Menu $menu, array $children = [], bool $isChild = false): array
+    private function processMenu(Menu $menu, $user, bool $isChild = false): ?array
     {
+        if (!$menu->isPermittedFor($user)) {
+            return null;
+        }
+
+        $permittedChildren = [];
+        foreach ($menu->subMenus as $child) {
+            $processedChild = $this->processMenu($child, $user, true);
+            if ($processedChild !== null) {
+                $permittedChildren[] = $processedChild;
+            }
+        }
+
+        // If it has no route/url and no visible children, don't show container parent
+        if (empty($menu->route) && empty($menu->url) && empty($permittedChildren)) {
+            return null;
+        }
+
         $item = [
             'id' => 'db-menu-' . $menu->id,
             'title' => $menu->name,
@@ -78,8 +83,8 @@ class SidebarComposer
             'target' => '_self',
         ];
 
-        if (!empty($children)) {
-            $item['children'] = $children;
+        if (!empty($permittedChildren)) {
+            $item['children'] = $permittedChildren;
         }
 
         return $item;
