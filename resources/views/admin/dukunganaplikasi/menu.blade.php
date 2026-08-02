@@ -1,7 +1,8 @@
-@extends('layouts.vertical')
+@extends('layouts.vertical', ['title' => 'Manajemen Menu'])
 
 @section('content')
-    <div class="container-fluid mt-3">
+    @include('layouts.partials.page-title', ['subtitle' => 'Dukungan Aplikasi', 'title' => 'Manajemen Menu'])
+    <div class="container-fluid mt-2">
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -206,54 +207,6 @@
                                                         @endcan
                                                     </td>
                                                 </tr>
-                                                <!-- LEVEL 3 SUB-MENUS -->
-                                                @if ($child->subMenus && $child->subMenus->count() > 0)
-                                                    @foreach ($child->subMenus as $subChild)
-                                                        @php
-                                                            $subChildTarget = $subChild->getPermissionTarget();
-                                                        @endphp
-                                                        <tr class="submenu-row child-of-{{ $child->id }}" data-id="{{ $subChild->id }}" data-parent-id="{{ $child->id }}">
-                                                            <td class="text-center text-muted fs-12">
-                                                                <i class="ti ti-dots-vertical text-secondary fs-14 handle-submenu me-1 cursor-pointer" title="Geser untuk mengurutkan Sub-menu ini"></i>
-                                                                <span class="order-number">{{ $loop->iteration }}</span>
-                                                            </td>
-                                                            <td class="ps-5">
-                                                                <span class="text-muted me-1">└─ └─</span>
-                                                                @if ($subChild->icon)
-                                                                    <i class="{{ $subChild->icon }} me-1 fs-16"></i>
-                                                                @endif
-                                                                {{ $subChild->name }}
-                                                            </td>
-                                                            <td>
-                                                                <div class="form-check form-switch">
-                                                                    <input class="form-check-input switch-toggle-status child-of-{{ $child->id }} cat-group-{{ $catSlug }}"
-                                                                        type="checkbox"
-                                                                        data-type="submenu"
-                                                                        data-id="{{ $subChild->id }}"
-                                                                        data-parent-id="{{ $child->id }}"
-                                                                        data-cat-slug="{{ $catSlug }}"
-                                                                        {{ $subChild->active ? 'checked' : '' }}>
-                                                                    <label class="form-check-label ms-1 fs-12 status-label-{{ $subChild->id }}">{{ $subChild->active ? 'Aktif' : 'Nonaktif' }}</label>
-                                                                </div>
-                                                            </td>
-                                                            <td class="text-center">
-                                                                @can('read ' . $subChildTarget)
-                                                                    <button type="button" class="btn btn-sm btn-outline-info btn-menu-action" data-action="view" data-menu='@json($subChild)' title="Detail"><i class="ti ti-eye"></i></button>
-                                                                @endcan
-                                                                @can('update ' . $subChildTarget)
-                                                                    <button type="button" class="btn btn-sm btn-outline-warning btn-menu-action" data-action="edit" data-menu='@json($subChild)' title="Edit"><i class="ti ti-edit"></i></button>
-                                                                @endcan
-                                                                @can('delete ' . $subChildTarget)
-                                                                    <form action="{{ route('admin.dukunganaplikasi.menu.destroy', $subChild->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus sub-menu ini?')">
-                                                                        @csrf
-                                                                        @method('DELETE')
-                                                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="ti ti-trash"></i></button>
-                                                                    </form>
-                                                                @endcan
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                @endif
                                             @endforeach
                                         @endforeach
                                     </tbody>
@@ -325,141 +278,45 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            let currentPage = 1;
-            let pageSize = 25;
+            const totalRows = {{ $totalMenuCount }};
 
+            // Live Instant Search Handler with Info Bar Update
             const searchInput = document.getElementById('table-search-input');
-            const lengthSelect = document.getElementById('table-length-select');
-            const tableInfoBar = document.getElementById('table-info-bar');
-            const paginationUl = document.getElementById('table-pagination');
-
-            function updateTableDisplay() {
-                const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
-                const selectedLength = lengthSelect ? lengthSelect.value : '25';
-                pageSize = selectedLength === 'all' ? Infinity : parseInt(selectedLength, 10);
-
-                let matchingRows = [];
-
-                document.querySelectorAll('.category-block').forEach(block => {
-                    let hasVisibleInBlock = false;
-                    block.querySelectorAll('.parent-menu-row, .submenu-row').forEach(row => {
-                        const text = row.textContent.toLowerCase();
-                        if (query === '' || text.includes(query)) {
-                            matchingRows.push(row);
-                            hasVisibleInBlock = true;
-                        } else {
-                            row.style.display = 'none';
-                        }
-                    });
-
-                    const catHeader = block.querySelector('.category-header-row');
-                    if (catHeader) {
-                        catHeader.style.display = (query === '' || hasVisibleInBlock) ? '' : 'none';
-                    }
-                });
-
-                const totalMatching = matchingRows.length;
-                const totalPages = pageSize === Infinity ? 1 : (Math.ceil(totalMatching / pageSize) || 1);
-
-                if (currentPage > totalPages) {
-                    currentPage = totalPages;
-                }
-                if (currentPage < 1) {
-                    currentPage = 1;
-                }
-
-                const startIndex = pageSize === Infinity ? 0 : (currentPage - 1) * pageSize;
-                const endIndex = pageSize === Infinity ? totalMatching : Math.min(startIndex + pageSize, totalMatching);
-
-                matchingRows.forEach((row, index) => {
-                    if (index >= startIndex && index < endIndex) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-
-                document.querySelectorAll('.category-block').forEach(block => {
-                    const catHeader = block.querySelector('.category-header-row');
-                    if (catHeader && catHeader.style.display !== 'none') {
-                        const visibleChildInPage = Array.from(block.querySelectorAll('.parent-menu-row, .submenu-row')).some(r => r.style.display !== 'none');
-                        if (query !== '' && !visibleChildInPage) {
-                            catHeader.style.display = 'none';
-                        }
-                    }
-                });
-
-                if (tableInfoBar) {
-                    if (totalMatching === 0) {
-                        tableInfoBar.innerHTML = 'Menampilkan <strong>0</strong> data';
-                    } else if (pageSize === Infinity) {
-                        tableInfoBar.innerHTML = `Menampilkan semua <strong>${totalMatching}</strong> data`;
-                    } else {
-                        tableInfoBar.innerHTML = `Menampilkan <strong>${startIndex + 1}</strong> sampai <strong>${endIndex}</strong> dari <strong>${totalMatching}</strong> data`;
-                    }
-                }
-
-                renderPagination(totalPages);
-            }
-
-            function renderPagination(totalPages) {
-                if (!paginationUl) return;
-
-                if (totalPages <= 1 || pageSize === Infinity) {
-                    paginationUl.innerHTML = '';
-                    return;
-                }
-
-                let html = '';
-
-                const prevDisabled = currentPage === 1 ? ' disabled' : '';
-                html += `<li class="page-item${prevDisabled}" data-page="1" title="Halaman Awal"><a class="page-link" href="javascript:void(0);"><i class="ti ti-chevrons-left fs-14"></i></a></li>`;
-                html += `<li class="page-item${prevDisabled}" data-page="${currentPage - 1}" title="Sebelumnya"><a class="page-link" href="javascript:void(0);"><i class="ti ti-chevron-left fs-14"></i></a></li>`;
-
-                let startPage = Math.max(1, currentPage - 2);
-                let endPage = Math.min(totalPages, startPage + 4);
-                if (endPage - startPage < 4) {
-                    startPage = Math.max(1, endPage - 4);
-                }
-
-                for (let p = startPage; p <= endPage; p++) {
-                    const activeClass = p === currentPage ? ' active' : '';
-                    html += `<li class="page-item${activeClass}" data-page="${p}"><a class="page-link" href="javascript:void(0);">${p}</a></li>`;
-                }
-
-                const nextDisabled = currentPage === totalPages ? ' disabled' : '';
-                html += `<li class="page-item${nextDisabled}" data-page="${currentPage + 1}" title="Berikutnya"><a class="page-link" href="javascript:void(0);"><i class="ti ti-chevron-right fs-14"></i></a></li>`;
-                html += `<li class="page-item${nextDisabled}" data-page="${totalPages}" title="Halaman Akhir"><a class="page-link" href="javascript:void(0);"><i class="ti ti-chevrons-right fs-14"></i></a></li>`;
-
-                paginationUl.innerHTML = html;
-
-                paginationUl.querySelectorAll('.page-item:not(.disabled)').forEach(item => {
-                    item.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const targetPage = parseInt(this.getAttribute('data-page'), 10);
-                        if (targetPage && targetPage !== currentPage) {
-                            currentPage = targetPage;
-                            updateTableDisplay();
-                        }
-                    });
-                });
-            }
-
-            if (lengthSelect) {
-                lengthSelect.addEventListener('change', function() {
-                    currentPage = 1;
-                    updateTableDisplay();
-                });
-            }
+            const infoVisibleCount = document.getElementById('info-visible-count');
 
             if (searchInput) {
                 searchInput.addEventListener('input', function() {
-                    currentPage = 1;
-                    updateTableDisplay();
+                    const query = this.value.toLowerCase().trim();
+                    let visibleCount = 0;
+
+                    document.querySelectorAll('.category-block').forEach(block => {
+                        let hasVisibleChild = false;
+                        block.querySelectorAll('.parent-menu-row, .submenu-row').forEach(row => {
+                            const text = row.textContent.toLowerCase();
+                            if (text.includes(query)) {
+                                row.style.display = '';
+                                hasVisibleChild = true;
+                                visibleCount++;
+                            } else {
+                                row.style.display = 'none';
+                            }
+                        });
+
+                        const catHeader = block.querySelector('.category-header-row');
+                        if (catHeader) {
+                            if (query === '' || hasVisibleChild) {
+                                catHeader.style.display = '';
+                            } else {
+                                catHeader.style.display = 'none';
+                            }
+                        }
+                    });
+
+                    if (infoVisibleCount) {
+                        infoVisibleCount.textContent = query === '' ? totalRows : visibleCount;
+                    }
                 });
             }
-
-            updateTableDisplay();
 
             const menuModal = new bootstrap.Modal(document.getElementById('menuModal'));
             const menuForm = document.getElementById('menuForm');
@@ -614,21 +471,6 @@
 
                     const originalState = !this.checked;
 
-                    // Instantly sync descendant switches visually in the DOM
-                    const syncChildSwitches = (parentId, state) => {
-                        document.querySelectorAll(`.child-of-${parentId}`).forEach(childSwitch => {
-                            childSwitch.checked = state;
-                            const childId = childSwitch.getAttribute('data-id');
-                            const label = document.querySelector(`.status-label-${childId}`);
-                            if (label) label.textContent = state ? 'Aktif' : 'Nonaktif';
-                            syncChildSwitches(childId, state);
-                        });
-                    };
-
-                    if (type === 'parent' || type === 'submenu') {
-                        syncChildSwitches(menuId, this.checked);
-                    }
-
                     fetch("{{ route('admin.dukunganaplikasi.menu.toggle-status') }}", {
                         method: 'POST',
                         headers: {
@@ -722,8 +564,6 @@
                         const cb = document.getElementById(`action_${actionWord}`);
                         if (cb) cb.checked = true;
                     });
-                } else {
-                    document.querySelectorAll('.action-checkbox').forEach(cb => cb.checked = true);
                 }
 
                 document.querySelectorAll('.role-checkbox').forEach(cb => cb.checked = false);
@@ -737,13 +577,6 @@
                     assignedRoleNames.forEach(rName => {
                         const roleCb = document.getElementById(`role_${rName}`);
                         if (roleCb) roleCb.checked = true;
-                    });
-                }
-
-                const checkedRoles = document.querySelectorAll('.role-checkbox:checked');
-                if (checkedRoles.length === 0) {
-                    document.querySelectorAll('.role-checkbox').forEach(cb => {
-                        cb.checked = (cb.value === 'superadmin' || cb.value === 'admin');
                     });
                 }
 

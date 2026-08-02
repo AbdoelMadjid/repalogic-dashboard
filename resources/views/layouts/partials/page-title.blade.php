@@ -1,15 +1,128 @@
 @php
     $breadcrumbItems = [];
     $pageMainTitle = $title ?? null;
+    $activeDataLang = null;
+
+    $routeName = Route::currentRouteName();
+    $currentPath = trim(request()->path(), '/');
+    $isAdmin = request()->is('admin*') || ($routeName && str_starts_with($routeName, 'admin.'));
 
     if (isset($breadcrumbs) && is_array($breadcrumbs)) {
         $breadcrumbItems = $breadcrumbs;
         $pageMainTitle = $pageMainTitle ?? 'Dashboard';
-    } else {
-        $routeName = Route::currentRouteName();
-        $currentPath = trim(request()->path(), '/');
 
-        // Search config/sidenav-template for matching route/URL hierarchy
+    } elseif ($isAdmin) {
+        // =========================================================================
+        // ADMIN MODE: BREADCRUMBS SHOW PARENT LOCATION (WITHOUT REPEATING LEAF TITLE)
+        // =========================================================================
+        $dbMenu = null;
+        try {
+            if (class_exists(\App\Models\Admin\DukunganAplikasi\Menu::class)) {
+                $query = \App\Models\Admin\DukunganAplikasi\Menu::with('parent.parent');
+
+                $matched = (clone $query)->where(function($q) use ($routeName, $currentPath) {
+                    if ($routeName) {
+                        $baseRoute = str_replace('.index', '', $routeName);
+                        $q->where('route', $routeName)->orWhere('route', $baseRoute);
+                    }
+                    $q->orWhere('url', $currentPath)
+                      ->orWhere('url', '/' . $currentPath);
+                })->first();
+
+                if (!$matched && $currentPath) {
+                    $pathParts = explode('/', $currentPath);
+                    while (count($pathParts) > 1 && !$matched) {
+                        $checkPath = implode('/', $pathParts);
+                        $matched = (clone $query)->where('url', $checkPath)
+                            ->orWhere('url', '/' . $checkPath)
+                            ->orWhere('route', str_replace('/', '.', $checkPath))
+                            ->first();
+                        array_pop($pathParts);
+                    }
+                }
+
+                $dbMenu = $matched;
+            }
+        } catch (\Throwable $e) {
+            $dbMenu = null;
+        }
+
+        if ($dbMenu) {
+            if (!$pageMainTitle) {
+                $pageMainTitle = $dbMenu->name;
+            }
+
+            $breadcrumbItems[] = [
+                'title' => 'Admin',
+                'url' => url('/admin'),
+            ];
+
+            if (!empty($dbMenu->category)) {
+                $breadcrumbItems[] = [
+                    'title' => Str::title(str_replace(['-', '_'], ' ', $dbMenu->category)),
+                    'url' => 'javascript:void(0);',
+                ];
+            }
+
+            if ($dbMenu->parent) {
+                if ($dbMenu->parent->parent && !empty($dbMenu->parent->parent->name)) {
+                    $breadcrumbItems[] = [
+                        'title' => $dbMenu->parent->parent->name,
+                        'url' => !empty($dbMenu->parent->parent->url) ? url($dbMenu->parent->parent->url) : 'javascript:void(0);',
+                    ];
+                }
+                $breadcrumbItems[] = [
+                    'title' => $dbMenu->parent->name,
+                    'url' => !empty($dbMenu->parent->url) ? url($dbMenu->parent->url) : 'javascript:void(0);',
+                ];
+            }
+
+        } else {
+            // Fallback for non-db admin pages: omit the active leaf title from breadcrumbs
+            $rawSegments = $routeName && str_contains($routeName, '.')
+                ? explode('.', $routeName)
+                : array_filter(explode('/', $currentPath));
+
+            if (count($rawSegments) > 0 && strtolower($rawSegments[0]) === 'admin') {
+                array_shift($rawSegments);
+            }
+            if (count($rawSegments) > 0 && strtolower(end($rawSegments)) === 'index') {
+                array_pop($rawSegments);
+            }
+
+            $segments = [];
+            $accumulated = ['admin'];
+            foreach ($rawSegments as $seg) {
+                $accumulated[] = $seg;
+                $cleanSeg = str_replace(['-', '_'], ' ', $seg);
+                $formatted = Str::title($cleanSeg);
+
+                $accRoute = implode('.', $accumulated);
+                $url = Route::has($accRoute) ? route($accRoute) : 'javascript:void(0);';
+
+                $segments[] = [
+                    'title' => $formatted,
+                    'url' => $url,
+                ];
+            }
+
+            $lastSegment = end($segments);
+            if (!$pageMainTitle) {
+                $pageMainTitle = is_array($lastSegment) ? $lastSegment['title'] ?? 'Dashboard' : 'Dashboard';
+            }
+
+            $ancestorSegments = count($segments) > 1 ? array_slice($segments, 0, -1) : $segments;
+
+            $breadcrumbItems = array_merge(
+                [['title' => 'Admin', 'url' => url('/admin')]],
+                $ancestorSegments
+            );
+        }
+
+    } else {
+        // =========================================================================
+        // TEMPLATE MODE: SIDENAV-TEMPLATE CONFIG DRIVEN
+        // =========================================================================
         $findHierarchy = function ($items, $ancestors) use (&$findHierarchy, $routeName, $currentPath) {
             if (!is_array($items)) {
                 return null;
@@ -56,7 +169,6 @@
             }
         }
 
-        $activeDataLang = null;
         if ($hierarchy && count($hierarchy) > 0) {
             $activeLeaf = end($hierarchy);
             $activeDataLang = $activeLeaf['data_lang'] ?? null;
@@ -64,7 +176,6 @@
                 $pageMainTitle = $activeLeaf['title'] ?? 'Dashboard';
             }
 
-            // Omit active leaf node from breadcrumb items, since active title is rendered as Main Title on the left
             $ancestors = count($hierarchy) > 1 ? array_slice($hierarchy, 0, -1) : $hierarchy;
 
             $breadcrumbItems = [];
@@ -88,11 +199,9 @@
                 ];
             }
         } else {
-            // Fallback: format route/path segments
-            $rawSegments =
-                $routeName && str_contains($routeName, '.')
-                    ? explode('.', $routeName)
-                    : array_filter(explode('/', $currentPath));
+            $rawSegments = $routeName && str_contains($routeName, '.')
+                ? explode('.', $routeName)
+                : array_filter(explode('/', $currentPath));
 
             if (count($rawSegments) > 0 && strtolower($rawSegments[0]) === 'template') {
                 array_shift($rawSegments);
@@ -116,10 +225,7 @@
                 $formatted = $knownAcronyms[$lowerSeg] ?? Str::title($cleanSeg);
 
                 $accRoute = implode('.', $accumulated);
-                $url = 'javascript:void(0);';
-                if (Route::has($accRoute)) {
-                    $url = route($accRoute);
-                }
+                $url = Route::has($accRoute) ? route($accRoute) : 'javascript:void(0);';
 
                 $segments[] = [
                     'title' => $formatted,
@@ -136,7 +242,7 @@
 
             $breadcrumbItems = array_merge(
                 [['title' => 'Template', 'url' => Route::has('dashboard') ? route('dashboard') : url('/')]],
-                $ancestorSegments,
+                $ancestorSegments
             );
         }
     }

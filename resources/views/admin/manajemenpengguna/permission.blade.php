@@ -1,7 +1,8 @@
-@extends('layouts.vertical')
+@extends('layouts.vertical', ['title' => 'Data Permission'])
 
 @section('content')
-    <div class="container-fluid mt-3">
+    @include('layouts.partials.page-title', ['subtitle' => 'Manajemen Pengguna', 'title' => 'Data Permission'])
+    <div class="container-fluid mt-2">
         <div class="row">
             <div class="col-12">
                 <div class="card">
