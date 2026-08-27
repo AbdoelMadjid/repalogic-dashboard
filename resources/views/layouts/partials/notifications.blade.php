@@ -3,7 +3,7 @@
 <script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 
 <style>
-    /* Global Fix: Remove backdrop blur and dark overlay for ALL SweetAlert notifications & toasts */
+    /* Global Fix: Remove backdrop blur for SweetAlert notifications & toasts */
     .swal2-container,
     .swal2-container.swal2-backdrop-show,
     .swal2-container.swal2-noanimation {
@@ -29,60 +29,28 @@
     }
 
     /* Ensure Toast popups remain clickable while container is transparent */
-    .swal2-popup.swal2-toast,
-    .swal2-container.swal2-top-end .swal2-popup,
-    .swal2-container.swal2-top-start .swal2-popup,
-    .swal2-container.swal2-bottom-end .swal2-popup,
-    .swal2-container.swal2-bottom-start .swal2-popup,
-    .swal2-container.swal2-top-right .swal2-popup,
-    .swal2-container.swal2-top-left .swal2-popup,
-    .swal2-container.swal2-bottom-right .swal2-popup,
-    .swal2-container.swal2-bottom-left .swal2-popup {
+    .swal2-popup.swal2-toast {
         pointer-events: auto !important;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
-        border: 1px solid rgba(0, 0, 0, 0.08) !important;
-        border-radius: 8px !important;
-        padding: 0.65rem 1rem !important;
-        font-size: 0.85rem !important;
-        line-height: 1.4 !important;
-    }
-
-    /* Compact, elegant Toast title typography */
-    .swal2-popup.swal2-toast .swal2-title {
-        font-size: 0.875rem !important; /* ~14px */
-        font-weight: 500 !important;
-        margin: 0 0.5rem !important;
-        color: #1e293b !important;
-        line-height: 1.4 !important;
-    }
-
-    /* Compact Toast description/html text */
-    .swal2-popup.swal2-toast .swal2-html-container {
-        font-size: 0.8125rem !important; /* ~13px */
-        margin: 0.25rem 0.5rem !important;
-        color: #475569 !important;
-        line-height: 1.35 !important;
-    }
-
-    /* Compact Toast icon scaling */
-    .swal2-popup.swal2-toast .swal2-icon {
-        width: 1.5rem !important;
-        height: 1.5rem !important;
-        min-width: 1.5rem !important;
-        margin: 0 0.5rem 0 0 !important;
-    }
-
-    .swal2-popup.swal2-toast .swal2-icon .swal2-icon-content {
-        font-size: 0.95rem !important;
-    }
-
-    .swal2-popup.swal2-toast .swal2-timer-progress-bar {
-        height: 3px !important;
     }
 
     /* Add proper spacing gap between SweetAlert action buttons */
     .swal2-actions {
         gap: 12px !important;
+    }
+
+    /* Firm & Vibrant Theme Color for SweetAlert2 Success Icon (Replaces pale default #a5dc86) */
+    .swal2-icon.swal2-success {
+        border-color: #10b981 !important;
+        color: #10b981 !important;
+    }
+    .swal2-icon.swal2-success .swal2-success-ring {
+        border-color: rgba(16, 185, 129, 0.25) !important;
+    }
+    .swal2-icon.swal2-success [class^="swal2-success-line"] {
+        background-color: #10b981 !important;
+    }
+    .swal2-timer-progress-bar {
+        background-color: #10b981 !important;
     }
 </style>
 
@@ -93,7 +61,7 @@
             const form = e.target;
             const dataConfirm = form.getAttribute('data-confirm');
             const onsubmitAttr = form.getAttribute('onsubmit');
-            
+
             let confirmMsg = null;
             if (dataConfirm) {
                 confirmMsg = dataConfirm;
@@ -139,7 +107,7 @@
                 e.preventDefault();
                 e.stopPropagation();
                 const menuTitle = unpreparedLink.getAttribute('data-menu-title') || 'Menu Ini';
-                
+
                 Swal.fire({
                     title: 'Belum Dapat Diakses',
                     html: `Fitur/Menu <strong>"${menuTitle}"</strong> sedang dalam tahap pengembangan dan rutenya belum aktif.`,

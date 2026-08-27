@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.1.3</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.1.4</strong>
                             </span>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                                     <h6 class="fw-bold mb-0 text-dark">2. Catat Log Changelog</h6>
                                 </div>
                                 <p class="fs-13 text-muted mb-0">
-                                    Tambahkan blok timeline baru pada <code>changelog.blade.php</code> dengan timestamp WIB dan uraian pembaruan fitur/bug fix.
+                                    Dokumentasikan riwayat perubahan di <code>changelog.blade.php</code> dan <code>docs/riwayat_release_dan_tag.md</code>.
                                 </p>
                             </div>
                         </div>
@@ -67,11 +67,11 @@
                         <div class="col-md-6 col-lg-3">
                             <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                 <div class="d-flex align-items-center mb-2">
-                                    <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-markdown fs-14"></i></span>
-                                    <h6 class="fw-bold mb-0 text-dark">3. Update README.md</h6>
+                                    <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-git-branch fs-14"></i></span>
+                                    <h6 class="fw-bold mb-0 text-dark">3. Commit &amp; Sync</h6>
                                 </div>
                                 <p class="fs-13 text-muted mb-0">
-                                    Perbarui tabel Release History pada file <code>README.md</code> di root direktori proyek.
+                                    Lakukan commit perubahan file kode dan dokumentasi: <code>git commit -m "feat/fix: ..."</code>.
                                 </p>
                             </div>
                         </div>
@@ -107,12 +107,12 @@
                 <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0 fw-bold"><i class="ti ti-history me-2 text-primary"></i>Git Commit Release
                         Timeline</h5>
-                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">20 Versions Logged</span>
+                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">21 Versions Logged</span>
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
 
-                        <!-- Version 2.1.3 -->
+                        <!-- Version 2.1.4 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -120,8 +120,37 @@
                             <div class="timeline-content ps-3.5 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.1.3</h5>
+                                        <h5 class="fw-bold mb-0">v2.1.4</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.1.4</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 23:02 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Public Landing Page Footer Overhaul, Drag &amp; Drop Website Sections Reordering, Fitur Aplikasi Header Clean-up &amp; SweetAlert2 Clean Native Restoration</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong>Landing Page Footer Modernization:</strong> Menghapus menu Admin dari footer publik, menstrukturisasi kategori Company &amp; Community menjadi 2 sub-kolom responsif, merombak styling dengan dark gradient, ambient glow, tombol sosial media glassmorphism, dan menyempurnakan jarak badge Hiring.</li>
+                                    <li><strong>Website Sections Drag &amp; Drop Reordering:</strong> Mengintegrasikan SortableJS pada Konfigurasi Website dengan drag handle, live badge renumbering, dan auto-save instan via AJAX ke server.</li>
+                                    <li><strong>Fitur Aplikasi Header Clean-up:</strong> Mengubah tombol badge "Auto-Save Instant" menjadi teks informasi yang elegan dengan ikon petir.</li>
+                                    <li><strong>SweetAlert2 Native Restoration &amp; Firm Theme Colors:</strong> Menghapus modifikasi CSS usang dari tema Inspinia di <code>app.css</code> dan <code>app.min.css</code> yang memotong koordinat centang, serta menerapkan warna Emerald/Primary tegas <code>#10b981</code> pada ikon notifikasi.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-muted border">Website Footer</span>
+                                    <span class="badge bg-light text-muted border">Drag &amp; Drop SortableJS</span>
+                                    <span class="badge bg-light text-muted border">SweetAlert2 Native</span>
+                                    <span class="badge bg-light text-muted border">UI/UX Polish</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.1.3 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-git-commit fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3.5 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.1.3</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.1.3</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 21:35 WIB</span>

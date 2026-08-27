@@ -13,9 +13,9 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'REPALOGIC Dashboard'),
 
-    'version' => env('APP_VERSION', 'v2.1.3'),
+    'version' => env('APP_VERSION', 'v2.1.4'),
 
     /*
     |--------------------------------------------------------------------------

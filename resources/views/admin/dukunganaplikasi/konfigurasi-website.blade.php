@@ -148,7 +148,7 @@
                                     <table class="table table-hover align-middle mb-0">
                                         <thead class="table-light align-middle text-center text-nowrap">
                                             <tr class="align-middle text-center text-nowrap">
-                                                <th class="text-center align-middle text-nowrap" style="width: 50px;">Urutan</th>
+                                                <th class="text-center align-middle text-nowrap" style="width: 80px;"><i class="ti ti-arrows-sort me-1"></i> Urutan</th>
                                                 <th class="text-start align-middle text-nowrap">Nama Seksi Halaman</th>
                                                 <th class="text-start align-middle text-nowrap">File Blade Template</th>
                                                 <th class="text-start align-middle text-nowrap">Anchor Target (#id)</th>
@@ -158,14 +158,22 @@
                                                 <th class="text-center align-middle text-nowrap" style="width: 100px;">Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="sortable-sections-list">
                                             @forelse ($activeTheme->sections as $sec)
-                                                <tr>
+                                                <tr class="section-row" data-id="{{ $sec->id }}">
                                                     <td class="text-center align-middle">
-                                                        <input type="number" name="orders[{{ $sec->id }}]" value="{{ $sec->orders }}" class="form-control form-control-sm text-center mx-auto" style="width: 65px;">
+                                                        <div class="d-flex align-items-center justify-content-center gap-1.5">
+                                                            <span class="drag-handle-section text-muted cursor-grab p-1" title="Drag & drop untuk mengubah urutan seksi">
+                                                                <i class="ti ti-menu-2 fs-18"></i>
+                                                            </span>
+                                                            <span class="badge bg-light text-dark fw-bold font-monospace border px-2 py-1 order-badge fs-12">
+                                                                {{ $sec->orders }}
+                                                            </span>
+                                                            <input type="hidden" name="orders[{{ $sec->id }}]" value="{{ $sec->orders }}" class="order-input">
+                                                        </div>
                                                     </td>
                                                     <td class="align-middle fw-semibold text-dark">
-                                                        <i class="ti ti-grip-vertical text-muted me-1"></i> {{ $sec->section_name }}
+                                                        {{ $sec->section_name }}
                                                         @if ($sec->nav_title)
                                                             <span class="fs-12 text-muted d-block fw-normal">(Navbar: "{{ $sec->nav_title }}")</span>
                                                         @endif
@@ -280,12 +288,13 @@
                                     </table>
                                 </div>
                                 @if ($activeTheme->sections->isNotEmpty())
-                                    <div class="card-footer bg-light p-3 d-flex justify-content-between align-items-center">
-                                        <span class="fs-13 text-muted">
-                                            <i class="ti ti-info-circle me-1"></i> Ubah nilai pada kolom <strong>Urutan</strong> lalu klik tombol di sebelah kanan untuk memperbarui urutan seksi.
+                                    <div class="card-footer bg-light p-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
+                                        <span class="fs-13 text-muted d-flex align-items-center gap-1">
+                                            <i class="ti ti-arrows-sort text-primary fs-16"></i>
+                                            <span>Geser ikon baris (<i class="ti ti-menu-2 fs-14"></i>) untuk mengubah urutan seksi secara instan (tersimpan otomatis).</span>
                                         </span>
-                                        <button type="submit" class="btn btn-primary btn-sm fw-semibold px-4">
-                                            <i class="ti ti-arrows-sort me-1"></i> Simpan Perubahan Urutan
+                                        <button type="submit" class="btn btn-primary btn-sm fw-semibold px-3">
+                                            <i class="ti ti-check me-1"></i> Simpan Urutan Manual
                                         </button>
                                     </div>
                                 @endif
@@ -297,15 +306,87 @@
         </div>
     </div>
 
+    <!-- Drag & Drop Styling -->
+    <style>
+        .cursor-grab {
+            cursor: grab !important;
+        }
+        .cursor-grab:active {
+            cursor: grabbing !important;
+        }
+        .sortable-ghost {
+            opacity: 0.35;
+            background-color: rgba(var(--bs-primary-rgb), 0.08) !important;
+            outline: 2px dashed var(--bs-primary) !important;
+        }
+        .sortable-drag {
+            opacity: 0.95;
+            background-color: #ffffff !important;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+        }
+    </style>
+
     <!-- Render Modals -->
     @include('admin.dukunganaplikasi.partials.konfigurasi_website_modal_form')
     @include('admin.dukunganaplikasi.partials.konfigurasi_website_modal_petunjuk')
     @include('admin.dukunganaplikasi.partials.konfigurasi_website_modal_tampilgambar')
 
+    <!-- SortableJS Plugin Asset -->
+    <script src="{{ asset('assets/plugins/sortablejs/Sortable.min.js') }}"></script>
+
     {{-- Project Standard Rule 1 Compliance: Place view scripts inside @section('content') before @endsection --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let currentPreviewSectionId = null;
+
+            // SortableJS Drag & Drop Reordering for Website Sections
+            const sortableList = document.getElementById('sortable-sections-list');
+            if (sortableList && typeof Sortable !== 'undefined') {
+                Sortable.create(sortableList, {
+                    handle: '.drag-handle-section',
+                    draggable: '.section-row',
+                    animation: 200,
+                    ghostClass: 'sortable-ghost',
+                    dragClass: 'sortable-drag',
+                    onEnd: function() {
+                        const orderedIds = [];
+                        sortableList.querySelectorAll('.section-row').forEach((row, index) => {
+                            const id = row.getAttribute('data-id');
+                            if (id) orderedIds.push(id);
+
+                            const badge = row.querySelector('.order-badge');
+                            if (badge) badge.textContent = index + 1;
+
+                            const input = row.querySelector('.order-input');
+                            if (input) input.value = index + 1;
+                        });
+
+                        fetch("{{ route('admin.dukunganaplikasi.konfigurasi-website.reorder-sections') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                orders: orderedIds
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (typeof window.showToast === 'function') {
+                                window.showToast(data.message || 'Urutan seksi halaman berhasil diperbarui.');
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error reordering sections:', err);
+                            if (typeof window.showError === 'function') {
+                                window.showError('Terjadi kesalahan saat menyimpan urutan seksi.');
+                            }
+                        });
+                    }
+                });
+            }
 
             // Toggle Background Image Container Helper
             function toggleBgContainer(selectEl) {

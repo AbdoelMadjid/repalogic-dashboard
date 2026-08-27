@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v2.1.3`  
-> **Terakhir Diperbarui:** 27 Agustus 2026 21:35 WIB  
+> **Versi Terbaru:** `v2.1.4`  
+> **Terakhir Diperbarui:** 27 Agustus 2026 23:02 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v2.1.4`** | `2026-08-27 23:02 WIB` | Public Landing Page Footer Overhaul, Drag & Drop Website Sections Reordering, Fitur Aplikasi Header Clean-up & SweetAlert2 Clean Native Restoration |
 | **`v2.1.3`** | `2026-08-27 21:35 WIB` | Universal SweetAlert2 Notification Engine & Global Helpers, High-Contrast Checkbox SVG Fix, Multi-Select Filter Sync & Route Order Optimization |
 | **`v2.1.2`** | `2026-08-27 20:55 WIB` | Overhaul & Refactoring Modul Fitur Aplikasi: Skema Dynamic Row CRUD, Instant AJAX Toggle, Bulk Group Action & Backward-Compatible Helper Object |
 | **`v2.1.1`** | `2026-08-27 19:10 WIB` | Edit Avatar Pengguna, Tampilan Detail (user_details & user_configs), Restriksi Menu Sidenav, Notifikasi Khusus Superadmin/Admin & Perapian Estetika Validasi |

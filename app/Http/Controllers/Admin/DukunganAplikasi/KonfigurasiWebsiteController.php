@@ -292,16 +292,34 @@ class KonfigurasiWebsiteController extends Controller
     }
 
     /**
-     * Reorder sections.
+     * Reorder sections (Supports AJAX Drag & Drop and Standard Form Submit).
      */
     public function reorderSections(Request $request)
     {
         $orders = $request->input('orders', []);
-        foreach ($orders as $id => $orderVal) {
-            WebsiteSection::where('id', $id)->update(['orders' => (int) $orderVal]);
+
+        if (is_array($orders)) {
+            // Check if it's a zero-indexed list of section IDs [id1, id2, id3, ...]
+            if (array_is_list($orders)) {
+                foreach ($orders as $index => $id) {
+                    WebsiteSection::where('id', $id)->update(['orders' => $index + 1]);
+                }
+            } else {
+                // Key-value map [id => orderVal]
+                foreach ($orders as $id => $orderVal) {
+                    WebsiteSection::where('id', $id)->update(['orders' => (int) $orderVal]);
+                }
+            }
         }
 
         WebsiteTheme::clearCache();
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Urutan seksi halaman berhasil diperbarui.',
+            ]);
+        }
 
         $this->notifySuccess("Urutan seksi halaman berhasil diperbarui.");
 

@@ -86,12 +86,12 @@
                             <small class="text-white-50 fs-12">Kelola komponen topbar, menu template sidebar, dan fitur sistem secara dinamis.</small>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="badge bg-light text-primary fw-semibold px-3 py-2">
-                            <i class="ti ti-bolt me-1"></i> Auto-Save Instant
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="text-white-70 fs-13 d-none d-sm-inline-flex align-items-center text-white text-opacity-75">
+                            <i class="ti ti-bolt text-warning me-1 fs-16"></i> Auto-Save Instant
                         </span>
                         @can('create dukunganaplikasi/fitur-aplikasi')
-                            <button type="button" class="btn btn-light text-primary fw-semibold btn-fitur-action" data-action="create">
+                            <button type="button" class="btn btn-light text-primary fw-semibold btn-fitur-action shadow-sm" data-action="create">
                                 <i class="ti ti-plus me-1"></i> Tambah Fitur Baru
                             </button>
                         @endcan
