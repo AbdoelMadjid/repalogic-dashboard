@@ -3,36 +3,36 @@
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
 > **Versi Terbaru:** `v2.1.3`  
-> **Terakhir Diperbarui:** 27 Agustus 2026  
+> **Terakhir Diperbarui:** 27 Agustus 2026 21:35 WIB  
 
 ---
 
 ## 📋 Tabel Riwayat Versi & Tag
 
-Dokumentasi lengkap mengenai setiap versi rilis, git tag, dan ringkasan perubahan pada proyek **REPALOGIC Dashboard**.
+Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (WIB), dan ringkasan perubahan pada proyek **REPALOGIC Dashboard**.
 
-| Tag / Versi | Tanggal Rilis | Deskripsi / Catatan Perubahan |
-| :--- | :--- | :--- |
-| **`v2.1.3`** | 2026-08-27 | Universal SweetAlert2 Notification Engine & Global Helpers, High-Contrast Checkbox SVG Fix, Multi-Select Filter Sync & Route Order Optimization |
-| **`v2.1.2`** | 2026-08-27 | Overhaul & Refactoring Modul Fitur Aplikasi: Skema Dynamic Row CRUD, Instant AJAX Toggle, Bulk Group Action & Backward-Compatible Helper Object |
-| **`v2.1.1`** | 2026-08-27 | Edit Avatar Pengguna, Tampilan Detail (user_details & user_configs), Restriksi Menu Sidenav, Notifikasi Khusus Superadmin/Admin & Perapian Estetika Validasi |
-| **`v2.1.0`** | 2026-08-27 | Pembaruan Sistem Otentikasi, Idle Lock Screen, User Approval, Penonaktifan & Aktivasi Akun Mandiri, Notification Hub & Admin Reset |
-| **`v2.0.0`** | 2026-08-27 | Engine Dinamisasi Tema & Seksi Website Terpusat, Crop Simulator & Arsitektur Partial Modular |
-| **`v1.9.3`** | 2026-08-27 | Pemisahan Tabel Config User, Pengatur Posisi Sampul Interaktif, Motto Hidup & Widget Progress Kelengkapan Profil |
-| **`v1.9.2`** | 2026-08-27 | Centralized Versioning Engine, Git Log Timestamps & Mandatory Changelog Standard (Rule 11) |
-| **`v1.9.1`** | 2026-08-27 | Standarisasi Hirarki View Modul (Rule 10), Meta Title Engine & Refinement Sidenav Search UI |
-| **`v1.9.0`** | 2026-08-27 | 100% Dynamic Bilingual Engine, Custom Menu Data-Lang & Modul Terjemahan Bahasa |
-| **`v1.8.2`** | 2026-08-02 | Melengkapi halaman profil pengguna |
-| **`v1.8.1`** | 2026-08-02 | Tambah halaman fitur aplikasi dan backup db di dukungan aplikasi |
-| **`v1.8.0`** | 2026-08-02 | Tambah halaman role, permission, akses user, akses role dan user di Manajemen Pengguna |
-| **`v1.7.0`** | 2026-08-01 | Perbaikan ngoding & optimalisasi struktur views |
-| **`v1.6.0`** | 2026-08-01 | Bilingual Internationalization Engine (ID & EN) |
-| **`v1.5.0`** | 2026-08-01 | Tabler & Lucide Full Icon Explorers |
-| **`v1.4.0`** | 2026-08-01 | Documentation Module & Interactive Tree Engine |
-| **`v1.3.0`** | 2026-08-01 | Layout Group Demo & Custom Pages Refactoring |
-| **`v1.2.0`** | 2026-08-01 | Sidenav Auto-Scroll Centering & Component Group |
-| **`v1.1.0`** | 2026-08-01 | Dynamic Navigation Config & Breadcrumb Engine |
-| **`v1.0.0`** | 2026-08-01 | Initial Project Setup |
+| Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
+| :--- | :---: | :--- |
+| **`v2.1.3`** | `2026-08-27 21:35 WIB` | Universal SweetAlert2 Notification Engine & Global Helpers, High-Contrast Checkbox SVG Fix, Multi-Select Filter Sync & Route Order Optimization |
+| **`v2.1.2`** | `2026-08-27 20:55 WIB` | Overhaul & Refactoring Modul Fitur Aplikasi: Skema Dynamic Row CRUD, Instant AJAX Toggle, Bulk Group Action & Backward-Compatible Helper Object |
+| **`v2.1.1`** | `2026-08-27 19:10 WIB` | Edit Avatar Pengguna, Tampilan Detail (user_details & user_configs), Restriksi Menu Sidenav, Notifikasi Khusus Superadmin/Admin & Perapian Estetika Validasi |
+| **`v2.1.0`** | `2026-08-27 18:15 WIB` | Pembaruan Sistem Otentikasi, Idle Lock Screen, User Approval, Penonaktifan & Aktivasi Akun Mandiri, Notification Hub & Admin Reset |
+| **`v2.0.0`** | `2026-08-27 14:35 WIB` | Engine Dinamisasi Tema & Seksi Website Terpusat, Crop Simulator & Arsitektur Partial Modular |
+| **`v1.9.3`** | `2026-08-27 10:30 WIB` | Pemisahan Tabel Config User, Pengatur Posisi Sampul Interaktif, Motto Hidup & Widget Progress Kelengkapan Profil |
+| **`v1.9.2`** | `2026-08-27 09:36 WIB` | Centralized Versioning Engine, Git Log Timestamps & Mandatory Changelog Standard (Rule 11) |
+| **`v1.9.1`** | `2026-08-27 09:17 WIB` | Standarisasi Hirarki View Modul (Rule 10), Meta Title Engine & Refinement Sidenav Search UI |
+| **`v1.9.0`** | `2026-08-27 08:04 WIB` | 100% Dynamic Bilingual Engine, Custom Menu Data-Lang & Modul Terjemahan Bahasa |
+| **`v1.8.2`** | `2026-08-02 16:47 WIB` | Melengkapi halaman profil pengguna |
+| **`v1.8.1`** | `2026-08-02 16:07 WIB` | Tambah halaman fitur aplikasi dan backup db di dukungan aplikasi |
+| **`v1.8.0`** | `2026-08-02 09:31 WIB` | Tambah halaman role, permission, akses user, akses role dan user di Manajemen Pengguna |
+| **`v1.7.0`** | `2026-08-01 15:54 WIB` | Perbaikan ngoding & optimalisasi struktur views |
+| **`v1.6.0`** | `2026-08-01 13:07 WIB` | Bilingual Internationalization Engine (ID & EN) |
+| **`v1.5.0`** | `2026-08-01 01:17 WIB` | Tabler & Lucide Full Icon Explorers |
+| **`v1.4.0`** | `2026-08-01 00:41 WIB` | Documentation Module & Interactive Tree Engine |
+| **`v1.3.0`** | `2026-07-31 23:17 WIB` | Layout Group Demo & Custom Pages Refactoring |
+| **`v1.2.0`** | `2026-07-31 22:51 WIB` | Sidenav Auto-Scroll Centering & Component Group |
+| **`v1.1.0`** | `2026-07-31 22:46 WIB` | Dynamic Navigation Config & Breadcrumb Engine |
+| **`v1.0.0`** | `2026-07-31 10:08 WIB` | Initial Project Setup |
 
 ---
 
