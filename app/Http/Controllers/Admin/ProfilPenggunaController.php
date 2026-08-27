@@ -174,4 +174,42 @@ class ProfilPenggunaController extends Controller
 
         return redirect()->route('admin.profil-pengguna.index');
     }
+
+    /**
+     * Request account deactivation to administrator.
+     */
+    public function requestDeactivation(Request $request)
+    {
+        $user = auth()->user();
+
+        $request->validate([
+            'reason' => 'nullable|string|max:500',
+        ]);
+
+        $user->update([
+            'deactivation_requested_at' => now(),
+            'deactivation_reason' => $request->input('reason'),
+        ]);
+
+        $this->notifySuccess('Permintaan penonaktifan akun berhasil dikirimkan ke Administrator.', 'Permintaan Terkirim');
+
+        return redirect()->route('admin.profil-pengguna.index');
+    }
+
+    /**
+     * Cancel pending account deactivation request.
+     */
+    public function cancelDeactivation()
+    {
+        $user = auth()->user();
+
+        $user->update([
+            'deactivation_requested_at' => null,
+            'deactivation_reason' => null,
+        ]);
+
+        $this->notifySuccess('Permintaan penonaktifan akun berhasil dibatalkan.', 'Dibatalkan');
+
+        return redirect()->route('admin.profil-pengguna.index');
+    }
 }

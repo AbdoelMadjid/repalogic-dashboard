@@ -23,6 +23,12 @@ Route::middleware('guest')->group(function () {
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
+    Route::get('request-activation', [\App\Http\Controllers\Auth\AccountReactivationController::class, 'create'])
+        ->name('activation.request');
+
+    Route::post('request-activation', [\App\Http\Controllers\Auth\AccountReactivationController::class, 'store'])
+        ->name('activation.send');
+
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');
 

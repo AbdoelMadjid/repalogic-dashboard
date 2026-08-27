@@ -88,7 +88,61 @@ class NotificationService
             }
         }
 
-        // 3. Database Notifications (Standar Laravel Notifications jika tabel ada)
+        // 3. Permintaan Nonaktifkan Akun Pengguna (Account Deactivation Request)
+        if ($canManageUsers) {
+            $deactivationRequestedUsers = User::whereNotNull('deactivation_requested_at')
+                ->latest('deactivation_requested_at')
+                ->take(10)
+                ->get();
+
+            foreach ($deactivationRequestedUsers as $dUser) {
+                $items->push([
+                    'id' => 'deactivation-' . $dUser->id,
+                    'type' => 'deactivate_request',
+                    'category_label' => 'Nonaktif Akun',
+                    'title' => $dUser->name,
+                    'subtitle' => $dUser->email,
+                    'message' => 'Mengajukan permohonan penonaktifan akun' . ($dUser->deactivation_reason ? ': ' . $dUser->deactivation_reason : '.'),
+                    'avatar' => $dUser->avatar_url,
+                    'icon' => 'ti ti-user-x',
+                    'badge_class' => 'bg-danger-subtle text-danger border-danger-subtle',
+                    'badge_label' => 'Minta Nonaktif',
+                    'url' => route('admin.manajemenpengguna.users.index', ['search' => $dUser->name]),
+                    'created_at' => $dUser->deactivation_requested_at,
+                    'time_ago' => $dUser->deactivation_requested_at ? $dUser->deactivation_requested_at->diffForHumans() : 'Baru saja',
+                    'is_unread' => true,
+                ]);
+            }
+        }
+
+        // 4. Permintaan Aktivasi Kembali Akun Pengguna (Account Reactivation Request)
+        if ($canManageUsers) {
+            $reactivationRequestedUsers = User::whereNotNull('reactivation_requested_at')
+                ->latest('reactivation_requested_at')
+                ->take(10)
+                ->get();
+
+            foreach ($reactivationRequestedUsers as $actUser) {
+                $items->push([
+                    'id' => 'reactivation-' . $actUser->id,
+                    'type' => 'activation_request',
+                    'category_label' => 'Aktivasi Akun',
+                    'title' => $actUser->name,
+                    'subtitle' => $actUser->email,
+                    'message' => 'Mengajukan permohonan pengaktifan kembali akun' . ($actUser->reactivation_reason ? ': ' . $actUser->reactivation_reason : '.'),
+                    'avatar' => $actUser->avatar_url,
+                    'icon' => 'ti ti-user-check',
+                    'badge_class' => 'bg-success-subtle text-success border-success-subtle',
+                    'badge_label' => 'Minta Aktivasi',
+                    'url' => route('admin.manajemenpengguna.users.index', ['search' => $actUser->name]),
+                    'created_at' => $actUser->reactivation_requested_at,
+                    'time_ago' => $actUser->reactivation_requested_at ? $actUser->reactivation_requested_at->diffForHumans() : 'Baru saja',
+                    'is_unread' => true,
+                ]);
+            }
+        }
+
+        // 5. Database Notifications (Standar Laravel Notifications jika tabel ada)
         try {
             if (\Illuminate\Support\Facades\Schema::hasTable('notifications') && method_exists($user, 'unreadNotifications')) {
                 $dbNotifications = $user->unreadNotifications()->take(10)->get();

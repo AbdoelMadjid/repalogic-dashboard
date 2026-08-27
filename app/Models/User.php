@@ -28,6 +28,10 @@ class User extends Authenticatable
         'approved_at',
         'approved_by',
         'password_reset_requested_at',
+        'deactivation_requested_at',
+        'deactivation_reason',
+        'reactivation_requested_at',
+        'reactivation_reason',
     ];
 
     /**
@@ -51,6 +55,8 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'approved_at' => 'datetime',
             'password_reset_requested_at' => 'datetime',
+            'deactivation_requested_at' => 'datetime',
+            'reactivation_requested_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -61,6 +67,22 @@ class User extends Authenticatable
     public function isPasswordResetRequested(): bool
     {
         return !is_null($this->password_reset_requested_at);
+    }
+
+    /**
+     * Check if user has an active deactivation request.
+     */
+    public function isDeactivationRequested(): bool
+    {
+        return !is_null($this->deactivation_requested_at);
+    }
+
+    /**
+     * Check if user has an active reactivation request.
+     */
+    public function isReactivationRequested(): bool
+    {
+        return !is_null($this->reactivation_requested_at);
     }
 
     /**

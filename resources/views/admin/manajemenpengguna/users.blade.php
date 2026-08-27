@@ -126,6 +126,22 @@
                                                         </span>
                                                     </div>
                                                 @endif
+
+                                                @if ($user->isDeactivationRequested())
+                                                    <div class="mt-1">
+                                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle fs-10 px-1.5 py-0.5" title="Permohonan Nonaktif: {{ $user->deactivation_reason ?? 'Tanpa alasan' }}">
+                                                            <i class="ti ti-user-x me-0.5"></i>Minta Nonaktif
+                                                        </span>
+                                                    </div>
+                                                @endif
+
+                                                @if ($user->isReactivationRequested())
+                                                    <div class="mt-1">
+                                                        <span class="badge bg-success-subtle text-success border border-success-subtle fs-10 px-1.5 py-0.5" title="Permohonan Aktivasi: {{ $user->reactivation_reason ?? 'Tanpa alasan' }}">
+                                                            <i class="ti ti-user-check me-0.5"></i>Minta Aktivasi
+                                                        </span>
+                                                    </div>
+                                                @endif
                                             </td>
                                             <td class="text-center text-muted fs-12">
                                                 {{ $user->created_at ? $user->created_at->format('d M Y, H:i') : '-' }}
@@ -151,6 +167,30 @@
                                                                 @csrf
                                                                 <button type="submit" class="btn btn-sm btn-info text-white" title="Reset Password ke Standar ('password*')">
                                                                     <i class="ti ti-key me-1"></i>Reset Password
+                                                                </button>
+                                                            </form>
+                                                        @endcan
+                                                    @endif
+
+                                                    {{-- Tombol Nonaktifkan Khusus Permintaan Nonaktif --}}
+                                                    @if ($user->isDeactivationRequested())
+                                                        @can('update manajemenpengguna/users')
+                                                            <form action="{{ route('admin.manajemenpengguna.users.deactivate', $user->id) }}" method="POST" class="d-inline" data-confirm="Nonaktifkan akun pengguna {{ $user->name }} sesuai permohonan?">
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-sm btn-danger text-white" title="Nonaktifkan Akun Pengguna">
+                                                                    <i class="ti ti-user-off me-1"></i>Nonaktifkan
+                                                                </button>
+                                                            </form>
+                                                        @endcan
+                                                    @endif
+
+                                                    {{-- Tombol Aktifkan Khusus Permintaan Aktivasi --}}
+                                                    @if ($user->isReactivationRequested())
+                                                        @can('update manajemenpengguna/users')
+                                                            <form action="{{ route('admin.manajemenpengguna.users.activate', $user->id) }}" method="POST" class="d-inline" data-confirm="Aktifkan kembali akun pengguna {{ $user->name }} sesuai permohonan?">
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-sm btn-success text-white" title="Aktifkan Kembali Akun Pengguna">
+                                                                    <i class="ti ti-user-check me-1"></i>Aktifkan
                                                                 </button>
                                                             </form>
                                                         @endcan

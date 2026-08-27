@@ -30,6 +30,8 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
     Route::post('profil-pengguna/update-detail', [ProfilPenggunaController::class, 'updateDetail'])->name('profil-pengguna.update-detail');
     Route::post('profil-pengguna/update-cover', [ProfilPenggunaController::class, 'updateCover'])->name('profil-pengguna.update-cover');
     Route::post('profil-pengguna/update-motto', [ProfilPenggunaController::class, 'updateMotto'])->name('profil-pengguna.update-motto');
+    Route::post('profil-pengguna/request-deactivation', [ProfilPenggunaController::class, 'requestDeactivation'])->name('profil-pengguna.request-deactivation');
+    Route::post('profil-pengguna/cancel-deactivation', [ProfilPenggunaController::class, 'cancelDeactivation'])->name('profil-pengguna.cancel-deactivation');
 
     Route::prefix('dukunganaplikasi')->name('dukunganaplikasi.')->group(function () {
         Route::get('profil-aplikasi', [ProfilAplikasiController::class, 'index'])->name('profil-aplikasi.index');
@@ -64,6 +66,8 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
     Route::prefix('manajemenpengguna')->name('manajemenpengguna.')->group(function () {
         Route::post('users/{id}/approve', [UserController::class, 'approve'])->name('users.approve');
         Route::post('users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
+        Route::post('users/{id}/deactivate', [UserController::class, 'deactivate'])->name('users.deactivate');
+        Route::post('users/{id}/activate', [UserController::class, 'activate'])->name('users.activate');
         Route::post('users/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
         Route::resource('users', UserController::class);
         Route::resource('role', RoleController::class);

@@ -155,6 +155,47 @@ class UserController extends Controller
     }
 
     /**
+     * Deactivate user upon request.
+     */
+    public function deactivate($id)
+    {
+        $user = User::findOrFail($id);
+
+        if (auth()->id() === $user->id) {
+            $this->notifyError("Anda tidak dapat menonaktifkan akun Anda sendiri dari sini.");
+            return redirect()->route('admin.manajemenpengguna.users.index');
+        }
+
+        $user->update([
+            'status' => 'inactive',
+            'deactivation_requested_at' => null,
+            'deactivation_reason' => null,
+        ]);
+
+        $this->notifySuccess("Akun pengguna \"{$user->name}\" telah dinonaktifkan sesuai permohonan.");
+
+        return redirect()->route('admin.manajemenpengguna.users.index');
+    }
+
+    /**
+     * Activate user upon reactivation request.
+     */
+    public function activate($id)
+    {
+        $user = User::findOrFail($id);
+
+        $user->update([
+            'status' => 'active',
+            'reactivation_requested_at' => null,
+            'reactivation_reason' => null,
+        ]);
+
+        $this->notifySuccess("Akun pengguna \"{$user->name}\" berhasil diaktifkan kembali.");
+
+        return redirect()->route('admin.manajemenpengguna.users.index');
+    }
+
+    /**
      * Toggle status active / inactive for user.
      */
     public function toggleStatus($id)
@@ -167,7 +208,16 @@ class UserController extends Controller
         }
 
         $newStatus = $user->status === 'active' ? 'inactive' : 'active';
-        $user->update(['status' => $newStatus]);
+        $updateData = ['status' => $newStatus];
+        if ($newStatus === 'inactive') {
+            $updateData['deactivation_requested_at'] = null;
+            $updateData['deactivation_reason'] = null;
+        } elseif ($newStatus === 'active') {
+            $updateData['reactivation_requested_at'] = null;
+            $updateData['reactivation_reason'] = null;
+        }
+
+        $user->update($updateData);
 
         $label = $newStatus === 'active' ? 'diaktifkan' : 'dinonaktifkan';
         $this->notifySuccess("Status akun \"{$user->name}\" berhasil {$label}.");

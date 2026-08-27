@@ -126,14 +126,15 @@
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 18:15 WIB</span>
                                 </div>
-                                <h6 class="fw-semibold text-dark mb-2">Pembaruan Sistem Otentikasi, Idle Lock Screen, User Approval Workflow, Multi-Type Notification Hub &amp; Admin Reset Password</h6>
+                                <h6 class="fw-semibold text-dark mb-2">Pembaruan Sistem Otentikasi, Idle Lock Screen, User Approval Workflow, Penonaktifan &amp; Aktivasi Akun Mandiri, Multi-Type Notification Hub &amp; Admin Reset Password</h6>
                                 <ul class="text-muted fs-14 mb-3 ps-3">
                                     <li><strong class="text-dark">Idle Screen Lock Otomatis:</strong> Fitur deteksi ketidakaktifan pengguna (5 menit) dengan modal lock screen AJAX, avatar pengguna, badge role, animasi getar saat sandi salah, dan integrasi topbar lock screen.</li>
                                     <li><strong class="text-dark">Alur Persetujuan Registrasi Pengguna (*User Approval Workflow*):</strong> Pengguna yang mendaftar mandiri berstatus <code>pending</code>, diproteksi dari login hingga disetujui, tombol persetujuan admin dengan assignment otomatis Spatie Role <code>user</code>.</li>
-                                    <li><strong class="text-dark">Pusat Notifikasi Universal Topbar (*Multi-Type Notification Hub*):</strong> Mengagregasikan notifikasi pendaftaran, permintaan reset password, permohonan nonaktif, pesan chat, dan notifikasi database Laravel via <code>NotificationService</code> terpusat.</li>
+                                    <li><strong class="text-dark">Penonaktifan Mandiri &amp; Aktivasi Kembali Akun (*Account Lifecycle*):</strong> Zona bahaya penonaktifan akun pada profil pengguna, halaman pengajuan aktivasi akun nonaktif (<code>/request-activation</code>), tombol aksi admin ("Nonaktifkan" &amp; "Aktifkan"), dan integrasi SweetAlert2.</li>
+                                    <li><strong class="text-dark">Pusat Notifikasi Universal Topbar (*Multi-Type Notification Hub*):</strong> Mengagregasikan notifikasi pendaftaran, permintaan reset password, permohonan nonaktif, permohonan aktivasi, pesan chat, dan notifikasi database Laravel via <code>NotificationService</code> terpusat sesuai standar Inspinia.</li>
                                     <li><strong class="text-dark">Permintaan Reset Password (*Admin-Assisted Reset*):</strong> Form forgot password dengan validasi interaktif, pengajuan permintaan reset ke administrator, tombol reset pada tabel admin ke password standar (<code>password*</code>), dan banner sukses terverifikasi.</li>
                                     <li><strong class="text-dark">Dinamisasi Branding Otentikasi &amp; Lokalisasi Bahasa Indonesia:</strong> Logo, favicon, meta title, dan teks footer form otentikasi terhubung 100% dinamis ke tabel <code>profil_aplikasi</code>, serta seluruh teks di-standarisasi ke Bahasa Indonesia.</li>
-                                    <li><strong class="text-dark">Dokumentasi Resmi Alur Otentikasi:</strong> Panduan lengkap di <code>docs/alur_registrasi_dan_persetujuan_pengguna.md</code>.</li>
+                                    <li><strong class="text-dark">Dokumentasi Resmi Alur Otentikasi:</strong> Panduan lengkap di <code>docs/alur_registrasi_dan_persetujuan_pengguna.md</code> dan <code>docs/alur_penonaktifan_dan_aktivasi_akun_pengguna.md</code>.</li>
                                 </ul>
                             </div>
                         </div>

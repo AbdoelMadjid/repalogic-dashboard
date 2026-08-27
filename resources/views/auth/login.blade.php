@@ -83,6 +83,25 @@
                             </div>
                         @endif
 
+                        @if (session('reactivation_success'))
+                            <div class="alert alert-success border-0 shadow-sm d-flex align-items-start gap-2 mb-3 py-2.5 px-3 rounded-3" role="alert" style="background-color: #f0fdf4; color: #166534; border-left: 4px solid #22c55e !important;">
+                                <i class="ti ti-user-check fs-18 text-success flex-shrink-0 mt-0.5"></i>
+                                <div class="fs-13 lh-base">
+                                    <strong class="d-block mb-0.5">Permohonan Aktivasi Terkirim!</strong>
+                                    {{ session('reactivation_success') }}
+                                </div>
+                            </div>
+                        @endif
+
+                        @if (session('info_message'))
+                            <div class="alert alert-info border-0 shadow-sm d-flex align-items-start gap-2 mb-3 py-2.5 px-3 rounded-3" role="alert" style="background-color: #eff6ff; color: #1e40af;">
+                                <i class="ti ti-info-circle-filled fs-18 text-primary flex-shrink-0 mt-0.5"></i>
+                                <div class="fs-13 lh-base">
+                                    {{ session('info_message') }}
+                                </div>
+                            </div>
+                        @endif
+
                         @if ($errors->has('unapproved'))
                             <div class="alert alert-warning border-0 shadow-sm d-flex align-items-start gap-2 mb-3 py-2.5 px-3 rounded-3" role="alert" style="background-color: #fffbeb; color: #92400e; border-left: 4px solid #f59e0b !important;">
                                 <i class="ti ti-clock-pause fs-18 text-warning flex-shrink-0 mt-0.5"></i>
@@ -96,9 +115,14 @@
                         @if ($errors->has('inactive'))
                             <div class="alert alert-danger border-0 shadow-sm d-flex align-items-start gap-2 mb-3 py-2.5 px-3 rounded-3" role="alert" style="background-color: #fef2f2; color: #991b1b; border-left: 4px solid #ef4444 !important;">
                                 <i class="ti ti-ban fs-18 text-danger flex-shrink-0 mt-0.5"></i>
-                                <div class="fs-13 lh-base">
+                                <div class="fs-13 lh-base w-100">
                                     <strong class="d-block mb-0.5">Akun Dinonaktifkan</strong>
                                     {{ $errors->first('inactive') }}
+                                    <div class="mt-2 pt-1 border-top border-danger-subtle">
+                                        <a href="{{ route('activation.request') }}" class="btn btn-sm btn-danger text-white fw-semibold py-1 px-2.5">
+                                            <i class="ti ti-user-check me-1"></i>Ajukan Permohonan Aktivasi Akun
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         @endif
@@ -172,6 +196,11 @@
                                 <a href="{{ route('register') }}"
                                     class="text-decoration-underline link-offset-3 fw-semibold">Daftar Akun Baru</a>
                             @endif
+                        </p>
+                        <p class="text-muted text-center mt-2 mb-0 fs-12">
+                            Akun dinonaktifkan?
+                            <a href="{{ route('activation.request') }}"
+                                class="text-decoration-underline link-offset-3 fw-semibold text-danger">Ajukan Aktivasi</a>
                         </p>
                     </div>
 
