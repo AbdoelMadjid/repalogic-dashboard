@@ -30,9 +30,8 @@ class NotificationService
         }
 
         $items = collect();
-        $canManageUsers = $user->hasRole(['superadmin', 'admin']) ||
-            $user->can('read manajemenpengguna/users') ||
-            $user->can('update manajemenpengguna/users');
+        // Notifikasi administratif hanya ditujukan untuk role Superadmin dan Admin
+        $canManageUsers = $user->hasAnyRole(['superadmin', 'admin']);
 
         // 1. Pendaftaran Pengguna Mandiri (Self-Registration Approval)
         if ($canManageUsers) {

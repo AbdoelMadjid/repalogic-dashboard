@@ -40,12 +40,39 @@ class UserDetail extends Model
         'tanggal_lahir' => 'date',
     ];
 
+    protected $appends = [
+        'alamat_lengkap',
+        'cover_bg_url',
+        'foto_ktp_url',
+    ];
+
     /**
      * Get the user that owns the detail.
      */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Accessor for foto KTP URL.
+     */
+    public function getFotoKtpUrlAttribute(): ?string
+    {
+        if (!empty($this->foto_ktp)) {
+            $path = ltrim($this->foto_ktp, '/');
+            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+                return asset('storage/' . $path);
+            }
+            if (file_exists(public_path('storage/' . $path))) {
+                return asset('storage/' . $path);
+            }
+            if (file_exists(public_path($path))) {
+                return asset($path);
+            }
+        }
+
+        return null;
     }
 
     /**

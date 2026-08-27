@@ -242,9 +242,9 @@
 
     <!-- SINGLE UNIFIED MODAL (CREATE, EDIT, VIEW/SHOW) -->
     <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <form id="userForm" action="" method="POST">
+                <form id="userForm" action="" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div id="methodSpoofingContainer"></div>
 
@@ -403,6 +403,80 @@
             const passwordHelp = document.getElementById('help_user_password');
             const passwordLabel = document.getElementById('label_user_password');
 
+            const avatarInput = document.getElementById('form_user_avatar');
+            const avatarPreview = document.getElementById('form_avatar_preview');
+            const btnResetAvatar = document.getElementById('btn_reset_avatar');
+            const removeAvatarInput = document.getElementById('form_remove_avatar');
+            const defaultAvatarUrl = "{{ asset('assets/images/users/default-avatar.svg') }}";
+            const defaultCoverUrl = "{{ asset('assets/images/profile-bg.jpg') }}";
+
+            // Live Avatar Preview Listener
+            if (avatarInput) {
+                avatarInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(evt) {
+                            if (avatarPreview) avatarPreview.src = evt.target.result;
+                            if (btnResetAvatar) btnResetAvatar.classList.remove('d-none');
+                            if (removeAvatarInput) removeAvatarInput.value = '0';
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            // Reset Avatar Button Listener
+            if (btnResetAvatar) {
+                btnResetAvatar.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (avatarInput) avatarInput.value = '';
+                    if (avatarPreview) avatarPreview.src = defaultAvatarUrl;
+                    if (removeAvatarInput) removeAvatarInput.value = '1';
+                    btnResetAvatar.classList.add('d-none');
+                });
+            }
+
+            function formatDateTime(dateStr) {
+                if (!dateStr) return '-';
+                try {
+                    const d = new Date(dateStr);
+                    if (isNaN(d.getTime())) return dateStr;
+                    return d.toLocaleDateString('id-ID', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                } catch (e) {
+                    return dateStr;
+                }
+            }
+
+            function formatDateOnly(dateStr) {
+                if (!dateStr) return '-';
+                try {
+                    const d = new Date(dateStr);
+                    if (isNaN(d.getTime())) return dateStr;
+                    return d.toLocaleDateString('id-ID', {
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric'
+                    });
+                } catch (e) {
+                    return dateStr;
+                }
+            }
+
+            function resetTabsToFirst() {
+                const firstTabBtn = document.getElementById('user-tab-account-btn');
+                if (firstTabBtn) {
+                    const tabInstance = bootstrap.Tab.getOrCreateInstance(firstTabBtn);
+                    tabInstance.show();
+                }
+            }
+
             document.addEventListener('click', function(e) {
                 const btn = e.target.closest('.btn-user-action');
                 if (!btn) return;
@@ -417,9 +491,14 @@
                 formInputs.forEach(input => input.disabled = false);
                 btnSubmitForm.classList.remove('d-none');
                 document.querySelectorAll('.user-role-checkbox').forEach(cb => cb.checked = false);
+                if (removeAvatarInput) removeAvatarInput.value = '0';
+                if (btnResetAvatar) btnResetAvatar.classList.add('d-none');
+                if (avatarPreview) avatarPreview.src = defaultAvatarUrl;
+
+                resetTabsToFirst();
 
                 if (action === 'create') {
-                    modalTitle.innerHTML = '<i class="ti ti-user-plus me-1"></i> Tambah Pengguna Baru';
+                    modalTitle.innerHTML = '<i class="ti ti-user-plus me-1 text-primary"></i> Tambah Pengguna Baru';
                     userForm.action = "{{ route('admin.manajemenpengguna.users.store') }}";
                     btnSubmitForm.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Pengguna';
                     passwordInput.required = true;
@@ -427,8 +506,13 @@
                     passwordHelp.textContent = 'Wajib diisi saat membuat akun baru (minimal 8 karakter).';
                     document.getElementById('form_user_status').value = 'active';
 
+                    // Reset detail & config views for new user
+                    populateDetailsAndConfig(null);
+                    const auditBox = document.getElementById('user_approval_audit_box');
+                    if (auditBox) auditBox.classList.add('d-none');
+
                 } else if (action === 'edit' && user) {
-                    modalTitle.innerHTML = `<i class="ti ti-user-edit me-1"></i> Edit Pengguna: ${user.name}`;
+                    modalTitle.innerHTML = `<i class="ti ti-user-edit me-1 text-warning"></i> Edit Pengguna: ${user.name}`;
                     userForm.action = `{{ url('admin/manajemenpengguna/users') }}/${user.id}`;
                     methodSpoofingContainer.innerHTML = '@method("PUT")';
                     btnSubmitForm.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Perbarui Pengguna';
@@ -436,29 +520,165 @@
                     passwordLabel.innerHTML = 'Kata Sandi Baru (Opsional)';
                     passwordHelp.textContent = 'Kosongkan jika tidak ingin mengubah kata sandi.';
 
-                    populateForm(user);
+                    populateForm(user, false);
 
                 } else if (action === 'view' && user) {
-                    modalTitle.innerHTML = `<i class="ti ti-eye me-1"></i> Detail Pengguna: ${user.name}`;
+                    modalTitle.innerHTML = `<i class="ti ti-eye me-1 text-info"></i> Detail Pengguna: ${user.name}`;
                     userForm.action = '#';
                     btnSubmitForm.classList.add('d-none');
-                    populateForm(user);
+                    populateForm(user, true);
                     formInputs.forEach(input => input.disabled = true);
                 }
 
                 userModal.show();
             });
 
-            function populateForm(user) {
+            function populateForm(user, isViewMode = false) {
+                // 1. Tab Akun & Kredensial
                 document.getElementById('form_user_name').value = user.name || '';
                 document.getElementById('form_user_email').value = user.email || '';
                 document.getElementById('form_user_status').value = user.status || 'active';
+
+                if (user.avatar_url) {
+                    avatarPreview.src = user.avatar_url;
+                } else {
+                    avatarPreview.src = defaultAvatarUrl;
+                }
+
+                if (!isViewMode && user.avatar) {
+                    btnResetAvatar.classList.remove('d-none');
+                } else {
+                    btnResetAvatar.classList.add('d-none');
+                }
 
                 const userRoles = user.role_names || (user.roles ? user.roles.map(r => r.name || r) : []);
                 userRoles.forEach(rName => {
                     const roleCb = document.querySelectorAll(`input[name="roles[]"][value="${rName}"]`);
                     roleCb.forEach(cb => cb.checked = true);
                 });
+
+                // Audit Persetujuan
+                const auditBox = document.getElementById('user_approval_audit_box');
+                if (auditBox) {
+                    if (user.approved_at || user.approver) {
+                        auditBox.classList.remove('d-none');
+                        document.getElementById('audit_approved_by').textContent = user.approver ? user.approver.name : (user.approved_by ? `User ID #${user.approved_by}` : '-');
+                        document.getElementById('audit_approved_at').textContent = user.approved_at ? formatDateTime(user.approved_at) : '-';
+                    } else {
+                        auditBox.classList.add('d-none');
+                    }
+                }
+
+                // 2. Tab Identitas KTP & Preferensi
+                populateDetailsAndConfig(user);
+            }
+
+            function populateDetailsAndConfig(user) {
+                const detail = user ? user.detail : null;
+                const detailEmptyAlert = document.getElementById('detail_empty_alert');
+
+                if (detail) {
+                    if (detailEmptyAlert) detailEmptyAlert.classList.add('d-none');
+                    document.getElementById('view_detail_nik').textContent = detail.nik || '-';
+                    document.getElementById('view_detail_nama_ktp').textContent = detail.nama_ktp || '-';
+
+                    let ttl = [];
+                    if (detail.tempat_lahir) ttl.push(detail.tempat_lahir);
+                    if (detail.tanggal_lahir) ttl.push(formatDateOnly(detail.tanggal_lahir));
+                    document.getElementById('view_detail_ttl').textContent = ttl.length > 0 ? ttl.join(', ') : '-';
+
+                    document.getElementById('view_detail_jenis_kelamin').textContent = detail.jenis_kelamin || '-';
+                    document.getElementById('view_detail_golongan_darah').textContent = detail.golongan_darah || '-';
+                    document.getElementById('view_detail_agama').textContent = detail.agama || '-';
+                    document.getElementById('view_detail_status_perkawinan').textContent = detail.status_perkawinan || '-';
+                    document.getElementById('view_detail_pekerjaan').textContent = detail.pekerjaan || '-';
+                    document.getElementById('view_detail_kewarganegaraan').textContent = detail.kewarganegaraan || 'WNI';
+
+                    document.getElementById('view_detail_alamat_jalan').textContent = detail.alamat_jalan || '-';
+
+                    let rtrwblok = [];
+                    if (detail.blok) rtrwblok.push('Blok ' + detail.blok);
+                    if (detail.rt || detail.rw) rtrwblok.push('RT ' + (detail.rt || '-') + ' / RW ' + (detail.rw || '-'));
+                    document.getElementById('view_detail_rt_rw_blok').textContent = rtrwblok.length > 0 ? rtrwblok.join(', ') : '-';
+
+                    document.getElementById('view_detail_desa_kelurahan').textContent = detail.desa_kelurahan || '-';
+                    document.getElementById('view_detail_kecamatan').textContent = detail.kecamatan || '-';
+                    document.getElementById('view_detail_kabupaten_kota').textContent = detail.kabupaten_kota || '-';
+                    document.getElementById('view_detail_provinsi').textContent = detail.provinsi || '-';
+                    document.getElementById('view_detail_kode_pos').textContent = detail.kode_pos || '-';
+
+                    const fotoKtpContainer = document.getElementById('view_detail_foto_ktp_container');
+                    if (detail.foto_ktp_url) {
+                        fotoKtpContainer.innerHTML = `
+                            <a href="${detail.foto_ktp_url}" target="_blank" class="d-inline-block border rounded overflow-hidden shadow-sm" title="Klik untuk memperbesar Foto KTP">
+                                <img src="${detail.foto_ktp_url}" alt="Foto KTP" class="img-fluid" style="max-height: 140px; object-fit: contain;">
+                            </a>
+                        `;
+                    } else {
+                        fotoKtpContainer.innerHTML = '<span class="text-muted fs-12 fst-italic">Belum mengunggah berkas KTP</span>';
+                    }
+                } else {
+                    if (detailEmptyAlert) detailEmptyAlert.classList.remove('d-none');
+                    document.getElementById('view_detail_nik').textContent = '-';
+                    document.getElementById('view_detail_nama_ktp').textContent = '-';
+                    document.getElementById('view_detail_ttl').textContent = '-';
+                    document.getElementById('view_detail_jenis_kelamin').textContent = '-';
+                    document.getElementById('view_detail_golongan_darah').textContent = '-';
+                    document.getElementById('view_detail_agama').textContent = '-';
+                    document.getElementById('view_detail_status_perkawinan').textContent = '-';
+                    document.getElementById('view_detail_pekerjaan').textContent = '-';
+                    document.getElementById('view_detail_kewarganegaraan').textContent = '-';
+                    document.getElementById('view_detail_alamat_jalan').textContent = '-';
+                    document.getElementById('view_detail_rt_rw_blok').textContent = '-';
+                    document.getElementById('view_detail_desa_kelurahan').textContent = '-';
+                    document.getElementById('view_detail_kecamatan').textContent = '-';
+                    document.getElementById('view_detail_kabupaten_kota').textContent = '-';
+                    document.getElementById('view_detail_provinsi').textContent = '-';
+                    document.getElementById('view_detail_kode_pos').textContent = '-';
+                    document.getElementById('view_detail_foto_ktp_container').innerHTML = '<span class="text-muted fs-12 fst-italic">Belum mengunggah berkas KTP</span>';
+                }
+
+                // 3. Tab Preferensi & Sampul (user_configs)
+                const config = user ? user.config : null;
+                const configEmptyAlert = document.getElementById('config_empty_alert');
+                const completionPct = user ? (user.profile_completion_percentage || 0) : 0;
+
+                const completionBadge = document.getElementById('view_config_completion_badge');
+                const completionBar = document.getElementById('view_config_completion_bar');
+                if (completionBadge) completionBadge.textContent = `${completionPct}%`;
+                if (completionBar) {
+                    completionBar.style.width = `${completionPct}%`;
+                    completionBar.setAttribute('aria-valuenow', completionPct);
+                }
+
+                const coverImg = document.getElementById('view_config_cover_preview');
+                const coverPosText = document.getElementById('view_config_cover_pos_text');
+                const mottoBox = document.getElementById('view_config_motto_box');
+                const themeBadge = document.getElementById('view_config_theme_badge');
+
+                if (user && user.cover_bg_url) {
+                    if (coverImg) coverImg.src = user.cover_bg_url;
+                } else {
+                    if (coverImg) coverImg.src = defaultCoverUrl;
+                }
+
+                const posY = (config && config.cover_position_y !== null && config.cover_position_y !== undefined) ? config.cover_position_y : (user && user.cover_position_y ? user.cover_position_y : 0);
+                if (coverImg) coverImg.style.objectPosition = `center ${posY}%`;
+                if (coverPosText) coverPosText.textContent = `${posY}%`;
+
+                const motto = (config && config.motto) ? config.motto : (user && user.motto ? user.motto : 'Setiap hari adalah kesempatan baru untuk belajar dan berkarya.');
+                if (mottoBox) mottoBox.textContent = `"${motto}"`;
+
+                const themeMode = (config && config.theme_mode) ? config.theme_mode : 'light';
+                if (themeBadge) {
+                    themeBadge.innerHTML = `<i class="ti ti-sun-moon me-1"></i> ${themeMode.toUpperCase()}`;
+                }
+
+                if (config) {
+                    if (configEmptyAlert) configEmptyAlert.classList.add('d-none');
+                } else {
+                    if (configEmptyAlert) configEmptyAlert.classList.remove('d-none');
+                }
             }
         });
     </script>

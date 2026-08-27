@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Traits\HasNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
@@ -20,7 +21,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::with(['roles', 'approver'])->latest()->get();
+        $users = User::with(['roles', 'approver', 'detail', 'config'])->latest()->get();
         foreach ($users as $user) {
             $user->role_names = $user->roles->pluck('name')->toArray();
         }
@@ -41,10 +42,16 @@ class UserController extends Controller
     {
         $validated = $request->validated();
 
+        $avatarPath = null;
+        if ($request->hasFile('avatar')) {
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+        }
+
         $user = User::create([
             'name' => trim($validated['name']),
             'email' => strtolower(trim($validated['email'])),
             'password' => Hash::make($validated['password']),
+            'avatar' => $avatarPath,
             'status' => $validated['status'] ?? 'active',
             'approved_at' => ($validated['status'] ?? 'active') === 'active' ? now() : null,
             'approved_by' => ($validated['status'] ?? 'active') === 'active' ? auth()->id() : null,
@@ -83,6 +90,18 @@ class UserController extends Controller
             'name' => trim($validated['name']),
             'email' => strtolower(trim($validated['email'])),
         ];
+
+        if ($request->hasFile('avatar')) {
+            if (!empty($user->avatar) && Storage::disk('public')->exists($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            $userData['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        } elseif ($request->boolean('remove_avatar')) {
+            if (!empty($user->avatar) && Storage::disk('public')->exists($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            $userData['avatar'] = null;
+        }
 
         if (isset($validated['status'])) {
             $userData['status'] = $validated['status'];
@@ -235,6 +254,10 @@ class UserController extends Controller
         if (auth()->id() === $user->id) {
             $this->notifyError("Anda tidak dapat menghapus akun Anda sendiri yang sedang aktif.");
             return redirect()->route('admin.manajemenpengguna.users.index');
+        }
+
+        if (!empty($user->avatar) && Storage::disk('public')->exists($user->avatar)) {
+            Storage::disk('public')->delete($user->avatar);
         }
 
         $user->roles()->detach();

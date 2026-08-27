@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.1.0</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.1.1</strong>
                             </span>
                         </div>
                     </div>
@@ -107,12 +107,12 @@
                 <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0 fw-bold"><i class="ti ti-history me-2 text-primary"></i>Git Commit Release
                         Timeline</h5>
-                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">17 Versions Logged</span>
+                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">18 Versions Logged</span>
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
 
-                        <!-- Version 2.1.0 -->
+                        <!-- Version 2.1.1 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -120,8 +120,32 @@
                             <div class="timeline-content ps-3.5 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.1.0</h5>
+                                        <h5 class="fw-bold mb-0">v2.1.1</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.1.1</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 19:10 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Pengelolaan Avatar Pengguna, Visualisasi Lengkap Data Profil (user_details &amp; user_configs), Restriksi Menu Template Sidenav, Notifikasi Khusus Superadmin/Admin &amp; Perapian Estetika Validasi</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Fasilitas Pengelolaan Avatar Pengguna (*User Avatar Management*):</strong> Penambahan fasilitas upload foto avatar pengguna pada form modal Create &amp; Edit dengan <em>live preview</em> gambar, tombol reset foto, dan integrasi penyimpanan berkas di <code>storage/app/public/avatars</code> pada rute <code>admin/manajemenpengguna/users</code>.</li>
+                                    <li><strong class="text-dark">Visualisasi Lengkap Data <code>user_details</code> &amp; <code>user_configs</code>:</strong> Penataan ulang modal form pengguna menjadi ukuran <code>modal-xl</code> dengan 3 tab navigasi terpisah (*Akun &amp; Kredensial*, *Identitas KTP &amp; Domisili*, *Preferensi &amp; Foto Sampul Header*) untuk memeriksa kelengkapan data NIK, alamat lengkap, foto KTP, foto sampul, motto, dan persentase kelengkapan profil.</li>
+                                    <li><strong class="text-dark">Restriksi Menu Template Sidenav:</strong> Grup menu template bawaan Inspinia pada navigasi samping kini dibatasi secara eksklusif hanya untuk role <code>superadmin</code> dan <code>admin</code>, sementara <em>Special Menu</em> tetap terbuka untuk semua pengguna.</li>
+                                    <li><strong class="text-dark">Isolasi Notifikasi Administratif Topbar:</strong> Notifikasi pendaftaran akun mandiri, permohonan reset password, permintaan penonaktifan, dan aktivasi akun kini hanya dikirimkan dan ditampilkan pada topbar untuk role <code>superadmin</code> dan <code>admin</code> via <code>NotificationService</code>.</li>
+                                    <li><strong class="text-dark">Penyempurnaan Spacing &amp; Estetika Validasi Form Otentikasi:</strong> Penataan ulang jarak vertikal (*clean spacing*) pesan error validasi input dan banner status sesi pada halaman Login, Registrasi, Lupa Password, dan Pengajuan Aktivasi Akun menggunakan gaya *pill-card* lembut yang rapi dan elegan.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.1.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-git-commit fs-xl text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3.5 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.1.0</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.1.0</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 18:15 WIB</span>

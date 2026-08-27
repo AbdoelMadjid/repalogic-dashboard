@@ -22,6 +22,7 @@ class UserRequest extends FormRequest
             'roles' => ['nullable', 'array'],
             'roles.*' => ['string', 'exists:roles,name'],
             'status' => ['nullable', 'string', 'in:active,pending,inactive'],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:2048'],
         ];
 
         if ($isUpdate) {
@@ -46,6 +47,9 @@ class UserRequest extends FormRequest
             'roles.array' => 'Daftar role harus berupa array.',
             'roles.*.exists' => 'Role yang dipilih tidak valid.',
             'status.in' => 'Status akun pengguna tidak valid.',
+            'avatar.image' => 'Berkas avatar harus berupa gambar.',
+            'avatar.mimes' => 'Format avatar harus jpeg, jpg, png, atau webp.',
+            'avatar.max' => 'Ukuran avatar maksimal 2MB.',
         ];
     }
 }

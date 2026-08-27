@@ -76,13 +76,13 @@
                 @endforelse
             </div>
 
-            <!-- All-->
-            @can('read manajemenpengguna/users')
+            <!-- Footer Link Khusus Superadmin & Admin -->
+            @if (auth()->check() && auth()->user()->hasAnyRole(['superadmin', 'admin']))
                 <a href="{{ route('admin.manajemenpengguna.users.index') }}"
                     class="dropdown-item text-center text-reset text-decoration-underline link-offset-2 fw-bold notify-item border-top border-light py-2">
                     Kelola Semua Pengguna
                 </a>
-            @endcan
+            @endif
         </div>
         <!-- End dropdown-menu -->
     </div>

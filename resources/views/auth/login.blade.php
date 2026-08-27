@@ -32,7 +32,13 @@
         }
         .invalid-feedback-custom {
             font-size: 0.8125rem;
-            line-height: 1.35;
+            line-height: 1.4;
+            margin-top: 0.5rem;
+            padding: 0.35rem 0.65rem;
+            border-radius: 0.375rem;
+            background-color: #fef2f2;
+            border: 1px solid #fee2e2;
+            color: #dc2626 !important;
             transition: all 0.2s ease-in-out;
         }
     </style>
@@ -64,7 +70,7 @@
 
                     <div class="card p-4 shadow-sm border-0 rounded-3">
                         @if (session('registered_pending'))
-                            <div class="alert alert-info border-0 shadow-sm d-flex align-items-start gap-2 mb-3 py-2.5 px-3 rounded-3" role="alert" style="background-color: #eff6ff; color: #1e40af;">
+                            <div class="alert alert-info border-0 shadow-sm d-flex align-items-start gap-2 mb-3.5 py-3 px-3.5 rounded-3" role="alert" style="background-color: #eff6ff; color: #1e40af;">
                                 <i class="ti ti-info-circle-filled fs-18 text-primary flex-shrink-0 mt-0.5"></i>
                                 <div class="fs-13 lh-base">
                                     <strong class="d-block mb-0.5">Pendaftaran Berhasil!</strong>
@@ -74,7 +80,7 @@
                         @endif
 
                         @if (session('reset_requested'))
-                            <div class="alert alert-success border-0 shadow-sm d-flex align-items-start gap-2 mb-3 py-2.5 px-3 rounded-3" role="alert" style="background-color: #f0fdf4; color: #166534; border-left: 4px solid #22c55e !important;">
+                            <div class="alert alert-success border-0 shadow-sm d-flex align-items-start gap-2 mb-3.5 py-3 px-3.5 rounded-3" role="alert" style="background-color: #f0fdf4; color: #166534; border-left: 4px solid #22c55e !important;">
                                 <i class="ti ti-key fs-18 text-success flex-shrink-0 mt-0.5"></i>
                                 <div class="fs-13 lh-base">
                                     <strong class="d-block mb-0.5">Permintaan Reset Terkirim!</strong>
@@ -84,7 +90,7 @@
                         @endif
 
                         @if (session('reactivation_success'))
-                            <div class="alert alert-success border-0 shadow-sm d-flex align-items-start gap-2 mb-3 py-2.5 px-3 rounded-3" role="alert" style="background-color: #f0fdf4; color: #166534; border-left: 4px solid #22c55e !important;">
+                            <div class="alert alert-success border-0 shadow-sm d-flex align-items-start gap-2 mb-3.5 py-3 px-3.5 rounded-3" role="alert" style="background-color: #f0fdf4; color: #166534; border-left: 4px solid #22c55e !important;">
                                 <i class="ti ti-user-check fs-18 text-success flex-shrink-0 mt-0.5"></i>
                                 <div class="fs-13 lh-base">
                                     <strong class="d-block mb-0.5">Permohonan Aktivasi Terkirim!</strong>
@@ -94,7 +100,7 @@
                         @endif
 
                         @if (session('info_message'))
-                            <div class="alert alert-info border-0 shadow-sm d-flex align-items-start gap-2 mb-3 py-2.5 px-3 rounded-3" role="alert" style="background-color: #eff6ff; color: #1e40af;">
+                            <div class="alert alert-info border-0 shadow-sm d-flex align-items-start gap-2 mb-3.5 py-3 px-3.5 rounded-3" role="alert" style="background-color: #eff6ff; color: #1e40af;">
                                 <i class="ti ti-info-circle-filled fs-18 text-primary flex-shrink-0 mt-0.5"></i>
                                 <div class="fs-13 lh-base">
                                     {{ session('info_message') }}
@@ -103,7 +109,7 @@
                         @endif
 
                         @if ($errors->has('unapproved'))
-                            <div class="alert alert-warning border-0 shadow-sm d-flex align-items-start gap-2 mb-3 py-2.5 px-3 rounded-3" role="alert" style="background-color: #fffbeb; color: #92400e; border-left: 4px solid #f59e0b !important;">
+                            <div class="alert alert-warning border-0 shadow-sm d-flex align-items-start gap-2 mb-3.5 py-3 px-3.5 rounded-3" role="alert" style="background-color: #fffbeb; color: #92400e; border-left: 4px solid #f59e0b !important;">
                                 <i class="ti ti-clock-pause fs-18 text-warning flex-shrink-0 mt-0.5"></i>
                                 <div class="fs-13 lh-base">
                                     <strong class="d-block mb-0.5">Menunggu Persetujuan Admin</strong>
@@ -113,7 +119,7 @@
                         @endif
 
                         @if ($errors->has('inactive'))
-                            <div class="alert alert-danger border-0 shadow-sm d-flex align-items-start gap-2 mb-3 py-2.5 px-3 rounded-3" role="alert" style="background-color: #fef2f2; color: #991b1b; border-left: 4px solid #ef4444 !important;">
+                            <div class="alert alert-danger border-0 shadow-sm d-flex align-items-start gap-2 mb-3.5 py-3 px-3.5 rounded-3" role="alert" style="background-color: #fef2f2; color: #991b1b; border-left: 4px solid #ef4444 !important;">
                                 <i class="ti ti-ban fs-18 text-danger flex-shrink-0 mt-0.5"></i>
                                 <div class="fs-13 lh-base w-100">
                                     <strong class="d-block mb-0.5">Akun Dinonaktifkan</strong>
@@ -143,7 +149,7 @@
                                         id="email" name="email" value="{{ old('email') }}"
                                         placeholder="Masukkan Email Anda (contoh: nama@domain.com)" autocomplete="email" />
                                 </div>
-                                <div id="emailFeedback" class="invalid-feedback-custom text-danger mt-1.5 @error('email') d-flex @else d-none @enderror align-items-center gap-1">
+                                <div id="emailFeedback" class="invalid-feedback-custom text-danger mt-2 @error('email') d-flex @else d-none @enderror align-items-center gap-1.5">
                                     <i class="ti ti-alert-circle fs-15 flex-shrink-0"></i>
                                     <span id="emailFeedbackText">{{ $errors->first('email') }}</span>
                                 </div>
@@ -167,7 +173,7 @@
                                         <i class="ti ti-eye fs-16" id="passwordEyeIcon"></i>
                                     </button>
                                 </div>
-                                <div id="passwordFeedback" class="invalid-feedback-custom text-danger mt-1.5 @error('password') d-flex @else d-none @enderror align-items-center gap-1">
+                                <div id="passwordFeedback" class="invalid-feedback-custom text-danger mt-2 @error('password') d-flex @else d-none @enderror align-items-center gap-1.5">
                                     <i class="ti ti-alert-circle fs-15 flex-shrink-0"></i>
                                     <span id="passwordFeedbackText">{{ $errors->first('password') }}</span>
                                 </div>

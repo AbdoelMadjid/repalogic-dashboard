@@ -32,7 +32,13 @@
         }
         .invalid-feedback-custom {
             font-size: 0.8125rem;
-            line-height: 1.35;
+            line-height: 1.4;
+            margin-top: 0.5rem;
+            padding: 0.35rem 0.65rem;
+            border-radius: 0.375rem;
+            background-color: #fef2f2;
+            border: 1px solid #fee2e2;
+            color: #dc2626 !important;
             transition: all 0.2s ease-in-out;
         }
     </style>
@@ -80,7 +86,7 @@
                                         id="userName" name="name" value="{{ old('name') }}"
                                         placeholder="Masukkan nama lengkap Anda" autocomplete="name" required />
                                 </div>
-                                <div id="nameFeedback" class="invalid-feedback-custom text-danger mt-1.5 @error('name') d-flex @else d-none @enderror align-items-center gap-1">
+                                <div id="nameFeedback" class="invalid-feedback-custom text-danger mt-2 @error('name') d-flex @else d-none @enderror align-items-center gap-1.5">
                                     <i class="ti ti-alert-circle fs-15 flex-shrink-0"></i>
                                     <span id="nameFeedbackText">{{ $errors->first('name') }}</span>
                                 </div>
@@ -100,7 +106,7 @@
                                         id="userEmail" name="email" value="{{ old('email') }}"
                                         placeholder="contoh: nama@domain.com" autocomplete="email" required />
                                 </div>
-                                <div id="emailFeedback" class="invalid-feedback-custom text-danger mt-1.5 @error('email') d-flex @else d-none @enderror align-items-center gap-1">
+                                <div id="emailFeedback" class="invalid-feedback-custom text-danger mt-2 @error('email') d-flex @else d-none @enderror align-items-center gap-1.5">
                                     <i class="ti ti-alert-circle fs-15 flex-shrink-0"></i>
                                     <span id="emailFeedbackText">{{ $errors->first('email') }}</span>
                                 </div>
@@ -123,7 +129,7 @@
                                         <i class="ti ti-eye fs-16" id="passwordEyeIcon"></i>
                                     </button>
                                 </div>
-                                <div id="passwordFeedback" class="invalid-feedback-custom text-danger mt-1.5 @error('password') d-flex @else d-none @enderror align-items-center gap-1">
+                                <div id="passwordFeedback" class="invalid-feedback-custom text-danger mt-2 @error('password') d-flex @else d-none @enderror align-items-center gap-1.5">
                                     <i class="ti ti-alert-circle fs-15 flex-shrink-0"></i>
                                     <span id="passwordFeedbackText">{{ $errors->first('password') }}</span>
                                 </div>
@@ -138,7 +144,7 @@
                                         type="checkbox" id="termAndPolicy" name="terms" value="1" {{ old('terms') ? 'checked' : '' }} />
                                     <label class="form-check-label" for="termAndPolicy">Saya menyetujui Syarat &amp; Kebijakan Layanan</label>
                                 </div>
-                                <div id="termsFeedback" class="invalid-feedback-custom text-danger mt-1.5 @error('terms') d-flex @else d-none @enderror align-items-center gap-1">
+                                <div id="termsFeedback" class="invalid-feedback-custom text-danger mt-2 @error('terms') d-flex @else d-none @enderror align-items-center gap-1.5">
                                     <i class="ti ti-alert-circle fs-15 flex-shrink-0"></i>
                                     <span id="termsFeedbackText">{{ $errors->first('terms') ?: 'Anda wajib menyetujui syarat & ketentuan.' }}</span>
                                 </div>

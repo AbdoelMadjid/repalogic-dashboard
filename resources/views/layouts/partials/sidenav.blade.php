@@ -67,23 +67,26 @@
                     @endforeach
                 @endif
 
-                @foreach (['main', 'apps', 'custom-pages', 'layouts', 'components', 'documentation', 'menu-item'] as $groupKey)
-                    @php
-                        $featureKey = 'menu_group_' . str_replace('-', '_', $groupKey);
-                        $isGroupVisible = empty($appFeatures) || (!empty($appFeatures->$featureKey));
-                    @endphp
-                    @if ($isGroupVisible && ($groupConfig = config("sidenav-template.$groupKey")))
-                        @include('layouts.partials.mainmenu._render', ['menuGroup' => $groupConfig])
-                    @endif
-                @endforeach
+                {{-- Menu Template (Bawaan Template Inspinia): Hanya untuk Role Superadmin & Admin --}}
+                @if (auth()->check() && auth()->user()->hasAnyRole(['superadmin', 'admin']))
+                    @foreach (['main', 'apps', 'custom-pages', 'layouts', 'components', 'documentation', 'menu-item'] as $groupKey)
+                        @php
+                            $featureKey = 'menu_group_' . str_replace('-', '_', $groupKey);
+                            $isGroupVisible = empty($appFeatures) || (!empty($appFeatures->$featureKey));
+                        @endphp
+                        @if ($isGroupVisible && ($groupConfig = config("sidenav-template.$groupKey")))
+                            @include('layouts.partials.mainmenu._render', ['menuGroup' => $groupConfig])
+                        @endif
+                    @endforeach
 
-                @if (empty($appFeatures) || !empty($appFeatures->menu_group_menu_item))
-                    <li class="side-nav-item">
-                        <a href="#" class="side-nav-link disabled">
-                            <span class="menu-icon"><i class="ti ti-ban"></i></span>
-                            <span class="menu-text" data-lang="disabled-menu">Disabled Menu</span>
-                        </a>
-                    </li>
+                    @if (empty($appFeatures) || !empty($appFeatures->menu_group_menu_item))
+                        <li class="side-nav-item">
+                            <a href="#" class="side-nav-link disabled">
+                                <span class="menu-icon"><i class="ti ti-ban"></i></span>
+                                <span class="menu-text" data-lang="disabled-menu">Disabled Menu</span>
+                            </a>
+                        </li>
+                    @endif
                 @endif
             </ul>
         </div>

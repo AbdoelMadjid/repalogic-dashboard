@@ -26,6 +26,10 @@ class UserConfig extends Model
         'settings' => 'array',
     ];
 
+    protected $appends = [
+        'cover_bg_url',
+    ];
+
     /**
      * Get the user that owns the configuration.
      */

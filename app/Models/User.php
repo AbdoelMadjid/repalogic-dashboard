@@ -45,6 +45,20 @@ class User extends Authenticatable
     ];
 
     /**
+     * The accessors to append to the model's array and JSON form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = [
+        'avatar_url',
+        'role_name',
+        'cover_bg_url',
+        'cover_position_y',
+        'motto',
+        'profile_completion_percentage',
+    ];
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
