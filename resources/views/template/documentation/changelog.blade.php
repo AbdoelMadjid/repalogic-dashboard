@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.1.4</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.2.0</strong>
                             </span>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                                     <h6 class="fw-bold mb-0 text-dark">2. Catat Log Changelog</h6>
                                 </div>
                                 <p class="fs-13 text-muted mb-0">
-                                    Dokumentasikan riwayat perubahan di <code>changelog.blade.php</code> dan <code>docs/riwayat_release_dan_tag.md</code>.
+                                    Tulis ringkasan rilis pada file <code>changelog.blade.php</code> dengan penanda waktu WIB yang presisi sesuai commit git.
                                 </p>
                             </div>
                         </div>
@@ -67,11 +67,11 @@
                         <div class="col-md-6 col-lg-3">
                             <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                 <div class="d-flex align-items-center mb-2">
-                                    <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-git-branch fs-14"></i></span>
-                                    <h6 class="fw-bold mb-0 text-dark">3. Commit &amp; Sync</h6>
+                                    <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-table fs-14"></i></span>
+                                    <h6 class="fw-bold mb-0 text-dark">3. Update Dokumen Rilis</h6>
                                 </div>
                                 <p class="fs-13 text-muted mb-0">
-                                    Lakukan commit perubahan file kode dan dokumentasi: <code>git commit -m "feat/fix: ..."</code>.
+                                    Tambahkan entri tabel rilis pada file <code>docs/riwayat_release_dan_tag.md</code> untuk arsip dokumentasi offline.
                                 </p>
                             </div>
                         </div>
@@ -80,20 +80,11 @@
                             <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                 <div class="d-flex align-items-center mb-2">
                                     <span class="badge bg-danger rounded-circle p-1.5 me-2"><i class="ti ti-tag fs-14"></i></span>
-                                    <h6 class="fw-bold mb-0 text-dark">4. Git Tag &amp; Push</h6>
+                                    <h6 class="fw-bold mb-0 text-dark">4. Git Tag Release</h6>
                                 </div>
                                 <p class="fs-13 text-muted mb-0">
-                                    Buat tag git: <code>git tag -a vX.Y.Z -m "Pesan rilis..."</code> lalu push ke remote repository: <code>git push origin main --tags</code>.
+                                    Buat tag git baru: <code>git tag -a vX.Y.Z -m "Release vX.Y.Z"</code> lalu jalankan <code>git push origin main --tags</code>.
                                 </p>
-                            </div>
-                        </div>
-
-                        <div class="col-12 mt-3">
-                            <div class="alert alert-info border-0 mb-0 py-2.5 px-3 fs-13 d-flex align-items-center">
-                                <i class="ti ti-info-circle fs-18 me-2 flex-shrink-0"></i>
-                                <div>
-                                    <strong>Catatan Otomatisasi Terintegrasi:</strong> Anda <em>TIDAK PERLU</em> mengubah hardcoded version pada Sidenav template, view Footer, maupun migrasi DB secara manual karena seluruh engine telah terpusat dan sinkron otomatis.
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -101,18 +92,18 @@
             </div>
         </div>
 
-        <!-- Release Timeline -->
-        <div class="col-12 mb-4">
-            <div class="card border shadow-sm">
-                <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0 fw-bold"><i class="ti ti-history me-2 text-primary"></i>Git Commit Release
-                        Timeline</h5>
-                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">21 Versions Logged</span>
+        <!-- Changelog Timeline Section -->
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0 fw-bold">
+                        <i class="ti ti-git-branch me-2 text-primary"></i> Timeline Pembaruan Sistem (Timeline Changelog)
+                    </h5>
+                    <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-1.5 rounded-pill">Production Ready</span>
                 </div>
                 <div class="card-body p-4">
-                    <div class="timeline timeline-icon-bordered">
-
-                        <!-- Version 2.1.4 -->
+                    <div class="timeline">
+                        <!-- Version 2.2.0 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -120,8 +111,37 @@
                             <div class="timeline-content ps-3.5 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.1.4</h5>
+                                        <h5 class="fw-bold mb-0">v2.2.0</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.2.0</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 23:28 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">User Login Tracking Engine, 24-Hour Point Accumulation, Geolocation Coordinates Capture &amp; Data Login Dashboard</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong>24-Hour / Daily Login Points Engine:</strong> Sistem perhitungan poin cerdas dengan aturan penambahan 1 poin pada login pertama setiap hari (atau interval 24 jam). Login berulang dalam hari yang sama tidak menambah poin, tetapi seluruh riwayat sesi tetap dicatat lengkap.</li>
+                                    <li><strong>Comprehensive Login History Audit:</strong> Pencatatan otomatis jenis browser, sistem operasi/platform, tipe perangkat (Desktop/Mobile/Tablet), alamat IP klien, tanggal &amp; waktu presisi, serta status penambahan poin pada setiap sesi login.</li>
+                                    <li><strong>Non-Blocking Geolocation Coordinates:</strong> Pengambilan titik koordinat GPS (latitude &amp; longitude) secara asynchronous via HTML5 Geolocation API pada form login tanpa menghambat kecepatan submit pengguna.</li>
+                                    <li><strong>Modul Admin Data Login:</strong> Antarmuka terpusat di <code>admin/manajemenpengguna/data-login</code> dengan 4 kartu statistik real-time, filter tanggal/pengguna/pencarian, Tab Pengguna Login Hari Ini, Tab Semua Riwayat Login dengan pagination, Modal Detail Sesi Login dengan integrasi OpenStreetMap &amp; Google Maps, serta fitur pembersihan log lama.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-muted border">Login Tracker</span>
+                                    <span class="badge bg-light text-muted border">Daily Points Engine</span>
+                                    <span class="badge bg-light text-muted border">Geolocation GPS</span>
+                                    <span class="badge bg-light text-muted border">Data Login Module</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.1.4 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-git-commit fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3.5 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.1.4</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.1.4</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 23:02 WIB</span>

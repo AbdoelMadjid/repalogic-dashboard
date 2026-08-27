@@ -28,7 +28,12 @@
                             <div>
                                 <h4 class="text-nowrap fw-bold mb-1">{{ $user->name }}</h4>
                                 <p class="text-muted mb-1"><i class="ti ti-mail me-1"></i>{{ $user->email }}</p>
-                                <span class="badge bg-primary-subtle text-primary fw-medium fs-xs">{{ $user->role_name }}</span>
+                                <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                                    <span class="badge bg-primary-subtle text-primary fw-medium fs-xs">{{ $user->role_name }}</span>
+                                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle fw-bold fs-xs" title="Total Poin Login yang Dikumpulkan">
+                                        <i class="ti ti-award me-0.5"></i> {{ number_format($user->login_count ?? 0) }} Poin Login
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="d-flex gap-2 align-items-center">
@@ -81,8 +86,13 @@
                             <i class="ti ti-shield-lock fs-18"></i>
                         </div>
                         <div>
-                            <span class="fs-12 text-muted d-block">Peran / Hak Akses</span>
-                            <span class="badge bg-warning-subtle text-warning fs-12 fw-semibold">{{ $user->role_name }}</span>
+                            <span class="fs-12 text-muted d-block">Peran & Akumulasi Poin</span>
+                            <div class="d-flex align-items-center gap-1.5 mt-0.5 flex-wrap">
+                                <span class="badge bg-warning-subtle text-warning fs-12 fw-semibold">{{ $user->role_name }}</span>
+                                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle fs-12 fw-bold" title="Total Poin Login (Maks 1 Poin per 24 Jam)">
+                                    <i class="ti ti-award me-0.5"></i> {{ number_format($user->login_count ?? 0) }} Poin
+                                </span>
+                            </div>
                         </div>
                     </div>
 

@@ -32,6 +32,9 @@ class User extends Authenticatable
         'deactivation_reason',
         'reactivation_requested_at',
         'reactivation_reason',
+        'login_count',
+        'last_login_at',
+        'last_login_point_at',
     ];
 
     /**
@@ -71,6 +74,9 @@ class User extends Authenticatable
             'password_reset_requested_at' => 'datetime',
             'deactivation_requested_at' => 'datetime',
             'reactivation_requested_at' => 'datetime',
+            'last_login_at' => 'datetime',
+            'last_login_point_at' => 'datetime',
+            'login_count' => 'integer',
             'password' => 'hashed',
         ];
     }
@@ -262,4 +268,47 @@ class User extends Authenticatable
 
         return min(100, $score);
     }
+
+    /**
+     * Relasi ke seluruh riwayat login pengguna.
+     */
+    public function logins(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\Admin\ManajemenPengguna\UserLogin::class, 'user_id');
+    }
+
+    /**
+     * Relasi ke entri login terbaru.
+     */
+    public function latestLogin(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(\App\Models\Admin\ManajemenPengguna\UserLogin::class, 'user_id')->latestOfMany('login_at');
+    }
+
+    /**
+     * Catat aktivitas login dan hitung poin login (1 poin per 24 jam / hari).
+     */
+    public function recordLogin(\Illuminate\Http\Request $request): \App\Models\Admin\ManajemenPengguna\UserLogin
+    {
+        $now = \Carbon\Carbon::now();
+        $awardPoint = false;
+
+        // Aturan poin: bertambah 1 jika belum pernah dapat poin ATAU sudah >= 24 jam ATAU tanggal berbeda
+        if ($this->last_login_point_at === null) {
+            $awardPoint = true;
+        } elseif ($this->last_login_point_at->diffInHours($now) >= 24 || ! $this->last_login_point_at->isSameDay($now)) {
+            $awardPoint = true;
+        }
+
+        if ($awardPoint) {
+            $this->login_count = ($this->login_count ?? 0) + 1;
+            $this->last_login_point_at = $now;
+        }
+
+        $this->last_login_at = $now;
+        $this->save();
+
+        return \App\Models\Admin\ManajemenPengguna\UserLogin::record($this, $request, $awardPoint);
+    }
 }
+

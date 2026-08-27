@@ -135,6 +135,8 @@
 
                         <form method="POST" action="{{ route('login') }}" id="loginForm" novalidate>
                             @csrf
+                            <input type="hidden" name="latitude" id="loginLatitude" value="">
+                            <input type="hidden" name="longitude" id="loginLongitude" value="">
                             <!-- Email Input Field -->
                             <div class="mb-3">
                                 <label for="email" class="form-label fw-semibold">
@@ -413,6 +415,25 @@
                 passwordInput.select();
             }, 150);
         @endif
+
+        // --- Geolocation Coordinates Capture (Non-blocking) ---
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    const latEl = document.getElementById('loginLatitude');
+                    const lngEl = document.getElementById('loginLongitude');
+                    if (latEl && lngEl) {
+                        latEl.value = position.coords.latitude;
+                        lngEl.value = position.coords.longitude;
+                    }
+                },
+                function (error) {
+                    // Silently ignore if user denies or location is disabled
+                    console.debug('Geolocation info:', error.message);
+                },
+                { timeout: 6000, enableHighAccuracy: false, maximumAge: 60000 }
+            );
+        }
     });
     </script>
 </body>

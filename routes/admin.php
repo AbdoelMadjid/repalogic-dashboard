@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\DukunganAplikasi\ProfilAplikasiController;
 use App\Http\Controllers\Admin\DukunganAplikasi\TranslationController;
 use App\Http\Controllers\Admin\ManajemenPengguna\AksesRoleController;
 use App\Http\Controllers\Admin\ManajemenPengguna\AksesUserController;
+use App\Http\Controllers\Admin\ManajemenPengguna\DataLoginController;
 use App\Http\Controllers\Admin\ManajemenPengguna\PermissionController;
 use App\Http\Controllers\Admin\ManajemenPengguna\RoleController;
 use App\Http\Controllers\Admin\ManajemenPengguna\UserController;
@@ -73,6 +74,11 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
         Route::post('users/{id}/activate', [UserController::class, 'activate'])->name('users.activate');
         Route::post('users/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
         Route::resource('users', UserController::class);
+        Route::post('data-login/clear', [DataLoginController::class, 'clearOldLogs'])->name('data-login.clear');
+        Route::get('data-login/{id}', [DataLoginController::class, 'show'])->whereNumber('id')->name('data-login.show');
+        Route::delete('data-login/{id}', [DataLoginController::class, 'destroy'])->whereNumber('id')->name('data-login.destroy');
+        Route::get('data-login', [DataLoginController::class, 'index'])->name('data-login.index');
+
         Route::resource('role', RoleController::class);
         Route::resource('permission', PermissionController::class);
         Route::resource('akses-role', AksesRoleController::class);
