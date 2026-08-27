@@ -19,8 +19,8 @@ class ProfilPenggunaController extends Controller
      */
     public function index()
     {
-        $user = auth()->user()->load('detail');
-        return view('admin.profil-pengguna.profil-pengguna', compact('user'));
+        $user = auth()->user()->load(['detail', 'config']);
+        return view('admin.profil-pengguna', compact('user'));
     }
 
     /**
@@ -112,6 +112,65 @@ class ProfilPenggunaController extends Controller
         $detail->save();
 
         $this->notifySuccess('Kelengkapan data KTP & Alamat berhasil disimpan.', 'Berhasil!');
+
+        return redirect()->route('admin.profil-pengguna.index');
+    }
+
+    /**
+     * Update user profile header cover background image & vertical position (user_configs table).
+     */
+    public function updateCover(Request $request)
+    {
+        $request->validate([
+            'cover_image' => 'nullable|image|mimes:jpeg,jpg,png,webp,svg|max:2048',
+            'cover_position_y' => 'nullable|integer|min:0|max:100',
+        ], [
+            'cover_image.image' => 'Berkas foto sampul harus berupa gambar.',
+            'cover_image.max' => 'Ukuran gambar foto sampul tidak boleh melebihi 2MB.',
+            'cover_position_y.integer' => 'Nilai posisi vertikal tidak valid.',
+        ]);
+
+        $user = auth()->user();
+        $config = \App\Models\UserConfig::firstOrNew(['user_id' => $user->id]);
+
+        if ($request->hasFile('cover_image')) {
+            if (!empty($config->cover_image) && Storage::disk('public')->exists($config->cover_image)) {
+                Storage::disk('public')->delete($config->cover_image);
+            }
+
+            $path = $request->file('cover_image')->store('covers', 'public');
+            $config->cover_image = $path;
+        }
+
+        if ($request->has('cover_position_y')) {
+            $config->cover_position_y = (int) $request->input('cover_position_y');
+        }
+
+        $config->save();
+
+        $this->notifySuccess('Foto sampul & posisi background header berhasil diperbarui.', 'Berhasil!');
+
+        return redirect()->route('admin.profil-pengguna.index');
+    }
+
+    /**
+     * Update user profile motto quote (user_configs table).
+     */
+    public function updateMotto(Request $request)
+    {
+        $request->validate([
+            'motto' => 'required|string|max:255',
+        ], [
+            'motto.required' => 'Motto hidup tidak boleh kosong.',
+            'motto.max' => 'Motto hidup maksimal 255 karakter.',
+        ]);
+
+        $user = auth()->user();
+        $config = \App\Models\UserConfig::firstOrNew(['user_id' => $user->id]);
+        $config->motto = $request->input('motto');
+        $config->save();
+
+        $this->notifySuccess('Motto hidup berhasil diperbarui.', 'Berhasil!');
 
         return redirect()->route('admin.profil-pengguna.index');
     }

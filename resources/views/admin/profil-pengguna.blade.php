@@ -9,10 +9,10 @@
     <div class="row">
         <div class="col-12">
             <article class="card card-out-of-container border-top-0 shadow-sm mb-4">
-                <div class="position-relative card-side-img overflow-hidden"
-                    style="height: 250px; background-image: url('{{ asset('assets/images/profile-bg.jpg') }}')">
+                <div id="main-header-banner" class="position-relative card-side-img overflow-hidden"
+                    style="height: 250px; background-image: url('{{ $user->cover_bg_url }}'); background-size: cover; background-position: center {{ $user->cover_position_y }}%;">
                     <div class="p-4 card-img-overlay rounded-start-0 auth-overlay d-flex align-items-center justify-content-center">
-                        <h3 class="text-white mb-0 fst-italic">"Pengaturan Profil Akun & Data Kelengkapan Pengguna"</h3>
+                        <h3 class="text-white mb-0 fst-italic text-center px-3" id="main-motto-display">"{{ $user->motto }}"</h3>
                     </div>
                 </div>
 
@@ -23,7 +23,7 @@
                             <div style="width: 90px; height: 90px; flex-shrink: 0;">
                                 <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}"
                                     class="rounded-circle img-thumbnail shadow-sm"
-                                    style="width: 90px; height: 90px; min-width: 90px; min-height: 90px; object-fit: cover; aspect-ratio: 1 / 1;" />
+                                    style="width: 90px; height: 90px; min-width: 90px; min-height: 90px; object-fit: cover; object-position: top; aspect-ratio: 1 / 1;" />
                             </div>
                             <div>
                                 <h4 class="text-nowrap fw-bold mb-1">{{ $user->name }}</h4>
@@ -41,25 +41,6 @@
                             <a href="{{ route('admin.profil-pengguna.edit') }}" class="btn btn-outline-primary fw-semibold">
                                 <i class="ti ti-id me-1"></i> Kelengkapan Data KTP
                             </a>
-
-                            <!-- Menu Titik 3 -->
-                            <div class="dropdown">
-                                <button class="btn btn-icon btn-dark" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="ti ti-dots fs-24"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#modal-edit-profil">
-                                            <i class="ti ti-user-edit me-2"></i> Edit Profil Singkat (Modal)
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('admin.profil-pengguna.edit') }}">
-                                            <i class="ti ti-id-badge me-2"></i> Edit Kelengkapan Data KTP
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -71,8 +52,8 @@
         <!-- Sidebar Personal Info -->
         <div class="col-xl-4 col-lg-5">
             <div class="card shadow-sm border-0 mb-4">
-                <div class="card-header bg-light py-3">
-                    <h5 class="card-title mb-0 fw-bold text-dark"><i class="ti ti-user-circle me-1 text-primary"></i> Informasi Akun</h5>
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="card-title text-white mb-0 fw-bold"><i class="ti ti-user-circle me-1"></i> Informasi Akun</h5>
                 </div>
                 <div class="card-body">
                     <div class="d-flex align-items-center gap-2 mb-3">
@@ -116,14 +97,108 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Card Foto Sampul / Background Header -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="card-title text-white mb-0 fw-bold"><i class="ti ti-photo me-1"></i> Foto Sampul Background Header</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('admin.profil-pengguna.update-cover') }}" method="POST" enctype="multipart/form-data" id="form-update-cover">
+                        @csrf
+                        <div class="mb-3 text-center">
+                            <div class="position-relative mb-2 overflow-hidden rounded border shadow-sm" style="height: 130px;">
+                                <img src="{{ $user->cover_bg_url }}" id="cover-preview-img" alt="Background Header" class="w-100 h-100 object-fit-cover" style="object-fit: cover; object-position: center {{ $user->cover_position_y }}%;" />
+                            </div>
+                            <label for="cover_bg_input" class="btn btn-sm btn-outline-primary fw-semibold cursor-pointer mb-2">
+                                <i class="ti ti-camera me-1"></i> Pilih / Ganti Foto Sampul
+                            </label>
+                            <input type="file" name="cover_image" id="cover_bg_input" class="d-none" accept="image/*">
+                        </div>
+
+                        <!-- Slider Pengatur Posisi Vertikal -->
+                        <div class="mb-3 p-2 bg-light rounded border">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label for="cover-position-range" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
+                                    <i class="ti ti-arrows-vertical text-primary fs-15"></i> Posisi Atas - Bawah:
+                                </label>
+                                <span id="cover-pos-val" class="badge bg-primary-subtle text-primary font-monospace fs-12 fw-bold">{{ $user->cover_position_y }}%</span>
+                            </div>
+                            <input type="range" class="form-range mb-2" id="cover-position-range" name="cover_position_y" min="0" max="100" value="{{ $user->cover_position_y }}">
+                            <div class="d-flex justify-content-between gap-1">
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-pos" data-pos="0">Atas (0%)</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-pos" data-pos="50">Tengah (50%)</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-pos" data-pos="100">Bawah (100%)</button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-sm w-100 fw-semibold">
+                            <i class="ti ti-device-floppy me-1"></i> Simpan Posisi / Foto Sampul
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Card Motto Hidup / Kutipan Profil -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="card-title text-white mb-0 fw-bold"><i class="ti ti-quote me-1"></i> Motto Hidup / Kutipan Profil</h5>
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('admin.profil-pengguna.update-motto') }}" method="POST" id="form-update-motto">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="motto_input" class="form-label fs-13 fw-semibold text-dark mb-1">Motto / Kata-Kata Bijak:</label>
+                            <textarea name="motto" id="motto_input" rows="3" class="form-control" placeholder="Tuliskan motto hidup Anda..." maxlength="255" required>{{ old('motto', $user->motto) }}</textarea>
+                            <span class="fs-12 text-muted d-block mt-1">Motto ini akan ditampilkan di atas banner foto sampul Anda.</span>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm w-100 fw-semibold">
+                            <i class="ti ti-device-floppy me-1"></i> Simpan Motto Hidup
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <!-- Detail Data KTP & Alamat Lengkap -->
         <div class="col-xl-8 col-lg-7">
+            <!-- Widget Progress Kelengkapan Profil -->
+            @php
+                $completion = $user->profile_completion_percentage;
+                $progressBg = $completion >= 80 ? 'bg-success' : ($completion >= 50 ? 'bg-warning' : 'bg-danger');
+                $badgeBg = $completion >= 80 ? 'bg-success-subtle text-success' : ($completion >= 50 ? 'bg-warning-subtle text-warning' : 'bg-danger-subtle text-danger');
+            @endphp
             <div class="card shadow-sm border-0 mb-4">
-                <div class="card-header bg-light py-3 d-flex align-items-center justify-content-between">
-                    <h5 class="card-title mb-0 fw-bold text-dark"><i class="ti ti-id me-1 text-primary"></i> Detail Kelengkapan Data KTP & Alamat</h5>
-                    <a href="{{ route('admin.profil-pengguna.edit') }}" class="btn btn-sm btn-primary fw-semibold">
+                <div class="card-body py-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="ti ti-chart-pie fs-20 text-primary"></i>
+                            <h6 class="mb-0 fw-bold text-dark">Status Kelengkapan Data Profil</h6>
+                        </div>
+                        <span class="badge {{ $badgeBg }} fs-12 fw-bold font-monospace px-2 py-1">{{ $completion }}% Terlengkap</span>
+                    </div>
+                    <div class="progress progress-sm rounded-pill mb-2" style="height: 10px;">
+                        <div class="progress-bar {{ $progressBg }} progress-bar-striped progress-bar-animated rounded-pill" role="progressbar" style="width: {{ $completion }}%;" aria-valuenow="{{ $completion }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="fs-12 text-muted d-flex align-items-center justify-content-between">
+                        <span>
+                            @if ($completion >= 100)
+                                <i class="ti ti-circle-check-filled text-success me-1"></i> Data profil Anda sudah <strong>100% Lengkap!</strong>
+                            @else
+                                <i class="ti ti-info-circle text-warning me-1"></i> Lengkapi data identitas KTP & rincian alamat untuk mencapai 100%.
+                            @endif
+                        </span>
+                        @if ($completion < 100)
+                            <a href="{{ route('admin.profil-pengguna.edit') }}" class="text-primary fw-semibold text-decoration-none">Lengkapi Sekarang <i class="ti ti-arrow-right"></i></a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-primary text-white py-3 d-flex align-items-center justify-content-between">
+                    <h5 class="card-title text-white mb-0 fw-bold"><i class="ti ti-id me-1"></i> Detail Kelengkapan Data KTP & Alamat</h5>
+                    <a href="{{ route('admin.profil-pengguna.edit') }}" class="btn btn-sm btn-light text-primary fw-semibold">
                         <i class="ti ti-edit me-1"></i> Edit Data KTP
                     </a>
                 </div>
@@ -245,7 +320,7 @@
                             <div class="d-inline-block position-relative mb-2">
                                 <img src="{{ $user->avatar_url }}" id="modal-avatar-preview" alt="avatar"
                                     class="rounded-circle img-thumbnail shadow-sm"
-                                    style="width: 100px; height: 100px; min-width: 100px; min-height: 100px; object-fit: cover; aspect-ratio: 1 / 1;" />
+                                    style="width: 100px; height: 100px; min-width: 100px; min-height: 100px; object-fit: cover; object-position: top; aspect-ratio: 1 / 1;" />
                             </div>
                             <div>
                                 <label for="modal-avatar-input" class="btn btn-sm btn-outline-primary fw-semibold cursor-pointer mb-0">
@@ -274,14 +349,24 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="modal_password" class="form-label fw-semibold text-dark">Kata Sandi Baru</label>
-                                    <input type="password" class="form-control" id="modal_password" name="password" placeholder="Kosongkan jika tidak diganti">
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="modal_password" name="password" placeholder="Kosongkan jika tidak diganti">
+                                        <button class="btn btn-outline-secondary toggle-password" type="button" data-input-id="modal_password" title="Lihat/Sembunyikan Kata Sandi">
+                                            <i class="ti ti-eye"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="modal_password_confirmation" class="form-label fw-semibold text-dark">Konfirmasi Kata Sandi</label>
-                                    <input type="password" class="form-control" id="modal_password_confirmation" name="password_confirmation" placeholder="Ulangi kata sandi baru">
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="modal_password_confirmation" name="password_confirmation" placeholder="Ulangi kata sandi baru">
+                                        <button class="btn btn-outline-secondary toggle-password" type="button" data-input-id="modal_password_confirmation" title="Lihat/Sembunyikan Kata Sandi">
+                                            <i class="ti ti-eye"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -301,7 +386,7 @@
     {{-- Page JS (Rule 1 Compliance: Place scripts inside @section('content') before @endsection) --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Live Image Preview for Modal Avatar Upload
+            // 1. Live Image Preview for Modal Avatar Upload
             const modalAvatarInput = document.getElementById('modal-avatar-input');
             const modalAvatarPreview = document.getElementById('modal-avatar-preview');
 
@@ -317,6 +402,97 @@
                     }
                 });
             }
+
+            // 2. Live Image Preview & Real-time Vertical Position Slider for Cover Background Header
+            const coverInput = document.getElementById('cover_bg_input');
+            const coverPreview = document.getElementById('cover-preview-img');
+            const coverForm = document.getElementById('form-update-cover');
+            const mainHeaderBanner = document.getElementById('main-header-banner');
+            const coverPosRange = document.getElementById('cover-position-range');
+            const coverPosVal = document.getElementById('cover-pos-val');
+            const presetButtons = document.querySelectorAll('.btn-preset-pos');
+
+            function updateCoverPosition(pos) {
+                const posPercent = pos + '%';
+                if (coverPosVal) {
+                    coverPosVal.textContent = posPercent;
+                }
+                if (coverPosRange) {
+                    coverPosRange.value = pos;
+                }
+                if (coverPreview) {
+                    coverPreview.style.objectPosition = 'center ' + posPercent;
+                }
+                if (mainHeaderBanner) {
+                    mainHeaderBanner.style.backgroundPosition = 'center ' + posPercent;
+                }
+            }
+
+            if (coverPosRange) {
+                coverPosRange.addEventListener('input', function(e) {
+                    updateCoverPosition(e.target.value);
+                });
+            }
+
+            presetButtons.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const pos = this.getAttribute('data-pos');
+                    updateCoverPosition(pos);
+                });
+            });
+
+            if (coverInput) {
+                coverInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(evt) {
+                            if (coverPreview) {
+                                coverPreview.src = evt.target.result;
+                            }
+                            if (mainHeaderBanner) {
+                                mainHeaderBanner.style.backgroundImage = 'url("' + evt.target.result + '")';
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            // 3. Real-time Motto Typing Preview
+            const mottoInput = document.getElementById('motto_input');
+            const mottoDisplay = document.getElementById('main-motto-display');
+            if (mottoInput && mottoDisplay) {
+                mottoInput.addEventListener('input', function() {
+                    mottoDisplay.textContent = '"' + (this.value || 'Setiap hari adalah kesempatan baru untuk belajar dan berkarya.') + '"';
+                });
+            }
+
+            // 4. Toggle Show/Hide Password Eye Icons (Rule 2 & Rule 7 Compliance: Event Delegation via data-input-id)
+            document.addEventListener('click', function(e) {
+                const toggleBtn = e.target.closest('.toggle-password');
+                if (toggleBtn) {
+                    const targetId = toggleBtn.getAttribute('data-input-id');
+                    const inputField = document.getElementById(targetId);
+                    const icon = toggleBtn.querySelector('i');
+
+                    if (inputField) {
+                        if (inputField.type === 'password') {
+                            inputField.type = 'text';
+                            if (icon) {
+                                icon.classList.remove('ti-eye');
+                                icon.classList.add('ti-eye-off');
+                            }
+                        } else {
+                            inputField.type = 'password';
+                            if (icon) {
+                                icon.classList.remove('ti-eye-off');
+                                icon.classList.add('ti-eye');
+                            }
+                        }
+                    }
+                }
+            });
         });
     </script>
 @endsection

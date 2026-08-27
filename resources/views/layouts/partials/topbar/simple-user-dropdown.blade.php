@@ -4,6 +4,7 @@
             <a class="topbar-link dropdown-toggle drop-arrow-none px-2" data-bs-toggle="dropdown" href="#!"
                 aria-haspopup="false" aria-expanded="false">
                 <img src="{{ auth()->user()->avatar_url }}" width="32" height="32" class="rounded-circle me-lg-2 d-flex object-fit-cover"
+                    style="object-fit: cover; object-position: top;"
                     alt="{{ auth()->user()->name }}" />
                 <div class="d-lg-flex align-items-center gap-1 d-none">
                     <h5 class="my-0">{{ auth()->user()->name }}</h5>
@@ -17,7 +18,7 @@
                 </div>
 
                 <!-- My Profile -->
-                <a href="#!" class="dropdown-item">
+                <a href="{{ route('admin.profil-pengguna.index') }}" class="dropdown-item">
                     <i class="ti ti-user-circle me-1 fs-lg align-middle"></i>
                     <span class="align-middle" data-lang="topbar-user-profile">Profile</span>
                 </a>

@@ -65,4 +65,25 @@ class UserDetail extends Model
 
         return !empty($parts) ? implode(', ', $parts) : 'Belum diisi';
     }
+
+    /**
+     * Accessor for profile cover background banner image URL.
+     */
+    public function getCoverBgUrlAttribute(): string
+    {
+        if (!empty($this->foto_ktp)) {
+            $path = ltrim($this->foto_ktp, '/');
+            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+                return asset('storage/' . $path);
+            }
+            if (file_exists(public_path('storage/' . $path))) {
+                return asset('storage/' . $path);
+            }
+            if (file_exists(public_path($path))) {
+                return asset($path);
+            }
+        }
+
+        return asset('assets/images/profile-bg.jpg');
+    }
 }

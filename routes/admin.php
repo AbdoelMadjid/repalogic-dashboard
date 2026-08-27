@@ -27,6 +27,8 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
     Route::post('profil-pengguna/update-quick', [ProfilPenggunaController::class, 'updateQuick'])->name('profil-pengguna.update-quick');
     Route::get('profil-pengguna/edit', [ProfilPenggunaController::class, 'edit'])->name('profil-pengguna.edit');
     Route::post('profil-pengguna/update-detail', [ProfilPenggunaController::class, 'updateDetail'])->name('profil-pengguna.update-detail');
+    Route::post('profil-pengguna/update-cover', [ProfilPenggunaController::class, 'updateCover'])->name('profil-pengguna.update-cover');
+    Route::post('profil-pengguna/update-motto', [ProfilPenggunaController::class, 'updateMotto'])->name('profil-pengguna.update-motto');
 
     Route::prefix('dukunganaplikasi')->name('dukunganaplikasi.')->group(function () {
         Route::get('profil-aplikasi', [ProfilAplikasiController::class, 'index'])->name('profil-aplikasi.index');

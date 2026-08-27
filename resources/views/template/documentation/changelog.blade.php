@@ -112,12 +112,12 @@
                 <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0 fw-bold"><i class="ti ti-history me-2 text-primary"></i>Git Commit Release
                         Timeline</h5>
-                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">14 Versions Logged</span>
+                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">15 Versions Logged</span>
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
 
-                        <!-- Version 1.9.2 -->
+                        <!-- Version 1.9.3 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -125,9 +125,34 @@
                             <div class="timeline-content ps-3.5 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v1.9.2</h5>
+                                        <h5 class="fw-bold mb-0">v1.9.3</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest
                                             Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build:
+                                            v1.9.3</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 10:30 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Pemisahan Tabel Config User, Pengatur Posisi Sampul Interaktif, Motto Hidup &amp; Widget Progress Kelengkapan Profil</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Pemisahan Dokumen KTP &amp; Cover Header:</strong> Memisahkan tabel <code>foto_ktp</code> pada <code>user_details</code> untuk dokumen KTP fisik, dan membuat tabel baru <code>user_configs</code> (kolom <code>cover_image</code>, <code>cover_position_y</code>, <code>motto</code>) untuk konfigurasi akun.</li>
+                                    <li><strong class="text-dark">Pengatur Posisi Vertikal Sampul Header:</strong> Fitur slider interaktif (0%-100%) dan tombol presisi (<em>Atas, Tengah, Bawah</em>) untuk mengatur posisi vertikal foto sampul header secara <em>real-time</em>.</li>
+                                    <li><strong class="text-dark">Motto Hidup Real-time:</strong> Menambahkan kartu editor Motto Hidup dengan pratinjau ketik <em>real-time</em> di atas banner foto sampul.</li>
+                                    <li><strong class="text-dark">Widget Status Kelengkapan Profil:</strong> Menambahkan widget <em>animated progress bar</em> kalkulasi kelengkapan data profil otomatis (0%-100%).</li>
+                                    <li><strong class="text-dark">Toggle Password Eye Icons &amp; Rule 12:</strong> Menambahkan tombol pengintip kata sandi (kepatuhan Rule 2 &amp; Rule 7) serta menetapkan **Rule 12** standarisasi header widget <code>bg-primary text-white</code>.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Version 1.9.2 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-check-filled fs-xl text-success"></i>
+                            </div>
+                            <div class="timeline-content ps-3.5 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v1.9.2</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build:
                                             v1.9.2</span>
                                     </div>

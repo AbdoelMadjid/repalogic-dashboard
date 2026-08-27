@@ -10,9 +10,9 @@
         <div class="col-12">
             <article class="card card-out-of-container border-top-0 shadow-sm mb-4">
                 <div class="position-relative card-side-img overflow-hidden"
-                    style="height: 200px; background-image: url('{{ asset('assets/images/profile-bg.jpg') }}')">
+                    style="height: 200px; background-image: url('{{ $user->cover_bg_url }}'); background-size: cover; background-position: center {{ $user->cover_position_y }}%;">
                     <div class="p-4 card-img-overlay rounded-start-0 flex-column gap-2 auth-overlay d-flex align-items-center justify-content-center">
-                        <h3 class="text-white mb-0 fst-italic">"Formulir Kelengkapan Data Identitas KTP & Alamat Pengguna"</h3>
+                        <h3 class="text-white mb-0 fst-italic text-center px-3">"{{ $user->motto }}"</h3>
                     </div>
                 </div>
             </article>
@@ -228,9 +228,9 @@
                                     @endif
                                 </div>
                                 <div class="col-md-9">
-                                    <label for="foto_ktp_input" class="form-label fw-bold text-dark fs-14">Unggah Berkas Foto KTP</label>
+                                    <label for="foto_ktp_input" class="form-label fw-bold text-dark fs-14">Unggah Berkas Foto Kartu KTP</label>
                                     <input class="form-control" type="file" id="foto_ktp_input" name="foto_ktp" accept="image/*" />
-                                    <span class="fs-12 text-muted mt-1 d-block">Unggah foto KTP fisik yang jelas (Maksimal 2MB).</span>
+                                    <span class="fs-12 text-muted mt-1 d-block">Unggah berkas foto dokumen KTP fisik yang jelas (Maksimal 2MB).</span>
                                 </div>
                             </div>
                         </div>

@@ -106,13 +106,19 @@ Jalankan migrasi tabel beserta seeder bawaan (data role, permission, & user awal
 php artisan migrate --seed
 ```
 
-### 7. Instalasi Dependensi Frontend & Compile Assets
+### 7. Buat Symbolic Link Storage (PENTING untuk Foto Avatar & Logo)
+Jalankan perintah penyambungan direktori storage publik agar gambar foto avatar pengguna, logo aplikasi, dan berkas KTP terhubung secara publik:
+```bash
+php artisan storage:link
+```
+
+### 8. Instalasi Dependensi Frontend & Compile Assets
 ```bash
 npm install
 npm run build
 ```
 
-### 8. Menjalankan Server Lokal
+### 9. Menjalankan Server Lokal
 Anda dapat menjalankan server pengembangan menggunakan perintah Artisan atau script Concurrently:
 
 *Menggunakan Artisan Serve:*
@@ -199,6 +205,7 @@ php artisan pail
 
 | Tag | Tanggal Rilis | Deskripsi / Catatan Perubahan |
 | :--- | :--- | :--- |
+| **`v1.9.3`** | 2026-08-27 | Pemisahan Tabel Config User, Pengatur Posisi Sampul Interaktif, Motto Hidup & Widget Progress Kelengkapan Profil |
 | **`v1.9.2`** | 2026-08-27 | Centralized Versioning Engine, Git Log Timestamps & Mandatory Changelog Standard (Rule 11) |
 | **`v1.9.1`** | 2026-08-27 | Standarisasi Hirarki View Modul (Rule 10), Meta Title Engine & Refineman Sidenav Search UI |
 | **`v1.9.0`** | 2026-08-27 | 100% Dynamic Bilingual Engine, Custom Menu Data-Lang & Modul Terjemahan Bahasa |

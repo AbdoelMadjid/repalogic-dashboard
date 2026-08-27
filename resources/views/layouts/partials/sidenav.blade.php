@@ -31,7 +31,7 @@
                         <a href="#!" class="link-reset">
                             <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}"
                                 class="rounded-circle mb-2 avatar-md object-fit-cover"
-                                style="width: 84px; height: 84px; object-fit: cover;" />
+                                style="width: 84px; height: 84px; object-fit: cover; object-position: top;" />
                             <span class="sidenav-user-name fw-bold d-block text-truncate">{{ auth()->user()->name }}</span>
                             <span class="fs-12 text-muted d-block text-truncate mt-1">{{ auth()->user()->email }}</span>
                         </a>

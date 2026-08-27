@@ -58,11 +58,17 @@ class User extends Authenticatable
             if (filter_var($this->avatar, FILTER_VALIDATE_URL)) {
                 return $this->avatar;
             }
-            if (file_exists(public_path('storage/' . $this->avatar))) {
-                return asset('storage/' . $this->avatar);
+
+            $path = ltrim($this->avatar, '/');
+
+            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+                return asset('storage/' . $path);
             }
-            if (file_exists(public_path($this->avatar))) {
-                return asset($this->avatar);
+            if (file_exists(public_path('storage/' . $path))) {
+                return asset('storage/' . $path);
+            }
+            if (file_exists(public_path($path))) {
+                return asset($path);
             }
         }
 
@@ -84,5 +90,94 @@ class User extends Authenticatable
     public function detail(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(UserDetail::class, 'user_id');
+    }
+
+    /**
+     * Get the user configuration record (Theme & Cover background).
+     */
+    public function config(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(UserConfig::class, 'user_id');
+    }
+
+    /**
+     * Accessor for user cover background banner URL.
+     */
+    public function getCoverBgUrlAttribute(): string
+    {
+        if ($this->config && !empty($this->config->cover_bg_url)) {
+            return $this->config->cover_bg_url;
+        }
+
+        return asset('assets/images/profile-bg.jpg');
+    }
+
+    /**
+     * Accessor for cover background vertical offset percentage (0 to 100).
+     */
+    public function getCoverPositionYAttribute(): int
+    {
+        return $this->config?->cover_position_y ?? 0;
+    }
+
+    /**
+     * Accessor for user profile motto quote.
+     */
+    public function getMottoAttribute(): string
+    {
+        return $this->config?->motto ?: 'Setiap hari adalah kesempatan baru untuk belajar dan berkarya.';
+    }
+
+    /**
+     * Calculate user profile completion percentage (0 to 100).
+     */
+    public function getProfileCompletionPercentageAttribute(): int
+    {
+        $score = 0;
+
+        // 1. Avatar (10%)
+        if (!empty($this->avatar)) {
+            $score += 10;
+        }
+
+        // 2. Cover image (10%)
+        if ($this->config && !empty($this->config->cover_image)) {
+            $score += 10;
+        }
+
+        // 3. Motto (10%)
+        if ($this->config && !empty($this->config->motto)) {
+            $score += 10;
+        }
+
+        $detail = $this->detail;
+        if ($detail) {
+            // 4. NIK (15%)
+            if (!empty($detail->nik)) {
+                $score += 15;
+            }
+            // 5. Nama KTP (10%)
+            if (!empty($detail->nama_ktp)) {
+                $score += 10;
+            }
+            // 6. Tempat & Tanggal Lahir (10%)
+            if (!empty($detail->tempat_lahir) && !empty($detail->tanggal_lahir)) {
+                $score += 10;
+            }
+            // 7. Jenis Kelamin & Agama (10%)
+            if (!empty($detail->jenis_kelamin) && !empty($detail->agama)) {
+                $score += 10;
+            }
+            // 8. Alamat Jalan, RT, RW (15%)
+            if (!empty($detail->alamat_jalan) || !empty($detail->rt)) {
+                $score += 15;
+            }
+            // 9. Kec, Kota, Prov (10%)
+            if (!empty($detail->kecamatan) && !empty($detail->kabupaten_kota)) {
+                $score += 10;
+            }
+        }
+
+        return min(100, $score);
     }
 }

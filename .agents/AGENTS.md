@@ -57,3 +57,10 @@
   1. Update `APP_VERSION` in `.env` / `config/app.php` (if releasing a new version).
   2. Add the timeline entry with exact timestamp (YYYY-MM-DD HH:mm WIB) in `resources/views/template/documentation/changelog.blade.php`.
   3. Add the release entry to the Release History table in `README.md`.
+
+## 12. Card Header Color & Widget Styling Standard
+- ALL main widget card headers (`<div class="card-header">`) across all pages MUST follow standardized theme styling:
+  - Main Settings / Primary Action Widget Headers MUST use `class="card-header bg-primary text-white py-3"` with white title text (`<h5 class="card-title text-white mb-0">`).
+  - Data / Content / Neutral Widget Headers MUST use clean white background (`class="card-header bg-white py-3"`).
+  - Do NOT use generic `bg-light` for primary card headers.
+

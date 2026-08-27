@@ -71,7 +71,7 @@
                                             <td class="text-center fw-semibold text-muted">{{ $loop->iteration }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="rounded-circle me-2 object-fit-cover border" style="width: 38px; height: 38px;">
+                                                    <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="rounded-circle me-2 object-fit-cover border" style="width: 38px; height: 38px; object-fit: cover; object-position: top;">
                                                     <div>
                                                         <h6 class="mb-0 fs-13 fw-semibold">{{ $user->name }}</h6>
                                                         <span class="text-muted fs-12">{{ $user->email }}</span>
