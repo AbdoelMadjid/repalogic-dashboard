@@ -40,6 +40,180 @@
 
 ## About Repalogic Dashboard
 
+**Repalogic Dashboard** adalah aplikasi sistem manajemen admin & dashboard modern berbasis **Laravel 13** dan **Inspinia Admin Template**. Dashboard ini dirancang untuk memberikan solusi manajemen pengguna yang komprehensif, fleksibel, serta berkinerja tinggi untuk kebutuhan aplikasi skala kecil hingga enterprise.
+
+### Fitur Utama:
+- 🔐 **Manajemen Pengguna & Hak Akses (Spatie Permission Matrix)**: Pengaturan Role, Permission, Akses User, dan Akses Role dengan tampilan matrix table yang intuitif.
+- ⚡ **Yajra DataTables Integration**: Pengolahan data server-side tabel yang cepat dan interaktif.
+- 🌐 **Engine Internasionalisasi Dua Bahasa (Bilingual ID & EN)**: Dukungan multi-bahasa terintegrasi.
+- 🎨 **Inspinia Modern UI & Icon Explorers**: Antarmuka responsif dengan penjelajah ikon Tabler & Lucide secara lengkap.
+- 🧩 **Engine Navigasi Dinamis & Breadcrumb Auto-Scroll**: Navigasi 3 level dinamis dengan pemusatan otomatis menu aktif.
+- 🛠️ **Dukungan Aplikasi & Backup Database**: Halaman profil aplikasi, fitur sistem, dan utilitas backup database terintegrasi.
+
+---
+
+## Langkah-langkah Git Clone & Instalasi
+
+Ikuti langkah-langkah di bawah ini untuk memasang dan menjalankan proyek **Repalogic Dashboard** di lingkungan lokal Anda:
+
+### 1. Prasyarat Sistem
+- **PHP**: `>= 8.3`
+- **Composer**: `>= 2.x`
+- **Node.js & NPM**: `>= 18.x` / `>= 20.x`
+- **Database**: MySQL / MariaDB (Rekomendasi: Laragon / XAMPP)
+- **Git**
+
+### 2. Clone Repository
+Buka terminal / command line, lalu jalankan perintah:
+```bash
+git clone https://github.com/AbdoelMadjid/repalogic-dashboard.git
+cd repalogic-dashboard
+```
+
+### 3. Instalasi Dependensi PHP (Composer)
+```bash
+composer install
+```
+
+### 4. Konfigurasi Environment (`.env`)
+Salin file `.env.example` menjadi `.env`:
+```bash
+cp .env.example .env
+```
+*Catatan untuk Windows (CMD/PowerShell):*
+```powershell
+copy .env.example .env
+```
+
+Buka file `.env` dan sesuaikan konfigurasi database Anda:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=repalogic_dashboard
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+### 5. Generate Application Key
+```bash
+php artisan key:generate
+```
+
+### 6. Migrasi & Seeder Database
+Jalankan migrasi tabel beserta seeder bawaan (data role, permission, & user awal):
+```bash
+php artisan migrate --seed
+```
+
+### 7. Instalasi Dependensi Frontend & Compile Assets
+```bash
+npm install
+npm run build
+```
+
+### 8. Menjalankan Server Lokal
+Anda dapat menjalankan server pengembangan menggunakan perintah Artisan atau script Concurrently:
+
+*Menggunakan Artisan Serve:*
+```bash
+php artisan serve
+```
+Akses aplikasi di browser pada alamat: `http://127.0.0.1:8000`
+
+*Menggunakan Script Development Lengkap (Server, Queue worker, Pail log, Vite):*
+```bash
+composer run dev
+```
+
+---
+
+## Roadmap / Rencana Pengembangan (Round Down Pengembangan)
+
+Berikut adalah tahapan rencana dan arah pengembangan proyek Repalogic Dashboard:
+
+- [x] **Fase 1: Inisialisasi & Integrasi Layout UI Template**
+  - Setup Laravel 13 & integrasi Inspinia Admin Dashboard UI.
+  - Setup komponen dasar Blade Vertical Layout & dynamic breadcrumb engine.
+- [x] **Fase 2: Navigasi Dinamis & Engine Multi-Bahasa**
+  - Implementasi navigasi 3-level dengan auto-scroll active menu centering.
+  - Implementasi bilingual engine (Bahasa Indonesia & Bahasa Inggris).
+  - Integrasi Icon Explorers (Tabler & Lucide Icons).
+- [x] **Fase 3: Manajemen Pengguna & Spatie Permission Matrix**
+  - Halaman Manajemen User, Role, & Permission.
+  - Tampilan Permission Matrix Table (Create, Read, Update, Delete, Lainnya, Semua).
+  - Pengaturan Akses Role & Akses User secara presisi.
+- [x] **Fase 4: Dukungan Aplikasi, Profil & Backup Database**
+  - Modul Profil Pengguna & Profil Aplikasi.
+  - Halaman fitur aplikasi & integrasi backup database.
+- [ ] **Fase 5: Pengayaan Modul E-Commerce & Log Sistem** *(Sedang Berjalan)*
+  - Penyempurnaan modul E-Commerce (Products, Orders, Customers, Refunds, Inventory).
+  - Dashboard analitik & grafik penjualan real-time.
+- [ ] **Fase 6: RESTful API Integration & Multi-tenant Support** *(Rencana Mendatang)*
+  - Penyediaan API endpoints untuk mobile & aplikasi pihak ketiga.
+  - Sistem pengawasan keamanan & audit trail log operasional.
+
+---
+
+## Skema dan Operasional
+
+### 1. Skema Arsitektur & Teknologi
+- **Framework**: Laravel 13 (PHP 8.3+)
+- **Authentication & Authorization**: Spatie Laravel-Permission (`spatie/laravel-permission`)
+- **Data Table Engine**: Yajra Laravel DataTables (`yajra/laravel-datatables-oracle`)
+- **Frontend Stack**: Vite, Bootstrap, Inspinia Assets, jQuery, SweetAlert2, Lucide Icons, Tabler Icons.
+- **Pola Arsitektur**: Model-View-Controller (MVC) dengan Vertical Layout Blade (`layouts.vertical`).
+- **Spatie Permission Matrix**: Penataan permission dikelompokkan berdasarkan Menu Utama & Sub-Menu untuk pengelolaan hak akses yang transparan.
+
+### 2. Alur Operasional & Modul Utama
+- **Manajemen Pengguna (`/manajemenpengguna/*`)**:
+  - `roles`: Pengelolaan data Peran/Role.
+  - `permissions`: Pengelolaan data Hak Akses/Permission.
+  - `user-access`: Pemetaan permission khusus ke setiap pengguna.
+  - `role-access`: Pemetaan permission ke role melalui Permission Matrix.
+- **Dukungan Aplikasi (`/dukunganaplikasi/*`)**:
+  - `app-profile`: Informasi profil dan sistem aplikasi.
+  - `backup`: Pengelolaan & eksekusi cadangan database (Backup DB).
+  - `features`: Katalog fitur dan status aplikasi.
+- **Template & Fitur E-Commerce (`/template/*`)**:
+  - Modul pendukung UI untuk produk, pemesanan, stok, laporan, dan pelanggan.
+
+### 3. Perintah Operasional Penting
+```bash
+# Clear Cache Aplikasi & Konfigurasi
+php artisan optimize:clear
+
+# Menjalankan Seeder Ulang
+php artisan db:seed
+
+# Menjalankan Queue Worker untuk Tugas Latar Belakang
+php artisan queue:listen
+
+# Pail Log Streaming (Monitoring Log Real-Time)
+php artisan pail
+```
+
+---
+
+## Riwayat Release / Tag
+
+| Tag | Tanggal Rilis | Deskripsi / Catatan Perubahan |
+| :--- | :--- | :--- |
+| **`v1.8.2`** | 2026-08-02 | Melengkapi halaman profil pengguna |
+| **`v1.8.1`** | 2026-08-02 | Tambah halaman fitur aplikasi dan backup db di dukungan aplikasi |
+| **`v1.8.0`** | 2026-08-02 | Tambah halaman role, permission, akses user, akses role dan user di Manajemen Pengguna |
+| **`v1.7.0`** | 2026-08-01 | Perbaikan ngoding & optimalisasi struktur views |
+| **`v1.6.0`** | 2026-08-01 | Bilingual Internationalization Engine (ID & EN) |
+| **`v1.5.0`** | 2026-08-01 | Tabler & Lucide Full Icon Explorers |
+| **`v1.4.0`** | 2026-08-01 | Documentation Module & Interactive Tree Engine |
+| **`v1.3.0`** | 2026-08-01 | Layout Group Demo & Custom Pages Refactoring |
+| **`v1.2.0`** | 2026-08-01 | Sidenav Auto-Scroll Centering & Component Group |
+| **`v1.1.0`** | 2026-08-01 | Dynamic Navigation Config & Breadcrumb Engine |
+| **`v1.0.0`** | 2026-08-01 | Initial Project Setup |
+
+---
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
