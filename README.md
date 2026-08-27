@@ -43,12 +43,16 @@
 **Repalogic Dashboard** adalah aplikasi sistem manajemen admin & dashboard modern berbasis **Laravel 13** dan **Inspinia Admin Template**. Dashboard ini dirancang untuk memberikan solusi manajemen pengguna yang komprehensif, fleksibel, serta berkinerja tinggi untuk kebutuhan aplikasi skala kecil hingga enterprise.
 
 ### Fitur Utama:
+- 🎨 **Engine Dinamisasi Tema & Seksi Website**: Pengaturan tema publik dinamis dengan *Crop Simulator*, *Background Attachment Paralaks 3D*, *Deteksi Orientasi Gambar*, dan arsitektur *Loose Coupling* baku.
 - 🔐 **Manajemen Pengguna & Hak Akses (Spatie Permission Matrix)**: Pengaturan Role, Permission, Akses User, dan Akses Role dengan tampilan matrix table yang intuitif.
 - ⚡ **Yajra DataTables Integration**: Pengolahan data server-side tabel yang cepat dan interaktif.
 - 🌐 **Engine Internasionalisasi Dua Bahasa (Bilingual ID & EN)**: Dukungan multi-bahasa terintegrasi.
 - 🎨 **Inspinia Modern UI & Icon Explorers**: Antarmuka responsif dengan penjelajah ikon Tabler & Lucide secara lengkap.
 - 🧩 **Engine Navigasi Dinamis & Breadcrumb Auto-Scroll**: Navigasi 3 level dinamis dengan pemusatan otomatis menu aktif.
 - 🛠️ **Dukungan Aplikasi & Backup Database**: Halaman profil aplikasi, fitur sistem, dan utilitas backup database terintegrasi.
+
+### 📚 Dokumentasi Arsitektur Teknis:
+- 📄 [**Arsitektur Engine Dinamisasi Tema & Seksi Website**](docs/arsitektur_dinamisasi_tema_website.md) — Panduan resmi arsitektur *Loose Coupling*, *Crop Simulator*, *Efek Paralaks 3D*, *Metadata Orientasi Gambar*, dan *Pemisahan Modal Modular*.
 
 ---
 
