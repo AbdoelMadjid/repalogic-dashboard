@@ -51,7 +51,8 @@
 - 🧩 **Engine Navigasi Dinamis & Breadcrumb Auto-Scroll**: Navigasi 3 level dinamis dengan pemusatan otomatis menu aktif.
 - 🛠️ **Dukungan Aplikasi & Backup Database**: Halaman profil aplikasi, fitur sistem, dan utilitas backup database terintegrasi.
 
-### 📚 Dokumentasi Arsitektur Teknis:
+### 📚 Dokumentasi Arsitektur Teknis & Riwayat Rilis:
+- 🏷️ [**Riwayat Lengkap Release & Git Tag**](docs/riwayat_release_dan_tag.md) — Daftar versi rilis, git tag, dan ringkasan pembaruan fitur per versi.
 - 📄 [**Arsitektur Engine Dinamisasi Tema & Seksi Website**](docs/arsitektur_dinamisasi_tema_website.md) — Panduan resmi arsitektur *Loose Coupling*, *Crop Simulator*, *Efek Paralaks 3D*, *Metadata Orientasi Gambar*, dan *Pemisahan Modal Modular*.
 - 📄 [**Alur Registrasi Mandiri & Persetujuan Akun Pengguna**](docs/alur_registrasi_dan_persetujuan_pengguna.md) — Panduan lengkap alur pendaftaran mandiri, *User Approval Workflow*, proteksi login *Zero-Trust*, *Universal Notification Hub*, dan aktivasi Spatie Role otomatis.
 - 📄 [**Alur Penonaktifan Mandiri & Aktivasi Kembali Akun Pengguna**](docs/alur_penonaktifan_dan_aktivasi_akun_pengguna.md) — Panduan lengkap *Danger Zone* penonaktifan profil mandiri, form pengajuan aktivasi akun nonaktif, integrasi notifikasi topbar, dan eksekusi admin.
@@ -178,15 +179,36 @@ Berikut adalah tahapan rencana dan arah pengembangan proyek Repalogic Dashboard:
 - **Pola Arsitektur**: Model-View-Controller (MVC) dengan Vertical Layout Blade (`layouts.vertical`).
 - **Spatie Permission Matrix**: Penataan permission dikelompokkan berdasarkan Menu Utama & Sub-Menu untuk pengelolaan hak akses yang transparan.
 
-### 2. Alur Operasional & Modul Utama
-- **Manajemen Pengguna (`/manajemenpengguna/*`)**:
-  - `roles`: Pengelolaan data Peran/Role.
-  - `permissions`: Pengelolaan data Hak Akses/Permission.
-  - `user-access`: Pemetaan permission khusus ke setiap pengguna.
-  - `role-access`: Pemetaan permission ke role melalui Permission Matrix.
-- **Dukungan Aplikasi (`/dukunganaplikasi/*`)**:
-  - `app-profile`: Informasi profil dan sistem aplikasi.
-  - `backup`: Pengelolaan & eksekusi cadangan database (Backup DB).
+Aplikasi siap diakses melalui peramban di: **`http://127.0.0.1:8000`** atau host lokal virtual host Laragon Anda.
+
+---
+
+## 🏛️ Struktur Hirarki Modul & Arsitektur Direktori
+
+Proyek ini menerapkan standar hirarki arsitektur seragam berbasis kelompok modul:
+
+### 1. Struktur Folder Backend (Admin)
+- **Controllers**: `app/Http/Controllers/Admin/{Kelompok}/{Modul}Controller.php`
+- **Form Requests**: `app/Http/Requests/Admin/{Kelompok}/{Modul}Request.php`
+- **Models**: `app/Models/Admin/{Kelompok}/{Modul}.php`
+- **Blade Views**: `resources/views/admin/{kelompok}/{modul}.blade.php`
+- **Modular Partials**: `resources/views/admin/{kelompok}/partials/{sub_komponen}.blade.php`
+
+### 2. Kelompok Modul Utama
+- **Manajemen Pengguna (`/admin/manajemenpengguna/*`)**:
+  - `users`: Manajemen akun pengguna, avatar, approval status, dan aktivasi/penonaktifan.
+  - `roles`: Manajemen Spatie Role & Spatie Permission Matrix table.
+  - `permissions`: Manajemen izin akses CRUD per modul.
+  - `akses-user` & `akses-role`: Penetapan akses individual & role.
+- **Dukungan Aplikasi (`/admin/dukunganaplikasi/*`)**:
+  - `profil-aplikasi`: Pengaturan identitas, logo, favicon, dan kontak sistem.
+  - `fitur-aplikasi`: Manajemen dinamis komponen topbar, menu template sidebar, dan fitur sistem.
+  - `backup-db`: Manajemen pencadangan database SQL otomatis.
+  - `translation`: Manajemen internasionalisasi dua bahasa (ID & EN).
+- **Website Dinamis (`/admin/website/*`)**:
+  - `themes`: Pengaturan tema landing page & seksi website dinamis (*Crop Simulator*, paralaks 3D).
+- **Template Modul Dokumentasi & Changelog (`/template/documentation/*`)**:
+  - `changelog`: Timeline riwayat rilis sinkron dengan Git commit.
   - `features`: Katalog fitur dan status aplikasi.
 - **Template & Fitur E-Commerce (`/template/*`)**:
   - Modul pendukung UI untuk produk, pemesanan, stok, laporan, dan pelanggan.
@@ -208,34 +230,14 @@ php artisan pail
 
 ---
 
-## Riwayat Release / Tag
+## 🏷️ Riwayat Release / Git Tag
 
-| Tag | Tanggal Rilis | Deskripsi / Catatan Perubahan |
-| :--- | :--- | :--- |
-| **`v2.1.3`** | 2026-08-27 | Universal SweetAlert2 Notification Engine & Global Helpers, High-Contrast Checkbox SVG Fix, Multi-Select Filter Sync & Route Order Optimization |
-| **`v2.1.2`** | 2026-08-27 | Overhaul & Refactoring Modul Fitur Aplikasi: Skema Dynamic Row CRUD, Instant AJAX Toggle, Bulk Group Action & Backward-Compatible Helper Object |
-| **`v2.1.1`** | 2026-08-27 | Edit Avatar Pengguna, Tampilan Detail (user_details & user_configs), Restriksi Menu Sidenav, Notifikasi Khusus Superadmin/Admin & Perapian Estetika Validasi |
-| **`v2.1.0`** | 2026-08-27 | Pembaruan Sistem Otentikasi, Idle Lock Screen, User Approval, Penonaktifan & Aktivasi Akun Mandiri, Notification Hub & Admin Reset |
-| **`v2.0.0`** | 2026-08-27 | Engine Dinamisasi Tema & Seksi Website Terpusat, Crop Simulator & Arsitektur Partial Modular |
-| **`v1.9.3`** | 2026-08-27 | Pemisahan Tabel Config User, Pengatur Posisi Sampul Interaktif, Motto Hidup & Widget Progress Kelengkapan Profil |
-| **`v1.9.2`** | 2026-08-27 | Centralized Versioning Engine, Git Log Timestamps & Mandatory Changelog Standard (Rule 11) |
-| **`v1.9.1`** | 2026-08-27 | Standarisasi Hirarki View Modul (Rule 10), Meta Title Engine & Refineman Sidenav Search UI |
-| **`v1.9.0`** | 2026-08-27 | 100% Dynamic Bilingual Engine, Custom Menu Data-Lang & Modul Terjemahan Bahasa |
-| **`v1.8.2`** | 2026-08-02 | Melengkapi halaman profil pengguna |
-| **`v1.8.1`** | 2026-08-02 | Tambah halaman fitur aplikasi dan backup db di dukungan aplikasi |
-| **`v1.8.0`** | 2026-08-02 | Tambah halaman role, permission, akses user, akses role dan user di Manajemen Pengguna |
-| **`v1.7.0`** | 2026-08-01 | Perbaikan ngoding & optimalisasi struktur views |
-| **`v1.6.0`** | 2026-08-01 | Bilingual Internationalization Engine (ID & EN) |
-| **`v1.5.0`** | 2026-08-01 | Tabler & Lucide Full Icon Explorers |
-| **`v1.4.0`** | 2026-08-01 | Documentation Module & Interactive Tree Engine |
-| **`v1.3.0`** | 2026-08-01 | Layout Group Demo & Custom Pages Refactoring |
-| **`v1.2.0`** | 2026-08-01 | Sidenav Auto-Scroll Centering & Component Group |
-| **`v1.1.0`** | 2026-08-01 | Dynamic Navigation Config & Breadcrumb Engine |
-| **`v1.0.0`** | 2026-08-01 | Initial Project Setup |
+Catatan riwayat rilis versi, git tag, dan ringkasan pembaruan fitur dikelola secara terpusat pada file dokumentasi:
+
+👉 **[Lihat Riwayat Lengkap Release & Git Tag (`docs/riwayat_release_dan_tag.md`)](docs/riwayat_release_dan_tag.md)**
 
 ---
 
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-

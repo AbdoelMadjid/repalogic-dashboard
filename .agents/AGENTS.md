@@ -58,11 +58,11 @@
 - Do NOT create a subfolder with `index.blade.php` for admin page views (e.g. use `resources/views/admin/dukunganaplikasi/translation.blade.php`, NOT `resources/views/admin/dukunganaplikasi/translation/index.blade.php`).
 - Supporting modals, form elements, and guide components MUST be placed inside the `resources/views/admin/{kelompok}/partials/` folder (e.g. `translation_form.blade.php`, `bilingual_guide_modal.blade.php`).
 
-## 11. Mandatory Changelog & README.md Update Standard
+## 11. Mandatory Changelog & Release History Update Standard
 - Whenever new features are added, updated, or modified, and before performing a git push or tag release:
   1. Update `APP_VERSION` in `.env`, `.env.example`, and `config/app.php` (if releasing a new version).
   2. Add the timeline entry with exact timestamp (YYYY-MM-DD HH:mm WIB) in `resources/views/template/documentation/changelog.blade.php`.
-  3. Add the release entry to the Release History table in `README.md`.
+  3. Add the release entry to the Release History table in `docs/riwayat_release_dan_tag.md`.
 
 ## 12. Card Header Color & Widget Styling Standard
 - ALL main widget card headers (`<div class="card-header">`) across all pages MUST follow standardized theme styling:
