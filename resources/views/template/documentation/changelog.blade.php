@@ -51,18 +51,18 @@
                                         <h5 class="fw-bold mb-0">v1.9.0</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest
                                             Release</span>
-                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Commit:
-                                            1411044 &amp; 0ae88be</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build:
+                                            v1.9.0</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-08-02</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-08-27</span>
                                 </div>
-                                <h6 class="fw-semibold text-dark mb-2">SweetAlert2 Universal Interceptor, Table Alignment Standard, Back to Top &amp; Sidenav Special Menu Fixes</h6>
+                                <h6 class="fw-semibold text-dark mb-2">100% Dynamic Bilingual Engine, Custom Menu Data-Lang &amp; Admin Translation Management Module</h6>
                                 <ul class="text-muted fs-14 mb-3 ps-3">
-                                    <li><strong class="text-dark">SweetAlert2 Universal Interceptor:</strong> Integrated global form submit listener (<code>data-confirm="..."</code>) intercepting all delete/reset forms with modern SweetAlert2 popups, custom red action buttons, and 12px button gaps.</li>
-                                    <li><strong class="text-dark">Standar Format Header Tabel (1-Baris &amp; Center):</strong> Enforced <code>align-middle text-center text-nowrap</code> across all admin DataTables, user management tables, and modal matrix tables for single-line centered presentation.</li>
-                                    <li><strong class="text-dark">Fix Posisi Sidenav Special Menu:</strong> Positioned Special Menu at absolute bottom of sidenav screen (5px-6px gap matching menu row spacing) with button background container preservation.</li>
-                                    <li><strong class="text-dark">Tombol Floating Back-to-Top:</strong> Added interactive smooth back-to-top floating scroll button partial (<code>layouts/partials/back-to-top.blade.php</code>).</li>
-                                    <li><strong class="text-dark">Pembersihan Seeder &amp; Konfigurasi:</strong> Refactored <code>FiturAplikasiSeeder</code> and <code>MenuManajemenPenggunaSeeder</code> for streamlined default app features.</li>
+                                    <li><strong class="text-dark">Kolom Kustom <code>data_lang</code> pada Tabel &amp; Modal Menu:</strong> Added <code>data_lang</code> migration, Eloquent model attribute, validation rules, and input field on <code>menu.blade.php</code> allowing custom translation keys for database menus.</li>
+                                    <li><strong class="text-dark">Modul Terjemahan Bahasa (<code>/admin/dukunganaplikasi/translation</code>):</strong> Built admin translation manager enabling live CRUD operations for <code>id.json</code> and <code>en.json</code> dictionary files without manual server file edits.</li>
+                                    <li><strong class="text-dark">Pengelompokkan Sidebar Menu &amp; Component Labels:</strong> Grouped translation key table dynamically by Sidebar Categories (Database Menus &amp; Template Menus) with origin position badges (<code>Menu Utama</code>, <code>Sub-Menu</code>, <code>Group Header</code>, <code>Label Sistem</code>).</li>
+                                    <li><strong class="text-dark">Modal Petunjuk Operasional Bilingual:</strong> Integrated interactive step-by-step guidance modal (<code>bilingual_guide_modal.blade.php</code>) accessible from both Menu Management and Translation pages.</li>
+                                    <li><strong class="text-dark">Safe Fallback &amp; Standar Proyek (.agents/AGENTS.md):</strong> Preserved graceful name fallback for unmapped keys and enforced project standards (SweetAlert2 confirm, single-line centered headers, PSR-4 autoloading).</li>
                                 </ul>
                                 <hr class="border-dashed my-3" />
                             </div>

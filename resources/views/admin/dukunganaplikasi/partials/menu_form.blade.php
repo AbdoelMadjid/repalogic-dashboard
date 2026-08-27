@@ -5,6 +5,11 @@
     </div>
 
     <div class="col-md-6 mb-3">
+        <label for="form_data_lang" class="form-label">Translation Key (Data Lang)</label>
+        <input type="text" class="form-control menu-input" id="form_data_lang" name="data_lang" placeholder="Contoh: manajemen-user (Otomatis jika kosong)">
+    </div>
+
+    <div class="col-md-6 mb-3">
         <label for="form_main_menu_id" class="form-label">Main Menu Parent</label>
         <select class="form-select menu-input" id="form_main_menu_id" name="main_menu_id">
             <option value="">-- Tanpa Parent (Menu Utama) --</option>

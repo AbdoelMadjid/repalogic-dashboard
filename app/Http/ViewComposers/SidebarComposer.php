@@ -3,6 +3,7 @@
 namespace App\Http\ViewComposers;
 
 use App\Models\Admin\DukunganAplikasi\Menu;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class SidebarComposer
@@ -41,6 +42,7 @@ class SidebarComposer
                 if (!isset($groupedMenus[$groupKey])) {
                     $groupedMenus[$groupKey] = [
                         'title' => $groupKey,
+                        'data_lang' => Str::slug($groupKey),
                         'items' => [],
                     ];
                 }
@@ -77,6 +79,7 @@ class SidebarComposer
         $item = [
             'id' => 'db-menu-' . $menu->id,
             'title' => $menu->name,
+            'data_lang' => $menu->data_lang ?: Str::slug($menu->name),
             'icon' => $isChild ? null : $menu->icon,
             'route' => $menu->route,
             'url' => $menu->url,

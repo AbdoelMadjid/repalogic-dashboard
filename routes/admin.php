@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DukunganAplikasi\BackupDbController;
 use App\Http\Controllers\Admin\DukunganAplikasi\FiturAplikasiController;
 use App\Http\Controllers\Admin\DukunganAplikasi\MenuController;
 use App\Http\Controllers\Admin\DukunganAplikasi\ProfilAplikasiController;
+use App\Http\Controllers\Admin\DukunganAplikasi\TranslationController;
 use App\Http\Controllers\Admin\ManajemenPengguna\AksesRoleController;
 use App\Http\Controllers\Admin\ManajemenPengguna\AksesUserController;
 use App\Http\Controllers\Admin\ManajemenPengguna\PermissionController;
@@ -39,6 +40,7 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
         Route::post('menu/toggle-status', [MenuController::class, 'toggleStatus'])->name('menu.toggle-status');
         Route::post('menu/reorder', [MenuController::class, 'reorder'])->name('menu.reorder');
         Route::resource('menu', MenuController::class);
+        Route::resource('translation', TranslationController::class);
 
         Route::get('backup-db', [BackupDbController::class, 'index'])->name('backup-db.index');
         Route::post('backup-db/process', [BackupDbController::class, 'processBackup'])->name('backup-db.process');

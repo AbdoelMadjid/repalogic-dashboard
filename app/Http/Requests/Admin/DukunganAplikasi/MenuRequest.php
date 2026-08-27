@@ -23,6 +23,7 @@ class MenuRequest extends FormRequest
 
         return [
             'name' => 'required|string|max:255',
+            'data_lang' => 'nullable|string|max:100',
             'main_menu_id' => 'nullable|exists:menus,id' . ($menuId ? "|different:id" : ''),
             'icon' => 'nullable|string|max:100',
             'route' => 'nullable|string|max:255',
@@ -44,6 +45,7 @@ class MenuRequest extends FormRequest
     {
         return [
             'name' => 'Nama Menu',
+            'data_lang' => 'Key Terjemahan (Data Lang)',
             'main_menu_id' => 'Main Menu Parent',
             'icon' => 'Icon Menu',
             'route' => 'Nama Route',

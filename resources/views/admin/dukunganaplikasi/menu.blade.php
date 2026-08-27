@@ -15,11 +15,16 @@
                                 ⚪ <i class="ti ti-dots-vertical text-secondary"></i> Drag <strong>Sub-Menu</strong> (hanya dalam menu utamanya).
                             </p>
                         </div>
-                        @can('create dukunganaplikasi/menu')
-                            <button type="button" class="btn btn-primary btn-sm btn-menu-action" data-action="create">
-                                <i class="ti ti-plus me-1"></i> Tambah Menu Baru
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#bilingualGuideModal">
+                                <i class="ti ti-help-circle me-1"></i> Petunjuk Bilingual
                             </button>
-                        @endcan
+                            @can('create dukunganaplikasi/menu')
+                                <button type="button" class="btn btn-primary btn-sm btn-menu-action" data-action="create">
+                                    <i class="ti ti-plus me-1"></i> Tambah Menu Baru
+                                </button>
+                            @endcan
+                        </div>
                     </div>
                     <div class="card-body">
                         @if (session('success'))
@@ -665,4 +670,5 @@
             }
         });
     </script>
+    @include('admin.dukunganaplikasi.partials.bilingual_guide_modal')
 @endsection

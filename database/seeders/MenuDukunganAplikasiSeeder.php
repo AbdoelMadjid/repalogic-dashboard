@@ -47,5 +47,13 @@ class MenuDukunganAplikasiSeeder extends BaseMenuSeeder
             'route' => 'admin.dukunganaplikasi.backup-db.index',
         ]);
         $this->attachMenupermission($sm4, ['create', 'read', 'update', 'delete'], ['superadmin', 'admin']);
+
+        $sm5 = $this->createSubMenu($mm, [
+            'name' => 'Terjemahan Bahasa',
+            'data_lang' => 'management-translation',
+            'url' => 'admin/dukunganaplikasi/translation',
+            'route' => 'admin.dukunganaplikasi.translation.index',
+        ]);
+        $this->attachMenupermission($sm5, ['create', 'read', 'update', 'delete'], ['superadmin', 'admin']);
     }
 }

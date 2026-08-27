@@ -15,6 +15,7 @@ class Menu extends Model
 
     protected $fillable = [
         'name',
+        'data_lang',
         'url',
         'category',
         'icon',
