@@ -23,43 +23,43 @@ Arsitektur ini menerapkan prinsip **Verifikasi & Persetujuan Administrator Terpu
 
 ```mermaid
 flowchart TD
-    subgraph Fase_1 [Fase 1: Permohonan Penonaktifan Akun (User Aktif)]
-        A[Pengguna Aktif Masuk ke /admin/profil-pengguna] --> B[Scroll ke Zona Bahaya di Bawah Data KTP]
-        B --> C[Klik Tombol 'Minta Nonaktifkan Akun']
-        C --> D[Isi Alasan Penonaktifan pada Modal Form]
-        D --> E[Submit ke ProfilPenggunaController@requestDeactivation]
-        E --> F[Update DB: deactivation_requested_at=now, deactivation_reason=text]
-        F --> G[Tampilkan Banner Status Pengajuan Kuning & Tombol Batalkan]
+    subgraph Fase_1 ["Fase 1: Permohonan Penonaktifan Akun (User Aktif)"]
+        A["Pengguna Aktif Masuk ke /admin/profil-pengguna"] --> B["Scroll ke Zona Bahaya di Bawah Data KTP"]
+        B --> C["Klik Tombol 'Minta Nonaktifkan Akun'"]
+        C --> D["Isi Alasan Penonaktifan pada Modal Form"]
+        D --> E["Submit ke ProfilPenggunaController@requestDeactivation"]
+        E --> F["Update DB: deactivation_requested_at=now, deactivation_reason=text"]
+        F --> G["Tampilkan Banner Status Pengajuan Kuning & Tombol Batalkan"]
     end
 
-    subgraph Fase_2 [Fase 2: Eksekusi Penonaktifan oleh Administrator]
-        F --> H[NotificationService Mendeteksi deactivation_requested_at]
-        H --> I[Lonceng Topbar Admin Menampilkan Badge Merah 'Minta Nonaktif']
-        I --> J[Admin Klik Notifikasi Topbar -> Buka users?search=Nama]
-        J --> K[Tabel Admin Menampilkan Badge 'Minta Nonaktif' & Tombol Merah 'Nonaktifkan']
-        K --> L[Admin Klik Tombol 'Nonaktifkan' + Konfirmasi SweetAlert2]
-        L --> M[Update DB: status='inactive', deactivation_requested_at=null]
+    subgraph Fase_2 ["Fase 2: Eksekusi Penonaktifan oleh Administrator"]
+        F --> H["NotificationService Mendeteksi deactivation_requested_at"]
+        H --> I["Lonceng Topbar Admin Menampilkan Badge Merah 'Minta Nonaktif'"]
+        I --> J["Admin Klik Notifikasi Topbar -> Buka users?search=Nama"]
+        J --> K["Tabel Admin Menampilkan Badge 'Minta Nonaktif' & Tombol Merah 'Nonaktifkan'"]
+        K --> L["Admin Klik Tombol 'Nonaktifkan' + Konfirmasi SweetAlert2"]
+        L --> M["Update DB: status='inactive', deactivation_requested_at=null"]
     end
 
-    subgraph Fase_3 [Fase 3: Pengajuan Aktivasi Kembali (User Nonaktif)]
-        M --> N[Pengguna Nonaktif Coba Login di /login]
-        N --> O[Login Gagal: Muncul Banner Merah 'Akun Dinonaktifkan']
-        O --> P[Pengguna Klik Tombol 'Ajukan Permohonan Aktivasi Akun']
-        P --> Q[Buka Halaman Publik /request-activation]
-        Q --> R[Input Email Terdaftar & Catatan Permohonan Aktivasi]
-        R --> S[Submit ke AccountReactivationController@store]
-        S --> T[Update DB: reactivation_requested_at=now, reactivation_reason=text]
-        T --> U[Redirect ke /login dengan Banner Sukses Hijau]
+    subgraph Fase_3 ["Fase 3: Pengajuan Aktivasi Kembali (User Nonaktif)"]
+        M --> N["Pengguna Nonaktif Coba Login di /login"]
+        N --> O["Login Gagal: Muncul Banner Merah 'Akun Dinonaktifkan'"]
+        O --> P["Pengguna Klik Tombol 'Ajukan Permohonan Aktivasi Akun'"]
+        P --> Q["Buka Halaman Publik /request-activation"]
+        Q --> R["Input Email Terdaftar & Catatan Permohonan Aktivasi"]
+        R --> S["Submit ke AccountReactivationController@store"]
+        S --> T["Update DB: reactivation_requested_at=now, reactivation_reason=text"]
+        T --> U["Redirect ke /login dengan Banner Sukses Hijau"]
     end
 
-    subgraph Fase_4 [Fase 4: Persetujuan Aktivasi oleh Administrator]
-        T --> V[NotificationService Mendeteksi reactivation_requested_at]
-        V --> W[Lonceng Topbar Admin Menampilkan Badge Hijau 'Minta Aktivasi']
-        W --> X[Admin Klik Notifikasi Topbar -> Buka users?search=Nama]
-        X --> Y[Tabel Admin Menampilkan Badge 'Minta Aktivasi' & Tombol Hijau 'Aktifkan']
-        Y --> Z[Admin Klik Tombol 'Aktifkan' + Konfirmasi SweetAlert2]
-        Z --> AA[Update DB: status='active', reactivation_requested_at=null]
-        AA --> AB([Akun Berhasil Aktif Kembali & Pengguna Dapat Login])
+    subgraph Fase_4 ["Fase 4: Persetujuan Aktivasi oleh Administrator"]
+        T --> V["NotificationService Mendeteksi reactivation_requested_at"]
+        V --> W["Lonceng Topbar Admin Menampilkan Badge Hijau 'Minta Aktivasi'"]
+        W --> X["Admin Klik Notifikasi Topbar -> Buka users?search=Nama"]
+        X --> Y["Tabel Admin Menampilkan Badge 'Minta Aktivasi' & Tombol Hijau 'Aktifkan'"]
+        Y --> Z["Admin Klik Tombol 'Aktifkan' + Konfirmasi SweetAlert2"]
+        Z --> AA["Update DB: status='active', reactivation_requested_at=null"]
+        AA --> AB(["Akun Berhasil Aktif Kembali & Pengguna Dapat Login"])
     end
 ```
 

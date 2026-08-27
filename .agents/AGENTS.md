@@ -60,7 +60,7 @@
 
 ## 11. Mandatory Changelog & README.md Update Standard
 - Whenever new features are added, updated, or modified, and before performing a git push or tag release:
-  1. Update `APP_VERSION` in `.env` / `config/app.php` (if releasing a new version).
+  1. Update `APP_VERSION` in `.env`, `.env.example`, and `config/app.php` (if releasing a new version).
   2. Add the timeline entry with exact timestamp (YYYY-MM-DD HH:mm WIB) in `resources/views/template/documentation/changelog.blade.php`.
   3. Add the release entry to the Release History table in `README.md`.
 
