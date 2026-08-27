@@ -212,6 +212,8 @@ php artisan pail
 
 | Tag | Tanggal Rilis | Deskripsi / Catatan Perubahan |
 | :--- | :--- | :--- |
+| **`v2.1.3`** | 2026-08-27 | Universal SweetAlert2 Notification Engine & Global Helpers, High-Contrast Checkbox SVG Fix, Multi-Select Filter Sync & Route Order Optimization |
+| **`v2.1.2`** | 2026-08-27 | Overhaul & Refactoring Modul Fitur Aplikasi: Skema Dynamic Row CRUD, Instant AJAX Toggle, Bulk Group Action & Backward-Compatible Helper Object |
 | **`v2.1.1`** | 2026-08-27 | Edit Avatar Pengguna, Tampilan Detail (user_details & user_configs), Restriksi Menu Sidenav, Notifikasi Khusus Superadmin/Admin & Perapian Estetika Validasi |
 | **`v2.1.0`** | 2026-08-27 | Pembaruan Sistem Otentikasi, Idle Lock Screen, User Approval, Penonaktifan & Aktivasi Akun Mandiri, Notification Hub & Admin Reset |
 | **`v2.0.0`** | 2026-08-27 | Engine Dinamisasi Tema & Seksi Website Terpusat, Crop Simulator & Arsitektur Partial Modular |

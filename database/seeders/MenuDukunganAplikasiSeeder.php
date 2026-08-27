@@ -36,7 +36,7 @@ class MenuDukunganAplikasiSeeder extends BaseMenuSeeder
 
         $sm3 = $this->createSubMenu($mm, [
             'name' => 'Fitur Aplikasi',
-            'url' => 'admin/dukunganaplikasi/fitu-aplikasi',
+            'url' => 'admin/dukunganaplikasi/fitur-aplikasi',
             'route' => 'admin.dukunganaplikasi.fitur-aplikasi.index',
         ]);
         $this->attachMenupermission($sm3, ['create', 'read', 'update', 'delete'], ['superadmin', 'admin']);

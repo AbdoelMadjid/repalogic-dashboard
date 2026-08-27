@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.1.1</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.1.3</strong>
                             </span>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                                     <h6 class="fw-bold mb-0 text-dark">2. Catat Log Changelog</h6>
                                 </div>
                                 <p class="fs-13 text-muted mb-0">
-                                    Buka <code>changelog.blade.php</code> dan tambahkan blok timeline versi rilis terbaru dengan mencantumkan timestamp (YYYY-MM-DD HH:mm WIB).
+                                    Tambahkan blok timeline baru pada <code>changelog.blade.php</code> dengan timestamp WIB dan uraian pembaruan fitur/bug fix.
                                 </p>
                             </div>
                         </div>
@@ -67,11 +67,11 @@
                         <div class="col-md-6 col-lg-3">
                             <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                 <div class="d-flex align-items-center mb-2">
-                                    <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-brand-git fs-14"></i></span>
-                                    <h6 class="fw-bold mb-0 text-dark">3. Catat di README.md</h6>
+                                    <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-markdown fs-14"></i></span>
+                                    <h6 class="fw-bold mb-0 text-dark">3. Update README.md</h6>
                                 </div>
                                 <p class="fs-13 text-muted mb-0">
-                                    Tambahkan baris riwayat versi rilis pada tabel <em>Riwayat Release / Tag</em> di file <code>README.md</code>.
+                                    Perbarui tabel Release History pada file <code>README.md</code> di root direktori proyek.
                                 </p>
                             </div>
                         </div>
@@ -107,12 +107,12 @@
                 <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0 fw-bold"><i class="ti ti-history me-2 text-primary"></i>Git Commit Release
                         Timeline</h5>
-                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">18 Versions Logged</span>
+                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">20 Versions Logged</span>
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
 
-                        <!-- Version 2.1.1 -->
+                        <!-- Version 2.1.3 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -120,8 +120,57 @@
                             <div class="timeline-content ps-3.5 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.1.1</h5>
+                                        <h5 class="fw-bold mb-0">v2.1.3</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.1.3</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 21:35 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Universal SweetAlert2 Notification Engine &amp; Global Helpers, High-Contrast Checkbox SVG Fix, Multi-Select Filter Sync &amp; Route Order Optimization</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Universal SweetAlert2 Global Helpers (Rule 9):</strong> Sentralisasi helper <code>window.showSuccess()</code>, <code>window.showError()</code>, <code>window.showWarning()</code>, <code>window.showConfirm()</code>, dan <code>window.showToast()</code> pada <code>notifications.blade.php</code> dengan dukungan progress bar, tombol OK, reload otomatis, dan tombol Bootstrap standar.</li>
+                                    <li><strong class="text-dark">High-Contrast Vector Checkbox Styling:</strong> Penambahan render eksplisit gambar vektor SVG checkmark putih (<code>stroke-width: 3.5</code>) pada class <code>.high-contrast-checkbox:checked</code> dan <code>:indeterminate</code> agar tanda centang tampil tegas dan jelas di seluruh peramban.</li>
+                                    <li><strong class="text-dark">Multi-Select Checkbox Filter Sync:</strong> Perbaikan kalkulasi baris aktif pada filter kategori sehingga fitur <em>Pilih Semua</em> bekerja akurat hanya pada item kategori yang sedang aktif (misal: 8 item pada Sidebar Menu Group).</li>
+                                    <li><strong class="text-dark">Route Conflict Resolution:</strong> Penataan ulang urutan rute pada <code>routes/admin.php</code> dengan menempatkan rute statis (<code>bulk-action</code>, <code>toggle</code>, <code>toggle-group</code>) sebelum rute parameter <code>{id}</code> dan menambahkan constraint <code>->whereNumber('id')</code>.</li>
+                                    <li><strong class="text-dark">Refined Toast Typography:</strong> Penyesuaian ukuran teks, dimensi ikon (1.5rem), dan ketebalan progress bar (3px) pada notifikasi Toast di sudut kanan atas agar tampak proporsional dan elegan.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.1.2 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-git-commit fs-xl text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3.5 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.1.2</h5>
+                                        <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.1.2</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 20:55 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Overhaul &amp; Refactoring Modul Fitur Aplikasi: Skema Dynamic Row CRUD, Instant AJAX Toggle, Bulk Group Action &amp; Backward-Compatible Helper Object</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Refactoring Skema Tabel <code>fitur_aplikasi</code> (Dynamic Row Architecture):</strong> Mengubah arsitektur tabel yang sebelumnya 1 row dengan puluhan kolom boolean kaku menjadi tabel baris dinamis (<code>id</code>, <code>kode_fitur</code>, <code>nama_fitur</code>, <code>kategori</code>, <code>deskripsi</code>, <code>icon</code>, <code>status</code>, <code>urutan</code>) yang dapat ditambah, diedit, dan dihapus secara leluasa.</li>
+                                    <li><strong class="text-dark">Fasilitas CRUD Lengkap &amp; Modal Form Modular:</strong> Penambahan fungsi Tambah Fitur Baru, Edit Data Fitur, dan Hapus Fitur dengan konfirmasi SweetAlert2 (Rule 9) melalui partial <code>partials/fitur_aplikasi_modal.blade.php</code> (Rule 10).</li>
+                                    <li><strong class="text-dark">Instant AJAX Switch Toggle &amp; Bulk Group Control:</strong> Pengalihan status fitur dapat dilakukan langsung dari tabel secara real-time via AJAX tanpa reload halaman, dilengkapi indikator badge status dan tombol pengalih massal per kategori (<em>Tampilkan Semua / Sembunyikan Semua</em>).</li>
+                                    <li><strong class="text-dark">Backward-Compatible <code>FeatureSettingMap</code> Helper:</strong> Implementasi wrapper class <code>FeatureSettingMap</code> yang kompatibel dengan akses properti dinamis (<code>$appFeatures-&gt;topbar_search_box</code>) dan helper <code>FiturAplikasi::isActive('kode_fitur')</code> sehingga tidak merusak integrasi topbar maupun sidebar.</li>
+                                    <li><strong class="text-dark">Seeder Bawaan Terstruktur:</strong> Penyesuaian <code>FiturAplikasiSeeder</code> untuk memuat 20 fitur bawaan standar (12 topbar header dan 8 sidebar menu groups) secara otomatis.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.1.1 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-git-commit fs-xl text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3.5 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.1.1</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.1.1</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 19:10 WIB</span>

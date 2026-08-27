@@ -11,33 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::dropIfExists('fitur_aplikasi');
+
         Schema::create('fitur_aplikasi', function (Blueprint $table) {
             $table->id();
-            
-            // Topbar Features
-            $table->boolean('topbar_search_box')->default(true);
-            $table->boolean('topbar_megamenu_header')->default(true);
-            $table->boolean('topbar_megamenu_apps')->default(true);
-            $table->boolean('topbar_theme_toggler')->default(true);
-            $table->boolean('topbar_apps_dropdown')->default(true);
-            $table->boolean('topbar_messages')->default(true);
-            $table->boolean('topbar_notifications')->default(true);
-            $table->boolean('topbar_fullscreen')->default(true);
-            $table->boolean('topbar_monochrome')->default(true);
-            $table->boolean('topbar_customizer')->default(true);
-            $table->boolean('topbar_language')->default(true);
-            $table->boolean('topbar_user_dropdown')->default(true);
-
-            // Sidenav Group Menus (Template)
-            $table->boolean('menu_group_main')->default(true);
-            $table->boolean('menu_group_apps')->default(true);
-            $table->boolean('menu_group_custom_pages')->default(true);
-            $table->boolean('menu_group_layouts')->default(true);
-            $table->boolean('menu_group_components')->default(true);
-            $table->boolean('menu_group_documentation')->default(true);
-            $table->boolean('menu_group_menu_item')->default(true);
-            $table->boolean('menu_special_menu')->default(true);
-
+            $table->string('kode_fitur', 100)->unique();
+            $table->string('nama_fitur', 255);
+            $table->string('kategori', 100)->default('topbar')->index();
+            $table->text('deskripsi')->nullable();
+            $table->string('icon', 100)->nullable();
+            $table->boolean('status')->default(true)->index();
+            $table->integer('urutan')->default(0);
+            $table->boolean('is_system')->default(false);
             $table->timestamps();
         });
     }

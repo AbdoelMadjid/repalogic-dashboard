@@ -38,10 +38,16 @@
 - Always apply `align-middle text-center text-nowrap` to `<thead class="...">`, `<tr class="...">`, and individual `<th>` tags.
 - This prevents header text from wrapping onto multiple lines and ensures uniform, clean table styling.
 
-## 9. SweetAlert2 Universal Delete Confirmation Standard
-- NEVER use native browser `confirm('...')` popups for delete or reset actions.
-- Form submit confirmations MUST use the `data-confirm="..."` attribute on `<form data-confirm="Message text...">`.
-- The global submit event listener in `layouts/partials/notifications.blade.php` automatically intercepts forms with `data-confirm`, presenting a modern SweetAlert2 modal with a 12px button gap and custom styling.
+## 9. SweetAlert2 Universal Notification & Confirmation Standard
+- NEVER use native browser `alert('...')` or `confirm('...')` popups.
+- Standard submit confirmations on HTML forms MUST use the `data-confirm="..."` attribute on `<form data-confirm="Pesan konfirmasi...">`, which is automatically intercepted by the global listener in `layouts/partials/notifications.blade.php`.
+- For JavaScript & AJAX interactions, always use the global SweetAlert2 helpers exposed on `window` (defined in `layouts/partials/notifications.blade.php`):
+  - `window.showSuccess(message, { reload: true|false, timer: 3000 })`: Displays a success popup with an animated progress bar and an OK button. Set `{ reload: true }` to automatically reload the page when confirmed or after the timer ends.
+  - `window.showError(message, title)`: Displays an error modal with Bootstrap `btn-danger`.
+  - `window.showWarning(message, title)`: Displays a warning modal with Bootstrap `btn-warning`.
+  - `window.showConfirm({ title, text, isDanger: true|false, onConfirm: () => { ... } })`: Displays a confirmation modal with 12px button gap and executes `onConfirm` callback.
+  - `window.showToast(message, type = 'success', duration = 3000)`: Displays a non-blocking toast at the top-end of the screen.
+- Never write verbose ad-hoc `Swal.fire({...})` blocks on individual blade view pages. Always use these standardized global helpers.
 
 ## 10. Module Directory Hierarchy & Flat View Naming Standard
 - All classes and views for a module MUST follow a consistent folder hierarchy across `Controllers`, `Requests`, `Models`, and `views`:

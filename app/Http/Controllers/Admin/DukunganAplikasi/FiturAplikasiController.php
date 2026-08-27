@@ -13,17 +13,116 @@ class FiturAplikasiController extends Controller
     use HasNotification;
 
     /**
-     * Tampilkan halaman formulir fitur aplikasi.
+     * Tampilkan halaman manajemen dan visibilitas fitur aplikasi.
      */
-    public function index()
+    public function index(Request $request)
     {
         if (!auth()->user()->can('read dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
-        $fitur = FiturAplikasi::getSettings();
+        $features = FiturAplikasi::orderBy('kategori', 'asc')
+            ->orderBy('urutan', 'asc')
+            ->orderBy('id', 'asc')
+            ->get();
 
-        return view('admin.dukunganaplikasi.fitur-aplikasi', compact('fitur'));
+        $totalFeatures = $features->count();
+        $activeFeatures = $features->where('status', true)->count();
+        $inactiveFeatures = $features->where('status', false)->count();
+        
+        $categories = FiturAplikasi::select('kategori')
+            ->distinct()
+            ->orderBy('kategori', 'asc')
+            ->pluck('kategori')
+            ->toArray();
+
+        $groupedFeatures = $features->groupBy('kategori');
+
+        return view('admin.dukunganaplikasi.fitur-aplikasi', compact(
+            'features',
+            'groupedFeatures',
+            'categories',
+            'totalFeatures',
+            'activeFeatures',
+            'inactiveFeatures'
+        ));
+    }
+
+    /**
+     * Simpan fitur baru ke database.
+     */
+    public function store(FiturAplikasiRequest $request)
+    {
+        $data = $request->validated();
+        $data['status'] = $request->has('status') ? (bool) $request->input('status') : true;
+        $data['urutan'] = $request->input('urutan', 0) ?? 0;
+        $data['is_system'] = false;
+
+        $feature = FiturAplikasi::create($data);
+        FiturAplikasi::clearCache();
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Fitur '{$feature->nama_fitur}' berhasil ditambahkan.",
+                'data' => $feature,
+            ]);
+        }
+
+        $this->notifySuccess("Fitur '{$feature->nama_fitur}' berhasil ditambahkan.", 'Berhasil!');
+        return redirect()->route('admin.dukunganaplikasi.fitur-aplikasi.index');
+    }
+
+    /**
+     * Perbarui data fitur aplikasi yang sudah ada.
+     */
+    public function update(FiturAplikasiRequest $request, $id)
+    {
+        $feature = FiturAplikasi::findOrFail($id);
+
+        $data = $request->validated();
+        $data['status'] = $request->has('status') ? (bool) $request->input('status') : false;
+        $data['urutan'] = $request->input('urutan', 0) ?? 0;
+
+        $feature->update($data);
+        FiturAplikasi::clearCache();
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Fitur '{$feature->nama_fitur}' berhasil diperbarui.",
+                'data' => $feature,
+            ]);
+        }
+
+        $this->notifySuccess("Fitur '{$feature->nama_fitur}' berhasil diperbarui.", 'Berhasil!');
+        return redirect()->route('admin.dukunganaplikasi.fitur-aplikasi.index');
+    }
+
+    /**
+     * Hapus data fitur aplikasi dari database.
+     */
+    public function destroy($id)
+    {
+        if (!auth()->user()->can('delete dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+            abort(403, 'Anda tidak memiliki izin untuk menghapus fitur ini.');
+        }
+
+        $feature = FiturAplikasi::findOrFail($id);
+        $featureName = $feature->nama_fitur;
+        $feature->delete();
+
+        FiturAplikasi::clearCache();
+
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Fitur '{$featureName}' berhasil dihapus.",
+            ]);
+        }
+
+        $this->notifySuccess("Fitur '{$featureName}' berhasil dihapus.", 'Berhasil!');
+        return redirect()->route('admin.dukunganaplikasi.fitur-aplikasi.index');
     }
 
     /**
@@ -39,39 +138,49 @@ class FiturAplikasiController extends Controller
         }
 
         $request->validate([
-            'feature' => 'required|string',
+            'id' => 'nullable|integer',
+            'feature' => 'nullable|string',
             'status' => 'required|boolean',
         ]);
 
-        $feature = $request->input('feature');
+        $id = $request->input('id');
+        $featureKey = $request->input('feature');
         $status = (bool) $request->input('status');
 
-        $fitur = FiturAplikasi::getSettings();
-
-        if (!array_key_exists($feature, $fitur->getAttributes())) {
+        if ($id) {
+            $feature = FiturAplikasi::find($id);
+        } elseif ($featureKey) {
+            $feature = FiturAplikasi::where('kode_fitur', $featureKey)->first();
+        } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Fitur yang dipilih tidak valid.',
+                'message' => 'Identifikasi fitur tidak valid.',
             ], 422);
         }
 
-        $fitur->$feature = $status;
-        $fitur->save();
+        if (!$feature) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Fitur tidak ditemukan di database.',
+            ], 404);
+        }
+
+        $feature->status = $status;
+        $feature->save();
 
         FiturAplikasi::clearCache();
 
-        $labelName = ucwords(str_replace(['topbar_', 'menu_group_', '_'], ['', '', ' '], $feature));
-
         return response()->json([
             'success' => true,
-            'message' => "Fitur {$labelName} berhasil " . ($status ? 'diaktifkan' : 'dinonaktifkan') . '.',
-            'feature' => $feature,
+            'message' => "Fitur '{$feature->nama_fitur}' berhasil " . ($status ? 'diaktifkan' : 'dinonaktifkan') . '.',
+            'id' => $feature->id,
+            'feature' => $feature->kode_fitur,
             'status' => $status,
         ]);
     }
 
     /**
-     * Toggle status masal per kelompok fitur (topbar / menu_group).
+     * Toggle status masal per kelompok / kategori fitur.
      */
     public function toggleGroup(Request $request)
     {
@@ -83,88 +192,81 @@ class FiturAplikasiController extends Controller
         }
 
         $request->validate([
-            'group' => 'required|in:topbar,menu_group',
+            'group' => 'required|string',
             'status' => 'required|boolean',
         ]);
 
         $group = $request->input('group');
         $status = (bool) $request->input('status');
 
-        $fitur = FiturAplikasi::getSettings();
-
-        if ($group === 'topbar') {
-            $fields = [
-                'topbar_search_box', 'topbar_megamenu_header', 'topbar_megamenu_apps',
-                'topbar_theme_toggler', 'topbar_apps_dropdown', 'topbar_messages',
-                'topbar_notifications', 'topbar_fullscreen', 'topbar_monochrome',
-                'topbar_customizer', 'topbar_language', 'topbar_user_dropdown'
-            ];
-            $groupLabel = 'Semua Fitur Topbar';
-        } else {
-            $fields = [
-                'menu_group_main', 'menu_group_apps', 'menu_group_custom_pages',
-                'menu_group_layouts', 'menu_group_components', 'menu_group_documentation',
-                'menu_group_menu_item', 'menu_special_menu'
-            ];
-            $groupLabel = 'Semua Group Menu Sidebar';
-        }
-
-        foreach ($fields as $field) {
-            $fitur->$field = $status;
-        }
-        $fitur->save();
-
+        $affected = FiturAplikasi::where('kategori', $group)->update(['status' => $status]);
         FiturAplikasi::clearCache();
+
+        $groupLabel = strtoupper($group);
 
         return response()->json([
             'success' => true,
-            'message' => "{$groupLabel} berhasil " . ($status ? 'ditampilkan' : 'disembunyikan') . '.',
+            'message' => "Semua fitur dalam kelompok '{$groupLabel}' ({$affected} fitur) berhasil " . ($status ? 'diaktifkan' : 'dinonaktifkan') . '.',
             'group' => $group,
-            'fields' => $fields,
             'status' => $status,
+            'affected' => $affected,
         ]);
     }
 
     /**
-     * Perbarui data status fitur aplikasi.
+     * Aksi massal (Aktifkan, Nonaktifkan, Hapus) untuk fitur yang dipilih via checkbox.
      */
-    public function update(FiturAplikasiRequest $request)
+    public function bulkAction(Request $request)
     {
-        $fitur = FiturAplikasi::getSettings();
+        $request->validate([
+            'action' => 'required|in:enable,disable,delete',
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer|exists:fitur_aplikasi,id',
+        ]);
 
-        $booleanFields = [
-            'topbar_search_box',
-            'topbar_megamenu_header',
-            'topbar_megamenu_apps',
-            'topbar_theme_toggler',
-            'topbar_apps_dropdown',
-            'topbar_messages',
-            'topbar_notifications',
-            'topbar_fullscreen',
-            'topbar_monochrome',
-            'topbar_customizer',
-            'topbar_language',
-            'topbar_user_dropdown',
-            'menu_group_main',
-            'menu_group_apps',
-            'menu_group_custom_pages',
-            'menu_group_layouts',
-            'menu_group_components',
-            'menu_group_documentation',
-            'menu_group_menu_item',
-            'menu_special_menu',
-        ];
+        $action = $request->input('action');
+        $ids = $request->input('ids');
 
-        $data = [];
-        foreach ($booleanFields as $field) {
-            $data[$field] = $request->boolean($field);
+        if ($action === 'delete') {
+            if (!auth()->user()->can('delete dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda tidak memiliki izin untuk menghapus fitur ini.',
+                ], 403);
+            }
+
+            $count = FiturAplikasi::whereIn('id', $ids)->delete();
+            FiturAplikasi::clearCache();
+
+            return response()->json([
+                'success' => true,
+                'message' => "{$count} fitur terpilih berhasil dihapus dari sistem.",
+                'action' => 'delete',
+                'affected' => $count,
+                'ids' => $ids,
+            ]);
         }
 
-        $fitur->update($data);
+        if (!auth()->user()->can('update dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki akses untuk mengubah fitur ini.',
+            ], 403);
+        }
+
+        $newStatus = ($action === 'enable');
+        $count = FiturAplikasi::whereIn('id', $ids)->update(['status' => $newStatus]);
         FiturAplikasi::clearCache();
 
-        $this->notifySuccess('Pengaturan Fitur Aplikasi berhasil diperbarui.', 'Berhasil!');
+        $statusText = $newStatus ? 'diaktifkan' : 'dinonaktifkan';
 
-        return redirect()->route('admin.dukunganaplikasi.fitur-aplikasi.index');
+        return response()->json([
+            'success' => true,
+            'message' => "{$count} fitur terpilih berhasil {$statusText}.",
+            'action' => $action,
+            'status' => $newStatus,
+            'affected' => $count,
+            'ids' => $ids,
+        ]);
     }
 }

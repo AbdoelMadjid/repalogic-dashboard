@@ -3,491 +3,306 @@
 @section('title', 'Fitur Aplikasi')
 
 @section('content')
-@php
-    $topbarFields = [
-        'topbar_search_box', 'topbar_megamenu_header', 'topbar_megamenu_apps',
-        'topbar_theme_toggler', 'topbar_apps_dropdown', 'topbar_messages',
-        'topbar_notifications', 'topbar_fullscreen', 'topbar_monochrome',
-        'topbar_customizer', 'topbar_language', 'topbar_user_dropdown'
-    ];
-    $topbarActiveCount = 0;
-    foreach ($topbarFields as $f) {
-        if (!empty($fitur->$f)) $topbarActiveCount++;
-    }
-    $allTopbarActive = ($topbarActiveCount === count($topbarFields));
-    $allTopbarInactive = ($topbarActiveCount === 0);
-
-    $sidebarFields = [
-        'menu_group_main', 'menu_group_apps', 'menu_group_custom_pages',
-        'menu_group_layouts', 'menu_group_components', 'menu_group_documentation',
-        'menu_group_menu_item', 'menu_special_menu'
-    ];
-    $sidebarActiveCount = 0;
-    foreach ($sidebarFields as $f) {
-        if (!empty($fitur->$f)) $sidebarActiveCount++;
-    }
-    $allSidebarActive = ($sidebarActiveCount === count($sidebarFields));
-    $allSidebarInactive = ($sidebarActiveCount === 0);
-@endphp
-
     <!-- Header Page Title -->
     @include('layouts.partials.page-title', ['title' => 'Fitur Aplikasi', 'subtitle' => 'Dukungan Aplikasi'])
 
+    <!-- STATISTIK RINGKASAN FITUR -->
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-3 mb-0">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted fs-12 fw-semibold text-uppercase">Total Fitur Terdaftar</span>
+                            <h3 class="fw-bold mb-0 mt-1 text-dark" id="stat-total">{{ $totalFeatures }}</h3>
+                        </div>
+                        <div class="avatar-md bg-primary-subtle text-primary rounded-3 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-apps fs-24"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-3 mb-0">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted fs-12 fw-semibold text-uppercase">Fitur Aktif (Ditampilkan)</span>
+                            <h3 class="fw-bold mb-0 mt-1 text-success" id="stat-active">{{ $activeFeatures }}</h3>
+                        </div>
+                        <div class="avatar-md bg-success-subtle text-success rounded-3 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-circle-check fs-24"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-3 mb-0">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted fs-12 fw-semibold text-uppercase">Fitur Nonaktif (Disembunyikan)</span>
+                            <h3 class="fw-bold mb-0 mt-1 text-danger" id="stat-inactive">{{ $inactiveFeatures }}</h3>
+                        </div>
+                        <div class="avatar-md bg-danger-subtle text-danger rounded-3 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-circle-x fs-24"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-3 mb-0">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="text-muted fs-12 fw-semibold text-uppercase">Total Kelompok / Kategori</span>
+                            <h3 class="fw-bold mb-0 mt-1 text-info">{{ count($categories) }}</h3>
+                        </div>
+                        <div class="avatar-md bg-info-subtle text-info rounded-3 d-flex align-items-center justify-content-center">
+                            <i class="ti ti-category fs-24"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABEL MANAJEMEN FITUR -->
     <div class="row">
         <div class="col-12">
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between py-3">
+                <!-- CARD HEADER (Rule 12 Compliance: bg-primary text-white py-3) -->
+                <div class="card-header bg-primary text-white d-flex flex-wrap align-items-center justify-content-between gap-2 py-3">
                     <div class="d-flex align-items-center gap-2">
                         <i class="ti ti-adjustments-alt fs-22"></i>
-                        <h5 class="card-title text-white mb-0">Manajemen Visibilitas Fitur & Layout Template</h5>
+                        <div>
+                            <h5 class="card-title text-white mb-0">Daftar Fitur Aplikasi & Manajemen Visibilitas</h5>
+                            <small class="text-white-50 fs-12">Kelola komponen topbar, menu template sidebar, dan fitur sistem secara dinamis.</small>
+                        </div>
                     </div>
-                    <div>
+                    <div class="d-flex align-items-center gap-2">
                         <span class="badge bg-light text-primary fw-semibold px-3 py-2">
-                            <i class="ti ti-bolt me-1"></i> Auto Save Instant
+                            <i class="ti ti-bolt me-1"></i> Auto-Save Instant
                         </span>
+                        @can('create dukunganaplikasi/fitur-aplikasi')
+                            <button type="button" class="btn btn-light text-primary fw-semibold btn-fitur-action" data-action="create">
+                                <i class="ti ti-plus me-1"></i> Tambah Fitur Baru
+                            </button>
+                        @endcan
                     </div>
                 </div>
 
-                <div class="card-body">
-                    <!-- SECTION 1: TOPBAR HEADER FEATURES -->
-                    <div class="mb-4">
-                        <div class="d-flex align-items-center gap-2 pb-2 mb-3 border-bottom">
-                            <i class="ti ti-layout-navbar text-primary fs-20"></i>
-                            <h5 class="mb-0 text-dark fw-bold">Fitur Topbar Header</h5>
-                            <span class="badge bg-primary-subtle text-primary fs-12">12 Komponen</span>
-                            @can('update dukunganaplikasi/fitur-aplikasi')
-                                <div class="ms-auto d-flex align-items-center gap-1">
-                                    <button type="button" class="btn btn-xs btn-outline-success btn-toggle-group" data-group="topbar" data-status="1" {{ $allTopbarActive ? 'disabled' : '' }}>
-                                        <i class="ti ti-eye me-1"></i> Tampilkan Semua
-                                    </button>
-                                    <button type="button" class="btn btn-xs btn-outline-danger btn-toggle-group" data-group="topbar" data-status="0" {{ $allTopbarInactive ? 'disabled' : '' }}>
-                                        <i class="ti ti-eye-off me-1"></i> Sembunyikan Semua
-                                    </button>
-                                </div>
-                            @endcan
+                <div class="card-body p-4">
+                    <!-- FILTER CONTROLS & SEARCH BAR -->
+                    <div class="row align-items-center mb-3 g-2">
+                        <div class="col-md-4 d-flex align-items-center">
+                            <label class="me-2 fs-13 text-muted mb-0 text-nowrap"><i class="ti ti-filter me-1"></i> Kelompok:</label>
+                            <select id="table-category-select" class="form-select form-select-sm">
+                                <option value="all">-- Semua Kelompok ({{ $totalFeatures }}) --</option>
+                                @foreach ($categories as $cat)
+                                    @php
+                                        $catLabel = match($cat) {
+                                            'topbar' => 'Topbar Header',
+                                            'menu_group' => 'Sidebar Menu Group',
+                                            'general' => 'Umum / General',
+                                            default => ucfirst($cat)
+                                        };
+                                        $catCount = $features->where('kategori', $cat)->count();
+                                    @endphp
+                                    <option value="{{ $cat }}">{{ $catLabel }} ({{ $catCount }})</option>
+                                @endforeach
+                            </select>
                         </div>
 
-                        <div class="row g-3">
-                            <!-- Search Box -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-info-subtle text-info rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-search fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Pencarian (Search Box)</h6>
-                                                <span class="fs-12 text-muted">Fitur pencarian di topbar</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="topbar_search_box" id="topbar_search_box" value="1" {{ $fitur->topbar_search_box ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-md-3 d-flex align-items-center">
+                            <label class="me-2 fs-13 text-muted mb-0">Tampilkan:</label>
+                            <select id="table-length-select" class="form-select form-select-sm" style="width: 120px;">
+                                <option value="10">10 baris</option>
+                                <option value="25" selected>25 baris</option>
+                                <option value="50">50 baris</option>
+                                <option value="all">Semua Baris</option>
+                            </select>
+                        </div>
 
-                            <!-- Mega Menu Header -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-primary-subtle text-primary rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-layout-grid me-0 fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Mega Menu Header</h6>
-                                                <span class="fs-12 text-muted">Dropdown navigasi mega menu</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="topbar_megamenu_header" id="topbar_megamenu_header" value="1" {{ $fitur->topbar_megamenu_header ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Mega Menu Apps -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-success-subtle text-success rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-apps fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Mega Menu Apps</h6>
-                                                <span class="fs-12 text-muted">Shortcut aplikasi mega menu</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="topbar_megamenu_apps" id="topbar_megamenu_apps" value="1" {{ $fitur->topbar_megamenu_apps ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Theme Toggler -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-warning-subtle text-warning rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-sun-moon fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Theme Light/Dark Switcher</h6>
-                                                <span class="fs-12 text-muted">Tombol ganti mode terang/gelap</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="topbar_theme_toggler" id="topbar_theme_toggler" value="1" {{ $fitur->topbar_theme_toggler ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Apps Grid Dropdown -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-purple-subtle text-purple rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-grid-dots fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Apps Grid Shortcut</h6>
-                                                <span class="fs-12 text-muted">Dropdown grid aplikasi pintas</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="topbar_apps_dropdown" id="topbar_apps_dropdown" value="1" {{ $fitur->topbar_apps_dropdown ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Messages Dropdown -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-info-subtle text-info rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-messages fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Pesan / Messages</h6>
-                                                <span class="fs-12 text-muted">Dropdown notifikasi pesan</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="topbar_messages" id="topbar_messages" value="1" {{ $fitur->topbar_messages ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Notification Dropdown -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-danger-subtle text-danger rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-bell fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Notifikasi Alert</h6>
-                                                <span class="fs-12 text-muted">Dropdown pengumuman & pemberitahuan</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="topbar_notifications" id="topbar_notifications" value="1" {{ $fitur->topbar_notifications ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Fullscreen Toggler -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-secondary-subtle text-dark rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-maximize fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Mode Fullscreen</h6>
-                                                <span class="fs-12 text-muted">Tombol layar penuh</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="topbar_fullscreen" id="topbar_fullscreen" value="1" {{ $fitur->topbar_fullscreen ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Monochrome Toggler -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-dark-subtle text-dark rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-contrast fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Mode Monochrome</h6>
-                                                <span class="fs-12 text-muted">Tombol mode hitam putih</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="topbar_monochrome" id="topbar_monochrome" value="1" {{ $fitur->topbar_monochrome ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Customizer Offcanvas -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-primary-subtle text-primary rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-settings-2 fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Customizer / Theme Settings</h6>
-                                                <span class="fs-12 text-muted">Panel Pengaturan Tema Sidebar & Topbar</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="topbar_customizer" id="topbar_customizer" value="1" {{ $fitur->topbar_customizer ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Language Selector -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-success-subtle text-success rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-language fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Pemilih Bahasa (Language)</h6>
-                                                <span class="fs-12 text-muted">Dropdown bahasa i18n</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="topbar_language" id="topbar_language" value="1" {{ $fitur->topbar_language ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- User Dropdown -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-warning-subtle text-warning rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-user-circle fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">User Profile Dropdown</h6>
-                                                <span class="fs-12 text-muted">Dropdown foto profil & menu pengguna</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="topbar_user_dropdown" id="topbar_user_dropdown" value="1" {{ $fitur->topbar_user_dropdown ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
+                        <div class="col-md-5 d-flex justify-content-md-end">
+                            <div class="d-flex align-items-center w-100 justify-content-md-end">
+                                <label class="me-2 fs-13 text-muted mb-0 text-nowrap">Cari Fitur:</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="text" id="table-search-input" class="form-control" placeholder="Ketik kode, nama, atau deskripsi...">
+                                    <button class="btn btn-outline-secondary" type="button" id="btn-clear-search" title="Bersihkan Pencarian">
+                                        <i class="ti ti-x"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- SECTION 2: TEMPLATE SIDENAV MENU GROUPS -->
-                    <div class="mt-4 pt-2">
-                        <div class="d-flex align-items-center gap-2 pb-2 mb-3 border-bottom">
-                            <i class="ti ti-layout-sidebar text-primary fs-20"></i>
-                            <h5 class="mb-0 text-dark fw-bold">Kelompok Group Menu Template Sidebar</h5>
-                            <span class="badge bg-secondary-subtle text-dark fs-12">8 Group & Menu</span>
-                            @can('update dukunganaplikasi/fitur-aplikasi')
-                                <div class="ms-auto d-flex align-items-center gap-1">
-                                    <button type="button" class="btn btn-xs btn-outline-success btn-toggle-group" data-group="menu_group" data-status="1" {{ $allSidebarActive ? 'disabled' : '' }}>
-                                        <i class="ti ti-eye me-1"></i> Tampilkan Semua
-                                    </button>
-                                    <button type="button" class="btn btn-xs btn-outline-danger btn-toggle-group" data-group="menu_group" data-status="0" {{ $allSidebarInactive ? 'disabled' : '' }}>
-                                        <i class="ti ti-eye-off me-1"></i> Sembunyikan Semua
-                                    </button>
+                    <!-- BULK ACTION TOOLBAR (PILIHAN CENTANG CHECKBOX) -->
+                    @can('update dukunganaplikasi/fitur-aplikasi')
+                        <div class="p-3 bg-light-subtle rounded-3 mb-3 border d-flex flex-wrap align-items-center justify-content-between gap-3" id="bulk-action-bar">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="form-check m-0 d-flex align-items-center gap-2">
+                                    <input class="form-check-input high-contrast-checkbox" type="checkbox" id="check-all-global" title="Centang Semua Fitur pada Kategori/Filter Ini">
+                                    <label class="form-check-label fw-semibold fs-13 text-dark user-select-none cursor-pointer" for="check-all-global" id="check-all-label">
+                                        Pilih Semua Fitur ({{ $totalFeatures }})
+                                    </label>
                                 </div>
-                            @endcan
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-12 px-2.5 py-1 ms-2" id="selected-badge" style="display: none;">
+                                    <i class="ti ti-check me-1"></i><span id="selected-count">0</span> terpilih
+                                </span>
+                            </div>
+
+                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                <!-- Tombol Aksi Massal untuk Item Terpilih -->
+                                <button type="button" class="btn btn-sm btn-success btn-bulk-action" data-bulk="enable" id="btn-bulk-enable" disabled>
+                                    <i class="ti ti-eye me-1"></i> Aktifkan Terpilih
+                                </button>
+                                <button type="button" class="btn btn-sm btn-warning text-dark btn-bulk-action" data-bulk="disable" id="btn-bulk-disable" disabled>
+                                    <i class="ti ti-eye-off me-1"></i> Nonaktifkan Terpilih
+                                </button>
+                                @can('delete dukunganaplikasi/fitur-aplikasi')
+                                    <button type="button" class="btn btn-sm btn-danger btn-bulk-action" data-bulk="delete" id="btn-bulk-delete" disabled>
+                                        <i class="ti ti-trash me-1"></i> Hapus Terpilih
+                                    </button>
+                                @endcan
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-deselect-all" style="display: none;">
+                                    <i class="ti ti-x me-1"></i> Batal Pilih
+                                </button>
+                            </div>
                         </div>
+                    @endcan
 
-                        <div class="row g-3">
-                            <!-- Main Group -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-primary-subtle text-primary rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-home fs-20"></i>
+                    <!-- TABEL DATA (Rule 8 Compliance: align-middle text-center text-nowrap) -->
+                    <div class="table-responsive">
+                        <table id="fitur-table" class="table table-hover table-bordered align-middle w-100 mb-0">
+                            <thead class="table-light align-middle text-center text-nowrap">
+                                <tr>
+                                    <th style="width: 45px;">
+                                        <input type="checkbox" class="form-check-input high-contrast-checkbox" id="check-all-page" title="Pilih Semua Baris di Halaman Ini">
+                                    </th>
+                                    <th style="width: 50px;">NO</th>
+                                    <th>NAMA & IKON FITUR</th>
+                                    <th>KODE FITUR (IDENTIFIER)</th>
+                                    <th>KELOMPOK</th>
+                                    <th>DESKRIPSI</th>
+                                    <th style="width: 80px;">URUTAN</th>
+                                    <th style="width: 140px;">STATUS</th>
+                                    <th style="width: 130px;">AKSI</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($features as $f)
+                                    @php
+                                        $catBadge = match($f->kategori) {
+                                            'topbar' => 'bg-primary-subtle text-primary border-primary-subtle',
+                                            'menu_group' => 'bg-purple-subtle text-purple border-purple-subtle',
+                                            'general' => 'bg-info-subtle text-info border-info-subtle',
+                                            default => 'bg-secondary-subtle text-secondary border-secondary-subtle'
+                                        };
+                                        $catLabel = match($f->kategori) {
+                                            'topbar' => 'Topbar Header',
+                                            'menu_group' => 'Sidebar Menu',
+                                            'general' => 'Umum',
+                                            default => ucfirst($f->kategori)
+                                        };
+                                    @endphp
+                                    <tr class="fitur-row" data-group="{{ $f->kategori }}" data-id="{{ $f->id }}">
+                                        <td class="text-center check-cell cursor-pointer">
+                                            <input type="checkbox" class="form-check-input high-contrast-checkbox check-row-item" value="{{ $f->id }}" data-id="{{ $f->id }}">
+                                        </td>
+                                        <td class="text-center fw-semibold text-muted fitur-no">{{ $loop->iteration }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="avatar-xs bg-light text-primary rounded d-flex align-items-center justify-content-center border">
+                                                    <i class="{{ $f->icon ?: 'ti ti-adjustments' }} fs-16"></i>
+                                                </div>
+                                                <div>
+                                                    <span class="fw-semibold text-dark">{{ $f->nama_fitur }}</span>
+                                                    @if ($f->is_system)
+                                                        <span class="badge bg-secondary-subtle text-muted border fs-10 ms-1" title="Fitur bawaan sistem">Bawaan</span>
+                                                    @endif
+                                                </div>
                                             </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Group: MAIN</h6>
-                                                <span class="fs-12 text-muted">Menu Dashboards (Analytics, CRM, E-commerce, dll)</span>
+                                        </td>
+                                        <td>
+                                            <code class="bg-light text-primary border px-2 py-1 rounded fs-12 fw-semibold">{{ $f->kode_fitur }}</code>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge {{ $catBadge }} border fs-11 px-2 py-1">
+                                                {{ $catLabel }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="text-muted fs-13">{{ $f->deskripsi ?: '-' }}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-light text-dark border">{{ $f->urutan }}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="d-flex align-items-center justify-content-center gap-2">
+                                                <div class="form-check form-switch m-0">
+                                                    <input class="form-check-input switch-large switch-fitur-toggle" 
+                                                           type="checkbox" 
+                                                           role="switch"
+                                                           id="switch_{{ $f->id }}" 
+                                                           data-id="{{ $f->id }}" 
+                                                           data-code="{{ $f->kode_fitur }}"
+                                                           value="1" 
+                                                           {{ $f->status ? 'checked' : '' }}
+                                                           @cannot('update dukunganaplikasi/fitur-aplikasi') disabled @endcannot>
+                                                </div>
+                                                <span class="status-indicator badge {{ $f->status ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }} fs-11" id="badge_status_{{ $f->id }}">
+                                                    {{ $f->status ? 'Aktif' : 'Nonaktif' }}
+                                                </span>
                                             </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="menu_group_main" id="menu_group_main" value="1" {{ $fitur->menu_group_main ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                        </td>
+                                        <td class="text-center text-nowrap">
+                                            <!-- DETAIL -->
+                                            <button type="button" class="btn btn-sm btn-outline-info btn-fitur-action me-1" data-action="view" data-row='@json($f)' title="Lihat Detail">
+                                                <i class="ti ti-eye"></i>
+                                            </button>
 
-                            <!-- Apps Group -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-success-subtle text-success rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-brand-hipchat fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Group: APPS</h6>
-                                                <span class="fs-12 text-muted">Calendar, Chat, Email, E-Commerce, Projects</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="menu_group_apps" id="menu_group_apps" value="1" {{ $fitur->menu_group_apps ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                            <!-- EDIT -->
+                                            @can('update dukunganaplikasi/fitur-aplikasi')
+                                                <button type="button" class="btn btn-sm btn-outline-warning btn-fitur-action me-1" data-action="edit" data-row='@json($f)' title="Edit Fitur">
+                                                    <i class="ti ti-edit"></i>
+                                                </button>
+                                            @endcan
 
-                            <!-- Custom Pages Group -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-warning-subtle text-warning rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-file-description fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Group: PAGES</h6>
-                                                <span class="fs-12 text-muted">Auth, Account Settings, Profile, Error Pages</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="menu_group_custom_pages" id="menu_group_custom_pages" value="1" {{ $fitur->menu_group_custom_pages ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                            <!-- HAPUS (Rule 9 Compliance: data-confirm standard for SweetAlert2) -->
+                                            @can('delete dukunganaplikasi/fitur-aplikasi')
+                                                <form action="{{ route('admin.dukunganaplikasi.fitur-aplikasi.destroy', $f->id) }}" method="POST" class="d-inline" data-confirm="Apakah Anda yakin ingin menghapus fitur &quot;{{ $f->nama_fitur }}&quot; ini dari sistem?">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus Fitur">
+                                                        <i class="ti ti-trash"></i>
+                                                    </button>
+                                                </form>
+                                            @endcan
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="9" class="text-center text-muted py-4">Belum ada data fitur aplikasi yang terdaftar.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
 
-                            <!-- Layouts Group -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-info-subtle text-info rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-layout-grid-add fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Group: LAYOUTS</h6>
-                                                <span class="fs-12 text-muted">Horizontal, Detached, Full, Compact Layouts</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="menu_group_layouts" id="menu_group_layouts" value="1" {{ $fitur->menu_group_layouts ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Components Group -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-purple-subtle text-purple rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-components fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Group: COMPONENTS</h6>
-                                                <span class="fs-12 text-muted">UI Kit, Extended UI, Forms, Tables, Charts, Icons</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="menu_group_components" id="menu_group_components" value="1" {{ $fitur->menu_group_components ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Documentation Group -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-danger-subtle text-danger rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-books fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Group: DOCUMENTATION</h6>
-                                                <span class="fs-12 text-muted">Dokumentasi template & log perubahan</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="menu_group_documentation" id="menu_group_documentation" value="1" {{ $fitur->menu_group_documentation ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Menu Items Group -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-dark-subtle text-dark rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-list-details fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Group: OTHER MENU ITEMS</h6>
-                                                <span class="fs-12 text-muted">Menu multi-level & disabled menu</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="menu_group_menu_item" id="menu_group_menu_item" value="1" {{ $fitur->menu_group_menu_item ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Special Menu Item -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="card border mb-0 h-100 shadow-none hover-border-primary transition-all">
-                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="avatar-sm bg-warning-subtle text-warning rounded d-flex align-items-center justify-content-center">
-                                                <i class="ti ti-star fs-20"></i>
-                                            </div>
-                                            <div>
-                                                <h6 class="mb-0 fw-semibold">Menu Spesial (Special Menu)</h6>
-                                                <span class="fs-12 text-muted">Tombol menu spesial ber-highlight di sidebar</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input switch-large switch-fitur-toggle" type="checkbox" name="menu_special_menu" id="menu_special_menu" value="1" {{ $fitur->menu_special_menu ? 'checked' : '' }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- FOOTER INFO & PAGINATION BAR -->
+                    <div class="row align-items-center mt-3">
+                        <div class="col-md-6 fs-13 text-muted" id="table-info-bar">
+                            Menampilkan <strong id="visible-count">{{ count($features) }}</strong> dari <strong>{{ count($features) }}</strong> fitur
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-md-end mt-2 mt-md-0">
+                            <ul class="pagination pagination-sm m-0" id="table-pagination"></ul>
                         </div>
                     </div>
                 </div>
@@ -495,198 +310,609 @@
                 <div class="card-footer bg-light py-3">
                     <span class="text-muted fs-13 d-flex align-items-center gap-2">
                         <i class="ti ti-circle-check text-success fs-18"></i> 
-                        <span>Setiap perubahan status sakelar akan langsung tersimpan secara instan di sistem.</span>
+                        <span>Pilih fitur yang ingin diubah menggunakan kotak centang di tabel untuk melakukan pengaktifan, penonaktifan, atau penghapusan massal secara instan.</span>
                     </span>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- MODAL FORM PARTIAL -->
+    @include('admin.dukunganaplikasi.partials.fitur_aplikasi_modal')
+
     <style>
         .switch-large {
-            width: 2.75em !important;
-            height: 1.5em !important;
+            width: 2.5em !important;
+            height: 1.35em !important;
             cursor: pointer;
         }
-        .hover-border-primary:hover {
-            border-color: var(--bs-primary) !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+
+        /* High-contrast, ultra-reliable SVG checkmark styling */
+        .high-contrast-checkbox {
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            border: 2px solid #475569 !important;
+            background-color: #ffffff !important;
+            width: 1.35em !important;
+            height: 1.35em !important;
+            cursor: pointer !important;
+            border-radius: 4px !important;
+            display: inline-block !important;
+            position: relative !important;
+            vertical-align: middle !important;
+            transition: all 0.15s ease-in-out !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important;
+            margin: 0 !important;
         }
-        .transition-all {
-            transition: all 0.2s ease-in-out;
+
+        .high-contrast-checkbox:hover {
+            border-color: #0d6efd !important;
+        }
+
+        .high-contrast-checkbox:checked {
+            background-color: #0d6efd !important;
+            border-color: #0d6efd !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3.5' d='m5 10 3.5 3.5L15 6'/%3e%3c/svg%3e") !important;
+            background-position: center !important;
+            background-size: 85% 85% !important;
+            background-repeat: no-repeat !important;
+            box-shadow: 0 2px 5px rgba(13, 110, 253, 0.35) !important;
+        }
+
+        .high-contrast-checkbox:indeterminate {
+            background-color: #0d6efd !important;
+            border-color: #0d6efd !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3.5' d='M5 10h10'/%3e%3c/svg%3e") !important;
+            background-position: center !important;
+            background-size: 85% 85% !important;
+            background-repeat: no-repeat !important;
+            box-shadow: 0 2px 5px rgba(13, 110, 253, 0.35) !important;
+        }
+
+        .bg-purple-subtle {
+            background-color: rgba(114, 94, 195, 0.12) !important;
+        }
+        .text-purple {
+            color: #725ec3 !important;
+        }
+        .border-purple-subtle {
+            border-color: rgba(114, 94, 195, 0.25) !important;
+        }
+        .fitur-row.table-active {
+            background-color: rgba(var(--bs-primary-rgb), 0.08) !important;
+        }
+        .cursor-pointer {
+            cursor: pointer !important;
         }
     </style>
 
     {{-- Page JS (Rule 1 Compliance: Place scripts inside @section('content') before @endsection) --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            function updateGroupButtonStates() {
-                // Section 1: Topbar
-                const topbarSwitches = Array.from(document.querySelectorAll('input[name^="topbar_"]'));
-                if (topbarSwitches.length > 0) {
-                    const checkedCount = topbarSwitches.filter(sw => sw.checked).length;
-                    const btnShowAll = document.querySelector('.btn-toggle-group[data-group="topbar"][data-status="1"]');
-                    const btnHideAll = document.querySelector('.btn-toggle-group[data-group="topbar"][data-status="0"]');
+            // Elements
+            const table = document.getElementById('fitur-table');
+            const tbody = table ? table.querySelector('tbody') : null;
+            const categorySelect = document.getElementById('table-category-select');
+            const lengthSelect = document.getElementById('table-length-select');
+            const searchInput = document.getElementById('table-search-input');
+            const btnClearSearch = document.getElementById('btn-clear-search');
+            const paginationUl = document.getElementById('table-pagination');
+            const infoBar = document.getElementById('table-info-bar');
+            const statTotal = document.getElementById('stat-total');
+            const statActive = document.getElementById('stat-active');
+            const statInactive = document.getElementById('stat-inactive');
 
-                    if (btnShowAll) btnShowAll.disabled = (checkedCount === topbarSwitches.length);
-                    if (btnHideAll) btnHideAll.disabled = (checkedCount === 0);
+            // Bulk Action Elements
+            const checkAllGlobal = document.getElementById('check-all-global');
+            const checkAllLabel = document.getElementById('check-all-label');
+            const checkAllPage = document.getElementById('check-all-page');
+            const selectedBadge = document.getElementById('selected-badge');
+            const selectedCountSpan = document.getElementById('selected-count');
+            const btnBulkEnable = document.getElementById('btn-bulk-enable');
+            const btnBulkDisable = document.getElementById('btn-bulk-disable');
+            const btnBulkDelete = document.getElementById('btn-bulk-delete');
+            const btnDeselectAll = document.getElementById('btn-deselect-all');
+
+            // Modal Elements
+            const modalEl = document.getElementById('fiturModal');
+            const modal = modalEl ? new bootstrap.Modal(modalEl) : null;
+            const form = document.getElementById('fiturForm');
+            const formMethod = document.getElementById('formMethod');
+            const featureIdInput = document.getElementById('feature_id');
+            const modalTitleText = document.getElementById('modalTitleText');
+            const modalTitleIcon = document.getElementById('modalTitleIcon');
+            const btnSubmitFitur = document.getElementById('btnSubmitFitur');
+            const btnSubmitText = document.getElementById('btnSubmitText');
+            const iconInput = document.getElementById('modal_icon');
+            const iconPreview = document.getElementById('iconPreview');
+
+            let currentPage = 1;
+            let filteredRows = [];
+            const selectedIds = new Set();
+
+            // Live Icon Preview
+            if (iconInput && iconPreview) {
+                iconInput.addEventListener('input', function() {
+                    const iconClass = this.value.trim() || 'ti ti-puzzle';
+                    iconPreview.innerHTML = `<i class="${iconClass} fs-18 text-primary"></i>`;
+                });
+            }
+
+            // Update Selection UI
+            function updateSelectionUI() {
+                const count = selectedIds.size;
+                if (selectedCountSpan) selectedCountSpan.textContent = count;
+
+                const hasSelection = count > 0;
+                if (selectedBadge) selectedBadge.style.display = hasSelection ? 'inline-block' : 'none';
+                if (btnDeselectAll) btnDeselectAll.style.display = hasSelection ? 'inline-block' : 'none';
+
+                if (btnBulkEnable) btnBulkEnable.disabled = !hasSelection;
+                if (btnBulkDisable) btnBulkDisable.disabled = !hasSelection;
+                if (btnBulkDelete) btnBulkDelete.disabled = !hasSelection;
+
+                // Sync Row Highlights & Checkboxes across ALL rows in table
+                const allRowCheckboxes = document.querySelectorAll('.check-row-item');
+                allRowCheckboxes.forEach(cb => {
+                    const row = cb.closest('tr');
+                    const isChecked = selectedIds.has(String(cb.value));
+                    cb.checked = isChecked;
+                    if (row) {
+                        if (isChecked) {
+                            row.classList.add('table-active');
+                        } else {
+                            row.classList.remove('table-active');
+                        }
+                    }
+                });
+
+                // Check filtered rows match
+                const filteredIds = filteredRows.map(row => {
+                    const cb = row.querySelector('.check-row-item');
+                    return cb ? String(cb.value) : null;
+                }).filter(Boolean);
+
+                const filteredSelectedCount = filteredIds.filter(id => selectedIds.has(id)).length;
+
+                // Sync "Pilih Semua (Filtered)"
+                if (checkAllGlobal) {
+                    if (filteredIds.length > 0) {
+                        checkAllGlobal.checked = (filteredSelectedCount === filteredIds.length);
+                        checkAllGlobal.indeterminate = (filteredSelectedCount > 0 && filteredSelectedCount < filteredIds.length);
+                    } else {
+                        checkAllGlobal.checked = false;
+                        checkAllGlobal.indeterminate = false;
+                    }
                 }
 
-                // Section 2: Sidebar (menu_group_ & menu_special_menu)
-                const sidebarSwitches = Array.from(document.querySelectorAll('input[name^="menu_group_"], input[name="menu_special_menu"]'));
-                if (sidebarSwitches.length > 0) {
-                    const checkedCount = sidebarSwitches.filter(sw => sw.checked).length;
-                    const btnShowAll = document.querySelector('.btn-toggle-group[data-group="menu_group"][data-status="1"]');
-                    const btnHideAll = document.querySelector('.btn-toggle-group[data-group="menu_group"][data-status="0"]');
+                // Sync Header "Check All Page"
+                if (checkAllPage) {
+                    const visibleRows = Array.from(document.querySelectorAll('.fitur-row:not([style*="display: none"])'));
+                    const pageIds = visibleRows.map(row => {
+                        const cb = row.querySelector('.check-row-item');
+                        return cb ? String(cb.value) : null;
+                    }).filter(Boolean);
 
-                    if (btnShowAll) btnShowAll.disabled = (checkedCount === sidebarSwitches.length);
-                    if (btnHideAll) btnHideAll.disabled = (checkedCount === 0);
+                    const pageSelectedCount = pageIds.filter(id => selectedIds.has(id)).length;
+
+                    if (pageIds.length > 0) {
+                        checkAllPage.checked = (pageSelectedCount === pageIds.length);
+                        checkAllPage.indeterminate = (pageSelectedCount > 0 && pageSelectedCount < pageIds.length);
+                    } else {
+                        checkAllPage.checked = false;
+                        checkAllPage.indeterminate = false;
+                    }
                 }
             }
 
-            // Run initial check on page load
-            updateGroupButtonStates();
+            // Client-side Filter, Search, & Pagination Logic
+            function applyFilterAndPagination() {
+                if (!tbody) return;
+                const rows = Array.from(tbody.querySelectorAll('.fitur-row'));
+                const selectedCat = categorySelect ? categorySelect.value : 'all';
+                const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+                const pageSize = lengthSelect ? (lengthSelect.value === 'all' ? rows.length : parseInt(lengthSelect.value, 10)) : 25;
 
-            // Event Delegation for Instant AJAX Toggle
+                filteredRows = rows.filter(row => {
+                    const group = row.getAttribute('data-group');
+                    const text = row.innerText.toLowerCase();
+
+                    const matchCat = (selectedCat === 'all' || group === selectedCat);
+                    const matchSearch = (!searchTerm || text.includes(searchTerm));
+
+                    return matchCat && matchSearch;
+                });
+
+                // Hide all rows initially
+                rows.forEach(r => r.style.display = 'none');
+
+                const totalFiltered = filteredRows.length;
+                const totalPages = Math.ceil(totalFiltered / pageSize) || 1;
+                if (currentPage > totalPages) currentPage = 1;
+
+                const startIndex = (currentPage - 1) * pageSize;
+                const endIndex = Math.min(startIndex + pageSize, totalFiltered);
+
+                for (let i = startIndex; i < endIndex; i++) {
+                    if (filteredRows[i]) {
+                        filteredRows[i].style.display = '';
+                    }
+                }
+
+                // Update Row Numbers
+                filteredRows.forEach((row, idx) => {
+                    const noCell = row.querySelector('.fitur-no');
+                    if (noCell) noCell.textContent = idx + 1;
+                });
+
+                // Update Info Bar
+                if (infoBar) {
+                    infoBar.innerHTML = `Menampilkan <strong>${totalFiltered === 0 ? 0 : startIndex + 1} - ${endIndex}</strong> dari <strong>${totalFiltered}</strong> data fitur`;
+                }
+
+                // Update Check All Label
+                if (checkAllLabel) {
+                    if (selectedCat === 'all') {
+                        checkAllLabel.textContent = `Pilih Semua (${totalFiltered} fitur)`;
+                    } else {
+                        const selectedOptionText = categorySelect.options[categorySelect.selectedIndex].text.split(' (')[0];
+                        checkAllLabel.textContent = `Pilih Semua (${selectedOptionText}: ${totalFiltered} fitur)`;
+                    }
+                }
+
+                // Render Pagination & Sync Checkboxes
+                renderPagination(totalPages);
+                updateSelectionUI();
+            }
+
+            function renderPagination(totalPages) {
+                if (!paginationUl) return;
+                paginationUl.innerHTML = '';
+                if (totalPages <= 1) return;
+
+                // Previous
+                const prevLi = document.createElement('li');
+                prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+                prevLi.innerHTML = `<a class="page-link" href="javascript:void(0)" aria-label="Previous"><i class="ti ti-chevron-left"></i></a>`;
+                prevLi.addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        applyFilterAndPagination();
+                    }
+                });
+                paginationUl.appendChild(prevLi);
+
+                // Page Numbers
+                for (let p = 1; p <= totalPages; p++) {
+                    if (totalPages > 7 && Math.abs(p - currentPage) > 2 && p !== 1 && p !== totalPages) {
+                        if (p === 2 || p === totalPages - 1) {
+                            const dotsLi = document.createElement('li');
+                            dotsLi.className = 'page-item disabled';
+                            dotsLi.innerHTML = `<span class="page-link">...</span>`;
+                            paginationUl.appendChild(dotsLi);
+                        }
+                        continue;
+                    }
+
+                    const pageLi = document.createElement('li');
+                    pageLi.className = `page-item ${p === currentPage ? 'active' : ''}`;
+                    pageLi.innerHTML = `<a class="page-link" href="javascript:void(0)">${p}</a>`;
+                    pageLi.addEventListener('click', () => {
+                        currentPage = p;
+                        applyFilterAndPagination();
+                    });
+                    paginationUl.appendChild(pageLi);
+                }
+
+                // Next
+                const nextLi = document.createElement('li');
+                nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+                nextLi.innerHTML = `<a class="page-link" href="javascript:void(0)" aria-label="Next"><i class="ti ti-chevron-right"></i></a>`;
+                nextLi.addEventListener('click', () => {
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        applyFilterAndPagination();
+                    }
+                });
+                paginationUl.appendChild(nextLi);
+            }
+
+            // Recalculate Stats in UI
+            function recalculateStats() {
+                const switches = Array.from(document.querySelectorAll('.switch-fitur-toggle'));
+                const activeCount = switches.filter(s => s.checked).length;
+                const inactiveCount = switches.length - activeCount;
+
+                if (statTotal) statTotal.textContent = switches.length;
+                if (statActive) statActive.textContent = activeCount;
+                if (statInactive) statInactive.textContent = inactiveCount;
+            }
+
+            // Event Listeners for Filters
+            if (categorySelect) categorySelect.addEventListener('change', () => { currentPage = 1; applyFilterAndPagination(); });
+            if (lengthSelect) lengthSelect.addEventListener('change', () => { currentPage = 1; applyFilterAndPagination(); });
+            if (searchInput) searchInput.addEventListener('input', () => { currentPage = 1; applyFilterAndPagination(); });
+            if (btnClearSearch) btnClearSearch.addEventListener('click', () => {
+                if (searchInput) searchInput.value = '';
+                currentPage = 1;
+                applyFilterAndPagination();
+            });
+
+            // Initial Table Render
+            applyFilterAndPagination();
+
+            // CHECKBOX SELECTION LOGIC (Rule 2 Compliance: Event Delegation)
+            document.addEventListener('change', function(e) {
+                const target = e.target;
+
+                // 1. Single Row Checkbox
+                if (target && target.classList.contains('check-row-item')) {
+                    const idVal = String(target.value);
+                    if (target.checked) {
+                        selectedIds.add(idVal);
+                    } else {
+                        selectedIds.delete(idVal);
+                    }
+                    updateSelectionUI();
+                }
+
+                // 2. Check All on Current Visible Page
+                if (target && target.id === 'check-all-page') {
+                    const isChecked = target.checked;
+                    const visibleRows = document.querySelectorAll('.fitur-row:not([style*="display: none"])');
+                    visibleRows.forEach(row => {
+                        const cb = row.querySelector('.check-row-item');
+                        if (cb) {
+                            const idVal = String(cb.value);
+                            if (isChecked) {
+                                selectedIds.add(idVal);
+                            } else {
+                                selectedIds.delete(idVal);
+                            }
+                        }
+                    });
+                    updateSelectionUI();
+                }
+
+                // 3. Check All in Current Filter Category
+                if (target && target.id === 'check-all-global') {
+                    const isChecked = target.checked;
+                    filteredRows.forEach(row => {
+                        const cb = row.querySelector('.check-row-item');
+                        if (cb) {
+                            const idVal = String(cb.value);
+                            if (isChecked) {
+                                selectedIds.add(idVal);
+                            } else {
+                                selectedIds.delete(idVal);
+                            }
+                        }
+                    });
+                    updateSelectionUI();
+                }
+            });
+
+            // Clicking on cell toggles checkbox
+            document.addEventListener('click', function(e) {
+                const checkCell = e.target.closest('.check-cell');
+                if (checkCell && e.target.tagName !== 'INPUT') {
+                    const cb = checkCell.querySelector('.check-row-item');
+                    if (cb) {
+                        cb.checked = !cb.checked;
+                        const idVal = String(cb.value);
+                        if (cb.checked) {
+                            selectedIds.add(idVal);
+                        } else {
+                            selectedIds.delete(idVal);
+                        }
+                        updateSelectionUI();
+                    }
+                }
+            });
+
+            // Deselect All Button
+            if (btnDeselectAll) {
+                btnDeselectAll.addEventListener('click', function() {
+                    selectedIds.clear();
+                    updateSelectionUI();
+                });
+            }
+
+            function getCsrfToken() {
+                return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
+            }
+
+            // EVENT DELEGATION: Instant Switch Toggle via AJAX
             document.addEventListener('change', function(e) {
                 const target = e.target;
                 if (target && target.classList.contains('switch-fitur-toggle')) {
-                    updateGroupButtonStates();
-                    const featureName = target.getAttribute('name');
+                    const featureId = target.getAttribute('data-id');
+                    const featureCode = target.getAttribute('data-code');
                     const isChecked = target.checked ? 1 : 0;
-                    
+                    const badgeStatus = document.getElementById(`badge_status_${featureId}`);
+
                     target.disabled = true;
 
                     fetch("{{ route('admin.dukunganaplikasi.fitur-aplikasi.toggle') }}", {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'X-CSRF-TOKEN': getCsrfToken(),
                             'Accept': 'application/json'
                         },
                         body: JSON.stringify({
-                            feature: featureName,
+                            id: parseInt(featureId, 10),
+                            feature: featureCode,
                             status: isChecked
                         })
                     })
-                    .then(response => response.json())
+                    .then(async res => {
+                        let data;
+                        try {
+                            data = await res.json();
+                        } catch (e) {
+                            data = { success: false, message: `Respon server tidak valid (${res.status} ${res.statusText})` };
+                        }
+                        if (!res.ok) {
+                            throw new Error(data.message || `Gagal menyimpan status (HTTP ${res.status}).`);
+                        }
+                        return data;
+                    })
                     .then(data => {
                         target.disabled = false;
                         if (data.success) {
-                            if (window.Swal) {
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: 'top-end',
-                                    showConfirmButton: false,
-                                    timer: 3500,
-                                    timerProgressBar: true,
-                                    backdrop: false,
-                                    didOpen: (toast) => {
-                                        toast.addEventListener('mouseenter', Swal.stopTimer);
-                                        toast.addEventListener('mouseleave', Swal.resumeTimer);
-                                    }
-                                });
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: data.message || 'Status fitur berhasil diperbarui'
-                                });
+                            if (badgeStatus) {
+                                badgeStatus.className = `status-indicator badge ${isChecked ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'} fs-11`;
+                                badgeStatus.textContent = isChecked ? 'Aktif' : 'Nonaktif';
                             }
-                            setTimeout(function() {
-                                window.location.reload();
-                            }, 3500);
+                            recalculateStats();
+                            window.showSuccess(data.message || 'Status fitur berhasil diperbarui.', { reload: true });
                         } else {
-                            target.checked = !target.checked; // Revert switch if failed
-                            if (window.Swal) {
-                                Swal.fire('Gagal', data.message || 'Gagal menyimpan status fitur.', 'error');
-                            } else {
-                                alert(data.message || 'Gagal menyimpan status fitur.');
-                            }
+                            target.checked = !target.checked;
+                            window.showError(data.message || 'Gagal mengubah status fitur.');
                         }
                     })
-                    .catch(error => {
+                    .catch(err => {
                         target.disabled = false;
-                        target.checked = !target.checked; // Revert switch if error
-                        console.error('Error toggling feature:', error);
-                        if (window.Swal) {
-                            Swal.fire('Error', 'Terjadi kesalahan koneksi saat menyimpan fitur.', 'error');
-                        } else {
-                            alert('Terjadi kesalahan koneksi saat menyimpan fitur.');
+                        target.checked = !target.checked;
+                        console.error('Error toggling feature:', err);
+                        window.showError(err.message || 'Terjadi kesalahan saat menyimpan status.');
+                    });
+                }
+            });
+
+            // EVENT DELEGATION: Bulk Action on Selected Rows (Aktifkan / Nonaktifkan / Hapus Terpilih)
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest('.btn-bulk-action');
+                if (btn) {
+                    const action = btn.getAttribute('data-bulk');
+                    const ids = Array.from(selectedIds).map(id => parseInt(id, 10)).filter(id => !isNaN(id));
+
+                    if (ids.length === 0) {
+                        window.showWarning('Silakan pilih minimal satu fitur terlebih dahulu.');
+                        return;
+                    }
+
+                    const actionLabel = action === 'enable' ? 'mengaktifkan' : (action === 'disable' ? 'menonaktifkan' : 'menghapus');
+                    const confirmTitle = action === 'delete' ? 'Konfirmasi Hapus Fitur' : 'Konfirmasi Ubah Status';
+                    const confirmText = `Apakah Anda yakin ingin ${actionLabel} ${ids.length} fitur yang dipilih?`;
+
+                    window.showConfirm({
+                        title: confirmTitle,
+                        text: confirmText,
+                        isDanger: (action === 'delete'),
+                        onConfirm: () => {
+                            btn.disabled = true;
+
+                            fetch("{{ route('admin.dukunganaplikasi.fitur-aplikasi.bulk-action') }}", {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': getCsrfToken(),
+                                    'Accept': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    action: action,
+                                    ids: ids
+                                })
+                            })
+                            .then(async res => {
+                                let data;
+                                try {
+                                    data = await res.json();
+                                } catch (e) {
+                                    data = { success: false, message: `Respon server tidak valid (${res.status} ${res.statusText})` };
+                                }
+                                if (!res.ok) {
+                                    throw new Error(data.message || `Gagal memproses aksi massal (HTTP ${res.status}).`);
+                                }
+                                return data;
+                            })
+                            .then(data => {
+                                btn.disabled = false;
+                                if (data.success) {
+                                    window.showSuccess(data.message, { reload: true });
+                                } else {
+                                    window.showError(data.message || 'Gagal memproses aksi massal.');
+                                }
+                            })
+                            .catch(err => {
+                                btn.disabled = false;
+                                console.error('Error executing bulk action:', err);
+                                window.showError(err.message || 'Terjadi kesalahan saat memproses aksi.');
+                            });
                         }
                     });
                 }
             });
 
-            // Event Delegation for Group Toggle (Tampilkan Semua / Sembunyikan Semua)
+            // EVENT DELEGATION: Action Buttons for Modal (Create, Edit, View) (Rule 2 Compliance)
             document.addEventListener('click', function(e) {
-                const btn = e.target.closest('.btn-toggle-group');
+                const btn = e.target.closest('.btn-fitur-action');
                 if (btn) {
-                    const groupName = btn.getAttribute('data-group');
-                    const statusVal = parseInt(btn.getAttribute('data-status'), 10);
-                    
-                    btn.disabled = true;
+                    const action = btn.getAttribute('data-action');
+                    const rowDataAttr = btn.getAttribute('data-row');
+                    const rowData = rowDataAttr ? JSON.parse(rowDataAttr) : null;
 
-                    fetch("{{ route('admin.dukunganaplikasi.fitur-aplikasi.toggle-group') }}", {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            group: groupName,
-                            status: statusVal
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        btn.disabled = false;
-                        if (data.success) {
-                            if (data.fields && Array.isArray(data.fields)) {
-                                data.fields.forEach(fieldName => {
-                                    const switchInput = document.querySelector(`input[name="${fieldName}"]`);
-                                    if (switchInput) {
-                                        switchInput.checked = (statusVal === 1);
-                                    }
-                                });
-                            }
-                            if (window.Swal) {
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: 'top-end',
-                                    showConfirmButton: false,
-                                    timer: 3500,
-                                    timerProgressBar: true,
-                                    backdrop: false,
-                                    didOpen: (toast) => {
-                                        toast.addEventListener('mouseenter', Swal.stopTimer);
-                                        toast.addEventListener('mouseleave', Swal.resumeTimer);
-                                    }
-                                });
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: data.message || 'Status kelompok fitur berhasil diperbarui'
-                                });
-                            }
-                            setTimeout(function() {
-                                window.location.reload();
-                            }, 3500);
-                        } else {
-                            if (window.Swal) {
-                                Swal.fire('Gagal', data.message || 'Gagal mengubah status kelompok fitur.', 'error');
-                            } else {
-                                alert(data.message || 'Gagal mengubah status kelompok fitur.');
-                            }
-                        }
-                    })
-                    .catch(error => {
-                        btn.disabled = false;
-                        console.error('Error toggling group:', error);
-                        if (window.Swal) {
-                            Swal.fire('Error', 'Terjadi kesalahan koneksi saat mengubah status fitur.', 'error');
-                        } else {
-                            alert('Terjadi kesalahan koneksi saat mengubah status fitur.');
-                        }
-                    });
+                    if (!modal || !form) return;
+
+                    form.reset();
+                    // Reset inputs state
+                    const inputs = form.querySelectorAll('input, select, textarea');
+                    inputs.forEach(inp => inp.disabled = false);
+                    btnSubmitFitur.style.display = '';
+
+                    if (action === 'create') {
+                        modalTitleText.textContent = 'Tambah Fitur Aplikasi Baru';
+                        modalTitleIcon.className = 'ti ti-plus';
+                        form.action = "{{ route('admin.dukunganaplikasi.fitur-aplikasi.store') }}";
+                        formMethod.value = 'POST';
+                        featureIdInput.value = '';
+                        btnSubmitText.textContent = 'Simpan Fitur Baru';
+                        document.getElementById('modal_status').checked = true;
+                        if (iconPreview) iconPreview.innerHTML = `<i class="ti ti-puzzle fs-18 text-primary"></i>`;
+                    } else if (action === 'edit' && rowData) {
+                        modalTitleText.textContent = 'Edit Data Fitur Aplikasi';
+                        modalTitleIcon.className = 'ti ti-edit';
+                        form.action = `/admin/dukunganaplikasi/fitur-aplikasi/${rowData.id}`;
+                        formMethod.value = 'PUT';
+                        featureIdInput.value = rowData.id;
+                        btnSubmitText.textContent = 'Perbarui Fitur';
+
+                        document.getElementById('modal_kode_fitur').value = rowData.kode_fitur || '';
+                        document.getElementById('modal_nama_fitur').value = rowData.nama_fitur || '';
+                        document.getElementById('modal_kategori').value = rowData.kategori || 'topbar';
+                        document.getElementById('modal_icon').value = rowData.icon || '';
+                        document.getElementById('modal_urutan').value = rowData.urutan || 0;
+                        document.getElementById('modal_deskripsi').value = rowData.deskripsi || '';
+                        document.getElementById('modal_status').checked = Boolean(rowData.status);
+
+                        const iconClass = (rowData.icon && rowData.icon.trim()) ? rowData.icon : 'ti ti-puzzle';
+                        if (iconPreview) iconPreview.innerHTML = `<i class="${iconClass} fs-18 text-primary"></i>`;
+                    } else if (action === 'view' && rowData) {
+                        modalTitleText.textContent = 'Detail Fitur Aplikasi';
+                        modalTitleIcon.className = 'ti ti-eye';
+                        formMethod.value = 'POST';
+                        featureIdInput.value = rowData.id;
+
+                        document.getElementById('modal_kode_fitur').value = rowData.kode_fitur || '';
+                        document.getElementById('modal_nama_fitur').value = rowData.nama_fitur || '';
+                        document.getElementById('modal_kategori').value = rowData.kategori || 'topbar';
+                        document.getElementById('modal_icon').value = rowData.icon || '';
+                        document.getElementById('modal_urutan').value = rowData.urutan || 0;
+                        document.getElementById('modal_deskripsi').value = rowData.deskripsi || '';
+                        document.getElementById('modal_status').checked = Boolean(rowData.status);
+
+                        const iconClass = (rowData.icon && rowData.icon.trim()) ? rowData.icon : 'ti ti-puzzle';
+                        if (iconPreview) iconPreview.innerHTML = `<i class="${iconClass} fs-18 text-primary"></i>`;
+
+                        // Disable all fields in view mode
+                        inputs.forEach(inp => inp.disabled = true);
+                        btnSubmitFitur.style.display = 'none';
+                    }
+
+                    modal.show();
                 }
             });
         });

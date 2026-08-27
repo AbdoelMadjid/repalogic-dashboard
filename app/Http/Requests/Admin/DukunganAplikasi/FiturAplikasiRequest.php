@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin\DukunganAplikasi;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class FiturAplikasiRequest extends FormRequest
 {
@@ -11,6 +12,10 @@ class FiturAplikasiRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        if ($this->isMethod('post') && !$this->route('id')) {
+            return auth()->user()->can('create dukunganaplikasi/fitur-aplikasi') || auth()->user()->hasRole('superadmin');
+        }
+
         return auth()->user()->can('update dukunganaplikasi/fitur-aplikasi') || auth()->user()->hasRole('superadmin');
     }
 
@@ -21,27 +26,49 @@ class FiturAplikasiRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('id') ?? $this->input('id');
+
         return [
-            'topbar_search_box' => 'nullable|boolean',
-            'topbar_megamenu_header' => 'nullable|boolean',
-            'topbar_megamenu_apps' => 'nullable|boolean',
-            'topbar_theme_toggler' => 'nullable|boolean',
-            'topbar_apps_dropdown' => 'nullable|boolean',
-            'topbar_messages' => 'nullable|boolean',
-            'topbar_notifications' => 'nullable|boolean',
-            'topbar_fullscreen' => 'nullable|boolean',
-            'topbar_monochrome' => 'nullable|boolean',
-            'topbar_customizer' => 'nullable|boolean',
-            'topbar_language' => 'nullable|boolean',
-            'topbar_user_dropdown' => 'nullable|boolean',
-            'menu_group_main' => 'nullable|boolean',
-            'menu_group_apps' => 'nullable|boolean',
-            'menu_group_custom_pages' => 'nullable|boolean',
-            'menu_group_layouts' => 'nullable|boolean',
-            'menu_group_components' => 'nullable|boolean',
-            'menu_group_documentation' => 'nullable|boolean',
-            'menu_group_menu_item' => 'nullable|boolean',
-            'menu_special_menu' => 'nullable|boolean',
+            'kode_fitur' => [
+                'required',
+                'string',
+                'max:100',
+                'regex:/^[a-zA-Z0-9_-]+$/',
+                Rule::unique('fitur_aplikasi', 'kode_fitur')->ignore($id),
+            ],
+            'nama_fitur' => 'required|string|max:255',
+            'kategori' => 'required|string|max:100',
+            'deskripsi' => 'nullable|string|max:500',
+            'icon' => 'nullable|string|max:100',
+            'status' => 'nullable|boolean',
+            'urutan' => 'nullable|integer',
+        ];
+    }
+
+    /**
+     * Get custom attribute names for validator errors.
+     */
+    public function attributes(): array
+    {
+        return [
+            'kode_fitur' => 'Kode Fitur',
+            'nama_fitur' => 'Nama Fitur',
+            'kategori' => 'Kelompok / Kategori',
+            'deskripsi' => 'Deskripsi Fitur',
+            'icon' => 'Ikon Fitur',
+            'status' => 'Status Aktif',
+            'urutan' => 'Urutan Tampil',
+        ];
+    }
+
+    /**
+     * Custom messages for validation.
+     */
+    public function messages(): array
+    {
+        return [
+            'kode_fitur.regex' => 'Kode Fitur hanya boleh berisi huruf, angka, tanda hubung (-), dan garis bawah (_).',
+            'kode_fitur.unique' => 'Kode Fitur ini sudah digunakan oleh fitur lain.',
         ];
     }
 }

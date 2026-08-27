@@ -38,9 +38,12 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
         Route::post('profil-aplikasi', [ProfilAplikasiController::class, 'update'])->name('profil-aplikasi.update');
 
         Route::get('fitur-aplikasi', [FiturAplikasiController::class, 'index'])->name('fitur-aplikasi.index');
+        Route::post('fitur-aplikasi', [FiturAplikasiController::class, 'store'])->name('fitur-aplikasi.store');
         Route::post('fitur-aplikasi/toggle', [FiturAplikasiController::class, 'toggleFeature'])->name('fitur-aplikasi.toggle');
         Route::post('fitur-aplikasi/toggle-group', [FiturAplikasiController::class, 'toggleGroup'])->name('fitur-aplikasi.toggle-group');
-        Route::post('fitur-aplikasi', [FiturAplikasiController::class, 'update'])->name('fitur-aplikasi.update');
+        Route::post('fitur-aplikasi/bulk-action', [FiturAplikasiController::class, 'bulkAction'])->name('fitur-aplikasi.bulk-action');
+        Route::match(['post', 'put', 'patch'], 'fitur-aplikasi/{id}', [FiturAplikasiController::class, 'update'])->whereNumber('id')->name('fitur-aplikasi.update');
+        Route::delete('fitur-aplikasi/{id}', [FiturAplikasiController::class, 'destroy'])->whereNumber('id')->name('fitur-aplikasi.destroy');
 
         Route::post('menu/toggle-status', [MenuController::class, 'toggleStatus'])->name('menu.toggle-status');
         Route::post('menu/reorder', [MenuController::class, 'reorder'])->name('menu.reorder');

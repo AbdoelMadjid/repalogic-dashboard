@@ -84,9 +84,7 @@
                 @include('layouts.partials.topbar.language-selector')
             @endif
 
-            @if(empty($appFeatures) || $appFeatures->topbar_user_dropdown)
-                @include('layouts.partials.topbar.simple-user-dropdown')
-            @endif
+            @include('layouts.partials.topbar.simple-user-dropdown')
         </div>
     </div>
 </header>

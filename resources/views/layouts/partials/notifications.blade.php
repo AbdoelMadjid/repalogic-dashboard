@@ -39,7 +39,45 @@
     .swal2-container.swal2-bottom-right .swal2-popup,
     .swal2-container.swal2-bottom-left .swal2-popup {
         pointer-events: auto !important;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15) !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+        border: 1px solid rgba(0, 0, 0, 0.08) !important;
+        border-radius: 8px !important;
+        padding: 0.65rem 1rem !important;
+        font-size: 0.85rem !important;
+        line-height: 1.4 !important;
+    }
+
+    /* Compact, elegant Toast title typography */
+    .swal2-popup.swal2-toast .swal2-title {
+        font-size: 0.875rem !important; /* ~14px */
+        font-weight: 500 !important;
+        margin: 0 0.5rem !important;
+        color: #1e293b !important;
+        line-height: 1.4 !important;
+    }
+
+    /* Compact Toast description/html text */
+    .swal2-popup.swal2-toast .swal2-html-container {
+        font-size: 0.8125rem !important; /* ~13px */
+        margin: 0.25rem 0.5rem !important;
+        color: #475569 !important;
+        line-height: 1.35 !important;
+    }
+
+    /* Compact Toast icon scaling */
+    .swal2-popup.swal2-toast .swal2-icon {
+        width: 1.5rem !important;
+        height: 1.5rem !important;
+        min-width: 1.5rem !important;
+        margin: 0 0.5rem 0 0 !important;
+    }
+
+    .swal2-popup.swal2-toast .swal2-icon .swal2-icon-content {
+        font-size: 0.95rem !important;
+    }
+
+    .swal2-popup.swal2-toast .swal2-timer-progress-bar {
+        height: 3px !important;
     }
 
     /* Add proper spacing gap between SweetAlert action buttons */
@@ -165,4 +203,111 @@
             });
         @endif
     });
+
+    /**
+     * =========================================================================
+     * UNIVERSAL SWEETALERT2 GLOBAL HELPERS ACROSS ALL MODULES
+     * =========================================================================
+     */
+
+    // 1. Universal Success Alert (Optional Auto-Reload with Progress Bar)
+    window.showSuccess = function(message, options = {}) {
+        const timer = options.timer !== undefined ? options.timer : (options.reload ? 3000 : undefined);
+        return Swal.fire({
+            title: options.title || 'Berhasil!',
+            text: message,
+            icon: 'success',
+            timer: timer,
+            timerProgressBar: Boolean(timer),
+            showConfirmButton: true,
+            confirmButtonText: options.confirmButtonText || 'OK',
+            customClass: {
+                confirmButton: 'btn btn-primary px-4'
+            },
+            buttonsStyling: false,
+            allowOutsideClick: false,
+            ...options
+        }).then((result) => {
+            if (options.reload) {
+                window.location.reload();
+            }
+            if (typeof options.onClose === 'function') {
+                options.onClose(result);
+            }
+            return result;
+        });
+    };
+
+    // 2. Universal Error Alert
+    window.showError = function(message, title = 'Gagal!') {
+        return Swal.fire({
+            title: title,
+            text: message,
+            icon: 'error',
+            confirmButtonText: 'OK',
+            customClass: {
+                confirmButton: 'btn btn-danger px-4'
+            },
+            buttonsStyling: false
+        });
+    };
+
+    // 3. Universal Warning Alert
+    window.showWarning = function(message, title = 'Peringatan') {
+        return Swal.fire({
+            title: title,
+            text: message,
+            icon: 'warning',
+            confirmButtonText: 'OK',
+            customClass: {
+                confirmButton: 'btn btn-warning px-4'
+            },
+            buttonsStyling: false
+        });
+    };
+
+    // 4. Universal Confirmation Dialog (for AJAX buttons & actions)
+    window.showConfirm = function(options = {}) {
+        const isDanger = options.isDanger !== false;
+        return Swal.fire({
+            title: options.title || (isDanger ? 'Konfirmasi Tindakan' : 'Konfirmasi'),
+            text: options.text || 'Apakah Anda yakin ingin melanjutkan tindakan ini?',
+            icon: options.icon || (isDanger ? 'warning' : 'question'),
+            showCancelButton: true,
+            confirmButtonText: options.confirmButtonText || (isDanger ? '<i class="ti ti-trash me-1"></i> Ya, Lanjutkan!' : '<i class="ti ti-check me-1"></i> Ya, Lanjutkan!'),
+            cancelButtonText: options.cancelButtonText || 'Batal',
+            reverseButtons: true,
+            customClass: {
+                confirmButton: isDanger ? 'btn btn-danger' : 'btn btn-primary',
+                cancelButton: 'btn btn-light'
+            },
+            buttonsStyling: false,
+            ...options
+        }).then((result) => {
+            if (result.isConfirmed && typeof options.onConfirm === 'function') {
+                options.onConfirm(result);
+            }
+            return result;
+        });
+    };
+
+    // 5. Universal Toast Notification
+    window.showToast = function(message, type = 'success', duration = 3000) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: duration,
+            timerProgressBar: true,
+            backdrop: false,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
+        return Toast.fire({
+            icon: type,
+            title: message
+        });
+    };
 </script>
