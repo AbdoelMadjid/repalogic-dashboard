@@ -49,33 +49,35 @@ erDiagram
     website_themes ||--o{ website_sections : "memiliki banyak seksi"
     website_themes {
         bigint id PK
-        string name "Nama Identitas Tema"
-        string folder "Sub-Directory Blade"
-        text description "Deskripsi Singkat"
-        boolean is_active "Status Aktif Tema"
-        timestamps
+        string name
+        string folder
+        text description
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
     }
     website_sections {
         bigint id PK
         bigint website_theme_id FK
-        string section_name "Nama Seksi Halaman"
-        string section_key "Unique Key Seksi"
-        string section_file "File View Blade"
-        string nav_title "Judul di Navbar"
-        string target_id "Anchor Target ID (#id)"
-        boolean show_in_nav "Tampil di Navbar"
-        boolean is_active "Status Aktif Seksi"
-        integer orders "Urutan Tampil"
-        string bg_type "Gaya Latar (default, light, dark, primary, image)"
-        string bg_color_class "Class Warna Ter-generate"
-        string bg_image "Path File Gambar Background"
-        integer bg_position_y "Posisi Vertikal Gambar (0-100%)"
-        string bg_size "Ukuran Latar (cover, contain)"
-        string bg_attachment "Efek Scroll (scroll, fixed/paralaks)"
-        integer bg_image_width "Lebar Gambar Asli (px)"
-        integer bg_image_height "Tinggi Gambar Asli (px)"
-        string bg_image_orientation "Orientasi (landscape, portrait, square)"
-        timestamps
+        string section_name
+        string section_key
+        string section_file
+        string nav_title
+        string target_id
+        boolean show_in_nav
+        boolean is_active
+        integer orders
+        string bg_type
+        string bg_color_class
+        string bg_image
+        integer bg_position_y
+        string bg_size
+        string bg_attachment
+        integer bg_image_width
+        integer bg_image_height
+        string bg_image_orientation
+        timestamp created_at
+        timestamp updated_at
     }
 ```
 
