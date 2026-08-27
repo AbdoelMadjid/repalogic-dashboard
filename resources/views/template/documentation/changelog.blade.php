@@ -102,13 +102,13 @@
                     <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-1.5 rounded-pill">Production Ready</span>
                 </div>
                 <div class="card-body p-4">
-                    <div class="timeline">
+                    <div class="timeline timeline-icon-bordered">
                         <!-- Version 2.2.0 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v2.2.0</h5>
@@ -119,10 +119,10 @@
                                 </div>
                                 <h6 class="fw-semibold text-dark mb-2">User Login Tracking Engine, 24-Hour Point Accumulation, Geolocation Coordinates Capture &amp; Data Login Dashboard</h6>
                                 <ul class="text-muted fs-14 mb-3 ps-3">
-                                    <li><strong>24-Hour / Daily Login Points Engine:</strong> Sistem perhitungan poin cerdas dengan aturan penambahan 1 poin pada login pertama setiap hari (atau interval 24 jam). Login berulang dalam hari yang sama tidak menambah poin, tetapi seluruh riwayat sesi tetap dicatat lengkap.</li>
-                                    <li><strong>Comprehensive Login History Audit:</strong> Pencatatan otomatis jenis browser, sistem operasi/platform, tipe perangkat (Desktop/Mobile/Tablet), alamat IP klien, tanggal &amp; waktu presisi, serta status penambahan poin pada setiap sesi login.</li>
-                                    <li><strong>Non-Blocking Geolocation Coordinates:</strong> Pengambilan titik koordinat GPS (latitude &amp; longitude) secara asynchronous via HTML5 Geolocation API pada form login tanpa menghambat kecepatan submit pengguna.</li>
-                                    <li><strong>Modul Admin Data Login:</strong> Antarmuka terpusat di <code>admin/manajemenpengguna/data-login</code> dengan 4 kartu statistik real-time, filter tanggal/pengguna/pencarian, Tab Pengguna Login Hari Ini, Tab Semua Riwayat Login dengan pagination, Modal Detail Sesi Login dengan integrasi OpenStreetMap &amp; Google Maps, serta fitur pembersihan log lama.</li>
+                                    <li><strong class="text-dark">24-Hour / Daily Login Points Engine:</strong> Sistem perhitungan poin cerdas dengan aturan penambahan 1 poin pada login pertama setiap hari (atau interval 24 jam). Login berulang dalam hari yang sama tidak menambah poin, tetapi seluruh riwayat sesi tetap dicatat lengkap.</li>
+                                    <li><strong class="text-dark">Comprehensive Login History Audit:</strong> Pencatatan otomatis jenis browser, sistem operasi/platform, tipe perangkat (Desktop/Mobile/Tablet), alamat IP klien, tanggal &amp; waktu presisi, serta status penambahan poin pada setiap sesi login.</li>
+                                    <li><strong class="text-dark">Non-Blocking Geolocation Coordinates:</strong> Pengambilan titik koordinat GPS (latitude &amp; longitude) secara asynchronous via HTML5 Geolocation API pada form login tanpa menghambat kecepatan submit pengguna.</li>
+                                    <li><strong class="text-dark">Modul Admin Data Login:</strong> Antarmuka terpusat di <code>admin/manajemenpengguna/data-login</code> dengan 4 kartu statistik real-time, filter tanggal/pengguna/pencarian, Tab Pengguna Login Hari Ini, Tab Semua Riwayat Login dengan pagination, Modal Detail Sesi Login dengan integrasi OpenStreetMap &amp; Google Maps, serta fitur pembersihan log lama.</li>
                                 </ul>
                                 <div class="d-flex flex-wrap gap-1">
                                     <span class="badge bg-light text-muted border">Login Tracker</span>
@@ -138,7 +138,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-git-commit fs-xl text-muted"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v2.1.4</h5>
@@ -148,10 +148,10 @@
                                 </div>
                                 <h6 class="fw-semibold text-dark mb-2">Public Landing Page Footer Overhaul, Drag &amp; Drop Website Sections Reordering, Fitur Aplikasi Header Clean-up &amp; SweetAlert2 Clean Native Restoration</h6>
                                 <ul class="text-muted fs-14 mb-3 ps-3">
-                                    <li><strong>Landing Page Footer Modernization:</strong> Menghapus menu Admin dari footer publik, menstrukturisasi kategori Company &amp; Community menjadi 2 sub-kolom responsif, merombak styling dengan dark gradient, ambient glow, tombol sosial media glassmorphism, dan menyempurnakan jarak badge Hiring.</li>
-                                    <li><strong>Website Sections Drag &amp; Drop Reordering:</strong> Mengintegrasikan SortableJS pada Konfigurasi Website dengan drag handle, live badge renumbering, dan auto-save instan via AJAX ke server.</li>
-                                    <li><strong>Fitur Aplikasi Header Clean-up:</strong> Mengubah tombol badge "Auto-Save Instant" menjadi teks informasi yang elegan dengan ikon petir.</li>
-                                    <li><strong>SweetAlert2 Native Restoration &amp; Firm Theme Colors:</strong> Menghapus modifikasi CSS usang dari tema Inspinia di <code>app.css</code> dan <code>app.min.css</code> yang memotong koordinat centang, serta menerapkan warna Emerald/Primary tegas <code>#10b981</code> pada ikon notifikasi.</li>
+                                    <li><strong class="text-dark">Landing Page Footer Modernization:</strong> Menghapus menu Admin dari footer publik, menstrukturisasi kategori Company &amp; Community menjadi 2 sub-kolom responsif, merombak styling dengan dark gradient, ambient glow, tombol sosial media glassmorphism, dan menyempurnakan jarak badge Hiring.</li>
+                                    <li><strong class="text-dark">Website Sections Drag &amp; Drop Reordering:</strong> Mengintegrasikan SortableJS pada Konfigurasi Website dengan drag handle, live badge renumbering, dan auto-save instan via AJAX ke server.</li>
+                                    <li><strong class="text-dark">Fitur Aplikasi Header Clean-up:</strong> Mengubah tombol badge "Auto-Save Instant" menjadi teks informasi yang elegan dengan ikon petir.</li>
+                                    <li><strong class="text-dark">SweetAlert2 Native Restoration &amp; Firm Theme Colors:</strong> Menghapus modifikasi CSS usang dari tema Inspinia di <code>app.css</code> dan <code>app.min.css</code> yang memotong koordinat centang, serta menerapkan warna Emerald/Primary tegas <code>#10b981</code> pada ikon notifikasi.</li>
                                 </ul>
                                 <div class="d-flex flex-wrap gap-1">
                                     <span class="badge bg-light text-muted border">Website Footer</span>
@@ -167,7 +167,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-git-commit fs-xl text-muted"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v2.1.3</h5>
@@ -191,7 +191,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-git-commit fs-xl text-primary"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v2.1.2</h5>
@@ -216,7 +216,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-git-commit fs-xl text-primary"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v2.1.1</h5>
@@ -240,7 +240,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-git-commit fs-xl text-primary"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v2.1.0</h5>
@@ -266,7 +266,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-circle-check-filled fs-xl text-success"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v2.0.0</h5>
@@ -290,7 +290,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-point-filled fs-xl text-muted"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v1.9.3</h5>
@@ -314,7 +314,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-circle-check-filled fs-xl text-success"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v1.9.2</h5>
@@ -330,7 +330,6 @@
                                     <li><strong class="text-dark">Standar Wajib Update Changelog (Rule 11):</strong> Documented Rule 11 in <code>.agents/AGENTS.md</code> enforcing mandatory updates to <code>changelog.blade.php</code> and <code>README.md</code> prior to git push / release.</li>
                                     <li><strong class="text-dark">Panduan Rilis Interaktif (Version Release Guide Card):</strong> Added interactive 4-step version release guide card with automatic Sidenav and Footer sync explanation.</li>
                                 </ul>
-                                <hr class="border-dashed my-3" />
                             </div>
                         </div>
 
@@ -339,7 +338,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-check fs-xl text-success"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v1.9.1</h5>
@@ -354,7 +353,6 @@
                                     <li><strong class="text-dark">Penyempurnaan Engine Meta Title (<code>title-meta.blade.php</code>):</strong> Bound <code>&lt;title&gt;</code> app name dynamically to <code>ProfilAplikasi</code> model (<code>app_name</code>: <em>REPALOGIC Dashboard</em>) and removed <code>"index"</code> fallback for resource routes.</li>
                                     <li><strong class="text-dark">UI Sidenav Search Input Box (<code>sidenav.blade.php</code>):</strong> Balanced search icon position (<code>ms-2</code>), adjusted typing start padding (<code>28px</code>), and applied Bootstrap 5 standard <code>text-white</code> class for white typed text and muted placeholder text without custom CSS.</li>
                                 </ul>
-                                <hr class="border-dashed my-3" />
                             </div>
                         </div>
 
@@ -363,7 +361,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-check fs-xl text-success"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v1.9.0</h5>
@@ -380,7 +378,6 @@
                                     <li><strong class="text-dark">Modal Petunjuk Operasional Bilingual:</strong> Integrated interactive step-by-step guidance modal (<code>bilingual_guide_modal.blade.php</code>) accessible from both Menu Management and Translation pages.</li>
                                     <li><strong class="text-dark">Safe Fallback &amp; Standar Proyek (.agents/AGENTS.md):</strong> Preserved graceful name fallback for unmapped keys and enforced project standards (SweetAlert2 confirm, single-line centered headers, PSR-4 autoloading).</li>
                                 </ul>
-                                <hr class="border-dashed my-3" />
                             </div>
                         </div>
 
@@ -389,7 +386,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-user-check fs-xl text-info"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v1.8.2</h5>
@@ -404,7 +401,6 @@
                                     <li><strong class="text-dark">Avatar Image Renderer:</strong> Updated avatar image rendering to prefer custom uploaded avatars with fallback to default avatar asset (<code>$user-&gt;avatar_url</code>).</li>
                                     <li><strong class="text-dark">Role &amp; Direct Access Overview:</strong> Integrated user roles badge list and direct permissions summary into profile view tabs.</li>
                                 </ul>
-                                <hr class="border-dashed my-3" />
                             </div>
                         </div>
 
@@ -413,7 +409,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-database fs-xl text-warning"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v1.8.1</h5>
@@ -428,7 +424,6 @@
                                     <li><strong class="text-dark">Modul Backup DB &amp; Restore (`backup-db.blade.php`):</strong> Implemented one-click automated SQL database backups, file size tracking, file download handler, restore functionality, and selective table backup options.</li>
                                     <li><strong class="text-dark">Profil Aplikasi (`profil-aplikasi.blade.php`):</strong> Built application branding manager for dynamic logo upload (Logo Large, Logo Small, Favicon, Application Name, Tagline, Copyright text).</li>
                                 </ul>
-                                <hr class="border-dashed my-3" />
                             </div>
                         </div>
 
@@ -437,7 +432,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-users fs-xl text-success"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v1.8.0</h5>
@@ -453,7 +448,6 @@
                                     <li><strong class="text-dark">Permission Matrix Table Standard (`akses_role.blade.php` &amp; `akses_user.blade.php`):</strong> Implemented Spatie permission matrix table layout (Columns: <code>MODUL / FITUR</code>, <code>CREATE</code>, <code>READ</code>, <code>UPDATE</code>, <code>DELETE</code>, <code>LAINNYA</code>, <code>SEMUA</code>) with high-contrast checkboxes and per-row <code>SEMUA</code> check/uncheck toggles.</li>
                                     <li><strong class="text-dark">Katalog Permission (`permission.blade.php`):</strong> Implemented direct permissions catalog view grouped by application features with CRUD action badges.</li>
                                 </ul>
-                                <hr class="border-dashed my-3" />
                             </div>
                         </div>
 
@@ -462,7 +456,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-sitemap fs-xl text-primary"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v1.7.0</h5>
@@ -477,7 +471,6 @@
                                     <li><strong class="text-dark">Dukungan Menu 3 Level:</strong> Enabled 3-level nested sub-menu hierarchy (Menu Utama L1, Sub-Menu L2, Sub-Sub-Menu L3) with recursive collapse rendering, order sorting, and URL path resolution (<code>getRealUrl()</code>).</li>
                                     <li><strong class="text-dark">Kolom URL &amp; Status Centered:</strong> Added URL column after Menu Name displaying resolved URL endpoints, and centered status switch toggles across all 3 levels.</li>
                                 </ul>
-                                <hr class="border-dashed my-3" />
                             </div>
                         </div>
 
@@ -486,7 +479,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-language fs-xl text-secondary"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v1.6.0</h5>
@@ -522,7 +515,6 @@
                                         (<code>.avatar-md.flex-shrink-0</code>) to ensure icon boxes remain perfectly square
                                         across variable-length translations.</li>
                                 </ul>
-                                <hr class="border-dashed my-3" />
                             </div>
                         </div>
 
@@ -531,7 +523,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-history fs-xl text-primary"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v1.5.0</h5>
@@ -560,7 +552,6 @@
                                         dropdowns (`Icons`) auto-expand and child menu items (`Tabler`, `Lucide`) stay
                                         highlighted when navigating to `-full` sub-routes.</li>
                                 </ul>
-                                <hr class="border-dashed my-3" />
                             </div>
                         </div>
 
@@ -569,7 +560,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-history fs-xl text-primary"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v1.4.0</h5>
@@ -592,7 +583,6 @@
                                         (`plugins-treeview.js`) with `wholerow` full-width node highlights and custom file
                                         icons.</li>
                                 </ul>
-                                <hr class="border-dashed my-3" />
                             </div>
                         </div>
 
@@ -601,7 +591,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-layout-board fs-xl text-warning"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v1.3.0</h5>
@@ -626,7 +616,6 @@
                                     <li><strong class="text-dark">Refactor Custom Group:</strong> Refactored auth basic,
                                         card, split, error pages, and custom plugin pages under `template/custom/`.</li>
                                 </ul>
-                                <hr class="border-dashed my-3" />
                             </div>
                         </div>
 
@@ -635,7 +624,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-arrows-vertical fs-xl text-info"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v1.2.0</h5>
@@ -656,7 +645,6 @@
                                         Converted UI elements, charts (Apex & ECharts), forms, tables, icons, and maps views
                                         under `template/components/` and `template/apps/`.</li>
                                 </ul>
-                                <hr class="border-dashed my-3" />
                             </div>
                         </div>
 
@@ -665,7 +653,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-route fs-xl text-success"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v1.1.0</h5>
@@ -689,7 +677,6 @@
                                         route resolver `routes/template.php` mapping Blade view hierarchy to dot-notation
                                         routes.</li>
                                 </ul>
-                                <hr class="border-dashed my-3" />
                             </div>
                         </div>
 
@@ -698,7 +685,7 @@
                             <div class="timeline-dot">
                                 <i class="ti ti-circle-check-filled fs-xl text-secondary"></i>
                             </div>
-                            <div class="timeline-content ps-3.5 w-100">
+                            <div class="timeline-content ps-3 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v1.0.0</h5>
