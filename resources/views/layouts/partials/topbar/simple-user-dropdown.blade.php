@@ -53,8 +53,8 @@
                 <!-- Divider -->
                 <div class="dropdown-divider"></div>
 
-                <!-- Lock -->
-                <a href="{{ asset('auth-lock-screen.html') }}" class="dropdown-item">
+                <!-- Lock Screen -->
+                <a href="javascript:void(0);" class="dropdown-item" data-action="trigger-lock-screen">
                     <i class="ti ti-lock me-1 fs-lg align-middle"></i>
                     <span class="align-middle" data-lang="topbar-user-lock-screen">Lock Screen</span>
                 </a>

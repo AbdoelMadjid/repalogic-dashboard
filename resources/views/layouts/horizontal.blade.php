@@ -36,7 +36,9 @@
 
     </div>
 
-    @yield('scripts')
+    @include('layouts.partials/notifications')
+    @include('layouts.partials/footer-scripts')
+    @include('layouts.partials.lock-screen-modal')
     @include('layouts.partials/back-to-top')
 
 </body>

@@ -6,11 +6,11 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                         <div>
                             <h4 class="card-title mb-1">Data Pengguna System (User Management)</h4>
                             <p class="text-muted fs-12 mb-0">
-                                Kelola akun pengguna aplikasi, kredensial login, dan atribusi Peran (Role).
+                                Kelola akun pengguna aplikasi, status persetujuan registrasi, dan atribusi Peran (Role).
                             </p>
                         </div>
                         @can('create manajemenpengguna/users')
@@ -53,7 +53,7 @@
                             <div class="col-md-6 d-flex justify-content-md-end mt-2 mt-md-0">
                                 <div class="d-flex align-items-center datatable-search-input">
                                     <label class="me-2 fs-13 text-muted mb-0 text-nowrap">Cari Pengguna:</label>
-                                    <input type="text" id="table-search-input" class="form-control form-control-sm" placeholder="Ketik nama atau email user...">
+                                    <input type="text" id="table-search-input" class="form-control form-control-sm" placeholder="Ketik nama, email, atau role..." value="{{ request('search', '') }}">
                                 </div>
                             </div>
                         </div>
@@ -62,11 +62,12 @@
                             <table class="table table-hover align-middle table-bordered mb-0" id="users-table">
                                 <thead class="table-light align-middle text-center text-nowrap">
                                     <tr class="align-middle text-center text-nowrap">
-                                        <th style="width: 60px;" class="text-center align-middle text-nowrap">#</th>
+                                        <th style="width: 50px;" class="text-center align-middle text-nowrap">#</th>
                                         <th class="text-center align-middle text-nowrap">Identitas Pengguna</th>
-                                        <th class="text-center align-middle text-nowrap">Peran Utama (Role)</th>
+                                        <th class="text-center align-middle text-nowrap">Peran (Role)</th>
+                                        <th class="text-center align-middle text-nowrap">Status Akun</th>
                                         <th class="text-center align-middle text-nowrap">Tanggal Terdaftar</th>
-                                        <th style="width: 140px;" class="text-center align-middle text-nowrap">Aksi</th>
+                                        <th style="width: 180px;" class="text-center align-middle text-nowrap">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -89,6 +90,7 @@
                                                             $badgeClass = match ($role->name) {
                                                                 'superadmin' => 'bg-danger-subtle text-danger border-danger-subtle',
                                                                 'admin' => 'bg-primary-subtle text-primary border-primary-subtle',
+                                                                'user' => 'bg-info-subtle text-info border-info-subtle',
                                                                 default => 'bg-secondary-subtle text-secondary border-secondary-subtle'
                                                             };
                                                         @endphp
@@ -96,15 +98,64 @@
                                                             <i class="ti ti-shield me-1"></i>{{ $role->name }}
                                                         </span>
                                                     @empty
-                                                        <span class="text-muted fs-12">- Tanpa Role -</span>
+                                                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle fs-11">
+                                                            <i class="ti ti-alert-circle me-1"></i>Belum Ada Role
+                                                        </span>
                                                     @endforelse
                                                 </div>
+                                            </td>
+                                            <td class="text-center py-2">
+                                                @if ($user->status === 'pending')
+                                                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle fs-11">
+                                                        <i class="ti ti-clock me-1"></i>Menunggu Persetujuan
+                                                    </span>
+                                                @elseif ($user->status === 'inactive')
+                                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle fs-11">
+                                                        <i class="ti ti-ban me-1"></i>Nonaktif
+                                                    </span>
+                                                @else
+                                                    <span class="badge bg-success-subtle text-success border border-success-subtle fs-11">
+                                                        <i class="ti ti-circle-check me-1"></i>Aktif
+                                                    </span>
+                                                @endif
+
+                                                @if ($user->isPasswordResetRequested())
+                                                    <div class="mt-1">
+                                                        <span class="badge bg-info-subtle text-info border border-info-subtle fs-10 px-1.5 py-0.5" title="Permintaan Reset Password Masuk">
+                                                            <i class="ti ti-key me-0.5"></i>Minta Reset
+                                                        </span>
+                                                    </div>
+                                                @endif
                                             </td>
                                             <td class="text-center text-muted fs-12">
                                                 {{ $user->created_at ? $user->created_at->format('d M Y, H:i') : '-' }}
                                             </td>
                                             <td class="text-center py-2 text-nowrap">
                                                 <div class="d-inline-flex align-items-center justify-content-center gap-1">
+                                                    {{-- Tombol Setujui Khusus User Pending --}}
+                                                    @if ($user->status === 'pending')
+                                                        @can('update manajemenpengguna/users')
+                                                            <form action="{{ route('admin.manajemenpengguna.users.approve', $user->id) }}" method="POST" class="d-inline" data-confirm="Setujui dan aktifkan akun {{ $user->name }} dengan Role User?">
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-sm btn-success" title="Setujui Akun &amp; Berikan Role User">
+                                                                    <i class="ti ti-user-check me-1"></i>Setujui
+                                                                </button>
+                                                            </form>
+                                                        @endcan
+                                                    @endif
+
+                                                    {{-- Tombol Reset Password Khusus Permintaan Reset --}}
+                                                    @if ($user->isPasswordResetRequested())
+                                                        @can('update manajemenpengguna/users')
+                                                            <form action="{{ route('admin.manajemenpengguna.users.reset-password', $user->id) }}" method="POST" class="d-inline" data-confirm="Reset password pengguna {{ $user->name }} ke password standar ('password*')?">
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-sm btn-info text-white" title="Reset Password ke Standar ('password*')">
+                                                                    <i class="ti ti-key me-1"></i>Reset Password
+                                                                </button>
+                                                            </form>
+                                                        @endcan
+                                                    @endif
+
                                                     @can('read manajemenpengguna/users')
                                                         <button type="button" class="btn btn-sm btn-outline-info btn-user-action" data-action="view" data-user='@json($user)' title="Detail Pengguna"><i class="ti ti-eye"></i></button>
                                                     @endcan
@@ -127,7 +178,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center text-muted py-4">Belum ada data pengguna yang terdaftar.</td>
+                                            <td colspan="6" class="text-center text-muted py-4">Belum ada data pengguna yang terdaftar.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -284,6 +335,20 @@
                 });
             }
 
+            // Auto search jika terdapat parameter ?search= di URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchParam = urlParams.get('search');
+            if (searchParam && searchInput) {
+                searchInput.value = searchParam;
+            }
+
+            if (searchInput && searchInput.value.trim() !== '') {
+                setTimeout(function() {
+                    searchInput.focus();
+                    searchInput.select();
+                }, 150);
+            }
+
             updateTableDisplay();
 
             // Modal & Action Handlers (Event Delegation)
@@ -320,6 +385,7 @@
                     passwordInput.required = true;
                     passwordLabel.innerHTML = 'Kata Sandi (Password) <span class="text-danger">*</span>';
                     passwordHelp.textContent = 'Wajib diisi saat membuat akun baru (minimal 8 karakter).';
+                    document.getElementById('form_user_status').value = 'active';
 
                 } else if (action === 'edit' && user) {
                     modalTitle.innerHTML = `<i class="ti ti-user-edit me-1"></i> Edit Pengguna: ${user.name}`;
@@ -346,6 +412,7 @@
             function populateForm(user) {
                 document.getElementById('form_user_name').value = user.name || '';
                 document.getElementById('form_user_email').value = user.email || '';
+                document.getElementById('form_user_status').value = user.status || 'active';
 
                 const userRoles = user.role_names || (user.roles ? user.roles.map(r => r.name || r) : []);
                 userRoles.forEach(rName => {

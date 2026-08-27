@@ -24,6 +24,10 @@ class User extends Authenticatable
         'email',
         'password',
         'avatar',
+        'status',
+        'approved_at',
+        'approved_by',
+        'password_reset_requested_at',
     ];
 
     /**
@@ -45,8 +49,50 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'approved_at' => 'datetime',
+            'password_reset_requested_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Check if user has an active password reset request.
+     */
+    public function isPasswordResetRequested(): bool
+    {
+        return !is_null($this->password_reset_requested_at);
+    }
+
+    /**
+     * Check if user is in pending approval state.
+     */
+    public function isPending(): bool
+    {
+        return $this->status === 'pending';
+    }
+
+    /**
+     * Check if user is active.
+     */
+    public function isActive(): bool
+    {
+        return $this->status === 'active';
+    }
+
+    /**
+     * Check if user is inactive / suspended.
+     */
+    public function isInactive(): bool
+    {
+        return $this->status === 'inactive';
+    }
+
+    /**
+     * Get the admin user who approved this account.
+     */
+    public function approver(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class, 'approved_by');
     }
 
     /**

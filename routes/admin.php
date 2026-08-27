@@ -62,6 +62,9 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
     });
 
     Route::prefix('manajemenpengguna')->name('manajemenpengguna.')->group(function () {
+        Route::post('users/{id}/approve', [UserController::class, 'approve'])->name('users.approve');
+        Route::post('users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
+        Route::post('users/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
         Route::resource('users', UserController::class);
         Route::resource('role', RoleController::class);
         Route::resource('permission', PermissionController::class);

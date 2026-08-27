@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.0.0</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.1.0</strong>
                             </span>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                                     <h6 class="fw-bold mb-0 text-dark">2. Catat Log Changelog</h6>
                                 </div>
                                 <p class="fs-13 text-muted mb-0">
-                                    Tambahkan item timeline rilis versi baru pada file <code>changelog.blade.php</code> ini dengan rincian poin pembaruan yang jelas.
+                                    Buka <code>changelog.blade.php</code> dan tambahkan blok timeline versi rilis terbaru dengan mencantumkan timestamp (YYYY-MM-DD HH:mm WIB).
                                 </p>
                             </div>
                         </div>
@@ -68,10 +68,10 @@
                             <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                 <div class="d-flex align-items-center mb-2">
                                     <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-brand-git fs-14"></i></span>
-                                    <h6 class="fw-bold mb-0 text-dark">3. Update Tabel README.md</h6>
+                                    <h6 class="fw-bold mb-0 text-dark">3. Catat di README.md</h6>
                                 </div>
                                 <p class="fs-13 text-muted mb-0">
-                                    Tambahkan baris versi rilis baru pada tabel <strong>Riwayat Release / Tag</strong> di dokumen utama <code>README.md</code>.
+                                    Tambahkan baris riwayat versi rilis pada tabel <em>Riwayat Release / Tag</em> di file <code>README.md</code>.
                                 </p>
                             </div>
                         </div>
@@ -79,27 +79,22 @@
                         <div class="col-md-6 col-lg-3">
                             <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                 <div class="d-flex align-items-center mb-2">
-                                    <span class="badge bg-info rounded-circle p-1.5 me-2"><i class="ti ti-upload fs-14"></i></span>
+                                    <span class="badge bg-danger rounded-circle p-1.5 me-2"><i class="ti ti-tag fs-14"></i></span>
                                     <h6 class="fw-bold mb-0 text-dark">4. Git Tag &amp; Push</h6>
                                 </div>
                                 <p class="fs-13 text-muted mb-0">
-                                    Jalankan perintah commit &amp; tagging: <br>
-                                    <code class="fs-11 text-dark">git tag -a vX.Y.Z -m "Release vX.Y.Z"</code><br>
-                                    <code class="fs-11 text-dark">git push origin main --tags</code>
+                                    Buat tag git: <code>git tag -a vX.Y.Z -m "Pesan rilis..."</code> lalu push ke remote repository: <code>git push origin main --tags</code>.
                                 </p>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- AUTOMATIC SYNC EXPLANATION -->
-                    <div class="alert alert-primary border-primary-subtle d-flex align-items-start gap-2 mt-3 mb-0">
-                        <i class="ti ti-refresh fs-18 text-primary flex-shrink-0 mt-0.5"></i>
-                        <div class="fs-12 text-primary-emphasis">
-                            <strong>Cara Kerja Otomatisasi Versi Sidenav &amp; Footer:</strong>
-                            <ul class="mb-0 ps-3 mt-1">
-                                <li><strong>Sidenav Changelog Badge:</strong> Terhubung secara langsung ke <code>config('app.version')</code> pada <code>config/sidenav-template/documentation.php</code>.</li>
-                                <li><strong>Footer Badge &amp; DB Profil Aplikasi:</strong> Model <code>ProfilAplikasi::getSettings()</code> dilengkapi mekanisme <em>Auto-Sync</em> yang secara otomatis meng-update kolom <code>app_version</code> di database MySQL dan Cache aplikasi begitu <code>APP_VERSION</code> di-update pada <code>.env</code> / <code>config/app.php</code>.</li>
-                            </ul>
+                        <div class="col-12 mt-3">
+                            <div class="alert alert-info border-0 mb-0 py-2.5 px-3 fs-13 d-flex align-items-center">
+                                <i class="ti ti-info-circle fs-18 me-2 flex-shrink-0"></i>
+                                <div>
+                                    <strong>Catatan Otomatisasi Terintegrasi:</strong> Anda <em>TIDAK PERLU</em> mengubah hardcoded version pada Sidenav template, view Footer, maupun migrasi DB secara manual karena seluruh engine telah terpusat dan sinkron otomatis.
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -112,12 +107,12 @@
                 <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0 fw-bold"><i class="ti ti-history me-2 text-primary"></i>Git Commit Release
                         Timeline</h5>
-                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">16 Versions Logged</span>
+                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">17 Versions Logged</span>
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
 
-                        <!-- Version 2.0.0 -->
+                        <!-- Version 2.1.0 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -125,8 +120,33 @@
                             <div class="timeline-content ps-3.5 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.0.0</h5>
+                                        <h5 class="fw-bold mb-0">v2.1.0</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.1.0</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 18:15 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Pembaruan Sistem Otentikasi, Idle Lock Screen, User Approval Workflow, Multi-Type Notification Hub &amp; Admin Reset Password</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Idle Screen Lock Otomatis:</strong> Fitur deteksi ketidakaktifan pengguna (5 menit) dengan modal lock screen AJAX, avatar pengguna, badge role, animasi getar saat sandi salah, dan integrasi topbar lock screen.</li>
+                                    <li><strong class="text-dark">Alur Persetujuan Registrasi Pengguna (*User Approval Workflow*):</strong> Pengguna yang mendaftar mandiri berstatus <code>pending</code>, diproteksi dari login hingga disetujui, tombol persetujuan admin dengan assignment otomatis Spatie Role <code>user</code>.</li>
+                                    <li><strong class="text-dark">Pusat Notifikasi Universal Topbar (*Multi-Type Notification Hub*):</strong> Mengagregasikan notifikasi pendaftaran, permintaan reset password, permohonan nonaktif, pesan chat, dan notifikasi database Laravel via <code>NotificationService</code> terpusat.</li>
+                                    <li><strong class="text-dark">Permintaan Reset Password (*Admin-Assisted Reset*):</strong> Form forgot password dengan validasi interaktif, pengajuan permintaan reset ke administrator, tombol reset pada tabel admin ke password standar (<code>password*</code>), dan banner sukses terverifikasi.</li>
+                                    <li><strong class="text-dark">Dinamisasi Branding Otentikasi &amp; Lokalisasi Bahasa Indonesia:</strong> Logo, favicon, meta title, dan teks footer form otentikasi terhubung 100% dinamis ke tabel <code>profil_aplikasi</code>, serta seluruh teks di-standarisasi ke Bahasa Indonesia.</li>
+                                    <li><strong class="text-dark">Dokumentasi Resmi Alur Otentikasi:</strong> Panduan lengkap di <code>docs/alur_registrasi_dan_persetujuan_pengguna.md</code>.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.0.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-check-filled fs-xl text-success"></i>
+                            </div>
+                            <div class="timeline-content ps-3.5 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.0.0</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.0.0</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 14:35 WIB</span>

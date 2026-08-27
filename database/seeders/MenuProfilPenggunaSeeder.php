@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use Spatie\Permission\Models\Role;
+
 class MenuProfilPenggunaSeeder extends BaseMenuSeeder
 {
     /**
@@ -17,6 +19,13 @@ class MenuProfilPenggunaSeeder extends BaseMenuSeeder
             'url' => 'admin/profil-pengguna',
             'route' => 'admin.profil-pengguna.index',
         ]);
-        $this->attachMenupermission($mm, ['create', 'read', 'update'], ['superadmin', 'admin', 'operator']);
+
+        // Ambil seluruh role yang ada di database agar menu dapat diakses oleh role apapun
+        $allRoles = Role::pluck('name')->toArray();
+        if (empty($allRoles)) {
+            $allRoles = ['superadmin', 'admin', 'operator', 'user'];
+        }
+
+        $this->attachMenupermission($mm, ['create', 'read', 'update'], $allRoles);
     }
 }

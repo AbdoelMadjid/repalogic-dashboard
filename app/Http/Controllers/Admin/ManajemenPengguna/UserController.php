@@ -20,7 +20,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::with('roles')->latest()->get();
+        $users = User::with(['roles', 'approver'])->latest()->get();
         foreach ($users as $user) {
             $user->role_names = $user->roles->pluck('name')->toArray();
         }
@@ -45,6 +45,9 @@ class UserController extends Controller
             'name' => trim($validated['name']),
             'email' => strtolower(trim($validated['email'])),
             'password' => Hash::make($validated['password']),
+            'status' => $validated['status'] ?? 'active',
+            'approved_at' => ($validated['status'] ?? 'active') === 'active' ? now() : null,
+            'approved_by' => ($validated['status'] ?? 'active') === 'active' ? auth()->id() : null,
         ]);
 
         if (isset($validated['roles'])) {
@@ -81,6 +84,14 @@ class UserController extends Controller
             'email' => strtolower(trim($validated['email'])),
         ];
 
+        if (isset($validated['status'])) {
+            $userData['status'] = $validated['status'];
+            if ($validated['status'] === 'active' && $user->status === 'pending') {
+                $userData['approved_at'] = now();
+                $userData['approved_by'] = auth()->id();
+            }
+        }
+
         if (!empty($validated['password'])) {
             $userData['password'] = Hash::make($validated['password']);
         }
@@ -94,6 +105,72 @@ class UserController extends Controller
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $this->notifySuccess("Data pengguna \"{$user->name}\" berhasil diperbarui.");
+
+        return redirect()->route('admin.manajemenpengguna.users.index');
+    }
+
+    /**
+     * Approve self-registered user and assign default 'user' role.
+     */
+    public function approve($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Pastikan role 'user' tersedia
+        Role::firstOrCreate(['name' => 'user', 'guard_name' => 'web']);
+
+        $user->update([
+            'status' => 'active',
+            'approved_at' => now(),
+            'approved_by' => auth()->id(),
+        ]);
+
+        // Otomatis assign role 'user' jika akun belum memiliki role
+        if ($user->roles->isEmpty()) {
+            $user->assignRole('user');
+        }
+
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
+        $this->notifySuccess("Akun pengguna \"{$user->name}\" berhasil disetujui & diaktifkan dengan Role User.");
+
+        return redirect()->route('admin.manajemenpengguna.users.index');
+    }
+
+    /**
+     * Reset user password to standard default password ("password*").
+     */
+    public function resetPassword($id)
+    {
+        $user = User::findOrFail($id);
+
+        $user->update([
+            'password' => Hash::make('password*'),
+            'password_reset_requested_at' => null,
+        ]);
+
+        $this->notifySuccess("Password pengguna \"{$user->name}\" berhasil di-reset menjadi \"password*\".");
+
+        return redirect()->route('admin.manajemenpengguna.users.index');
+    }
+
+    /**
+     * Toggle status active / inactive for user.
+     */
+    public function toggleStatus($id)
+    {
+        $user = User::findOrFail($id);
+
+        if (auth()->id() === $user->id) {
+            $this->notifyError("Anda tidak dapat mengubah status akun Anda sendiri.");
+            return redirect()->route('admin.manajemenpengguna.users.index');
+        }
+
+        $newStatus = $user->status === 'active' ? 'inactive' : 'active';
+        $user->update(['status' => $newStatus]);
+
+        $label = $newStatus === 'active' ? 'diaktifkan' : 'dinonaktifkan';
+        $this->notifySuccess("Status akun \"{$user->name}\" berhasil {$label}.");
 
         return redirect()->route('admin.manajemenpengguna.users.index');
     }

@@ -53,6 +53,7 @@
 
 ### 📚 Dokumentasi Arsitektur Teknis:
 - 📄 [**Arsitektur Engine Dinamisasi Tema & Seksi Website**](docs/arsitektur_dinamisasi_tema_website.md) — Panduan resmi arsitektur *Loose Coupling*, *Crop Simulator*, *Efek Paralaks 3D*, *Metadata Orientasi Gambar*, dan *Pemisahan Modal Modular*.
+- 📄 [**Alur Registrasi Mandiri & Persetujuan Akun Pengguna**](docs/alur_registrasi_dan_persetujuan_pengguna.md) — Panduan lengkap alur pendaftaran mandiri, *User Approval Workflow*, proteksi login *Zero-Trust*, *Universal Notification Hub*, dan aktivasi Spatie Role otomatis.
 
 ---
 
@@ -210,6 +211,7 @@ php artisan pail
 
 | Tag | Tanggal Rilis | Deskripsi / Catatan Perubahan |
 | :--- | :--- | :--- |
+| **`v2.1.0`** | 2026-08-27 | Pembaruan Sistem Otentikasi, Idle Lock Screen, User Approval Workflow, Multi-Type Notification Hub & Admin Reset Password |
 | **`v2.0.0`** | 2026-08-27 | Engine Dinamisasi Tema & Seksi Website Terpusat, Crop Simulator & Arsitektur Partial Modular |
 | **`v1.9.3`** | 2026-08-27 | Pemisahan Tabel Config User, Pengatur Posisi Sampul Interaktif, Motto Hidup & Widget Progress Kelengkapan Profil |
 | **`v1.9.2`** | 2026-08-27 | Centralized Versioning Engine, Git Log Timestamps & Mandatory Changelog Standard (Rule 11) |

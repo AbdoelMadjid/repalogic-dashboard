@@ -1,0 +1,140 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\User;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+
+class NotificationService
+{
+    /**
+     * Get aggregated system notifications for topbar dropdown.
+     * Supports:
+     * - Registration approvals (Pendaftaran Mandiri)
+     * - User deactivation requests (Permintaan Nonaktif User)
+     * - Password reset requests (Permintaan Reset Password)
+     * - Chat / User Messages (Pesan Baru Antar Pengguna)
+     * - Database / System notifications
+     */
+    public static function getNotifications(?User $currentUser = null): array
+    {
+        $user = $currentUser ?: Auth::user();
+        if (!$user) {
+            return [
+                'items' => collect(),
+                'total_count' => 0,
+                'unread_count' => 0,
+                'categories' => [],
+            ];
+        }
+
+        $items = collect();
+        $canManageUsers = $user->hasRole(['superadmin', 'admin']) ||
+            $user->can('read manajemenpengguna/users') ||
+            $user->can('update manajemenpengguna/users');
+
+        // 1. Pendaftaran Pengguna Mandiri (Self-Registration Approval)
+        if ($canManageUsers) {
+            $pendingUsers = User::where('status', 'pending')
+                ->latest()
+                ->take(10)
+                ->get();
+
+            foreach ($pendingUsers as $pUser) {
+                $items->push([
+                    'id' => 'registration-' . $pUser->id,
+                    'type' => 'registration',
+                    'category_label' => 'Pendaftaran Akun',
+                    'title' => $pUser->name,
+                    'subtitle' => $pUser->email,
+                    'message' => 'Pendaftaran akun baru menunggu persetujuan administrator.',
+                    'avatar' => $pUser->avatar_url,
+                    'icon' => 'ti ti-user-plus',
+                    'badge_class' => 'bg-warning-subtle text-warning border-warning-subtle',
+                    'badge_label' => 'Perlu Persetujuan',
+                    'url' => route('admin.manajemenpengguna.users.index', ['search' => $pUser->name]),
+                    'created_at' => $pUser->created_at,
+                    'time_ago' => $pUser->created_at ? $pUser->created_at->diffForHumans() : 'Baru saja',
+                    'is_unread' => true,
+                ]);
+            }
+        }
+
+        // 2. Permintaan Reset Password (Password Reset Request)
+        if ($canManageUsers) {
+            $resetRequestedUsers = User::whereNotNull('password_reset_requested_at')
+                ->latest('password_reset_requested_at')
+                ->take(10)
+                ->get();
+
+            foreach ($resetRequestedUsers as $rUser) {
+                $items->push([
+                    'id' => 'reset-password-' . $rUser->id,
+                    'type' => 'reset_password_request',
+                    'category_label' => 'Reset Password',
+                    'title' => $rUser->name,
+                    'subtitle' => $rUser->email,
+                    'message' => 'Mengajukan permintaan reset kata sandi ke password standar.',
+                    'avatar' => $rUser->avatar_url,
+                    'icon' => 'ti ti-key',
+                    'badge_class' => 'bg-info-subtle text-info border-info-subtle',
+                    'badge_label' => 'Minta Reset',
+                    'url' => route('admin.manajemenpengguna.users.index', ['search' => $rUser->name]),
+                    'created_at' => $rUser->password_reset_requested_at,
+                    'time_ago' => $rUser->password_reset_requested_at ? $rUser->password_reset_requested_at->diffForHumans() : 'Baru saja',
+                    'is_unread' => true,
+                ]);
+            }
+        }
+
+        // 3. Database Notifications (Standar Laravel Notifications jika tabel ada)
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('notifications') && method_exists($user, 'unreadNotifications')) {
+                $dbNotifications = $user->unreadNotifications()->take(10)->get();
+                foreach ($dbNotifications as $dNotif) {
+                    $data = $dNotif->data;
+                    $notifType = $data['type'] ?? 'system';
+
+                    $items->push([
+                        'id' => 'db-' . $dNotif->id,
+                        'type' => $notifType,
+                        'category_label' => $data['category_label'] ?? 'Pemberitahuan',
+                        'title' => $data['title'] ?? 'Notifikasi Sistem',
+                        'subtitle' => $data['subtitle'] ?? null,
+                        'message' => $data['message'] ?? 'Ada pembaruan aktivitas pada sistem.',
+                        'avatar' => $data['avatar'] ?? asset('assets/images/users/default-avatar.svg'),
+                        'icon' => $data['icon'] ?? 'ti ti-bell-ringing',
+                        'badge_class' => $data['badge_class'] ?? 'bg-info-subtle text-info border-info-subtle',
+                        'badge_label' => $data['badge_label'] ?? 'Info',
+                        'url' => $data['url'] ?? 'javascript:void(0);',
+                        'created_at' => $dNotif->created_at,
+                        'time_ago' => $dNotif->created_at ? $dNotif->created_at->diffForHumans() : 'Baru saja',
+                        'is_unread' => is_null($dNotif->read_at),
+                    ]);
+                }
+            }
+        } catch (\Throwable $e) {
+            // Silently fallback if notifications table is inaccessible
+        }
+
+        // Urutkan seluruh notifikasi berdasarkan waktu terbaru
+        $sortedItems = $items->sortByDesc('created_at')->values();
+
+        // Hitung kategori notifikasi
+        $categories = [
+            'registration' => $sortedItems->where('type', 'registration')->count(),
+            'deactivate_request' => $sortedItems->where('type', 'deactivate_request')->count(),
+            'reset_password_request' => $sortedItems->where('type', 'reset_password_request')->count(),
+            'chat_message' => $sortedItems->where('type', 'chat_message')->count(),
+            'system' => $sortedItems->where('type', 'system')->count(),
+        ];
+
+        return [
+            'items' => $sortedItems,
+            'total_count' => $sortedItems->count(),
+            'unread_count' => $sortedItems->where('is_unread', true)->count(),
+            'categories' => $categories,
+        ];
+    }
+}

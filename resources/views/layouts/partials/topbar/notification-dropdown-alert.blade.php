@@ -1,279 +1,115 @@
+@php
+    $notifData = \App\Services\NotificationService::getNotifications();
+    $notifItems = $notifData['items'];
+    $totalCount = $notifData['total_count'];
+    $unreadCount = $notifData['unread_count'];
+@endphp
+
 <div id="notification-dropdown-alert" class="topbar-item">
     <div class="dropdown">
-        <button class="topbar-link dropdown-toggle drop-arrow-none" data-bs-toggle="dropdown" type="button"
-            data-bs-auto-close="outside" aria-haspopup="false" aria-expanded="false">
+        <button class="topbar-link dropdown-toggle drop-arrow-none position-relative" data-bs-toggle="dropdown" type="button"
+            data-bs-auto-close="outside" aria-haspopup="false" aria-expanded="false" title="Pusat Notifikasi &amp; Pemberitahuan">
             <i class="ti ti-bell topbar-link-icon"></i>
-            <span class="badge badge-square text-bg-warning topbar-badge">12</span>
+            @if ($unreadCount > 0)
+                <span class="badge badge-square bg-danger topbar-badge animate-pulse" style="font-size: 10px; padding: 2px 5px;">
+                    {{ $unreadCount > 99 ? '99+' : $unreadCount }}
+                </span>
+            @endif
         </button>
 
-        <div class="dropdown-menu p-0 dropdown-menu-end dropdown-menu-lg">
-            <div class="px-3 py-2 border-bottom">
+        <div class="dropdown-menu p-0 dropdown-menu-end dropdown-menu-lg shadow-lg border-0" style="border-radius: 0.85rem; overflow: hidden; min-width: 330px;">
+            <!-- Header Notifikasi Multi-Type -->
+            <div class="px-3 py-2.5 border-bottom bg-light bg-opacity-50">
                 <div class="row align-items-center">
                     <div class="col">
-                        <h6 class="m-0 fs-md fw-semibold" data-lang="topbar-notifications-title">Notifications</h6>
+                        <h6 class="m-0 fs-13 fw-bold text-dark">
+                            <i class="ti ti-bell-ringing me-1 text-primary"></i> Notifikasi
+                        </h6>
                     </div>
-                    <div class="col text-end">
-                        <a href="#!" class="badge text-bg-light badge-label py-1"
-                            data-lang="topbar-notifications-alerts-badge">12 Alerts</a>
+                    <div class="col-auto">
+                        @if ($unreadCount > 0)
+                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle py-1 px-2 fs-11 fw-semibold">
+                                {{ $unreadCount }} Baru
+                            </span>
+                        @else
+                            <span class="badge bg-success-subtle text-success border border-success-subtle py-1 px-2 fs-11">
+                                <i class="ti ti-check me-1"></i>Terbaru
+                            </span>
+                        @endif
                     </div>
                 </div>
             </div>
 
-            <div style="max-height: 300px" data-simplebar="">
-                <!-- item 1 -->
-                <div class="dropdown-item notification-item py-2 text-wrap" id="notification-1">
-                    <span class="d-flex gap-2">
-                        <span class="avatar-md flex-shrink-0">
-                            <span class="avatar-title bg-danger-subtle text-danger rounded">
-                                <i class="ti ti-server-bolt notification-item-icon fill-danger"></i>
-                            </span>
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">Critical alert: Server crash
-                                detected</span>
-                            <br />
-                            <span class="fs-xs">30 minutes ago</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#notification-1">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
+            <!-- List Item Notifikasi Universal -->
+            <div style="max-height: 330px" data-simplebar="">
+                @forelse ($notifItems as $item)
+                    <a href="{{ $item['url'] }}"
+                        class="dropdown-item notification-item py-2.5 px-3 text-wrap border-bottom border-light d-block hover-bg-light transition-all">
+                        <div class="d-flex gap-2.5 align-items-center">
+                            <!-- Avatar / Icon Bulat -->
+                            <div class="position-relative flex-shrink-0">
+                                @if (!empty($item['avatar']))
+                                    <img src="{{ $item['avatar'] }}" alt="{{ $item['title'] }}"
+                                        class="rounded-circle object-fit-cover border"
+                                        style="width: 38px; height: 38px; object-fit: cover; object-position: top;">
+                                @else
+                                    <div class="avatar-sm rounded-circle d-flex align-items-center justify-content-center bg-primary-subtle text-primary border" style="width: 38px; height: 38px;">
+                                        <i class="{{ $item['icon'] }} fs-18"></i>
+                                    </div>
+                                @endif
 
-                <!-- item 2 -->
-                <div class="dropdown-item notification-item py-2 text-wrap" id="notification-2">
-                    <span class="d-flex gap-2">
-                        <span class="avatar-md flex-shrink-0">
-                            <span class="avatar-title bg-warning-subtle text-warning rounded">
-                                <i class="ti ti-alert-triangle notification-item-icon fill-warning"></i>
-                            </span>
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">High memory usage on Node
-                                A</span>
-                            <br />
-                            <span class="fs-xs">10 minutes ago</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#notification-2">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
+                                @if ($item['type'] === 'registration')
+                                    <span class="position-absolute bottom-0 end-0 bg-warning border border-2 border-white rounded-circle"
+                                        style="width: 11px; height: 11px;" title="Registrasi Baru"></span>
+                                @elseif ($item['type'] === 'chat_message')
+                                    <span class="position-absolute bottom-0 end-0 bg-success border border-2 border-white rounded-circle"
+                                        style="width: 11px; height: 11px;" title="Pesan Baru"></span>
+                                @elseif ($item['type'] === 'deactivate_request')
+                                    <span class="position-absolute bottom-0 end-0 bg-danger border border-2 border-white rounded-circle"
+                                        style="width: 11px; height: 11px;" title="Permintaan Nonaktif"></span>
+                                @endif
+                            </div>
 
-                <!-- item 3 -->
-                <div class="dropdown-item notification-item py-2 text-wrap" id="notification-3">
-                    <span class="d-flex gap-2">
-                        <span class="avatar-md flex-shrink-0">
-                            <span class="avatar-title bg-success-subtle text-success rounded">
-                                <i class="ti ti-circle-check notification-item-icon fill-success"></i>
+                            <!-- Detail Pesan Notifikasi -->
+                            <div class="flex-grow-1 overflow-hidden">
+                                <div class="d-flex justify-content-between align-items-center mb-0.5">
+                                    <h6 class="mb-0 fs-13 fw-semibold text-dark text-truncate" style="max-width: 140px;">
+                                        {{ $item['title'] }}
+                                    </h6>
+                                    <span class="badge {{ $item['badge_class'] }} border fs-10 px-1.5 py-0.5">
+                                        {{ $item['badge_label'] }}
+                                    </span>
+                                </div>
+                                <p class="text-muted fs-12 mb-1 text-truncate">
+                                    {{ $item['subtitle'] ?: $item['message'] }}
+                                </p>
+                                <div class="d-flex align-items-center justify-content-between text-muted fs-11">
+                                    <span><i class="ti ti-clock me-1"></i>{{ $item['time_ago'] }}</span>
+                                    <span class="text-primary fw-medium"><i class="ti ti-arrow-right fs-12"></i> Buka</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                @empty
+                    <div class="text-center py-4 px-3">
+                        <div class="avatar-md mx-auto mb-2">
+                            <span class="avatar-title bg-success-subtle text-success rounded-circle fs-24 d-inline-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                <i class="ti ti-circle-check"></i>
                             </span>
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">Backup completed
-                                successfully</span>
-                            <br />
-                            <span class="fs-xs">1 hour ago</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#notification-3">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
-
-                <!-- item 4 -->
-                <div class="dropdown-item notification-item py-2 text-wrap" id="notification-4">
-                    <span class="d-flex gap-2">
-                        <span class="avatar-md flex-shrink-0">
-                            <span class="avatar-title bg-primary-subtle text-primary rounded">
-                                <i class="ti ti-user-plus notification-item-icon fill-primary"></i>
-                            </span>
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">New user registration: Sarah
-                                Miles</span>
-                            <br />
-                            <span class="fs-xs">Just now</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#notification-4">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
-
-                <!-- item 5 -->
-                <div class="dropdown-item notification-item py-2 text-wrap" id="notification-5">
-                    <span class="d-flex gap-2">
-                        <span class="avatar-md flex-shrink-0">
-                            <span class="avatar-title bg-danger-subtle text-danger rounded">
-                                <i class="ti ti-bug notification-item-icon fill-danger"></i>
-                            </span>
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">Bug reported in payment
-                                module</span>
-                            <br />
-                            <span class="fs-xs">20 minutes ago</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#notification-5">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
-
-                <!-- item 6 -->
-                <div class="dropdown-item notification-item py-2 text-wrap" id="notification-6">
-                    <span class="d-flex gap-2">
-                        <span class="avatar-md flex-shrink-0">
-                            <span class="avatar-title bg-info-subtle text-info rounded">
-                                <i class="ti ti-message-circle notification-item-icon fill-info"></i>
-                            </span>
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">New comment on Task #142</span>
-                            <br />
-                            <span class="fs-xs">15 minutes ago</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#notification-6">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
-
-                <!-- item 7 -->
-                <div class="dropdown-item notification-item py-2 text-wrap" id="notification-7">
-                    <span class="d-flex gap-2">
-                        <span class="avatar-md flex-shrink-0">
-                            <span class="avatar-title bg-warning-subtle text-warning rounded">
-                                <i class="ti ti-battery-charging notification-item-icon fill-warning"></i>
-                            </span>
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">Low battery on Device X</span>
-                            <br />
-                            <span class="fs-xs">45 minutes ago</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#notification-7">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
-
-                <!-- item 8 -->
-                <div class="dropdown-item notification-item py-2 text-wrap" id="notification-8">
-                    <span class="d-flex gap-2">
-                        <span class="avatar-md flex-shrink-0">
-                            <span class="avatar-title bg-success-subtle text-success rounded">
-                                <i class="ti ti-cloud-upload notification-item-icon fill-success"></i>
-                            </span>
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">File upload completed</span>
-                            <br />
-                            <span class="fs-xs">1 hour ago</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#notification-8">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
-
-                <!-- item 9 -->
-                <div class="dropdown-item notification-item py-2 text-wrap" id="notification-9">
-                    <span class="d-flex gap-2">
-                        <span class="avatar-md flex-shrink-0">
-                            <span class="avatar-title bg-primary-subtle text-primary rounded">
-                                <i class="ti ti-calendar notification-item-icon fill-primary"></i>
-                            </span>
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">Team meeting scheduled at 3
-                                PM</span>
-                            <br />
-                            <span class="fs-xs">2 hours ago</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#notification-9">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
-
-                <!-- item 10 -->
-                <div class="dropdown-item notification-item py-2 text-wrap" id="notification-10">
-                    <span class="d-flex gap-2">
-                        <span class="avatar-md flex-shrink-0">
-                            <span class="avatar-title bg-secondary-subtle text-secondary rounded">
-                                <i class="ti ti-download notification-item-icon fill-secondary"></i>
-                            </span>
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">Report ready for download</span>
-                            <br />
-                            <span class="fs-xs">3 hours ago</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#notification-10">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
-
-                <!-- item 11 -->
-                <div class="dropdown-item notification-item py-2 text-wrap" id="notification-11">
-                    <span class="d-flex gap-2">
-                        <span class="avatar-md flex-shrink-0">
-                            <span class="avatar-title bg-danger-subtle text-danger rounded">
-                                <i class="ti ti-lock notification-item-icon fill-danger"></i>
-                            </span>
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">Multiple failed login
-                                attempts</span>
-                            <br />
-                            <span class="fs-xs">5 hours ago</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#notification-11">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
-
-                <!-- item 12 -->
-                <div class="dropdown-item notification-item py-2 text-wrap" id="notification-12">
-                    <span class="d-flex gap-2">
-                        <span class="avatar-md flex-shrink-0">
-                            <span class="avatar-title bg-info-subtle text-info rounded">
-                                <i class="ti ti-bell-ringing notification-item-icon fill-info"></i>
-                            </span>
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">Reminder: Submit your
-                                timesheet</span>
-                            <br />
-                            <span class="fs-xs">Today, 9:00 AM</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#notification-12">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
+                        </div>
+                        <h6 class="fs-13 fw-semibold mb-1 text-dark">Tidak Ada Pemberitahuan Baru</h6>
+                        <p class="text-muted fs-12 mb-0">Semua tugas, registrasi, dan pesan sistem telah diproses.</p>
+                    </div>
+                @endforelse
             </div>
-            <!-- end dropdown-->
 
-            <!-- All-->
-            <a href="javascript:void(0);"
-                class="dropdown-item text-center text-reset text-decoration-underline link-offset-2 fw-bold notify-item border-top border-light py-2"
-                data-lang="topbar-notifications-view-all">View All Alerts</a>
+            <!-- Footer Link Universal -->
+            @can('read manajemenpengguna/users')
+                <a href="{{ route('admin.manajemenpengguna.users.index') }}"
+                    class="dropdown-item text-center text-primary text-decoration-underline link-offset-2 fw-semibold notify-item border-top border-light py-2 fs-12 bg-light bg-opacity-25">
+                    Kelola Semua Data Pengguna &rarr;
+                </a>
+            @endcan
         </div>
     </div>
 </div>

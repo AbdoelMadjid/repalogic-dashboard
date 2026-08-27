@@ -21,6 +21,7 @@ class UserRequest extends FormRequest
             'email' => ['required', 'email', 'max:255', 'unique:users,email' . ($isUpdate ? ',' . $userId : '')],
             'roles' => ['nullable', 'array'],
             'roles.*' => ['string', 'exists:roles,name'],
+            'status' => ['nullable', 'string', 'in:active,pending,inactive'],
         ];
 
         if ($isUpdate) {
@@ -44,6 +45,7 @@ class UserRequest extends FormRequest
             'password.confirmed' => 'Konfirmasi kata sandi tidak cocok.',
             'roles.array' => 'Daftar role harus berupa array.',
             'roles.*.exists' => 'Role yang dipilih tidak valid.',
+            'status.in' => 'Status akun pengguna tidak valid.',
         ];
     }
 }
