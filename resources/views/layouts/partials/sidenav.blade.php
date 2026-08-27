@@ -43,9 +43,9 @@
         <div class="px-3 mb-3 mt-2">
             <div class="position-relative sidenav-search-wrap">
                 <i
-                    class="ti ti-search position-absolute top-50 start-0 translate-middle-y ms-3 sidenav-search-icon"></i>
+                    class="ti ti-search position-absolute top-50 start-0 translate-middle-y ms-2 sidenav-search-icon"></i>
                 <input type="text" id="sidenav-menu-search"
-                    class="form-control form-control-sm ps-5 sidenav-search-input" placeholder="Search menu..."
+                    class="form-control form-control-sm sidenav-search-input text-white" style="padding-left: 28px;" placeholder="Search menu..."
                     data-lang-placeholder="sidenav-search-placeholder">
             </div>
             <div id="sidenav-search-empty" class="sidenav-search-empty mt-2 d-none" data-lang="sidenav-search-empty">

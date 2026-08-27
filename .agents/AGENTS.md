@@ -42,3 +42,12 @@
 - NEVER use native browser `confirm('...')` popups for delete or reset actions.
 - Form submit confirmations MUST use the `data-confirm="..."` attribute on `<form data-confirm="Message text...">`.
 - The global submit event listener in `layouts/partials/notifications.blade.php` automatically intercepts forms with `data-confirm`, presenting a modern SweetAlert2 modal with a 12px button gap and custom styling.
+
+## 10. Module Directory Hierarchy & Flat View Naming Standard
+- All classes and views for a module MUST follow a consistent folder hierarchy across `Controllers`, `Requests`, `Models`, and `views`:
+  - Controllers: `app/Http/Controllers/Admin/{Kelompok}/{Modul}Controller.php`
+  - Form Requests: `app/Http/Requests/Admin/{Kelompok}/{Modul}Request.php`
+  - Models: `app/Models/Admin/{Kelompok}/{Modul}.php`
+  - Views: `resources/views/admin/{kelompok}/{modul}.blade.php`
+- Do NOT create a subfolder with `index.blade.php` for admin page views (e.g. use `resources/views/admin/dukunganaplikasi/translation.blade.php`, NOT `resources/views/admin/dukunganaplikasi/translation/index.blade.php`).
+- Supporting modals, form elements, and guide components MUST be placed inside the `resources/views/admin/{kelompok}/partials/` folder (e.g. `translation_form.blade.php`, `bilingual_guide_modal.blade.php`).

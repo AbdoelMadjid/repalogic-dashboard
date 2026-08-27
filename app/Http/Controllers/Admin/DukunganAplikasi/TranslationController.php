@@ -124,7 +124,7 @@ class TranslationController extends Controller
             $groupedTranslations[$item['group']][] = $item;
         }
 
-        return view('admin.dukunganaplikasi.translation.index', compact('translations', 'groupedTranslations', 'categories'));
+        return view('admin.dukunganaplikasi.translation', compact('translations', 'groupedTranslations', 'categories'));
     }
 
     /**

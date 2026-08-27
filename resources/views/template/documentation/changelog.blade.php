@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v1.9.0</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v1.9.1</strong>
                             </span>
                         </div>
                     </div>
@@ -35,12 +35,12 @@
                 <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0 fw-bold"><i class="ti ti-history me-2 text-primary"></i>Git Commit Release
                         Timeline</h5>
-                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">12 Versions Logged</span>
+                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">13 Versions Logged</span>
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
 
-                        <!-- Version 1.9.0 -->
+                        <!-- Version 1.9.1 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -48,9 +48,33 @@
                             <div class="timeline-content ps-3.5 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v1.9.0</h5>
+                                        <h5 class="fw-bold mb-0">v1.9.1</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest
                                             Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build:
+                                            v1.9.1</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-08-27</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Module View Hierarchy Standardization (Rule 10), Meta Title Engine &amp; Sidenav Search UI Refinements</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Standarisasi Hirarki View Modul (Rule 10):</strong> Refactored <code>translation/index.blade.php</code> into flat view <code>translation.blade.php</code> and extracted modal form to <code>partials/translation_form.blade.php</code>. Documented Rule 10 in <code>.agents/AGENTS.md</code>.</li>
+                                    <li><strong class="text-dark">Penyempurnaan Engine Meta Title (<code>title-meta.blade.php</code>):</strong> Bound <code>&lt;title&gt;</code> app name dynamically to <code>ProfilAplikasi</code> model (<code>app_name</code>: <em>REPALOGIC Dashboard</em>) and removed <code>"index"</code> fallback for resource routes.</li>
+                                    <li><strong class="text-dark">UI Sidenav Search Input Box (<code>sidenav.blade.php</code>):</strong> Balanced search icon position (<code>ms-2</code>), adjusted typing start padding (<code>28px</code>), and applied Bootstrap 5 standard <code>text-white</code> class for white typed text and muted placeholder text without custom CSS.</li>
+                                </ul>
+                                <hr class="border-dashed my-3" />
+                            </div>
+                        </div>
+
+                        <!-- Version 1.9.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-check fs-xl text-success"></i>
+                            </div>
+                            <div class="timeline-content ps-3.5 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v1.9.0</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build:
                                             v1.9.0</span>
                                     </div>
