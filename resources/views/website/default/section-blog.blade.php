@@ -1,4 +1,4 @@
-    <section class="section-custom bg-light bg-opacity-30 border-top border-bottom border-light" id="blog">
+<section class="section-custom" id="blog">
         <div class="container">
             <div class="row">
                 <div class="col-12 text-center">

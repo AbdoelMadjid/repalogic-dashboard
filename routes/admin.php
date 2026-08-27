@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DukunganAplikasi\BackupDbController;
 use App\Http\Controllers\Admin\DukunganAplikasi\FiturAplikasiController;
+use App\Http\Controllers\Admin\DukunganAplikasi\KonfigurasiWebsiteController;
 use App\Http\Controllers\Admin\DukunganAplikasi\MenuController;
 use App\Http\Controllers\Admin\DukunganAplikasi\ProfilAplikasiController;
 use App\Http\Controllers\Admin\DukunganAplikasi\TranslationController;
@@ -48,6 +49,16 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
         Route::post('backup-db/process', [BackupDbController::class, 'processBackup'])->name('backup-db.process');
         Route::get('backup-db/download/{filename}', [BackupDbController::class, 'download'])->name('backup-db.download');
         Route::delete('backup-db/destroy/{filename}', [BackupDbController::class, 'destroy'])->name('backup-db.destroy');
+
+        Route::get('konfigurasi-website', [KonfigurasiWebsiteController::class, 'index'])->name('konfigurasi-website.index');
+        Route::post('konfigurasi-website/store-theme', [KonfigurasiWebsiteController::class, 'storeTheme'])->name('konfigurasi-website.store-theme');
+        Route::post('konfigurasi-website/activate-theme/{id}', [KonfigurasiWebsiteController::class, 'activateTheme'])->name('konfigurasi-website.activate-theme');
+        Route::post('konfigurasi-website/store-section', [KonfigurasiWebsiteController::class, 'storeSection'])->name('konfigurasi-website.store-section');
+        Route::match(['POST', 'PUT'], 'konfigurasi-website/update-section/{id}', [KonfigurasiWebsiteController::class, 'updateSection'])->name('konfigurasi-website.update-section');
+        Route::delete('konfigurasi-website/destroy-section/{id}', [KonfigurasiWebsiteController::class, 'destroySection'])->name('konfigurasi-website.destroy-section');
+        Route::post('konfigurasi-website/toggle-active-section/{id}', [KonfigurasiWebsiteController::class, 'toggleActiveSection'])->name('konfigurasi-website.toggle-active-section');
+        Route::post('konfigurasi-website/update-section-position/{id}', [KonfigurasiWebsiteController::class, 'updateSectionPosition'])->name('konfigurasi-website.update-section-position');
+        Route::post('konfigurasi-website/reorder-sections', [KonfigurasiWebsiteController::class, 'reorderSections'])->name('konfigurasi-website.reorder-sections');
     });
 
     Route::prefix('manajemenpengguna')->name('manajemenpengguna.')->group(function () {

@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v1.9.2</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.0.0</strong>
                             </span>
                         </div>
                     </div>
@@ -112,12 +112,12 @@
                 <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0 fw-bold"><i class="ti ti-history me-2 text-primary"></i>Git Commit Release
                         Timeline</h5>
-                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">15 Versions Logged</span>
+                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">16 Versions Logged</span>
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
 
-                        <!-- Version 1.9.3 -->
+                        <!-- Version 2.0.0 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -125,11 +125,33 @@
                             <div class="timeline-content ps-3.5 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.0.0</h5>
+                                        <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.0.0</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 14:35 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Engine Dinamisasi Tema &amp; Seksi Website Terpusat, Crop Simulator &amp; Arsitektur Partial Modular</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Arsitektur Tema &amp; Seksi Dinamis Terpusat:</strong> Membuat tabel database <code>website_themes</code> dan <code>website_sections</code> yang mengatur tema aktif, urutan seksi, gaya latar belakang, hingga background-image secara 100% dinamis tanpa hardcode view.</li>
+                                    <li><strong class="text-dark">Interactive Crop Simulator &amp; Height Ratio:</strong> Modal pratinjau media interaktif (`#modal-preview-image`) yang dilengkapi 3 tombol simulasi tinggi seksi (<em>Pendek ~220px, Sedang ~380px, Tinggi ~550px</em>) dan range slider fokus vertikal (0-100%) dengan AJAX update tanpa reload.</li>
+                                    <li><strong class="text-dark">Deteksi Otomatis Orientasi &amp; Efek Paralaks 3D:</strong> Membaca metadata dimensi gambar asli (<em>Landscape, Portrait, Square</em>), serta menambahkan opsi <code>background-size</code> (Cover/Contain), <code>background-attachment</code> (Paralaks 3D Fixed), dan soft dark backdrop blur overlay.</li>
+                                    <li><strong class="text-dark">Pemisahan Partial Modal Modular (Rule 10):</strong> Memisahkan file modal menjadi 3 partial terorganisir: <code>konfigurasi_website_modal_form</code>, <code>konfigurasi_website_modal_petunjuk</code>, dan <code>konfigurasi_website_modal_tampilgambar</code>.</li>
+                                    <li><strong class="text-dark">Dokumentasi Arsitektur Resmi:</strong> Dibuat panduan resmi pengembang di <code>docs/arsitektur_dinamisasi_tema_website.md</code>.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Version 1.9.3 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-point-filled fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3.5 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
                                         <h5 class="fw-bold mb-0">v1.9.3</h5>
-                                        <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest
-                                            Release</span>
-                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build:
-                                            v1.9.3</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v1.9.3</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 10:30 WIB</span>
                                 </div>

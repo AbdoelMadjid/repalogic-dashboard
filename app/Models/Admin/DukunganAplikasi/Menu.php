@@ -158,4 +158,89 @@ class Menu extends Model
         }
         return '';
     }
+
+    /**
+     * Bootstrap the model and register lifecycle listeners.
+     */
+    protected static function booted()
+    {
+        static::saved(function (Menu $menu) {
+            static::syncTranslationKey($menu);
+        });
+    }
+
+    /**
+     * Auto-sync menu data_lang translation key to id.json and en.json
+     */
+    public static function syncTranslationKey(Menu $menu): void
+    {
+        $dataLang = $menu->data_lang ?: Str::slug($menu->name);
+        if (empty($dataLang)) {
+            return;
+        }
+
+        $idPath = public_path('assets/data/translations/id.json');
+        $enPath = public_path('assets/data/translations/en.json');
+
+        $readJson = function (string $path): array {
+            if (!file_exists($path)) {
+                return [];
+            }
+            $content = @file_get_contents($path);
+            $data = json_decode($content, true);
+            return is_array($data) ? $data : [];
+        };
+
+        $writeJson = function (string $path, array $data): void {
+            ksort($data);
+            $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            file_put_contents($path, $json);
+        };
+
+        $idData = $readJson($idPath);
+        $enData = $readJson($enPath);
+        $updated = false;
+
+        if (!isset($idData[$dataLang])) {
+            $idData[$dataLang] = $menu->name;
+            $updated = true;
+        }
+
+        if (!isset($enData[$dataLang])) {
+            $enData[$dataLang] = static::getEnglishDefault($menu->name);
+            $updated = true;
+        }
+
+        if ($updated) {
+            $writeJson($idPath, $idData);
+            $writeJson($enPath, $enData);
+        }
+    }
+
+    /**
+     * Helper mapping for default English translations.
+     */
+    public static function getEnglishDefault(string $name): string
+    {
+        $map = [
+            'Konfigurasi Website' => 'Website Configuration',
+            'Profil Pengguna' => 'User Profile',
+            'Edit Profil' => 'Edit Profile',
+            'Kelengkapan Data KTP' => 'Identity Data Completeness',
+            'Profil Aplikasi' => 'Application Profile',
+            'Fitur Aplikasi' => 'Application Features',
+            'Terjemahan Bahasa' => 'Language Translation',
+            'Backup DB' => 'Database Backup',
+            'Manajemen Pengguna' => 'User Management',
+            'Dukungan Aplikasi' => 'Application Support',
+            'User' => 'User',
+            'Role' => 'Role',
+            'Permission' => 'Permission',
+            'Akses Role' => 'Role Access',
+            'Akses User' => 'User Access',
+            'Menu' => 'Menu',
+        ];
+
+        return $map[$name] ?? $name;
+    }
 }

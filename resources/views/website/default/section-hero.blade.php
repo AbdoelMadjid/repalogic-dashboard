@@ -1,4 +1,4 @@
-<section class="bg-light bg-opacity-50 border-top border-light position-relative" id="hero">
+<section class="section-custom" id="hero">
     <!-- Background Pattern -->
     <div class="position-absolute top-0 start-50 translate-middle-x mt-5">
         <img src="{{ asset('assets/images/bg-pattern.png') }}" alt="" />

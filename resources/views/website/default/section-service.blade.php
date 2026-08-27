@@ -1,4 +1,4 @@
-<section class="section-custom pb-5" id="services">
+<section class="section-custom" id="services">
     <div class="container">
         <!-- Section Heading -->
         <div class="row">

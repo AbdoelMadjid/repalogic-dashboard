@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('layouts.partials.sidenav', \App\Http\ViewComposers\SidebarComposer::class);
 
-        View::composer(['layouts.partials.title-meta', 'layouts.partials.sidenav', 'layouts.partials.footer'], function ($view) {
+        View::composer(['layouts.partials.title-meta', 'layouts.partials.sidenav', 'layouts.partials.footer', 'welcome', 'website.*', 'website.partials.*'], function ($view) {
             if (class_exists(\App\Models\Admin\DukunganAplikasi\ProfilAplikasi::class)) {
                 try {
                     $view->with('appProfil', \App\Models\Admin\DukunganAplikasi\ProfilAplikasi::getSettings());
@@ -58,6 +58,22 @@ class AppServiceProvider extends ServiceProvider
                 }
             } else {
                 $view->with('appFeatures', null);
+            }
+        });
+
+        View::composer(['welcome', 'website.*', 'website.partials.*'], function ($view) {
+            if (class_exists(\App\Models\Admin\DukunganAplikasi\WebsiteTheme::class)) {
+                try {
+                    $activeTheme = \App\Models\Admin\DukunganAplikasi\WebsiteTheme::getActiveTheme();
+                    $view->with('activeWebsiteTheme', $activeTheme);
+                    $view->with('activeWebsiteSections', $activeTheme ? $activeTheme->activeSections : collect());
+                } catch (\Exception $e) {
+                    $view->with('activeWebsiteTheme', null);
+                    $view->with('activeWebsiteSections', collect());
+                }
+            } else {
+                $view->with('activeWebsiteTheme', null);
+                $view->with('activeWebsiteSections', collect());
             }
         });
     }

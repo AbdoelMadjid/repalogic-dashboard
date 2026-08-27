@@ -28,14 +28,38 @@ class TranslationController extends Controller
      */
     public function index(Request $request)
     {
+        // 1. Auto-sync missing database menu keys to id.json & en.json
+        $dbMenus = Menu::with('parent')->get();
         $idData = $this->readJson($this->idJsonPath);
         $enData = $this->readJson($this->enJsonPath);
+        $jsonUpdated = false;
+
+        foreach ($dbMenus as $m) {
+            $k = $m->data_lang ?: Str::slug($m->name);
+            if (!empty($k)) {
+                if (!isset($idData[$k])) {
+                    $idData[$k] = $m->name;
+                    $jsonUpdated = true;
+                }
+                if (!isset($enData[$k])) {
+                    $enData[$k] = Menu::getEnglishDefault($m->name);
+                    $jsonUpdated = true;
+                }
+            }
+        }
+
+        if ($jsonUpdated) {
+            $this->writeJson($this->idJsonPath, $idData);
+            $this->writeJson($this->enJsonPath, $enData);
+            // Re-read fresh JSON data after auto-syncing missing keys
+            $idData = $this->readJson($this->idJsonPath);
+            $enData = $this->readJson($this->enJsonPath);
+        }
 
         $allKeys = array_unique(array_merge(array_keys($idData), array_keys($enData)));
         sort($allKeys);
 
         // Map Database Menus
-        $dbMenus = Menu::with('parent')->get();
         $dbKeyMap = [];
 
         foreach ($dbMenus as $m) {

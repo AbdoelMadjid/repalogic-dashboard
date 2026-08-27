@@ -1,4 +1,4 @@
-<section class="section-custom bg-light bg-opacity-30 border-top border-light border-bottom" id="features">
+<section class="section-custom" id="features">
     <div class="container">
         <div class="row align-items-center pb-5">
             <div class="col-lg-6 col-xl-5 py-3">

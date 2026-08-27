@@ -2,10 +2,14 @@
     <div class="container">
         <div class="row g-4 justify-content-between">
             <div class="col-lg-3">
-                <img src="{{ asset('assets/images/logo.png') }}" alt="logo" height="30" />
-                <p class="mt-3 fs-sm">INSPINIA is the top-selling admin dashboard template on WrapBootstrap, known
-                    for its sleek design, flexibility, and powerful features. Build modern web applications with
-                    ease using the best in class!</p>
+                @if ($appProfil && !empty($appProfil->logo_lg) && Storage::disk('public')->exists($appProfil->logo_lg))
+                    <img src="{{ asset('storage/' . $appProfil->logo_lg) }}" alt="{{ $appProfil->app_name }}" height="32" style="object-fit: contain;" />
+                @else
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="logo" height="30" />
+                @endif
+                <p class="mt-3 fs-sm text-opacity-75">
+                    {{ $appProfil->meta_description ?? 'Inspinia Admin Dashboard & Management System' }}
+                </p>
 
                 <div class="d-flex gap-2 mt-4 mb-2">
                     <a href="#!" class="btn btn-sm btn-icon rounded-circle btn-dark" title="Facebook">
@@ -58,13 +62,11 @@
                     <div class="col-6 col-md-4">
                         <h5 class="text-white mb-4 ps-2">Admin</h5>
                         <ul class="nav flex-column">
-                            <li class="nav-item"><a class="nav-link pt-0" href="#!">Dashboard</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#!">User Management</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#!">Roles & Permissions</a>
-                            </li>
-                            <li class="nav-item"><a class="nav-link" href="#!">System Logs</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#!">Settings</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#!">API Access</a></li>
+                            <li class="nav-item"><a class="nav-link pt-0" href="{{ route('login') }}">Log In / Sign In</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('admin.profil-pengguna.index') }}">Profil Pengguna</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('admin.dukunganaplikasi.profil-aplikasi.index') }}">Pengaturan Aplikasi</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('admin.dukunganaplikasi.fitur-aplikasi.index') }}">Katalog Fitur</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('admin.dukunganaplikasi.backup-db.index') }}">Backup Database</a></li>
                         </ul>
                     </div>
                 </div>
@@ -74,10 +76,22 @@
         </div>
         <!-- end row-->
 
+        @php
+            $createdYear = $appProfil->created_year ?? '2024';
+            $currentYear = date('Y');
+            $yearDisplay = ($createdYear != $currentYear) ? "{$createdYear} - {$currentYear}" : $currentYear;
+            $footerText = $appProfil->footer_text ?? 'Inspinia By';
+            $devName = $appProfil->developer_name ?? 'WebAppLayers';
+            $devUrl = $appProfil->developer_url ?? '#!';
+            $appVersion = $appProfil->app_version ?? config('app.version', 'v1.9.3');
+        @endphp
         <div class="row mt-5">
             <div class="col-12 text-center">
-                <p class="mb-4">© 2014 - <span data-current-year></span> Inspinia By <span
-                        class="fw-semibold">WebAppLayers</span></p>
+                <p class="mb-4 text-opacity-75 fs-sm">
+                    © {{ $yearDisplay }} <strong class="text-white">{{ $appProfil->app_name ?? 'REPALOGIC Dashboard' }}</strong> — {{ $footerText }} 
+                    <a href="{{ $devUrl }}" target="_blank" class="fw-semibold text-white text-decoration-none">{{ $devName }}</a>.
+                    <span class="badge bg-primary text-white ms-2 font-monospace fs-xs">{{ $appVersion }}</span>
+                </p>
             </div>
         </div>
         <!-- end row-->

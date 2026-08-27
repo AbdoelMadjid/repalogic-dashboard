@@ -1,4 +1,4 @@
-<section class="section-custom position-relative overflow-hidden" id="reviews">
+<section class="section-custom" id="reviews">
     <!-- background pattern -->
     <div class="position-absolute top-0 start-50 translate-middle-x mt-5 opacity-50">
         <img src="{{ asset('assets/images/bg-pattern.png') }}" alt="" />

@@ -55,5 +55,13 @@ class MenuDukunganAplikasiSeeder extends BaseMenuSeeder
             'route' => 'admin.dukunganaplikasi.translation.index',
         ]);
         $this->attachMenupermission($sm5, ['create', 'read', 'update', 'delete'], ['superadmin', 'admin']);
+
+        $sm6 = $this->createSubMenu($mm, [
+            'name' => 'Konfigurasi Website',
+            'data_lang' => 'management-config-website',
+            'url' => 'admin/dukunganaplikasi/konfigurasi-website',
+            'route' => 'admin.dukunganaplikasi.konfigurasi-website.index',
+        ]);
+        $this->attachMenupermission($sm6, ['create', 'read', 'update', 'delete'], ['superadmin', 'admin']);
     }
 }

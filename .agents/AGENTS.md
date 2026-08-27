@@ -64,3 +64,11 @@
   - Data / Content / Neutral Widget Headers MUST use clean white background (`class="card-header bg-white py-3"`).
   - Do NOT use generic `bg-light` for primary card headers.
 
+## 13. Website Dynamic Theme Section View Standardization
+- All theme section Blade views in `resources/views/website/{folder}/{file}.blade.php` MUST use neutral outer section tags (`<section class="section-custom" id="{target_id}">`).
+- Do NOT hardcode background colors (`bg-light`, `bg-dark`, `bg-primary`) or inline `style="background-image: ..."` directly on the section root element inside Blade views.
+- Do NOT hardcode text color overrides (`text-white`, `text-dark`) directly on main section title tags (`<h2>`, `<p>`). Use standard typography elements so text colors automatically adapt when background style changes (light vs dark/image).
+- For internal content cards, use standard Bootstrap `.card` elements. The system automatically preserves dark readable text inside cards even when section background is set to dark or background-image.
+- Background colors, borders, and custom background images are dynamically managed via the `website_sections` table database (`bg_type`, `bg_color_class`, `bg_image`) and wrapped by `welcome.blade.php`.
+- Target anchor IDs (`id="{target_id}"`) MUST be present on the outer `<section>` tag to ensure smooth navbar scrolling.
+
