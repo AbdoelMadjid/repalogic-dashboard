@@ -71,7 +71,7 @@ return [
             'icon' => 'ti ti-history',
             'route' => 'template.documentation.changelog',
             'badge' => [
-                'text' => 'v1.9.0',
+                'text' => config('app.version', 'v1.9.1'),
                 'class' => 'badge bg-primary-subtle text-primary fs-xs',
             ],
         ],

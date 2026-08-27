@@ -21,8 +21,85 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v1.9.1</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v1.9.2</strong>
                             </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Release Procedure Guide Card -->
+        <div class="col-12 mb-4">
+            <div class="card border border-info-subtle shadow-sm">
+                <div class="card-header bg-info-subtle py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0 fw-bold text-info-emphasis">
+                        <i class="ti ti-book me-2"></i> Standar Prosedur Pembaruan Versi Rilis / Tag (Version Release Guide)
+                    </h5>
+                    <span class="badge bg-info text-white font-monospace">Centralized Engine</span>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="p-3 border rounded-3 bg-light-subtle h-100">
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-primary rounded-circle p-1.5 me-2"><i class="ti ti-settings fs-14"></i></span>
+                                    <h6 class="fw-bold mb-0 text-dark">1. Update APP_VERSION</h6>
+                                </div>
+                                <p class="fs-13 text-muted mb-0">
+                                    Cukup ubah <code>APP_VERSION=vX.Y.Z</code> pada file <code>.env</code> / <code>config/app.php</code>. Versi pada <strong>Sidenav, Footer, &amp; DB Profil Aplikasi</strong> akan ter-update secara otomatis!
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3">
+                            <div class="p-3 border rounded-3 bg-light-subtle h-100">
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-success rounded-circle p-1.5 me-2"><i class="ti ti-file-text fs-14"></i></span>
+                                    <h6 class="fw-bold mb-0 text-dark">2. Catat Log Changelog</h6>
+                                </div>
+                                <p class="fs-13 text-muted mb-0">
+                                    Tambahkan item timeline rilis versi baru pada file <code>changelog.blade.php</code> ini dengan rincian poin pembaruan yang jelas.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3">
+                            <div class="p-3 border rounded-3 bg-light-subtle h-100">
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-brand-git fs-14"></i></span>
+                                    <h6 class="fw-bold mb-0 text-dark">3. Update Tabel README.md</h6>
+                                </div>
+                                <p class="fs-13 text-muted mb-0">
+                                    Tambahkan baris versi rilis baru pada tabel <strong>Riwayat Release / Tag</strong> di dokumen utama <code>README.md</code>.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-3">
+                            <div class="p-3 border rounded-3 bg-light-subtle h-100">
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-info rounded-circle p-1.5 me-2"><i class="ti ti-upload fs-14"></i></span>
+                                    <h6 class="fw-bold mb-0 text-dark">4. Git Tag &amp; Push</h6>
+                                </div>
+                                <p class="fs-13 text-muted mb-0">
+                                    Jalankan perintah commit &amp; tagging: <br>
+                                    <code class="fs-11 text-dark">git tag -a vX.Y.Z -m "Release vX.Y.Z"</code><br>
+                                    <code class="fs-11 text-dark">git push origin main --tags</code>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AUTOMATIC SYNC EXPLANATION -->
+                    <div class="alert alert-primary border-primary-subtle d-flex align-items-start gap-2 mt-3 mb-0">
+                        <i class="ti ti-refresh fs-18 text-primary flex-shrink-0 mt-0.5"></i>
+                        <div class="fs-12 text-primary-emphasis">
+                            <strong>Cara Kerja Otomatisasi Versi Sidenav &amp; Footer:</strong>
+                            <ul class="mb-0 ps-3 mt-1">
+                                <li><strong>Sidenav Changelog Badge:</strong> Terhubung secara langsung ke <code>config('app.version')</code> pada <code>config/sidenav-template/documentation.php</code>.</li>
+                                <li><strong>Footer Badge &amp; DB Profil Aplikasi:</strong> Model <code>ProfilAplikasi::getSettings()</code> dilengkapi mekanisme <em>Auto-Sync</em> yang secara otomatis meng-update kolom <code>app_version</code> di database MySQL dan Cache aplikasi begitu <code>APP_VERSION</code> di-update pada <code>.env</code> / <code>config/app.php</code>.</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -35,12 +112,12 @@
                 <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0 fw-bold"><i class="ti ti-history me-2 text-primary"></i>Git Commit Release
                         Timeline</h5>
-                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">13 Versions Logged</span>
+                    <span class="badge bg-primary-subtle text-primary fw-semibold px-2.5 py-1">14 Versions Logged</span>
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
 
-                        <!-- Version 1.9.1 -->
+                        <!-- Version 1.9.2 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -48,13 +125,38 @@
                             <div class="timeline-content ps-3.5 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v1.9.1</h5>
+                                        <h5 class="fw-bold mb-0">v1.9.2</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest
                                             Release</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build:
+                                            v1.9.2</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 09:36 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Centralized Release Version Engine, Git Log Timestamps &amp; Mandatory Changelog Standard (Rule 11)</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Otomatisasi Versi Terpusat (Centralized Versioning Engine):</strong> Configured <code>config('app.version')</code> via <code>APP_VERSION</code> in <code>.env</code>. Bound Sidenav Changelog badge, Footer badge, and <code>ProfilAplikasi</code> model auto-sync to a single source of truth.</li>
+                                    <li><strong class="text-dark">Waktu Presisi Rilis (Git Log Timestamps):</strong> Updated all release timeline dates to include exact commit hours and minutes (<code>HH:mm WIB</code>) fetched directly from <code>git log</code> history.</li>
+                                    <li><strong class="text-dark">Standar Wajib Update Changelog (Rule 11):</strong> Documented Rule 11 in <code>.agents/AGENTS.md</code> enforcing mandatory updates to <code>changelog.blade.php</code> and <code>README.md</code> prior to git push / release.</li>
+                                    <li><strong class="text-dark">Panduan Rilis Interaktif (Version Release Guide Card):</strong> Added interactive 4-step version release guide card with automatic Sidenav and Footer sync explanation.</li>
+                                </ul>
+                                <hr class="border-dashed my-3" />
+                            </div>
+                        </div>
+
+                        <!-- Version 1.9.1 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-check fs-xl text-success"></i>
+                            </div>
+                            <div class="timeline-content ps-3.5 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v1.9.1</h5>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build:
                                             v1.9.1</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-08-27</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 09:17 WIB</span>
                                 </div>
                                 <h6 class="fw-semibold text-dark mb-2">Module View Hierarchy Standardization (Rule 10), Meta Title Engine &amp; Sidenav Search UI Refinements</h6>
                                 <ul class="text-muted fs-14 mb-3 ps-3">
@@ -78,7 +180,7 @@
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build:
                                             v1.9.0</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-08-27</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 08:04 WIB</span>
                                 </div>
                                 <h6 class="fw-semibold text-dark mb-2">100% Dynamic Bilingual Engine, Custom Menu Data-Lang &amp; Admin Translation Management Module</h6>
                                 <ul class="text-muted fs-14 mb-3 ps-3">
@@ -104,7 +206,7 @@
                                         <span class="badge bg-info-subtle text-info fw-semibold fs-xs">Profile &amp; Identity</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Commit: bbddc7b</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-08-02</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-02 16:47 WIB</span>
                                 </div>
                                 <h6 class="fw-semibold text-dark mb-2">User Profile Management &amp; KTP Identity Details</h6>
                                 <ul class="text-muted fs-14 mb-3 ps-3">
@@ -128,7 +230,7 @@
                                         <span class="badge bg-warning-subtle text-warning fw-semibold fs-xs">App Features &amp; Backup</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Commit: d3c1827 &amp; 57c2d7f</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-08-02</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-02 16:07 WIB</span>
                                 </div>
                                 <h6 class="fw-semibold text-dark mb-2">Application Features Switcher, Database Backup/Restore &amp; App Branding Profile</h6>
                                 <ul class="text-muted fs-14 mb-3 ps-3">
@@ -152,7 +254,7 @@
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">User Management</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Commit: 504d930 &amp; f12f6c2</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-08-02</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-02 09:31 WIB</span>
                                 </div>
                                 <h6 class="fw-semibold text-dark mb-2">User Management, Spatie Roles, Permissions Catalog &amp; Access Matrix Tables</h6>
                                 <ul class="text-muted fs-14 mb-3 ps-3">
@@ -177,7 +279,7 @@
                                         <span class="badge bg-primary-subtle text-primary fw-semibold fs-xs">Dynamic Menu Engine</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Commit: 876177d &amp; 02ddb3a</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-08-01</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-01 15:54 WIB</span>
                                 </div>
                                 <h6 class="fw-semibold text-dark mb-2">Database-Driven Dynamic Menu Engine &amp; 3-Level Menu Hierarchy</h6>
                                 <ul class="text-muted fs-14 mb-3 ps-3">
@@ -201,7 +303,7 @@
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Bilingual
                                             i18n Engine</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-08-01</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-01 13:07 WIB</span>
                                 </div>
                                 <h6 class="fw-semibold text-dark mb-2">Bilingual Internationalization Engine (ID &amp; EN),
                                     Topbar &amp; Customizer i18n</h6>
@@ -246,7 +348,7 @@
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Full Icon
                                             Explorers</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-08-01</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-01 01:17 WIB</span>
                                 </div>
                                 <h6 class="fw-semibold text-dark mb-2">Tabler & Lucide Full Icon Explorers & Recursive
                                     Sidenav Active Route Engine</h6>
@@ -284,7 +386,7 @@
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Commit:
                                             e7c036f & 588b10a</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-08-01</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-01 00:41 WIB</span>
                                 </div>
                                 <h6 class="fw-semibold text-dark mb-2">Documentation Module & Interactive Tree Engine</h6>
                                 <ul class="text-muted fs-14 mb-3 ps-3">
@@ -318,7 +420,7 @@
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Commit:
                                             3a391e2 & 5858a50</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-07-31</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-07-31 23:17 WIB</span>
                                 </div>
                                 <h6 class="fw-semibold text-dark mb-2">Layout Group Demo & Custom Pages Refactoring</h6>
                                 <ul class="text-muted fs-14 mb-3 ps-3">
@@ -352,7 +454,7 @@
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Commit:
                                             7cbf31c & 2f7585d</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-07-31</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-07-31 22:51 WIB</span>
                                 </div>
                                 <h6 class="fw-semibold text-dark mb-2">Sidenav Auto-Scroll Centering & Component Menu Group
                                 </h6>
@@ -382,7 +484,7 @@
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Commit:
                                             8bea610 & b6d118e</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-07-31</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-07-31 22:46 WIB</span>
                                 </div>
                                 <h6 class="fw-semibold text-dark mb-2">Dynamic Navigation Config & Multi-Word Breadcrumb
                                     Engine</h6>
@@ -415,7 +517,7 @@
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Commit:
                                             bbc6dc0 - e6f6c13</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-calendar me-1"></i> 2026-07-31</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-07-31 10:08 WIB</span>
                                 </div>
                                 <h6 class="fw-semibold text-dark mb-2">Initial Project Release & Repository Setup</h6>
                                 <ul class="text-muted fs-14 mb-0 ps-3">

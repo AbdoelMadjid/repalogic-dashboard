@@ -199,6 +199,7 @@ php artisan pail
 
 | Tag | Tanggal Rilis | Deskripsi / Catatan Perubahan |
 | :--- | :--- | :--- |
+| **`v1.9.2`** | 2026-08-27 | Centralized Versioning Engine, Git Log Timestamps & Mandatory Changelog Standard (Rule 11) |
 | **`v1.9.1`** | 2026-08-27 | Standarisasi Hirarki View Modul (Rule 10), Meta Title Engine & Refineman Sidenav Search UI |
 | **`v1.9.0`** | 2026-08-27 | 100% Dynamic Bilingual Engine, Custom Menu Data-Lang & Modul Terjemahan Bahasa |
 | **`v1.8.2`** | 2026-08-02 | Melengkapi halaman profil pengguna |
