@@ -48,7 +48,7 @@
                             </a>
 
                             <!-- Tombol Pesan / Chat -->
-                            <a href="{{ route('admin.messages.index') }}" class="btn btn-outline-success fw-semibold" id="btn-user-messages" title="Fitur Pesan / Obrolan">
+                            <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="btn btn-outline-success fw-semibold" id="btn-user-messages" title="Fitur Pesan / Obrolan">
                                 <i class="ti ti-message me-1"></i> Pesan
                             </a>
                         </div>

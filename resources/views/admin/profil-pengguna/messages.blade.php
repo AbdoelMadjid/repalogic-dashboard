@@ -239,7 +239,7 @@
             function loadConversation(userId) {
                 if (!userId) return;
 
-                fetch(`/admin/messages/conversation/${userId}`, {
+                fetch(`/admin/profil-pengguna/messages/conversation/${userId}`, {
                     method: 'GET',
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
@@ -323,7 +323,7 @@
 
                     chatInput.value = '';
 
-                    fetch('/admin/messages/send', {
+                    fetch('/admin/profil-pengguna/messages/send', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

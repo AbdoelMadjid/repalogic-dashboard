@@ -27,22 +27,25 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('messages', [MessageController::class, 'index'])->name('messages.index');
-    Route::get('messages/conversation/{user}', [MessageController::class, 'getMessages'])->name('messages.conversation');
-    Route::post('messages/send', [MessageController::class, 'send'])->name('messages.send');
-
     Route::get('notifications/poll', [NotificationController::class, 'poll'])->name('notifications.poll');
     Route::get('notifications/poll-messages', [NotificationController::class, 'pollMessages'])->name('notifications.poll-messages');
     Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
 
-    Route::get('profil-pengguna', [ProfilPenggunaController::class, 'index'])->name('profil-pengguna.index');
-    Route::post('profil-pengguna/update-quick', [ProfilPenggunaController::class, 'updateQuick'])->name('profil-pengguna.update-quick');
-    Route::get('profil-pengguna/edit', [ProfilPenggunaController::class, 'edit'])->name('profil-pengguna.edit');
-    Route::post('profil-pengguna/update-detail', [ProfilPenggunaController::class, 'updateDetail'])->name('profil-pengguna.update-detail');
-    Route::post('profil-pengguna/update-cover', [ProfilPenggunaController::class, 'updateCover'])->name('profil-pengguna.update-cover');
-    Route::post('profil-pengguna/update-motto', [ProfilPenggunaController::class, 'updateMotto'])->name('profil-pengguna.update-motto');
-    Route::post('profil-pengguna/request-deactivation', [ProfilPenggunaController::class, 'requestDeactivation'])->name('profil-pengguna.request-deactivation');
-    Route::post('profil-pengguna/cancel-deactivation', [ProfilPenggunaController::class, 'cancelDeactivation'])->name('profil-pengguna.cancel-deactivation');
+    Route::prefix('profil-pengguna')->name('profil-pengguna.')->group(function () {
+        Route::get('/', [ProfilPenggunaController::class, 'index'])->name('index');
+        Route::post('update-quick', [ProfilPenggunaController::class, 'updateQuick'])->name('update-quick');
+        Route::get('edit', [ProfilPenggunaController::class, 'edit'])->name('edit');
+        Route::post('update-detail', [ProfilPenggunaController::class, 'updateDetail'])->name('update-detail');
+        Route::post('update-cover', [ProfilPenggunaController::class, 'updateCover'])->name('update-cover');
+        Route::post('update-motto', [ProfilPenggunaController::class, 'updateMotto'])->name('update-motto');
+        Route::post('request-deactivation', [ProfilPenggunaController::class, 'requestDeactivation'])->name('request-deactivation');
+        Route::post('cancel-deactivation', [ProfilPenggunaController::class, 'cancelDeactivation'])->name('cancel-deactivation');
+
+        // Fitur Pesan & Obrolan (admin/profil-pengguna/messages)
+        Route::get('messages', [MessageController::class, 'index'])->name('messages.index');
+        Route::get('messages/conversation/{user}', [MessageController::class, 'getMessages'])->name('messages.conversation');
+        Route::post('messages/send', [MessageController::class, 'send'])->name('messages.send');
+    });
 
     Route::prefix('dukunganaplikasi')->name('dukunganaplikasi.')->group(function () {
         Route::get('profil-aplikasi', [ProfilAplikasiController::class, 'index'])->name('profil-aplikasi.index');

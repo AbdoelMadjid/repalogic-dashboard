@@ -76,7 +76,7 @@ class MessageController extends Controller
             ];
         });
 
-        return view('admin.messages', compact('contacts', 'activeUser', 'messages'));
+        return view('admin.profil-pengguna.messages', compact('contacts', 'activeUser', 'messages'));
     }
 
     /**
