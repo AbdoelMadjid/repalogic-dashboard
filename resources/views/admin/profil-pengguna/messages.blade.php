@@ -628,6 +628,11 @@
                         lastMessageCount = newCount;
                         lastMessageId = newLastId;
 
+                        // Sinkronkan badge dropdown pesan di topbar
+                        if (typeof window.fetchMessagesSilently === 'function') {
+                            window.fetchMessagesSilently(false);
+                        }
+
                         // Pasang ulang scroll listener jika elemen di-recreate
                         attachScrollListener();
 
@@ -680,6 +685,12 @@
 
                             // Pindahkan kontak ke "Percakapan Aktif" dan update waktu & ringkasan pesan
                             promoteContactToRecent(receiverId, messageText, 'Baru saja');
+                            
+                            // Sinkronkan unread counts & topbar
+                            pollSidebarContacts();
+                            if (typeof window.fetchMessagesSilently === 'function') {
+                                window.fetchMessagesSilently(false);
+                            }
                         }
                     })
                     .catch(function(err) {});
@@ -750,12 +761,97 @@
                     .replace(/'/g, "&#039;");
             }
 
-            // Polling otomatis setiap 5 detik untuk memperbarui percakapan aktif jika ada pesan baru
+            // Polling daftar kontak, pesan terakhir & badge angka unread di sidebar secara real-time
+            function pollSidebarContacts() {
+                if (document.hidden) return;
+
+                fetch('/admin/profil-pengguna/messages/poll-contacts', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (!data || !data.success || !Array.isArray(data.contacts)) return;
+
+                    const listRecent = document.getElementById('list-recent-contacts');
+                    const listOther = document.getElementById('list-other-contacts');
+                    const secRecent = document.getElementById('section-recent-contacts');
+                    const secOther = document.getElementById('section-other-contacts');
+                    const badgeRecent = document.getElementById('badge-recent-count');
+                    const badgeOther = document.getElementById('badge-other-count');
+
+                    data.contacts.forEach(function(c) {
+                        const contactEl = document.querySelector(`.btn-select-chat[data-user-id="${c.id}"]`);
+                        if (!contactEl) return;
+
+                        const lastMsgEl = contactEl.querySelector('.contact-last-msg');
+                        const lastTimeEl = contactEl.querySelector('.contact-last-time');
+                        const unreadBadge = contactEl.querySelector('.contact-unread-badge');
+
+                        if (lastMsgEl && c.last_message) lastMsgEl.textContent = c.last_message;
+                        if (lastTimeEl && c.last_message_time) lastTimeEl.textContent = c.last_message_time;
+
+                        const isContactActive = String(activeUserId) === String(c.id);
+
+                        if (unreadBadge) {
+                            if (isContactActive) {
+                                unreadBadge.classList.add('d-none');
+                                unreadBadge.textContent = '0';
+                            } else if (c.unread_count > 0) {
+                                unreadBadge.textContent = c.unread_count > 99 ? '99+' : c.unread_count;
+                                unreadBadge.classList.remove('d-none');
+                            } else {
+                                unreadBadge.classList.add('d-none');
+                                unreadBadge.textContent = '0';
+                            }
+                        }
+
+                        // Jika kontak memiliki percakapan dan sebelumnya di 'other', pindahkan ke 'recent'
+                        if (c.has_conversation && listOther && listRecent && listOther.contains(contactEl)) {
+                            listRecent.prepend(contactEl);
+                        }
+
+                        // Jika ada pesan baru masuk (unread > 0), tempatkan di urutan teratas list recent
+                        if (c.unread_count > 0 && listRecent && listRecent.contains(contactEl)) {
+                            if (listRecent.firstElementChild !== contactEl) {
+                                listRecent.prepend(contactEl);
+                            }
+                        }
+                    });
+
+                    if (badgeRecent && typeof data.recent_count !== 'undefined') badgeRecent.textContent = data.recent_count;
+                    if (badgeOther && typeof data.other_count !== 'undefined') badgeOther.textContent = data.other_count;
+
+                    if (secRecent) {
+                        if (data.recent_count > 0) secRecent.classList.remove('d-none');
+                        else secRecent.classList.add('d-none');
+                    }
+
+                    if (secOther) {
+                        if (data.other_count > 0) {
+                            secOther.classList.remove('d-none');
+                            if (data.recent_count > 0) secOther.classList.add('mt-2');
+                            else secOther.classList.remove('mt-2');
+                        } else {
+                            secOther.classList.add('d-none');
+                        }
+                    }
+                })
+                .catch(function(err) {});
+            }
+
+            // 1. Polling daftar kontak & badge unread sidebar setiap 3.5 detik
+            setInterval(pollSidebarContacts, 3500);
+
+            // 2. Polling obrolan aktif setiap 3.5 detik jika ada kontak yang sedang dibuka
             setInterval(function() {
                 if (activeUserId && !document.hidden) {
-                    loadConversation(activeUserId);
+                    loadConversation(activeUserId, true);
                 }
-            }, 5000);
+            }, 3500);
 
             // ==========================================
             // EMOJI / EMOTION PICKER & INSERTION ENGINE

@@ -89,6 +89,58 @@ class MessageController extends Controller
     }
 
     /**
+     * Poll contacts status and unread counts for real-time sidebar sync.
+     */
+    public function pollContacts(Request $request): JsonResponse
+    {
+        $currentUser = Auth::user();
+
+        $users = User::where('id', '!=', $currentUser->id)
+            ->where('status', 'active')
+            ->orderBy('name', 'asc')
+            ->get();
+
+        $contacts = [];
+        $recentCount = 0;
+        $otherCount = 0;
+
+        foreach ($users as $u) {
+            $convId = Message::makeConversationId($currentUser->id, $u->id);
+            $lastMsg = Message::where('conversation_id', $convId)->latest()->first();
+            $unreadCount = Message::where('conversation_id', $convId)
+                ->where('receiver_id', $currentUser->id)
+                ->where('is_read', false)
+                ->count();
+
+            if ($lastMsg !== null) {
+                $recentCount++;
+            } else {
+                $otherCount++;
+            }
+
+            $contacts[] = [
+                'id' => $u->id,
+                'name' => $u->name,
+                'email' => $u->email,
+                'avatar' => $u->avatar_url,
+                'role_name' => $u->role_name,
+                'last_message' => $lastMsg ? $lastMsg->body : 'Belum ada obrolan.',
+                'last_message_time' => $lastMsg && $lastMsg->created_at ? $lastMsg->created_at->diffForHumans() : '',
+                'last_message_raw' => $lastMsg && $lastMsg->created_at ? $lastMsg->created_at->timestamp : 0,
+                'has_conversation' => $lastMsg !== null,
+                'unread_count' => $unreadCount,
+            ];
+        }
+
+        return response()->json([
+            'success' => true,
+            'contacts' => $contacts,
+            'recent_count' => $recentCount,
+            'other_count' => $otherCount,
+        ]);
+    }
+
+    /**
      * Fetch conversation messages via AJAX for target user.
      */
     public function getMessages(Request $request, int $userId): JsonResponse

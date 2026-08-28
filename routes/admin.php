@@ -43,6 +43,7 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
 
         // Fitur Pesan & Obrolan (admin/profil-pengguna/messages)
         Route::get('messages', [MessageController::class, 'index'])->name('messages.index');
+        Route::get('messages/poll-contacts', [MessageController::class, 'pollContacts'])->name('messages.poll-contacts');
         Route::get('messages/conversation/{user}', [MessageController::class, 'getMessages'])->name('messages.conversation');
         Route::post('messages/send', [MessageController::class, 'send'])->name('messages.send');
     });

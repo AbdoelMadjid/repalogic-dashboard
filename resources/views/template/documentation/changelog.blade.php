@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.3.3 -->
+                        <!-- Version 2.3.4 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,36 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.3.3</h5>
+                                        <h5 class="fw-bold mb-0">v2.3.4</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.3.4</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-28 16:11 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Real-Time Sidebar Contacts Sync Engine, Auto Unread Badges Counter, Background Contact Polling &amp; Message Hub Bridge</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Polling Kontak &amp; Badge Unread Real-Time:</strong> Penambahan endpoint <code>admin/profil-pengguna/messages/poll-contacts</code> yang berjalan di latar belakang setiap 3.5 detik untuk memperbarui angka pesan masuk (<em>unread counter badge</em>), cuplikan pesan terakhir, dan timestamp kontak di sidebar penerima secara otomatis tanpa reload halaman.</li>
+                                    <li><strong class="text-dark">Promosi Kontak Otomatis (Auto-Promote to Recent):</strong> Kontak yang baru mengirimkan pesan otomatis dipindahkan ke posisi teratas bagian <code>Percakapan Aktif</code> secara langsung di browser penerima.</li>
+                                    <li><strong class="text-dark">Sinkronisasi Penuh Topbar &amp; Chat Hub:</strong> Integrasi pembersihan badge unread otomatis saat pesan dibuka atau dibalas, serta sinkronisasi instan ke ikon amplop notifikasi topbar via <code>window.fetchMessagesSilently()</code>.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Sidebar Contact Polling</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Auto Unread Badge</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Live Contact Reorder</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Message Hub Sync</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.3.3 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xl text-muted opacity-50"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.3.3</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.3.3</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-28 15:58 WIB</span>
@@ -128,10 +156,10 @@
                                     <li><strong class="text-dark">Interaksi UI &amp; Auto-Dismiss:</strong> Penutupan otomatis popup emoji saat klik di luar area maupun penekanan tombol <code>Escape</code>, serta aktivasi tombol otomatis saat memilih kontak lawan bicara.</li>
                                 </ul>
                                 <div class="d-flex flex-wrap gap-1">
-                                    <span class="badge bg-light text-dark border fs-xs">Chat Emoji Picker</span>
-                                    <span class="badge bg-light text-dark border fs-xs">Emotion Grid</span>
-                                    <span class="badge bg-light text-dark border fs-xs">Real-Time Emoji Search</span>
-                                    <span class="badge bg-light text-dark border fs-xs">Cursor-Aware Insertion</span>
+                                    <span class="badge bg-light text-muted border fs-xs">Chat Emoji Picker</span>
+                                    <span class="badge bg-light text-muted border fs-xs">Emotion Grid</span>
+                                    <span class="badge bg-light text-muted border fs-xs">Real-Time Emoji Search</span>
+                                    <span class="badge bg-light text-muted border fs-xs">Cursor-Aware Insertion</span>
                                 </div>
                             </div>
                         </div>
