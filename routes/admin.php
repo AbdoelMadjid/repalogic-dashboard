@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ManajemenPengguna\DataLoginController;
 use App\Http\Controllers\Admin\ManajemenPengguna\PermissionController;
 use App\Http\Controllers\Admin\ManajemenPengguna\RoleController;
 use App\Http\Controllers\Admin\ManajemenPengguna\UserController;
+use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\ProfilPenggunaController;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('messages', [MessageController::class, 'index'])->name('messages.index');
+    Route::get('messages/conversation/{user}', [MessageController::class, 'getMessages'])->name('messages.conversation');
+    Route::post('messages/send', [MessageController::class, 'send'])->name('messages.send');
+
     Route::get('notifications/poll', [NotificationController::class, 'poll'])->name('notifications.poll');
     Route::get('notifications/poll-messages', [NotificationController::class, 'pollMessages'])->name('notifications.poll-messages');
     Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');

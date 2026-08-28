@@ -54,4 +54,15 @@ class Message extends Model
     {
         return $query->where('conversation_id', $conversationId);
     }
+
+    /**
+     * Generate a deterministic conversation ID for two user IDs.
+     */
+    public static function makeConversationId(int $userA, int $userB): string
+    {
+        $min = min($userA, $userB);
+        $max = max($userA, $userB);
+
+        return "conv_{$min}_{$max}";
+    }
 }
