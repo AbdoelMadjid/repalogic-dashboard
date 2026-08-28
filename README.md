@@ -55,9 +55,8 @@
 ### 📚 Dokumentasi Arsitektur Teknis & Riwayat Rilis:
 - 🏷️ [**Riwayat Lengkap Release & Git Tag**](docs/riwayat_release_dan_tag.md) — Daftar versi rilis, git tag, dan ringkasan pembaruan fitur per versi.
 - 💬 [**Pola & Operasional Fitur Chat / Messages Engine**](docs/arsitektur_dan_operasional_fitur_chat_messages.md) — Panduan lengkap arsitektur percakapan *1-on-1*, skema database *conversation ID*, *Quoted Reply*, *Emoji Picker*, *Attachment Upload & Lightbox*, dan *Real-Time Avatar Sync Engine*.
+- 🔐 [**Arsitektur & Operasional Autentikasi Pengguna**](docs/arsitektur_dan_operasional_authentication_user.md) — Panduan lengkap alur pendaftaran mandiri, *User Approval Workflow*, proteksi login *Zero-Trust*, *Universal Notification Hub*, penonaktifan mandiri (*Danger Zone*), pengajuan aktivasi kembali, dan Spatie Role otomatis.
 - 📄 [**Arsitektur Engine Dinamisasi Tema & Seksi Website**](docs/arsitektur_dinamisasi_tema_website.md) — Panduan resmi arsitektur *Loose Coupling*, *Crop Simulator*, *Efek Paralaks 3D*, *Metadata Orientasi Gambar*, dan *Pemisahan Modal Modular*.
-- 📄 [**Alur Registrasi Mandiri & Persetujuan Akun Pengguna**](docs/alur_registrasi_dan_persetujuan_pengguna.md) — Panduan lengkap alur pendaftaran mandiri, *User Approval Workflow*, proteksi login *Zero-Trust*, *Universal Notification Hub*, dan aktivasi Spatie Role otomatis.
-- 📄 [**Alur Penonaktifan Mandiri & Aktivasi Kembali Akun Pengguna**](docs/alur_penonaktifan_dan_aktivasi_akun_pengguna.md) — Panduan lengkap *Danger Zone* penonaktifan profil mandiri, form pengajuan aktivasi akun nonaktif, integrasi notifikasi topbar, dan eksekusi admin.
 
 ---
 

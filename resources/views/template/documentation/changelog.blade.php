@@ -436,7 +436,7 @@
                                     <li><strong class="text-dark">Pusat Notifikasi Universal Topbar (Multi-Type Notification Hub):</strong> Mengagregasikan notifikasi pendaftaran, permintaan reset password, permohonan nonaktif, permohonan aktivasi, pesan chat, dan notifikasi database Laravel via <code>NotificationService</code> terpusat sesuai standar Inspinia.</li>
                                     <li><strong class="text-dark">Permintaan Reset Password (Admin-Assisted Reset):</strong> Form forgot password dengan validasi interaktif, pengajuan permintaan reset ke administrator, tombol reset pada tabel admin ke password standar (<code>password*</code>), dan banner sukses terverifikasi.</li>
                                     <li><strong class="text-dark">Dinamisasi Branding Otentikasi &amp; Lokalisasi Bahasa Indonesia:</strong> Logo, favicon, meta title, dan teks footer form otentikasi terhubung 100% dinamis ke tabel <code>profil_aplikasi</code>, serta seluruh teks di-standarisasi ke Bahasa Indonesia.</li>
-                                    <li><strong class="text-dark">Dokumentasi Resmi Alur Otentikasi:</strong> Panduan lengkap di <code>docs/alur_registrasi_dan_persetujuan_pengguna.md</code> dan <code>docs/alur_penonaktifan_dan_aktivasi_akun_pengguna.md</code>.</li>
+                                    <li><strong class="text-dark">Dokumentasi Resmi Alur Otentikasi:</strong> Panduan lengkap di <code>docs/arsitektur_dan_operasional_authentication_user.md</code>.</li>
                                 </ul>
                             </div>
                         </div>
