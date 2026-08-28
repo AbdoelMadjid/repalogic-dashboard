@@ -32,6 +32,7 @@ class User extends Authenticatable
         'deactivation_reason',
         'reactivation_requested_at',
         'reactivation_reason',
+        'rejection_reason',
         'login_count',
         'last_login_at',
         'last_login_point_at',
@@ -114,6 +115,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Relationship to Message model (Received messages).
+     */
+    public function receivedMessages(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
+    }
+
+    /**
+     * Relationship to Message model (Sent messages).
+     */
+    public function sentMessages(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    /**
      * Check if user is active.
      */
     public function isActive(): bool
@@ -127,6 +144,14 @@ class User extends Authenticatable
     public function isInactive(): bool
     {
         return $this->status === 'inactive';
+    }
+
+    /**
+     * Check if user registration was rejected.
+     */
+    public function isRejected(): bool
+    {
+        return $this->status === 'rejected';
     }
 
     /**

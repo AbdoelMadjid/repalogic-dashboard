@@ -2,13 +2,21 @@
     <!-- Brand Logo -->
     <a href="{{ route('dashboard') }}" class="logo">
         <span class="logo logo-light">
-            <span class="logo-lg"><img src="{{ !empty($appProfil->logo_lg) ? asset('storage/' . $appProfil->logo_lg) : asset('assets/images/logo.png') }}" alt="logo" /></span>
-            <span class="logo-sm"><img src="{{ !empty($appProfil->logo_sm) ? asset('storage/' . $appProfil->logo_sm) : asset('assets/images/logo-sm.png') }}" alt="small logo" /></span>
+            <span class="logo-lg"><img
+                    src="{{ !empty($appProfil->logo_lg) ? asset('storage/' . $appProfil->logo_lg) : asset('assets/images/logo.png') }}"
+                    alt="logo" /></span>
+            <span class="logo-sm"><img
+                    src="{{ !empty($appProfil->logo_sm) ? asset('storage/' . $appProfil->logo_sm) : asset('assets/images/logo-sm.png') }}"
+                    alt="small logo" /></span>
         </span>
 
         <span class="logo logo-dark">
-            <span class="logo-lg"><img src="{{ !empty($appProfil->logo_lg) ? asset('storage/' . $appProfil->logo_lg) : asset('assets/images/logo-black.png') }}" alt="dark logo" /></span>
-            <span class="logo-sm"><img src="{{ !empty($appProfil->logo_sm) ? asset('storage/' . $appProfil->logo_sm) : asset('assets/images/logo-sm.png') }}" alt="small logo" /></span>
+            <span class="logo-lg"><img
+                    src="{{ !empty($appProfil->logo_lg) ? asset('storage/' . $appProfil->logo_lg) : asset('assets/images/logo-black.png') }}"
+                    alt="dark logo" /></span>
+            <span class="logo-sm"><img
+                    src="{{ !empty($appProfil->logo_sm) ? asset('storage/' . $appProfil->logo_sm) : asset('assets/images/logo-sm.png') }}"
+                    alt="small logo" /></span>
         </span>
     </a>
 
@@ -45,8 +53,8 @@
                 <i
                     class="ti ti-search position-absolute top-50 start-0 translate-middle-y ms-2 sidenav-search-icon"></i>
                 <input type="text" id="sidenav-menu-search"
-                    class="form-control form-control-sm sidenav-search-input text-white" style="padding-left: 28px;" placeholder="Search menu..."
-                    data-lang-placeholder="sidenav-search-placeholder">
+                    class="form-control form-control-sm sidenav-search-input text-white" style="padding-left: 28px;"
+                    placeholder="Search menu..." data-lang-placeholder="sidenav-search-placeholder">
             </div>
             <div id="sidenav-search-empty" class="sidenav-search-empty mt-2 d-none" data-lang="sidenav-search-empty">
                 Menu tidak ditemukan.
@@ -68,11 +76,12 @@
                 @endif
 
                 {{-- Menu Template (Bawaan Template Inspinia): Hanya untuk Role Superadmin & Admin --}}
-                @if (auth()->check() && auth()->user()->hasAnyRole(['superadmin', 'admin']))
+                @if (auth()->check() &&
+                        auth()->user()->hasAnyRole(['superadmin', 'admin']))
                     @foreach (['main', 'apps', 'custom-pages', 'layouts', 'components', 'documentation', 'menu-item'] as $groupKey)
                         @php
                             $featureKey = 'menu_group_' . str_replace('-', '_', $groupKey);
-                            $isGroupVisible = empty($appFeatures) || (!empty($appFeatures->$featureKey));
+                            $isGroupVisible = empty($appFeatures) || !empty($appFeatures->$featureKey);
                         @endphp
                         @if ($isGroupVisible && ($groupConfig = config("sidenav-template.$groupKey")))
                             @include('layouts.partials.mainmenu._render', ['menuGroup' => $groupConfig])
@@ -96,7 +105,7 @@
         <div class="sidenav-special-bottom">
             <ul class="side-nav mb-0">
                 <li class="side-nav-item mb-0">
-                    <a href="#" class="side-nav-link special-menu">
+                    <a href="{{ Route::has('template.documentation.changelog') ? route('template.documentation.changelog') : url('template/documentation/changelog') }}" class="side-nav-link special-menu">
                         <span class="menu-icon"><i class="ti ti-star"></i></span>
                         <span class="menu-text" data-lang="special-menu">Special Menu</span>
                     </a>
@@ -123,7 +132,8 @@
 
     .sidenav-special-bottom {
         position: absolute !important;
-        bottom: 6px !important; /* Spasi 6px persis dari tepi paling bawah layar sidebar */
+        bottom: 6px !important;
+        /* Spasi 6px persis dari tepi paling bawah layar sidebar */
         left: 0 !important;
         right: 0 !important;
         z-index: 1050 !important;

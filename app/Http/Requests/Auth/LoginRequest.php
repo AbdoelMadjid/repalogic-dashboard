@@ -92,6 +92,17 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        if ($user->isRejected()) {
+            RateLimiter::hit($this->throttleKey());
+            $this->flashOnly(['email']);
+
+            $reasonMsg = !empty($user->rejection_reason) ? 'Alasan Penolakan: "' . $user->rejection_reason . '". ' : '';
+
+            throw ValidationException::withMessages([
+                'rejected' => 'Pengajuan pendaftaran akun Anda ditolak oleh Administrator. ' . $reasonMsg . 'Silakan melakukan pendaftaran ulang.',
+            ]);
+        }
+
         if ($user->isInactive()) {
             RateLimiter::hit($this->throttleKey());
             $this->flashOnly(['email']);

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ManajemenPengguna\DataLoginController;
 use App\Http\Controllers\Admin\ManajemenPengguna\PermissionController;
 use App\Http\Controllers\Admin\ManajemenPengguna\RoleController;
 use App\Http\Controllers\Admin\ManajemenPengguna\UserController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\ProfilPenggunaController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('notifications/poll', [NotificationController::class, 'poll'])->name('notifications.poll');
+    Route::get('notifications/poll-messages', [NotificationController::class, 'pollMessages'])->name('notifications.poll-messages');
+    Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
+
     Route::get('profil-pengguna', [ProfilPenggunaController::class, 'index'])->name('profil-pengguna.index');
     Route::post('profil-pengguna/update-quick', [ProfilPenggunaController::class, 'updateQuick'])->name('profil-pengguna.update-quick');
     Route::get('profil-pengguna/edit', [ProfilPenggunaController::class, 'edit'])->name('profil-pengguna.edit');
@@ -69,8 +74,10 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
 
     Route::prefix('manajemenpengguna')->name('manajemenpengguna.')->group(function () {
         Route::post('users/{id}/approve', [UserController::class, 'approve'])->name('users.approve');
+        Route::post('users/{id}/reject-registration', [UserController::class, 'rejectRegistration'])->name('users.reject-registration');
         Route::post('users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
         Route::post('users/{id}/deactivate', [UserController::class, 'deactivate'])->name('users.deactivate');
+        Route::post('users/{id}/reject-deactivation', [UserController::class, 'rejectDeactivation'])->name('users.reject-deactivation');
         Route::post('users/{id}/activate', [UserController::class, 'activate'])->name('users.activate');
         Route::post('users/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
         Route::resource('users', UserController::class);

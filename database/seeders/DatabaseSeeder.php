@@ -18,12 +18,14 @@ class DatabaseSeeder extends Seeder
         // 1. Seed Roles
         $this->call(RoleSeeder::class);
 
-        // 2. Seed Admin Users
+        // 2. Seed Admin & Core Users
         $user1 = User::firstOrCreate([
             'email' => 'superadmin@example.com',
         ], [
             'name' => 'Super Admin',
             'password' => bcrypt('password'),
+            'status' => 'active',
+            'approved_at' => now(),
         ]);
         $user1->assignRole('superadmin');
 
@@ -32,6 +34,8 @@ class DatabaseSeeder extends Seeder
         ], [
             'name' => 'Admin',
             'password' => bcrypt('password'),
+            'status' => 'active',
+            'approved_at' => now(),
         ]);
         $user2->assignRole('admin');
 
@@ -40,19 +44,24 @@ class DatabaseSeeder extends Seeder
         ], [
             'name' => 'Operator',
             'password' => bcrypt('password'),
+            'status' => 'active',
+            'approved_at' => now(),
         ]);
         $user3->assignRole('operator');
 
-        // 3. Seed Menus & Permissions
+        // 3. Seed 10 Dummy Users dengan Role 'user' via Factory
+        User::factory()->count(10)->create();
+
+        // 4. Seed Menus & Permissions
         $this->call(MainMenuSeeder::class);
 
-        // 4. Seed Profil Aplikasi
+        // 5. Seed Profil Aplikasi
         $this->call(ProfilAplikasiSeeder::class);
 
-        // 5. Seed Fitur Aplikasi
+        // 6. Seed Fitur Aplikasi
         $this->call(FiturAplikasiSeeder::class);
 
-        // 6. Seed Tema & Seksi Website Landing Page
+        // 7. Seed Tema & Seksi Website Landing Page
         $this->call(WebsiteThemeSeeder::class);
     }
 }

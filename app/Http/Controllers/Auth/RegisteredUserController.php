@@ -30,6 +30,18 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // Hapus record pendaftaran lama yang berstatus 'rejected' agar calon pengguna dapat mendaftar ulang
+        if ($request->filled('email')) {
+            $existingRejectedUser = User::where('email', strtolower(trim($request->email)))
+                ->where('status', 'rejected')
+                ->first();
+
+            if ($existingRejectedUser) {
+                $existingRejectedUser->roles()->detach();
+                $existingRejectedUser->delete();
+            }
+        }
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],

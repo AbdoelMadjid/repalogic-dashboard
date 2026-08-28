@@ -17,7 +17,7 @@ class MenuManajemenPenggunaSeeder extends BaseMenuSeeder
             'url' => 'admin/manajemenpengguna',
             'route' => 'admin.manajemenpengguna',
         ]);
-        $this->attachMenupermission($mm, ['create', 'read', 'update', 'delete'], ['superadmin', 'admin']);
+        $this->attachMenupermission($mm, ['read'], ['superadmin', 'admin']);
 
         // 2. Sub-menus under Manajemen Pengguna
         $sm1 = $this->createSubMenu($mm, [

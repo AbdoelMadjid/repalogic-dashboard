@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.2.0</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.3.0</strong>
                             </span>
                         </div>
                     </div>
@@ -29,68 +29,70 @@
             </div>
         </div>
 
-        <!-- Release Procedure Guide Card -->
-        <div class="col-12 mb-4">
-            <div class="card border border-info-subtle shadow-sm">
-                <div class="card-header bg-info-subtle py-3 d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0 fw-bold text-info-emphasis">
-                        <i class="ti ti-book me-2"></i> Standar Prosedur Pembaruan Versi Rilis / Tag (Version Release Guide)
-                    </h5>
-                    <span class="badge bg-info text-white font-monospace">Centralized Engine</span>
-                </div>
-                <div class="card-body p-4">
-                    <div class="row g-3">
-                        <div class="col-md-6 col-lg-3">
-                            <div class="p-3 border rounded-3 bg-light-subtle h-100">
-                                <div class="d-flex align-items-center mb-2">
-                                    <span class="badge bg-primary rounded-circle p-1.5 me-2"><i class="ti ti-settings fs-14"></i></span>
-                                    <h6 class="fw-bold mb-0 text-dark">1. Update APP_VERSION</h6>
+        <!-- Release Procedure Guide Card (Khusus Superadmin & Admin) -->
+        @if (auth()->check() && auth()->user()->hasAnyRole(['superadmin', 'admin']))
+            <div class="col-12 mb-4">
+                <div class="card border border-info-subtle shadow-sm">
+                    <div class="card-header bg-info-subtle py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0 fw-bold text-info-emphasis">
+                            <i class="ti ti-book me-2"></i> Standar Prosedur Pembaruan Versi Rilis / Tag (Version Release Guide)
+                        </h5>
+                        <span class="badge bg-info text-white font-monospace">Centralized Engine</span>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-6 col-lg-3">
+                                <div class="p-3 border rounded-3 bg-light-subtle h-100">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="badge bg-primary rounded-circle p-1.5 me-2"><i class="ti ti-settings fs-14"></i></span>
+                                        <h6 class="fw-bold mb-0 text-dark">1. Update APP_VERSION</h6>
+                                    </div>
+                                    <p class="fs-13 text-muted mb-0">
+                                        Cukup ubah <code>APP_VERSION=vX.Y.Z</code> pada file <code>.env</code> / <code>config/app.php</code>. Versi pada <strong>Sidenav, Footer, &amp; DB Profil Aplikasi</strong> akan ter-update secara otomatis!
+                                    </p>
                                 </div>
-                                <p class="fs-13 text-muted mb-0">
-                                    Cukup ubah <code>APP_VERSION=vX.Y.Z</code> pada file <code>.env</code> / <code>config/app.php</code>. Versi pada <strong>Sidenav, Footer, &amp; DB Profil Aplikasi</strong> akan ter-update secara otomatis!
-                                </p>
                             </div>
-                        </div>
 
-                        <div class="col-md-6 col-lg-3">
-                            <div class="p-3 border rounded-3 bg-light-subtle h-100">
-                                <div class="d-flex align-items-center mb-2">
-                                    <span class="badge bg-success rounded-circle p-1.5 me-2"><i class="ti ti-file-text fs-14"></i></span>
-                                    <h6 class="fw-bold mb-0 text-dark">2. Catat Log Changelog</h6>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="p-3 border rounded-3 bg-light-subtle h-100">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="badge bg-success rounded-circle p-1.5 me-2"><i class="ti ti-file-text fs-14"></i></span>
+                                        <h6 class="fw-bold mb-0 text-dark">2. Catat Log Changelog</h6>
+                                    </div>
+                                    <p class="fs-13 text-muted mb-0">
+                                        Tulis ringkasan rilis pada file <code>changelog.blade.php</code> dengan penanda waktu WIB yang presisi sesuai commit git.
+                                    </p>
                                 </div>
-                                <p class="fs-13 text-muted mb-0">
-                                    Tulis ringkasan rilis pada file <code>changelog.blade.php</code> dengan penanda waktu WIB yang presisi sesuai commit git.
-                                </p>
                             </div>
-                        </div>
 
-                        <div class="col-md-6 col-lg-3">
-                            <div class="p-3 border rounded-3 bg-light-subtle h-100">
-                                <div class="d-flex align-items-center mb-2">
-                                    <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-table fs-14"></i></span>
-                                    <h6 class="fw-bold mb-0 text-dark">3. Update Dokumen Rilis</h6>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="p-3 border rounded-3 bg-light-subtle h-100">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-table fs-14"></i></span>
+                                        <h6 class="fw-bold mb-0 text-dark">3. Update Dokumen Rilis</h6>
+                                    </div>
+                                    <p class="fs-13 text-muted mb-0">
+                                        Tambahkan entri tabel rilis pada file <code>docs/riwayat_release_dan_tag.md</code> untuk arsip dokumentasi offline.
+                                    </p>
                                 </div>
-                                <p class="fs-13 text-muted mb-0">
-                                    Tambahkan entri tabel rilis pada file <code>docs/riwayat_release_dan_tag.md</code> untuk arsip dokumentasi offline.
-                                </p>
                             </div>
-                        </div>
 
-                        <div class="col-md-6 col-lg-3">
-                            <div class="p-3 border rounded-3 bg-light-subtle h-100">
-                                <div class="d-flex align-items-center mb-2">
-                                    <span class="badge bg-danger rounded-circle p-1.5 me-2"><i class="ti ti-tag fs-14"></i></span>
-                                    <h6 class="fw-bold mb-0 text-dark">4. Git Tag Release</h6>
+                            <div class="col-md-6 col-lg-3">
+                                <div class="p-3 border rounded-3 bg-light-subtle h-100">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="badge bg-danger rounded-circle p-1.5 me-2"><i class="ti ti-tag fs-14"></i></span>
+                                        <h6 class="fw-bold mb-0 text-dark">4. Git Tag Release</h6>
+                                    </div>
+                                    <p class="fs-13 text-muted mb-0">
+                                        Buat tag git baru: <code>git tag -a vX.Y.Z -m "Release vX.Y.Z"</code> lalu jalankan <code>git push origin main --tags</code>.
+                                    </p>
                                 </div>
-                                <p class="fs-13 text-muted mb-0">
-                                    Buat tag git baru: <code>git tag -a vX.Y.Z -m "Release vX.Y.Z"</code> lalu jalankan <code>git push origin main --tags</code>.
-                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
 
         <!-- Changelog Timeline Section -->
         <div class="col-12">
@@ -103,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.2.0 -->
+                        <!-- Version 2.3.0 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -111,8 +113,38 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.2.0</h5>
+                                        <h5 class="fw-bold mb-0">v2.3.0</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.3.0</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-28 10:15 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Real-Time Notification Polling, Self-Registration Rejection Workflow, Deactivation Request Notification System &amp; Topbar Layout Refinements</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Tabel Database Dedicated Messages:</strong> Pembuatan skema tabel <code>messages</code> khusus untuk arsitektur pengiriman pesan/chat antarpengguna dan notifikasi sistem dengan dukungan <code>sender_id</code>, <code>receiver_id</code>, <code>conversation_id</code>, <code>subject</code>, <code>body</code>, <code>reason</code>, dan <code>read_at</code>.</li>
+                                    <li><strong class="text-dark">Tombol Pesan di Profil Pengguna:</strong> Penambahan tombol <code>Pesan</code> hijau pada header <code>admin/profil-pengguna</code> di samping kanan tombol Kelengkapan Data KTP.</li>
+                                    <li><strong class="text-dark">Real-Time Messages &amp; Notification Polling:</strong> Pembaruan otomatis notifikasi &amp; pesan topbar setiap 20 detik via AJAX tanpa mengganggu timer idle atau lock screen, dengan indikator badge status <code>Belum dibaca</code> dan <code>Sudah dibaca</code>.</li>
+                                    <li><strong class="text-dark">Alur Penolakan Registrasi Mandiri &amp; Non-Aktif:</strong> Penolakan permohonan penonaktifan mengirimkan pesan terintegrasi ke tabel <code>messages</code>. Mengklik notifikasi/pesan akan membuka modal detail alasan penolakan dan menandai pesan sebagai dibaca.</li>
+                                    <li><strong class="text-dark">UserFactory &amp; Automated User Seeder:</strong> Konfigurasi <code>UserFactory</code> dan <code>DatabaseSeeder</code> untuk menghasilkan 10 akun dummy pengguna baru secara otomatis dengan atribusi Spatie Role <code>user</code>, penanganan status badge <code>Pendaftaran Ditolak</code> pada tabel data pengguna, dan pembaruan layout status pesan di bawah waktu topbar.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-muted border">Dedicated Messages Table</span>
+                                    <span class="badge bg-light text-muted border">Chat Architecture</span>
+                                    <span class="badge bg-light text-muted border">UserFactory 10 Dummy Users</span>
+                                    <span class="badge bg-light text-muted border">Real-Time Polling</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.2.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-git-commit fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.2.0</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.2.0</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-27 23:28 WIB</span>

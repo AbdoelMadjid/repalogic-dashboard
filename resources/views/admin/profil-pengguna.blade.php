@@ -28,10 +28,10 @@
                             <div>
                                 <h4 class="text-nowrap fw-bold mb-1">{{ $user->name }}</h4>
                                 <p class="text-muted mb-1"><i class="ti ti-mail me-1"></i>{{ $user->email }}</p>
-                                <div class="d-flex align-items-center gap-1.5 flex-wrap">
-                                    <span class="badge bg-primary-subtle text-primary fw-medium fs-xs">{{ $user->role_name }}</span>
-                                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle fw-bold fs-xs" title="Total Poin Login yang Dikumpulkan">
-                                        <i class="ti ti-award me-0.5"></i> {{ number_format($user->login_count ?? 0) }} Poin Login
+                                <div class="d-flex align-items-center gap-2 flex-wrap mt-1">
+                                    <span class="badge bg-primary-subtle text-primary fw-medium px-2 py-1 fs-xs">{{ $user->role_name }}</span>
+                                    <span class="badge bg-warning-subtle text-warning fw-medium px-2 py-1 fs-xs" title="Total Poin Login yang Dikumpulkan">
+                                        <i class="ti ti-award me-1"></i> {{ number_format($user->login_count ?? 0) }} Poin Login
                                     </span>
                                 </div>
                             </div>
@@ -46,6 +46,11 @@
                             <a href="{{ route('admin.profil-pengguna.edit') }}" class="btn btn-outline-primary fw-semibold">
                                 <i class="ti ti-id me-1"></i> Kelengkapan Data KTP
                             </a>
+
+                            <!-- Tombol Pesan / Chat -->
+                            <button type="button" class="btn btn-outline-success fw-semibold" id="btn-user-messages" title="Fitur Pesan / Obrolan">
+                                <i class="ti ti-message me-1"></i> Pesan
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -87,10 +92,10 @@
                         </div>
                         <div>
                             <span class="fs-12 text-muted d-block">Peran & Akumulasi Poin</span>
-                            <div class="d-flex align-items-center gap-1.5 mt-0.5 flex-wrap">
-                                <span class="badge bg-warning-subtle text-warning fs-12 fw-semibold">{{ $user->role_name }}</span>
-                                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle fs-12 fw-bold" title="Total Poin Login (Maks 1 Poin per 24 Jam)">
-                                    <i class="ti ti-award me-0.5"></i> {{ number_format($user->login_count ?? 0) }} Poin
+                            <div class="d-flex align-items-center gap-2 mt-1 flex-wrap">
+                                <span class="badge bg-primary-subtle text-primary fs-12 fw-semibold px-2 py-1">{{ $user->role_name }}</span>
+                                <span class="badge bg-warning-subtle text-warning fs-12 fw-semibold px-2 py-1" title="Total Poin Login (Maks 1 Poin per 24 Jam)">
+                                    <i class="ti ti-award me-1"></i> {{ number_format($user->login_count ?? 0) }} Poin
                                 </span>
                             </div>
                         </div>
@@ -320,7 +325,7 @@
                 <div class="card-body">
                     @if ($user->isDeactivationRequested())
                         <div class="alert alert-warning border-0 shadow-sm d-flex align-items-start gap-3 p-3 mb-0 rounded-3" style="background-color: #fffbeb; color: #92400e;">
-                            <div class="avatar-sm bg-warning text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 mt-0.5">
+                            <div class="avatar-sm bg-warning text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 mt-1">
                                 <i class="ti ti-hourglass-low fs-20"></i>
                             </div>
                             <div class="w-100">
@@ -329,7 +334,7 @@
                                     Anda telah mengajukan permohonan penonaktifan akun pada <strong class="text-dark">{{ $user->deactivation_requested_at->format('d F Y (H:i)') }} WIB</strong>. Permintaan ini sedang menunggu tinjauan dan konfirmasi dari Administrator sistem.
                                 </p>
                                 @if(!empty($user->deactivation_reason))
-                                    <div class="p-2.5 bg-white border border-warning-subtle rounded-2 fs-13 mb-2">
+                                    <div class="p-3 bg-white border border-warning-subtle rounded-2 fs-13 mb-2">
                                         <strong class="text-dark d-block mb-1"><i class="ti ti-notes me-1"></i>Alasan Pengajuan:</strong>
                                         <span class="text-secondary fst-italic">"{{ $user->deactivation_reason }}"</span>
                                     </div>
@@ -377,8 +382,8 @@
                 <form action="{{ route('admin.profil-pengguna.request-deactivation') }}" method="POST" id="form-request-deactivation">
                     @csrf
                     <div class="modal-body p-4">
-                        <div class="alert alert-danger border-0 d-flex align-items-start gap-2 mb-3 py-2.5 px-3 rounded-3" style="background-color: #fef2f2; color: #991b1b;">
-                            <i class="ti ti-alert-circle fs-20 flex-shrink-0 mt-0.5"></i>
+                        <div class="alert alert-danger border-0 d-flex align-items-start gap-2 mb-3 py-2 px-3 rounded-3" style="background-color: #fef2f2; color: #991b1b;">
+                            <i class="ti ti-alert-circle fs-20 flex-shrink-0 mt-1"></i>
                             <div class="fs-13">
                                 <strong>Perhatian:</strong> Permintaan penonaktifan akun akan dikirimkan langsung ke Administrator. Setelah disetujui, Anda tidak akan dapat masuk kembali hingga diaktifkan oleh admin.
                             </div>
@@ -594,6 +599,19 @@
                     }
                 }
             });
+            // 5. Listener Tombol Pesan / Chat pada Header Profil Pengguna
+            const btnUserMessages = document.getElementById('btn-user-messages');
+            if (btnUserMessages) {
+                btnUserMessages.addEventListener('click', function() {
+                    const topbarMsgBtn = document.getElementById('topbar-messages-toggle-btn');
+                    if (topbarMsgBtn && window.bootstrap && window.bootstrap.Dropdown) {
+                        const bsDropdown = window.bootstrap.Dropdown.getOrCreateInstance(topbarMsgBtn);
+                        bsDropdown.toggle();
+                    } else if (typeof window.showToast === 'function') {
+                        window.showToast('Fitur Pesan Siap Digunakan!', 'success');
+                    }
+                });
+            }
         });
     </script>
 @endsection

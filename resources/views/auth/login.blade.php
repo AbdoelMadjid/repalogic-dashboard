@@ -118,6 +118,21 @@
                             </div>
                         @endif
 
+                        @if ($errors->has('rejected'))
+                            <div class="alert alert-danger border-0 shadow-sm d-flex align-items-start gap-2 mb-3 py-3 px-3 rounded-3" role="alert" style="background-color: #fef2f2; color: #991b1b; border-left: 4px solid #ef4444 !important;">
+                                <i class="ti ti-user-x fs-18 text-danger flex-shrink-0 mt-1"></i>
+                                <div class="fs-13 lh-base w-100">
+                                    <strong class="d-block mb-1">Pengajuan Pendaftaran Ditolak</strong>
+                                    {{ $errors->first('rejected') }}
+                                    <div class="mt-2 pt-1 border-top border-danger-subtle">
+                                        <a href="{{ route('register') }}" class="btn btn-sm btn-danger text-white fw-semibold py-1 px-3">
+                                            <i class="ti ti-user-plus me-1"></i> Daftar Ulang Sekarang
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                         @if ($errors->has('inactive'))
                             <div class="alert alert-danger border-0 shadow-sm d-flex align-items-start gap-2 mb-3.5 py-3 px-3.5 rounded-3" role="alert" style="background-color: #fef2f2; color: #991b1b; border-left: 4px solid #ef4444 !important;">
                                 <i class="ti ti-ban fs-18 text-danger flex-shrink-0 mt-0.5"></i>

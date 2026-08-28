@@ -109,8 +109,12 @@
                                                     <span class="badge bg-warning-subtle text-warning border border-warning-subtle fs-11">
                                                         <i class="ti ti-clock me-1"></i>Menunggu Persetujuan
                                                     </span>
+                                                @elseif ($user->status === 'rejected')
+                                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle fs-11" title="{{ $user->rejection_reason ? 'Alasan: ' . $user->rejection_reason : 'Pendaftaran ditolak' }}">
+                                                        <i class="ti ti-user-x me-1"></i>Pendaftaran Ditolak
+                                                    </span>
                                                 @elseif ($user->status === 'inactive')
-                                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle fs-11">
+                                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle fs-11">
                                                         <i class="ti ti-ban me-1"></i>Nonaktif
                                                     </span>
                                                 @else
@@ -148,13 +152,25 @@
                                             </td>
                                             <td class="text-center py-2 text-nowrap">
                                                 <div class="d-inline-flex align-items-center justify-content-center gap-1">
-                                                    {{-- Tombol Setujui Khusus User Pending --}}
+                                                    {{-- Tombol Setujui / Tolak Khusus User Pending atau Rejected --}}
                                                     @if ($user->status === 'pending')
                                                         @can('update manajemenpengguna/users')
                                                             <form action="{{ route('admin.manajemenpengguna.users.approve', $user->id) }}" method="POST" class="d-inline" data-confirm="Setujui dan aktifkan akun {{ $user->name }} dengan Role User?">
                                                                 @csrf
                                                                 <button type="submit" class="btn btn-sm btn-success" title="Setujui Akun &amp; Berikan Role User">
                                                                     <i class="ti ti-user-check me-1"></i>Setujui
+                                                                </button>
+                                                            </form>
+                                                            <button type="button" class="btn btn-sm btn-outline-danger btn-reject-registration-modal" data-user-id="{{ $user->id }}" data-user-name="{{ $user->name }}" title="Tolak Pendaftaran Akun">
+                                                                <i class="ti ti-x me-1"></i>Tolak
+                                                            </button>
+                                                        @endcan
+                                                    @elseif ($user->status === 'rejected')
+                                                        @can('update manajemenpengguna/users')
+                                                            <form action="{{ route('admin.manajemenpengguna.users.approve', $user->id) }}" method="POST" class="d-inline" data-confirm="Setujui dan aktifkan akun {{ $user->name }} yang sebelumnya ditolak?">
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-sm btn-success" title="Setujui &amp; Aktifkan Akun">
+                                                                    <i class="ti ti-user-check me-1"></i>Setujui Akun
                                                                 </button>
                                                             </form>
                                                         @endcan
@@ -172,7 +188,7 @@
                                                         @endcan
                                                     @endif
 
-                                                    {{-- Tombol Nonaktifkan Khusus Permintaan Nonaktif --}}
+                                                    {{-- Tombol Nonaktifkan / Tolak Khusus Permintaan Nonaktif --}}
                                                     @if ($user->isDeactivationRequested())
                                                         @can('update manajemenpengguna/users')
                                                             <form action="{{ route('admin.manajemenpengguna.users.deactivate', $user->id) }}" method="POST" class="d-inline" data-confirm="Nonaktifkan akun pengguna {{ $user->name }} sesuai permohonan?">
@@ -181,6 +197,9 @@
                                                                     <i class="ti ti-user-off me-1"></i>Nonaktifkan
                                                                 </button>
                                                             </form>
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary btn-reject-deactivation-modal" data-user-id="{{ $user->id }}" data-user-name="{{ $user->name }}" data-user-reason="{{ $user->deactivation_reason }}" title="Tolak Permohonan Penonaktifan">
+                                                                <i class="ti ti-x me-1"></i>Tolak Nonaktif
+                                                            </button>
                                                         @endcan
                                                     @endif
 
@@ -264,8 +283,108 @@
         </div>
     </div>
 
+    <!-- MODAL TOLAK PENDAFTARAN REGISTRASI -->
+    <div class="modal fade" id="modal-reject-registration" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-danger text-white py-3">
+                    <h5 class="modal-title text-white mb-0" id="modalRejectRegTitle"><i class="ti ti-user-x me-1"></i> Tolak Pendaftaran Akun</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="form-reject-registration" method="POST" action="">
+                    @csrf
+                    <div class="modal-body p-4">
+                        <p class="text-muted fs-13 mb-3">Tuliskan alasan penolakan pendaftaran akun untuk <strong id="reject-reg-user-name" class="text-dark"></strong>:</p>
+                        <div class="mb-3">
+                            <label for="reject_reg_reason" class="form-label fw-semibold text-dark">Alasan Penolakan <span class="text-danger">*</span></label>
+                            <textarea name="reason" id="reject_reg_reason" rows="3" class="form-control" placeholder="Contoh: Identitas diri tidak sesuai dengan foto KTP..." required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light py-3">
+                        <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger px-4 fw-semibold"><i class="ti ti-send me-1"></i> Kirim Penolakan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL TOLAK PERMINTAAN NONAKTIFKAN AKUN -->
+    <div class="modal fade" id="modal-reject-deactivation" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-warning text-dark py-3">
+                    <h5 class="modal-title text-dark mb-0" id="modalRejectDeactTitle"><i class="ti ti-user-x me-1"></i> Tolak Permohonan Penonaktifan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="form-reject-deactivation" method="POST" action="">
+                    @csrf
+                    <div class="modal-body p-4">
+                        <p class="text-muted fs-13 mb-2">Permohonan penonaktifan akun oleh <strong id="reject-deact-user-name" class="text-dark"></strong>:</p>
+                        <div id="reject-deact-user-reason-box" class="p-3 bg-light rounded border fs-12 mb-3 fst-italic text-secondary"></div>
+                        <div class="mb-3">
+                            <label for="reject_deact_reason" class="form-label fw-semibold text-dark">Alasan Penolakan dari Admin <span class="text-danger">*</span></label>
+                            <textarea name="reason" id="reject_deact_reason" rows="3" class="form-control" placeholder="Contoh: Akun Anda masih memiliki transaksi aktif..." required></textarea>
+                            <span class="fs-12 text-muted mt-1 d-block">Alasan penolakan ini akan dikirimkan langsung ke Notifikasi/Pesan pengguna.</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light py-3">
+                        <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-warning px-4 fw-semibold text-dark"><i class="ti ti-send me-1"></i> Kirim Penolakan & Notifikasi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Event delegation untuk tombol Tolak Pendaftaran & Tolak Nonaktif
+            document.addEventListener('click', function(e) {
+                const btnRejectReg = e.target.closest('.btn-reject-registration-modal');
+                if (btnRejectReg) {
+                    const userId = btnRejectReg.getAttribute('data-user-id');
+                    const userName = btnRejectReg.getAttribute('data-user-name');
+                    const form = document.getElementById('form-reject-registration');
+                    const nameLabel = document.getElementById('reject-reg-user-name');
+
+                    if (form && userId) {
+                        form.action = `/admin/manajemenpengguna/users/${userId}/reject-registration`;
+                    }
+                    if (nameLabel) nameLabel.textContent = userName || 'Pengguna';
+
+                    const modalEl = document.getElementById('modal-reject-registration');
+                    if (modalEl && window.bootstrap && window.bootstrap.Modal) {
+                        const modal = new window.bootstrap.Modal(modalEl);
+                        modal.show();
+                    }
+                }
+
+                const btnRejectDeact = e.target.closest('.btn-reject-deactivation-modal');
+                if (btnRejectDeact) {
+                    const userId = btnRejectDeact.getAttribute('data-user-id');
+                    const userName = btnRejectDeact.getAttribute('data-user-name');
+                    const userReason = btnRejectDeact.getAttribute('data-user-reason');
+                    const form = document.getElementById('form-reject-deactivation');
+                    const nameLabel = document.getElementById('reject-deact-user-name');
+                    const reasonBox = document.getElementById('reject-deact-user-reason-box');
+
+                    if (form && userId) {
+                        form.action = `/admin/manajemenpengguna/users/${userId}/reject-deactivation`;
+                    }
+                    if (nameLabel) nameLabel.textContent = userName || 'Pengguna';
+                    if (reasonBox) {
+                        reasonBox.textContent = userReason ? `Alasan Pengajuan User: "${userReason}"` : 'Alasan Pengajuan User: Tidak mencantumkan alasan khusus.';
+                    }
+
+                    const modalEl = document.getElementById('modal-reject-deactivation');
+                    if (modalEl && window.bootstrap && window.bootstrap.Modal) {
+                        const modal = new window.bootstrap.Modal(modalEl);
+                        modal.show();
+                    }
+                }
+            });
+
             let currentPage = 1;
             let pageSize = 25;
 

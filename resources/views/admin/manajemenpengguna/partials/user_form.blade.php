@@ -62,6 +62,7 @@
                     <option value="active">Aktif (Disetujui &amp; Dapat Login)</option>
                     <option value="pending">Menunggu Persetujuan (Pending Registration)</option>
                     <option value="inactive">Nonaktif (Akses Login Diblokir)</option>
+                    <option value="rejected">Pendaftaran Ditolak (Akses Login Diblokir)</option>
                 </select>
                 <small class="text-muted fs-12 d-block mt-1">Status aktivasi akun pengguna dalam sistem.</small>
             </div>

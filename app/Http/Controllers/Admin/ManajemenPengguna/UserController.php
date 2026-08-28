@@ -197,6 +197,73 @@ class UserController extends Controller
     }
 
     /**
+     * Reject self-registration request.
+     */
+    public function rejectRegistration(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $reason = trim($request->input('reason', 'Pendaftaran tidak disetujui oleh Administrator.'));
+
+        $user->update([
+            'status' => 'rejected',
+            'rejection_reason' => $reason,
+        ]);
+
+        $this->notifySuccess("Pendaftaran pengguna \"{$user->name}\" berhasil ditolak.");
+
+        return redirect()->route('admin.manajemenpengguna.users.index');
+    }
+
+    /**
+     * Reject user deactivation request and send notification message to the user.
+     */
+    public function rejectDeactivation(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $reason = trim($request->input('reason', 'Permohonan penonaktifan tidak disetujui oleh Administrator.'));
+
+        $user->update([
+            'deactivation_requested_at' => null,
+            'deactivation_reason' => null,
+        ]);
+
+        // Kirim pesan ke tabel messages & notifikasi
+        try {
+            \App\Models\Message::create([
+                'sender_id' => auth()->id(),
+                'receiver_id' => $user->id,
+                'subject' => 'Permohonan Non Aktif Akun',
+                'body' => 'Permohonan non aktif akun Anda ditolak oleh Administrator.',
+                'reason' => $reason,
+                'message_type' => 'deactivation_rejected',
+                'is_read' => false,
+            ]);
+
+            $user->notifications()->create([
+                'id' => (string) \Illuminate\Support\Str::uuid(),
+                'type' => 'deactivation_rejected',
+                'data' => [
+                    'title' => 'Permohonan Non Aktif Akun',
+                    'subtitle' => 'Permohonan non aktif akun Anda ditolak oleh Administrator.',
+                    'message' => 'Permohonan non aktif akun Anda ditolak oleh Administrator.',
+                    'reason' => $reason,
+                    'icon' => 'ti ti-user-x',
+                    'badge_class' => 'bg-danger-subtle text-danger border-danger-subtle',
+                    'badge_label' => 'Penonaktifan Ditolak',
+                    'url' => 'javascript:void(0);',
+                ],
+                'read_at' => null,
+            ]);
+        } catch (\Throwable $e) {
+            // Silently fallback if notifications table issue
+        }
+
+        $this->notifySuccess("Permohonan penonaktifan pengguna \"{$user->name}\" telah ditolak & notifikasi dikirimkan.");
+
+        return redirect()->route('admin.manajemenpengguna.users.index');
+    }
+
+    /**
      * Activate user upon reactivation request.
      */
     public function activate($id)

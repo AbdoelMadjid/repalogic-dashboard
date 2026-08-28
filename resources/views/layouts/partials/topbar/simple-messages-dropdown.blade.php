@@ -1,159 +1,198 @@
+@php
+    $messageData = \App\Services\NotificationService::getUserMessages();
+    $messageItems = $messageData['items'];
+    $totalCount = $messageData['total_count'];
+    $unreadCount = $messageData['unread_count'];
+@endphp
+
 <div id="simple-messages-dropdown" class="topbar-item">
-    <div class="dropdown">
+    <div class="dropdown" id="topbar-messages-dropdown-wrapper">
         <button class="topbar-link dropdown-toggle drop-arrow-none" data-bs-toggle="dropdown" type="button"
-            data-bs-auto-close="outside" aria-haspopup="false" aria-expanded="false">
+            id="topbar-messages-toggle-btn" data-bs-auto-close="outside" aria-haspopup="false" aria-expanded="false">
             <i class="ti ti-mail topbar-link-icon"></i>
-            <span class="badge text-bg-success badge-circle topbar-badge">7</span>
+            <span id="topbar-messages-badge" class="badge text-bg-success badge-circle topbar-badge {{ $unreadCount > 0 ? '' : 'd-none' }}">
+                {{ $unreadCount > 99 ? '99+' : ($unreadCount > 0 ? $unreadCount : '') }}
+            </span>
         </button>
 
-        <div class="dropdown-menu p-0 dropdown-menu-end dropdown-menu-lg">
-            <div class="px-3 py-2 border-bottom">
-                <div class="row align-items-center">
-                    <div class="col">
-                        <h6 class="m-0 fs-md fw-semibold" data-lang="topbar-messages-title">Messages</h6>
-                    </div>
-                    <div class="col text-end">
-                        <a href="#!" class="badge badge-soft-success badge-label py-1"
-                            data-lang="topbar-messages-notifications-badge">09 Notifications</a>
-                    </div>
-                </div>
-            </div>
-
-            <div style="max-height: 300px" data-simplebar="">
-                <!-- item 1 -->
-                <div class="dropdown-item notification-item py-2 text-wrap active" id="message-1">
-                    <span class="d-flex gap-3">
-                        <span class="flex-shrink-0">
-                            <img src="{{ asset('assets/images/users/user-1.jpg') }}" class="avatar-md rounded-circle"
-                                alt="User Avatar" />
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">Liam Carter</span>
-                            uploaded a new document to
-                            <span class="fw-medium text-body">Project Phoenix</span>
-                            <br />
-                            <span class="fs-xs">5 minutes ago</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#message-1">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
-
-                <!-- item 2 -->
-                <div class="dropdown-item notification-item py-2 text-wrap" id="message-2">
-                    <span class="d-flex gap-3">
-                        <span class="flex-shrink-0">
-                            <img src="{{ asset('assets/images/users/user-2.jpg') }}" class="avatar-md rounded-circle"
-                                alt="User Avatar" />
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">Ava Mitchell</span>
-                            commented on
-                            <span class="fw-medium text-body">Marketing Campaign Q3</span>
-                            <br />
-                            <span class="fs-xs">12 minutes ago</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#message-2">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
-
-                <!-- item 3 -->
-                <div class="dropdown-item notification-item py-2 text-wrap" id="message-3">
-                    <span class="d-flex gap-3">
-                        <span class="avatar-md flex-shrink-0">
-                            <span class="avatar-title text-bg-info rounded-circle fs-22">
-                                <i class="ti ti-user-hexagon fs-22"></i>
-                            </span>
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">Noah Blake</span>
-                            updated the status of
-                            <span class="fw-medium text-body">Client Onboarding</span>
-                            <br />
-                            <span class="fs-xs">30 minutes ago</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#message-3">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
-
-                <!-- item 4 -->
-                <div class="dropdown-item notification-item py-2 text-wrap" id="message-4">
-                    <span class="d-flex gap-3">
-                        <span class="flex-shrink-0">
-                            <img src="{{ asset('assets/images/users/user-4.jpg') }}" class="avatar-md rounded-circle"
-                                alt="User Avatar" />
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">Sophia Taylor</span>
-                            sent an invoice for
-                            <span class="fw-medium text-body">Service Renewal</span>
-                            <br />
-                            <span class="fs-xs">1 hour ago</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#message-4">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
-
-                <!-- item 5 -->
-                <div class="dropdown-item notification-item py-2 text-wrap" id="message-5">
-                    <span class="d-flex gap-3">
-                        <span class="flex-shrink-0">
-                            <img src="{{ asset('assets/images/users/user-5.jpg') }}" class="avatar-md rounded-circle"
-                                alt="User Avatar" />
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">Ethan Moore</span>
-                            completed the task
-                            <span class="fw-medium text-body">UI Review</span>
-                            <br />
-                            <span class="fs-xs">2 hours ago</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#message-5">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
-
-                <!-- item 6 -->
-                <div class="dropdown-item notification-item py-2 text-wrap" id="message-6">
-                    <span class="d-flex gap-3">
-                        <span class="flex-shrink-0">
-                            <img src="{{ asset('assets/images/users/user-6.jpg') }}" class="avatar-md rounded-circle"
-                                alt="User Avatar" />
-                        </span>
-                        <span class="flex-grow-1 text-muted">
-                            <span class="fw-medium text-body">Olivia White</span>
-                            assigned you a task in
-                            <span class="fw-medium text-body">Sales Pipeline</span>
-                            <br />
-                            <span class="fs-xs">Yesterday</span>
-                        </span>
-                        <button type="button" class="flex-shrink-0 text-muted btn btn-link p-0"
-                            data-dismissible="#message-6">
-                            <i class="ti ti-square-rounded-x fs-xxl"></i>
-                        </button>
-                    </span>
-                </div>
-            </div>
-
-            <!-- All-->
-            <a href="javascript:void(0);"
-                class="dropdown-item text-center text-reset text-decoration-underline link-offset-2 fw-bold notify-item border-top border-light py-2"
-                data-lang="topbar-messages-read-all">Read All Messages</a>
+        <div id="topbar-messages-dropdown-content" class="dropdown-menu p-0 dropdown-menu-end dropdown-menu-lg" style="min-width: 360px; overflow-x: hidden;">
+            @include('layouts.partials.topbar.simple-messages-dropdown-content', [
+                'messageItems' => $messageItems,
+                'unreadCount' => $unreadCount,
+                'totalCount' => $totalCount,
+            ])
         </div>
         <!-- End dropdown-menu -->
     </div>
     <!-- end dropdown-->
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const pollMessagesUrl = "{{ route('admin.notifications.poll-messages') }}";
+    const pollIntervalMs = 20000;
+    const msgBadge = document.getElementById('topbar-messages-badge');
+    const msgDropdownContent = document.getElementById('topbar-messages-dropdown-content');
+    const msgToggleBtn = document.getElementById('topbar-messages-toggle-btn');
+    const csrfToken = "{{ csrf_token() }}";
+
+    let isFetchingMsg = false;
+
+    window.fetchMessagesSilently = function(isUserAction = false) {
+        if (isFetchingMsg) return;
+        if (sessionStorage.getItem('repalogic_screen_locked') === 'true') return;
+        if (!isUserAction && document.hidden) return;
+        if (!isUserAction && msgDropdownContent && msgDropdownContent.classList.contains('show')) return;
+
+        isFetchingMsg = true;
+
+        fetch(pollMessagesUrl, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(function(response) {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
+        .then(function(data) {
+            if (data && data.success) {
+                const count = parseInt(data.unread_count, 10) || 0;
+                if (msgBadge) {
+                    if (count > 0) {
+                        msgBadge.textContent = count > 99 ? '99+' : count;
+                        msgBadge.classList.remove('d-none');
+                    } else {
+                        msgBadge.classList.add('d-none');
+                        msgBadge.textContent = '';
+                    }
+                }
+
+                if (msgDropdownContent && data.html) {
+                    msgDropdownContent.innerHTML = data.html;
+                }
+            }
+        })
+        .catch(function(err) {
+            // Silently fallback during background polling
+        })
+        .finally(function() {
+            isFetchingMsg = false;
+        });
+    };
+
+    // 1. Polling otomatis setiap 20 detik tanpa mengganggu idle timer
+    setInterval(function() {
+        window.fetchMessagesSilently(false);
+    }, pollIntervalMs);
+
+    // 2. Poll langsung saat ikon amplop pesan diklik
+    if (msgToggleBtn) {
+        msgToggleBtn.addEventListener('click', function() {
+            window.fetchMessagesSilently(true);
+        });
+    }
+
+    // 3. Poll saat tab browser kembali aktif
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            window.fetchMessagesSilently(false);
+        }
+    });
+
+    // 4. Event Delegation saat Item Pesan Diklik (Rule 2 Compliance)
+    document.addEventListener('click', function(e) {
+        const msgItem = e.target.closest('.btn-view-message-detail');
+        if (!msgItem) return;
+
+        const msgId = msgItem.getAttribute('data-message-id') || '';
+        const title = msgItem.getAttribute('data-message-title') || 'Pesan Masuk';
+        const content = msgItem.getAttribute('data-message-content') || '';
+        const reason = msgItem.getAttribute('data-message-reason') || '';
+        const timeAgo = msgItem.getAttribute('data-message-time') || '';
+        const targetUrl = msgItem.getAttribute('data-message-url') || '';
+
+        // 1. Optimistic UI update saat diklik: langsung ubah 'Belum dibaca' -> 'Sudah dibaca' & kurangi badge angka
+        const statusSpan = msgItem.querySelector('.status-read-text');
+        if (statusSpan && statusSpan.classList.contains('text-warning')) {
+            statusSpan.classList.remove('text-warning', 'fw-medium');
+            statusSpan.classList.add('text-muted');
+            statusSpan.textContent = 'Sudah dibaca';
+            msgItem.classList.add('bg-light-subtle', 'opacity-75');
+
+            if (msgBadge && !msgBadge.classList.contains('d-none')) {
+                let currentVal = parseInt(msgBadge.textContent, 10) || 0;
+                if (currentVal > 1) {
+                    msgBadge.textContent = (currentVal - 1) > 99 ? '99+' : (currentVal - 1);
+                } else {
+                    msgBadge.classList.add('d-none');
+                    msgBadge.textContent = '';
+                }
+            }
+        }
+
+        // 2. Tandai sebagai dibaca di database via AJAX
+        if (msgId) {
+            fetch('/admin/notifications/' + encodeURIComponent(msgId) + '/read', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(function() {
+                window.fetchMessagesSilently(true);
+            }).catch(function() {});
+        }
+
+        // Tampilkan Modal SweetAlert2 untuk memperjelas pesan yang masuk
+        if (targetUrl === 'javascript:void(0);' || reason || msgId.startsWith('db-')) {
+            e.preventDefault();
+
+            if (typeof Swal !== 'undefined') {
+                // Formatting title: warnai kata "Ditolak" dengan warna merah (text-danger)
+                let formattedTitle = title;
+                if (formattedTitle.includes('Ditolak') && !formattedTitle.includes('text-danger')) {
+                    formattedTitle = formattedTitle.replace('Ditolak', '<span class="text-danger">Ditolak</span>');
+                }
+
+                // Hapus kalimat "dengan alasan: ..." dari pesan karena sudah ada di box khusus bawahnya
+                let cleanMessage = content;
+                if (cleanMessage.includes('dengan alasan:')) {
+                    cleanMessage = cleanMessage.split('dengan alasan:')[0].trim();
+                    if (!cleanMessage.endsWith('.')) cleanMessage += '.';
+                }
+
+                let modalHtml = `<div class="text-start fs-14 text-dark lh-base mt-2">
+                    <p class="mb-3 text-secondary">${cleanMessage}</p>`;
+
+                if (reason) {
+                    modalHtml += `<div class="p-3 bg-light border-start border-danger border-4 rounded-2 fs-13 text-dark mb-3">
+                        <strong class="text-danger d-block mb-1"><i class="ti ti-notes me-1"></i>Alasan Penolakan dari Admin:</strong>
+                        <span class="fst-italic">"${reason}"</span>
+                    </div>`;
+                }
+
+                modalHtml += `<div class="fs-12 text-muted mt-2 border-top pt-2 d-flex align-items-center gap-1">
+                    <i class="ti ti-clock fs-14 text-success"></i> ${timeAgo}
+                </div></div>`;
+
+                Swal.fire({
+                    title: formattedTitle,
+                    html: modalHtml,
+                    icon: reason ? 'warning' : 'info',
+                    confirmButtonText: 'Tutup / Mengerti',
+                    customClass: {
+                        confirmButton: 'btn btn-primary px-4'
+                    },
+                    buttonsStyling: false
+                }).then(function() {
+                    window.fetchMessagesSilently(true);
+                });
+            }
+        }
+    });
+});
+</script>
