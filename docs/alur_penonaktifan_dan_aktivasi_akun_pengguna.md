@@ -2,7 +2,9 @@
 
 > **Status Sistem:** Production-Ready (Enterprise Grade)  
 > **Lokasi File Dokumentasi:** `docs/alur_penonaktifan_dan_aktivasi_akun_pengguna.md`  
-> **Terakhir Diperbarui:** 27 Agustus 2026  
+> **Status Sistem:** Production-Ready (Enterprise Grade)  
+> **Lokasi File Dokumentasi:** `docs/alur_penonaktifan_dan_aktivasi_akun_pengguna.md`  
+> **Terakhir Diperbarui:** 28 Agustus 2026  
 
 ---
 
@@ -13,9 +15,10 @@ Sistem **Siklus Hidup Akun Pengguna (*User Account Lifecycle Management*)** dira
 Arsitektur ini menerapkan prinsip **Verifikasi & Persetujuan Administrator Terpusat (*Admin-Assisted Lifecycle Control*)**:
 1. Pengguna aktif dapat mengajukan permohonan penonaktifan akun melalui menu **Profil Pengguna** (`admin/profil-pengguna`) pada zona bahaya (*Danger Zone*).
 2. Pengajuan permohonan penonaktifan otomatis memicu notifikasi real-time pada **Pusat Notifikasi Topbar Administrator** dengan badge merah **"Minta Nonaktif"**.
-3. Administrator meninjau dan mengeksekusi penonaktifan akun pada tabel **Manajemen Pengguna** (`admin/manajemenpengguna/users`) melalui tombol **"Nonaktifkan"**.
-4. Pengguna yang akunnya dinonaktifkan tidak dapat masuk (*login*) ke sistem dan disajikan banner peringatan interaktif beserta tombol tindakan langsung menuju halaman pengajuan aktivasi (`/request-activation`).
-5. Pengajuan aktivasi kembali akun diverifikasi oleh Administrator melalui notifikasi badge hijau **"Minta Aktivasi"** dan tombol **"Aktifkan"** pada tabel admin.
+3. Administrator meninjau dan mengeksekusi penonaktifan akun pada tabel **Manajemen Pengguna** (`admin/manajemenpengguna/users`) melalui tombol **"Nonaktifkan"** atau memilih untuk mengeklik tombol **"Tolak Nonaktif"** jika permohonan ditolak.
+4. Jika disetujui untuk dinonaktifkan, pengguna tidak dapat masuk (*login*) ke sistem dan disajikan banner peringatan interaktif beserta tombol tindakan langsung menuju halaman pengajuan aktivasi (`/request-activation`).
+5. Jika permohonan penonaktifan ditolak oleh Admin, status akun **tetap AKTIF**, dan sistem secara otomatis mengirimkan pesan pemberitahuan berisi alasan penolakan langsung ke **Dropdown Pesan Topbar Pengguna** (`messages` table).
+6. Pengajuan aktivasi kembali akun diverifikasi oleh Administrator melalui notifikasi badge hijau **"Minta Aktivasi"** dan tombol **"Aktifkan"** pada tabel admin.
 
 ---
 
@@ -32,34 +35,40 @@ flowchart TD
         F --> G["Tampilkan Banner Status Pengajuan Kuning & Tombol Batalkan"]
     end
 
-    subgraph Fase_2 ["Fase 2: Eksekusi Penonaktifan oleh Administrator"]
+    subgraph Fase_2 ["Fase 2: Keputusan Administrator (Setujui / Tolak Nonaktif)"]
         F --> H["NotificationService Mendeteksi deactivation_requested_at"]
         H --> I["Lonceng Topbar Admin Menampilkan Badge Merah 'Minta Nonaktif'"]
         I --> J["Admin Klik Notifikasi Topbar -> Buka users?search=Nama"]
-        J --> K["Tabel Admin Menampilkan Badge 'Minta Nonaktif' & Tombol Merah 'Nonaktifkan'"]
-        K --> L["Admin Klik Tombol 'Nonaktifkan' + Konfirmasi SweetAlert2"]
-        L --> M["Update DB: status='inactive', deactivation_requested_at=null"]
+        J --> K{"Admin Ambil Keputusan"}
+        
+        K -- Klik 'Nonaktifkan' --> L["Update DB: status='inactive', deactivation_requested_at=null"]
+        
+        K -- Klik 'Tolak Nonaktif' --> M["Buka Modal Form Alasan Penolakan Admin"]
+        M --> N["Submit ke UserController@rejectDeactivation"]
+        N --> O["Update DB: deactivation_requested_at=null, status tetap 'active'"]
+        O --> P["Sistem Otomatis Buat Record di Tabel messages & notifications"]
+        P --> Q["Dropdown Pesan Topbar User Menampilkan 'Penonaktifan Ditolak'"]
     end
 
     subgraph Fase_3 ["Fase 3: Pengajuan Aktivasi Kembali (User Nonaktif)"]
-        M --> N["Pengguna Nonaktif Coba Login di /login"]
-        N --> O["Login Gagal: Muncul Banner Merah 'Akun Dinonaktifkan'"]
-        O --> P["Pengguna Klik Tombol 'Ajukan Permohonan Aktivasi Akun'"]
-        P --> Q["Buka Halaman Publik /request-activation"]
-        Q --> R["Input Email Terdaftar & Catatan Permohonan Aktivasi"]
-        R --> S["Submit ke AccountReactivationController@store"]
-        S --> T["Update DB: reactivation_requested_at=now, reactivation_reason=text"]
-        T --> U["Redirect ke /login dengan Banner Sukses Hijau"]
+        L --> R["Pengguna Nonaktif Coba Login di /login"]
+        R --> S["Login Gagal: Muncul Banner Merah 'Akun Dinonaktifkan'"]
+        S --> T["Pengguna Klik Tombol 'Ajukan Permohonan Aktivasi Akun'"]
+        T --> U["Buka Halaman Publik /request-activation"]
+        U --> V["Input Email Terdaftar & Catatan Permohonan Aktivasi"]
+        V --> W["Submit ke AccountReactivationController@store"]
+        W --> X["Update DB: reactivation_requested_at=now, reactivation_reason=text"]
+        X --> Y["Redirect ke /login dengan Banner Sukses Hijau"]
     end
 
     subgraph Fase_4 ["Fase 4: Persetujuan Aktivasi oleh Administrator"]
-        T --> V["NotificationService Mendeteksi reactivation_requested_at"]
-        V --> W["Lonceng Topbar Admin Menampilkan Badge Hijau 'Minta Aktivasi'"]
-        W --> X["Admin Klik Notifikasi Topbar -> Buka users?search=Nama"]
-        X --> Y["Tabel Admin Menampilkan Badge 'Minta Aktivasi' & Tombol Hijau 'Aktifkan'"]
-        Y --> Z["Admin Klik Tombol 'Aktifkan' + Konfirmasi SweetAlert2"]
-        Z --> AA["Update DB: status='active', reactivation_requested_at=null"]
-        AA --> AB(["Akun Berhasil Aktif Kembali & Pengguna Dapat Login"])
+        X --> Z["NotificationService Mendeteksi reactivation_requested_at"]
+        Z --> AA["Lonceng Topbar Admin Menampilkan Badge Hijau 'Minta Aktivasi'"]
+        AA --> AB["Admin Klik Notifikasi Topbar -> Buka users?search=Nama"]
+        AB --> AC["Tabel Admin Menampilkan Badge 'Minta Aktivasi' & Tombol Hijau 'Aktifkan'"]
+        AC --> AD["Admin Klik Tombol 'Aktifkan' + Konfirmasi SweetAlert2"]
+        AD --> AE["Update DB: status='active', reactivation_requested_at=null"]
+        AE --> AF(["Akun Berhasil Aktif Kembali & Pengguna Dapat Login"])
     end
 ```
 
@@ -84,7 +93,7 @@ ALTER TABLE `users`
 
 | Nama Kolom | Tipe Data | Nullable | Keterangan & Fungsi |
 | :--- | :--- | :--- | :--- |
-| `status` | `enum('pending','active','inactive')` | Tidak (`default: 'active'`) | Status operasional akun pengguna. |
+| `status` | `enum('pending','active','inactive','rejected')` | Tidak (`default: 'active'`) | Status operasional akun pengguna. |
 | `deactivation_requested_at` | `timestamp` | Ya | Waktu pengguna mengajukan permohonan penonaktifan akun. |
 | `deactivation_reason` | `text` | Ya | Alasan/catatan penonaktifan yang dituliskan oleh pengguna. |
 | `reactivation_requested_at` | `timestamp` | Ya | Waktu pengguna nonaktif mengajukan permohonan aktivasi kembali. |
@@ -94,7 +103,7 @@ ALTER TABLE `users`
 
 ## 🧩 4. Rincian Implementasi Kode & Logika Controller
 
-### 4.1 Model User ([app/Models/User.php](file:///f:/laragon/finaly/repalogic-dashboard/app/Models/User.php))
+### 4.1 Model User ([app/Models/User.php](file:///c:/laragon/www/repalogic-dashboard/app/Models/User.php))
 Model `User` dilengkapi helper method untuk mendeteksi status permohonan secara ekspresif:
 
 ```php
@@ -113,7 +122,7 @@ public function isReactivationRequested(): bool
 
 ---
 
-### 4.2 Sisi Pengguna Aktif: Profil Pengguna ([ProfilPenggunaController.php](file:///f:/laragon/finaly/repalogic-dashboard/app/Http/Controllers/Admin/ProfilPenggunaController.php))
+### 4.2 Sisi Pengguna Aktif: Profil Pengguna ([ProfilPenggunaController.php](file:///c:/laragon/www/repalogic-dashboard/app/Http/Controllers/Admin/ProfilPenggunaController.php))
 
 1. **Pengajuan Permohonan Nonaktif:**
    ```php
@@ -149,7 +158,7 @@ public function isReactivationRequested(): bool
 
 ---
 
-### 4.3 Sisi Pengguna Nonaktif: Pengajuan Aktivasi ([AccountReactivationController.php](file:///f:/laragon/finaly/repalogic-dashboard/app/Http/Controllers/Auth/AccountReactivationController.php))
+### 4.3 Sisi Pengguna Nonaktif: Pengajuan Aktivasi ([AccountReactivationController.php](file:///c:/laragon/www/repalogic-dashboard/app/Http/Controllers/Auth/AccountReactivationController.php))
 
 1. **Form Publik:** `GET /request-activation` (`auth.request-activation`).
 2. **Pemrosesan Permohonan:**
@@ -188,7 +197,7 @@ public function isReactivationRequested(): bool
 
 ---
 
-### 4.4 Sisi Administrator: Modul Manajemen Pengguna ([UserController.php](file:///f:/laragon/finaly/repalogic-dashboard/app/Http/Controllers/Admin/ManajemenPengguna/UserController.php))
+### 4.4 Sisi Administrator: Modul Manajemen Pengguna ([UserController.php](file:///c:/laragon/www/repalogic-dashboard/app/Http/Controllers/Admin/ManajemenPengguna/UserController.php))
 
 1. **Eksekusi Penonaktifan Akun:**
    ```php
@@ -206,7 +215,35 @@ public function isReactivationRequested(): bool
    }
    ```
 
-2. **Eksekusi Pengaktifan Kembali Akun:**
+2. **Eksekusi Penolakan Permohonan Penonaktifan Akun (`rejectDeactivation`):**
+   ```php
+   public function rejectDeactivation(Request $request, $id)
+   {
+       $user = User::findOrFail($id);
+       $reason = trim($request->input('reason', 'Permohonan penonaktifan tidak disetujui oleh Administrator.'));
+
+       $user->update([
+           'deactivation_requested_at' => null,
+           'deactivation_reason' => null,
+       ]);
+
+       // Kirim pesan otomatis ke tabel messages & notifikasi database
+       \App\Models\Message::create([
+           'sender_id' => auth()->id(),
+           'receiver_id' => $user->id,
+           'subject' => 'Permohonan Non Aktif Akun',
+           'body' => 'Permohonan non aktif akun Anda ditolak oleh Administrator.',
+           'reason' => $reason,
+           'message_type' => 'deactivation_rejected',
+           'is_read' => false,
+       ]);
+
+       $this->notifySuccess("Permohonan penonaktifan pengguna \"{$user->name}\" telah ditolak & notifikasi dikirimkan.");
+       return redirect()->route('admin.manajemenpengguna.users.index');
+   }
+   ```
+
+3. **Eksekusi Pengaktifan Kembali Akun:**
    ```php
    public function activate($id)
    {
@@ -224,14 +261,15 @@ public function isReactivationRequested(): bool
 
 ---
 
-## 🔔 5. Integrasi Universal Notification Hub ([NotificationService.php](file:///f:/laragon/finaly/repalogic-dashboard/app/Services/NotificationService.php))
+## 🔔 5. Integrasi Universal Notification Hub & Topbar Messages Dropdown
 
 Pusat notifikasi topbar secara otomatis menangkap seluruh permohonan penonaktifan dan aktivasi secara terstruktur:
 
-| Tipe Permohonan | Kategori | Ikon Tabler | Warna Badge | Aksi URL Klik |
+| Tipe Permohonan | Kategori / Lokasi Topbar | Ikon Tabler | Warna Badge | Aksi Klik |
 | :--- | :--- | :--- | :--- | :--- |
-| **Penonaktifan Akun** | `deactivate_request` | `ti ti-user-x` | Merah (`bg-danger-subtle text-danger`) | `admin/manajemenpengguna/users?search={Name}` |
-| **Aktivasi Kembali** | `activation_request` | `ti ti-user-check` | Hijau (`bg-success-subtle text-success`) | `admin/manajemenpengguna/users?search={Name}` |
+| **Penonaktifan Akun** | Lonceng Notifikasi (`deactivate_request`) | `ti ti-user-x` | Merah (`bg-danger-subtle text-danger`) | Opens `admin/manajemenpengguna/users?search={Name}` |
+| **Aktivasi Kembali** | Lonceng Notifikasi (`activation_request`) | `ti ti-user-check` | Hijau (`bg-success-subtle text-success`) | Opens `admin/manajemenpengguna/users?search={Name}` |
+| **Penonaktifan Ditolak** | Dropdown Pesan Amplop (`simple-messages-dropdown`) | `ti ti-mail-opened` | Teks Merah (`Penonaktifan Ditolak`) | Opens SweetAlert2 Modal Alasan Admin + Mark as Read |?search={Name}` |
 
 ---
 
