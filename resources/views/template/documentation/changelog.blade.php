@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.3.0 -->
+                        <!-- Version 2.3.1 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,38 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.3.0</h5>
+                                        <h5 class="fw-bold mb-0">v2.3.1</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.3.1</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-28 14:55 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Categorized Contact Sidebar, Grouped Topbar Messages Dropdown, Smart Scroll Preservation &amp; Universal Profile Detail Modal</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Pemisahan Kontak Sidebar Chat:</strong> Pengelompokan kontak menjadi bagian <code>Percakapan Aktif</code> (diurutkan berdasarkan pesan terbaru) dan <code>Pengguna Lainnya</code> dengan promosi kontak otomatis secara real-time saat obrolan baru dikirim.</li>
+                                    <li><strong class="text-dark">Pengelompokan Pesan Topbar Dropdown:</strong> Pesan pada dropdown amplop topbar kini dikelompokkan 1 baris per pengirim dengan indikator badge jumlah chat baru (misal <code>3 Chat</code>), serta navigasi langsung ke halaman percakapan chat tanpa modal pop-up.</li>
+                                    <li><strong class="text-dark">Notifikasi Penolakan ke Alur Chat:</strong> Penolakan permohonan registrasi/penonaktifan oleh Superadmin/Admin disimpan lengkap dengan <code>conversation_id</code> sehingga otomatis muncul di timeline obrolan pengguna.</li>
+                                    <li><strong class="text-dark">Smart Scroll Position Handling:</strong> Pencegahan scroll otomatis ke bawah secara paksa ketika pengguna sedang scroll ke atas membaca riwayat pesan lama, serta eliminasi re-render DOM yang tidak perlu saat polling background.</li>
+                                    <li><strong class="text-dark">Modal Detail Akun Pengguna Universal:</strong> Pengubahan tombol <code>Detail Akun</code> di header obrolan menjadi modal pop-up yang dapat diakses oleh seluruh pengguna (termasuk role User) untuk melihat profil lengkap lawan bicara.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-muted border">Categorized Contacts</span>
+                                    <span class="badge bg-light text-muted border">Grouped Topbar Messages</span>
+                                    <span class="badge bg-light text-muted border">Smart Scroll Preservation</span>
+                                    <span class="badge bg-light text-muted border">Universal Profile Modal</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.3.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-git-commit fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.3.0</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.3.0</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-28 10:15 WIB</span>

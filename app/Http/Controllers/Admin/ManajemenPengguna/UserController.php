@@ -209,6 +209,21 @@ class UserController extends Controller
             'rejection_reason' => $reason,
         ]);
 
+        try {
+            $convId = \App\Models\Message::makeConversationId(auth()->id(), $user->id);
+
+            \App\Models\Message::create([
+                'sender_id' => auth()->id(),
+                'receiver_id' => $user->id,
+                'conversation_id' => $convId,
+                'subject' => 'Pendaftaran Akun Ditolak',
+                'body' => "Pendaftaran akun Anda ditolak oleh Administrator.\nAlasan Penolakan: {$reason}",
+                'reason' => $reason,
+                'message_type' => 'registration_rejected',
+                'is_read' => false,
+            ]);
+        } catch (\Throwable $e) {}
+
         $this->notifySuccess("Pendaftaran pengguna \"{$user->name}\" berhasil ditolak.");
 
         return redirect()->route('admin.manajemenpengguna.users.index');
@@ -227,13 +242,16 @@ class UserController extends Controller
             'deactivation_reason' => null,
         ]);
 
-        // Kirim pesan ke tabel messages & notifikasi
+        // Kirim pesan ke tabel messages & notifikasi dengan conversation_id
         try {
+            $convId = \App\Models\Message::makeConversationId(auth()->id(), $user->id);
+
             \App\Models\Message::create([
                 'sender_id' => auth()->id(),
                 'receiver_id' => $user->id,
-                'subject' => 'Permohonan Non Aktif Akun',
-                'body' => 'Permohonan non aktif akun Anda ditolak oleh Administrator.',
+                'conversation_id' => $convId,
+                'subject' => 'Permohonan Non Aktif Akun Ditolak',
+                'body' => "Permohonan penonaktifan akun Anda ditolak oleh Administrator.\nAlasan Penolakan: {$reason}",
                 'reason' => $reason,
                 'message_type' => 'deactivation_rejected',
                 'is_read' => false,
@@ -243,14 +261,14 @@ class UserController extends Controller
                 'id' => (string) \Illuminate\Support\Str::uuid(),
                 'type' => 'deactivation_rejected',
                 'data' => [
-                    'title' => 'Permohonan Non Aktif Akun',
+                    'title' => 'Permohonan Non Aktif Akun Ditolak',
                     'subtitle' => 'Permohonan non aktif akun Anda ditolak oleh Administrator.',
                     'message' => 'Permohonan non aktif akun Anda ditolak oleh Administrator.',
                     'reason' => $reason,
                     'icon' => 'ti ti-user-x',
                     'badge_class' => 'bg-danger-subtle text-danger border-danger-subtle',
                     'badge_label' => 'Penonaktifan Ditolak',
-                    'url' => 'javascript:void(0);',
+                    'url' => route('admin.profil-pengguna.messages.index', ['user_id' => auth()->id()]),
                 ],
                 'read_at' => null,
             ]);

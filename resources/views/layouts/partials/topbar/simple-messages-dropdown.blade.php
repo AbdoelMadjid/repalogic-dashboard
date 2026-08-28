@@ -147,52 +147,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }).catch(function() {});
         }
 
-        // Tampilkan Modal SweetAlert2 untuk memperjelas pesan yang masuk
-        if (targetUrl === 'javascript:void(0);' || reason || msgId.startsWith('db-')) {
-            e.preventDefault();
+        // 3. Langsung navigasi ke halaman chat (admin/profil-pengguna/messages?user_id=X)
+        const finalUrl = (targetUrl && targetUrl !== 'javascript:void(0);') 
+            ? targetUrl 
+            : "{{ route('admin.profil-pengguna.messages.index') }}";
 
-            if (typeof Swal !== 'undefined') {
-                // Formatting title: warnai kata "Ditolak" dengan warna merah (text-danger)
-                let formattedTitle = title;
-                if (formattedTitle.includes('Ditolak') && !formattedTitle.includes('text-danger')) {
-                    formattedTitle = formattedTitle.replace('Ditolak', '<span class="text-danger">Ditolak</span>');
-                }
-
-                // Hapus kalimat "dengan alasan: ..." dari pesan karena sudah ada di box khusus bawahnya
-                let cleanMessage = content;
-                if (cleanMessage.includes('dengan alasan:')) {
-                    cleanMessage = cleanMessage.split('dengan alasan:')[0].trim();
-                    if (!cleanMessage.endsWith('.')) cleanMessage += '.';
-                }
-
-                let modalHtml = `<div class="text-start fs-14 text-dark lh-base mt-2">
-                    <p class="mb-3 text-secondary">${cleanMessage}</p>`;
-
-                if (reason) {
-                    modalHtml += `<div class="p-3 bg-light border-start border-danger border-4 rounded-2 fs-13 text-dark mb-3">
-                        <strong class="text-danger d-block mb-1"><i class="ti ti-notes me-1"></i>Alasan Penolakan dari Admin:</strong>
-                        <span class="fst-italic">"${reason}"</span>
-                    </div>`;
-                }
-
-                modalHtml += `<div class="fs-12 text-muted mt-2 border-top pt-2 d-flex align-items-center gap-1">
-                    <i class="ti ti-clock fs-14 text-success"></i> ${timeAgo}
-                </div></div>`;
-
-                Swal.fire({
-                    title: formattedTitle,
-                    html: modalHtml,
-                    icon: reason ? 'warning' : 'info',
-                    confirmButtonText: 'Tutup / Mengerti',
-                    customClass: {
-                        confirmButton: 'btn btn-primary px-4'
-                    },
-                    buttonsStyling: false
-                }).then(function() {
-                    window.fetchMessagesSilently(true);
-                });
-            }
-        }
+        window.location.href = finalUrl;
     });
 });
 </script>

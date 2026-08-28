@@ -44,11 +44,22 @@
                 <div class="flex-grow-1 text-muted d-flex justify-content-between align-items-start gap-2" style="min-width: 0;">
                     <div class="d-flex flex-column align-items-start gap-1" style="min-width: 0;">
                         <span class="fw-semibold text-body fs-13 lh-sm me-1">{!! $item['title'] !!}</span>
-                        @if (!empty($item['badge_label']))
-                            <span class="badge {{ $item['badge_class'] }} fs-xs px-2 py-1">
-                                {{ $item['badge_label'] }}
-                            </span>
-                        @endif
+                        <div class="d-flex align-items-center gap-1 flex-wrap">
+                            @if (!empty($item['badge_label']))
+                                <span class="badge {{ $item['badge_class'] }} fs-xs px-2 py-0.5">
+                                    {{ $item['badge_label'] }}
+                                </span>
+                            @endif
+                            @if (!empty($item['unread_count_group']) && $item['unread_count_group'] > 0)
+                                <span class="badge bg-danger text-white fs-xs px-1.5 py-0.5 shadow-sm" title="{{ $item['unread_count_group'] }} pesan belum dibaca">
+                                    <i class="ti ti-message-dots me-1"></i>{{ $item['unread_count_group'] }} Chat
+                                </span>
+                            @elseif (!empty($item['total_count_group']) && $item['total_count_group'] > 1)
+                                <span class="badge bg-light text-muted border fs-xs px-1.5 py-0.5">
+                                    {{ $item['total_count_group'] }} Pesan
+                                </span>
+                            @endif
+                        </div>
                     </div>
                     <div class="d-flex flex-column align-items-end text-end flex-shrink-0 ms-auto">
                         <span class="fs-xs text-muted text-nowrap mb-0.5">{{ $item['time_ago'] }}</span>

@@ -17,30 +17,67 @@
                 </div>
                 <div id="chat-sidebar" class="card-body p-2" style="height: calc(100% - 100px)" data-simplebar data-simplebar-md>
                     <div class="list-group list-group-flush chat-list" id="chat-contacts-list">
-                        @forelse ($contacts as $c)
-                            @php
-                                $isActive = $activeUser && $activeUser->id === $c['id'];
-                            @endphp
-                            <a href="javascript:void(0);" data-user-id="{{ $c['id'] }}" data-user-name="{{ $c['name'] }}" data-user-avatar="{{ $c['avatar'] }}" data-user-role="{{ $c['role_name'] }}" class="list-group-item list-group-item-action d-flex gap-2 justify-content-between btn-select-chat {{ $isActive ? 'active' : '' }}">
-                                <span class="d-flex justify-content-start align-items-center gap-2 overflow-hidden">
-                                    <span class="avatar avatar-sm flex-shrink-0">
-                                        <img src="{{ $c['avatar'] }}" alt="{{ $c['name'] }}" class="img-fluid rounded-circle object-fit-cover shadow-sm" style="width: 38px; height: 38px; min-width: 38px; min-height: 38px; object-fit: cover; object-position: top; aspect-ratio: 1 / 1;" />
-                                    </span>
-                                    <span class="overflow-hidden">
-                                        <span data-chat-search-field class="text-nowrap fw-semibold fs-base mb-0 lh-base text-dark d-block">{{ $c['name'] }}</span>
-                                        <span class="text-muted d-block fs-xs mb-0 text-truncate contact-last-msg">{{ $c['last_message'] }}</span>
-                                    </span>
-                                </span>
-                                <span class="d-flex flex-column gap-1 justify-content-center flex-shrink-0 align-items-end">
-                                    <span class="text-muted fs-xs contact-last-time">{{ $c['last_message_time'] }}</span>
-                                    <span class="badge text-bg-success fs-xxs contact-unread-badge {{ $c['unread_count'] > 0 ? '' : 'd-none' }}">{{ $c['unread_count'] }}</span>
-                                </span>
-                            </a>
-                        @empty
-                            <div class="text-center py-4 px-2 text-muted fs-13">
-                                Belum ada pengguna lain terdaftar.
+                        <div id="section-recent-contacts" class="chat-section {{ $recentContacts->isEmpty() ? 'd-none' : '' }}">
+                            <div class="px-3 py-2 fs-11 font-monospace fw-bold text-uppercase text-muted bg-light border-bottom d-flex align-items-center justify-content-between">
+                                <span><i class="ti ti-messages me-1 text-primary"></i>Percakapan Aktif</span>
+                                <span class="badge bg-primary-subtle text-primary border fs-10" id="badge-recent-count">{{ $recentContacts->count() }}</span>
                             </div>
-                        @endforelse
+                            <div id="list-recent-contacts">
+                                @foreach ($recentContacts as $c)
+                                    @php
+                                        $isActive = $activeUser && $activeUser->id === $c['id'];
+                                    @endphp
+                                    <a href="javascript:void(0);" data-user-id="{{ $c['id'] }}" data-user-name="{{ $c['name'] }}" data-user-avatar="{{ $c['avatar'] }}" data-user-role="{{ $c['role_name'] }}" class="list-group-item list-group-item-action d-flex gap-2 justify-content-between btn-select-chat {{ $isActive ? 'active' : '' }}">
+                                        <span class="d-flex justify-content-start align-items-center gap-2 overflow-hidden">
+                                            <span class="avatar avatar-sm flex-shrink-0">
+                                                <img src="{{ $c['avatar'] }}" alt="{{ $c['name'] }}" class="img-fluid rounded-circle object-fit-cover shadow-sm" style="width: 38px; height: 38px; min-width: 38px; min-height: 38px; object-fit: cover; object-position: top; aspect-ratio: 1 / 1;" />
+                                            </span>
+                                            <span class="overflow-hidden">
+                                                <span data-chat-search-field class="text-nowrap fw-semibold fs-base mb-0 lh-base text-dark d-block">{{ $c['name'] }}</span>
+                                                <span class="text-muted d-block fs-xs mb-0 text-truncate contact-last-msg">{{ $c['last_message'] }}</span>
+                                            </span>
+                                        </span>
+                                        <span class="d-flex flex-column gap-1 justify-content-center flex-shrink-0 align-items-end">
+                                            <span class="text-muted fs-xs contact-last-time">{{ $c['last_message_time'] }}</span>
+                                            <span class="badge text-bg-success fs-xxs contact-unread-badge {{ $c['unread_count'] > 0 ? '' : 'd-none' }}">{{ $c['unread_count'] }}</span>
+                                        </span>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div id="section-other-contacts" class="chat-section {{ $otherContacts->isEmpty() ? 'd-none' : '' }} {{ $recentContacts->isNotEmpty() ? 'mt-2' : '' }}">
+                            <div class="px-3 py-2 fs-11 font-monospace fw-bold text-uppercase text-muted bg-light border-top border-bottom d-flex align-items-center justify-content-between">
+                                <span><i class="ti ti-users me-1 text-secondary"></i>Pengguna Lainnya</span>
+                                <span class="badge bg-secondary-subtle text-secondary border fs-10" id="badge-other-count">{{ $otherContacts->count() }}</span>
+                            </div>
+                            <div id="list-other-contacts">
+                                @foreach ($otherContacts as $c)
+                                    @php
+                                        $isActive = $activeUser && $activeUser->id === $c['id'];
+                                    @endphp
+                                    <a href="javascript:void(0);" data-user-id="{{ $c['id'] }}" data-user-name="{{ $c['name'] }}" data-user-avatar="{{ $c['avatar'] }}" data-user-role="{{ $c['role_name'] }}" class="list-group-item list-group-item-action d-flex gap-2 justify-content-between btn-select-chat {{ $isActive ? 'active' : '' }}">
+                                        <span class="d-flex justify-content-start align-items-center gap-2 overflow-hidden">
+                                            <span class="avatar avatar-sm flex-shrink-0">
+                                                <img src="{{ $c['avatar'] }}" alt="{{ $c['name'] }}" class="img-fluid rounded-circle object-fit-cover shadow-sm" style="width: 38px; height: 38px; min-width: 38px; min-height: 38px; object-fit: cover; object-position: top; aspect-ratio: 1 / 1;" />
+                                            </span>
+                                            <span class="overflow-hidden">
+                                                <span data-chat-search-field class="text-nowrap fw-semibold fs-base mb-0 lh-base text-dark d-block">{{ $c['name'] }}</span>
+                                                <span class="text-muted d-block fs-xs mb-0 text-truncate contact-last-msg">{{ $c['last_message'] }}</span>
+                                            </span>
+                                        </span>
+                                        <span class="d-flex flex-column gap-1 justify-content-center flex-shrink-0 align-items-end">
+                                            <span class="text-muted fs-xs contact-last-time">{{ $c['last_message_time'] }}</span>
+                                            <span class="badge text-bg-success fs-xxs contact-unread-badge {{ $c['unread_count'] > 0 ? '' : 'd-none' }}">{{ $c['unread_count'] }}</span>
+                                        </span>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div id="empty-contacts-msg" class="text-center py-4 px-2 text-muted fs-13 {{ ($recentContacts->isNotEmpty() || $otherContacts->isNotEmpty()) ? 'd-none' : '' }}">
+                            Belum ada pengguna lain terdaftar.
+                        </div>
                     </div>
                 </div>
                 <!-- end card-body-->
@@ -69,9 +106,9 @@
                 </div>
 
                 <div class="d-flex align-items-center gap-2">
-                    <a href="{{ route('admin.manajemenpengguna.users.index', ['search' => $activeUser ? $activeUser->name : '']) }}" id="btn-view-user-detail" class="btn btn-sm btn-outline-primary" title="Lihat Profil Pengguna Ini">
+                    <button type="button" id="btn-view-user-detail" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#user-detail-modal" title="Lihat Profil Pengguna Ini" {{ $activeUser ? '' : 'disabled' }}>
                         <i class="ti ti-user me-1"></i> Detail Akun
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -147,6 +184,52 @@
         <!-- end card-->
     </div>
 
+    <!-- MODAL DETAIL AKUN PENGGUNA -->
+    <div class="modal fade" id="user-detail-modal" tabindex="-1" aria-labelledby="userDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white py-3">
+                    <h5 class="modal-title text-white fs-15 fw-semibold" id="userDetailModalLabel">
+                        <i class="ti ti-id me-1"></i> Detail Profil Pengguna
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <div class="mb-3 position-relative d-inline-block">
+                        <img id="modal-user-avatar" src="{{ $activeUser ? $activeUser->avatar_url : asset('assets/images/users/default-avatar.svg') }}" class="rounded-circle img-thumbnail shadow-sm" style="width: 90px; height: 90px; object-fit: cover; object-position: top;" alt="Avatar Pengguna">
+                    </div>
+                    <h5 class="fw-bold mb-1 text-dark fs-16" id="modal-user-name">{{ $activeUser ? $activeUser->name : '-' }}</h5>
+                    <p class="text-muted fs-13 mb-3" id="modal-user-email">{{ $activeUser ? $activeUser->email : '-' }}</p>
+
+                    <div class="d-flex justify-content-center gap-2 mb-4">
+                        <span class="badge bg-primary-subtle text-primary border px-3 py-1.5 fs-12" id="modal-user-role">
+                            <i class="ti ti-shield-check me-1"></i>{{ $activeUser ? $activeUser->role_name : '-' }}
+                        </span>
+                        <span class="badge bg-success-subtle text-success border px-3 py-1.5 fs-12" id="modal-user-status">
+                            <i class="ti ti-circle-check me-1"></i>{{ $activeUser ? ucfirst($activeUser->status) : 'Aktif' }}
+                        </span>
+                    </div>
+
+                    <div class="bg-light p-3 rounded border text-start fs-13">
+                        <div class="row g-2">
+                            <div class="col-5 text-muted"><i class="ti ti-mail me-1"></i> Alamat Email:</div>
+                            <div class="col-7 fw-semibold text-dark text-truncate" id="modal-info-email">{{ $activeUser ? $activeUser->email : '-' }}</div>
+                            
+                            <div class="col-5 text-muted"><i class="ti ti-shield me-1"></i> Peran Akun:</div>
+                            <div class="col-7 fw-semibold text-dark" id="modal-info-role">{{ $activeUser ? $activeUser->role_name : '-' }}</div>
+
+                            <div class="col-5 text-muted"><i class="ti ti-calendar me-1"></i> Terdaftar Sejak:</div>
+                            <div class="col-7 fw-semibold text-dark" id="modal-info-joined">{{ $activeUser && $activeUser->created_at ? $activeUser->created_at->format('d M Y') : '-' }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light py-2 justify-content-end">
+                    <button type="button" class="btn btn-secondary btn-sm px-3" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- Rules 1 Compliance: Placement of script inside @section('content') before @endsection --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -163,24 +246,101 @@
             const contactSearchInput = document.getElementById('chat-contact-search');
 
             let activeUserId = activeReceiverInput ? activeReceiverInput.value : '';
+            let lastMessageCount = {{ $messages->count() }};
+            let lastMessageId = {{ $messages->isNotEmpty() ? $messages->last()->id : 'null' }};
+            let userHasScrolledUp = false;
+
+            function getChatScrollElement() {
+                if (!chatContainer) return null;
+                if (window.SimpleBar) {
+                    const sb = window.SimpleBar.instances.get(chatContainer);
+                    if (sb && typeof sb.getScrollElement === 'function') {
+                        const el = sb.getScrollElement();
+                        if (el) return el;
+                    }
+                }
+                const sbWrapper = chatContainer.querySelector('.simplebar-content-wrapper');
+                if (sbWrapper) return sbWrapper;
+                return chatContainer;
+            }
+
+            function isUserNearBottom() {
+                const scrollEl = getChatScrollElement();
+                if (!scrollEl) return true;
+                const distanceToBottom = scrollEl.scrollHeight - scrollEl.scrollTop - scrollEl.clientHeight;
+                return distanceToBottom < 120;
+            }
+
+            function attachScrollListener() {
+                const scrollEl = getChatScrollElement();
+                if (scrollEl) {
+                    scrollEl.addEventListener('scroll', function() {
+                        const distanceToBottom = scrollEl.scrollHeight - scrollEl.scrollTop - scrollEl.clientHeight;
+                        userHasScrolledUp = distanceToBottom > 120;
+                    }, { passive: true });
+                }
+            }
+            setTimeout(attachScrollListener, 200);
 
             // Scroll container chat ke paling bawah
-            function scrollToBottom() {
+            function scrollToBottom(force = false) {
                 if (!chatContainer) return;
                 setTimeout(function() {
-                    if (window.SimpleBar) {
-                        const sb = window.SimpleBar.instances.get(chatContainer);
-                        if (sb) {
-                            const scrollElement = sb.getScrollElement();
-                            if (scrollElement) scrollElement.scrollTop = scrollElement.scrollHeight;
-                            return;
-                        }
+                    const scrollElement = getChatScrollElement();
+                    if (scrollElement) {
+                        scrollElement.scrollTop = scrollElement.scrollHeight;
+                        userHasScrolledUp = false;
                     }
-                    chatContainer.scrollTop = chatContainer.scrollHeight;
                 }, 50);
             }
 
-            scrollToBottom();
+            scrollToBottom(true);
+
+            // Pindahkan kontak ke bagian "Percakapan Aktif" secara teratur & urutkan ke posisi teratas
+            function promoteContactToRecent(userId, messageText, timeText = 'Baru saja') {
+                const contactEl = document.querySelector(`.btn-select-chat[data-user-id="${userId}"]`);
+                if (!contactEl) return;
+
+                const lastMsgEl = contactEl.querySelector('.contact-last-msg');
+                const lastTimeEl = contactEl.querySelector('.contact-last-time');
+                if (lastMsgEl && messageText) lastMsgEl.textContent = messageText;
+                if (lastTimeEl && timeText) lastTimeEl.textContent = timeText;
+
+                const listRecent = document.getElementById('list-recent-contacts');
+                const listOther = document.getElementById('list-other-contacts');
+                const secRecent = document.getElementById('section-recent-contacts');
+                const secOther = document.getElementById('section-other-contacts');
+                const badgeRecent = document.getElementById('badge-recent-count');
+                const badgeOther = document.getElementById('badge-other-count');
+
+                if (!listRecent || !listOther) return;
+
+                const isCurrentlyOther = listOther.contains(contactEl);
+
+                if (isCurrentlyOther) {
+                    listRecent.prepend(contactEl);
+
+                    if (badgeRecent) {
+                        const currentRecent = parseInt(badgeRecent.textContent.trim() || '0', 10);
+                        badgeRecent.textContent = currentRecent + 1;
+                    }
+                    if (badgeOther) {
+                        const currentOther = parseInt(badgeOther.textContent.trim() || '0', 10);
+                        badgeOther.textContent = Math.max(0, currentOther - 1);
+                    }
+
+                    if (secRecent) secRecent.classList.remove('d-none');
+                    if (secOther) {
+                        if (listOther.children.length === 0) {
+                            secOther.classList.add('d-none');
+                        } else {
+                            secOther.classList.add('mt-2');
+                        }
+                    }
+                } else {
+                    listRecent.prepend(contactEl);
+                }
+            }
 
             // Search Filter Kontak Sidebar (Rule 2 Compliance)
             if (contactSearchInput) {
@@ -221,6 +381,10 @@
                 if (unreadBadge) unreadBadge.classList.add('d-none');
 
                 activeUserId = userId;
+                lastMessageCount = 0;
+                lastMessageId = null;
+                userHasScrolledUp = false;
+
                 if (activeReceiverInput) activeReceiverInput.value = userId;
                 if (activeChatName) activeChatName.textContent = userName;
                 if (activeChatRole) activeChatRole.textContent = userRole;
@@ -228,15 +392,15 @@
                 if (document.getElementById('btn-send-message')) document.getElementById('btn-send-message').disabled = false;
 
                 if (btnViewUserDetail) {
-                    btnViewUserDetail.href = `/admin/manajemenpengguna/users?search=${encodeURIComponent(userName)}`;
+                    btnViewUserDetail.disabled = false;
                 }
 
                 // Load percakapan via AJAX
-                loadConversation(userId);
+                loadConversation(userId, false);
             });
 
             // Load Percakapan via AJAX
-            function loadConversation(userId) {
+            function loadConversation(userId, isPolling = false) {
                 if (!userId) return;
 
                 fetch(`/admin/profil-pengguna/messages/conversation/${userId}`, {
@@ -249,9 +413,35 @@
                 .then(function(res) { return res.json(); })
                 .then(function(data) {
                     if (data && data.success && chatContainer) {
+                        if (data.target_user) {
+                            const tu = data.target_user;
+                            if (document.getElementById('modal-user-avatar')) document.getElementById('modal-user-avatar').src = tu.avatar;
+                            if (document.getElementById('modal-user-name')) document.getElementById('modal-user-name').textContent = tu.name;
+                            if (document.getElementById('modal-user-email')) document.getElementById('modal-user-email').textContent = tu.email;
+                            if (document.getElementById('modal-user-role')) document.getElementById('modal-user-role').innerHTML = `<i class="ti ti-shield-check me-1"></i>${tu.role_name}`;
+                            if (document.getElementById('modal-user-status')) document.getElementById('modal-user-status').innerHTML = `<i class="ti ti-circle-check me-1"></i>${tu.status}`;
+                            if (document.getElementById('modal-info-email')) document.getElementById('modal-info-email').textContent = tu.email;
+                            if (document.getElementById('modal-info-role')) document.getElementById('modal-info-role').textContent = tu.role_name;
+                            if (document.getElementById('modal-info-joined')) document.getElementById('modal-info-joined').textContent = tu.joined_at;
+                        }
+
+                        const messages = data.messages || [];
+                        const newCount = messages.length;
+                        const newLastMsg = newCount > 0 ? messages[newCount - 1] : null;
+                        const newLastId = newLastMsg ? newLastMsg.id : null;
+
+                        // Jika sedang polling dan tidak ada perubahan total/id pesan terakhir, abaikan re-render DOM
+                        if (isPolling && newCount === lastMessageCount && newLastId === lastMessageId) {
+                            return;
+                        }
+
+                        const wasNearBottom = isUserNearBottom();
+
                         let html = '';
-                        if (data.messages && data.messages.length > 0) {
-                            data.messages.forEach(function(msg) {
+                        if (newCount > 0) {
+                            promoteContactToRecent(userId, newLastMsg.body, newLastMsg.time_formatted);
+
+                            messages.forEach(function(msg) {
                                 const isSender = msg.is_sender;
                                 const avatar = isSender ? currentUserAvatar : msg.sender_avatar;
 
@@ -304,7 +494,16 @@
                             chatContainer.innerHTML = html;
                         }
 
-                        scrollToBottom();
+                        lastMessageCount = newCount;
+                        lastMessageId = newLastId;
+
+                        // Pasang ulang scroll listener jika elemen di-recreate
+                        attachScrollListener();
+
+                        // Hanya scroll ke paling bawah jika bukan polling biasa ATAU jika user tidak sedang scroll ke atas & berada di bawah
+                        if (!isPolling || (!userHasScrolledUp && wasNearBottom)) {
+                            scrollToBottom(true);
+                        }
                     }
                 })
                 .catch(function(err) {});
@@ -341,16 +540,10 @@
                         if (data && data.success) {
                             // Append pesan baru langsung ke UI
                             appendSingleMessage(data.message);
-                            scrollToBottom();
+                            scrollToBottom(true);
 
-                            // Update last message pada sidebar kontak
-                            const activeContactEl = document.querySelector(`#chat-contacts-list .btn-select-chat[data-user-id="${receiverId}"]`);
-                            if (activeContactEl) {
-                                const lastMsgEl = activeContactEl.querySelector('.contact-last-msg');
-                                const lastTimeEl = activeContactEl.querySelector('.contact-last-time');
-                                if (lastMsgEl) lastMsgEl.textContent = messageText;
-                                if (lastTimeEl) lastTimeEl.textContent = 'Baru saja';
-                            }
+                            // Pindahkan kontak ke "Percakapan Aktif" dan update waktu & ringkasan pesan
+                            promoteContactToRecent(receiverId, messageText, 'Baru saja');
                         }
                     })
                     .catch(function(err) {});

@@ -169,32 +169,58 @@ class NotificationService
 
         try {
             if (\Illuminate\Support\Facades\Schema::hasTable('messages')) {
+                // Ambil total pesan belum dibaca untuk badge di topbar icon
+                $totalUnreadCount = \App\Models\Message::where('receiver_id', $user->id)
+                    ->where('is_read', false)
+                    ->count();
+
                 $dbMessages = \App\Models\Message::where('receiver_id', $user->id)
                     ->with('sender')
                     ->orderBy('created_at', 'desc')
-                    ->take(15)
                     ->get();
 
-                foreach ($dbMessages as $msg) {
-                    $senderAvatar = $msg->sender ? $msg->sender->avatar_url : asset('assets/images/users/default-avatar.svg');
+                $totalMessagesCount = $dbMessages->count();
+
+                // Kelompokkan pesan berdasarkan sender_id (1 pengirim = 1 baris di dropdown)
+                $groupedMessages = $dbMessages->groupBy('sender_id');
+
+                foreach ($groupedMessages as $senderId => $msgGroup) {
+                    $latestMsg = $msgGroup->first();
+                    $unreadCountInGroup = $msgGroup->where('is_read', false)->count();
+                    $totalCountInGroup = $msgGroup->count();
+
+                    $senderName = $latestMsg->sender ? $latestMsg->sender->name : ($latestMsg->subject ?: 'Pesan Masuk');
+                    $senderAvatar = $latestMsg->sender ? $latestMsg->sender->avatar_url : asset('assets/images/users/default-avatar.svg');
+                    $targetUrl = route('admin.profil-pengguna.messages.index', ['user_id' => $senderId]);
+
+                    $badgeLabel = 'Pesan';
+                    if ($latestMsg->message_type === 'deactivation_rejected') {
+                        $badgeLabel = 'Penonaktifan Ditolak';
+                    } elseif ($latestMsg->message_type === 'registration_rejected') {
+                        $badgeLabel = 'Pendaftaran Ditolak';
+                    }
+
                     $items->push([
-                        'id' => 'msg-' . $msg->id,
-                        'raw_id' => $msg->id,
+                        'id' => 'sender-' . $senderId,
+                        'sender_id' => $senderId,
+                        'message_ids' => $msgGroup->pluck('id')->toArray(),
                         'is_message_model' => true,
-                        'type' => $msg->message_type,
-                        'title' => $msg->subject ?: 'Pesan Masuk',
+                        'type' => $latestMsg->message_type,
+                        'title' => $senderName,
                         'subtitle' => null,
-                        'message' => $msg->body,
-                        'reason' => $msg->reason,
+                        'message' => $latestMsg->body,
+                        'reason' => $latestMsg->reason,
                         'avatar' => $senderAvatar,
                         'icon' => 'ti ti-mail-opened',
-                        'badge_class' => $msg->message_type === 'deactivation_rejected' ? 'bg-danger-subtle text-danger border-danger-subtle' : 'bg-primary-subtle text-primary border-primary-subtle',
-                        'badge_label' => $msg->message_type === 'deactivation_rejected' ? 'Penonaktifan Ditolak' : 'Pesan',
-                        'url' => 'javascript:void(0);',
-                        'created_at' => $msg->created_at,
-                        'time_ago' => $msg->created_at ? $msg->created_at->diffForHumans() : 'Baru saja',
-                        'is_unread' => !$msg->is_read,
-                        'is_read' => (bool) $msg->is_read,
+                        'badge_class' => in_array($latestMsg->message_type, ['deactivation_rejected', 'registration_rejected']) ? 'bg-danger-subtle text-danger border-danger-subtle' : 'bg-primary-subtle text-primary border-primary-subtle',
+                        'badge_label' => $badgeLabel,
+                        'unread_count_group' => $unreadCountInGroup,
+                        'total_count_group' => $totalCountInGroup,
+                        'url' => $targetUrl,
+                        'created_at' => $latestMsg->created_at,
+                        'time_ago' => $latestMsg->created_at ? $latestMsg->created_at->diffForHumans() : 'Baru saja',
+                        'is_unread' => $unreadCountInGroup > 0,
+                        'is_read' => $unreadCountInGroup === 0,
                     ]);
                 }
             }

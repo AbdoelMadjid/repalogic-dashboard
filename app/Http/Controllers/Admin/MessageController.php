@@ -24,20 +24,49 @@ class MessageController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-        // Tentukan user target obrolan aktif (jika ada parameter ?user_id=X di URL)
+        // Ambil pesan terakhir & pisahkan kontak yang sudah obrolan vs pengguna baru
+        $recentContacts = collect();
+        $otherContacts = collect();
+
+        foreach ($users as $u) {
+            $convId = Message::makeConversationId($currentUser->id, $u->id);
+            $lastMsg = Message::where('conversation_id', $convId)->latest()->first();
+            $unreadCount = Message::where('conversation_id', $convId)
+                ->where('receiver_id', $currentUser->id)
+                ->where('is_read', false)
+                ->count();
+
+            $cData = [
+                'id' => $u->id,
+                'name' => $u->name,
+                'email' => $u->email,
+                'avatar' => $u->avatar_url,
+                'role_name' => $u->role_name,
+                'last_message' => $lastMsg ? $lastMsg->body : 'Belum ada obrolan.',
+                'last_message_time' => $lastMsg && $lastMsg->created_at ? $lastMsg->created_at->diffForHumans() : '',
+                'last_message_raw' => $lastMsg ? $lastMsg->created_at : null,
+                'unread_count' => $unreadCount,
+            ];
+
+            if ($lastMsg !== null) {
+                $recentContacts->push($cData);
+            } else {
+                $otherContacts->push($cData);
+            }
+        }
+
+        // Urutkan obrolan aktif dari pesan paling baru
+        $recentContacts = $recentContacts->sortByDesc('last_message_raw')->values();
+
+        // Tentukan user target obrolan aktif (hanya jika ada parameter ?user_id=X di URL)
         $targetUserId = $request->query('user_id');
         $activeUser = null;
 
         if ($targetUserId) {
-            $activeUser = User::where('id', $targetUserId)->where('id', '!=', $currentUser->id)->first();
+            $activeUser = $users->firstWhere('id', (int) $targetUserId);
         }
 
-        // Jika tidak ada parameter URL atau user tidak ditemukan, default ke user pertama
-        if (!$activeUser && $users->isNotEmpty()) {
-            $activeUser = $users->first();
-        }
-
-        // Ambil seluruh pesan antara user aktif dan activeUser
+        // Ambil seluruh pesan antara user aktif dan activeUser (hanya jika user_id ditentukan)
         $messages = collect();
         if ($activeUser) {
             $convId = Message::makeConversationId($currentUser->id, $activeUser->id);
@@ -55,28 +84,7 @@ class MessageController extends Controller
                 ]);
         }
 
-        // Ambil pesan terakhir & jumlah unread untuk setiap kontak di sidebar
-        $contacts = $users->map(function ($u) use ($currentUser) {
-            $convId = Message::makeConversationId($currentUser->id, $u->id);
-            $lastMsg = Message::where('conversation_id', $convId)->latest()->first();
-            $unreadCount = Message::where('conversation_id', $convId)
-                ->where('receiver_id', $currentUser->id)
-                ->where('is_read', false)
-                ->count();
-
-            return [
-                'id' => $u->id,
-                'name' => $u->name,
-                'email' => $u->email,
-                'avatar' => $u->avatar_url,
-                'role_name' => $u->role_name,
-                'last_message' => $lastMsg ? $lastMsg->body : 'Belum ada obrolan.',
-                'last_message_time' => $lastMsg && $lastMsg->created_at ? $lastMsg->created_at->diffForHumans() : '',
-                'unread_count' => $unreadCount,
-            ];
-        });
-
-        return view('admin.profil-pengguna.messages', compact('contacts', 'activeUser', 'messages'));
+        return view('admin.profil-pengguna.messages', compact('recentContacts', 'otherContacts', 'activeUser', 'messages'));
     }
 
     /**
@@ -124,6 +132,8 @@ class MessageController extends Controller
                 'email' => $targetUser->email,
                 'avatar' => $targetUser->avatar_url,
                 'role_name' => $targetUser->role_name,
+                'status' => ucfirst($targetUser->status),
+                'joined_at' => $targetUser->created_at ? $targetUser->created_at->format('d M Y') : '-',
             ],
             'messages' => $messages,
         ]);

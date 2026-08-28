@@ -61,8 +61,19 @@ class NotificationController extends Controller
     {
         $user = Auth::user();
         if ($user) {
-            // Check if it's a Message record (msg- prefix or numeric)
-            if (str_starts_with($id, 'msg-') || is_numeric($id)) {
+            // Check if it's a grouped message by sender (sender- prefix)
+            if (str_starts_with($id, 'sender-')) {
+                $senderId = (int) str_replace('sender-', '', $id);
+                \App\Models\Message::where('sender_id', $senderId)
+                    ->where('receiver_id', $user->id)
+                    ->where('is_read', false)
+                    ->update([
+                        'is_read' => true,
+                        'read_at' => now(),
+                    ]);
+            }
+            // Check if it's a single Message record (msg- prefix or numeric)
+            elseif (str_starts_with($id, 'msg-') || is_numeric($id)) {
                 $cleanId = str_replace('msg-', '', $id);
                 $msg = \App\Models\Message::where('id', $cleanId)->where('receiver_id', $user->id)->first();
                 if ($msg) {
