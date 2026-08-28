@@ -43,6 +43,7 @@
 **Repalogic Dashboard** adalah aplikasi sistem manajemen admin & dashboard modern berbasis **Laravel 13** dan **Inspinia Admin Template**. Dashboard ini dirancang untuk memberikan solusi manajemen pengguna yang komprehensif, fleksibel, serta berkinerja tinggi untuk kebutuhan aplikasi skala kecil hingga enterprise.
 
 ### Fitur Utama:
+- 💬 **Fitur Chat & Direct Messaging Interaktif**: Komunikasi dua arah real-time, *Quoted Reply*, *Emoji Picker*, upload lampiran foto & dokumen hingga 10 MB, *Image Lightbox Modal*, dan *Real-Time Avatar Synchronization*.
 - 🎨 **Engine Dinamisasi Tema & Seksi Website**: Pengaturan tema publik dinamis dengan *Crop Simulator*, *Background Attachment Paralaks 3D*, *Deteksi Orientasi Gambar*, dan arsitektur *Loose Coupling* baku.
 - 🔐 **Manajemen Pengguna & Hak Akses (Spatie Permission Matrix)**: Pengaturan Role, Permission, Akses User, dan Akses Role dengan tampilan matrix table yang intuitif.
 - ⚡ **Yajra DataTables Integration**: Pengolahan data server-side tabel yang cepat dan interaktif.
@@ -53,6 +54,7 @@
 
 ### 📚 Dokumentasi Arsitektur Teknis & Riwayat Rilis:
 - 🏷️ [**Riwayat Lengkap Release & Git Tag**](docs/riwayat_release_dan_tag.md) — Daftar versi rilis, git tag, dan ringkasan pembaruan fitur per versi.
+- 💬 [**Pola & Operasional Fitur Chat / Messages Engine**](docs/arsitektur_dan_operasional_fitur_chat_messages.md) — Panduan lengkap arsitektur percakapan *1-on-1*, skema database *conversation ID*, *Quoted Reply*, *Emoji Picker*, *Attachment Upload & Lightbox*, dan *Real-Time Avatar Sync Engine*.
 - 📄 [**Arsitektur Engine Dinamisasi Tema & Seksi Website**](docs/arsitektur_dinamisasi_tema_website.md) — Panduan resmi arsitektur *Loose Coupling*, *Crop Simulator*, *Efek Paralaks 3D*, *Metadata Orientasi Gambar*, dan *Pemisahan Modal Modular*.
 - 📄 [**Alur Registrasi Mandiri & Persetujuan Akun Pengguna**](docs/alur_registrasi_dan_persetujuan_pengguna.md) — Panduan lengkap alur pendaftaran mandiri, *User Approval Workflow*, proteksi login *Zero-Trust*, *Universal Notification Hub*, dan aktivasi Spatie Role otomatis.
 - 📄 [**Alur Penonaktifan Mandiri & Aktivasi Kembali Akun Pengguna**](docs/alur_penonaktifan_dan_aktivasi_akun_pengguna.md) — Panduan lengkap *Danger Zone* penonaktifan profil mandiri, form pengajuan aktivasi akun nonaktif, integrasi notifikasi topbar, dan eksekusi admin.
