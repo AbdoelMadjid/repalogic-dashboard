@@ -28,9 +28,9 @@
                                         $isActive = $activeUser && $activeUser->id === $c['id'];
                                     @endphp
                                     <a href="javascript:void(0);" data-user-id="{{ $c['id'] }}" data-user-name="{{ $c['name'] }}" data-user-avatar="{{ $c['avatar'] }}" data-user-role="{{ $c['role_name'] }}" class="list-group-item list-group-item-action d-flex gap-2 justify-content-between btn-select-chat {{ $isActive ? 'active' : '' }}">
-                                        <span class="d-flex justify-content-start align-items-center gap-2 overflow-hidden">
-                                            <span class="avatar avatar-sm flex-shrink-0">
-                                                <img src="{{ $c['avatar'] }}" alt="{{ $c['name'] }}" class="img-fluid rounded-circle object-fit-cover shadow-sm" style="width: 38px; height: 38px; min-width: 38px; min-height: 38px; object-fit: cover; object-position: top; aspect-ratio: 1 / 1;" />
+                                        <span class="d-flex justify-content-start align-items-center gap-2.5 overflow-hidden">
+                                            <span class="flex-shrink-0">
+                                                <img src="{{ $c['avatar'] }}" alt="{{ $c['name'] }}" class="rounded-circle object-fit-cover shadow-sm" style="width: 38px; height: 38px; min-width: 38px; min-height: 38px; object-fit: cover; object-position: top; display: block;" />
                                             </span>
                                             <span class="overflow-hidden">
                                                 <span data-chat-search-field class="text-nowrap fw-semibold fs-base mb-0 lh-base text-dark d-block">{{ $c['name'] }}</span>
@@ -57,9 +57,9 @@
                                         $isActive = $activeUser && $activeUser->id === $c['id'];
                                     @endphp
                                     <a href="javascript:void(0);" data-user-id="{{ $c['id'] }}" data-user-name="{{ $c['name'] }}" data-user-avatar="{{ $c['avatar'] }}" data-user-role="{{ $c['role_name'] }}" class="list-group-item list-group-item-action d-flex gap-2 justify-content-between btn-select-chat {{ $isActive ? 'active' : '' }}">
-                                        <span class="d-flex justify-content-start align-items-center gap-2 overflow-hidden">
-                                            <span class="avatar avatar-sm flex-shrink-0">
-                                                <img src="{{ $c['avatar'] }}" alt="{{ $c['name'] }}" class="img-fluid rounded-circle object-fit-cover shadow-sm" style="width: 38px; height: 38px; min-width: 38px; min-height: 38px; object-fit: cover; object-position: top; aspect-ratio: 1 / 1;" />
+                                        <span class="d-flex justify-content-start align-items-center gap-2.5 overflow-hidden">
+                                            <span class="flex-shrink-0">
+                                                <img src="{{ $c['avatar'] }}" alt="{{ $c['name'] }}" class="rounded-circle object-fit-cover shadow-sm" style="width: 38px; height: 38px; min-width: 38px; min-height: 38px; object-fit: cover; object-position: top; display: block;" />
                                             </span>
                                             <span class="overflow-hidden">
                                                 <span data-chat-search-field class="text-nowrap fw-semibold fs-base mb-0 lh-base text-dark d-block">{{ $c['name'] }}</span>
@@ -94,18 +94,23 @@
                     </button>
                 </div>
 
-                <div class="flex-grow-1">
-                    <h5 class="mb-1 lh-base fs-lg fw-bold" id="active-chat-name">
-                        {{ $activeUser ? $activeUser->name : 'Pilih Kontak' }}
-                    </h5>
-                    <p class="mb-0 lh-sm text-muted d-flex align-items-center gap-1 fs-12">
-                        <i class="ti ti-circle-filled text-success fs-10"></i>
-                        <span id="active-chat-status">Aktif &amp; Terhubung</span>
-                        <span class="badge bg-primary-subtle text-primary border ms-2 fs-11" id="active-chat-role">{{ $activeUser ? $activeUser->role_name : '' }}</span>
-                    </p>
+                <div class="d-flex align-items-center gap-3 flex-grow-1 overflow-hidden">
+                    <div class="flex-shrink-0" id="active-chat-avatar-wrapper">
+                        <img id="active-chat-avatar" src="{{ $activeUser ? $activeUser->avatar_url : asset('assets/images/users/default-avatar.svg') }}" alt="Avatar" class="rounded-circle object-fit-cover shadow-sm {{ $activeUser ? '' : 'd-none' }}" style="width: 42px; height: 42px; min-width: 42px; min-height: 42px; object-fit: cover; object-position: top; display: block;" />
+                    </div>
+                    <div class="overflow-hidden">
+                        <h5 class="mb-1 lh-base fs-lg fw-bold text-truncate" id="active-chat-name">
+                            {{ $activeUser ? $activeUser->name : 'Pilih Kontak' }}
+                        </h5>
+                        <p class="mb-0 lh-sm text-muted d-flex align-items-center gap-1 fs-12">
+                            <i class="ti ti-circle-filled text-success fs-10"></i>
+                            <span id="active-chat-status">Aktif &amp; Terhubung</span>
+                            <span class="badge bg-primary-subtle text-primary border ms-2 fs-11" id="active-chat-role">{{ $activeUser ? $activeUser->role_name : '' }}</span>
+                        </p>
+                    </div>
                 </div>
 
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-2 flex-shrink-0">
                     <button type="button" id="btn-view-user-detail" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#user-detail-modal" title="Lihat Profil Pengguna Ini" {{ $activeUser ? '' : 'disabled' }}>
                         <i class="ti ti-user me-1"></i> Detail Akun
                     </button>
@@ -123,20 +128,54 @@
                         @endphp
                         <div class="d-flex align-items-start gap-2 my-3 chat-item {{ $isSender ? 'text-end justify-content-end' : '' }}">
                             @if (!$isSender)
-                                <img src="{{ $msgAvatar }}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />
+                                <img src="{{ $msgAvatar }}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0 chat-avatar-opponent" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />
                             @endif
                             <div style="max-width: 75%;">
                                 <div class="chat-message py-2 px-3 {{ $isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border' }} rounded shadow-sm text-start">
                                     @if ($msg->parent)
                                         <div class="p-2 mb-2 bg-white bg-opacity-75 rounded border-start border-3 border-primary text-start fs-12 shadow-sm">
-                                            <strong class="d-block text-primary fs-11 mb-0.5"><i class="ti ti-corner-up-left me-1"></i>{{ $msg->parent->sender ? $msg->parent->sender->name : 'Pesan' }}</strong>
-                                            <div class="text-muted text-truncate fs-12">{{ $msg->parent->body }}</div>
+                                            <strong class="d-block text-primary fs-11 mb-0.5"><i class="ti ti-corner-up-left me-1"></i>{{ $msg->parent->sender ? ($msg->parent->sender_id === auth()->id() ? 'Anda' : $msg->parent->sender->name) : 'Pesan' }}</strong>
+                                            <div class="text-muted text-truncate fs-12">{{ $msg->parent->body ?: ($msg->parent->attachment_name ?: 'Lampiran berkas') }}</div>
                                         </div>
                                     @endif
                                     @if ($msg->subject && $msg->subject !== 'Pesan Masuk')
                                         <strong class="d-block text-primary fs-12 mb-1"><i class="ti ti-bell me-1"></i>{{ $msg->subject }}</strong>
                                     @endif
-                                    <div class="fs-13 lh-base text-wrap" style="word-break: break-word;">{!! nl2br(e($msg->body)) !!}</div>
+
+                                    @if ($msg->attachment_url)
+                                        @php
+                                            $isImg = $msg->attachment_type === 'image' || in_array(strtolower(pathinfo($msg->attachment_url, PATHINFO_EXTENSION)), ['jpg','jpeg','png','webp','gif']);
+                                        @endphp
+                                        <div class="mt-1 mb-2">
+                                            @if ($isImg)
+                                                <div class="chat-attachment-image">
+                                                    <a href="{{ $msg->attachment_url }}" class="d-inline-block position-relative rounded overflow-hidden shadow-sm border btn-preview-img-modal" data-img-url="{{ $msg->attachment_url }}" data-img-name="{{ $msg->attachment_name ?: 'Gambar' }}">
+                                                        <img src="{{ $msg->attachment_url }}" alt="{{ $msg->attachment_name ?: 'Gambar' }}" class="img-fluid rounded" style="max-height: 220px; max-width: 100%; object-fit: cover; cursor: pointer;">
+                                                    </a>
+                                                </div>
+                                            @else
+                                                <div class="p-2 bg-white bg-opacity-75 rounded border d-flex align-items-center justify-content-between gap-2 shadow-sm fs-12">
+                                                    <div class="d-flex align-items-center gap-2 overflow-hidden">
+                                                        <i class="ti ti-file-text fs-24 text-primary flex-shrink-0"></i>
+                                                        <div class="overflow-hidden text-start">
+                                                            <span class="d-block fw-semibold text-dark text-truncate" title="{{ $msg->attachment_name ?: 'Lampiran Berkas' }}">{{ $msg->attachment_name ?: 'Berkas Unduhan' }}</span>
+                                                            @if ($msg->attachment_size)
+                                                                <span class="d-block text-muted fs-11">{{ round($msg->attachment_size / 1024, 1) }} KB</span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <a href="{{ $msg->attachment_url }}" download="{{ $msg->attachment_name ?: 'berkas' }}" target="_blank" class="btn btn-sm btn-outline-primary px-2 py-1 flex-shrink-0" title="Unduh Berkas">
+                                                        <i class="ti ti-download"></i>
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endif
+
+                                    @if (!empty($msg->body))
+                                        <div class="fs-13 lh-base text-wrap" style="word-break: break-word;">{!! nl2br(e($msg->body)) !!}</div>
+                                    @endif
+
                                     @if ($msg->reason)
                                         <div class="mt-2 p-2 bg-white rounded border border-danger-subtle fs-12 text-danger">
                                             <strong><i class="ti ti-notes me-1"></i>Alasan dari Admin:</strong> {{ $msg->reason }}
@@ -145,13 +184,13 @@
                                 </div>
                                 <div class="d-flex align-items-center gap-2 text-muted fs-xs mt-1 {{ $isSender ? 'justify-content-end' : 'justify-content-start' }}">
                                     <span><i class="ti ti-clock me-0.5"></i> {{ $msg->created_at ? $msg->created_at->format('H:i') : '' }}</span>
-                                    <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-1 opacity-75 opacity-100-hover" data-msg-id="{{ $msg->id }}" data-sender-name="{{ $senderName }}" data-msg-body="{{ e($msg->body) }}" title="Balas Pesan Ini">
+                                    <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-1 opacity-75 opacity-100-hover" data-msg-id="{{ $msg->id }}" data-sender-name="{{ $senderName }}" data-msg-body="{{ e($msg->body ?: ($msg->attachment_name ?: 'Lampiran berkas')) }}" title="Balas Pesan Ini">
                                         <i class="ti ti-corner-up-left"></i> Balas
                                     </button>
                                 </div>
                             </div>
                             @if ($isSender)
-                                <img src="{{ $msgAvatar }}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />
+                                <img src="{{ $msgAvatar }}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0 chat-avatar-sender" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />
                             @endif
                         </div>
                     @endforeach
@@ -225,7 +264,7 @@
                     </div>
                 </div>
 
-                <form id="form-send-chat" action="javascript:void(0);">
+                <form id="form-send-chat" action="javascript:void(0);" enctype="multipart/form-data">
                     <input type="hidden" id="active-receiver-id" value="{{ $activeUser ? $activeUser->id : '' }}">
                     <input type="hidden" id="reply-parent-id" name="parent_id" value="">
 
@@ -240,15 +279,40 @@
                         <div class="fs-12 text-muted text-truncate ps-1" id="reply-preview-body"></div>
                     </div>
 
+                    <!-- PREVIEW BOX LAMPIRAN BERKAS / GAMBAR -->
+                    <div id="attachment-preview-container" class="d-none bg-white p-2 mb-2 rounded border-start border-3 border-info shadow-sm position-relative">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center gap-2 overflow-hidden">
+                                <div id="attachment-thumb-wrapper" class="flex-shrink-0 rounded bg-light border d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; overflow: hidden;">
+                                    <img id="attachment-preview-img" src="" class="d-none w-100 h-100 object-fit-cover" alt="Preview">
+                                    <i id="attachment-preview-icon" class="ti ti-file fs-20 text-info"></i>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <div class="fw-semibold text-dark fs-12 text-truncate" id="attachment-preview-name">berkas.pdf</div>
+                                    <div class="text-muted fs-11" id="attachment-preview-size">0 KB</div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-close fs-10" id="btn-cancel-attachment" aria-label="Batal Lampiran"></button>
+                        </div>
+                    </div>
+
                     <div class="d-flex gap-2 align-items-center position-relative">
                         <div class="position-relative flex-grow-1 d-flex align-items-center">
                             <div class="app-search flex-grow-1 position-relative">
-                                <input type="text" id="chat-message-input" class="form-control py-2 bg-light-subtle border-light pe-5" placeholder="Ketik pesan Anda di sini..." autocomplete="off" {{ $activeUser ? '' : 'disabled' }} />
+                                <input type="text" id="chat-message-input" class="form-control py-2 bg-light-subtle border-light" style="padding-right: 76px !important;" placeholder="Ketik pesan Anda di sini..." autocomplete="off" {{ $activeUser ? '' : 'disabled' }} />
                                 <i class="ti ti-message app-search-icon text-muted"></i>
                             </div>
-                            <button type="button" id="btn-toggle-emoji" class="btn btn-sm btn-icon position-absolute end-0 me-2 text-muted hover-text-primary z-2" style="background: transparent; border: none; cursor: pointer;" title="Sisipkan Emoji / Emoticon" {{ $activeUser ? '' : 'disabled' }}>
-                                <i class="ti ti-mood-smile fs-18"></i>
-                            </button>
+                            <div class="position-absolute end-0 me-2 d-flex align-items-center gap-1 z-2">
+                                <!-- Tombol Lampirkan Berkas/Gambar -->
+                                <input type="file" id="chat-file-input" class="d-none" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.zip,.rar,.txt">
+                                <button type="button" id="btn-attach-file" class="btn btn-sm btn-icon text-muted hover-text-primary" style="background: transparent; border: none; cursor: pointer; padding: 2px;" title="Kirim Gambar / Lampiran Berkas" {{ $activeUser ? '' : 'disabled' }}>
+                                    <i class="ti ti-paperclip fs-18"></i>
+                                </button>
+                                <!-- Tombol Emoji -->
+                                <button type="button" id="btn-toggle-emoji" class="btn btn-sm btn-icon text-muted hover-text-primary" style="background: transparent; border: none; cursor: pointer; padding: 2px;" title="Sisipkan Emoji / Emoticon" {{ $activeUser ? '' : 'disabled' }}>
+                                    <i class="ti ti-mood-smile fs-18"></i>
+                                </button>
+                            </div>
                         </div>
                         <button type="submit" id="btn-send-message" class="btn btn-primary px-3 fw-semibold flex-shrink-0" {{ $activeUser ? '' : 'disabled' }}>
                             Kirim <i class="ti ti-send ms-1 fs-14"></i>
@@ -306,11 +370,31 @@
         </div>
     </div>
 
+    <!-- MODAL LIGHTBOX PRATINJAU GAMBAR CHAT -->
+    <div class="modal fade" id="chat-image-modal" tabindex="-1" aria-labelledby="chatImageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg bg-dark">
+                <div class="modal-header border-0 py-2 px-3 d-flex justify-content-between align-items-center bg-dark text-white">
+                    <span class="modal-title text-white fs-13 text-truncate fw-semibold" id="chatImageModalLabel">Pratinjau Gambar</span>
+                    <div class="d-flex align-items-center gap-2">
+                        <a href="#" id="modal-download-image" download class="btn btn-sm btn-outline-light px-2.5 py-1 text-white" title="Unduh Gambar Asli">
+                            <i class="ti ti-download me-1"></i> Unduh
+                        </a>
+                        <button type="button" class="btn-close btn-close-white fs-12" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="modal-body p-0 text-center bg-black d-flex align-items-center justify-content-center" style="min-height: 280px; max-height: 80vh; overflow: hidden;">
+                    <img id="modal-preview-full-img" src="" class="img-fluid" style="max-height: 78vh; object-fit: contain;" alt="Gambar Penuh">
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- Rules 1 Compliance: Placement of script inside @section('content') before @endsection --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const currentUserId = {{ auth()->id() }};
-            const currentUserAvatar = "{{ auth()->user()->avatar_url }}";
+            let currentUserAvatar = "{{ auth()->user()->avatar_url }}";
 
             const chatContainer = document.getElementById('chat-container');
             const chatForm = document.getElementById('form-send-chat');
@@ -318,6 +402,7 @@
             const activeReceiverInput = document.getElementById('active-receiver-id');
             const activeChatName = document.getElementById('active-chat-name');
             const activeChatRole = document.getElementById('active-chat-role');
+            const activeChatAvatar = document.getElementById('active-chat-avatar');
             const btnViewUserDetail = document.getElementById('btn-view-user-detail');
             const contactSearchInput = document.getElementById('chat-contact-search');
 
@@ -326,15 +411,52 @@
             let lastMessageId = {{ $messages->isNotEmpty() ? $messages->last()->id : 'null' }};
             let userHasScrolledUp = false;
 
+            // ==========================================
+            // HELPER FUNCTIONS (UTILITIES & DOM)
+            // ==========================================
+            function escapeHtml(text) {
+                if (text === null || typeof text === 'undefined') return '';
+                return String(text)
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+
+            function formatBytes(bytes) {
+                if (!bytes || bytes === 0) return '0 B';
+                const b = parseInt(bytes, 10);
+                if (b >= 1048576) {
+                    return (b / 1048576).toFixed(1) + ' MB';
+                } else if (b >= 1024) {
+                    return (b / 1024).toFixed(1) + ' KB';
+                }
+                return b + ' B';
+            }
+
+            function setChatContainerHtml(html) {
+                if (!chatContainer) return;
+                const sbContent = chatContainer.querySelector('.simplebar-content');
+                if (sbContent) {
+                    sbContent.innerHTML = html;
+                } else {
+                    chatContainer.innerHTML = html;
+                }
+            }
+
+            function appendChatContainerHtml(html) {
+                if (!chatContainer) return;
+                const sbContent = chatContainer.querySelector('.simplebar-content');
+                if (sbContent) {
+                    sbContent.insertAdjacentHTML('beforeend', html);
+                } else {
+                    chatContainer.insertAdjacentHTML('beforeend', html);
+                }
+            }
+
             function getChatScrollElement() {
                 if (!chatContainer) return null;
-                if (window.SimpleBar) {
-                    const sb = window.SimpleBar.instances.get(chatContainer);
-                    if (sb && typeof sb.getScrollElement === 'function') {
-                        const el = sb.getScrollElement();
-                        if (el) return el;
-                    }
-                }
                 const sbWrapper = chatContainer.querySelector('.simplebar-content-wrapper');
                 if (sbWrapper) return sbWrapper;
                 return chatContainer;
@@ -358,7 +480,6 @@
             }
             setTimeout(attachScrollListener, 200);
 
-            // Scroll container chat ke paling bawah
             function scrollToBottom(force = false) {
                 if (!chatContainer) return;
                 setTimeout(function() {
@@ -371,6 +492,34 @@
             }
 
             scrollToBottom(true);
+
+            function renderAttachmentHtml(msg) {
+                if (!msg.attachment_url) return '';
+                const isImg = msg.attachment_type === 'image' || (msg.attachment_url && /\.(jpg|jpeg|png|webp|gif)$/i.test(msg.attachment_url));
+                const name = escapeHtml(msg.attachment_name || 'Lampiran Berkas');
+                const sizeStr = msg.attachment_size_formatted || (msg.attachment_size ? formatBytes(msg.attachment_size) : '');
+
+                if (isImg) {
+                    return `<div class="chat-attachment-image mt-1 mb-2">
+                        <a href="${msg.attachment_url}" class="d-inline-block position-relative rounded overflow-hidden shadow-sm border btn-preview-img-modal" data-img-url="${msg.attachment_url}" data-img-name="${name}">
+                            <img src="${msg.attachment_url}" alt="${name}" class="img-fluid rounded" style="max-height: 220px; max-width: 100%; object-fit: cover; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                        </a>
+                    </div>`;
+                } else {
+                    return `<div class="mt-1 mb-2 p-2 bg-white bg-opacity-75 rounded border d-flex align-items-center justify-content-between gap-2 shadow-sm fs-12">
+                        <div class="d-flex align-items-center gap-2 overflow-hidden">
+                            <i class="ti ti-file-text fs-24 text-primary flex-shrink-0"></i>
+                            <div class="overflow-hidden text-start">
+                                <span class="d-block fw-semibold text-dark text-truncate" title="${name}">${name}</span>
+                                ${sizeStr ? `<span class="d-block text-muted fs-11">${sizeStr}</span>` : ''}
+                            </div>
+                        </div>
+                        <a href="${msg.attachment_url}" download="${name}" target="_blank" class="btn btn-sm btn-outline-primary px-2 py-1 flex-shrink-0" title="Unduh Berkas">
+                            <i class="ti ti-download"></i>
+                        </a>
+                    </div>`;
+                }
+            }
 
             // Pindahkan kontak ke bagian "Percakapan Aktif" secara teratur & urutkan ke posisi teratas
             function promoteContactToRecent(userId, messageText, timeText = 'Baru saja') {
@@ -464,19 +613,135 @@
                 if (activeReceiverInput) activeReceiverInput.value = userId;
                 if (activeChatName) activeChatName.textContent = userName;
                 if (activeChatRole) activeChatRole.textContent = userRole;
+                if (activeChatAvatar) {
+                    activeChatAvatar.src = userAvatar || "{{ asset('assets/images/users/default-avatar.svg') }}";
+                    activeChatAvatar.classList.remove('d-none');
+                }
                 if (chatInput) chatInput.disabled = false;
                 if (document.getElementById('btn-send-message')) document.getElementById('btn-send-message').disabled = false;
                 if (document.getElementById('btn-toggle-emoji')) document.getElementById('btn-toggle-emoji').disabled = false;
+                if (document.getElementById('btn-attach-file')) document.getElementById('btn-attach-file').disabled = false;
 
                 if (btnViewUserDetail) {
                     btnViewUserDetail.disabled = false;
                 }
 
-                // Reset state balasan pesan saat ganti kontak
+                // Reset state balasan & lampiran saat ganti kontak
                 cancelReplyState();
+                cancelAttachmentState();
 
                 // Load percakapan via AJAX
                 loadConversation(userId, false);
+            });
+
+            const btnAttachFile = document.getElementById('btn-attach-file');
+            const chatFileInput = document.getElementById('chat-file-input');
+            const attachmentPreviewContainer = document.getElementById('attachment-preview-container');
+            const attachmentPreviewImg = document.getElementById('attachment-preview-img');
+            const attachmentPreviewIcon = document.getElementById('attachment-preview-icon');
+            const attachmentPreviewName = document.getElementById('attachment-preview-name');
+            const attachmentPreviewSize = document.getElementById('attachment-preview-size');
+            const btnCancelAttachment = document.getElementById('btn-cancel-attachment');
+
+            let selectedChatFile = null;
+
+            function cancelAttachmentState() {
+                selectedChatFile = null;
+                if (chatFileInput) chatFileInput.value = '';
+                if (attachmentPreviewContainer) attachmentPreviewContainer.classList.add('d-none');
+                if (attachmentPreviewImg) {
+                    attachmentPreviewImg.src = '';
+                    attachmentPreviewImg.classList.add('d-none');
+                }
+                if (attachmentPreviewIcon) attachmentPreviewIcon.classList.remove('d-none');
+            }
+
+            if (btnAttachFile && chatFileInput) {
+                btnAttachFile.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    chatFileInput.click();
+                });
+
+                chatFileInput.addEventListener('change', function(e) {
+                    const files = e.target.files;
+                    if (!files || files.length === 0) return;
+
+                    const file = files[0];
+
+                    // Validasi ukuran berkas maksimal 10 MB
+                    if (file.size > 10 * 1024 * 1024) {
+                        if (typeof window.showWarning === 'function') {
+                            window.showWarning('Ukuran berkas melebihi batas maksimal 10 MB.');
+                        } else {
+                            alert('Ukuran berkas melebihi batas maksimal 10 MB.');
+                        }
+                        chatFileInput.value = '';
+                        return;
+                    }
+
+                    selectedChatFile = file;
+
+                    if (attachmentPreviewContainer) {
+                        attachmentPreviewContainer.classList.remove('d-none');
+                        if (attachmentPreviewName) attachmentPreviewName.textContent = file.name;
+                        if (attachmentPreviewSize) attachmentPreviewSize.textContent = formatBytes(file.size);
+
+                        const isImage = file.type.startsWith('image/');
+                        if (isImage && attachmentPreviewImg) {
+                            const reader = new FileReader();
+                            reader.onload = function(evt) {
+                                attachmentPreviewImg.src = evt.target.result;
+                                attachmentPreviewImg.classList.remove('d-none');
+                                if (attachmentPreviewIcon) attachmentPreviewIcon.classList.add('d-none');
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            if (attachmentPreviewImg) attachmentPreviewImg.classList.add('d-none');
+                            if (attachmentPreviewIcon) {
+                                attachmentPreviewIcon.classList.remove('d-none');
+                                if (file.name.endsWith('.pdf')) attachmentPreviewIcon.className = 'ti ti-file-type-pdf fs-22 text-danger';
+                                else if (file.name.endsWith('.doc') || file.name.endsWith('.docx')) attachmentPreviewIcon.className = 'ti ti-file-type-doc fs-22 text-primary';
+                                else if (file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) attachmentPreviewIcon.className = 'ti ti-file-type-xls fs-22 text-success';
+                                else if (file.name.endsWith('.zip') || file.name.endsWith('.rar')) attachmentPreviewIcon.className = 'ti ti-file-type-zip fs-22 text-warning';
+                                else attachmentPreviewIcon.className = 'ti ti-file-text fs-22 text-info';
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (btnCancelAttachment) {
+                btnCancelAttachment.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    cancelAttachmentState();
+                });
+            }
+
+            // Event Delegation Buka Modal Lightbox Gambar (Rule 2 Compliance)
+            document.addEventListener('click', function(e) {
+                const imgBtn = e.target.closest('.btn-preview-img-modal');
+                if (!imgBtn) return;
+                e.preventDefault();
+
+                const imgUrl = imgBtn.getAttribute('data-img-url');
+                const imgName = imgBtn.getAttribute('data-img-name') || 'Pratinjau Gambar';
+
+                const modalImg = document.getElementById('modal-preview-full-img');
+                const modalLabel = document.getElementById('chatImageModalLabel');
+                const downloadLink = document.getElementById('modal-download-image');
+
+                if (modalImg) modalImg.src = imgUrl;
+                if (modalLabel) modalLabel.textContent = imgName;
+                if (downloadLink) {
+                    downloadLink.href = imgUrl;
+                    downloadLink.setAttribute('download', imgName);
+                }
+
+                const modalEl = document.getElementById('chat-image-modal');
+                if (modalEl && window.bootstrap) {
+                    const bsModal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                    bsModal.show();
+                }
             });
 
             // Event Delegation Tombol Balas Pesan (Rule 2 Compliance)
@@ -542,6 +807,20 @@
                             if (document.getElementById('modal-info-email')) document.getElementById('modal-info-email').textContent = tu.email;
                             if (document.getElementById('modal-info-role')) document.getElementById('modal-info-role').textContent = tu.role_name;
                             if (document.getElementById('modal-info-joined')) document.getElementById('modal-info-joined').textContent = tu.joined_at;
+
+                            // Sinkronkan avatar header aktif & kontak sidebar jika berubah
+                            if (activeChatAvatar && tu.avatar) {
+                                activeChatAvatar.src = tu.avatar;
+                                activeChatAvatar.classList.remove('d-none');
+                            }
+                            const contactEl = document.querySelector(`.btn-select-chat[data-user-id="${userId}"]`);
+                            if (contactEl && tu.avatar) {
+                                contactEl.setAttribute('data-user-avatar', tu.avatar);
+                                const contactImg = contactEl.querySelector('img');
+                                if (contactImg && contactImg.src !== tu.avatar) {
+                                    contactImg.src = tu.avatar;
+                                }
+                            }
                         }
 
                         const messages = data.messages || [];
@@ -558,16 +837,18 @@
 
                         let html = '';
                         if (newCount > 0) {
-                            promoteContactToRecent(userId, newLastMsg.body, newLastMsg.time_formatted);
+                            const summaryText = newLastMsg.body || (newLastMsg.attachment_type === 'image' ? '📷 [Foto / Gambar]' : ('📎 [' + (newLastMsg.attachment_name || 'Berkas') + ']'));
+                            promoteContactToRecent(userId, summaryText, newLastMsg.time_formatted);
 
                             messages.forEach(function(msg) {
                                 const isSender = msg.is_sender;
-                                const avatar = isSender ? currentUserAvatar : msg.sender_avatar;
+                                const avatar = isSender ? currentUserAvatar : (msg.sender_avatar || currentUserAvatar);
                                 const senderName = isSender ? 'Anda' : (msg.sender_name || 'Pengguna');
+                                const replyText = msg.body || (msg.attachment_name || 'Lampiran');
 
                                 html += `<div class="d-flex align-items-start gap-2 my-3 chat-item ${isSender ? 'text-end justify-content-end' : ''}">`;
                                 if (!isSender) {
-                                    html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
+                                    html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0 chat-avatar-opponent" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
                                 }
                                 html += `<div style="max-width: 75%;">
                                     <div class="chat-message py-2 px-3 ${isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border'} rounded shadow-sm text-start">`;
@@ -582,7 +863,15 @@
                                 if (msg.subject && msg.subject !== 'Pesan Masuk') {
                                     html += `<strong class="d-block text-primary fs-12 mb-1"><i class="ti ti-bell me-1"></i>${escapeHtml(msg.subject)}</strong>`;
                                 }
-                                html += `<div class="fs-13 lh-base text-wrap" style="word-break: break-word;">${escapeHtml(msg.body).replace(/\n/g, '<br>')}</div>`;
+
+                                if (msg.attachment_url) {
+                                    html += renderAttachmentHtml(msg);
+                                }
+
+                                if (msg.body) {
+                                    html += `<div class="fs-13 lh-base text-wrap" style="word-break: break-word;">${escapeHtml(msg.body).replace(/\n/g, '<br>')}</div>`;
+                                }
+
                                 if (msg.reason) {
                                     html += `<div class="mt-2 p-2 bg-white rounded border border-danger-subtle fs-12 text-danger">
                                         <strong><i class="ti ti-notes me-1"></i>Alasan dari Admin:</strong> ${escapeHtml(msg.reason)}
@@ -591,13 +880,13 @@
                                 html += `</div>
                                     <div class="d-flex align-items-center gap-2 text-muted fs-xs mt-1 ${isSender ? 'justify-content-end' : 'justify-content-start'}">
                                         <span><i class="ti ti-clock me-0.5"></i> ${msg.time_formatted}</span>
-                                        <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-1 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" data-sender-name="${escapeHtml(senderName)}" data-msg-body="${escapeHtml(msg.body)}" title="Balas Pesan Ini">
+                                        <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-1 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" data-sender-name="${escapeHtml(senderName)}" data-msg-body="${escapeHtml(replyText)}" title="Balas Pesan Ini">
                                             <i class="ti ti-corner-up-left"></i> Balas
                                         </button>
                                     </div>
                                 </div>`;
                                 if (isSender) {
-                                    html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
+                                    html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0 chat-avatar-sender" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
                                 }
                                 html += `</div>`;
                             });
@@ -613,17 +902,8 @@
                             </div>`;
                         }
 
-                        if (window.SimpleBar) {
-                            const sb = window.SimpleBar.instances.get(chatContainer);
-                            if (sb) {
-                                const contentEl = sb.getContentElement();
-                                if (contentEl) contentEl.innerHTML = html;
-                            } else {
-                                chatContainer.innerHTML = html;
-                            }
-                        } else {
-                            chatContainer.innerHTML = html;
-                        }
+                        // Update isi kontainer obrolan secara presisi
+                        setChatContainerHtml(html);
 
                         lastMessageCount = newCount;
                         lastMessageId = newLastId;
@@ -642,10 +922,12 @@
                         }
                     }
                 })
-                .catch(function(err) {});
+                .catch(function(err) {
+                    console.error('Error loading conversation:', err);
+                });
             }
 
-            // Kirim Pesan via AJAX
+            // Kirim Pesan via AJAX (Mendukung Teks, Reply Quote, dan Lampiran Berkas/Foto)
             if (chatForm) {
                 chatForm.addEventListener('submit', function(e) {
                     e.preventDefault();
@@ -656,44 +938,68 @@
                     const replyParentInput = document.getElementById('reply-parent-id');
                     const parentId = (replyParentInput && replyParentInput.value.trim() !== '') ? parseInt(replyParentInput.value.trim(), 10) : null;
 
-                    if (!messageText || !receiverId) return;
+                    if ((!messageText && !selectedChatFile) || !receiverId) return;
 
-                    chatInput.value = '';
+                    const formData = new FormData();
+                    formData.append('receiver_id', receiverId);
+                    if (parentId) formData.append('parent_id', parentId);
+                    if (messageText) formData.append('body', messageText);
+                    if (selectedChatFile) formData.append('attachment', selectedChatFile);
+
+                    const sendBtn = document.getElementById('btn-send-message');
+                    if (sendBtn) {
+                        sendBtn.disabled = true;
+                        sendBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Mengirim...';
+                    }
 
                     fetch('/admin/profil-pengguna/messages/send', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': "{{ csrf_token() }}",
                             'X-Requested-With': 'XMLHttpRequest',
                             'Accept': 'application/json'
                         },
-                        body: JSON.stringify({
-                            receiver_id: receiverId,
-                            parent_id: parentId,
-                            body: messageText
-                        })
+                        body: formData
                     })
                     .then(function(res) { return res.json(); })
                     .then(function(data) {
                         if (data && data.success) {
+                            chatInput.value = '';
                             cancelReplyState();
+                            cancelAttachmentState();
 
                             // Append pesan baru langsung ke UI
                             appendSingleMessage(data.message);
                             scrollToBottom(true);
 
                             // Pindahkan kontak ke "Percakapan Aktif" dan update waktu & ringkasan pesan
-                            promoteContactToRecent(receiverId, messageText, 'Baru saja');
+                            const summaryText = data.message.body || (data.message.attachment_type === 'image' ? '📷 [Foto / Gambar]' : ('📎 [' + (data.message.attachment_name || 'Berkas') + ']'));
+                            promoteContactToRecent(receiverId, summaryText, 'Baru saja');
                             
                             // Sinkronkan unread counts & topbar
                             pollSidebarContacts();
                             if (typeof window.fetchMessagesSilently === 'function') {
                                 window.fetchMessagesSilently(false);
                             }
+                        } else if (data && data.message) {
+                            if (typeof window.showError === 'function') {
+                                window.showError(data.message, 'Gagal Mengirim');
+                            } else {
+                                alert(data.message);
+                            }
                         }
                     })
-                    .catch(function(err) {});
+                    .catch(function(err) {
+                        if (typeof window.showError === 'function') {
+                            window.showError('Terjadi kesalahan saat mengirim pesan atau berkas.', 'Kesalahan Jaringan');
+                        }
+                    })
+                    .finally(function() {
+                        if (sendBtn) {
+                            sendBtn.disabled = false;
+                            sendBtn.innerHTML = 'Kirim <i class="ti ti-send ms-1 fs-14"></i>';
+                        }
+                    });
                 });
             }
 
@@ -707,10 +1013,11 @@
                 const isSender = msg.is_sender !== false;
                 const avatar = isSender ? currentUserAvatar : (msg.sender_avatar || currentUserAvatar);
                 const senderName = isSender ? 'Anda' : (msg.sender_name || 'Pengguna');
+                const replyText = msg.body || (msg.attachment_name || 'Lampiran');
 
                 let html = `<div class="d-flex align-items-start gap-2 my-3 chat-item ${isSender ? 'text-end justify-content-end' : ''}">`;
                 if (!isSender) {
-                    html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
+                    html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0 chat-avatar-opponent" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
                 }
                 html += `<div style="max-width: 75%;">
                     <div class="chat-message py-2 px-3 ${isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border'} rounded shadow-sm text-start">`;
@@ -722,17 +1029,24 @@
                     </div>`;
                 }
 
-                html += `<div class="fs-13 lh-base text-wrap" style="word-break: break-word;">${escapeHtml(msg.body).replace(/\n/g, '<br>')}</div>
-                    </div>
+                if (msg.attachment_url) {
+                    html += renderAttachmentHtml(msg);
+                }
+
+                if (msg.body) {
+                    html += `<div class="fs-13 lh-base text-wrap" style="word-break: break-word;">${escapeHtml(msg.body).replace(/\n/g, '<br>')}</div>`;
+                }
+
+                html += `</div>
                     <div class="d-flex align-items-center gap-2 text-muted fs-xs mt-1 ${isSender ? 'justify-content-end' : 'justify-content-start'}">
                         <span><i class="ti ti-clock me-0.5"></i> ${msg.time_formatted}</span>
-                        <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-1 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" data-sender-name="${escapeHtml(senderName)}" data-msg-body="${escapeHtml(msg.body)}" title="Balas Pesan Ini">
+                        <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-1 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" data-sender-name="${escapeHtml(senderName)}" data-msg-body="${escapeHtml(replyText)}" title="Balas Pesan Ini">
                             <i class="ti ti-corner-up-left"></i> Balas
                         </button>
                     </div>
                 </div>`;
                 if (isSender) {
-                    html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
+                    html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0 chat-avatar-sender" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
                 }
                 html += `</div>`;
 
@@ -761,7 +1075,7 @@
                     .replace(/'/g, "&#039;");
             }
 
-            // Polling daftar kontak, pesan terakhir & badge angka unread di sidebar secara real-time
+            // Polling daftar kontak, pesan terakhir, badge unread, dan avatar terbaru secara real-time
             function pollSidebarContacts() {
                 if (document.hidden) return;
 
@@ -776,6 +1090,16 @@
                 .then(function(data) {
                     if (!data || !data.success || !Array.isArray(data.contacts)) return;
 
+                    // Real-time update avatar user aktif jika berubah
+                    if (data.current_user_avatar && data.current_user_avatar !== currentUserAvatar) {
+                        currentUserAvatar = data.current_user_avatar;
+                        document.querySelectorAll('#chat-container .chat-avatar-sender').forEach(function(img) {
+                            if (img.src !== data.current_user_avatar) {
+                                img.src = data.current_user_avatar;
+                            }
+                        });
+                    }
+
                     const listRecent = document.getElementById('list-recent-contacts');
                     const listOther = document.getElementById('list-other-contacts');
                     const secRecent = document.getElementById('section-recent-contacts');
@@ -787,6 +1111,15 @@
                         const contactEl = document.querySelector(`.btn-select-chat[data-user-id="${c.id}"]`);
                         if (!contactEl) return;
 
+                        // Real-time update avatar kontak di sidebar
+                        if (c.avatar) {
+                            contactEl.setAttribute('data-user-avatar', c.avatar);
+                            const contactImg = contactEl.querySelector('img');
+                            if (contactImg && contactImg.src !== c.avatar) {
+                                contactImg.src = c.avatar;
+                            }
+                        }
+
                         const lastMsgEl = contactEl.querySelector('.contact-last-msg');
                         const lastTimeEl = contactEl.querySelector('.contact-last-time');
                         const unreadBadge = contactEl.querySelector('.contact-unread-badge');
@@ -795,6 +1128,24 @@
                         if (lastTimeEl && c.last_message_time) lastTimeEl.textContent = c.last_message_time;
 
                         const isContactActive = String(activeUserId) === String(c.id);
+
+                        // Real-time update avatar header aktif, modal detail, dan chat bubbles lawan bicara
+                        if (isContactActive && c.avatar) {
+                            const activeHeaderAvatar = document.getElementById('active-chat-avatar');
+                            if (activeHeaderAvatar && activeHeaderAvatar.src !== c.avatar) {
+                                activeHeaderAvatar.src = c.avatar;
+                                activeHeaderAvatar.classList.remove('d-none');
+                            }
+                            const modalAvatar = document.getElementById('modal-user-avatar');
+                            if (modalAvatar && modalAvatar.src !== c.avatar) {
+                                modalAvatar.src = c.avatar;
+                            }
+                            document.querySelectorAll('#chat-container .chat-avatar-opponent').forEach(function(img) {
+                                if (img.src !== c.avatar) {
+                                    img.src = c.avatar;
+                                }
+                            });
+                        }
 
                         if (unreadBadge) {
                             if (isContactActive) {

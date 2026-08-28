@@ -42,7 +42,7 @@ class MessageController extends Controller
                 'email' => $u->email,
                 'avatar' => $u->avatar_url,
                 'role_name' => $u->role_name,
-                'last_message' => $lastMsg ? $lastMsg->body : 'Belum ada obrolan.',
+                'last_message' => $this->getDisplayLastMessage($lastMsg),
                 'last_message_time' => $lastMsg && $lastMsg->created_at ? $lastMsg->created_at->diffForHumans() : '',
                 'last_message_raw' => $lastMsg ? $lastMsg->created_at : null,
                 'unread_count' => $unreadCount,
@@ -124,7 +124,7 @@ class MessageController extends Controller
                 'email' => $u->email,
                 'avatar' => $u->avatar_url,
                 'role_name' => $u->role_name,
-                'last_message' => $lastMsg ? $lastMsg->body : 'Belum ada obrolan.',
+                'last_message' => $this->getDisplayLastMessage($lastMsg),
                 'last_message_time' => $lastMsg && $lastMsg->created_at ? $lastMsg->created_at->diffForHumans() : '',
                 'last_message_raw' => $lastMsg && $lastMsg->created_at ? $lastMsg->created_at->timestamp : 0,
                 'has_conversation' => $lastMsg !== null,
@@ -134,6 +134,7 @@ class MessageController extends Controller
 
         return response()->json([
             'success' => true,
+            'current_user_avatar' => $currentUser->avatar_url,
             'contacts' => $contacts,
             'recent_count' => $recentCount,
             'other_count' => $otherCount,
@@ -143,10 +144,10 @@ class MessageController extends Controller
     /**
      * Fetch conversation messages via AJAX for target user.
      */
-    public function getMessages(Request $request, int $userId): JsonResponse
+    public function getMessages(Request $request, $user): JsonResponse
     {
         $currentUser = Auth::user();
-        $targetUser = User::findOrFail($userId);
+        $targetUser = $user instanceof User ? $user : User::findOrFail((int) $user);
 
         $convId = Message::makeConversationId($currentUser->id, $targetUser->id);
 
@@ -171,11 +172,16 @@ class MessageController extends Controller
                     'reason' => $msg->reason,
                     'subject' => $msg->subject,
                     'message_type' => $msg->message_type,
+                    'attachment_url' => $msg->attachment_url,
+                    'attachment_name' => $msg->attachment_name,
+                    'attachment_type' => $msg->attachment_type,
+                    'attachment_size' => $msg->attachment_size,
+                    'attachment_size_formatted' => $msg->attachment_size ? $this->formatFileSize($msg->attachment_size) : null,
                     'parent_id' => $msg->parent_id,
                     'parent' => $msg->parent ? [
                         'id' => $msg->parent->id,
                         'sender_name' => $msg->parent->sender ? ($msg->parent->sender_id === $currentUser->id ? 'Anda' : $msg->parent->sender->name) : 'Pesan',
-                        'body' => $msg->parent->body,
+                        'body' => $msg->parent->body ?: ($msg->parent->attachment_name ?: 'Lampiran berkas'),
                     ] : null,
                     'time_formatted' => $msg->created_at ? $msg->created_at->format('H:i') : '',
                     'date_formatted' => $msg->created_at ? $msg->created_at->format('d M Y') : '',
@@ -200,17 +206,29 @@ class MessageController extends Controller
     }
 
     /**
-     * Send new direct chat message via AJAX.
+     * Send new direct chat message (with text, reply quote, image or document attachment) via AJAX.
      */
     public function send(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'receiver_id' => ['required', 'integer', 'exists:users,id'],
-            'body' => ['required', 'string', 'max:2000'],
+            'body' => ['nullable', 'string', 'max:2000'],
+            'attachment' => ['nullable', 'file', 'max:10240', 'mimes:jpg,jpeg,png,webp,gif,pdf,doc,docx,xls,xlsx,zip,rar,txt'],
         ], [
             'receiver_id.required' => 'Penerima pesan wajib ditentukan.',
-            'body.required' => 'Isi pesan tidak boleh kosong.',
+            'attachment.max' => 'Ukuran lampiran maksimal 10 MB.',
+            'attachment.mimes' => 'Format berkas harus berupa Gambar (JPG, PNG, WEBP, GIF) atau Dokumen (PDF, DOC, XLS, ZIP, TXT).',
         ]);
+
+        $bodyText = $request->filled('body') ? trim($validated['body']) : '';
+        $hasAttachment = $request->hasFile('attachment');
+
+        if ($bodyText === '' && !$hasAttachment) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pesan atau lampiran berkas wajib diisi.'
+            ], 422);
+        }
 
         $currentUser = Auth::user();
         $receiverId = (int) $validated['receiver_id'];
@@ -230,6 +248,29 @@ class MessageController extends Controller
             $parentMessage = Message::with('sender')->find($parentId);
         }
 
+        // Handle upload berkas/gambar jika ada
+        $attachmentUrl = null;
+        $attachmentName = null;
+        $attachmentType = null;
+        $attachmentSize = null;
+
+        if ($hasAttachment) {
+            $file = $request->file('attachment');
+            $originalName = $file->getClientOriginalName();
+            $ext = strtolower($file->getClientOriginalExtension());
+            $size = $file->getSize();
+
+            $isImage = in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif']);
+            $attachmentType = $isImage ? 'image' : 'file';
+
+            $filename = 'chat_' . time() . '_' . uniqid() . '.' . $ext;
+            $file->storeAs('chat_attachments', $filename, 'public');
+
+            $attachmentUrl = asset('storage/chat_attachments/' . $filename);
+            $attachmentName = $originalName;
+            $attachmentSize = $size;
+        }
+
         $convId = Message::makeConversationId($currentUser->id, $receiverId);
 
         $msg = Message::create([
@@ -237,7 +278,11 @@ class MessageController extends Controller
             'receiver_id' => $receiverId,
             'conversation_id' => $convId,
             'parent_id' => $parentMessage ? $parentMessage->id : null,
-            'body' => trim($validated['body']),
+            'body' => $bodyText,
+            'attachment_url' => $attachmentUrl,
+            'attachment_name' => $attachmentName,
+            'attachment_type' => $attachmentType,
+            'attachment_size' => $attachmentSize,
             'message_type' => 'direct',
             'is_read' => false,
         ]);
@@ -248,15 +293,61 @@ class MessageController extends Controller
                 'id' => $msg->id,
                 'is_sender' => true,
                 'body' => $msg->body,
+                'attachment_url' => $msg->attachment_url,
+                'attachment_name' => $msg->attachment_name,
+                'attachment_type' => $msg->attachment_type,
+                'attachment_size' => $msg->attachment_size,
+                'attachment_size_formatted' => $msg->attachment_size ? $this->formatFileSize($msg->attachment_size) : null,
                 'parent_id' => $msg->parent_id,
                 'parent' => $parentMessage ? [
                     'id' => $parentMessage->id,
                     'sender_name' => $parentMessage->sender ? ($parentMessage->sender_id === $currentUser->id ? 'Anda' : $parentMessage->sender->name) : 'Pesan',
-                    'body' => $parentMessage->body,
+                    'body' => $parentMessage->body ?: ($parentMessage->attachment_name ?: 'Lampiran berkas'),
                 ] : null,
                 'time_formatted' => $msg->created_at ? $msg->created_at->format('H:i') : 'Baru saja',
                 'sender_avatar' => $currentUser->avatar_url,
             ],
         ]);
+    }
+
+    /**
+     * Get clean display text for last message summary.
+     */
+    private function getDisplayLastMessage(?Message $msg): string
+    {
+        if (!$msg) {
+            return 'Belum ada obrolan.';
+        }
+
+        if (!empty($msg->body)) {
+            return $msg->body;
+        }
+
+        if ($msg->attachment_type === 'image' || in_array(strtolower(pathinfo($msg->attachment_url ?? '', PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'webp', 'gif'])) {
+            return '📷 [Foto / Gambar]';
+        }
+
+        if ($msg->attachment_name) {
+            return '📎 [' . $msg->attachment_name . ']';
+        }
+
+        if ($msg->attachment_url) {
+            return '📎 [Lampiran Berkas]';
+        }
+
+        return 'Belum ada obrolan.';
+    }
+
+    /**
+     * Format bytes to readable size string.
+     */
+    private function formatFileSize(int $bytes): string
+    {
+        if ($bytes >= 1048576) {
+            return round($bytes / 1048576, 1) . ' MB';
+        } elseif ($bytes >= 1024) {
+            return round($bytes / 1024, 1) . ' KB';
+        }
+        return $bytes . ' B';
     }
 }

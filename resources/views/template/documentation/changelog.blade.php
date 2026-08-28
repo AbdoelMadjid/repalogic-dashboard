@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.3.4 -->
+                        <!-- Version 2.3.5 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,39 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.3.4</h5>
+                                        <h5 class="fw-bold mb-0">v2.3.5</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.3.5</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-28 16:40 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Direct Chat Image &amp; File Attachment Upload, Pre-Upload Live File Preview Bar, Image Lightbox Modal &amp; Real-Time Avatar Synchronization</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Fitur Kirim Gambar &amp; Lampiran Berkas:</strong> Penambahan tombol lampiran berkas (<code>ti-paperclip</code>) di samping tombol emoji pada formulir chat, mendukung upload gambar (JPG, PNG, WEBP, GIF) dan dokumen (PDF, DOCX, XLSX, ZIP, TXT) hingga ukuran 10 MB.</li>
+                                    <li><strong class="text-dark">Bar Pratinjau Berkas Interaktif (Live Preview Bar):</strong> Penampilan thumbnail pratinjau instan untuk foto atau ikon format dokumen dengan indikator nama dan ukuran berkas sebelum pesan dikirim, lengkap dengan tombol pembatalan (<em>cancel attachment</em>).</li>
+                                    <li><strong class="text-dark">Modal Lightbox Gambar &amp; Kartu Berkas Obrolan:</strong> Kartu gambar responsif dengan efek zoom saat hover yang dapat diklik untuk pratinjau resolusi tinggi pada modal lightbox (<code>#chat-image-modal</code>) serta tombol unduh langsung, dan kartu dokumen rapi dengan tombol download instan.</li>
+                                    <li><strong class="text-dark">Sinkronisasi Avatar Real-Time:</strong> Pembaruan dinamis foto profil pengguna di sidebar kontak, header aktif obrolan, modal detail, dan seluruh balon pesan obrolan secara instan saat pengguna memperbarui avatar mereka tanpa reload halaman.</li>
+                                    <li><strong class="text-dark">Integrasi Skema &amp; Ringkasan Pesan:</strong> Migrasi kolom metadata lampiran (<code>attachment_name</code>, <code>attachment_type</code>, <code>attachment_size</code>) pada tabel <code>messages</code> dan pemformatan ringkasan pesan otomatis pada sidebar kontak (📷 <em>[Foto / Gambar]</em> atau 📎 <em>[Berkas]</em>).</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Chat File Attachment</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Image Upload &amp; Lightbox</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Live Attachment Preview</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Real-Time Avatar Sync</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Document Download Card</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.3.4 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xl text-muted opacity-50"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.3.4</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.3.4</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-28 16:11 WIB</span>
@@ -126,10 +157,10 @@
                                     <li><strong class="text-dark">Sinkronisasi Penuh Topbar &amp; Chat Hub:</strong> Integrasi pembersihan badge unread otomatis saat pesan dibuka atau dibalas, serta sinkronisasi instan ke ikon amplop notifikasi topbar via <code>window.fetchMessagesSilently()</code>.</li>
                                 </ul>
                                 <div class="d-flex flex-wrap gap-1">
-                                    <span class="badge bg-light text-dark border fs-xs">Sidebar Contact Polling</span>
-                                    <span class="badge bg-light text-dark border fs-xs">Auto Unread Badge</span>
-                                    <span class="badge bg-light text-dark border fs-xs">Live Contact Reorder</span>
-                                    <span class="badge bg-light text-dark border fs-xs">Message Hub Sync</span>
+                                    <span class="badge bg-light text-muted border fs-xs">Sidebar Contact Polling</span>
+                                    <span class="badge bg-light text-muted border fs-xs">Auto Unread Badge</span>
+                                    <span class="badge bg-light text-muted border fs-xs">Live Contact Reorder</span>
+                                    <span class="badge bg-light text-muted border fs-xs">Message Hub Sync</span>
                                 </div>
                             </div>
                         </div>

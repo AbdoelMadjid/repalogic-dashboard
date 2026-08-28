@@ -24,6 +24,9 @@ class Message extends Model
         'is_read',
         'read_at',
         'attachment_url',
+        'attachment_name',
+        'attachment_type',
+        'attachment_size',
     ];
 
     protected $casts = [
