@@ -51,7 +51,9 @@ Sistem percakapan menggunakan satu tabel inti `messages` dengan dukungan relasi 
 
 Untuk memastikan bahwa pesan antara User A dan User B selalu berada dalam satu wadah percakapan yang sama tanpa bergantung pada siapa yang memulai obrolan terlebih dahulu, ID percakapan digenerasi menggunakan formula:
 
-$$\text{conversation\_id} = \min(\text{user}_1, \text{user}_2) + \text{"\_"} + \max(\text{user}_1, \text{user}_2)$$
+```text
+conversation_id = min(user_1, user_2) . '_' . max(user_1, user_2)
+```
 
 ```php
 // app/Models/Message.php
