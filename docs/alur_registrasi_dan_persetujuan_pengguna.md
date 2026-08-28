@@ -2,20 +2,21 @@
 
 > **Status Sistem:** Production-Ready (Enterprise Grade)  
 > **Lokasi File Dokumentasi:** `docs/alur_registrasi_dan_persetujuan_pengguna.md`  
-> **Terakhir Diperbarui:** 27 Agustus 2026  
+> **Terakhir Diperbarui:** 28 Agustus 2026  
 
 ---
 
 ## 📋 1. Pendahuluan & Ringkasan Eksekutif
 
-Sistem **Registrasi Mandiri dengan Alur Persetujuan Administrator (*User Approval Workflow*)** dirancang untuk menjamin keamanan, integritas data, dan kontrol akses akun pada aplikasi dashboard. 
+Sistem **Registrasi Mandiri dengan Alur Persetujuan Administrator (*User Approval & Rejection Workflow*)** dirancang untuk menjamin keamanan, integritas data, dan kontrol akses akun pada aplikasi dashboard. 
 
 Berbeda dengan sistem registrasi konvensional yang langsung memberikan akses masuk setelah mendaftar, arsitektur ini menerapkan prinsip **Verifikasi Pra-Aktivasi (*Zero-Trust Onboarding*)**:
 1. Pengguna baru dapat mendaftarkan diri secara mandiri melalui halaman registrasi publik (`/register`).
 2. Akun yang baru terdaftar **tidak langsung aktif** dan ditandai dengan status `pending` (Menunggu Persetujuan).
 3. Notifikasi pendaftaran baru secara *real-time* dikirimkan ke **Pusat Notifikasi Topbar Administrator**.
-4. Superadmin atau Admin meninjau data pendaftar pada modul **Manajemen Pengguna** (`admin/manajemenpengguna/users`) dan menyetujui akun melalui tombol **"Setujui"**.
-5. Saat disetujui, akun otomatis diaktifkan (`active`) dan diberikan hak akses peran Spatie **`user`** sehingga pengguna dapat login dan mengakses fitur sesuai haknya.
+4. Superadmin atau Admin meninjau data pendaftar pada modul **Manajemen Pengguna** (`admin/manajemenpengguna/users`).
+5. **Jika Disetujui:** Admin mengeklik tombol **"Setujui"**. Akun otomatis diaktifkan (`active`) dan diberikan hak akses peran Spatie **`user`** sehingga pengguna dapat login.
+6. **Jika Ditolak:** Admin mengeklik tombol **"Tolak"** dan menginput alasan penolakan. Status akun diubah menjadi **`rejected`** (*Pendaftaran Ditolak*). Saat login, pengguna akan mendapatkan banner notifikasi lengkap berisi alasan penolakan dan diberikan kesempatan untuk mendaftar ulang.
 
 ---
 
@@ -33,22 +34,27 @@ flowchart TD
     F --> G[Redirect ke /login dengan Banner Info Pendaftaran Berhasil]
     
     G --> H{Pengguna Coba Login Sebelum Disetujui?}
-    H -- Ya --> I[Blokir Login & Tampilkan Banner Warning: Menunggu Persetujuan Admin]
+    H -- Ya (Status Pending) --> I[Blokir Login & Banner: Menunggu Persetujuan Admin]
     
     F --> J[NotificationService Mendeteksi Akun Pending]
     J --> K[Muncul Badge Merah & Item Notifikasi pada Lonceng Topbar Admin]
     
-    K --> L[Admin Klik Notifikasi Topbar]
-    L --> M[Buka admin/manajemenpengguna/users?search=NamaUser]
-    M --> N[Tabel Terfilter Menampilkan Baris Pengguna Pending]
+    K --> L[Admin Klik Notifikasi Topbar / Buka admin/manajemenpengguna/users]
+    L --> M{Admin Ambil Keputusan}
     
-    N --> O[Admin Klik Tombol Hijau 'Setujui']
-    O --> P[Konfirmasi SweetAlert2]
-    P --> Q[Update User: status='active', approved_at=now, approved_by=admin_id]
-    Q --> R[Otomatis Berikan Spatie Role 'user']
-    R --> S[Item Notifikasi Hilang dari Topbar Lonceng]
+    M -- Klik 'Setujui' --> N[Update User: status='active', approved_at=now, approved_by=admin_id]
+    N --> O[Otomatis Berikan Spatie Role 'user']
+    O --> P([Pengguna Sukses Login & Masuk ke Dashboard])
     
-    S --> T([Pengguna Sukses Login & Masuk ke Dashboard])
+    M -- Klik 'Tolak' --> Q[Buka Modal Alasan Penolakan]
+    Q --> R[Submit Alasan: status='rejected', rejection_reason=alasan]
+    R --> S[Status Berubah ke Badge Merah 'Pendaftaran Ditolak']
+    
+    S --> T{Pengguna Ditolak Coba Login?}
+    T -- Ya --> U[Blokir Login & Banner Merah: Ditolak + Alasan Admin]
+    U --> V[Pengguna Buka /register untuk Daftar Ulang]
+    V --> W[RegisteredUserController Otomatis Hapus Record Old Rejected User]
+    W --> B
 ```
 
 ---
@@ -56,13 +62,14 @@ flowchart TD
 ## 🗄️ 3. Arsitektur Database & Schema Metadata
 
 ### 3.1 Perubahan Schema pada Tabel `users`
-Implementasi status persetujuan didukung oleh migrasi database `2026_08_27_070000_add_status_and_approval_to_users_table.php`:
+Implementasi status persetujuan dan penolakan didukung oleh migrasi database `2026_08_27_070000_add_status_and_approval_to_users_table.php` dan `2026_08_28_000003_add_rejection_reason_to_users_table.php`:
 
 | Nama Kolom | Tipe Data | Nullable | Default | Keterangan |
 | :--- | :--- | :--- | :--- | :--- |
-| `status` | `VARCHAR(20)` | `NO` | `'active'` | Nilai: `'pending'`, `'active'`, `'inactive'` |
+| `status` | `VARCHAR(20)` | `NO` | `'active'` | Nilai: `'pending'`, `'active'`, `'inactive'`, `'rejected'` |
 | `approved_at` | `TIMESTAMP` | `YES` | `NULL` | Waktu persetujuan akun oleh administrator |
 | `approved_by` | `BIGINT (FK)` | `YES` | `NULL` | ID user administrator penanggung jawab yang menyetujui akun |
+| `rejection_reason` | `TEXT` | `YES` | `NULL` | Catatan alasan penolakan pendaftaran oleh administrator |
 
 ### 3.2 Spatie Role Baku untuk Pendaftaran Mandiri
 - **Nama Role:** `user`
@@ -158,6 +165,24 @@ public function approve($id)
     app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
     $this->notifySuccess("Akun pengguna \"{$user->name}\" berhasil disetujui & diaktifkan dengan Role User.");
+
+    return redirect()->route('admin.manajemenpengguna.users.index');
+}
+```
+
+- **Eksekusi Penolakan Pendaftaran Mandiri (`rejectRegistration`):**
+```php
+public function rejectRegistration(Request $request, $id)
+{
+    $user = User::findOrFail($id);
+    $reason = trim($request->input('reason', 'Pendaftaran tidak disetujui oleh Administrator.'));
+
+    $user->update([
+        'status' => 'rejected',
+        'rejection_reason' => $reason,
+    ]);
+
+    $this->notifySuccess("Pendaftaran pengguna \"{$user->name}\" berhasil ditolak.");
 
     return redirect()->route('admin.manajemenpengguna.users.index');
 }
