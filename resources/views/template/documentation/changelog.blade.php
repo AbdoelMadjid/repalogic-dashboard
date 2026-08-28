@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.3.2 -->
+                        <!-- Version 2.3.3 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,38 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.3.2</h5>
+                                        <h5 class="fw-bold mb-0">v2.3.3</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.3.3</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-28 15:58 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Interactive Chat Emoji &amp; Emotion Picker, Multi-Category Emotion Grid, Real-Time Keyword Search &amp; Cursor-Aware Insertion Engine</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Fitur Pemilih Emoji &amp; Emoticon Interaktif:</strong> Penambahan tombol pemilih emoji (<code>ti-mood-smile</code>) pada kolom input chat dengan panel popover modern lengkap dengan bar reaksi cepat (<em>Quick Reactions</em>: 👍, ❤️, 😂, 🔥, 🎉, 🙏, 😊, 👏, 🚀).</li>
+                                    <li><strong class="text-dark">Pengelompokan 5 Kategori Emoji &amp; Navigasi Tab:</strong> Struktur basis data emoji terorganisir yang mencakup kategori <em>Senyum &amp; Emosi</em> (😀), <em>Gestur &amp; Tangan</em> (👍), <em>Hati &amp; Cinta</em> (❤️), <em>Objek &amp; Simbol</em> (🎉), serta <em>Aktivitas</em> (☕).</li>
+                                    <li><strong class="text-dark">Pencarian Emoji Real-Time Multibahasa:</strong> Filter pencarian emoji instan berdasarkan kata kunci dwibahasa (misal: <em>senyum, cinta, api, jempol, sedih, kopi</em> maupun tag bahasa Inggris).</li>
+                                    <li><strong class="text-dark">Penyisipan Cerdas Berdasarkan Posisi Kursor (Cursor-Aware Insertion):</strong> Emoji disisipkan tepat pada posisi kursor pengguna saat ini tanpa menghilangkan fokus input atau menghapus draf teks yang sedang diketik.</li>
+                                    <li><strong class="text-dark">Interaksi UI &amp; Auto-Dismiss:</strong> Penutupan otomatis popup emoji saat klik di luar area maupun penekanan tombol <code>Escape</code>, serta aktivasi tombol otomatis saat memilih kontak lawan bicara.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Chat Emoji Picker</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Emotion Grid</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Real-Time Emoji Search</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Cursor-Aware Insertion</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.3.2 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xl text-muted opacity-50"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.3.2</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.3.2</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-28 15:02 WIB</span>
@@ -127,10 +157,10 @@
                                     <li><strong class="text-dark">Penanganan Safe Payload AJAX &amp; Topbar Hub:</strong> Sanitasi parameter <code>parent_id</code> secara aman di backend controller dan frontend AJAX untuk mencegah kegagalan validasi, serta sinkronisasi otomatis ke Message Dropdown di navbar.</li>
                                 </ul>
                                 <div class="d-flex flex-wrap gap-1">
-                                    <span class="badge bg-light text-dark border fs-xs">Message Reply</span>
-                                    <span class="badge bg-light text-dark border fs-xs">Quote Engine</span>
-                                    <span class="badge bg-light text-dark border fs-xs">Parent Message ID</span>
-                                    <span class="badge bg-light text-dark border fs-xs">AJAX Payload Fix</span>
+                                    <span class="badge bg-light text-muted border fs-xs">Message Reply</span>
+                                    <span class="badge bg-light text-muted border fs-xs">Quote Engine</span>
+                                    <span class="badge bg-light text-muted border fs-xs">Parent Message ID</span>
+                                    <span class="badge bg-light text-muted border fs-xs">AJAX Payload Fix</span>
                                 </div>
                             </div>
                         </div>

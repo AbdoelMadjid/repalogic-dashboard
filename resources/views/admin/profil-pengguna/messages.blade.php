@@ -175,7 +175,56 @@
             <!-- end card-body -->
 
             <!-- FOOTER: INPUT PESAN & TOMBOL KIRIM -->
-            <div class="card-footer bg-body-secondary border-top border-dashed py-2.5">
+            <div class="card-footer bg-body-secondary border-top border-dashed py-2.5 position-relative">
+                <!-- EMOJI PICKER POPOVER -->
+                <div id="emoji-picker-container" class="d-none position-absolute bg-white rounded-3 shadow-lg border p-2.5" style="bottom: 75px; right: 15px; width: 340px; max-width: calc(100vw - 30px); z-index: 1060; transition: all 0.2s ease-in-out;">
+                    <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2">
+                        <div class="d-flex align-items-center gap-1.5">
+                            <i class="ti ti-mood-smile text-primary fs-16"></i>
+                            <span class="fw-bold fs-13 text-dark">Sisipkan Emoji</span>
+                        </div>
+                        <button type="button" class="btn-close fs-10" id="btn-close-emoji" aria-label="Tutup"></button>
+                    </div>
+
+                    <!-- Quick Popular Reaction Bar -->
+                    <div class="d-flex align-items-center gap-1 justify-content-between mb-2 px-1.5 py-1 bg-light rounded border">
+                        <span class="fs-11 text-muted fw-semibold ps-1">Cepat:</span>
+                        <div class="d-flex gap-1 overflow-x-auto">
+                            <button type="button" class="btn btn-sm p-0 border-0 fs-16 btn-insert-emoji" data-emoji="👍" title="Jempol">👍</button>
+                            <button type="button" class="btn btn-sm p-0 border-0 fs-16 btn-insert-emoji" data-emoji="❤️" title="Hati">❤️</button>
+                            <button type="button" class="btn btn-sm p-0 border-0 fs-16 btn-insert-emoji" data-emoji="😂" title="Tertawa">😂</button>
+                            <button type="button" class="btn btn-sm p-0 border-0 fs-16 btn-insert-emoji" data-emoji="🔥" title="Api Semangat">🔥</button>
+                            <button type="button" class="btn btn-sm p-0 border-0 fs-16 btn-insert-emoji" data-emoji="🎉" title="Perayaan">🎉</button>
+                            <button type="button" class="btn btn-sm p-0 border-0 fs-16 btn-insert-emoji" data-emoji="🙏" title="Terima Kasih">🙏</button>
+                            <button type="button" class="btn btn-sm p-0 border-0 fs-16 btn-insert-emoji" data-emoji="😊" title="Senyum">😊</button>
+                            <button type="button" class="btn btn-sm p-0 border-0 fs-16 btn-insert-emoji" data-emoji="👏" title="Tepuk Tangan">👏</button>
+                            <button type="button" class="btn btn-sm p-0 border-0 fs-16 btn-insert-emoji" data-emoji="🚀" title="Roket">🚀</button>
+                        </div>
+                    </div>
+
+                    <!-- Category Tabs -->
+                    <div class="nav nav-pills nav-justified emoji-tabs mb-2 gap-1 bg-light p-1 rounded" id="emoji-category-tabs">
+                        <button type="button" class="nav-link py-1 px-1.5 fs-14 active btn-emoji-cat" data-category="smileys" title="Senyum & Emosi">😀</button>
+                        <button type="button" class="nav-link py-1 px-1.5 fs-14 btn-emoji-cat" data-category="gestures" title="Gestur & Tangan">👍</button>
+                        <button type="button" class="nav-link py-1 px-1.5 fs-14 btn-emoji-cat" data-category="hearts" title="Hati & Cinta">❤️</button>
+                        <button type="button" class="nav-link py-1 px-1.5 fs-14 btn-emoji-cat" data-category="objects" title="Objek & Simbol">🎉</button>
+                        <button type="button" class="nav-link py-1 px-1.5 fs-14 btn-emoji-cat" data-category="activities" title="Aktivitas & Lainnya">☕</button>
+                    </div>
+
+                    <!-- Search Input -->
+                    <div class="mb-2">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-white border-end-0 py-0 text-muted"><i class="ti ti-search fs-12"></i></span>
+                            <input type="text" id="emoji-search-input" class="form-control border-start-0 py-1 fs-12" placeholder="Cari emoji (misal: senang, api, love)..." autocomplete="off">
+                        </div>
+                    </div>
+
+                    <!-- Emoji Grid Container -->
+                    <div id="emoji-grid-container" class="emoji-grid" style="max-height: 180px; overflow-y: auto; display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; padding: 2px;">
+                        <!-- Rendered dynamically via JS -->
+                    </div>
+                </div>
+
                 <form id="form-send-chat" action="javascript:void(0);">
                     <input type="hidden" id="active-receiver-id" value="{{ $activeUser ? $activeUser->id : '' }}">
                     <input type="hidden" id="reply-parent-id" name="parent_id" value="">
@@ -191,12 +240,17 @@
                         <div class="fs-12 text-muted text-truncate ps-1" id="reply-preview-body"></div>
                     </div>
 
-                    <div class="d-flex gap-2 align-items-center">
-                        <div class="app-search flex-grow-1">
-                            <input type="text" id="chat-message-input" class="form-control py-2 bg-light-subtle border-light" placeholder="Ketik pesan Anda di sini..." autocomplete="off" {{ $activeUser ? '' : 'disabled' }} />
-                            <i class="ti ti-message app-search-icon text-muted"></i>
+                    <div class="d-flex gap-2 align-items-center position-relative">
+                        <div class="position-relative flex-grow-1 d-flex align-items-center">
+                            <div class="app-search flex-grow-1 position-relative">
+                                <input type="text" id="chat-message-input" class="form-control py-2 bg-light-subtle border-light pe-5" placeholder="Ketik pesan Anda di sini..." autocomplete="off" {{ $activeUser ? '' : 'disabled' }} />
+                                <i class="ti ti-message app-search-icon text-muted"></i>
+                            </div>
+                            <button type="button" id="btn-toggle-emoji" class="btn btn-sm btn-icon position-absolute end-0 me-2 text-muted hover-text-primary z-2" style="background: transparent; border: none; cursor: pointer;" title="Sisipkan Emoji / Emoticon" {{ $activeUser ? '' : 'disabled' }}>
+                                <i class="ti ti-mood-smile fs-18"></i>
+                            </button>
                         </div>
-                        <button type="submit" id="btn-send-message" class="btn btn-primary px-3 fw-semibold" {{ $activeUser ? '' : 'disabled' }}>
+                        <button type="submit" id="btn-send-message" class="btn btn-primary px-3 fw-semibold flex-shrink-0" {{ $activeUser ? '' : 'disabled' }}>
                             Kirim <i class="ti ti-send ms-1 fs-14"></i>
                         </button>
                     </div>
@@ -412,6 +466,7 @@
                 if (activeChatRole) activeChatRole.textContent = userRole;
                 if (chatInput) chatInput.disabled = false;
                 if (document.getElementById('btn-send-message')) document.getElementById('btn-send-message').disabled = false;
+                if (document.getElementById('btn-toggle-emoji')) document.getElementById('btn-toggle-emoji').disabled = false;
 
                 if (btnViewUserDetail) {
                     btnViewUserDetail.disabled = false;
@@ -701,6 +756,384 @@
                     loadConversation(activeUserId);
                 }
             }, 5000);
+
+            // ==========================================
+            // EMOJI / EMOTION PICKER & INSERTION ENGINE
+            // ==========================================
+            const emojiPickerContainer = document.getElementById('emoji-picker-container');
+            const btnToggleEmoji = document.getElementById('btn-toggle-emoji');
+            const btnCloseEmoji = document.getElementById('btn-close-emoji');
+            const emojiSearchInput = document.getElementById('emoji-search-input');
+            const emojiGridContainer = document.getElementById('emoji-grid-container');
+
+            const EMOJI_DATABASE = {
+                smileys: [
+                    { char: '😀', tags: 'senyum lebar gembira grinning happy smile' },
+                    { char: '😃', tags: 'senyum ceria bahagia smiley joy' },
+                    { char: '😄', tags: 'tertawa senang smile haha lol' },
+                    { char: '😁', tags: 'nyengir gembira grin teeth' },
+                    { char: '😆', tags: 'tertawa terbahak laughing ngakak' },
+                    { char: '😅', tags: 'senyum keringat lega sweat smile whew' },
+                    { char: '🤣', tags: 'tertawa guling rofl ngakak parah' },
+                    { char: '😂', tags: 'menangis tertawa joy ngakak nangis' },
+                    { char: '🙂', tags: 'senyum tipis ramah slightly smiling' },
+                    { char: '🙃', tags: 'senyum terbalik sarkas upside down' },
+                    { char: '😉', tags: 'kedip mata genit wink flirty' },
+                    { char: '😊', tags: 'tersipu malu manis blush warm' },
+                    { char: '😇', tags: 'malaikat suci baik angel innocent' },
+                    { char: '🥰', tags: 'penuh cinta sayang hearts lovely' },
+                    { char: '😍', tags: 'kagum suka cinta heart eyes love' },
+                    { char: '🤩', tags: 'terpukau bintang star struck amazing' },
+                    { char: '😘', tags: 'cium cinta blow kiss love' },
+                    { char: '😗', tags: 'cium biasa kissing cute' },
+                    { char: '😚', tags: 'cium mesra kissing closed eyes' },
+                    { char: '😋', tags: 'lezat enak sedap yum delicious' },
+                    { char: '😛', tags: 'melet lidah bercanda tongue' },
+                    { char: '😜', tags: 'melet kedip konyol wink tongue crazy' },
+                    { char: '🤪', tags: 'gila seru konyol zany goofy' },
+                    { char: '😝', tags: 'melet tertawa squint tongue funny' },
+                    { char: '🤗', tags: 'peluk hangat hugging friendly' },
+                    { char: '🤭', tags: 'menutup mulut kaget hand over mouth oops' },
+                    { char: '🤫', tags: 'diam rahasia sst shushing quiet secret' },
+                    { char: '🤔', tags: 'mikir berpikir ide thinking question' },
+                    { char: '🤐', tags: 'tutup mulut kunci zipper secret' },
+                    { char: '🤨', tags: 'curiga heran raised eyebrow skeptic' },
+                    { char: '😐', tags: 'netral datar neutral poker face' },
+                    { char: '😑', tags: 'tanpa ekspresi jengkel expressionless' },
+                    { char: '😶', tags: 'diam hening no mouth silent' },
+                    { char: '😏', tags: 'senyum sinis nakal smirk sly' },
+                    { char: '😒', tags: 'kesal tidak puas unamused annoyed' },
+                    { char: '🙄', tags: 'memutar mata bosan rolling eyes whatever' },
+                    { char: '😬', tags: 'meringis canggung grimace awkward' },
+                    { char: '🤥', tags: 'bohong pinokio lying liar' },
+                    { char: '😌', tags: 'lega tenang damai relieved peaceful' },
+                    { char: '😔', tags: 'sedih murung lesu pensive sad' },
+                    { char: '😪', tags: 'mengantuk lelah sleepy tired' },
+                    { char: '🤤', tags: 'ngiler mau sedap drooling want' },
+                    { char: '😴', tags: 'tidur zzz sleeping bed' },
+                    { char: '😷', tags: 'masker sakit flu mask hospital' },
+                    { char: '🤒', tags: 'demam panas sakit thermometer sick' },
+                    { char: '🤕', tags: 'terluka perban head bandage hurt' },
+                    { char: '🤢', tags: 'mual ingin muntah nauseated sick' },
+                    { char: '🤮', tags: 'muntah vomiting sick gross' },
+                    { char: '🤧', tags: 'bersin pilek sneezing cold flu' },
+                    { char: '🥵', tags: 'kepanasan gerah hot face summer' },
+                    { char: '🥶', tags: 'kedinginan beku cold face freezing' },
+                    { char: '🥴', tags: 'pusing teler woozy tipsy' },
+                    { char: '😵', tags: 'pusing pingsan dizzy knockout' },
+                    { char: '🤯', tags: 'pikiran meledak kaget exploding mindblown' },
+                    { char: '🤠', tags: 'koboi cowboy hat cool' },
+                    { char: '🥳', tags: 'pesta perayaan selamat partying celebrate' },
+                    { char: '😎', tags: 'keren kacamata gaya cool sunglass swag' },
+                    { char: '🤓', tags: 'kutu buku pintar kacamata nerd smart geek' },
+                    { char: '🧐', tags: 'mengamati teliti cek periksa monocle inspect' },
+                    { char: '😕', tags: 'bingung ragu confused puzzled' },
+                    { char: '😟', tags: 'cemas khawatir worried anxious' },
+                    { char: '🙁', tags: 'cemberut sedikit sedih frowning sad' },
+                    { char: '😮', tags: 'mulut terbuka kaget open mouth wow' },
+                    { char: '😯', tags: 'terperangah hushed surprised' },
+                    { char: '😲', tags: 'terkejut kaget astonished shocked' },
+                    { char: '😳', tags: 'malu kaget merah flushed shy' },
+                    { char: '🥺', tags: 'memohon sedih puppy eyes pleading please' },
+                    { char: '😦', tags: 'kaget kecewa frowning open mouth' },
+                    { char: '😧', tags: 'terpukul cemas anguished hurt' },
+                    { char: '😨', tags: 'takut kaget fearful scared' },
+                    { char: '😰', tags: 'keringat dingin anxious sweat panic' },
+                    { char: '😥', tags: 'sedih lega sad relieved whew' },
+                    { char: '😢', tags: 'menangis sedih air mata crying tear' },
+                    { char: '😭', tags: 'menangis tersedu kejer sob weeping loud' },
+                    { char: '😱', tags: 'berteriak takut jerit scream horror panic' },
+                    { char: '😖', tags: 'jengkel tersiksa confounded frustrated' },
+                    { char: '😣', tags: 'menahan sakit lelah persevering struggle' },
+                    { char: '😞', tags: 'kecewa pupus sedih disappointed sad' },
+                    { char: '😓', tags: 'putus asa letih downcast sweat' },
+                    { char: '😩', tags: 'lelah letih pasrah weary exhausted' },
+                    { char: '😫', tags: 'capek lelah sangat tired drained' },
+                    { char: '🥱', tags: 'menguap mengantuk yawning sleepy' },
+                    { char: '😤', tags: 'mendengus bertekad triumph steam furious' },
+                    { char: '😡', tags: 'marah murka merah pouting enraged angry' },
+                    { char: '😠', tags: 'marah kesal angry mad' },
+                    { char: '🤬', tags: 'memaki sensor marah cursing mad swearing' },
+                    { char: '😈', tags: 'iblis tersenyum jahat devil evil smile' },
+                    { char: '👿', tags: 'iblis marah devil angry evil' },
+                    { char: '💀', tags: 'tengkorak mati ngakak skull dead' },
+                    { char: '💩', tags: 'kotoran lucu poop crap funny' },
+                    { char: '🤡', tags: 'badut lelucon clown joke silly' },
+                    { char: '👻', tags: 'hantu bayangan ghost spooky boo' },
+                    { char: '👽', tags: 'alien luar angkasa ufo extraterrestrial' },
+                    { char: '🤖', tags: 'robot bot mesin ai artificial' }
+                ],
+                gestures: [
+                    { char: '👍', tags: 'jempol mantap setuju oke sip thumbs up ok' },
+                    { char: '👎', tags: 'jempol bawah tidak setuju jelek thumbs down bad' },
+                    { char: '👌', tags: 'oke sempurna pas mantap ok hand perfect' },
+                    { char: '🤌', tags: 'pinched fingers maksud apa gesture' },
+                    { char: '🤏', tags: 'sedikit kecil tipis pinching little bit' },
+                    { char: '✌️', tags: 'damai peace salam dua jari victory' },
+                    { char: '🤞', tags: 'semoga beruntung doa crossed fingers luck' },
+                    { char: '🫰', tags: 'saranghae love jari korea finger heart' },
+                    { char: '🤟', tags: 'aku cinta kamu metal gaul love you gesture' },
+                    { char: '🤘', tags: 'musik rock metal keren rock on horns' },
+                    { char: '🤙', tags: 'hubungi saya telepon santai call me hang loose' },
+                    { char: '👈', tags: 'tunjuk kiri pointing left direction' },
+                    { char: '👉', tags: 'tunjuk kanan ini pointing right here' },
+                    { char: '👆', tags: 'tunjuk atas perhatikan pointing up look' },
+                    { char: '👇', tags: 'tunjuk bawah cek ini pointing down check' },
+                    { char: '☝️', tags: 'nomor satu satu telunjuk index pointing up one' },
+                    { char: '🖐️', tags: 'lima tangan buka splayed fingers five' },
+                    { char: '✋', tags: 'angkat tangan berhenti stop raised hand wait' },
+                    { char: '🖖', tags: 'salam spock vulcan salute live long' },
+                    { char: '🤝', tags: 'jabat tangan salaman deal sepakat handshake partner' },
+                    { char: '👏', tags: 'tepuk tangan applause salut hebat clapping bravo' },
+                    { char: '🙌', tags: 'angkat tangan syukur hore raising hands celebrate' },
+                    { char: '🫶', tags: 'bentuk hati tangan cinta heart hands love' },
+                    { char: '🤲', tags: 'berdoa memohon syukur palms up together pray' },
+                    { char: '🙏', tags: 'terima kasih mohon maaf please thanks pray' },
+                    { char: '🤜', tags: 'kepalan tos fist bump right' },
+                    { char: '🤛', tags: 'kepalan tos bro fist bump left' },
+                    { char: '✊', tags: 'kepalan tangan semangat juang raised fist power' },
+                    { char: '👊', tags: 'tinju pukulan tos punch oncoming fist' },
+                    { char: '👋', tags: 'lambaian tangan halo dadah waving hand bye hi' },
+                    { char: '🫂', tags: 'pelukan erat hangat teman people hugging hug' },
+                    { char: '💋', tags: 'bekas ciuman bibir kiss mark lips' },
+                    { char: '💯', tags: 'seratus persen sempurna juara hundred points perfect' },
+                    { char: '🔥', tags: 'api semangat panas gacor jos fire lit hot' },
+                    { char: '✨', tags: 'kilauan bersinar baru estetik sparkles shine magic' },
+                    { char: '🌟', tags: 'bintang bersinar terang glowing star shining' },
+                    { char: '💥', tags: 'ledakan tabrakan boom collision blast' }
+                ],
+                hearts: [
+                    { char: '❤️', tags: 'hati merah cinta sayang love red heart' },
+                    { char: '🧡', tags: 'hati oranye hangat orange heart care' },
+                    { char: '💛', tags: 'hati kuning sahabat yellow heart friend' },
+                    { char: '💚', tags: 'hati hijau damai alam green heart nature' },
+                    { char: '💙', tags: 'hati biru tenang setia blue heart trust' },
+                    { char: '💜', tags: 'hati ungu elegan purple heart royal' },
+                    { char: '🖤', tags: 'hati hitam keren misteri black heart cool' },
+                    { char: '🤍', tags: 'hati putih suci tulus white heart pure' },
+                    { char: '🤎', tags: 'hati cokelat brown heart warm' },
+                    { char: '💔', tags: 'patah hati sedih putus broken heart sad' },
+                    { char: '❤️‍🔥', tags: 'hati membara gelora rindu heart on fire passion' },
+                    { char: '❤️‍🩹', tags: 'hati sembuh pulih mending heart healing' },
+                    { char: '❣️', tags: 'tanda seru hati heart exclamation love' },
+                    { char: '💕', tags: 'dua hati manis two hearts lovely' },
+                    { char: '💞', tags: 'hati berputar harmonis revolving hearts' },
+                    { char: '💓', tags: 'detak jantung berdebar beating heart heartbeat' },
+                    { char: '💗', tags: 'hati membesar kasih growing heart expand' },
+                    { char: '💖', tags: 'hati berkilau sparkling heart sparkle' },
+                    { char: '💘', tags: 'panah asmara cupid cinta heart with arrow' },
+                    { char: '💝', tags: 'kado cinta hadiah ribbon gift heart' },
+                    { char: '💟', tags: 'dekorasi hati heart decoration ornament' }
+                ],
+                objects: [
+                    { char: '🎉', tags: 'terompet pesta selamat perayaan party popper celebrate' },
+                    { char: '🎊', tags: 'konfeti bola pesta kemeriahan confetti ball' },
+                    { char: '🎁', tags: 'hadiah kado bingkisan kejutan gift wrapped present' },
+                    { char: '🏆', tags: 'piala juara pemenang nomor satu trophy champion winner' },
+                    { char: '🥇', tags: 'medali emas juara satu medal first place gold' },
+                    { char: '🎯', tags: 'sasaran target fokus tepat bullseye direct hit goal' },
+                    { char: '🚀', tags: 'roket meluncur cepat gas launch rocket fast' },
+                    { char: '💡', tags: 'lampu bohlam ide terang cemerlang light bulb idea smart' },
+                    { char: '📌', tags: 'pin paku semat penting tandai pushpin pin memo' },
+                    { char: '📍', tags: 'lokasi titik pin koordinat map marker pin location' },
+                    { char: '📝', tags: 'catatan tulis memo tugas agenda memo write note' },
+                    { char: '📅', tags: 'kalender tanggal jadwal rapat calendar date schedule' },
+                    { char: '🕒', tags: 'jam waktu pukul pengingat clock time watch' },
+                    { char: '💼', tags: 'tas kerja koper kantor bisnis briefcase work business' },
+                    { char: '💻', tags: 'laptop komputer kerja ngoding laptop computer tech' },
+                    { char: '📱', tags: 'handphone telepon seluler hp smartphone mobile phone' },
+                    { char: '🔒', tags: 'terkunci aman privasi rahasia locked secure privacy' },
+                    { char: '🔑', tags: 'kunci akses kata sandi solusi key password unlock' },
+                    { char: '✅', tags: 'centang hijau benar sukses selesai check mark ok done' },
+                    { char: '❌', tags: 'silang merah salah batal tolak cross mark error cancel' },
+                    { char: '⚠️', tags: 'peringatan awas hati-hati bahaya warning alert caution' },
+                    { char: '❓', tags: 'tanda tanya kenapa ada apa question mark why' },
+                    { char: '❗', tags: 'tanda seru penting perhatian exclamation mark important' },
+                    { char: '💬', tags: 'balon obrolan chat pesan bicara speech balloon chat message' },
+                    { char: '💭', tags: 'balon pikiran mikir impian thought balloon thinking' }
+                ],
+                activities: [
+                    { char: '☕', tags: 'kopi teh hangat istirahat santai coffee tea break relax' },
+                    { char: '🍕', tags: 'pizza makanan enak makan siang pizza food slice' },
+                    { char: '🍔', tags: 'hamburger burger fastfood makan hamburger food' },
+                    { char: '🍻', tags: 'bersulang cheers minum bersama beer toast drink' },
+                    { char: '🥂', tags: 'gelas anggur perayaan selamat cheers champagne toast' },
+                    { char: '🎂', tags: 'kue ulang tahun ultah selamat birthday cake sweet' },
+                    { char: '🍰', tags: 'kue manis dessert lezat shortcake cake pastry' },
+                    { char: '🍦', tags: 'es krim segar manis ice cream sweet cold' },
+                    { char: '🍿', tags: 'popcorn nonton bioskop film movie snack' },
+                    { char: '🚗', tags: 'mobil jalan perjalanan otw car auto drive travel' },
+                    { char: '✈️', tags: 'pesawat terbang liburan perjalanan tugas airplane flight holiday' },
+                    { char: '🏖️', tags: 'pantai liburan santai holiday healing beach summer vacation' },
+                    { char: '🎵', tags: 'musik lagu nada santai music note song melody' },
+                    { char: '🎮', tags: 'video game main permainan seru gamepad gaming play' },
+                    { char: '⚽', tags: 'sepak bola olahraga tanding bola soccer football ball' },
+                    { char: '🏀', tags: 'basket olahraga tim basketball ball sports' }
+                ]
+            };
+
+            let currentEmojiCategory = 'smileys';
+
+            function renderEmojiGrid(category = 'smileys', filterQuery = '') {
+                if (!emojiGridContainer) return;
+
+                let list = [];
+                const query = filterQuery.toLowerCase().trim();
+
+                if (query !== '') {
+                    // Filter pencarian di semua kategori emoji
+                    Object.keys(EMOJI_DATABASE).forEach(function(cat) {
+                        EMOJI_DATABASE[cat].forEach(function(item) {
+                            if (item.tags.includes(query) || item.char.includes(query)) {
+                                if (!list.some(function(i) { return i.char === item.char; })) {
+                                    list.push(item);
+                                }
+                            }
+                        });
+                    });
+                } else {
+                    list = EMOJI_DATABASE[category] || [];
+                }
+
+                if (list.length === 0) {
+                    emojiGridContainer.innerHTML = `<div class="col-12 text-center py-3 text-muted fs-12" style="grid-column: 1 / -1;">
+                        <i class="ti ti-mood-empty fs-18 d-block mb-1"></i>Emoji tidak ditemukan
+                    </div>`;
+                    return;
+                }
+
+                let html = '';
+                list.forEach(function(item) {
+                    html += `<button type="button" class="emoji-btn btn-insert-emoji" data-emoji="${item.char}" title="${item.char}">${item.char}</button>`;
+                });
+
+                emojiGridContainer.innerHTML = html;
+            }
+
+            // Inisialisasi awal render grid emoji
+            renderEmojiGrid(currentEmojiCategory);
+
+            // Toggle Popup Emoji Picker
+            if (btnToggleEmoji && emojiPickerContainer) {
+                btnToggleEmoji.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const isHidden = emojiPickerContainer.classList.contains('d-none');
+                    if (isHidden) {
+                        emojiPickerContainer.classList.remove('d-none');
+                        if (emojiSearchInput) {
+                            emojiSearchInput.value = '';
+                            setTimeout(function() { emojiSearchInput.focus(); }, 100);
+                        }
+                        renderEmojiGrid(currentEmojiCategory);
+                    } else {
+                        emojiPickerContainer.classList.add('d-none');
+                    }
+                });
+            }
+
+            // Close Popup Emoji
+            if (btnCloseEmoji && emojiPickerContainer) {
+                btnCloseEmoji.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    emojiPickerContainer.classList.add('d-none');
+                });
+            }
+
+            // Tab Kategori Emoji
+            document.querySelectorAll('#emoji-category-tabs .btn-emoji-cat').forEach(function(tabBtn) {
+                tabBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelectorAll('#emoji-category-tabs .btn-emoji-cat').forEach(function(b) { b.classList.remove('active'); });
+                    tabBtn.classList.add('active');
+
+                    const category = tabBtn.getAttribute('data-category');
+                    currentEmojiCategory = category;
+                    if (emojiSearchInput) emojiSearchInput.value = '';
+                    renderEmojiGrid(category);
+                });
+            });
+
+            // Pencarian Emoji Real-Time
+            if (emojiSearchInput) {
+                emojiSearchInput.addEventListener('keyup', function(e) {
+                    const q = e.target.value;
+                    renderEmojiGrid(currentEmojiCategory, q);
+                });
+            }
+
+            // Event Delegation Sisipkan Emoji ke Kolom Input (Rule 2 Compliance)
+            document.addEventListener('click', function(e) {
+                const btnEmoji = e.target.closest('.btn-insert-emoji');
+                if (!btnEmoji) return;
+                e.preventDefault();
+
+                const emoji = btnEmoji.getAttribute('data-emoji');
+                if (!emoji || !chatInput) return;
+
+                // Sisipkan emoji pada posisi kursor saat ini
+                const startPos = chatInput.selectionStart || 0;
+                const endPos = chatInput.selectionEnd || 0;
+                const textBefore = chatInput.value.substring(0, startPos);
+                const textAfter = chatInput.value.substring(endPos, chatInput.value.length);
+
+                chatInput.value = textBefore + emoji + textAfter;
+                const newPos = startPos + emoji.length;
+                chatInput.setSelectionRange(newPos, newPos);
+                chatInput.focus();
+            });
+
+            // Tutup Emoji Picker jika mengklik di luar area
+            document.addEventListener('click', function(e) {
+                if (!emojiPickerContainer || emojiPickerContainer.classList.contains('d-none')) return;
+                if (!emojiPickerContainer.contains(e.target) && !btnToggleEmoji.contains(e.target)) {
+                    emojiPickerContainer.classList.add('d-none');
+                }
+            });
+
+            // Tutup Emoji Picker saat tombol ESC ditekan
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && emojiPickerContainer && !emojiPickerContainer.classList.contains('d-none')) {
+                    emojiPickerContainer.classList.add('d-none');
+                }
+            });
         });
     </script>
+
+    <style>
+        .emoji-btn {
+            font-size: 1.3rem;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: transform 0.12s ease, background-color 0.12s ease;
+            user-select: none;
+        }
+        .emoji-btn:hover {
+            background-color: #f1f5f9;
+            transform: scale(1.25);
+            z-index: 2;
+        }
+        .emoji-btn:active {
+            transform: scale(0.92);
+        }
+        .emoji-tabs .nav-link {
+            color: #64748b;
+            border-radius: 6px;
+            transition: all 0.15s ease;
+        }
+        .emoji-tabs .nav-link.active {
+            background-color: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            font-weight: bold;
+        }
+    </style>
 @endsection
