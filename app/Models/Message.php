@@ -16,6 +16,7 @@ class Message extends Model
         'sender_id',
         'receiver_id',
         'conversation_id',
+        'parent_id',
         'subject',
         'body',
         'reason',
@@ -38,6 +39,11 @@ class Message extends Model
     public function receiver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'receiver_id');
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Message::class, 'parent_id');
     }
 
     public function scopeForReceiver($query, int $userId)

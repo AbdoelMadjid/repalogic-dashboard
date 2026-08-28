@@ -70,7 +70,8 @@ class MessageController extends Controller
         $messages = collect();
         if ($activeUser) {
             $convId = Message::makeConversationId($currentUser->id, $activeUser->id);
-            $messages = Message::where('conversation_id', $convId)
+            $messages = Message::with(['sender', 'parent.sender'])
+                ->where('conversation_id', $convId)
                 ->orderBy('created_at', 'asc')
                 ->get();
 
@@ -106,7 +107,8 @@ class MessageController extends Controller
                 'read_at' => now(),
             ]);
 
-        $messages = Message::where('conversation_id', $convId)
+        $messages = Message::with(['sender', 'parent.sender'])
+            ->where('conversation_id', $convId)
             ->orderBy('created_at', 'asc')
             ->get()
             ->map(function ($msg) use ($currentUser) {
@@ -117,6 +119,12 @@ class MessageController extends Controller
                     'reason' => $msg->reason,
                     'subject' => $msg->subject,
                     'message_type' => $msg->message_type,
+                    'parent_id' => $msg->parent_id,
+                    'parent' => $msg->parent ? [
+                        'id' => $msg->parent->id,
+                        'sender_name' => $msg->parent->sender ? ($msg->parent->sender_id === $currentUser->id ? 'Anda' : $msg->parent->sender->name) : 'Pesan',
+                        'body' => $msg->parent->body,
+                    ] : null,
                     'time_formatted' => $msg->created_at ? $msg->created_at->format('H:i') : '',
                     'date_formatted' => $msg->created_at ? $msg->created_at->format('d M Y') : '',
                     'sender_name' => $msg->sender ? $msg->sender->name : 'Sistem',
@@ -154,9 +162,20 @@ class MessageController extends Controller
 
         $currentUser = Auth::user();
         $receiverId = (int) $validated['receiver_id'];
+        
+        $parentId = null;
+        if ($request->filled('parent_id') && is_numeric($request->input('parent_id'))) {
+            $parentId = (int) $request->input('parent_id');
+            $request->validate(['parent_id' => 'exists:messages,id']);
+        }
 
         if ($receiverId === $currentUser->id) {
             return response()->json(['success' => false, 'message' => 'Tidak dapat mengirim pesan ke diri sendiri.'], 422);
+        }
+
+        $parentMessage = null;
+        if ($parentId) {
+            $parentMessage = Message::with('sender')->find($parentId);
         }
 
         $convId = Message::makeConversationId($currentUser->id, $receiverId);
@@ -165,6 +184,7 @@ class MessageController extends Controller
             'sender_id' => $currentUser->id,
             'receiver_id' => $receiverId,
             'conversation_id' => $convId,
+            'parent_id' => $parentMessage ? $parentMessage->id : null,
             'body' => trim($validated['body']),
             'message_type' => 'direct',
             'is_read' => false,
@@ -176,6 +196,12 @@ class MessageController extends Controller
                 'id' => $msg->id,
                 'is_sender' => true,
                 'body' => $msg->body,
+                'parent_id' => $msg->parent_id,
+                'parent' => $parentMessage ? [
+                    'id' => $parentMessage->id,
+                    'sender_name' => $parentMessage->sender ? ($parentMessage->sender_id === $currentUser->id ? 'Anda' : $parentMessage->sender->name) : 'Pesan',
+                    'body' => $parentMessage->body,
+                ] : null,
                 'time_formatted' => $msg->created_at ? $msg->created_at->format('H:i') : 'Baru saja',
                 'sender_avatar' => $currentUser->avatar_url,
             ],

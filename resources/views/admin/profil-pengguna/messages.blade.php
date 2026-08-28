@@ -119,6 +119,7 @@
                         @php
                             $isSender = $msg->sender_id === auth()->id();
                             $msgAvatar = $isSender ? auth()->user()->avatar_url : ($msg->sender ? $msg->sender->avatar_url : asset('assets/images/users/default-avatar.svg'));
+                            $senderName = $isSender ? 'Anda' : ($msg->sender ? $msg->sender->name : 'Pengguna');
                         @endphp
                         <div class="d-flex align-items-start gap-2 my-3 chat-item {{ $isSender ? 'text-end justify-content-end' : '' }}">
                             @if (!$isSender)
@@ -126,6 +127,12 @@
                             @endif
                             <div style="max-width: 75%;">
                                 <div class="chat-message py-2 px-3 {{ $isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border' }} rounded shadow-sm text-start">
+                                    @if ($msg->parent)
+                                        <div class="p-2 mb-2 bg-white bg-opacity-75 rounded border-start border-3 border-primary text-start fs-12 shadow-sm">
+                                            <strong class="d-block text-primary fs-11 mb-0.5"><i class="ti ti-corner-up-left me-1"></i>{{ $msg->parent->sender ? $msg->parent->sender->name : 'Pesan' }}</strong>
+                                            <div class="text-muted text-truncate fs-12">{{ $msg->parent->body }}</div>
+                                        </div>
+                                    @endif
                                     @if ($msg->subject && $msg->subject !== 'Pesan Masuk')
                                         <strong class="d-block text-primary fs-12 mb-1"><i class="ti ti-bell me-1"></i>{{ $msg->subject }}</strong>
                                     @endif
@@ -136,9 +143,11 @@
                                         </div>
                                     @endif
                                 </div>
-                                <div class="text-muted fs-xs mt-1 {{ $isSender ? 'text-end' : 'text-start' }}">
-                                    <i class="ti ti-clock me-0.5"></i>
-                                    {{ $msg->created_at ? $msg->created_at->format('H:i') : '' }}
+                                <div class="d-flex align-items-center gap-2 text-muted fs-xs mt-1 {{ $isSender ? 'justify-content-end' : 'justify-content-start' }}">
+                                    <span><i class="ti ti-clock me-0.5"></i> {{ $msg->created_at ? $msg->created_at->format('H:i') : '' }}</span>
+                                    <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-1 opacity-75 opacity-100-hover" data-msg-id="{{ $msg->id }}" data-sender-name="{{ $senderName }}" data-msg-body="{{ e($msg->body) }}" title="Balas Pesan Ini">
+                                        <i class="ti ti-corner-up-left"></i> Balas
+                                    </button>
                                 </div>
                             </div>
                             @if ($isSender)
@@ -169,6 +178,19 @@
             <div class="card-footer bg-body-secondary border-top border-dashed py-2.5">
                 <form id="form-send-chat" action="javascript:void(0);">
                     <input type="hidden" id="active-receiver-id" value="{{ $activeUser ? $activeUser->id : '' }}">
+                    <input type="hidden" id="reply-parent-id" name="parent_id" value="">
+
+                    <!-- PREVIEW BOX BALASAN PESAN -->
+                    <div id="reply-preview-container" class="d-none bg-white p-2.5 mb-2 rounded border-start border-3 border-primary shadow-sm position-relative">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fs-12 fw-bold text-primary d-flex align-items-center gap-1">
+                                <i class="ti ti-corner-up-left fs-14"></i> Membalas ke <span id="reply-preview-name" class="fw-semibold text-dark"></span>
+                            </span>
+                            <button type="button" class="btn-close fs-10" id="btn-cancel-reply" aria-label="Batal Balas"></button>
+                        </div>
+                        <div class="fs-12 text-muted text-truncate ps-1" id="reply-preview-body"></div>
+                    </div>
+
                     <div class="d-flex gap-2 align-items-center">
                         <div class="app-search flex-grow-1">
                             <input type="text" id="chat-message-input" class="form-control py-2 bg-light-subtle border-light" placeholder="Ketik pesan Anda di sini..." autocomplete="off" {{ $activeUser ? '' : 'disabled' }} />
@@ -395,9 +417,51 @@
                     btnViewUserDetail.disabled = false;
                 }
 
+                // Reset state balasan pesan saat ganti kontak
+                cancelReplyState();
+
                 // Load percakapan via AJAX
                 loadConversation(userId, false);
             });
+
+            // Event Delegation Tombol Balas Pesan (Rule 2 Compliance)
+            document.addEventListener('click', function(e) {
+                const btnReply = e.target.closest('.btn-reply-msg');
+                if (!btnReply) return;
+                e.preventDefault();
+
+                const msgId = btnReply.getAttribute('data-msg-id');
+                const senderName = btnReply.getAttribute('data-sender-name');
+                const msgBody = btnReply.getAttribute('data-msg-body');
+
+                const replyContainer = document.getElementById('reply-preview-container');
+                const replyName = document.getElementById('reply-preview-name');
+                const replyBody = document.getElementById('reply-preview-body');
+                const replyParentInput = document.getElementById('reply-parent-id');
+
+                if (replyContainer && replyParentInput) {
+                    replyParentInput.value = msgId;
+                    if (replyName) replyName.textContent = senderName;
+                    if (replyBody) replyBody.textContent = msgBody;
+                    replyContainer.classList.remove('d-none');
+                    if (chatInput) chatInput.focus();
+                }
+            });
+
+            const btnCancelReply = document.getElementById('btn-cancel-reply');
+            if (btnCancelReply) {
+                btnCancelReply.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    cancelReplyState();
+                });
+            }
+
+            function cancelReplyState() {
+                const replyContainer = document.getElementById('reply-preview-container');
+                const replyParentInput = document.getElementById('reply-parent-id');
+                if (replyParentInput) replyParentInput.value = '';
+                if (replyContainer) replyContainer.classList.add('d-none');
+            }
 
             // Load Percakapan via AJAX
             function loadConversation(userId, isPolling = false) {
@@ -444,6 +508,7 @@
                             messages.forEach(function(msg) {
                                 const isSender = msg.is_sender;
                                 const avatar = isSender ? currentUserAvatar : msg.sender_avatar;
+                                const senderName = isSender ? 'Anda' : (msg.sender_name || 'Pengguna');
 
                                 html += `<div class="d-flex align-items-start gap-2 my-3 chat-item ${isSender ? 'text-end justify-content-end' : ''}">`;
                                 if (!isSender) {
@@ -451,8 +516,16 @@
                                 }
                                 html += `<div style="max-width: 75%;">
                                     <div class="chat-message py-2 px-3 ${isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border'} rounded shadow-sm text-start">`;
+                                
+                                if (msg.parent) {
+                                    html += `<div class="p-2 mb-2 bg-white bg-opacity-75 rounded border-start border-3 border-primary text-start fs-12 shadow-sm">
+                                        <strong class="d-block text-primary fs-11 mb-0.5"><i class="ti ti-corner-up-left me-1"></i>${escapeHtml(msg.parent.sender_name || 'Pesan')}</strong>
+                                        <div class="text-muted text-truncate fs-12">${escapeHtml(msg.parent.body || '')}</div>
+                                    </div>`;
+                                }
+
                                 if (msg.subject && msg.subject !== 'Pesan Masuk') {
-                                    html += `<strong class="d-block text-primary fs-12 mb-1"><i class="ti ti-bell me-1"></i>${msg.subject}</strong>`;
+                                    html += `<strong class="d-block text-primary fs-12 mb-1"><i class="ti ti-bell me-1"></i>${escapeHtml(msg.subject)}</strong>`;
                                 }
                                 html += `<div class="fs-13 lh-base text-wrap" style="word-break: break-word;">${escapeHtml(msg.body).replace(/\n/g, '<br>')}</div>`;
                                 if (msg.reason) {
@@ -461,8 +534,11 @@
                                     </div>`;
                                 }
                                 html += `</div>
-                                    <div class="text-muted fs-xs mt-1 ${isSender ? 'text-end' : 'text-start'}">
-                                        <i class="ti ti-clock me-0.5"></i> ${msg.time_formatted}
+                                    <div class="d-flex align-items-center gap-2 text-muted fs-xs mt-1 ${isSender ? 'justify-content-end' : 'justify-content-start'}">
+                                        <span><i class="ti ti-clock me-0.5"></i> ${msg.time_formatted}</span>
+                                        <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-1 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" data-sender-name="${escapeHtml(senderName)}" data-msg-body="${escapeHtml(msg.body)}" title="Balas Pesan Ini">
+                                            <i class="ti ti-corner-up-left"></i> Balas
+                                        </button>
                                     </div>
                                 </div>`;
                                 if (isSender) {
@@ -517,6 +593,8 @@
 
                     const messageText = chatInput.value.trim();
                     const receiverId = activeReceiverInput ? activeReceiverInput.value : '';
+                    const replyParentInput = document.getElementById('reply-parent-id');
+                    const parentId = (replyParentInput && replyParentInput.value.trim() !== '') ? parseInt(replyParentInput.value.trim(), 10) : null;
 
                     if (!messageText || !receiverId) return;
 
@@ -532,12 +610,15 @@
                         },
                         body: JSON.stringify({
                             receiver_id: receiverId,
+                            parent_id: parentId,
                             body: messageText
                         })
                     })
                     .then(function(res) { return res.json(); })
                     .then(function(data) {
                         if (data && data.success) {
+                            cancelReplyState();
+
                             // Append pesan baru langsung ke UI
                             appendSingleMessage(data.message);
                             scrollToBottom(true);
@@ -557,17 +638,37 @@
                 const emptyPlaceholder = chatContainer.querySelector('#empty-chat-placeholder');
                 if (emptyPlaceholder) emptyPlaceholder.remove();
 
-                const html = `<div class="d-flex align-items-start gap-2 my-3 chat-item text-end justify-content-end">
-                    <div style="max-width: 75%;">
-                        <div class="chat-message py-2 px-3 bg-primary-subtle text-dark rounded shadow-sm text-start">
-                            <div class="fs-13 lh-base text-wrap" style="word-break: break-word;">${escapeHtml(msg.body).replace(/\n/g, '<br>')}</div>
-                        </div>
-                        <div class="text-muted fs-xs mt-1 text-end">
-                            <i class="ti ti-clock me-0.5"></i> ${msg.time_formatted}
-                        </div>
+                const isSender = msg.is_sender !== false;
+                const avatar = isSender ? currentUserAvatar : (msg.sender_avatar || currentUserAvatar);
+                const senderName = isSender ? 'Anda' : (msg.sender_name || 'Pengguna');
+
+                let html = `<div class="d-flex align-items-start gap-2 my-3 chat-item ${isSender ? 'text-end justify-content-end' : ''}">`;
+                if (!isSender) {
+                    html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
+                }
+                html += `<div style="max-width: 75%;">
+                    <div class="chat-message py-2 px-3 ${isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border'} rounded shadow-sm text-start">`;
+                
+                if (msg.parent) {
+                    html += `<div class="p-2 mb-2 bg-white bg-opacity-75 rounded border-start border-3 border-primary text-start fs-12 shadow-sm">
+                        <strong class="d-block text-primary fs-11 mb-0.5"><i class="ti ti-corner-up-left me-1"></i>${escapeHtml(msg.parent.sender_name || 'Pesan')}</strong>
+                        <div class="text-muted text-truncate fs-12">${escapeHtml(msg.parent.body || '')}</div>
+                    </div>`;
+                }
+
+                html += `<div class="fs-13 lh-base text-wrap" style="word-break: break-word;">${escapeHtml(msg.body).replace(/\n/g, '<br>')}</div>
                     </div>
-                    <img src="${msg.sender_avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />
+                    <div class="d-flex align-items-center gap-2 text-muted fs-xs mt-1 ${isSender ? 'justify-content-end' : 'justify-content-start'}">
+                        <span><i class="ti ti-clock me-0.5"></i> ${msg.time_formatted}</span>
+                        <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-1 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" data-sender-name="${escapeHtml(senderName)}" data-msg-body="${escapeHtml(msg.body)}" title="Balas Pesan Ini">
+                            <i class="ti ti-corner-up-left"></i> Balas
+                        </button>
+                    </div>
                 </div>`;
+                if (isSender) {
+                    html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
+                }
+                html += `</div>`;
 
                 if (window.SimpleBar) {
                     const sb = window.SimpleBar.instances.get(chatContainer);

@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.3.1 -->
+                        <!-- Version 2.3.2 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,37 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.3.1</h5>
+                                        <h5 class="fw-bold mb-0">v2.3.2</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.3.2</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-28 15:02 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Interactive Message Reply/Quote Engine, Parent Message ID DB Schema, Dynamic Quoted Box &amp; Auto Sync Message Hub</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Fitur Balas / Reply Pesan Interaktif:</strong> Penambahan tombol <code>Balas</code> pada setiap bubble pesan pengguna (baik pesan pengirim maupun lawan obrolan) serta bar pratinjau balasan di atas kolom input dengan tombol pembatalan instan.</li>
+                                    <li><strong class="text-dark">Skema Database &amp; Model Relasi:</strong> Penambahan kolom <code>parent_id</code> (foreign key nullable ke <code>messages.id</code>) pada tabel <code>messages</code> serta relasi Eloquent <code>parent()</code>.</li>
+                                    <li><strong class="text-dark">Kotak Kutipan Dinamis (Quote Box):</strong> Tampilan balasan pesan di dalam bubble obrolan yang menampilkan nama pengirim asal secara proporsional (misal label <code>Anda</code> pada pengirim atau Nama Lawan Chat) serta potongan teks pesan yang dibalas.</li>
+                                    <li><strong class="text-dark">Penanganan Safe Payload AJAX &amp; Topbar Hub:</strong> Sanitasi parameter <code>parent_id</code> secara aman di backend controller dan frontend AJAX untuk mencegah kegagalan validasi, serta sinkronisasi otomatis ke Message Dropdown di navbar.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Message Reply</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Quote Engine</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Parent Message ID</span>
+                                    <span class="badge bg-light text-dark border fs-xs">AJAX Payload Fix</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.3.1 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xl text-muted opacity-50"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.3.1</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.3.1</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-28 14:55 WIB</span>

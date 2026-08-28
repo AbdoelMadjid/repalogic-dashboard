@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v2.3.1`  
-> **Terakhir Diperbarui:** 28 Agustus 2026 14:55 WIB  
+> **Versi Terbaru:** `v2.3.2`  
+> **Terakhir Diperbarui:** 28 Agustus 2026 15:02 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v2.3.2`** | `2026-08-28 15:02 WIB` | Interactive Message Reply/Quote Engine, Parent Message ID DB Schema, Dynamic Quoted Box & Auto Sync Message Hub |
 | **`v2.3.1`** | `2026-08-28 14:55 WIB` | Categorized Contact Sidebar, Grouped Topbar Messages Dropdown, Smart Scroll Preservation & Universal Profile Detail Modal |
 | **`v2.3.0`** | `2026-08-28 11:05 WIB` | Dedicated Messages Table, UserFactory 10 Dummy Users Seeder, Real-Time Messages Polling & Registration Rejection Fixes |
 | **`v2.2.0`** | `2026-08-27 23:28 WIB` | User Login Tracking Engine, 24-Hour Point Accumulation, Geolocation Coordinates Capture & Data Login Dashboard |
