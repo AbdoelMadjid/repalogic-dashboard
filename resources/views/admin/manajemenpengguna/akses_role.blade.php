@@ -280,6 +280,107 @@
 
             updateTableDisplay();
 
+            // Master "Pilih Semua Permission" checkbox
+            const checkAllPerms = document.getElementById('check_all_permissions');
+            if (checkAllPerms) {
+                checkAllPerms.addEventListener('change', function() {
+                    const isChecked = this.checked;
+                    document.querySelectorAll('.role-permission-checkbox, .check-row-all').forEach(cb => {
+                        if (!cb.disabled) {
+                            cb.checked = isChecked;
+                        }
+                    });
+                    syncAllParentMenuStates();
+                });
+            }
+
+            // Helper to automatically sync all parent menu states (check if any submenu is checked, uncheck completely if all submenus are unchecked)
+            function syncAllParentMenuStates() {
+                // 1. Process Level 2 submenus that have Level 3 children
+                document.querySelectorAll('.child-row[data-menu-id]').forEach(row => {
+                    const cMenuId = row.getAttribute('data-menu-id');
+                    const level3Children = document.querySelectorAll(`.role-permission-checkbox[data-parent-menu-id="${cMenuId}"]`);
+                    if (level3Children.length > 0) {
+                        const checkedLevel3 = document.querySelectorAll(`.role-permission-checkbox[data-parent-menu-id="${cMenuId}"]:checked`);
+                        if (checkedLevel3.length > 0) {
+                            let readCb = row.querySelector(`.role-permission-checkbox[data-action="read"]`) || row.querySelector(`.role-permission-checkbox`);
+                            if (readCb && !readCb.disabled) readCb.checked = true;
+                        } else {
+                            row.querySelectorAll('.role-permission-checkbox').forEach(cb => {
+                                if (!cb.disabled) cb.checked = false;
+                            });
+                        }
+                    }
+                });
+
+                // 2. Process Level 1 Menu Utama (parents)
+                document.querySelectorAll('.parent-row[data-menu-id]').forEach(row => {
+                    const pMenuId = row.getAttribute('data-menu-id');
+                    const allChildren = document.querySelectorAll(
+                        `.role-permission-checkbox[data-parent-menu-id="${pMenuId}"], ` +
+                        `.role-permission-checkbox[data-root-parent-id="${pMenuId}"]`
+                    );
+                    if (allChildren.length > 0) {
+                        const checkedChildren = document.querySelectorAll(
+                            `.role-permission-checkbox[data-parent-menu-id="${pMenuId}"]:checked, ` +
+                            `.role-permission-checkbox[data-root-parent-id="${pMenuId}"]:checked`
+                        );
+                        if (checkedChildren.length > 0) {
+                            let readCb = row.querySelector(`.role-permission-checkbox[data-action="read"]`) || row.querySelector(`.role-permission-checkbox`);
+                            if (readCb && !readCb.disabled) readCb.checked = true;
+                        } else {
+                            row.querySelectorAll('.role-permission-checkbox').forEach(cb => {
+                                if (!cb.disabled) cb.checked = false;
+                            });
+                        }
+                    }
+                });
+            }
+
+            // Permission Row Check All & Individual Permission Checkboxes (Event Delegation)
+            document.addEventListener('change', function(e) {
+                if (e.target && e.target.classList.contains('check-row-all')) {
+                    const targetClass = e.target.getAttribute('data-target-class');
+                    if (targetClass) {
+                        document.querySelectorAll(`.${targetClass}`).forEach(cb => {
+                            if (!cb.disabled) {
+                                cb.checked = e.target.checked;
+                            }
+                        });
+                    }
+                    syncAllParentMenuStates();
+                    updateRowAllStates();
+                    updateCheckAllState();
+                } else if (e.target && e.target.classList.contains('role-permission-checkbox')) {
+                    syncAllParentMenuStates();
+                    updateRowAllStates();
+                    updateCheckAllState();
+                }
+            });
+
+            // Update row-all and check-all checkbox states based on checked items
+            function updateRowAllStates() {
+                document.querySelectorAll('.check-row-all').forEach(rowAll => {
+                    const targetClass = rowAll.getAttribute('data-target-class');
+                    if (targetClass) {
+                        const items = document.querySelectorAll(`.${targetClass}`);
+                        const checkedItems = document.querySelectorAll(`.${targetClass}:checked`);
+                        if (items.length > 0) {
+                            rowAll.checked = (items.length === checkedItems.length);
+                        }
+                    }
+                });
+            }
+
+            function updateCheckAllState() {
+                const checkAll = document.getElementById('check_all_permissions');
+                const totalItems = document.querySelectorAll('.role-permission-checkbox').length;
+                const checkedItems = document.querySelectorAll('.role-permission-checkbox:checked').length;
+                if (checkAll && totalItems > 0) {
+                    checkAll.checked = (totalItems === checkedItems);
+                }
+            }
+
             // Modal & Action Handlers (Event Delegation)
             const aksesRoleModalElement = document.getElementById('aksesRoleModal');
             const aksesRoleModal = new bootstrap.Modal(aksesRoleModalElement);
@@ -332,58 +433,6 @@
                 updateCheckAllState();
 
                 aksesRoleModal.show();
-            });
-
-            // Master "Pilih Semua Permission" checkbox
-            const checkAllMaster = document.getElementById('check_all_permissions');
-            if (checkAllMaster) {
-                checkAllMaster.addEventListener('change', function() {
-                    const isChecked = this.checked;
-                    document.querySelectorAll('.role-permission-checkbox, .check-row-all').forEach(cb => {
-                        if (!cb.disabled) cb.checked = isChecked;
-                    });
-                });
-            }
-
-            // Per-row "SEMUA" checkboxes
-            document.querySelectorAll('.check-row-all').forEach(rowAll => {
-                rowAll.addEventListener('change', function() {
-                    const tr = this.closest('tr');
-                    if (tr) {
-                        const rowItems = tr.querySelectorAll('.check-row-item');
-                        rowItems.forEach(cb => {
-                            if (!cb.disabled) cb.checked = this.checked;
-                        });
-                    }
-                    updateCheckAllState();
-                });
-            });
-
-            // Update row-all and check-all checkbox states based on checked items
-            function updateRowAllStates() {
-                document.querySelectorAll('.matrix-row').forEach(tr => {
-                    const items = tr.querySelectorAll('.check-row-item');
-                    const checkedItems = tr.querySelectorAll('.check-row-item:checked');
-                    const rowAll = tr.querySelector('.check-row-all');
-                    if (rowAll && items.length > 0) {
-                        rowAll.checked = items.length === checkedItems.length;
-                    }
-                });
-            }
-
-            function updateCheckAllState() {
-                const totalItems = document.querySelectorAll('.check-row-item').length;
-                const checkedItems = document.querySelectorAll('.check-row-item:checked').length;
-                if (checkAllMaster && totalItems > 0) {
-                    checkAllMaster.checked = totalItems === checkedItems;
-                }
-            }
-
-            document.querySelectorAll('.check-row-item').forEach(item => {
-                item.addEventListener('change', function() {
-                    updateRowAllStates();
-                    updateCheckAllState();
-                });
             });
         });
     </script>

@@ -27,11 +27,38 @@ class AksesUserController extends Controller
             $user->direct_permission_names = $user->permissions->pluck('name')->toArray();
             $user->role_names = $user->roles->pluck('name')->toArray();
         }
-        $roles = Role::all();
-        $permissions = Permission::with(['menus'])->get();
-        $parentMenus = Menu::with(['subMenus.subMenus.permissions', 'subMenus.permissions', 'permissions'])->parents()->orderBy('orders', 'asc')->get();
+        $roles = Role::with('permissions')->get();
+        $permissions = Permission::all();
 
-        return view('admin.manajemenpengguna.akses_user', compact('users', 'roles', 'permissions', 'parentMenus'));
+        // Fetch menus with their sub-menus and attached Spatie permissions for permission matrix UI
+        $parentMenus = Menu::with([
+            'permissions',
+            'subMenus' => function ($q) {
+                $q->with([
+                    'permissions',
+                    'subMenus' => function ($q2) {
+                        $q2->with('permissions')->orderBy('orders', 'asc');
+                    }
+                ])->orderBy('orders', 'asc');
+            }
+        ])
+        ->parents()
+        ->orderBy('orders', 'asc')
+        ->get();
+
+        // Find standalone permissions not linked to any Menu model
+        $menuPermissionNames = [];
+        foreach (Menu::with('permissions')->get() as $m) {
+            foreach ($m->permissions as $p) {
+                $menuPermissionNames[$p->name] = true;
+            }
+        }
+
+        $otherPermissions = $permissions->reject(function ($p) use ($menuPermissionNames) {
+            return isset($menuPermissionNames[$p->name]);
+        });
+
+        return view('admin.manajemenpengguna.akses_user', compact('users', 'roles', 'permissions', 'parentMenus', 'otherPermissions'));
     }
 
     /**
@@ -50,11 +77,23 @@ class AksesUserController extends Controller
         $user = User::findOrFail($id);
         $validated = $request->validated();
 
-        if (isset($validated['roles'])) {
-            $user->syncRoles($validated['roles']);
-        }
+        $selectedRoles = $validated['roles'] ?? [];
+        $user->syncRoles($selectedRoles);
 
-        $user->syncPermissions($validated['permissions'] ?? []);
+        $submittedPermissions = $validated['permissions'] ?? [];
+
+        // Ambil seluruh permission yang sudah diberikan secara otomatis melalui role yang dipilih
+        $rolePermissionNames = Role::whereIn('name', $selectedRoles)
+            ->with('permissions')
+            ->get()
+            ->flatMap(fn($role) => $role->permissions->pluck('name'))
+            ->unique()
+            ->toArray();
+
+        // Hanya simpan izin langsung (direct permissions) yang belum dicakup oleh role
+        $directPermissions = array_values(array_diff($submittedPermissions, $rolePermissionNames));
+
+        $user->syncPermissions($directPermissions);
 
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 

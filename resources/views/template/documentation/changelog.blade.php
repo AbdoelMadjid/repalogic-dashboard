@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.5.0</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.5.1</strong>
                             </span>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                                         <h6 class="fw-bold mb-0 text-dark">1. Update APP_VERSION</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Perbarui variabel <code>APP_VERSION</code> pada berkas <code>.env</code>, <code>.env.example</code>, dan <code>config/app.php</code>.
+                                        Perbarui konstanta <code>APP_VERSION</code> pada <code>.env</code>, <code>.env.example</code>, dan <code>config/app.php</code>.
                                     </p>
                                 </div>
                             </div>
@@ -57,10 +57,10 @@
                                 <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                     <div class="d-flex align-items-center mb-2">
                                         <span class="badge bg-success rounded-circle p-1.5 me-2"><i class="ti ti-history fs-14"></i></span>
-                                        <h6 class="fw-bold mb-0 text-dark">2. Update Changelog</h6>
+                                        <h6 class="fw-bold mb-0 text-dark">2. Update Changelog View</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Tambahkan riwayat pembaruan baru pada timeline ini dengan timestamp presisi WIB.
+                                        Tambahkan item rilis baru pada file <code>resources/views/template/documentation/changelog.blade.php</code>.
                                     </p>
                                 </div>
                             </div>
@@ -68,11 +68,11 @@
                             <div class="col-md-6 col-lg-3">
                                 <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                     <div class="d-flex align-items-center mb-2">
-                                        <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-file-text fs-14"></i></span>
+                                        <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-tag fs-14"></i></span>
                                         <h6 class="fw-bold mb-0 text-dark">3. Update Release Doc</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Tambahkan baris rilis baru pada dokumen <code>docs/riwayat_release_dan_tag.md</code>.
+                                        Catat riwayat rilis baru pada tabel <code>docs/riwayat_release_dan_tag.md</code>.
                                     </p>
                                 </div>
                             </div>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.5.0 -->
+                        <!-- Version 2.5.1 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,39 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.5.0</h5>
+                                        <h5 class="fw-bold mb-0">v2.5.1</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.5.1</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 02:42 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Unified Spatie Permission Matrix Table Hierarchy, Real-Time Parent-Child Auto Check/Uncheck Sync Engine &amp; Smart Direct Permission Deduplication Filter</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Standarisasi Matriks Permission Spatie:</strong> Penyatuan layout tabel matriks hak akses secara seragam pada seluruh modul Manajemen Pengguna (<code>role</code>, <code>akses-role</code>, dan <code>akses-user</code>) dengan dukungan visual hierarki Menu Utama (Level 1), Submenu (Level 2), Sub-submenu (Level 3), serta izin sistem Standalone.</li>
+                                    <li><strong class="text-dark">Sinkronisasi Otomatis Induk-Anak (Auto Parent-Child Sync):</strong> Implementasi <code>syncAllParentMenuStates()</code> untuk otomatis mencentang hak akses <code>read</code> pada Menu Utama ketika salah satu aksi di submenu dipilih, dan otomatis menghilangkan seluruh centang pada baris Menu Utama ketika semua submenunya dikosongkan.</li>
+                                    <li><strong class="text-dark">Smart Row &amp; Master Check All Sync:</strong> Sinkronisasi dua arah tombol baris <strong>SEMUA</strong> dan header <strong>Pilih Semua Permission</strong> yang otomatis tercentang ketika seluruh aksi aktif dan otomatis batal jika ada salah satu aksi yang tidak aktif.</li>
+                                    <li><strong class="text-dark">Penyaringan Cerdas Izin Langsung (Direct Permission Deduplication):</strong> Sistem secara otomatis menyaring dan hanya menyimpan izin tambahan yang belum tercakup oleh role terpilih, mencegah duplikasi data izin bawaan role ke tabel <code>model_has_permissions</code>.</li>
+                                    <li><strong class="text-dark">Pemuatan Lengkap Hak Akses Role (Inherited Permissions Loading):</strong> Modal <code>akses-user</code> kini membaca seluruh izin bawaan role (<code>all_permission_names</code>) sehingga pengguna dengan role Superadmin atau role lainnya langsung tercentang penuh dan sinkron secara <em>real-time</em> saat role diganti.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Permission Matrix Table</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Parent-Child Sync Engine</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Direct Permission Deduplication</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Role-to-Permissions Realtime Sync</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Spatie Laravel Permission</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.5.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xs text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.5.0</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.5.0</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 00:05 WIB</span>

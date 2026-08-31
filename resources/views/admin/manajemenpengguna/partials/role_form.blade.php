@@ -65,7 +65,7 @@
                             });
                         @endphp
                         <!-- MAIN MENU ROW -->
-                        <tr class="menu-row parent-row">
+                        <tr class="menu-row parent-row" data-menu-id="{{ $pMenu->id }}">
                             <td class="ps-3 py-2">
                                 <div class="d-flex align-items-center">
                                     <div class="avatar-xs me-2 d-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-3 flex-shrink-0" style="width: 32px; height: 32px;">
@@ -88,7 +88,8 @@
                                 <td class="text-center py-2">
                                     @if (isset($pPerms[$act]))
                                         <input class="form-check-input role-input role-permission-checkbox row-perm-{{ $pMenu->id }} cursor-pointer"
-                                            type="checkbox" name="permissions[]" value="{{ $pPerms[$act]->name }}" id="perm_{{ $pPerms[$act]->id }}">
+                                            type="checkbox" name="permissions[]" value="{{ $pPerms[$act]->name }}" id="perm_{{ $pPerms[$act]->id }}"
+                                            data-menu-id="{{ $pMenu->id }}" data-action="{{ $act }}">
                                     @else
                                         <span class="text-muted fs-12">-</span>
                                     @endif
@@ -101,7 +102,8 @@
                                     @foreach ($pOtherPerms as $oPerm)
                                         <div class="form-check d-inline-block m-0">
                                             <input class="form-check-input role-input role-permission-checkbox row-perm-{{ $pMenu->id }} cursor-pointer"
-                                                type="checkbox" name="permissions[]" value="{{ $oPerm->name }}" id="perm_{{ $oPerm->id }}" title="{{ $oPerm->name }}">
+                                                type="checkbox" name="permissions[]" value="{{ $oPerm->name }}" id="perm_{{ $oPerm->id }}" title="{{ $oPerm->name }}"
+                                                data-menu-id="{{ $pMenu->id }}" data-action="other">
                                         </div>
                                     @endforeach
                                 @else
@@ -111,7 +113,7 @@
 
                             <!-- ROW ALL COLUMN -->
                             <td class="text-center py-2 pe-3">
-                                <input class="form-check-input check-row-all cursor-pointer" type="checkbox" data-target-class="row-perm-{{ $pMenu->id }}" title="Pilih Semua Aksi untuk {{ $pMenu->name }}">
+                                <input class="form-check-input check-row-all cursor-pointer" type="checkbox" data-target-class="row-perm-{{ $pMenu->id }}" data-menu-id="{{ $pMenu->id }}" title="Pilih Semua Aksi untuk {{ $pMenu->name }}">
                             </td>
                         </tr>
 
@@ -126,7 +128,7 @@
                                     return in_array(explode(' ', $p->name)[0], ['create', 'read', 'update', 'delete']);
                                 });
                             @endphp
-                            <tr class="menu-row child-row">
+                            <tr class="menu-row child-row" data-menu-id="{{ $cMenu->id }}" data-parent-menu-id="{{ $pMenu->id }}">
                                 <td class="ps-4 py-2">
                                     <div class="d-flex align-items-center ps-2">
                                         <span class="text-muted me-2 font-monospace fs-14">└─</span>
@@ -149,7 +151,8 @@
                                     <td class="text-center py-2">
                                         @if (isset($cPerms[$act]))
                                             <input class="form-check-input role-input role-permission-checkbox row-perm-{{ $cMenu->id }} cursor-pointer"
-                                                type="checkbox" name="permissions[]" value="{{ $cPerms[$act]->name }}" id="perm_{{ $cPerms[$act]->id }}">
+                                                type="checkbox" name="permissions[]" value="{{ $cPerms[$act]->name }}" id="perm_{{ $cPerms[$act]->id }}"
+                                                data-menu-id="{{ $cMenu->id }}" data-parent-menu-id="{{ $pMenu->id }}" data-action="{{ $act }}">
                                         @else
                                             <span class="text-muted fs-12">-</span>
                                         @endif
@@ -161,7 +164,8 @@
                                         @foreach ($cOtherPerms as $oPerm)
                                             <div class="form-check d-inline-block m-0">
                                                 <input class="form-check-input role-input role-permission-checkbox row-perm-{{ $cMenu->id }} cursor-pointer"
-                                                    type="checkbox" name="permissions[]" value="{{ $oPerm->name }}" id="perm_{{ $oPerm->id }}" title="{{ $oPerm->name }}">
+                                                    type="checkbox" name="permissions[]" value="{{ $oPerm->name }}" id="perm_{{ $oPerm->id }}" title="{{ $oPerm->name }}"
+                                                    data-menu-id="{{ $cMenu->id }}" data-parent-menu-id="{{ $pMenu->id }}" data-action="other">
                                             </div>
                                         @endforeach
                                     @else
@@ -170,7 +174,7 @@
                                 </td>
 
                                 <td class="text-center py-2 pe-3">
-                                    <input class="form-check-input check-row-all cursor-pointer" type="checkbox" data-target-class="row-perm-{{ $cMenu->id }}" title="Pilih Semua Aksi untuk {{ $cMenu->name }}">
+                                    <input class="form-check-input check-row-all cursor-pointer" type="checkbox" data-target-class="row-perm-{{ $cMenu->id }}" data-menu-id="{{ $cMenu->id }}" data-parent-menu-id="{{ $pMenu->id }}" title="Pilih Semua Aksi untuk {{ $cMenu->name }}">
                                 </td>
                             </tr>
 
@@ -186,7 +190,7 @@
                                             return in_array(explode(' ', $p->name)[0], ['create', 'read', 'update', 'delete']);
                                         });
                                     @endphp
-                                    <tr class="menu-row sub-child-row">
+                                    <tr class="menu-row sub-child-row" data-menu-id="{{ $scMenu->id }}" data-parent-menu-id="{{ $cMenu->id }}" data-root-parent-id="{{ $pMenu->id }}">
                                         <td class="ps-5 py-2">
                                             <div class="d-flex align-items-center ps-3">
                                                 <span class="text-muted me-2 font-monospace fs-14">└─ └─</span>
@@ -209,7 +213,8 @@
                                             <td class="text-center py-2">
                                                 @if (isset($scPerms[$act]))
                                                     <input class="form-check-input role-input role-permission-checkbox row-perm-{{ $scMenu->id }} cursor-pointer"
-                                                        type="checkbox" name="permissions[]" value="{{ $scPerms[$act]->name }}" id="perm_{{ $scMenu->id }}">
+                                                        type="checkbox" name="permissions[]" value="{{ $scPerms[$act]->name }}" id="perm_{{ $scMenu->id }}"
+                                                        data-menu-id="{{ $scMenu->id }}" data-parent-menu-id="{{ $cMenu->id }}" data-root-parent-id="{{ $pMenu->id }}" data-action="{{ $act }}">
                                                 @else
                                                     <span class="text-muted fs-12">-</span>
                                                 @endif
@@ -221,7 +226,8 @@
                                                 @foreach ($scOtherPerms as $oPerm)
                                                     <div class="form-check d-inline-block m-0">
                                                         <input class="form-check-input role-input role-permission-checkbox row-perm-{{ $scMenu->id }} cursor-pointer"
-                                                            type="checkbox" name="permissions[]" value="{{ $oPerm->name }}" id="perm_{{ $oPerm->id }}" title="{{ $oPerm->name }}">
+                                                            type="checkbox" name="permissions[]" value="{{ $oPerm->name }}" id="perm_{{ $oPerm->id }}" title="{{ $oPerm->name }}"
+                                                            data-menu-id="{{ $scMenu->id }}" data-parent-menu-id="{{ $cMenu->id }}" data-root-parent-id="{{ $pMenu->id }}" data-action="other">
                                                     </div>
                                                 @endforeach
                                             @else
@@ -230,7 +236,7 @@
                                         </td>
 
                                         <td class="text-center py-2 pe-3">
-                                            <input class="form-check-input check-row-all cursor-pointer" type="checkbox" data-target-class="row-perm-{{ $scMenu->id }}" title="Pilih Semua Aksi untuk {{ $scMenu->name }}">
+                                            <input class="form-check-input check-row-all cursor-pointer" type="checkbox" data-target-class="row-perm-{{ $scMenu->id }}" data-menu-id="{{ $scMenu->id }}" data-parent-menu-id="{{ $cMenu->id }}" data-root-parent-id="{{ $pMenu->id }}" title="Pilih Semua Aksi untuk {{ $scMenu->name }}">
                                         </td>
                                     </tr>
                                 @endforeach

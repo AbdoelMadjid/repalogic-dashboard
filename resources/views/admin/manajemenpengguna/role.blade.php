@@ -281,22 +281,100 @@
                 checkAllPerms.addEventListener('change', function() {
                     const isChecked = this.checked;
                     document.querySelectorAll('.role-permission-checkbox, .check-row-all').forEach(cb => {
-                        cb.checked = isChecked;
+                        if (!cb.disabled) {
+                            cb.checked = isChecked;
+                        }
                     });
+                    syncAllParentMenuStates();
                 });
             }
 
-            // Permission Row Check All Handler (Row SEMUA Checkbox)
+            // Helper to automatically sync all parent menu states (check if any submenu is checked, uncheck completely if all submenus are unchecked)
+            function syncAllParentMenuStates() {
+                // 1. Process Level 2 submenus that have Level 3 children
+                document.querySelectorAll('.child-row[data-menu-id]').forEach(row => {
+                    const cMenuId = row.getAttribute('data-menu-id');
+                    const level3Children = document.querySelectorAll(`.role-permission-checkbox[data-parent-menu-id="${cMenuId}"]`);
+                    if (level3Children.length > 0) {
+                        const checkedLevel3 = document.querySelectorAll(`.role-permission-checkbox[data-parent-menu-id="${cMenuId}"]:checked`);
+                        if (checkedLevel3.length > 0) {
+                            let readCb = row.querySelector(`.role-permission-checkbox[data-action="read"]`) || row.querySelector(`.role-permission-checkbox`);
+                            if (readCb && !readCb.disabled) readCb.checked = true;
+                        } else {
+                            row.querySelectorAll('.role-permission-checkbox').forEach(cb => {
+                                if (!cb.disabled) cb.checked = false;
+                            });
+                        }
+                    }
+                });
+
+                // 2. Process Level 1 Menu Utama (parents)
+                document.querySelectorAll('.parent-row[data-menu-id]').forEach(row => {
+                    const pMenuId = row.getAttribute('data-menu-id');
+                    const allChildren = document.querySelectorAll(
+                        `.role-permission-checkbox[data-parent-menu-id="${pMenuId}"], ` +
+                        `.role-permission-checkbox[data-root-parent-id="${pMenuId}"]`
+                    );
+                    if (allChildren.length > 0) {
+                        const checkedChildren = document.querySelectorAll(
+                            `.role-permission-checkbox[data-parent-menu-id="${pMenuId}"]:checked, ` +
+                            `.role-permission-checkbox[data-root-parent-id="${pMenuId}"]:checked`
+                        );
+                        if (checkedChildren.length > 0) {
+                            let readCb = row.querySelector(`.role-permission-checkbox[data-action="read"]`) || row.querySelector(`.role-permission-checkbox`);
+                            if (readCb && !readCb.disabled) readCb.checked = true;
+                        } else {
+                            row.querySelectorAll('.role-permission-checkbox').forEach(cb => {
+                                if (!cb.disabled) cb.checked = false;
+                            });
+                        }
+                    }
+                });
+            }
+
+            // Permission Row Check All & Individual Permission Checkboxes (Event Delegation)
             document.addEventListener('change', function(e) {
                 if (e.target && e.target.classList.contains('check-row-all')) {
                     const targetClass = e.target.getAttribute('data-target-class');
                     if (targetClass) {
                         document.querySelectorAll(`.${targetClass}`).forEach(cb => {
-                            cb.checked = e.target.checked;
+                            if (!cb.disabled) {
+                                cb.checked = e.target.checked;
+                            }
                         });
                     }
+                    syncAllParentMenuStates();
+                    updateRowAllStates();
+                    updateCheckAllState();
+                } else if (e.target && e.target.classList.contains('role-permission-checkbox')) {
+                    syncAllParentMenuStates();
+                    updateRowAllStates();
+                    updateCheckAllState();
                 }
             });
+
+            // Update row-all and check-all checkbox states based on checked items
+            function updateRowAllStates() {
+                document.querySelectorAll('.check-row-all').forEach(rowAll => {
+                    const targetClass = rowAll.getAttribute('data-target-class');
+                    if (targetClass) {
+                        const items = document.querySelectorAll(`.${targetClass}`);
+                        const checkedItems = document.querySelectorAll(`.${targetClass}:checked`);
+                        if (items.length > 0) {
+                            rowAll.checked = (items.length === checkedItems.length);
+                        }
+                    }
+                });
+            }
+
+            function updateCheckAllState() {
+                const checkAll = document.getElementById('check_all_permissions');
+                const totalItems = document.querySelectorAll('.role-permission-checkbox').length;
+                const checkedItems = document.querySelectorAll('.role-permission-checkbox:checked').length;
+                if (checkAll && totalItems > 0) {
+                    checkAll.checked = (totalItems === checkedItems);
+                }
+            }
 
             // Modal & Action Handlers (Event Delegation)
             const roleModalElement = document.getElementById('roleModal');
@@ -329,6 +407,8 @@
                     modalTitle.innerHTML = '<i class="ti ti-plus me-1"></i> Tambah Role Baru';
                     roleForm.action = "{{ route('admin.manajemenpengguna.role.store') }}";
                     btnSubmitForm.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Role';
+                    updateRowAllStates();
+                    updateCheckAllState();
 
                 } else if (action === 'edit' && role) {
                     modalTitle.innerHTML = `<i class="ti ti-edit me-1"></i> Edit Role: ${role.name}`;
@@ -363,6 +443,8 @@
                         permCb.forEach(cb => cb.checked = true);
                     });
                 }
+                updateRowAllStates();
+                updateCheckAllState();
             }
         });
     </script>

@@ -21,10 +21,37 @@ class AksesRoleController extends Controller
     public function index(Request $request)
     {
         $roles = Role::withCount(['permissions', 'users'])->with('permissions')->get();
-        $permissions = Permission::with(['menus'])->get();
-        $parentMenus = Menu::with(['subMenus.subMenus.permissions', 'subMenus.permissions', 'permissions'])->parents()->orderBy('orders', 'asc')->get();
+        $permissions = Permission::all();
 
-        return view('admin.manajemenpengguna.akses_role', compact('roles', 'permissions', 'parentMenus'));
+        // Fetch menus with their sub-menus and attached Spatie permissions for permission matrix UI
+        $parentMenus = Menu::with([
+            'permissions',
+            'subMenus' => function ($q) {
+                $q->with([
+                    'permissions',
+                    'subMenus' => function ($q2) {
+                        $q2->with('permissions')->orderBy('orders', 'asc');
+                    }
+                ])->orderBy('orders', 'asc');
+            }
+        ])
+        ->parents()
+        ->orderBy('orders', 'asc')
+        ->get();
+
+        // Find standalone permissions not linked to any Menu model
+        $menuPermissionNames = [];
+        foreach (Menu::with('permissions')->get() as $m) {
+            foreach ($m->permissions as $p) {
+                $menuPermissionNames[$p->name] = true;
+            }
+        }
+
+        $otherPermissions = $permissions->reject(function ($p) use ($menuPermissionNames) {
+            return isset($menuPermissionNames[$p->name]);
+        });
+
+        return view('admin.manajemenpengguna.akses_role', compact('roles', 'permissions', 'parentMenus', 'otherPermissions'));
     }
 
     /**

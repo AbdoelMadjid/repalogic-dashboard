@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v2.5.0`  
-> **Terakhir Diperbarui:** 01 September 2026 00:05 WIB  
+> **Versi Terbaru:** `v2.5.1`  
+> **Terakhir Diperbarui:** 01 September 2026 02:42 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v2.5.1`** | `2026-09-01 02:42 WIB` | Unified Spatie Permission Matrix Table Hierarchy, Real-Time Parent-Child Auto Check/Uncheck Sync Engine & Smart Direct Permission Deduplication Filter |
 | **`v2.5.0`** | `2026-09-01 00:05 WIB` | Interactive Today Logins Widget Card Suite & Dual View Switcher, Chat Header Online Indicator Clean-up & Architecture Rule 14 (Icon & Label Spacing Standard) |
 | **`v2.4.9`** | `2026-08-31 22:05 WIB` | Auth Security Rate Limiting Integration, Unified Form Error Aesthetics & Meta Title Internationalization Sanitization |
 | **`v2.4.8`** | `2026-08-31 19:12 WIB` | Application Settings Hub & Maintenance Mode Engine: 6 Interactive Control Widgets, Dynamic Idle Lock Screen, 503 Maintenance Page, Global Middleware Protection & User KTP Photo Preview Modal |
