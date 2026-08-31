@@ -25,7 +25,6 @@
         @include('layouts.partials/sidenav')
 
         <div class="content-page">
-            @include('layouts.partials.impersonation-banner')
             <div class="container-fluid">
 
                 @yield('content')
