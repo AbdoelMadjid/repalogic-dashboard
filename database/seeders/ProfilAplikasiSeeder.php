@@ -28,7 +28,7 @@ class ProfilAplikasiSeeder extends Seeder
                 'footer_text' => 'Inspinia By',
                 'created_year' => '2026',
                 'developer_name' => 'Repalogic',
-                'developer_url' => 'https://github.com/AbdoelMadjid',
+                'developer_url' => 'https://github.com/AbdoelMadjid/repalogic-dashboard',
             ]
         );
     }
