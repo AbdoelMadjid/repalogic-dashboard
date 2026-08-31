@@ -6,67 +6,225 @@
     <!-- Header Page Title -->
     @include('layouts.partials.page-title', ['title' => 'Fitur Aplikasi', 'subtitle' => 'Dukungan Aplikasi'])
 
-    <!-- STATISTIK RINGKASAN FITUR -->
+    <!-- WIDGET PANEL KONTROL & PENGATURAN FITUR APLIKASI -->
     <div class="row g-3 mb-4">
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm rounded-3 mb-0">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <span class="text-muted fs-12 fw-semibold text-uppercase">Total Fitur Terdaftar</span>
-                            <h3 class="fw-bold mb-0 mt-1 text-dark" id="stat-total">{{ $totalFeatures }}</h3>
+        <!-- WIDGET 1: VISIBILITAS & MANAJEMEN FITUR -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card h-100 shadow-sm border-0 rounded-3">
+                <div class="card-header bg-primary text-white py-3 d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="ti ti-adjustments-horizontal fs-20"></i>
+                        <h6 class="card-title text-white mb-0 fw-bold">Visibilitas Fitur & Komponen</h6>
+                    </div>
+                    <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Hub Kontrol</span>
+                </div>
+                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="text-muted fs-12 fw-semibold">Status Fitur Sistem</span>
+                            <span class="badge bg-success-subtle text-success fs-12 fw-bold" id="stat-active-badge">{{ $activeFeatures }} Aktif / {{ $totalFeatures }} Total</span>
                         </div>
-                        <div class="avatar-md bg-primary-subtle text-primary rounded-3 d-flex align-items-center justify-content-center">
-                            <i class="ti ti-apps fs-24"></i>
+                        <div class="progress mb-3" style="height: 8px;">
+                            @php
+                                $percentActive = $totalFeatures > 0 ? round(($activeFeatures / $totalFeatures) * 100) : 0;
+                            @endphp
+                            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{ $percentActive }}%;" aria-valuenow="{{ $percentActive }}" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
+                        <p class="text-muted fs-12 mb-3">
+                            Sembunyikan atau tampilkan komponen topbar, grup menu navigasi sidebar, dan modul fungsional aplikasi secara instan.
+                        </p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="#features-management-section" class="btn btn-sm btn-primary w-100 fw-semibold">
+                            <i class="ti ti-list-check me-1"></i> Buka Manajemen Fitur
+                        </a>
+                        @can('create dukunganaplikasi/fitur-aplikasi')
+                            <button type="button" class="btn btn-sm btn-outline-primary btn-fitur-action flex-shrink-0" data-action="create" title="Tambah Fitur Baru">
+                                <i class="ti ti-plus"></i>
+                            </button>
+                        @endcan
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm rounded-3 mb-0">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <span class="text-muted fs-12 fw-semibold text-uppercase">Fitur Aktif (Ditampilkan)</span>
-                            <h3 class="fw-bold mb-0 mt-1 text-success" id="stat-active">{{ $activeFeatures }}</h3>
+        <!-- WIDGET 2: PENGATURAN WAKTU IDLE (AUTO LOCK SCREEN) -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card h-100 shadow-sm border-0 rounded-3">
+                <div class="card-header bg-warning text-white py-3 d-flex align-items-center justify-content-between" style="background-color: #f59e0b !important;">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="ti ti-clock-pause fs-20"></i>
+                        <h6 class="card-title text-white mb-0 fw-bold">Waktu Idle & Auto Lock</h6>
+                    </div>
+                    <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Keamanan</span>
+                </div>
+                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <label for="widget_idle_timeout" class="form-label fs-12 fw-semibold text-dark mb-0">Batas Waktu Ketidakaktifan:</label>
+                            <span class="badge bg-warning-subtle text-warning fs-11 fw-bold" id="badge-current-idle">Aktif: {{ $appSettings['idle_timeout_minutes'] > 0 ? $appSettings['idle_timeout_minutes'] . ' Menit' : 'Nonaktif' }}</span>
                         </div>
-                        <div class="avatar-md bg-success-subtle text-success rounded-3 d-flex align-items-center justify-content-center">
-                            <i class="ti ti-circle-check fs-24"></i>
+                        <div class="input-group input-group-sm mb-2">
+                            <span class="input-group-text bg-light text-muted"><i class="ti ti-timer"></i></span>
+                            <select id="widget_idle_timeout" class="form-select form-select-sm">
+                                <option value="1" {{ $appSettings['idle_timeout_minutes'] == 1 ? 'selected' : '' }}>1 Menit (Mode Pengujian)</option>
+                                <option value="3" {{ $appSettings['idle_timeout_minutes'] == 3 ? 'selected' : '' }}>3 Menit (Cepat)</option>
+                                <option value="5" {{ $appSettings['idle_timeout_minutes'] == 5 ? 'selected' : '' }}>5 Menit (Standar Rekomendasi)</option>
+                                <option value="10" {{ $appSettings['idle_timeout_minutes'] == 10 ? 'selected' : '' }}>10 Menit</option>
+                                <option value="15" {{ $appSettings['idle_timeout_minutes'] == 15 ? 'selected' : '' }}>15 Menit</option>
+                                <option value="30" {{ $appSettings['idle_timeout_minutes'] == 30 ? 'selected' : '' }}>30 Menit</option>
+                                <option value="60" {{ $appSettings['idle_timeout_minutes'] == 60 ? 'selected' : '' }}>60 Menit (1 Jam)</option>
+                                <option value="0" {{ $appSettings['idle_timeout_minutes'] == 0 ? 'selected' : '' }}>Nonaktifkan Auto-Lock</option>
+                            </select>
                         </div>
+                        <p class="text-muted fs-12 mb-3">
+                            Layar akan terkunci otomatis saat tidak ada interaksi mouse/keyboard selama durasi yang ditentukan.
+                        </p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-sm btn-warning text-white w-100 fw-semibold" id="btn-save-idle-timeout" style="background-color: #f59e0b; border-color: #f59e0b;">
+                            <i class="ti ti-device-floppy me-1"></i> Simpan Durasi Idle
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary flex-shrink-0" id="btn-test-lock-screen" title="Uji Kunci Layar Sekarang">
+                            <i class="ti ti-lock me-1"></i> Uji Kunci
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm rounded-3 mb-0">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <span class="text-muted fs-12 fw-semibold text-uppercase">Fitur Nonaktif (Disembunyikan)</span>
-                            <h3 class="fw-bold mb-0 mt-1 text-danger" id="stat-inactive">{{ $inactiveFeatures }}</h3>
-                        </div>
-                        <div class="avatar-md bg-danger-subtle text-danger rounded-3 d-flex align-items-center justify-content-center">
-                            <i class="ti ti-circle-x fs-24"></i>
-                        </div>
+        <!-- WIDGET 3: MODE PEMELIHARAAN (MAINTENANCE MODE) -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card h-100 shadow-sm border-0 rounded-3">
+                <div class="card-header bg-danger text-white py-3 d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="ti ti-tool fs-20"></i>
+                        <h6 class="card-title text-white mb-0 fw-bold">Status Sistem & Maintenance</h6>
                     </div>
+                    <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Operasional</span>
+                </div>
+                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="fs-12 fw-semibold text-dark">Mode Pemeliharaan:</span>
+                            <div class="form-check form-switch m-0">
+                                <input class="form-check-input" type="checkbox" role="switch" id="widget_maintenance_mode" {{ $appSettings['maintenance_mode'] ? 'checked' : '' }}>
+                                <label class="form-check-label fs-12 fw-bold text-danger ms-1" for="widget_maintenance_mode" id="maintenance-status-label">{{ $appSettings['maintenance_mode'] ? 'Aktif' : 'Nonaktif' }}</label>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <input type="text" class="form-control form-control-sm" id="widget_maintenance_message" value="{{ $appSettings['maintenance_message'] }}" placeholder="Pesan untuk pengguna...">
+                        </div>
+                        <p class="text-muted fs-12 mb-3">
+                            Saat aktif, pengguna biasa akan diarahkan ke laman pemeliharaan sementara administrator tetap memiliki akses.
+                        </p>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-danger w-100 fw-semibold" id="btn-save-maintenance">
+                        <i class="ti ti-device-floppy me-1"></i> Simpan Status Pemeliharaan
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm rounded-3 mb-0">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <span class="text-muted fs-12 fw-semibold text-uppercase">Total Kelompok / Kategori</span>
-                            <h3 class="fw-bold mb-0 mt-1 text-info">{{ count($categories) }}</h3>
+        <!-- WIDGET 4: KEAMANAN SESI & PROTEKSI LOGIN -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card h-100 shadow-sm border-0 rounded-3">
+                <div class="card-header bg-info text-white py-3 d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="ti ti-shield-lock fs-20"></i>
+                        <h6 class="card-title text-white mb-0 fw-bold">Keamanan & Proteksi Akun</h6>
+                    </div>
+                    <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Proteksi</span>
+                </div>
+                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <label for="widget_rate_limit" class="fs-12 fw-semibold text-dark mb-0">Maks Gagal Login (Lockout):</label>
+                            <select id="widget_rate_limit" class="form-select form-select-sm" style="width: 110px;">
+                                <option value="3" {{ $appSettings['rate_limit_attempts'] == 3 ? 'selected' : '' }}>3 Kali</option>
+                                <option value="5" {{ $appSettings['rate_limit_attempts'] == 5 ? 'selected' : '' }}>5 Kali</option>
+                                <option value="10" {{ $appSettings['rate_limit_attempts'] == 10 ? 'selected' : '' }}>10 Kali</option>
+                            </select>
                         </div>
-                        <div class="avatar-md bg-info-subtle text-info rounded-3 d-flex align-items-center justify-content-center">
-                            <i class="ti ti-category fs-24"></i>
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input" type="checkbox" id="widget_auto_approval" {{ $appSettings['auto_user_approval'] ? 'checked' : '' }}>
+                            <label class="form-check-label fs-12 text-dark" for="widget_auto_approval">Otomatis Setujui Pendaftaran Akun Baru</label>
                         </div>
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input" type="checkbox" id="widget_new_device" {{ $appSettings['new_device_alert'] ? 'checked' : '' }}>
+                            <label class="form-check-label fs-12 text-dark" for="widget_new_device">Notifikasi Login dari Perangkat Baru</label>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-info text-white w-100 fw-semibold" id="btn-save-security">
+                        <i class="ti ti-device-floppy me-1"></i> Simpan Kebijakan Keamanan
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- WIDGET 5: SINKRONISASI POLLING & NOTIFIKASI REAL-TIME -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card h-100 shadow-sm border-0 rounded-3">
+                <div class="card-header bg-success text-white py-3 d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="ti ti-refresh fs-20"></i>
+                        <h6 class="card-title text-white mb-0 fw-bold">Sinkronisasi Polling & Notifikasi</h6>
+                    </div>
+                    <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Real-Time</span>
+                </div>
+                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <label for="widget_polling_interval" class="fs-12 fw-semibold text-dark mb-0">Interval Polling Latar Belakang:</label>
+                            <select id="widget_polling_interval" class="form-select form-select-sm" style="width: 120px;">
+                                <option value="10" {{ $appSettings['polling_interval'] == 10 ? 'selected' : '' }}>10 Detik</option>
+                                <option value="20" {{ $appSettings['polling_interval'] == 20 ? 'selected' : '' }}>20 Detik (Standar)</option>
+                                <option value="30" {{ $appSettings['polling_interval'] == 30 ? 'selected' : '' }}>30 Detik</option>
+                                <option value="60" {{ $appSettings['polling_interval'] == 60 ? 'selected' : '' }}>60 Detik</option>
+                            </select>
+                        </div>
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input" type="checkbox" id="widget_sound_notif" {{ $appSettings['sound_notification'] ? 'checked' : '' }}>
+                            <label class="form-check-label fs-12 text-dark" for="widget_sound_notif">Audio Nada Suara Notifikasi Masuk</label>
+                        </div>
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input" type="checkbox" id="widget_toast_notif" {{ $appSettings['toast_notification'] ? 'checked' : '' }}>
+                            <label class="form-check-label fs-12 text-dark" for="widget_toast_notif">Pop-up Toast Notifikasi Otomatis</label>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-success w-100 fw-semibold" id="btn-save-polling">
+                        <i class="ti ti-device-floppy me-1"></i> Simpan Konfigurasi Polling
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- WIDGET 6: MANAJEMEN CACHE & OPTIMASI KINERJA -->
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card h-100 shadow-sm border-0 rounded-3">
+                <div class="card-header bg-dark text-white py-3 d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="ti ti-cpu fs-20"></i>
+                        <h6 class="card-title text-white mb-0 fw-bold">Cache & Optimasi Kinerja</h6>
+                    </div>
+                    <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Server</span>
+                </div>
+                <div class="card-body p-3 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex flex-wrap gap-1 mb-3">
+                            <span class="badge bg-light text-dark border"><i class="ti ti-layout me-1 text-primary"></i> Views: Cached</span>
+                            <span class="badge bg-light text-dark border"><i class="ti ti-route me-1 text-info"></i> Routes: Synced</span>
+                            <span class="badge bg-light text-dark border"><i class="ti ti-settings me-1 text-warning"></i> Config: Loaded</span>
+                            <span class="badge bg-light text-dark border"><i class="ti ti-database me-1 text-success"></i> Cache: Active</span>
+                        </div>
+                        <p class="text-muted fs-12 mb-3">
+                            Bersihkan cache tampilan Blade, cache route URL, dan konfigurasi cache sistem untuk memperbarui perubahan seketika.
+                        </p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-sm btn-dark w-100 fw-semibold" id="btn-clear-all-cache">
+                            <i class="ti ti-trash me-1"></i> Bersihkan Semua Cache
+                        </button>
                     </div>
                 </div>
             </div>
@@ -74,7 +232,7 @@
     </div>
 
     <!-- TABEL MANAJEMEN FITUR -->
-    <div class="row">
+    <div class="row" id="features-management-section">
         <div class="col-12">
             <div class="card shadow-sm border-0">
                 <!-- CARD HEADER (Rule 12 Compliance: bg-primary text-white py-3) -->
@@ -846,6 +1004,239 @@
                     });
                 }
             });
+
+            // WIDGET 2: IDLE TIMEOUT HANDLER
+            const idleSelect = document.getElementById('widget_idle_timeout');
+            const btnSaveIdle = document.getElementById('btn-save-idle-timeout');
+            const btnTestLock = document.getElementById('btn-test-lock-screen');
+            const badgeCurrentIdle = document.getElementById('badge-current-idle');
+
+            const storedMins = localStorage.getItem('repalogic_idle_timeout_minutes');
+            if (storedMins !== null && idleSelect) {
+                idleSelect.value = storedMins;
+                if (badgeCurrentIdle) {
+                    badgeCurrentIdle.textContent = storedMins > 0 ? `Aktif: ${storedMins} Menit` : 'Nonaktif';
+                }
+            }
+
+            if (btnSaveIdle && idleSelect) {
+                btnSaveIdle.addEventListener('click', function() {
+                    const mins = parseInt(idleSelect.value);
+                    btnSaveIdle.disabled = true;
+                    btnSaveIdle.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Menyimpan...';
+
+                    fetch("{{ route('admin.dukunganaplikasi.fitur-aplikasi.update-setting') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': getCsrfToken(),
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            key: 'idle_timeout_minutes',
+                            value: mins
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        btnSaveIdle.disabled = false;
+                        btnSaveIdle.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Durasi Idle';
+
+                        if (typeof window.setIdleTimeoutMinutes === 'function') {
+                            window.setIdleTimeoutMinutes(mins);
+                        } else {
+                            localStorage.setItem('repalogic_idle_timeout_minutes', mins);
+                        }
+
+                        if (badgeCurrentIdle) {
+                            badgeCurrentIdle.textContent = mins > 0 ? `Aktif: ${mins} Menit` : 'Nonaktif';
+                        }
+
+                        if (typeof window.showToast === 'function') {
+                            window.showToast(mins > 0 ? `Waktu idle auto-lock diset ke ${mins} menit.` : 'Auto-lock dinonaktifkan.', 'success');
+                        }
+                    })
+                    .catch(err => {
+                        btnSaveIdle.disabled = false;
+                        btnSaveIdle.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Durasi Idle';
+                        window.showError(err.message || 'Gagal menyimpan pengaturan waktu idle.');
+                    });
+                });
+            }
+
+            if (btnTestLock) {
+                btnTestLock.addEventListener('click', function() {
+                    if (typeof window.lockScreen === 'function') {
+                        window.lockScreen();
+                    } else {
+                        window.showWarning('Fungsi lock screen belum siap.');
+                    }
+                });
+            }
+
+            // WIDGET 3: MAINTENANCE MODE HANDLER
+            const switchMaintenance = document.getElementById('widget_maintenance_mode');
+            const labelMaintenance = document.getElementById('maintenance-status-label');
+            const inputMaintenanceMsg = document.getElementById('widget_maintenance_message');
+            const btnSaveMaintenance = document.getElementById('btn-save-maintenance');
+
+            if (switchMaintenance && labelMaintenance) {
+                switchMaintenance.addEventListener('change', function() {
+                    labelMaintenance.textContent = this.checked ? 'Aktif' : 'Nonaktif';
+                });
+            }
+
+            if (btnSaveMaintenance && switchMaintenance && inputMaintenanceMsg) {
+                btnSaveMaintenance.addEventListener('click', function() {
+                    btnSaveMaintenance.disabled = true;
+                    btnSaveMaintenance.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Menyimpan...';
+
+                    Promise.all([
+                        fetch("{{ route('admin.dukunganaplikasi.fitur-aplikasi.update-setting') }}", {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': getCsrfToken(), 'Accept': 'application/json' },
+                            body: JSON.stringify({ key: 'maintenance_mode', value: switchMaintenance.checked ? 1 : 0 })
+                        }),
+                        fetch("{{ route('admin.dukunganaplikasi.fitur-aplikasi.update-setting') }}", {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': getCsrfToken(), 'Accept': 'application/json' },
+                            body: JSON.stringify({ key: 'maintenance_message', value: inputMaintenanceMsg.value })
+                        })
+                    ])
+                    .then(() => {
+                        btnSaveMaintenance.disabled = false;
+                        btnSaveMaintenance.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Status Pemeliharaan';
+                        window.showToast('Pengaturan mode pemeliharaan berhasil disimpan.', 'success');
+                    })
+                    .catch(err => {
+                        btnSaveMaintenance.disabled = false;
+                        btnSaveMaintenance.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Status Pemeliharaan';
+                        window.showError(err.message || 'Gagal menyimpan status pemeliharaan.');
+                    });
+                });
+            }
+
+            // WIDGET 4: SECURITY POLICY HANDLER
+            const selectRateLimit = document.getElementById('widget_rate_limit');
+            const switchAutoApproval = document.getElementById('widget_auto_approval');
+            const switchNewDevice = document.getElementById('widget_new_device');
+            const btnSaveSecurity = document.getElementById('btn-save-security');
+
+            if (btnSaveSecurity && selectRateLimit && switchAutoApproval && switchNewDevice) {
+                btnSaveSecurity.addEventListener('click', function() {
+                    btnSaveSecurity.disabled = true;
+                    btnSaveSecurity.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Menyimpan...';
+
+                    Promise.all([
+                        fetch("{{ route('admin.dukunganaplikasi.fitur-aplikasi.update-setting') }}", {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': getCsrfToken(), 'Accept': 'application/json' },
+                            body: JSON.stringify({ key: 'rate_limit_attempts', value: selectRateLimit.value })
+                        }),
+                        fetch("{{ route('admin.dukunganaplikasi.fitur-aplikasi.update-setting') }}", {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': getCsrfToken(), 'Accept': 'application/json' },
+                            body: JSON.stringify({ key: 'auto_user_approval', value: switchAutoApproval.checked ? 1 : 0 })
+                        }),
+                        fetch("{{ route('admin.dukunganaplikasi.fitur-aplikasi.update-setting') }}", {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': getCsrfToken(), 'Accept': 'application/json' },
+                            body: JSON.stringify({ key: 'new_device_alert', value: switchNewDevice.checked ? 1 : 0 })
+                        })
+                    ])
+                    .then(() => {
+                        btnSaveSecurity.disabled = false;
+                        btnSaveSecurity.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Kebijakan Keamanan';
+                        window.showToast('Kebijakan keamanan akun berhasil disimpan.', 'success');
+                    })
+                    .catch(err => {
+                        btnSaveSecurity.disabled = false;
+                        btnSaveSecurity.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Kebijakan Keamanan';
+                        window.showError(err.message || 'Gagal menyimpan kebijakan keamanan.');
+                    });
+                });
+            }
+
+            // WIDGET 5: POLLING & NOTIFICATION HANDLER
+            const selectPollingInterval = document.getElementById('widget_polling_interval');
+            const switchSoundNotif = document.getElementById('widget_sound_notif');
+            const switchToastNotif = document.getElementById('widget_toast_notif');
+            const btnSavePolling = document.getElementById('btn-save-polling');
+
+            if (btnSavePolling && selectPollingInterval && switchSoundNotif && switchToastNotif) {
+                btnSavePolling.addEventListener('click', function() {
+                    btnSavePolling.disabled = true;
+                    btnSavePolling.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Menyimpan...';
+
+                    Promise.all([
+                        fetch("{{ route('admin.dukunganaplikasi.fitur-aplikasi.update-setting') }}", {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': getCsrfToken(), 'Accept': 'application/json' },
+                            body: JSON.stringify({ key: 'polling_interval', value: selectPollingInterval.value })
+                        }),
+                        fetch("{{ route('admin.dukunganaplikasi.fitur-aplikasi.update-setting') }}", {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': getCsrfToken(), 'Accept': 'application/json' },
+                            body: JSON.stringify({ key: 'sound_notification', value: switchSoundNotif.checked ? 1 : 0 })
+                        }),
+                        fetch("{{ route('admin.dukunganaplikasi.fitur-aplikasi.update-setting') }}", {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': getCsrfToken(), 'Accept': 'application/json' },
+                            body: JSON.stringify({ key: 'toast_notification', value: switchToastNotif.checked ? 1 : 0 })
+                        })
+                    ])
+                    .then(() => {
+                        btnSavePolling.disabled = false;
+                        btnSavePolling.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Konfigurasi Polling';
+                        window.showToast('Konfigurasi sinkronisasi polling berhasil disimpan.', 'success');
+                    })
+                    .catch(err => {
+                        btnSavePolling.disabled = false;
+                        btnSavePolling.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Konfigurasi Polling';
+                        window.showError(err.message || 'Gagal menyimpan konfigurasi polling.');
+                    });
+                });
+            }
+
+            // WIDGET 6: CLEAR SYSTEM CACHE HANDLER
+            const btnClearCache = document.getElementById('btn-clear-all-cache');
+            if (btnClearCache) {
+                btnClearCache.addEventListener('click', function() {
+                    window.showConfirm({
+                        title: 'Bersihkan Cache Sistem?',
+                        text: 'Tindakan ini akan mengosongkan cache Views Blade, Cache Route, Cache Konfigurasi, dan Cache Fitur secara menyeluruh.',
+                        isDanger: false,
+                        onConfirm: () => {
+                            btnClearCache.disabled = true;
+                            btnClearCache.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Membersihkan...';
+
+                            fetch("{{ route('admin.dukunganaplikasi.fitur-aplikasi.clear-cache') }}", {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': getCsrfToken(),
+                                    'Accept': 'application/json'
+                                }
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                btnClearCache.disabled = false;
+                                btnClearCache.innerHTML = '<i class="ti ti-trash me-1"></i> Bersihkan Semua Cache';
+                                if (data.success) {
+                                    window.showSuccess(data.message, { reload: false });
+                                } else {
+                                    window.showError(data.message || 'Gagal membersihkan cache sistem.');
+                                }
+                            })
+                            .catch(err => {
+                                btnClearCache.disabled = false;
+                                btnClearCache.innerHTML = '<i class="ti ti-trash me-1"></i> Bersihkan Semua Cache';
+                                window.showError(err.message || 'Terjadi kesalahan saat membersihkan cache.');
+                            });
+                        }
+                    });
+                });
+            }
 
             // EVENT DELEGATION: Action Buttons for Modal (Create, Edit, View) (Rule 2 Compliance)
             document.addEventListener('click', function(e) {

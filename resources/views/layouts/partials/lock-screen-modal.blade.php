@@ -124,13 +124,24 @@
     }
 </style>
 
+@php
+    $serverIdleMinutes = \Illuminate\Support\Facades\Cache::get('app_setting_idle_timeout_minutes', 5);
+@endphp
+
 <script>
 (function() {
     'use strict';
 
-    // Durasi Idle: 5 Menit (5 * 60 * 1000 ms)
-    const IDLE_TIMEOUT_MS = 5 * 60 * 1000;
+    // Durasi Idle: Konfigurasi Dinamis (localStorage -> Server Setting -> Default 5 Menit)
+    const serverIdleMinutes = {{ (int) $serverIdleMinutes }};
     const STORAGE_KEY_LOCKED = 'repalogic_screen_locked';
+
+    function getIdleTimeoutMs() {
+        const stored = localStorage.getItem('repalogic_idle_timeout_minutes');
+        const mins = (stored !== null && stored !== '') ? parseInt(stored) : serverIdleMinutes;
+        if (mins <= 0) return 0; // 0 = Fitur Auto Lock Dinonaktifkan
+        return mins * 60 * 1000;
+    }
 
     let idleTimer = null;
     let lockModalInstance = null;
@@ -199,6 +210,14 @@
     };
 
     /**
+     * Set Durasi Idle Baru secara instan
+     */
+    window.setIdleTimeoutMinutes = function(minutes) {
+        localStorage.setItem('repalogic_idle_timeout_minutes', minutes);
+        resetIdleTimer();
+    };
+
+    /**
      * Reset Timer Idle
      */
     function resetIdleTimer() {
@@ -209,11 +228,15 @@
 
         if (idleTimer) {
             clearTimeout(idleTimer);
+            idleTimer = null;
         }
 
-        idleTimer = setTimeout(function() {
-            window.lockScreen();
-        }, IDLE_TIMEOUT_MS);
+        const timeoutMs = getIdleTimeoutMs();
+        if (timeoutMs > 0) {
+            idleTimer = setTimeout(function() {
+                window.lockScreen();
+            }, timeoutMs);
+        }
     }
 
     // Pasang listener aktivitas pengguna untuk reset timer idle

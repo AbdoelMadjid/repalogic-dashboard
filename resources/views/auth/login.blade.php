@@ -148,6 +148,16 @@
                             </div>
                         @endif
 
+                        @if ($errors->has('maintenance'))
+                            <div class="alert alert-danger border-0 shadow-sm d-flex align-items-start gap-2 mb-3.5 py-3 px-3.5 rounded-3" role="alert" style="background-color: #fef2f2; color: #991b1b; border-left: 4px solid #ef4444 !important;">
+                                <i class="ti ti-tool fs-18 text-danger flex-shrink-0 mt-0.5"></i>
+                                <div class="fs-13 lh-base w-100">
+                                    <strong class="d-block mb-0.5">Mode Pemeliharaan Aktif</strong>
+                                    {{ $errors->first('maintenance') }}
+                                </div>
+                            </div>
+                        @endif
+
                         <form method="POST" action="{{ route('login') }}" id="loginForm" novalidate>
                             @csrf
                             <input type="hidden" name="latitude" id="loginLatitude" value="">

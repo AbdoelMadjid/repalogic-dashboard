@@ -43,9 +43,11 @@
 **Repalogic Dashboard** adalah aplikasi sistem manajemen admin & dashboard modern berbasis **Laravel 13** dan **Inspinia Admin Template**. Dashboard ini dirancang untuk memberikan solusi manajemen pengguna yang komprehensif, fleksibel, serta berkinerja tinggi untuk kebutuhan aplikasi skala kecil hingga enterprise.
 
 ### Fitur Utama:
+- ⚙️ **Hub Pengaturan Fitur & Mode Pemeliharaan (Maintenance Mode)**: Panel 6 widget interaktif untuk manajemen visibilitas fitur sistem, waktu idle auto lock screen, proteksi mode pemeliharaan global dengan bypass superadmin/admin, kebijakan keamanan login, polling real-time, dan pembersih seluruh cache server.
 - 💬 **Fitur Chat & Direct Messaging Interaktif**: Komunikasi dua arah real-time, *Quoted Reply*, *Emoji Picker*, upload lampiran foto & dokumen hingga 10 MB, *Image Lightbox Modal*, dan *Real-Time Avatar Synchronization*.
 - 🎨 **Engine Dinamisasi Tema & Seksi Website**: Pengaturan tema publik dinamis dengan *Crop Simulator*, *Background Attachment Paralaks 3D*, *Deteksi Orientasi Gambar*, dan arsitektur *Loose Coupling* baku.
 - 🔐 **Manajemen Pengguna & Hak Akses (Spatie Permission Matrix)**: Pengaturan Role, Permission, Akses User, dan Akses Role dengan tampilan matrix table yang intuitif.
+- 🪪 **Pratinjau Foto KTP Profil Pengguna**: Baris berkas fisik KTP pada detail profil dengan modal preview ukuran penuh, buka di tab baru, dan unduh berkas.
 - ⚡ **Yajra DataTables Integration**: Pengolahan data server-side tabel yang cepat dan interaktif.
 - 🌐 **Engine Internasionalisasi Dua Bahasa (Bilingual ID & EN)**: Dukungan multi-bahasa terintegrasi.
 - 🎨 **Inspinia Modern UI & Icon Explorers**: Antarmuka responsif dengan penjelajah ikon Tabler & Lucide secara lengkap.
@@ -54,6 +56,7 @@
 
 ### 📚 Dokumentasi Arsitektur Teknis & Riwayat Rilis:
 - 🏷️ [**Riwayat Lengkap Release & Git Tag**](docs/riwayat_release_dan_tag.md) — Daftar versi rilis, git tag, dan ringkasan pembaruan fitur per versi.
+- ⚙️ [**Arsitektur & Operasional Fitur dan Pengaturan Aplikasi**](docs/arsitektur_dan_operasional_fitur_dan_pengaturan_aplikasi.md) — Panduan lengkap hub panel kontrol 6 widget, manajemen visibilitas fitur, mekanisme intersepsi login & middleware `CheckMaintenanceMode`, waktu idle dinamis, dan pembersihan cache.
 - 💬 [**Pola & Operasional Fitur Chat / Messages Engine**](docs/arsitektur_dan_operasional_fitur_chat_messages.md) — Panduan lengkap arsitektur percakapan *1-on-1*, skema database *conversation ID*, *Quoted Reply*, *Emoji Picker*, *Attachment Upload & Lightbox*, dan *Real-Time Avatar Sync Engine*.
 - 🔐 [**Arsitektur & Operasional Autentikasi Pengguna**](docs/arsitektur_dan_operasional_authentication_user.md) — Panduan lengkap alur pendaftaran mandiri, *User Approval Workflow*, proteksi login *Zero-Trust*, *Universal Notification Hub*, penonaktifan mandiri (*Danger Zone*), pengajuan aktivasi kembali, dan Spatie Role otomatis.
 - 📄 [**Arsitektur Engine Dinamisasi Tema & Seksi Website**](docs/arsitektur_dinamisasi_tema_website.md) — Panduan resmi arsitektur *Loose Coupling*, *Crop Simulator*, *Efek Paralaks 3D*, *Metadata Orientasi Gambar*, dan *Pemisahan Modal Modular*.

@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v2.4.7`  
-> **Terakhir Diperbarui:** 31 Agustus 2026 17:18 WIB  
+> **Versi Terbaru:** `v2.4.8`  
+> **Terakhir Diperbarui:** 31 Agustus 2026 19:12 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v2.4.8`** | `2026-08-31 19:12 WIB` | Application Settings Hub & Maintenance Mode Engine: 6 Interactive Control Widgets, Dynamic Idle Lock Screen, 503 Maintenance Page, Global Middleware Protection & User KTP Photo Preview Modal |
 | **`v2.4.7`** | `2026-08-31 17:18 WIB` | User Profile Cover Height Customization Engine: Real-Time Proportional Slider, Inline Presets & Synchronized Aspect Ratio WYSIWYG |
 | **`v2.4.6`** | `2026-08-31 17:00 WIB` | Interactive Chat Enhancements Suite: In-Chat Search, Pinned Messages, Emoji Reactions, Message Forwarding & Voice Note Audio Engine |
 | **`v2.4.5`** | `2026-08-31 16:36 WIB` | Clear Conversation History Engine (Keep Opponent Chat Intact) & Dual deleted_for_sender/receiver Flags |

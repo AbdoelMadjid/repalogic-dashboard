@@ -112,6 +112,19 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // 4. Cek apakah Mode Pemeliharaan (Maintenance Mode) sedang aktif
+        $isMaintenance = (bool) \Illuminate\Support\Facades\Cache::get('app_setting_maintenance_mode', false);
+        if ($isMaintenance && ! $user->hasRole('superadmin') && ! $user->hasRole('admin')) {
+            RateLimiter::hit($this->throttleKey());
+            $this->flashOnly(['email']);
+
+            $maintenanceMsg = \Illuminate\Support\Facades\Cache::get('app_setting_maintenance_message', 'Sistem sedang dalam proses pemeliharaan berkala. Saat ini hanya Administrator yang dapat masuk ke sistem.');
+
+            throw ValidationException::withMessages([
+                'maintenance' => $maintenanceMsg,
+            ]);
+        }
+
         Auth::login($user, $this->boolean('remember'));
 
         RateLimiter::clear($this->throttleKey());

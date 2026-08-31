@@ -7,6 +7,8 @@ use App\Http\Requests\Admin\DukunganAplikasi\FiturAplikasiRequest;
 use App\Models\Admin\DukunganAplikasi\FiturAplikasi;
 use App\Traits\HasNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 
 class FiturAplikasiController extends Controller
 {
@@ -38,13 +40,27 @@ class FiturAplikasiController extends Controller
 
         $groupedFeatures = $features->groupBy('kategori');
 
+        // Pengaturan Sistem Aplikasi
+        $appSettings = [
+            'idle_timeout_minutes' => Cache::get('app_setting_idle_timeout_minutes', 5),
+            'maintenance_mode' => (bool) Cache::get('app_setting_maintenance_mode', false),
+            'maintenance_message' => Cache::get('app_setting_maintenance_message', 'Sistem sedang dalam proses pemeliharaan berkala. Silakan coba beberapa saat lagi.'),
+            'rate_limit_attempts' => Cache::get('app_setting_rate_limit_attempts', 5),
+            'auto_user_approval' => (bool) Cache::get('app_setting_auto_user_approval', false),
+            'new_device_alert' => (bool) Cache::get('app_setting_new_device_alert', true),
+            'polling_interval' => Cache::get('app_setting_polling_interval', 20),
+            'sound_notification' => (bool) Cache::get('app_setting_sound_notification', true),
+            'toast_notification' => (bool) Cache::get('app_setting_toast_notification', true),
+        ];
+
         return view('admin.dukunganaplikasi.fitur-aplikasi', compact(
             'features',
             'groupedFeatures',
             'categories',
             'totalFeatures',
             'activeFeatures',
-            'inactiveFeatures'
+            'inactiveFeatures',
+            'appSettings'
         ));
     }
 
@@ -267,6 +283,69 @@ class FiturAplikasiController extends Controller
             'status' => $newStatus,
             'affected' => $count,
             'ids' => $ids,
+        ]);
+    }
+
+    /**
+     * Bersihkan seluruh cache sistem (views, config, routes, app cache).
+     */
+    public function clearSystemCache(Request $request)
+    {
+        if (!auth()->user()->can('update dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki akses untuk membersihkan cache sistem.',
+            ], 403);
+        }
+
+        try {
+            Artisan::call('view:clear');
+            Artisan::call('cache:clear');
+            Artisan::call('config:clear');
+            Artisan::call('route:clear');
+
+            FiturAplikasi::clearCache();
+            \App\Models\Admin\DukunganAplikasi\ProfilAplikasi::clearCache();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Seluruh cache sistem (Views, Config, Routes, Application Cache) berhasil dibersihkan!',
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal membersihkan cache: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Simpan konfigurasi setting aplikasi via AJAX.
+     */
+    public function updateAppSetting(Request $request)
+    {
+        if (!auth()->user()->can('update dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki akses untuk mengubah konfigurasi aplikasi.',
+            ], 403);
+        }
+
+        $request->validate([
+            'key' => 'required|string',
+            'value' => 'nullable',
+        ]);
+
+        $key = $request->input('key');
+        $value = $request->input('value');
+
+        Cache::forever('app_setting_' . $key, $value);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pengaturan berhasil disimpan ke sistem.',
+            'key' => $key,
+            'value' => $value,
         ]);
     }
 }

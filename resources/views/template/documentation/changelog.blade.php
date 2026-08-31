@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.4.7</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.4.8</strong>
                             </span>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                                         <h6 class="fw-bold mb-0 text-dark">1. Update APP_VERSION</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Cukup ubah <code>APP_VERSION=vX.Y.Z</code> pada file <code>.env</code> / <code>config/app.php</code>. Versi pada <strong>Sidenav, Footer, &amp; DB Profil Aplikasi</strong> akan ter-update secara otomatis!
+                                        Perbarui variabel <code>APP_VERSION</code> pada berkas <code>.env</code>, <code>.env.example</code>, dan <code>config/app.php</code>.
                                     </p>
                                 </div>
                             </div>
@@ -56,11 +56,11 @@
                             <div class="col-md-6 col-lg-3">
                                 <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                     <div class="d-flex align-items-center mb-2">
-                                        <span class="badge bg-success rounded-circle p-1.5 me-2"><i class="ti ti-file-text fs-14"></i></span>
-                                        <h6 class="fw-bold mb-0 text-dark">2. Catat Log Changelog</h6>
+                                        <span class="badge bg-success rounded-circle p-1.5 me-2"><i class="ti ti-history fs-14"></i></span>
+                                        <h6 class="fw-bold mb-0 text-dark">2. Update Changelog</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Tambahkan log pada file <code>resources/views/template/documentation/changelog.blade.php</code> dengan timestamp presisi WIB.
+                                        Tambahkan riwayat pembaruan baru pada timeline ini dengan timestamp presisi WIB.
                                     </p>
                                 </div>
                             </div>
@@ -68,11 +68,11 @@
                             <div class="col-md-6 col-lg-3">
                                 <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                     <div class="d-flex align-items-center mb-2">
-                                        <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-table fs-14"></i></span>
-                                        <h6 class="fw-bold mb-0 text-dark">3. Update Tabel Rilis</h6>
+                                        <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-file-text fs-14"></i></span>
+                                        <h6 class="fw-bold mb-0 text-dark">3. Update Release Doc</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Catat riwayat pada tabel <code>docs/riwayat_release_dan_tag.md</code> untuk arsip dokumentasi markdown.
+                                        Tambahkan baris rilis baru pada dokumen <code>docs/riwayat_release_dan_tag.md</code>.
                                     </p>
                                 </div>
                             </div>
@@ -80,11 +80,11 @@
                             <div class="col-md-6 col-lg-3">
                                 <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                     <div class="d-flex align-items-center mb-2">
-                                        <span class="badge bg-danger rounded-circle p-1.5 me-2"><i class="ti ti-tag fs-14"></i></span>
+                                        <span class="badge bg-info rounded-circle p-1.5 me-2"><i class="ti ti-git-merge fs-14"></i></span>
                                         <h6 class="fw-bold mb-0 text-dark">4. Git Tag Release</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Buat tag git baru: <code>git tag -a vX.Y.Z -m "Release vX.Y.Z"</code> lalu jalankan <code>git push origin main --tags</code>.
+                                        Lakukan commit perubahan lalu buat tag git baru dan lakukan push tag ke repositori.
                                     </p>
                                 </div>
                             </div>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.4.7 -->
+                        <!-- Version 2.4.8 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,38 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.4.7</h5>
+                                        <h5 class="fw-bold mb-0">v2.4.8</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.8</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 19:12 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Application Settings Hub &amp; Maintenance Mode Engine: 6 Interactive Control Widgets, Dynamic Idle Lock Screen, 503 Maintenance Page, Global Middleware Protection &amp; User KTP Photo Preview Modal</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Hub Panel Kontrol &amp; Pengaturan Fitur Terpadu (<code>admin/dukunganaplikasi/fitur-aplikasi</code>):</strong> Menghadirkan 6 widget interaktif untuk manajemen visibilitas fitur sistem, waktu idle auto lock, mode pemeliharaan, kebijakan keamanan autentikasi, sinkronisasi polling real-time, dan pembersih seluruh cache server.</li>
+                                    <li><strong class="text-dark">Mode Pemeliharaan (Maintenance Mode) &amp; Akses Administrator:</strong> Proteksi menyeluruh via middleware <code>CheckMaintenanceMode</code> dan <code>LoginRequest</code>. Akun superadmin &amp; admin tetap memiliki akses penuh (bypass otomatis), sementara akun non-admin/tamu diblokir login dan diarahkan ke halaman responsif <code>errors/503.blade.php</code>.</li>
+                                    <li><strong class="text-dark">Pengatur Waktu Idle Dinamis (Auto Screen Lock):</strong> Durasi ketidakaktifan pengguna tersinkronisasi instan antara cache server dan browser localStorage dengan tombol pengujian langsung (<code>window.lockScreen()</code>).</li>
+                                    <li><strong class="text-dark">Preview Foto KTP Profil Pengguna (<code>admin/profil-pengguna</code>):</strong> Penambahan baris dokumen KTP fisik di bagian bawah tabel detail kelengkapan identitas pengguna dengan tombol preview modal ukuran penuh, unduh berkas, dan buka tab baru.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Settings Hub</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Maintenance Mode</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Idle Lock Screen</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Cache Optimizer</span>
+                                    <span class="badge bg-light text-dark border fs-xs">KTP Preview Modal</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.4.7 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-dot fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.4.7</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.7</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 17:18 WIB</span>
