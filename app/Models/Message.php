@@ -27,12 +27,51 @@ class Message extends Model
         'attachment_name',
         'attachment_type',
         'attachment_size',
+        'deleted_for_sender',
+        'deleted_for_receiver',
+        'is_pinned',
+        'reactions',
+        'is_forwarded',
     ];
 
     protected $casts = [
         'is_read' => 'boolean',
         'read_at' => 'datetime',
+        'deleted_for_sender' => 'boolean',
+        'deleted_for_receiver' => 'boolean',
+        'is_pinned' => 'boolean',
+        'reactions' => 'array',
+        'is_forwarded' => 'boolean',
     ];
+
+    /**
+     * Toggle reaction emoji for a specific user ID.
+     */
+    public function toggleReaction(string $emoji, int $userId): array
+    {
+        $reactions = is_array($this->reactions) ? $this->reactions : [];
+        
+        $userList = isset($reactions[$emoji]) && is_array($reactions[$emoji]) ? $reactions[$emoji] : [];
+        
+        if (in_array($userId, $userList)) {
+            // Remove user from reaction
+            $userList = array_values(array_diff($userList, [$userId]));
+            if (empty($userList)) {
+                unset($reactions[$emoji]);
+            } else {
+                $reactions[$emoji] = $userList;
+            }
+        } else {
+            // Add user to reaction
+            $userList[] = $userId;
+            $reactions[$emoji] = array_values(array_unique($userList));
+        }
+
+        $this->reactions = empty($reactions) ? null : $reactions;
+        $this->save();
+
+        return $this->reactions ?: [];
+    }
 
     public function sender(): BelongsTo
     {
@@ -62,6 +101,19 @@ class Message extends Model
     public function scopeByConversation($query, string $conversationId)
     {
         return $query->where('conversation_id', $conversationId);
+    }
+
+    public function scopeVisibleTo($query, int $userId)
+    {
+        return $query->where(function ($q) use ($userId) {
+            $q->where(function ($q1) use ($userId) {
+                $q1->where('sender_id', $userId)
+                   ->where('deleted_for_sender', false);
+            })->orWhere(function ($q2) use ($userId) {
+                $q2->where('receiver_id', $userId)
+                   ->where('deleted_for_receiver', false);
+            });
+        });
     }
 
     /**

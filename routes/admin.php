@@ -48,6 +48,11 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
         Route::get('messages/poll-contacts', [MessageController::class, 'pollContacts'])->name('messages.poll-contacts');
         Route::get('messages/conversation/{user}', [MessageController::class, 'getMessages'])->name('messages.conversation');
         Route::post('messages/send', [MessageController::class, 'send'])->name('messages.send');
+        Route::post('messages/{id}/toggle-pin', [MessageController::class, 'togglePin'])->whereNumber('id')->name('messages.toggle-pin');
+        Route::post('messages/{id}/toggle-reaction', [MessageController::class, 'toggleReaction'])->whereNumber('id')->name('messages.toggle-reaction');
+        Route::post('messages/{id}/forward', [MessageController::class, 'forward'])->whereNumber('id')->name('messages.forward');
+        Route::delete('messages/conversation/{user}/clear', [MessageController::class, 'clearConversation'])->name('messages.clear-conversation');
+        Route::delete('messages/{id}', [MessageController::class, 'destroy'])->whereNumber('id')->name('messages.destroy');
     });
 
     Route::prefix('dukunganaplikasi')->name('dukunganaplikasi.')->group(function () {

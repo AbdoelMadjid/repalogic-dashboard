@@ -111,27 +111,68 @@
                 </div>
 
                 <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                    <button type="button" id="btn-toggle-search" class="btn btn-sm btn-outline-secondary" title="Cari Pesan dalam Obrolan Ini" {{ $activeUser ? '' : 'disabled' }}>
+                        <i class="ti ti-search"></i>
+                    </button>
+                    <button type="button" id="btn-clear-chat" class="btn btn-sm btn-outline-danger" title="Bersihkan Seluruh Riwayat Obrolan" {{ ($activeUser && $messages->isNotEmpty()) ? '' : 'disabled' }}>
+                        <i class="ti ti-trash me-1"></i> Bersihkan Obrolan
+                    </button>
                     <button type="button" id="btn-view-user-detail" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#user-detail-modal" title="Lihat Profil Pengguna Ini" {{ $activeUser ? '' : 'disabled' }}>
                         <i class="ti ti-user me-1"></i> Detail Akun
                     </button>
                 </div>
             </div>
 
+            <!-- IN-CHAT SEARCH BAR -->
+            <div id="in-chat-search-bar" class="bg-light-subtle border-bottom px-3 py-2 d-none" style="transition: all 0.2s ease;">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="input-group input-group-sm flex-grow-1">
+                        <span class="input-group-text bg-white border-end-0 text-muted"><i class="ti ti-search fs-14"></i></span>
+                        <input type="text" id="input-search-in-chat" class="form-control border-start-0 ps-1 fs-12" placeholder="Ketik kata kunci pesan...">
+                        <button class="btn btn-outline-secondary border-start-0" type="button" id="btn-clear-in-chat-search" style="display:none;"><i class="ti ti-x fs-12"></i></button>
+                    </div>
+                    <span class="fs-12 text-muted text-nowrap d-none" id="search-match-count">0 dari 0</span>
+                    <button type="button" class="btn btn-sm btn-light border px-2 py-1" id="btn-search-prev" title="Pesan Sebelumnya" disabled><i class="ti ti-chevron-up"></i></button>
+                    <button type="button" class="btn btn-sm btn-light border px-2 py-1" id="btn-search-next" title="Pesan Selanjutnya" disabled><i class="ti ti-chevron-down"></i></button>
+                    <button type="button" class="btn btn-sm btn-link text-muted p-1" id="btn-close-search" title="Tutup Pencarian"><i class="ti ti-x fs-16"></i></button>
+                </div>
+            </div>
+
+            <!-- PINNED MESSAGE FLOATING BANNER -->
+            <div id="pinned-message-banner" class="alert border-0 rounded-0 mb-0 py-2 px-3 d-flex align-items-center justify-content-between d-none" style="background-color: #f0fdf4; color: #166534; border-bottom: 1px solid #bbf7d0 !important;">
+                <div class="d-flex align-items-center gap-2 overflow-hidden me-2 flex-grow-1" id="btn-jump-to-pinned" role="button" title="Klik untuk melompat ke pesan yang disematkan" style="cursor: pointer;">
+                    <i class="ti ti-pin-filled fs-16 flex-shrink-0 text-success"></i>
+                    <div class="text-truncate fs-12">
+                        <strong class="fw-semibold text-success">Pesan Disematkan:</strong> <span id="pinned-text-preview" class="text-dark">...</span>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-link text-success p-0 text-decoration-none flex-shrink-0" id="btn-unpin-banner" title="Lepas Sematan"><i class="ti ti-x fs-14"></i></button>
+            </div>
+
             <!-- MESSAGES BUBBLE CONTAINER -->
-            <div id="chat-container" class="card-body pt-2 pb-3 chat-content-bar" data-simplebar style="height: calc(100vh - 280px); overflow-y: auto;">
+            <div id="chat-container" class="card-body pt-2 pb-3 chat-content-bar position-relative" data-simplebar style="height: calc(100vh - 280px); overflow-y: auto;">
                 @if ($activeUser && $messages->isNotEmpty())
                     @foreach ($messages as $msg)
                         @php
                             $isSender = $msg->sender_id === auth()->id();
                             $msgAvatar = $isSender ? auth()->user()->avatar_url : ($msg->sender ? $msg->sender->avatar_url : asset('assets/images/users/default-avatar.svg'));
                             $senderName = $isSender ? 'Anda' : ($msg->sender ? $msg->sender->name : 'Pengguna');
+                            $reactions = is_array($msg->reactions) ? $msg->reactions : [];
+                            $isPinned = (bool) $msg->is_pinned;
+                            $isForwarded = (bool) $msg->is_forwarded;
                         @endphp
                         <div class="d-flex align-items-start gap-2 my-3 chat-item {{ $isSender ? 'text-end justify-content-end' : '' }}" id="chat-msg-{{ $msg->id }}" data-msg-id="{{ $msg->id }}">
                             @if (!$isSender)
                                 <img src="{{ $msgAvatar }}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0 chat-avatar-opponent" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />
                             @endif
                             <div style="max-width: 75%;">
-                                <div class="chat-message py-2 px-3 {{ $isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border' }} rounded shadow-sm text-start">
+                                <div class="chat-message py-2 px-3 {{ $isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border' }} rounded shadow-sm text-start position-relative">
+                                    @if ($isForwarded)
+                                        <div class="fs-11 text-muted fst-italic mb-1 d-flex align-items-center gap-1">
+                                            <i class="ti ti-arrow-forward-up fs-12 text-primary"></i> Diteruskan
+                                        </div>
+                                    @endif
+
                                     @if ($msg->parent)
                                         <div class="p-2 mb-2 bg-white bg-opacity-75 rounded border-start border-3 border-primary text-start fs-12 shadow-sm reply-quote-box" data-parent-id="{{ $msg->parent_id }}" role="button" title="Klik untuk menuju pesan yang dibalas">
                                             <strong class="d-block text-primary fs-11 mb-0.5"><i class="ti ti-corner-up-left me-1"></i>{{ $msg->parent->sender ? ($msg->parent->sender_id === auth()->id() ? 'Anda' : $msg->parent->sender->name) : 'Pesan' }}</strong>
@@ -144,10 +185,26 @@
 
                                     @if ($msg->attachment_url)
                                         @php
-                                            $isImg = $msg->attachment_type === 'image' || in_array(strtolower(pathinfo($msg->attachment_url, PATHINFO_EXTENSION)), ['jpg','jpeg','png','webp','gif']);
+                                            $isVoice = $msg->attachment_type === 'voice' || in_array(strtolower(pathinfo($msg->attachment_url, PATHINFO_EXTENSION)), ['mp3','wav','ogg','webm','m4a','aac','flac']);
+                                            $isImg = !$isVoice && ($msg->attachment_type === 'image' || in_array(strtolower(pathinfo($msg->attachment_url, PATHINFO_EXTENSION)), ['jpg','jpeg','png','webp','gif']));
                                         @endphp
                                         <div class="my-2">
-                                            @if ($isImg)
+                                            @if ($isVoice)
+                                                <div class="voice-player-card p-2 rounded-3 bg-white bg-opacity-75 border d-flex align-items-center gap-2 shadow-sm" style="min-width: 220px; max-width: 280px;">
+                                                    <button type="button" class="btn btn-sm btn-primary rounded-circle p-0 d-flex align-items-center justify-content-center btn-play-voice flex-shrink-0" style="width: 32px; height: 32px;" data-audio-src="{{ $msg->attachment_url }}" title="Putar Pesan Suara">
+                                                        <i class="ti ti-player-play fs-14"></i>
+                                                    </button>
+                                                    <div class="flex-grow-1 overflow-hidden">
+                                                        <div class="d-flex justify-content-between align-items-center fs-xxs text-muted mb-1">
+                                                            <span class="voice-current-time">0:00</span>
+                                                            <span class="voice-duration">🎙️ Pesan Suara</span>
+                                                        </div>
+                                                        <div class="progress voice-progress rounded-pill bg-secondary-subtle" style="height: 5px; cursor: pointer;">
+                                                            <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 0%"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @elseif ($isImg)
                                                 <div class="chat-attachment-image">
                                                     <a href="{{ $msg->attachment_url }}" class="d-inline-block position-relative rounded-3 overflow-hidden shadow-sm border btn-preview-img-modal" data-img-url="{{ $msg->attachment_url }}" data-img-name="{{ $msg->attachment_name ?: 'Gambar' }}">
                                                         <img src="{{ $msg->attachment_url }}" alt="{{ $msg->attachment_name ?: 'Gambar' }}" class="rounded-3" style="width: 240px; max-width: 100%; height: 160px; object-fit: cover; cursor: pointer; display: block; transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
@@ -177,7 +234,7 @@
                                     @endif
 
                                     @if (!empty($msg->body))
-                                        <div class="fs-13 lh-base text-wrap" style="word-break: break-word;">{!! nl2br(e($msg->body)) !!}</div>
+                                        <div class="fs-13 lh-base text-wrap message-body-text" style="word-break: break-word;">{!! nl2br(e($msg->body)) !!}</div>
                                     @endif
 
                                     @if ($msg->reason)
@@ -186,10 +243,40 @@
                                         </div>
                                     @endif
                                 </div>
+
+                                <!-- REACTIONS CONTAINER -->
+                                <div class="chat-reactions-container d-flex flex-wrap gap-1 mt-1 {{ $isSender ? 'justify-content-end' : 'justify-content-start' }}" id="chat-reactions-{{ $msg->id }}">
+                                    @foreach ($reactions as $emoji => $users)
+                                        @if (!empty($users))
+                                            @php $hasReacted = in_array(auth()->id(), $users); @endphp
+                                            <button type="button" class="btn btn-xs py-0.5 px-1.5 rounded-pill border {{ $hasReacted ? 'bg-primary-subtle text-primary border-primary' : 'bg-light text-dark border-secondary-subtle' }} btn-reaction-pill fs-xxs d-inline-flex align-items-center gap-1" data-msg-id="{{ $msg->id }}" data-emoji="{{ $emoji }}" title="{{ count($users) }} orang bereaksi {{ $emoji }}">
+                                                <span>{{ $emoji }}</span>
+                                                <span class="fw-semibold">{{ count($users) }}</span>
+                                            </button>
+                                        @endif
+                                    @endforeach
+                                </div>
+
+                                <!-- MESSAGE ACTION BUTTONS -->
                                 <div class="d-flex align-items-center gap-2 text-muted fs-xs mt-1 {{ $isSender ? 'justify-content-end' : 'justify-content-start' }}">
-                                    <span><i class="ti ti-clock me-0.5"></i> {{ $msg->created_at ? $msg->created_at->format('H:i') : '' }}</span>
-                                    <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-1 opacity-75 opacity-100-hover" data-msg-id="{{ $msg->id }}" data-sender-name="{{ $senderName }}" data-msg-body="{{ e($msg->body ?: ($msg->attachment_name ?: 'Lampiran berkas')) }}" title="Balas Pesan Ini">
+                                    <span class="chat-status-time"><i class="ti ti-clock me-0.5"></i> {{ $msg->created_at ? $msg->created_at->format('H:i') : '' }}</span>
+                                    @if ($isPinned)
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle fs-xxs py-0.5 px-1 pinned-indicator" title="Pesan Disematkan"><i class="ti ti-pin-filled me-0.5"></i> Sematan</span>
+                                    @endif
+                                    <button type="button" class="btn btn-link p-0 text-muted btn-react-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover" data-msg-id="{{ $msg->id }}" title="Beri Reaksi Emoji">
+                                        <i class="ti ti-mood-smile"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover" data-msg-id="{{ $msg->id }}" data-sender-name="{{ $senderName }}" data-msg-body="{{ e($msg->body ?: ($msg->attachment_name ?: 'Lampiran berkas')) }}" title="Balas Pesan Ini">
                                         <i class="ti ti-corner-up-left"></i> Balas
+                                    </button>
+                                    <button type="button" class="btn btn-link p-0 text-muted btn-forward-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover" data-msg-id="{{ $msg->id }}" title="Teruskan Pesan">
+                                        <i class="ti ti-arrow-forward-up"></i> Teruskan
+                                    </button>
+                                    <button type="button" class="btn btn-link p-0 text-muted btn-pin-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover" data-msg-id="{{ $msg->id }}" data-is-pinned="{{ $isPinned ? '1' : '0' }}" title="{{ $isPinned ? 'Lepas Sematan' : 'Sematkan Pesan' }}">
+                                        <i class="ti {{ $isPinned ? 'ti-pinned-off text-warning' : 'ti-pin' }}"></i> {{ $isPinned ? 'Lepas Pin' : 'Pin' }}
+                                    </button>
+                                    <button type="button" class="btn btn-link p-0 text-danger btn-delete-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover ms-1" data-msg-id="{{ $msg->id }}" data-is-sender="{{ $isSender ? '1' : '0' }}" title="{{ $isSender ? 'Hapus / Tarik untuk Semua Orang' : 'Hapus untuk Saya' }}">
+                                        <i class="ti ti-trash"></i> Hapus
                                     </button>
                                 </div>
                             </div>
@@ -216,6 +303,16 @@
                 @endif
             </div>
             <!-- end card-body -->
+
+            <!-- FLOATING QUICK REACTION BAR -->
+            <div id="quick-reaction-popover" class="d-none position-absolute bg-white rounded-pill shadow-lg border px-2 py-1 d-flex align-items-center gap-1.5 z-3" style="transition: all 0.15s ease;">
+                <button type="button" class="btn btn-link p-0 border-0 fs-18 btn-quick-react text-decoration-none" data-emoji="👍" title="Suka">👍</button>
+                <button type="button" class="btn btn-link p-0 border-0 fs-18 btn-quick-react text-decoration-none" data-emoji="❤️" title="Hati">❤️</button>
+                <button type="button" class="btn btn-link p-0 border-0 fs-18 btn-quick-react text-decoration-none" data-emoji="😂" title="Tertawa">😂</button>
+                <button type="button" class="btn btn-link p-0 border-0 fs-18 btn-quick-react text-decoration-none" data-emoji="😮" title="Kaget">😮</button>
+                <button type="button" class="btn btn-link p-0 border-0 fs-18 btn-quick-react text-decoration-none" data-emoji="😢" title="Sedih">😢</button>
+                <button type="button" class="btn btn-link p-0 border-0 fs-18 btn-quick-react text-decoration-none" data-emoji="🙏" title="Terima Kasih">🙏</button>
+            </div>
 
             <!-- FOOTER: INPUT PESAN & TOMBOL KIRIM -->
             <div class="card-footer bg-body-secondary border-top border-dashed py-2.5 position-relative">
@@ -300,15 +397,37 @@
                         </div>
                     </div>
 
-                    <div class="d-flex gap-2 align-items-center position-relative">
+                    <!-- VOICE RECORDING BAR -->
+                    <div id="voice-recording-container" class="d-none align-items-center justify-content-between flex-grow-1 bg-danger-subtle px-3 py-1.5 mb-1 rounded-pill border border-danger-subtle">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="spinner-grow spinner-grow-sm text-danger" role="status" style="width: 10px; height: 10px;"></span>
+                            <span id="voice-recording-timer" class="fs-13 fw-bold text-danger font-monospace">00:00</span>
+                            <span class="fs-12 text-danger ms-1">Merekam suara...</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" id="btn-cancel-voice" class="btn btn-sm btn-link text-danger p-0 text-decoration-none fs-12" title="Batal Rekam">
+                                <i class="ti ti-trash me-0.5"></i> Batal
+                            </button>
+                            <button type="button" id="btn-send-voice" class="btn btn-sm btn-danger rounded-circle p-1 d-flex align-items-center justify-content-center shadow-sm" style="width: 32px; height: 32px;" title="Kirim Pesan Suara">
+                                <i class="ti ti-send fs-14"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- NORMAL INPUT CONTAINER -->
+                    <div class="d-flex gap-2 align-items-center position-relative" id="chat-input-row">
                         <div class="position-relative flex-grow-1 d-flex align-items-center">
                             <div class="app-search flex-grow-1 position-relative">
-                                <input type="text" id="chat-message-input" class="form-control py-2 bg-light-subtle border-light" style="padding-right: 76px !important;" placeholder="Ketik pesan Anda di sini..." autocomplete="off" {{ $activeUser ? '' : 'disabled' }} />
+                                <input type="text" id="chat-message-input" class="form-control py-2 bg-light-subtle border-light" style="padding-right: 105px !important;" placeholder="Ketik pesan Anda di sini..." autocomplete="off" {{ $activeUser ? '' : 'disabled' }} />
                                 <i class="ti ti-message app-search-icon text-muted"></i>
                             </div>
                             <div class="position-absolute end-0 me-2 d-flex align-items-center gap-1 z-2">
+                                <!-- Tombol Rekam Suara (Voice Note) -->
+                                <button type="button" id="btn-record-voice" class="btn btn-sm btn-icon text-muted hover-text-danger" style="background: transparent; border: none; cursor: pointer; padding: 2px;" title="Rekam Pesan Suara (Voice Note)" {{ $activeUser ? '' : 'disabled' }}>
+                                    <i class="ti ti-microphone fs-18 text-danger"></i>
+                                </button>
                                 <!-- Tombol Lampirkan Berkas/Gambar -->
-                                <input type="file" id="chat-file-input" class="d-none" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.zip,.rar,.txt">
+                                <input type="file" id="chat-file-input" class="d-none" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.zip,.rar,.txt,audio/*">
                                 <button type="button" id="btn-attach-file" class="btn btn-sm btn-icon text-muted hover-text-primary" style="background: transparent; border: none; cursor: pointer; padding: 2px;" title="Kirim Gambar / Lampiran Berkas" {{ $activeUser ? '' : 'disabled' }}>
                                     <i class="ti ti-paperclip fs-18"></i>
                                 </button>
@@ -374,6 +493,31 @@
         </div>
     </div>
 
+    <!-- MODAL TERUSKAN PESAN (FORWARD MODAL) -->
+    <div class="modal fade" id="forward-message-modal" tabindex="-1" aria-labelledby="forwardMessageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow-lg rounded-3">
+                <div class="modal-header bg-primary text-white py-2.5 px-3">
+                    <h6 class="modal-title fs-14 fw-semibold text-white mb-0" id="forwardMessageModalLabel">
+                        <i class="ti ti-arrow-forward-up me-1"></i> Teruskan Pesan
+                    </h6>
+                    <button type="button" class="btn-close btn-close-white btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3">
+                    <div class="mb-2">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-white border-end-0"><i class="ti ti-search fs-12 text-muted"></i></span>
+                            <input type="text" id="forward-contact-search" class="form-control border-start-0 ps-1 fs-12" placeholder="Cari kontak pengguna...">
+                        </div>
+                    </div>
+                    <div class="list-group list-group-flush border rounded-2 overflow-y-auto" id="forward-contact-list" style="max-height: 240px;">
+                        <!-- Rendered dynamically via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL LIGHTBOX PRATINJAU GAMBAR CHAT -->
     <div class="modal fade" id="chat-image-modal" tabindex="-1" aria-labelledby="chatImageModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" style="max-width: 580px;">
@@ -416,16 +560,94 @@
             const activeChatRole = document.getElementById('active-chat-role');
             const activeChatAvatar = document.getElementById('active-chat-avatar');
             const btnViewUserDetail = document.getElementById('btn-view-user-detail');
+            const btnClearChat = document.getElementById('btn-clear-chat');
             const contactSearchInput = document.getElementById('chat-contact-search');
+
+            // In-Chat Search Elements
+            const btnToggleSearch = document.getElementById('btn-toggle-search');
+            const inChatSearchBar = document.getElementById('in-chat-search-bar');
+            const inputSearchInChat = document.getElementById('input-search-in-chat');
+            const btnClearInChatSearch = document.getElementById('btn-clear-in-chat-search');
+            const searchMatchCount = document.getElementById('search-match-count');
+            const btnSearchPrev = document.getElementById('btn-search-prev');
+            const btnSearchNext = document.getElementById('btn-search-next');
+            const btnCloseSearch = document.getElementById('btn-close-search');
+
+            // Pinned Message Elements
+            const pinnedMessageBanner = document.getElementById('pinned-message-banner');
+            const pinnedTextPreview = document.getElementById('pinned-text-preview');
+            const btnJumpToPinned = document.getElementById('btn-jump-to-pinned');
+            const btnUnpinBanner = document.getElementById('btn-unpin-banner');
+            let currentPinnedMessageId = null;
+
+            // Quick Reaction Elements
+            const quickReactionPopover = document.getElementById('quick-reaction-popover');
+            let activeReactMessageId = null;
+
+            // Forward Modal Elements
+            const forwardModalEl = document.getElementById('forward-message-modal');
+            const forwardContactSearch = document.getElementById('forward-contact-search');
+            const forwardContactList = document.getElementById('forward-contact-list');
+            let activeForwardMessageId = null;
+
+            // Voice Note Recorder Elements
+            const btnRecordVoice = document.getElementById('btn-record-voice');
+            const voiceRecordingContainer = document.getElementById('voice-recording-container');
+            const voiceRecordingTimer = document.getElementById('voice-recording-timer');
+            const btnCancelVoice = document.getElementById('btn-cancel-voice');
+            const btnSendVoice = document.getElementById('btn-send-voice');
+            const chatInputRow = document.getElementById('chat-input-row');
 
             let activeUserId = activeReceiverInput ? activeReceiverInput.value : '';
             let lastMessageCount = {{ $messages->count() }};
             let lastMessageId = {{ $messages->isNotEmpty() ? $messages->last()->id : 'null' }};
             let userHasScrolledUp = false;
 
+            // Voice Note MediaRecorder state
+            let mediaRecorder = null;
+            let audioChunks = [];
+            let recordingTimerInterval = null;
+            let recordingSeconds = 0;
+            let activeAudioPlayer = null;
+            let activeAudioBtn = null;
+            let activeAudioProgress = null;
+            let activeAudioTimeEl = null;
+
+            // In-Chat Search state
+            let searchMatches = [];
+            let currentSearchIndex = -1;
+
             // ==========================================
             // HELPER FUNCTIONS (UTILITIES & DOM)
             // ==========================================
+            function renderReactionsHtml(msgId, reactions, isSender) {
+                if (!reactions || typeof reactions !== 'object') return '';
+                let html = '';
+                Object.keys(reactions).forEach(function(emoji) {
+                    const users = reactions[emoji];
+                    if (Array.isArray(users) && users.length > 0) {
+                        const hasReacted = users.includes(currentUserId);
+                        html += `<button type="button" class="btn btn-xs py-0.5 px-1.5 rounded-pill border ${hasReacted ? 'bg-primary-subtle text-primary border-primary' : 'bg-light text-dark border-secondary-subtle'} btn-reaction-pill fs-xxs d-inline-flex align-items-center gap-1" data-msg-id="${msgId}" data-emoji="${emoji}" title="${users.length} orang bereaksi ${emoji}">
+                            <span>${emoji}</span>
+                            <span class="fw-semibold">${users.length}</span>
+                        </button>`;
+                    }
+                });
+                return html;
+            }
+
+            function updatePinnedBanner(pinnedMsg) {
+                if (!pinnedMessageBanner || !pinnedTextPreview) return;
+                if (pinnedMsg) {
+                    currentPinnedMessageId = pinnedMsg.id;
+                    const previewText = pinnedMsg.body || (pinnedMsg.attachment_name || (pinnedMsg.attachment_type === 'voice' ? 'Pesan Suara' : 'Lampiran berkas'));
+                    pinnedTextPreview.textContent = previewText.length > 60 ? previewText.substring(0, 60) + '...' : previewText;
+                    pinnedMessageBanner.classList.remove('d-none');
+                } else {
+                    currentPinnedMessageId = null;
+                    pinnedMessageBanner.classList.add('d-none');
+                }
+            }
             function escapeHtml(text) {
                 if (text === null || typeof text === 'undefined') return '';
                 return String(text)
@@ -507,11 +729,27 @@
 
             function renderAttachmentHtml(msg) {
                 if (!msg.attachment_url) return '';
-                const isImg = msg.attachment_type === 'image' || (msg.attachment_url && /\.(jpg|jpeg|png|webp|gif)$/i.test(msg.attachment_url));
+                const isVoice = msg.attachment_type === 'voice' || (msg.attachment_url && /\.(mp3|wav|ogg|webm|m4a|aac|flac)$/i.test(msg.attachment_url));
+                const isImg = !isVoice && (msg.attachment_type === 'image' || (msg.attachment_url && /\.(jpg|jpeg|png|webp|gif)$/i.test(msg.attachment_url)));
                 const name = escapeHtml(msg.attachment_name || 'Lampiran Berkas');
                 const sizeStr = msg.attachment_size_formatted || (msg.attachment_size ? formatBytes(msg.attachment_size) : '');
 
-                if (isImg) {
+                if (isVoice) {
+                    return `<div class="voice-player-card my-2 p-2 rounded-3 bg-white bg-opacity-75 border d-flex align-items-center gap-2 shadow-sm" style="min-width: 220px; max-width: 280px;">
+                        <button type="button" class="btn btn-sm btn-primary rounded-circle p-0 d-flex align-items-center justify-content-center btn-play-voice flex-shrink-0" style="width: 32px; height: 32px;" data-audio-src="${msg.attachment_url}" title="Putar Pesan Suara">
+                            <i class="ti ti-player-play fs-14"></i>
+                        </button>
+                        <div class="flex-grow-1 overflow-hidden">
+                            <div class="d-flex justify-content-between align-items-center fs-xxs text-muted mb-1">
+                                <span class="voice-current-time">0:00</span>
+                                <span class="voice-duration">🎙️ Pesan Suara</span>
+                            </div>
+                            <div class="progress voice-progress rounded-pill bg-secondary-subtle" style="height: 5px; cursor: pointer;">
+                                <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>`;
+                } else if (isImg) {
                     return `<div class="chat-attachment-image my-2">
                         <a href="${msg.attachment_url}" class="d-inline-block position-relative rounded-3 overflow-hidden shadow-sm border btn-preview-img-modal" data-img-url="${msg.attachment_url}" data-img-name="${name}">
                             <img src="${msg.attachment_url}" alt="${name}" class="rounded-3" style="width: 240px; max-width: 100%; height: 160px; object-fit: cover; cursor: pointer; display: block; transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
@@ -583,6 +821,57 @@
                 }
             }
 
+            // Pindahkan kontak kembali ke bagian "Pengguna Lainnya" secara instan saat obrolan kosong/dibersihkan
+            function demoteContactToOther(userId) {
+                const contactEl = document.querySelector(`.btn-select-chat[data-user-id="${userId}"]`);
+                if (!contactEl) return;
+
+                const lastMsgEl = contactEl.querySelector('.contact-last-msg');
+                const lastTimeEl = contactEl.querySelector('.contact-last-time');
+                const unreadBadge = contactEl.querySelector('.contact-unread-badge');
+
+                if (lastMsgEl) lastMsgEl.textContent = 'Belum ada obrolan.';
+                if (lastTimeEl) lastTimeEl.textContent = '';
+                if (unreadBadge) {
+                    unreadBadge.classList.add('d-none');
+                    unreadBadge.textContent = '0';
+                }
+
+                const listRecent = document.getElementById('list-recent-contacts');
+                const listOther = document.getElementById('list-other-contacts');
+                const secRecent = document.getElementById('section-recent-contacts');
+                const secOther = document.getElementById('section-other-contacts');
+                const badgeRecent = document.getElementById('badge-recent-count');
+                const badgeOther = document.getElementById('badge-other-count');
+
+                if (!listRecent || !listOther) return;
+
+                if (listRecent.contains(contactEl)) {
+                    listOther.prepend(contactEl);
+
+                    const currentRecent = listRecent.children.length;
+                    const currentOther = listOther.children.length;
+
+                    if (badgeRecent) badgeRecent.textContent = currentRecent;
+                    if (badgeOther) badgeOther.textContent = currentOther;
+
+                    if (secRecent) {
+                        if (currentRecent > 0) secRecent.classList.remove('d-none');
+                        else secRecent.classList.add('d-none');
+                    }
+
+                    if (secOther) {
+                        if (currentOther > 0) {
+                            secOther.classList.remove('d-none');
+                            if (currentRecent > 0) secOther.classList.add('mt-2');
+                            else secOther.classList.remove('mt-2');
+                        } else {
+                            secOther.classList.add('d-none');
+                        }
+                    }
+                }
+            }
+
             // Search Filter Kontak Sidebar (Rule 2 Compliance)
             if (contactSearchInput) {
                 contactSearchInput.addEventListener('keyup', function(e) {
@@ -643,7 +932,10 @@
                 if (document.getElementById('btn-send-message')) document.getElementById('btn-send-message').disabled = false;
                 if (document.getElementById('btn-toggle-emoji')) document.getElementById('btn-toggle-emoji').disabled = false;
                 if (document.getElementById('btn-attach-file')) document.getElementById('btn-attach-file').disabled = false;
+                if (btnRecordVoice) btnRecordVoice.disabled = false;
+                if (btnToggleSearch) btnToggleSearch.disabled = false;
                 if (btnViewUserDetail) btnViewUserDetail.disabled = false;
+                if (btnClearChat) btnClearChat.disabled = true;
 
                 // Tampilkan placeholder transisi cepat di chat container
                 setChatContainerHtml(`
@@ -890,23 +1182,36 @@
                         const wasNearBottom = isUserNearBottom();
 
                         let html = '';
+                        let pinnedMsg = null;
                         if (newCount > 0) {
-                            const summaryText = newLastMsg.body || (newLastMsg.attachment_type === 'image' ? '📷 [Foto / Gambar]' : ('📎 [' + (newLastMsg.attachment_name || 'Berkas') + ']'));
+                            const summaryText = newLastMsg.body || (newLastMsg.attachment_type === 'image' ? '📷 [Foto / Gambar]' : (newLastMsg.attachment_type === 'voice' ? '🎙️ [Pesan Suara]' : ('📎 [' + (newLastMsg.attachment_name || 'Berkas') + ']')));
                             promoteContactToRecent(userId, summaryText, newLastMsg.time_formatted);
 
                             messages.forEach(function(msg) {
+                                if (msg.is_pinned) {
+                                    pinnedMsg = msg;
+                                }
                                 const isSender = msg.is_sender;
                                 const avatar = isSender ? currentUserAvatar : (msg.sender_avatar || currentUserAvatar);
                                 const senderName = isSender ? 'Anda' : (msg.sender_name || 'Pengguna');
-                                const replyText = msg.body || (msg.attachment_name || 'Lampiran');
+                                const replyText = msg.body || (msg.attachment_name || (msg.attachment_type === 'voice' ? 'Pesan Suara' : 'Lampiran'));
+                                const isPinned = msg.is_pinned === true;
+                                const isForwarded = msg.is_forwarded === true;
+                                const reactions = msg.reactions || [];
 
                                 html += `<div class="d-flex align-items-start gap-2 my-3 chat-item ${isSender ? 'text-end justify-content-end' : ''}" id="chat-msg-${msg.id}" data-msg-id="${msg.id}">`;
                                 if (!isSender) {
                                     html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0 chat-avatar-opponent" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
                                 }
                                 html += `<div style="max-width: 75%;">
-                                    <div class="chat-message py-2 px-3 ${isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border'} rounded shadow-sm text-start">`;
+                                    <div class="chat-message py-2 px-3 ${isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border'} rounded shadow-sm text-start position-relative">`;
                                 
+                                if (isForwarded) {
+                                    html += `<div class="fs-11 text-muted fst-italic mb-1 d-flex align-items-center gap-1">
+                                        <i class="ti ti-arrow-forward-up fs-12 text-primary"></i> Diteruskan
+                                    </div>`;
+                                }
+
                                 if (msg.parent) {
                                     const parentId = msg.parent_id || (msg.parent ? msg.parent.id : '');
                                     html += `<div class="p-2 mb-2 bg-white bg-opacity-75 rounded border-start border-3 border-primary text-start fs-12 shadow-sm reply-quote-box" data-parent-id="${parentId}" role="button" title="Klik untuk menuju pesan yang dibalas">
@@ -924,7 +1229,7 @@
                                 }
 
                                 if (msg.body) {
-                                    html += `<div class="fs-13 lh-base text-wrap" style="word-break: break-word;">${escapeHtml(msg.body).replace(/\n/g, '<br>')}</div>`;
+                                    html += `<div class="fs-13 lh-base text-wrap message-body-text" style="word-break: break-word;">${escapeHtml(msg.body).replace(/\n/g, '<br>')}</div>`;
                                 }
 
                                 if (msg.reason) {
@@ -933,54 +1238,83 @@
                                     </div>`;
                                 }
                                 html += `</div>
-                                    <div class="d-flex align-items-center gap-2 text-muted fs-xs mt-1 ${isSender ? 'justify-content-end' : 'justify-content-start'}">
-                                        <span><i class="ti ti-clock me-0.5"></i> ${msg.time_formatted}</span>
-                                        <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-1 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" data-sender-name="${escapeHtml(senderName)}" data-msg-body="${escapeHtml(replyText)}" title="Balas Pesan Ini">
-                                            <i class="ti ti-corner-up-left"></i> Balas
-                                        </button>
-                                    </div>
-                                </div>`;
-                                if (isSender) {
-                                    html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0 chat-avatar-sender" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
-                                }
-                                html += `</div>`;
-                            });
-                        } else {
-                            html = `<div class="text-center py-5 text-muted chat-placeholder-box" id="empty-chat-placeholder">
-                                <div class="avatar-md mx-auto mb-2">
-                                    <span class="avatar-title text-bg-light text-primary rounded-circle fs-24">
-                                        <i class="ti ti-messages"></i>
-                                    </span>
+
+                                <!-- REACTIONS CONTAINER -->
+                                <div class="chat-reactions-container d-flex flex-wrap gap-1 mt-1 ${isSender ? 'justify-content-end' : 'justify-content-start'}" id="chat-reactions-${msg.id}">
+                                    ${renderReactionsHtml(msg.id, reactions, isSender)}
                                 </div>
-                                <h6 class="fs-14 fw-semibold text-dark mb-1">Belum Ada Riwayat Obrolan</h6>
-                                <p class="fs-12 mb-0">Mulai percakapan dengan mengetikkan pesan di bawah ini.</p>
+
+                                <!-- ACTION ROW -->
+                                <div class="d-flex align-items-center gap-2 text-muted fs-xs mt-1 ${isSender ? 'justify-content-end' : 'justify-content-start'}">
+                                    <span class="chat-status-time"><i class="ti ti-clock me-0.5"></i> ${msg.time_formatted}</span>
+                                    ${isPinned ? '<span class="badge bg-success-subtle text-success border border-success-subtle fs-xxs py-0.5 px-1 pinned-indicator" title="Pesan Disematkan"><i class="ti ti-pin-filled me-0.5"></i> Sematan</span>' : ''}
+                                    <button type="button" class="btn btn-link p-0 text-muted btn-react-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" title="Beri Reaksi Emoji">
+                                        <i class="ti ti-mood-smile"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" data-sender-name="${escapeHtml(senderName)}" data-msg-body="${escapeHtml(replyText)}" title="Balas Pesan Ini">
+                                        <i class="ti ti-corner-up-left"></i> Balas
+                                    </button>
+                                    <button type="button" class="btn btn-link p-0 text-muted btn-forward-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" title="Teruskan Pesan">
+                                        <i class="ti ti-arrow-forward-up"></i> Teruskan
+                                    </button>
+                                    <button type="button" class="btn btn-link p-0 text-muted btn-pin-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" data-is-pinned="${isPinned ? '1' : '0'}" title="${isPinned ? 'Lepas Sematan' : 'Sematkan Pesan'}">
+                                        <i class="ti ${isPinned ? 'ti-pinned-off text-warning' : 'ti-pin'}"></i> ${isPinned ? 'Lepas Pin' : 'Pin'}
+                                    </button>
+                                    <button type="button" class="btn btn-link p-0 text-danger btn-delete-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover ms-1" data-msg-id="${msg.id}" data-is-sender="${isSender ? '1' : '0'}" title="${isSender ? 'Hapus / Tarik untuk Semua Orang' : 'Hapus untuk Saya'}">
+                                        <i class="ti ti-trash"></i> Hapus
+                                    </button>
+                                </div>
                             </div>`;
-                        }
-
-                        // Update isi kontainer obrolan secara presisi
-                        setChatContainerHtml(html);
-
-                        lastMessageCount = newCount;
-                        lastMessageId = newLastId;
-
-                        // Sinkronkan badge dropdown pesan di topbar
-                        if (typeof window.fetchMessagesSilently === 'function') {
-                            window.fetchMessagesSilently(false);
-                        }
-
-                        // Pasang ulang scroll listener jika elemen di-recreate
-                        attachScrollListener();
-
-                        // Hanya scroll ke paling bawah jika bukan polling biasa ATAU jika user tidak sedang scroll ke atas & berada di bawah
-                        if (!isPolling || (!userHasScrolledUp && wasNearBottom)) {
-                            scrollToBottom(true);
-                        }
+                            if (isSender) {
+                                html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0 chat-avatar-sender" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
+                            }
+                            html += `</div>`;
+                        });
+                    } else {
+                        html = `<div class="text-center py-5 text-muted chat-placeholder-box" id="empty-chat-placeholder">
+                            <div class="avatar-md mx-auto mb-2">
+                                <span class="avatar-title text-bg-light text-primary rounded-circle fs-24">
+                                    <i class="ti ti-messages"></i>
+                                </span>
+                            </div>
+                            <h6 class="fs-14 fw-semibold text-dark mb-1">Belum Ada Riwayat Obrolan</h6>
+                            <p class="fs-12 mb-0">Mulai percakapan dengan mengetikkan pesan di bawah ini.</p>
+                        </div>`;
                     }
-                })
-                .catch(function(err) {
-                    console.error('Error loading conversation:', err);
-                });
-            }
+
+                    // Update isi kontainer obrolan secara presisi
+                    setChatContainerHtml(html);
+                    updatePinnedBanner(pinnedMsg);
+
+                    if (btnClearChat) {
+                        btnClearChat.disabled = newCount === 0;
+                    }
+
+                    if (newCount === 0 && activeUserId) {
+                        demoteContactToOther(activeUserId);
+                    }
+
+                    lastMessageCount = newCount;
+                    lastMessageId = newLastId;
+
+                    // Sinkronkan badge dropdown pesan di topbar
+                    if (typeof window.fetchMessagesSilently === 'function') {
+                        window.fetchMessagesSilently(false);
+                    }
+
+                    // Pasang ulang scroll listener jika elemen di-recreate
+                    attachScrollListener();
+
+                    // Hanya scroll ke paling bawah jika bukan polling biasa ATAU jika user tidak sedang scroll ke atas & berada di bawah
+                    if (!isPolling || (!userHasScrolledUp && wasNearBottom)) {
+                        scrollToBottom(true);
+                    }
+                }
+            })
+            .catch(function(err) {
+                console.error('Error loading conversation:', err);
+            });
+        }
 
             // Kirim Pesan via AJAX (Mendukung Teks, Reply Quote, dan Lampiran Berkas/Foto)
             if (chatForm) {
@@ -1080,6 +1414,12 @@
                                     btnReply.setAttribute('data-msg-id', data.message.id);
                                 }
 
+                                const btnDelete = tempEl.querySelector('.btn-delete-msg');
+                                if (btnDelete) {
+                                    btnDelete.setAttribute('data-msg-id', data.message.id);
+                                    btnDelete.classList.remove('d-none');
+                                }
+
                                 if (data.message.attachment_url) {
                                     const previewLink = tempEl.querySelector('.btn-preview-img-modal');
                                     if (previewLink) {
@@ -1116,9 +1456,6 @@
                         statusTimeEl.innerHTML = `<span class="badge bg-danger-subtle text-danger fs-xxs py-0.5 px-1"><i class="ti ti-alert-circle me-1"></i>${escapeHtml(errorText)}</span>`;
                     }
                 }
-                if (typeof window.showToast === 'function') {
-                    window.showToast(errorText, 'error');
-                }
             }
 
             function appendSingleMessage(msg) {
@@ -1134,16 +1471,25 @@
                 const isPending = msg.is_pending === true;
                 const avatar = isSender ? currentUserAvatar : (msg.sender_avatar || currentUserAvatar);
                 const senderName = isSender ? 'Anda' : (msg.sender_name || 'Pengguna');
-                const replyText = msg.body || (msg.attachment_name || 'Lampiran');
+                const replyText = msg.body || (msg.attachment_name || (msg.attachment_type === 'voice' ? 'Pesan Suara' : 'Lampiran'));
                 const timeIndicator = isPending ? `<i class="ti ti-clock text-muted opacity-75 me-0.5" title="Mengirim..."></i> ${msg.time_formatted}` : `<i class="ti ti-check text-primary me-0.5" title="Terkirim"></i> ${msg.time_formatted}`;
+                const isPinned = msg.is_pinned === true;
+                const isForwarded = msg.is_forwarded === true;
+                const reactions = msg.reactions || [];
 
                 let html = `<div class="d-flex align-items-start gap-2 my-3 chat-item ${isSender ? 'text-end justify-content-end' : ''}" id="chat-msg-${msg.id}" data-msg-id="${msg.id}">`;
                 if (!isSender) {
                     html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0 chat-avatar-opponent" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
                 }
                 html += `<div style="max-width: 75%;">
-                    <div class="chat-message py-2 px-3 ${isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border'} rounded shadow-sm text-start">`;
+                    <div class="chat-message py-2 px-3 ${isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border'} rounded shadow-sm text-start position-relative">`;
                 
+                if (isForwarded) {
+                    html += `<div class="fs-11 text-muted fst-italic mb-1 d-flex align-items-center gap-1">
+                        <i class="ti ti-arrow-forward-up fs-12 text-primary"></i> Diteruskan
+                    </div>`;
+                }
+
                 if (msg.parent) {
                     const parentId = msg.parent_id || (msg.parent ? msg.parent.id : '');
                     html += `<div class="p-2 mb-2 bg-white bg-opacity-75 rounded border-start border-3 border-primary text-start fs-12 shadow-sm reply-quote-box" data-parent-id="${parentId}" role="button" title="Klik untuk menuju pesan yang dibalas">
@@ -1157,23 +1503,47 @@
                 }
 
                 if (msg.body) {
-                    html += `<div class="fs-13 lh-base text-wrap" style="word-break: break-word;">${escapeHtml(msg.body).replace(/\n/g, '<br>')}</div>`;
+                    html += `<div class="fs-13 lh-base text-wrap message-body-text" style="word-break: break-word;">${escapeHtml(msg.body).replace(/\n/g, '<br>')}</div>`;
                 }
 
                 html += `</div>
-                    <div class="d-flex align-items-center gap-2 text-muted fs-xs mt-1 ${isSender ? 'justify-content-end' : 'justify-content-start'}">
-                        <span class="chat-status-time">${timeIndicator}</span>
-                        <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-1 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" data-sender-name="${escapeHtml(senderName)}" data-msg-body="${escapeHtml(replyText)}" title="Balas Pesan Ini">
-                            <i class="ti ti-corner-up-left"></i> Balas
-                        </button>
-                    </div>
-                </div>`;
+
+                <!-- REACTIONS CONTAINER -->
+                <div class="chat-reactions-container d-flex flex-wrap gap-1 mt-1 ${isSender ? 'justify-content-end' : 'justify-content-start'}" id="chat-reactions-${msg.id}">
+                    ${renderReactionsHtml(msg.id, reactions, isSender)}
+                </div>
+
+                <!-- ACTION ROW -->
+                <div class="d-flex align-items-center gap-2 text-muted fs-xs mt-1 ${isSender ? 'justify-content-end' : 'justify-content-start'}">
+                    <span class="chat-status-time">${timeIndicator}</span>
+                    ${isPinned ? '<span class="badge bg-success-subtle text-success border border-success-subtle fs-xxs py-0.5 px-1 pinned-indicator" title="Pesan Disematkan"><i class="ti ti-pin-filled me-0.5"></i> Sematan</span>' : ''}
+                    <button type="button" class="btn btn-link p-0 text-muted btn-react-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover ${isPending ? 'd-none' : ''}" data-msg-id="${msg.id}" title="Beri Reaksi Emoji">
+                        <i class="ti ti-mood-smile"></i>
+                    </button>
+                    <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover ${isPending ? 'd-none' : ''}" data-msg-id="${msg.id}" data-sender-name="${escapeHtml(senderName)}" data-msg-body="${escapeHtml(replyText)}" title="Balas Pesan Ini">
+                        <i class="ti ti-corner-up-left"></i> Balas
+                    </button>
+                    <button type="button" class="btn btn-link p-0 text-muted btn-forward-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover ${isPending ? 'd-none' : ''}" data-msg-id="${msg.id}" title="Teruskan Pesan">
+                        <i class="ti ti-arrow-forward-up"></i> Teruskan
+                    </button>
+                    <button type="button" class="btn btn-link p-0 text-muted btn-pin-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover ${isPending ? 'd-none' : ''}" data-msg-id="${msg.id}" data-is-pinned="${isPinned ? '1' : '0'}" title="${isPinned ? 'Lepas Sematan' : 'Sematkan Pesan'}">
+                        <i class="ti ${isPinned ? 'ti-pinned-off text-warning' : 'ti-pin'}"></i> ${isPinned ? 'Lepas Pin' : 'Pin'}
+                    </button>
+                    <button type="button" class="btn btn-link p-0 text-danger btn-delete-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover ms-1 ${isPending ? 'd-none' : ''}" data-msg-id="${msg.id}" data-is-sender="${isSender ? '1' : '0'}" title="${isSender ? 'Hapus / Tarik untuk Semua Orang' : 'Hapus untuk Saya'}">
+                        <i class="ti ti-trash"></i> Hapus
+                    </button>
+                </div>
+            </div>`;
                 if (isSender) {
                     html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0 chat-avatar-sender" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
                 }
                 html += `</div>`;
 
                 appendChatContainerHtml(html);
+
+                if (btnClearChat) {
+                    btnClearChat.disabled = false;
+                }
             }
 
             function escapeHtml(text) {
@@ -1274,6 +1644,11 @@
                         // Jika kontak memiliki percakapan dan sebelumnya di 'other', pindahkan ke 'recent'
                         if (c.has_conversation && listOther && listRecent && listOther.contains(contactEl)) {
                             listRecent.prepend(contactEl);
+                        }
+
+                        // Jika kontak TIDAK memiliki percakapan lagi dan sebelumnya di 'recent', pindahkan ke 'other'
+                        if (!c.has_conversation && listOther && listRecent && listRecent.contains(contactEl)) {
+                            listOther.prepend(contactEl);
                         }
 
                         // Jika ada pesan baru masuk (unread > 0), tempatkan di urutan teratas list recent
@@ -1655,6 +2030,930 @@
                     emojiPickerContainer.classList.add('d-none');
                 }
             });
+
+            // Event Delegation Hapus Pesan Chat (Rule 2 & Rule 9 Compliance)
+            document.addEventListener('click', function(e) {
+                const btnDelete = e.target.closest('.btn-delete-msg');
+                if (!btnDelete) return;
+                e.preventDefault();
+
+                const msgId = btnDelete.getAttribute('data-msg-id');
+                const isSender = btnDelete.getAttribute('data-is-sender') === '1' || btnDelete.getAttribute('data-is-sender') === 'true';
+
+                if (!msgId || String(msgId).startsWith('temp_')) return;
+
+                const confirmTitle = isSender ? 'Tarik & Hapus Pesan?' : 'Hapus Pesan untuk Saya?';
+                const confirmText = isSender 
+                    ? 'Pesan yang Anda kirim akan ditarik dan dihapus permanen untuk semua orang (tidak terlihat lagi oleh lawan chat maupun Anda).' 
+                    : 'Pesan ini hanya akan dihapus dari tampilan obrolan Anda. Pengirim / lawan chat tetap dapat melihat pesan ini.';
+
+                const doDelete = function() {
+                    fetch(`/admin/profil-pengguna/messages/${msgId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(function(res) { return res.json(); })
+                    .then(function(data) {
+                        if (data && data.success) {
+                            // Jika pesan yang sedang dibalas adalah pesan ini, batalkan preview balasan
+                            const replyParentInput = document.getElementById('reply-parent-id');
+                            if (replyParentInput && replyParentInput.value === String(msgId)) {
+                                cancelReplyState();
+                            }
+
+                            // Hapus elemen pesan dari DOM dengan animasi halus
+                            const msgEl = document.getElementById(`chat-msg-${msgId}`);
+                            if (msgEl) {
+                                msgEl.style.transition = 'all 0.25s ease-out';
+                                msgEl.style.opacity = '0';
+                                msgEl.style.transform = 'scale(0.95)';
+                                setTimeout(function() {
+                                    msgEl.remove();
+
+                                    // Periksa apakah masih ada pesan tersisa di kontainer
+                                    const remainingItems = chatContainer.querySelectorAll('.chat-item');
+                                    if (remainingItems.length === 0) {
+                                        if (btnClearChat) btnClearChat.disabled = true;
+                                        if (activeUserId) demoteContactToOther(activeUserId);
+                                        setChatContainerHtml(`
+                                            <div class="text-center py-5 text-muted chat-placeholder-box" id="empty-chat-placeholder">
+                                                <div class="avatar-md mx-auto mb-2">
+                                                    <span class="avatar-title text-bg-light text-primary rounded-circle fs-24">
+                                                        <i class="ti ti-messages"></i>
+                                                    </span>
+                                                </div>
+                                                <h6 class="fs-14 fw-semibold text-dark mb-1">Belum Ada Riwayat Obrolan</h6>
+                                                <p class="fs-12 mb-0">Mulai percakapan dengan mengetikkan pesan di bawah ini.</p>
+                                            </div>
+                                        `);
+                                    }
+                                }, 250);
+                            }
+
+                            if (typeof window.showToast === 'function') {
+                                window.showToast(data.message, 'success');
+                            }
+
+                            // Sinkronkan sidebar kontak & badge unread
+                            pollSidebarContacts();
+                            if (typeof window.fetchMessagesSilently === 'function') {
+                                window.fetchMessagesSilently(false);
+                            }
+                        } else {
+                            if (typeof window.showError === 'function') {
+                                window.showError(data && data.message ? data.message : 'Gagal menghapus pesan.');
+                            }
+                        }
+                    })
+                    .catch(function(err) {
+                        if (typeof window.showError === 'function') {
+                            window.showError('Terjadi kesalahan koneksi saat menghapus pesan.');
+                        }
+                    });
+                };
+
+                if (typeof window.showConfirm === 'function') {
+                    window.showConfirm({
+                        title: confirmTitle,
+                        text: confirmText,
+                        isDanger: true,
+                        onConfirm: doDelete
+                    });
+                } else {
+                    if (confirm(confirmText)) {
+                        doDelete();
+                    }
+                }
+            });
+
+            // Event Listener Bersihkan Seluruh Riwayat Obrolan (Rule 2 & Rule 9 Compliance)
+            if (btnClearChat) {
+                btnClearChat.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!activeUserId) return;
+
+                    const activeName = activeChatName ? activeChatName.textContent.trim() : 'pengguna ini';
+
+                    const confirmClear = function() {
+                        fetch(`/admin/profil-pengguna/messages/conversation/${activeUserId}/clear`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'application/json'
+                            }
+                        })
+                        .then(function(res) { return res.json(); })
+                        .then(function(data) {
+                            if (data && data.success) {
+                                cancelReplyState();
+                                lastMessageCount = 0;
+                                lastMessageId = null;
+
+                                setChatContainerHtml(`
+                                    <div class="text-center py-5 text-muted chat-placeholder-box" id="empty-chat-placeholder">
+                                        <div class="avatar-md mx-auto mb-2">
+                                            <span class="avatar-title text-bg-light text-primary rounded-circle fs-24">
+                                                <i class="ti ti-messages"></i>
+                                            </span>
+                                        </div>
+                                        <h6 class="fs-14 fw-semibold text-dark mb-1">Belum Ada Riwayat Obrolan</h6>
+                                        <p class="fs-12 mb-0">Mulai percakapan dengan mengetikkan pesan di bawah ini.</p>
+                                    </div>
+                                `);
+
+                                if (btnClearChat) btnClearChat.disabled = true;
+
+                                // Pindahkan kontak langsung ke "Pengguna Lainnya" seketika tanpa perlu refresh
+                                if (activeUserId) {
+                                    demoteContactToOther(activeUserId);
+                                }
+
+                                if (typeof window.showToast === 'function') {
+                                    window.showToast(data.message, 'success');
+                                }
+
+                                pollSidebarContacts();
+                                if (typeof window.fetchMessagesSilently === 'function') {
+                                    window.fetchMessagesSilently(false);
+                                }
+                            } else {
+                                if (typeof window.showError === 'function') {
+                                    window.showError(data && data.message ? data.message : 'Gagal membersihkan riwayat obrolan.');
+                                }
+                            }
+                        })
+                        .catch(function(err) {
+                            if (typeof window.showError === 'function') {
+                                window.showError('Terjadi kesalahan jaringan saat membersihkan obrolan.');
+                            }
+                        });
+                    };
+
+                    if (typeof window.showConfirm === 'function') {
+                        window.showConfirm({
+                            title: 'Bersihkan Seluruh Riwayat Obrolan?',
+                            text: `Semua riwayat percakapan dengan ${activeName} akan dihapus dari tampilan Anda. Lawan obrolan Anda tetap dapat melihat seluruh riwayat percakapan tersebut.`,
+                            isDanger: true,
+                            onConfirm: confirmClear
+                        });
+                    } else {
+                        if (confirm(`Bersihkan riwayat obrolan dengan ${activeName}? Lawan obrolan tetap dapat melihatnya.`)) {
+                            confirmClear();
+                        }
+                    }
+                });
+            }
+
+            // ==========================================
+            // 1. IN-CHAT SEARCH BAR LOGIC
+            // ==========================================
+            document.addEventListener('click', function(e) {
+                const btnSearch = e.target.closest('#btn-toggle-search');
+                if (btnSearch) {
+                    e.preventDefault();
+                    if (btnSearch.disabled) return;
+
+                    const searchBar = document.getElementById('in-chat-search-bar');
+                    if (searchBar) {
+                        const isHidden = searchBar.classList.contains('d-none');
+                        if (isHidden) {
+                            searchBar.classList.remove('d-none');
+                            const searchInput = document.getElementById('input-search-in-chat');
+                            if (searchInput) {
+                                setTimeout(function() { searchInput.focus(); }, 50);
+                                if (searchInput.value.trim() !== '') {
+                                    performInChatSearch(searchInput.value.trim());
+                                }
+                            }
+                        } else {
+                            closeInChatSearch();
+                        }
+                    }
+                    return;
+                }
+
+                const btnClose = e.target.closest('#btn-close-search');
+                if (btnClose) {
+                    e.preventDefault();
+                    closeInChatSearch();
+                    return;
+                }
+
+                const btnClear = e.target.closest('#btn-clear-in-chat-search');
+                if (btnClear) {
+                    e.preventDefault();
+                    const searchInput = document.getElementById('input-search-in-chat');
+                    if (searchInput) {
+                        searchInput.value = '';
+                        performInChatSearch('');
+                        searchInput.focus();
+                    }
+                    return;
+                }
+
+                const btnNext = e.target.closest('#btn-search-next');
+                if (btnNext) {
+                    e.preventDefault();
+                    if (searchMatches.length > 0) {
+                        currentSearchIndex = (currentSearchIndex + 1) % searchMatches.length;
+                        highlightCurrentMatch();
+                    }
+                    return;
+                }
+
+                const btnPrev = e.target.closest('#btn-search-prev');
+                if (btnPrev) {
+                    e.preventDefault();
+                    if (searchMatches.length > 0) {
+                        currentSearchIndex = (currentSearchIndex - 1 + searchMatches.length) % searchMatches.length;
+                        highlightCurrentMatch();
+                    }
+                    return;
+                }
+            });
+
+            function closeInChatSearch() {
+                const searchBar = document.getElementById('in-chat-search-bar');
+                const searchInput = document.getElementById('input-search-in-chat');
+                const countBadge = document.getElementById('search-match-count');
+                const btnPrev = document.getElementById('btn-search-prev');
+                const btnNext = document.getElementById('btn-search-next');
+                const btnClear = document.getElementById('btn-clear-in-chat-search');
+
+                if (searchBar) searchBar.classList.add('d-none');
+                if (searchInput) searchInput.value = '';
+                if (btnClear) btnClear.style.display = 'none';
+                if (btnPrev) btnPrev.disabled = true;
+                if (btnNext) btnNext.disabled = true;
+
+                clearSearchHighlights();
+                searchMatches = [];
+                currentSearchIndex = -1;
+                if (countBadge) {
+                    countBadge.textContent = '0 dari 0';
+                    countBadge.classList.add('d-none');
+                }
+            }
+
+            function clearSearchHighlights() {
+                document.querySelectorAll('#chat-container .message-body-text').forEach(function(el) {
+                    if (el.hasAttribute('data-raw-body')) {
+                        el.innerHTML = escapeHtml(el.getAttribute('data-raw-body')).replace(/\n/g, '<br>');
+                        el.removeAttribute('data-raw-body');
+                    }
+                });
+            }
+
+            function performInChatSearch(query) {
+                clearSearchHighlights();
+                searchMatches = [];
+                currentSearchIndex = -1;
+
+                const countBadge = document.getElementById('search-match-count');
+                const btnPrev = document.getElementById('btn-search-prev');
+                const btnNext = document.getElementById('btn-search-next');
+                const btnClear = document.getElementById('btn-clear-in-chat-search');
+
+                if (btnClear) {
+                    btnClear.style.display = query ? 'inline-block' : 'none';
+                }
+
+                if (!query) {
+                    if (countBadge) {
+                        countBadge.textContent = '0 dari 0';
+                        countBadge.classList.add('d-none');
+                    }
+                    if (btnPrev) btnPrev.disabled = true;
+                    if (btnNext) btnNext.disabled = true;
+                    return;
+                }
+
+                const bodyEls = document.querySelectorAll('#chat-container .message-body-text');
+                const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(`(${escapedQuery})`, 'gi');
+
+                bodyEls.forEach(function(el) {
+                    const rawText = el.getAttribute('data-raw-body') || el.textContent || '';
+                    if (regex.test(rawText)) {
+                        el.setAttribute('data-raw-body', rawText);
+                        const safeHtml = escapeHtml(rawText).replace(/\n/g, '<br>');
+                        el.innerHTML = safeHtml.replace(regex, '<mark class="search-match bg-warning text-dark px-0.5 rounded fw-semibold">$1</mark>');
+                    }
+                });
+
+                searchMatches = Array.from(document.querySelectorAll('#chat-container mark.search-match'));
+                if (searchMatches.length > 0) {
+                    currentSearchIndex = 0;
+                    if (btnPrev) btnPrev.disabled = false;
+                    if (btnNext) btnNext.disabled = false;
+                    highlightCurrentMatch();
+                } else {
+                    if (countBadge) {
+                        countBadge.textContent = '0 dari 0';
+                        countBadge.classList.remove('d-none');
+                    }
+                    if (btnPrev) btnPrev.disabled = true;
+                    if (btnNext) btnNext.disabled = true;
+                }
+            }
+
+            function highlightCurrentMatch() {
+                if (searchMatches.length === 0) return;
+                searchMatches.forEach(function(m) {
+                    m.classList.remove('bg-danger', 'text-white');
+                    m.classList.add('bg-warning', 'text-dark');
+                });
+
+                const current = searchMatches[currentSearchIndex];
+                if (current) {
+                    current.classList.remove('bg-warning', 'text-dark');
+                    current.classList.add('bg-danger', 'text-white');
+                    current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    const bubble = current.closest('.chat-message');
+                    if (bubble) {
+                        bubble.classList.remove('chat-message-highlight');
+                        void bubble.offsetWidth;
+                        bubble.classList.add('chat-message-highlight');
+                    }
+                }
+
+                const countBadge = document.getElementById('search-match-count');
+                if (countBadge) {
+                    countBadge.textContent = `${currentSearchIndex + 1} dari ${searchMatches.length}`;
+                    countBadge.classList.remove('d-none');
+                }
+            }
+
+            document.addEventListener('input', function(e) {
+                if (e.target && e.target.id === 'input-search-in-chat') {
+                    performInChatSearch(e.target.value.trim());
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.target && e.target.id === 'input-search-in-chat') {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (searchMatches.length > 0) {
+                            if (e.shiftKey) {
+                                currentSearchIndex = (currentSearchIndex - 1 + searchMatches.length) % searchMatches.length;
+                            } else {
+                                currentSearchIndex = (currentSearchIndex + 1) % searchMatches.length;
+                            }
+                            highlightCurrentMatch();
+                        }
+                    } else if (e.key === 'Escape') {
+                        closeInChatSearch();
+                    }
+                }
+            });
+
+            // ==========================================
+            // 2. PINNED MESSAGES LOGIC
+            // ==========================================
+            if (btnJumpToPinned) {
+                btnJumpToPinned.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!currentPinnedMessageId) return;
+                    const targetEl = document.getElementById(`chat-msg-${currentPinnedMessageId}`);
+                    if (targetEl) {
+                        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        const bubble = targetEl.querySelector('.chat-message') || targetEl;
+                        bubble.classList.remove('chat-message-highlight');
+                        void bubble.offsetWidth;
+                        bubble.classList.add('chat-message-highlight');
+                    } else {
+                        if (typeof window.showToast === 'function') {
+                            window.showToast('Pesan sematan berada di luar riwayat saat ini.', 'info');
+                        }
+                    }
+                });
+            }
+
+            if (btnUnpinBanner) {
+                btnUnpinBanner.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!currentPinnedMessageId) return;
+                    togglePinMessage(currentPinnedMessageId);
+                });
+            }
+
+            document.addEventListener('click', function(e) {
+                const btnPin = e.target.closest('.btn-pin-msg');
+                if (!btnPin) return;
+                e.preventDefault();
+                const msgId = btnPin.getAttribute('data-msg-id');
+                if (!msgId) return;
+                togglePinMessage(msgId);
+            });
+
+            function togglePinMessage(msgId) {
+                fetch(`/admin/profil-pengguna/messages/${msgId}/toggle-pin`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (data && data.success) {
+                        if (typeof window.showToast === 'function') {
+                            window.showToast(data.message, 'success');
+                        }
+                        if (activeUserId) {
+                            loadConversation(activeUserId, false);
+                        }
+                    } else {
+                        if (typeof window.showError === 'function') {
+                            window.showError(data && data.message ? data.message : 'Gagal mengubah sematan pesan.');
+                        }
+                    }
+                })
+                .catch(function(err) {
+                    if (typeof window.showError === 'function') {
+                        window.showError('Terjadi kesalahan jaringan.');
+                    }
+                });
+            }
+
+            // ==========================================
+            // 3. MESSAGE REACTIONS LOGIC
+            // ==========================================
+            document.addEventListener('click', function(e) {
+                const btnReact = e.target.closest('.btn-react-msg');
+                if (btnReact) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const msgId = btnReact.getAttribute('data-msg-id');
+                    activeReactMessageId = msgId;
+
+                    if (quickReactionPopover) {
+                        if (quickReactionPopover.parentNode !== document.body) {
+                            document.body.appendChild(quickReactionPopover);
+                        }
+
+                        const rect = btnReact.getBoundingClientRect();
+                        const popoverWidth = 240;
+                        let leftPos = rect.left - 80;
+                        if (leftPos + popoverWidth > window.innerWidth - 10) {
+                            leftPos = window.innerWidth - popoverWidth - 10;
+                        }
+                        if (leftPos < 10) leftPos = 10;
+
+                        let topPos = rect.top - 46;
+                        if (topPos < 10) {
+                            topPos = rect.bottom + 8;
+                        }
+
+                        quickReactionPopover.style.position = 'fixed';
+                        quickReactionPopover.style.zIndex = '99999';
+                        quickReactionPopover.style.top = `${topPos}px`;
+                        quickReactionPopover.style.left = `${leftPos}px`;
+                        quickReactionPopover.classList.remove('d-none');
+                    }
+                    return;
+                }
+
+                const btnQuickEmoji = e.target.closest('.btn-quick-react');
+                if (btnQuickEmoji) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const emoji = btnQuickEmoji.getAttribute('data-emoji');
+                    if (activeReactMessageId && emoji) {
+                        submitReaction(activeReactMessageId, emoji);
+                    }
+                    if (quickReactionPopover) quickReactionPopover.classList.add('d-none');
+                    return;
+                }
+
+                const btnReactionPill = e.target.closest('.btn-reaction-pill');
+                if (btnReactionPill) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const msgId = btnReactionPill.getAttribute('data-msg-id');
+                    const emoji = btnReactionPill.getAttribute('data-emoji');
+                    if (msgId && emoji) {
+                        submitReaction(msgId, emoji);
+                    }
+                    return;
+                }
+
+                // Klik di luar popover menutup popover
+                if (quickReactionPopover && !quickReactionPopover.contains(e.target)) {
+                    quickReactionPopover.classList.add('d-none');
+                }
+            });
+
+            function submitReaction(msgId, emoji) {
+                if (!msgId || !emoji) return;
+
+                // 1. Optimistic UI: Update DOM instantly without any delay (0ms)
+                const reactionsContainer = document.getElementById(`chat-reactions-${msgId}`);
+                const msgItem = document.getElementById(`chat-msg-${msgId}`);
+                const isSender = msgItem ? (msgItem.classList.contains('justify-content-end') || msgItem.classList.contains('text-end')) : false;
+
+                if (reactionsContainer) {
+                    let currentPill = reactionsContainer.querySelector(`.btn-reaction-pill[data-emoji="${emoji}"]`);
+                    if (currentPill) {
+                        const countSpan = currentPill.querySelector('.fw-semibold');
+                        let currentCount = countSpan ? parseInt(countSpan.textContent.trim() || '0', 10) : 0;
+                        const hasReacted = currentPill.classList.contains('bg-primary-subtle');
+                        if (hasReacted) {
+                            currentCount = Math.max(0, currentCount - 1);
+                            if (currentCount === 0) {
+                                currentPill.remove();
+                            } else {
+                                if (countSpan) countSpan.textContent = currentCount;
+                                currentPill.className = 'btn btn-xs py-0.5 px-1.5 rounded-pill border bg-light text-dark border-secondary-subtle btn-reaction-pill fs-xxs d-inline-flex align-items-center gap-1';
+                            }
+                        } else {
+                            currentCount++;
+                            if (countSpan) countSpan.textContent = currentCount;
+                            currentPill.className = 'btn btn-xs py-0.5 px-1.5 rounded-pill border bg-primary-subtle text-primary border-primary btn-reaction-pill fs-xxs d-inline-flex align-items-center gap-1';
+                        }
+                    } else {
+                        const newPillHtml = `<button type="button" class="btn btn-xs py-0.5 px-1.5 rounded-pill border bg-primary-subtle text-primary border-primary btn-reaction-pill fs-xxs d-inline-flex align-items-center gap-1" data-msg-id="${msgId}" data-emoji="${emoji}" title="1 orang bereaksi ${emoji}">
+                            <span>${emoji}</span>
+                            <span class="fw-semibold">1</span>
+                        </button>`;
+                        reactionsContainer.insertAdjacentHTML('beforeend', newPillHtml);
+                    }
+                }
+
+                // 2. Background AJAX synchronization
+                fetch(`/admin/profil-pengguna/messages/${msgId}/toggle-reaction`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ emoji: emoji })
+                })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (data && data.success && reactionsContainer) {
+                        reactionsContainer.innerHTML = renderReactionsHtml(msgId, data.reactions, isSender);
+                    }
+                })
+                .catch(function(err) {
+                    console.error('Error submitting reaction:', err);
+                });
+            }
+
+            // ==========================================
+            // 4. FORWARD MESSAGE LOGIC
+            // ==========================================
+            document.addEventListener('click', function(e) {
+                const btnForward = e.target.closest('.btn-forward-msg');
+                if (!btnForward) return;
+                e.preventDefault();
+
+                const msgId = btnForward.getAttribute('data-msg-id');
+                activeForwardMessageId = msgId;
+
+                populateForwardContactList();
+
+                if (forwardModalEl && window.bootstrap) {
+                    const bsModal = bootstrap.Modal.getOrCreateInstance(forwardModalEl);
+                    bsModal.show();
+                }
+            });
+
+            function populateForwardContactList(filterQuery = '') {
+                if (!forwardContactList) return;
+                const contactEls = document.querySelectorAll('#chat-contacts-list .btn-select-chat');
+                let html = '';
+                const query = filterQuery.toLowerCase().trim();
+
+                contactEls.forEach(function(el) {
+                    const uid = el.getAttribute('data-user-id');
+                    const uname = el.getAttribute('data-user-name') || '';
+                    const uavatar = el.getAttribute('data-user-avatar') || '';
+                    const urole = el.getAttribute('data-user-role') || '';
+
+                    if (query === '' || uname.toLowerCase().includes(query)) {
+                        html += `<div class="list-group-item list-group-item-action d-flex align-items-center justify-content-between py-2 px-2.5 border-0 border-bottom">
+                            <div class="d-flex align-items-center gap-2 overflow-hidden me-2">
+                                <img src="${uavatar}" class="rounded-circle object-fit-cover flex-shrink-0" style="width: 32px; height: 32px;" alt="Avatar">
+                                <div class="overflow-hidden">
+                                    <div class="fw-semibold text-dark fs-12 text-truncate">${escapeHtml(uname)}</div>
+                                    <div class="text-muted fs-11 text-truncate">${escapeHtml(urole)}</div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary btn-sm px-2.5 py-1 fs-11 btn-send-forward flex-shrink-0" data-target-uid="${uid}" data-target-uname="${escapeHtml(uname)}">
+                                <i class="ti ti-arrow-forward-up me-0.5"></i> Teruskan
+                            </button>
+                        </div>`;
+                    }
+                });
+
+                if (html === '') {
+                    html = `<div class="p-3 text-center text-muted fs-12">Kontak tidak ditemukan.</div>`;
+                }
+
+                forwardContactList.innerHTML = html;
+            }
+
+            if (forwardContactSearch) {
+                forwardContactSearch.addEventListener('input', function(e) {
+                    populateForwardContactList(e.target.value);
+                });
+            }
+
+            document.addEventListener('click', function(e) {
+                const btnSendFwd = e.target.closest('.btn-send-forward');
+                if (!btnSendFwd) return;
+                e.preventDefault();
+
+                const targetUid = btnSendFwd.getAttribute('data-target-uid');
+                const targetUname = btnSendFwd.getAttribute('data-target-uname') || 'pengguna';
+                if (!activeForwardMessageId || !targetUid) return;
+
+                btnSendFwd.disabled = true;
+                btnSendFwd.innerHTML = `<span class="spinner-border spinner-border-sm" role="status"></span>`;
+
+                fetch(`/admin/profil-pengguna/messages/${activeForwardMessageId}/forward`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ target_user_id: targetUid })
+                })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (data && data.success) {
+                        if (forwardModalEl && window.bootstrap) {
+                            const bsModal = bootstrap.Modal.getInstance(forwardModalEl);
+                            if (bsModal) bsModal.hide();
+                        }
+                        if (typeof window.showToast === 'function') {
+                            window.showToast(`Pesan berhasil diteruskan ke ${targetUname}`, 'success');
+                        }
+                        pollSidebarContacts();
+                        if (activeUserId === targetUid) {
+                            loadConversation(targetUid, false);
+                        }
+                    } else {
+                        if (typeof window.showError === 'function') {
+                            window.showError(data && data.message ? data.message : 'Gagal meneruskan pesan.');
+                        }
+                        btnSendFwd.disabled = false;
+                        btnSendFwd.innerHTML = `<i class="ti ti-arrow-forward-up me-0.5"></i> Teruskan`;
+                    }
+                })
+                .catch(function(err) {
+                    if (typeof window.showError === 'function') {
+                        window.showError('Terjadi kesalahan koneksi.');
+                    }
+                    btnSendFwd.disabled = false;
+                    btnSendFwd.innerHTML = `<i class="ti ti-arrow-forward-up me-0.5"></i> Teruskan`;
+                });
+            });
+
+            // ==========================================
+            // 5. VOICE NOTE RECORDER & AUDIO PLAYER
+            // ==========================================
+            if (btnRecordVoice) {
+                btnRecordVoice.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    if (!activeUserId) return;
+
+                    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                        if (typeof window.showWarning === 'function') {
+                            window.showWarning('Browser Anda tidak mendukung rekaman audio.');
+                        } else {
+                            alert('Browser Anda tidak mendukung rekaman audio.');
+                        }
+                        return;
+                    }
+
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        audioChunks = [];
+                        mediaRecorder = new MediaRecorder(stream);
+
+                        mediaRecorder.ondataavailable = function(evt) {
+                            if (evt.data && evt.data.size > 0) {
+                                audioChunks.push(evt.data);
+                            }
+                        };
+
+                        mediaRecorder.start();
+                        recordingSeconds = 0;
+
+                        if (voiceRecordingContainer) {
+                            voiceRecordingContainer.classList.remove('d-none');
+                            voiceRecordingContainer.classList.add('d-flex');
+                        }
+                        if (chatInputRow) chatInputRow.classList.add('d-none');
+
+                        if (voiceRecordingTimer) voiceRecordingTimer.textContent = '00:00';
+                        recordingTimerInterval = setInterval(function() {
+                            recordingSeconds++;
+                            const mins = String(Math.floor(recordingSeconds / 60)).padStart(2, '0');
+                            const secs = String(recordingSeconds % 60).padStart(2, '0');
+                            if (voiceRecordingTimer) voiceRecordingTimer.textContent = `${mins}:${secs}`;
+                        }, 1000);
+
+                    } catch (err) {
+                        console.error('Mic access error:', err);
+                        if (typeof window.showWarning === 'function') {
+                            window.showWarning('Izin mikrofon ditolak atau tidak tersedia.');
+                        } else {
+                            alert('Izin mikrofon ditolak.');
+                        }
+                    }
+                });
+            }
+
+            function stopRecordingCleanup() {
+                if (recordingTimerInterval) {
+                    clearInterval(recordingTimerInterval);
+                    recordingTimerInterval = null;
+                }
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                    mediaRecorder.stream.getTracks().forEach(function(track) { track.stop(); });
+                }
+                if (voiceRecordingContainer) {
+                    voiceRecordingContainer.classList.add('d-none');
+                    voiceRecordingContainer.classList.remove('d-flex');
+                }
+                if (chatInputRow) chatInputRow.classList.remove('d-none');
+            }
+
+            if (btnCancelVoice) {
+                btnCancelVoice.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    stopRecordingCleanup();
+                    audioChunks = [];
+                });
+            }
+
+            if (btnSendVoice) {
+                btnSendVoice.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!mediaRecorder || !activeUserId) return;
+
+                    mediaRecorder.onstop = function() {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        if (audioBlob.size === 0) return;
+
+                        const audioFile = new File([audioBlob], `voice_note_${Date.now()}.webm`, { type: 'audio/webm' });
+                        const formData = new FormData();
+                        formData.append('receiver_id', activeUserId);
+                        formData.append('attachment', audioFile);
+
+                        const replyParentInput = document.getElementById('reply-parent-id');
+                        const parentId = (replyParentInput && replyParentInput.value.trim() !== '') ? parseInt(replyParentInput.value.trim(), 10) : null;
+                        if (parentId) formData.append('parent_id', parentId);
+
+                        const tempMsgId = 'temp_' + Date.now();
+                        const blobUrl = URL.createObjectURL(audioBlob);
+                        const now = new Date();
+                        const timeFormatted = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+
+                        const optimisticMsg = {
+                            id: tempMsgId,
+                            temp_id: tempMsgId,
+                            is_sender: true,
+                            body: '',
+                            attachment_url: blobUrl,
+                            attachment_name: 'Pesan Suara',
+                            attachment_type: 'voice',
+                            attachment_size: audioBlob.size,
+                            parent_id: parentId,
+                            time_formatted: timeFormatted,
+                            is_pending: true
+                        };
+
+                        appendSingleMessage(optimisticMsg);
+                        scrollToBottom(true);
+                        promoteContactToRecent(activeUserId, '🎙️ [Pesan Suara]', 'Baru saja');
+
+                        fetch('/admin/profil-pengguna/messages/send', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'application/json'
+                            },
+                            body: formData
+                        })
+                        .then(function(res) { return res.json(); })
+                        .then(function(data) {
+                            if (data && data.success) {
+                                const tempEl = document.getElementById(`chat-msg-${tempMsgId}`);
+                                if (tempEl) {
+                                    tempEl.id = `chat-msg-${data.message.id}`;
+                                    tempEl.setAttribute('data-msg-id', data.message.id);
+                                    const statusTimeEl = tempEl.querySelector('.chat-status-time');
+                                    if (statusTimeEl) {
+                                        statusTimeEl.innerHTML = `<i class="ti ti-check text-primary me-0.5" title="Terkirim"></i> ${data.message.time_formatted || timeFormatted}`;
+                                    }
+                                }
+                                pollSidebarContacts();
+                            }
+                        })
+                        .catch(function(err) {
+                            console.error('Error sending voice note:', err);
+                        });
+                    };
+
+                    stopRecordingCleanup();
+                });
+            }
+
+            // In-Bubble Audio Player Logic
+            document.addEventListener('click', function(e) {
+                const btnPlay = e.target.closest('.btn-play-voice');
+                if (!btnPlay) return;
+                e.preventDefault();
+
+                const audioSrc = btnPlay.getAttribute('data-audio-src');
+                if (!audioSrc) return;
+
+                const card = btnPlay.closest('.voice-player-card');
+                const progressBar = card ? card.querySelector('.progress-bar') : null;
+                const timeEl = card ? card.querySelector('.voice-current-time') : null;
+                const icon = btnPlay.querySelector('i');
+
+                // Jika sedang memainkan audio yang sama -> pause
+                if (activeAudioPlayer && activeAudioBtn === btnPlay) {
+                    if (activeAudioPlayer.paused) {
+                        activeAudioPlayer.play();
+                        if (icon) icon.className = 'ti ti-player-pause fs-14';
+                    } else {
+                        activeAudioPlayer.pause();
+                        if (icon) icon.className = 'ti ti-player-play fs-14';
+                    }
+                    return;
+                }
+
+                // Stop active previous player
+                if (activeAudioPlayer) {
+                    activeAudioPlayer.pause();
+                    if (activeAudioBtn) {
+                        const prevIcon = activeAudioBtn.querySelector('i');
+                        if (prevIcon) prevIcon.className = 'ti ti-player-play fs-14';
+                    }
+                    if (activeAudioProgress) activeAudioProgress.style.width = '0%';
+                }
+
+                activeAudioPlayer = new Audio(audioSrc);
+                activeAudioBtn = btnPlay;
+                activeAudioProgress = progressBar;
+                activeAudioTimeEl = timeEl;
+
+                if (icon) icon.className = 'ti ti-player-pause fs-14';
+
+                activeAudioPlayer.addEventListener('timeupdate', function() {
+                    if (activeAudioPlayer.duration) {
+                        const progress = (activeAudioPlayer.currentTime / activeAudioPlayer.duration) * 100;
+                        if (progressBar) progressBar.style.width = `${progress}%`;
+
+                        const curMins = Math.floor(activeAudioPlayer.currentTime / 60);
+                        const curSecs = String(Math.floor(activeAudioPlayer.currentTime % 60)).padStart(2, '0');
+                        if (timeEl) timeEl.textContent = `${curMins}:${curSecs}`;
+                    }
+                });
+
+                activeAudioPlayer.addEventListener('ended', function() {
+                    if (icon) icon.className = 'ti ti-player-play fs-14';
+                    if (progressBar) progressBar.style.width = '0%';
+                    if (timeEl) timeEl.textContent = '0:00';
+                    activeAudioPlayer = null;
+                });
+
+                activeAudioPlayer.play();
+            });
+
+            // Seek audio saat progress bar diklik
+            document.addEventListener('click', function(e) {
+                const progressContainer = e.target.closest('.voice-progress');
+                if (!progressContainer || !activeAudioPlayer) return;
+
+                const rect = progressContainer.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const percent = Math.max(0, Math.min(1, clickX / rect.width));
+
+                if (activeAudioPlayer.duration) {
+                    activeAudioPlayer.currentTime = percent * activeAudioPlayer.duration;
+                }
+            });
         });
     </script>
 
@@ -1706,6 +3005,19 @@
         .reply-quote-box:active {
             transform: translateY(0);
         }
+        mark.search-match {
+            background-color: #fef08a !important;
+            color: #854d0e !important;
+            border-radius: 3px;
+            padding: 1px 3px;
+            box-shadow: 0 0 0 1px rgba(234, 179, 8, 0.4);
+            font-weight: 600;
+        }
+        mark.search-match.bg-danger {
+            background-color: #ef4444 !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.6);
+        }
         @keyframes pulseMessageHighlight {
             0% {
                 box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.8);
@@ -1723,6 +3035,35 @@
         }
         .chat-message-highlight {
             animation: pulseMessageHighlight 1.8s ease-in-out !important;
+        }
+        #quick-reaction-popover {
+            background: #ffffff;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            animation: popoverFadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes popoverFadeIn {
+            from { opacity: 0; transform: translateY(4px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .btn-quick-react {
+            font-size: 1.35rem;
+            line-height: 1;
+            padding: 4px 6px !important;
+            border-radius: 50%;
+            transition: transform 0.12s ease, background-color 0.12s ease;
+        }
+        .btn-quick-react:hover {
+            transform: scale(1.35);
+            background-color: #f1f5f9;
+        }
+        .btn-reaction-pill {
+            transition: all 0.15s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+        .btn-reaction-pill:hover {
+            transform: scale(1.1);
         }
     </style>
 @endsection

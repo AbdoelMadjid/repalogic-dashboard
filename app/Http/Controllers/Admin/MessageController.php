@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class MessageController extends Controller
 {
@@ -30,10 +31,11 @@ class MessageController extends Controller
 
         foreach ($users as $u) {
             $convId = Message::makeConversationId($currentUser->id, $u->id);
-            $lastMsg = Message::where('conversation_id', $convId)->latest()->first();
+            $lastMsg = Message::where('conversation_id', $convId)->visibleTo($currentUser->id)->latest()->first();
             $unreadCount = Message::where('conversation_id', $convId)
                 ->where('receiver_id', $currentUser->id)
                 ->where('is_read', false)
+                ->where('deleted_for_receiver', false)
                 ->count();
 
             $cData = [
@@ -72,6 +74,7 @@ class MessageController extends Controller
             $convId = Message::makeConversationId($currentUser->id, $activeUser->id);
             $messages = Message::with(['sender', 'parent.sender'])
                 ->where('conversation_id', $convId)
+                ->visibleTo($currentUser->id)
                 ->orderBy('created_at', 'asc')
                 ->get();
 
@@ -106,10 +109,11 @@ class MessageController extends Controller
 
         foreach ($users as $u) {
             $convId = Message::makeConversationId($currentUser->id, $u->id);
-            $lastMsg = Message::where('conversation_id', $convId)->latest()->first();
+            $lastMsg = Message::where('conversation_id', $convId)->visibleTo($currentUser->id)->latest()->first();
             $unreadCount = Message::where('conversation_id', $convId)
                 ->where('receiver_id', $currentUser->id)
                 ->where('is_read', false)
+                ->where('deleted_for_receiver', false)
                 ->count();
 
             if ($lastMsg !== null) {
@@ -162,6 +166,7 @@ class MessageController extends Controller
 
         $messages = Message::with(['sender', 'parent.sender'])
             ->where('conversation_id', $convId)
+            ->visibleTo($currentUser->id)
             ->orderBy('created_at', 'asc')
             ->get()
             ->map(function ($msg) use ($currentUser) {
@@ -178,6 +183,9 @@ class MessageController extends Controller
                     'attachment_size' => $msg->attachment_size,
                     'attachment_size_formatted' => $msg->attachment_size ? $this->formatFileSize($msg->attachment_size) : null,
                     'parent_id' => $msg->parent_id,
+                    'is_pinned' => (bool) $msg->is_pinned,
+                    'reactions' => $msg->reactions ?: [],
+                    'is_forwarded' => (bool) $msg->is_forwarded,
                     'parent' => $msg->parent ? [
                         'id' => $msg->parent->id,
                         'sender_name' => $msg->parent->sender ? ($msg->parent->sender_id === $currentUser->id ? 'Anda' : $msg->parent->sender->name) : 'Pesan',
@@ -206,18 +214,18 @@ class MessageController extends Controller
     }
 
     /**
-     * Send new direct chat message (with text, reply quote, image or document attachment) via AJAX.
+     * Send new direct chat message (with text, reply quote, image, audio, or document attachment) via AJAX.
      */
     public function send(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'receiver_id' => ['required', 'integer', 'exists:users,id'],
             'body' => ['nullable', 'string', 'max:2000'],
-            'attachment' => ['nullable', 'file', 'max:10240', 'mimes:jpg,jpeg,png,webp,gif,pdf,doc,docx,xls,xlsx,zip,rar,txt'],
+            'attachment' => ['nullable', 'file', 'max:10240', 'mimes:jpg,jpeg,png,webp,gif,pdf,doc,docx,xls,xlsx,zip,rar,txt,mp3,wav,ogg,webm,m4a,mp4,aac,flac'],
         ], [
             'receiver_id.required' => 'Penerima pesan wajib ditentukan.',
             'attachment.max' => 'Ukuran lampiran maksimal 10 MB.',
-            'attachment.mimes' => 'Format berkas harus berupa Gambar (JPG, PNG, WEBP, GIF) atau Dokumen (PDF, DOC, XLS, ZIP, TXT).',
+            'attachment.mimes' => 'Format berkas harus berupa Gambar, Audio/Voice Note, atau Dokumen (PDF, DOC, XLS, ZIP, TXT).',
         ]);
 
         $bodyText = $request->filled('body') ? trim($validated['body']) : '';
@@ -248,7 +256,7 @@ class MessageController extends Controller
             $parentMessage = Message::with('sender')->find($parentId);
         }
 
-        // Handle upload berkas/gambar jika ada
+        // Handle upload berkas/gambar/audio jika ada
         $attachmentUrl = null;
         $attachmentName = null;
         $attachmentType = null;
@@ -261,13 +269,21 @@ class MessageController extends Controller
             $size = $file->getSize();
 
             $isImage = in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif']);
-            $attachmentType = $isImage ? 'image' : 'file';
+            $isVoice = in_array($ext, ['mp3', 'wav', 'ogg', 'webm', 'm4a', 'aac', 'flac']) || str_starts_with($file->getMimeType() ?? '', 'audio/');
 
-            $filename = 'chat_' . time() . '_' . uniqid() . '.' . $ext;
+            if ($isImage) {
+                $attachmentType = 'image';
+            } elseif ($isVoice) {
+                $attachmentType = 'voice';
+            } else {
+                $attachmentType = 'file';
+            }
+
+            $filename = 'chat_' . time() . '_' . uniqid() . '.' . ($ext ?: 'webm');
             $file->storeAs('chat_attachments', $filename, 'public');
 
             $attachmentUrl = asset('storage/chat_attachments/' . $filename);
-            $attachmentName = $originalName;
+            $attachmentName = $attachmentType === 'voice' ? 'Pesan Suara' : $originalName;
             $attachmentSize = $size;
         }
 
@@ -285,6 +301,9 @@ class MessageController extends Controller
             'attachment_size' => $attachmentSize,
             'message_type' => 'direct',
             'is_read' => false,
+            'is_pinned' => false,
+            'reactions' => null,
+            'is_forwarded' => false,
         ]);
 
         return response()->json([
@@ -299,6 +318,9 @@ class MessageController extends Controller
                 'attachment_size' => $msg->attachment_size,
                 'attachment_size_formatted' => $msg->attachment_size ? $this->formatFileSize($msg->attachment_size) : null,
                 'parent_id' => $msg->parent_id,
+                'is_pinned' => false,
+                'reactions' => [],
+                'is_forwarded' => false,
                 'parent' => $parentMessage ? [
                     'id' => $parentMessage->id,
                     'sender_name' => $parentMessage->sender ? ($parentMessage->sender_id === $currentUser->id ? 'Anda' : $parentMessage->sender->name) : 'Pesan',
@@ -307,6 +329,98 @@ class MessageController extends Controller
                 'time_formatted' => $msg->created_at ? $msg->created_at->format('H:i') : 'Baru saja',
                 'sender_avatar' => $currentUser->avatar_url,
             ],
+        ]);
+    }
+
+    /**
+     * Toggle pinned status of a message.
+     */
+    public function togglePin(Request $request, $id): JsonResponse
+    {
+        $currentUser = Auth::user();
+        $message = Message::visibleTo($currentUser->id)->findOrFail((int) $id);
+
+        $newPinnedState = !$message->is_pinned;
+
+        // If pinning, unpin other pinned messages in this conversation
+        if ($newPinnedState) {
+            Message::where('conversation_id', $message->conversation_id)
+                ->where('is_pinned', true)
+                ->update(['is_pinned' => false]);
+        }
+
+        $message->is_pinned = $newPinnedState;
+        $message->save();
+
+        return response()->json([
+            'success' => true,
+            'is_pinned' => $message->is_pinned,
+            'message_id' => $message->id,
+            'message' => $message->is_pinned ? 'Pesan berhasil disematkan di obrolan.' : 'Sematan pesan berhasil dilepas.',
+        ]);
+    }
+
+    /**
+     * Toggle reaction emoji on a message.
+     */
+    public function toggleReaction(Request $request, $id): JsonResponse
+    {
+        $validated = $request->validate([
+            'emoji' => ['required', 'string', 'max:20'],
+        ]);
+
+        $currentUser = Auth::user();
+        $message = Message::visibleTo($currentUser->id)->findOrFail((int) $id);
+
+        $reactions = $message->toggleReaction($validated['emoji'], $currentUser->id);
+
+        return response()->json([
+            'success' => true,
+            'message_id' => $message->id,
+            'reactions' => $reactions,
+            'message' => 'Reaksi pesan berhasil diperbarui.',
+        ]);
+    }
+
+    /**
+     * Forward an existing message to another user.
+     */
+    public function forward(Request $request, $id): JsonResponse
+    {
+        $validated = $request->validate([
+            'target_user_id' => ['required', 'integer', 'exists:users,id'],
+        ]);
+
+        $currentUser = Auth::user();
+        $targetUser = User::findOrFail((int) $validated['target_user_id']);
+
+        if ($targetUser->id === $currentUser->id) {
+            return response()->json(['success' => false, 'message' => 'Tidak dapat meneruskan pesan ke diri sendiri.'], 422);
+        }
+
+        $sourceMsg = Message::visibleTo($currentUser->id)->findOrFail((int) $id);
+        $convId = Message::makeConversationId($currentUser->id, $targetUser->id);
+
+        $newMsg = Message::create([
+            'sender_id' => $currentUser->id,
+            'receiver_id' => $targetUser->id,
+            'conversation_id' => $convId,
+            'body' => $sourceMsg->body,
+            'attachment_url' => $sourceMsg->attachment_url,
+            'attachment_name' => $sourceMsg->attachment_name,
+            'attachment_type' => $sourceMsg->attachment_type,
+            'attachment_size' => $sourceMsg->attachment_size,
+            'message_type' => 'direct',
+            'is_read' => false,
+            'is_pinned' => false,
+            'reactions' => null,
+            'is_forwarded' => true,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pesan berhasil diteruskan ke ' . $targetUser->name . '.',
+            'target_user_id' => $targetUser->id,
         ]);
     }
 
@@ -321,6 +435,10 @@ class MessageController extends Controller
 
         if (!empty($msg->body)) {
             return $msg->body;
+        }
+
+        if ($msg->attachment_type === 'voice') {
+            return '🎙️ [Pesan Suara]';
         }
 
         if ($msg->attachment_type === 'image' || in_array(strtolower(pathinfo($msg->attachment_url ?? '', PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'webp', 'gif'])) {
@@ -349,5 +467,104 @@ class MessageController extends Controller
             return round($bytes / 1024, 1) . ' KB';
         }
         return $bytes . ' B';
+    }
+
+    /**
+     * Delete a message.
+     * - If deleted by sender: permanently delete for everyone (unsend).
+     * - If deleted by receiver: delete only for receiver (keep visible to sender).
+     */
+    public function destroy(Request $request, $id): JsonResponse
+    {
+        $currentUser = Auth::user();
+        $message = Message::findOrFail((int) $id);
+
+        // Validasi otoritas: hanya pengirim atau penerima yang boleh menghapus
+        if ($message->sender_id !== $currentUser->id && $message->receiver_id !== $currentUser->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki hak akses untuk menghapus pesan ini.',
+            ], 403);
+        }
+
+        // KASUS 1: Dihapus oleh Pengirim (Sender) -> Hapus permanen untuk semua orang
+        if ($message->sender_id === $currentUser->id) {
+            // Hapus file lampiran dari disk penyimpanan jika ada
+            if ($message->attachment_url) {
+                $storagePrefix = asset('storage/');
+                $relativeStoragePath = str_replace($storagePrefix . '/', '', $message->attachment_url);
+                if (Storage::disk('public')->exists($relativeStoragePath)) {
+                    Storage::disk('public')->delete($relativeStoragePath);
+                }
+            }
+
+            $message->delete();
+
+            return response()->json([
+                'success' => true,
+                'deleted_for_everyone' => true,
+                'message' => 'Pesan berhasil ditarik dan dihapus untuk semua orang.',
+            ]);
+        }
+
+        // KASUS 2: Dihapus oleh Penerima (Receiver) -> Sembunyikan hanya untuk penerima
+        $message->update([
+            'deleted_for_receiver' => true,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'deleted_for_everyone' => false,
+            'message' => 'Pesan berhasil dihapus dari tampilan percakapan Anda.',
+        ]);
+    }
+
+    /**
+     * Clear entire conversation history with a target user for the current user.
+     * Keeps all messages intact for the opponent.
+     */
+    public function clearConversation(Request $request, $user): JsonResponse
+    {
+        $currentUser = Auth::user();
+        $targetUser = $user instanceof User ? $user : User::findOrFail((int) $user);
+
+        $convId = Message::makeConversationId($currentUser->id, $targetUser->id);
+
+        // Tandai pesan yang dikirim oleh current user sebagai terhapus untuk pengirim
+        Message::where('conversation_id', $convId)
+            ->where('sender_id', $currentUser->id)
+            ->update([
+                'deleted_for_sender' => true,
+            ]);
+
+        // Tandai pesan yang diterima oleh current user sebagai terhapus untuk penerima
+        Message::where('conversation_id', $convId)
+            ->where('receiver_id', $currentUser->id)
+            ->update([
+                'deleted_for_receiver' => true,
+                'is_read' => true,
+            ]);
+
+        // Bersihkan data jika kedua belah pihak sudah menghapus pesan yang sama
+        $bothDeleted = Message::where('conversation_id', $convId)
+            ->where('deleted_for_sender', true)
+            ->where('deleted_for_receiver', true)
+            ->get();
+
+        foreach ($bothDeleted as $bMsg) {
+            if ($bMsg->attachment_url) {
+                $storagePrefix = asset('storage/');
+                $relativeStoragePath = str_replace($storagePrefix . '/', '', $bMsg->attachment_url);
+                if (Storage::disk('public')->exists($relativeStoragePath)) {
+                    Storage::disk('public')->delete($relativeStoragePath);
+                }
+            }
+            $bMsg->delete();
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Seluruh riwayat obrolan dengan ' . $targetUser->name . ' berhasil dibersihkan dari tampilan Anda.',
+        ]);
     }
 }

@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.4.3</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.4.6</strong>
                             </span>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                                         <h6 class="fw-bold mb-0 text-dark">2. Catat Log Changelog</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Tulis ringkasan rilis pada file <code>changelog.blade.php</code> dengan penanda waktu WIB yang presisi sesuai commit git.
+                                        Tambahkan log pada file <code>resources/views/template/documentation/changelog.blade.php</code> dengan timestamp presisi WIB.
                                     </p>
                                 </div>
                             </div>
@@ -69,10 +69,10 @@
                                 <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                     <div class="d-flex align-items-center mb-2">
                                         <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-table fs-14"></i></span>
-                                        <h6 class="fw-bold mb-0 text-dark">3. Update Dokumen Rilis</h6>
+                                        <h6 class="fw-bold mb-0 text-dark">3. Update Tabel Rilis</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Tambahkan entri tabel rilis pada file <code>docs/riwayat_release_dan_tag.md</code> untuk arsip dokumentasi offline.
+                                        Catat riwayat pada tabel <code>docs/riwayat_release_dan_tag.md</code> untuk arsip dokumentasi markdown.
                                     </p>
                                 </div>
                             </div>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.4.3 -->
+                        <!-- Version 2.4.6 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,98 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.4.3</h5>
+                                        <h5 class="fw-bold mb-0">v2.4.6</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.6</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 17:00 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Interactive Chat Suite: In-Chat Search, Pinned Messages, Emoji Reactions, Message Forwarding &amp; Voice Note Audio Engine</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Pencarian Pesan Interaktif (In-Chat Search Bar):</strong> Fitur navigasi dan penyorotan teks pesan real-time dalam obrolan aktif dengan indikator pencocokan (Match Counter misal: <em>1/3</em>), tombol navigasi Next/Prev, dan animasi pulse scroll fokus.</li>
+                                    <li><strong class="text-dark">Sematkan Pesan Penting (Pinned Messages):</strong> Banner sematan elegan di bagian atas jendela obrolan dengan cuplikan teks, fungsi klik langsung menuju pesan (jump-to-message), serta aksi pin/unpin per pesan.</li>
+                                    <li><strong class="text-dark">Reaksi Emoji Cepat (Message Reactions):</strong> Palette reaksi emoji melayang (👍 ❤️ 😂 😮 😢 🙏) dan badge pill interaktif di bawah setiap balon chat dengan counter jumlah reaksi dan toggle reaksi pengguna.</li>
+                                    <li><strong class="text-dark">Teruskan Pesan (Forward Messages):</strong> Modal pencarian dan pemilihan kontak instan untuk meneruskan pesan teks maupun lampiran ke pengguna lain dengan label <em>"Diteruskan"</em>.</li>
+                                    <li><strong class="text-dark">Perekam &amp; Pemutar Pesan Suara (Voice Note Recorder &amp; Web Audio Player):</strong> Dukungan Web Audio API MediaRecorder dengan timer durasi rekaman, tombol batal/kirim, serta pemutar audio kustom modern di dalam balon obrolan dengan progress bar yang dapat diklik (seekable).</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">In-Chat Search</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Pinned Messages</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Message Reactions</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Forward Message</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Voice Note</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Web Audio Player</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.4.5 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-dot fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.4.5</h5>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.5</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 16:36 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Clear Conversation History Engine &amp; Instant Sidebar Demotion (Keep Opponent Chat Intact)</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Pembersihan Riwayat Percakapan Sepihak (Clear Chat for Me):</strong> Penambahan tombol <em>"Bersihkan Obrolan"</em> di header area pesan untuk menghapus/membersihkan seluruh riwayat chat dengan kontak aktif dari tampilan pengguna, sementara lawan obrolan tetap mempertahankan seluruh riwayat pesan secara lengkap.</li>
+                                    <li><strong class="text-dark">Pemindahan Kontak Instan Tanpa Refresh:</strong> Ketika seluruh obrolan dibersihkan atau pesan habis dihapus, kontak seketika (0ms delay) berpindah dari kelompok <em>"Percakapan Aktif"</em> ke <em>"Pengguna Lainnya"</em> di sidebar lengkap dengan pembaruan badge counter real-time.</li>
+                                    <li><strong class="text-dark">Dukungan Flag DB deleted_for_sender &amp; deleted_for_receiver:</strong> Penambahan kolom <code>deleted_for_sender</code> dan optimalisasi <code>scopeVisibleTo()</code> sehingga pesan terkirim maupun pesan diterima dapat disembunyikan secara presisi per pengguna.</li>
+                                    <li><strong class="text-dark">SweetAlert2 Confirmation Dialog:</strong> Dilengkapi dialog konfirmasi interaktif dengan pesan peringatan yang informatif dan pembaruan instan state tombol serta placeholder.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Clear Conversation</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Instant Sidebar Demotion</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Keep Opponent Chat</span>
+                                    <span class="badge bg-light text-dark border fs-xs">deleted_for_sender</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Chat Engine</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.4.4 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xl text-muted opacity-50"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.4.4</h5>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.4</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 16:30 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Dual-Mode Chat Message Deletion Engine (Unsend for Everyone &amp; Delete for Me)</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Hapus Pesan Terkirim (Tarik untuk Semua Orang / Unsend):</strong> Pesan yang dikirim oleh pengguna aktif dapat ditarik/dihapus secara permanen dari basis data dan langsung tidak terlihat lagi pada layar lawan obrolan secara instan dan sinkron.</li>
+                                    <li><strong class="text-dark">Hapus Pesan Diterima (Hapus untuk Saya / Delete for Me):</strong> Pesan dari lawan obrolan yang dihapus oleh pengguna hanya disembunyikan dari riwayat percakapan pengguna aktif via kolom <code>deleted_for_receiver</code>, sementara lawan obrolan (pengirim) tetap dapat melihat pesan tersebut secara utuh.</li>
+                                    <li><strong class="text-dark">SweetAlert2 Confirmation Dialog &amp; Smooth Fadeout:</strong> Konfirmasi penghapusan pesan terstandarisasi dengan modal SweetAlert2 (Rule 9) dan animasi penghapusan elemen bubble chat yang mulus seketika.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Delete for Everyone</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Delete for Me</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Dual Mode Message Deletion</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Chat Engine</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.4.3 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xl text-muted opacity-50"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.4.3</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.3</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 16:22 WIB</span>

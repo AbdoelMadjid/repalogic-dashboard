@@ -172,9 +172,11 @@ class NotificationService
                 // Ambil total pesan belum dibaca untuk badge di topbar icon
                 $totalUnreadCount = \App\Models\Message::where('receiver_id', $user->id)
                     ->where('is_read', false)
+                    ->where('deleted_for_receiver', false)
                     ->count();
 
                 $dbMessages = \App\Models\Message::where('receiver_id', $user->id)
+                    ->where('deleted_for_receiver', false)
                     ->with('sender')
                     ->orderBy('created_at', 'desc')
                     ->get();
