@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.4.1</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.4.2</strong>
                             </span>
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.4.1 -->
+                        <!-- Version 2.4.2 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,36 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.4.1</h5>
+                                        <h5 class="fw-bold mb-0">v2.4.2</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.2</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 16:15 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Zero-Latency Optimistic UI Message Sending &amp; Instant Seamless Contact Switch Engine</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Pengiriman Pesan Instan (Optimistic UI):</strong> Balon pesan yang dikirim kini langsung muncul di layar detik itu juga (0ms delay) dengan status jam/indikator pending, form langsung dibersihkan, dan auto-scroll seketika tanpa menunggu respon server.</li>
+                                    <li><strong class="text-dark">Sinkronisasi Background Asinkron:</strong> Permintaan pengiriman dikirim di latar belakang. ID pesan, link lampiran, dan tanda centang terkirim diperbarui secara mulus setelah server merespon.</li>
+                                    <li><strong class="text-dark">Perpindahan Kontak Seketika (Instant Contact Switch):</strong> Saat memilih atau membuat obrolan baru dengan pengguna lain, header aktif dan input chat langsung aktif dan fokus seketika dengan transisi pemuatan yang halus.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Optimistic UI</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Zero Delay</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Instant Contact Switch</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Seamless Sync</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.4.1 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xl text-muted opacity-50"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.4.1</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.1</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 16:05 WIB</span>

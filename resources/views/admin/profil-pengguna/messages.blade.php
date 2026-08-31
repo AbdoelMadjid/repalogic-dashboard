@@ -611,7 +611,7 @@
 
                 if (!userId || userId === activeUserId) return;
 
-                // Mark active contact item
+                // Mark active contact item instantly
                 document.querySelectorAll('#chat-contacts-list .btn-select-chat').forEach(function(el) {
                     el.classList.remove('active');
                 });
@@ -626,6 +626,7 @@
                 lastMessageId = null;
                 userHasScrolledUp = false;
 
+                // Update Header seketika (Instant 0ms Feedback)
                 if (activeReceiverInput) activeReceiverInput.value = userId;
                 if (activeChatName) activeChatName.textContent = userName;
                 if (activeChatRole) activeChatRole.textContent = userRole;
@@ -633,14 +634,24 @@
                     activeChatAvatar.src = userAvatar || "{{ asset('assets/images/users/default-avatar.svg') }}";
                     activeChatAvatar.classList.remove('d-none');
                 }
-                if (chatInput) chatInput.disabled = false;
+
+                // Aktifkan input chat langsung tanpa jeda
+                if (chatInput) {
+                    chatInput.disabled = false;
+                    chatInput.focus();
+                }
                 if (document.getElementById('btn-send-message')) document.getElementById('btn-send-message').disabled = false;
                 if (document.getElementById('btn-toggle-emoji')) document.getElementById('btn-toggle-emoji').disabled = false;
                 if (document.getElementById('btn-attach-file')) document.getElementById('btn-attach-file').disabled = false;
+                if (btnViewUserDetail) btnViewUserDetail.disabled = false;
 
-                if (btnViewUserDetail) {
-                    btnViewUserDetail.disabled = false;
-                }
+                // Tampilkan placeholder transisi cepat di chat container
+                setChatContainerHtml(`
+                    <div class="text-center py-5 text-muted" id="chat-loading-placeholder">
+                        <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
+                        <div class="fs-12 fw-medium">Memuat percakapan dengan ${escapeHtml(userName)}...</div>
+                    </div>
+                `);
 
                 // Reset state balasan & lampiran saat ganti kontak
                 cancelReplyState();
@@ -981,21 +992,66 @@
                     const receiverId = activeReceiverInput ? activeReceiverInput.value : '';
                     const replyParentInput = document.getElementById('reply-parent-id');
                     const parentId = (replyParentInput && replyParentInput.value.trim() !== '') ? parseInt(replyParentInput.value.trim(), 10) : null;
+                    const replyNameEl = document.getElementById('reply-preview-name');
+                    const replyBodyEl = document.getElementById('reply-preview-body');
 
                     if ((!messageText && !selectedChatFile) || !receiverId) return;
 
+                    // Siapkan snapshot data optimistik sebelum form di-clear
+                    const tempMsgId = 'temp_' + Date.now();
+                    const capturedFile = selectedChatFile;
+                    let capturedFileUrl = null;
+                    if (capturedFile && capturedFile.type.startsWith('image/')) {
+                        capturedFileUrl = (attachmentPreviewImg && attachmentPreviewImg.src) ? attachmentPreviewImg.src : URL.createObjectURL(capturedFile);
+                    }
+                    const capturedFileName = capturedFile ? capturedFile.name : null;
+                    const capturedFileType = capturedFile ? (capturedFile.type.startsWith('image/') ? 'image' : 'file') : null;
+                    const capturedFileSize = capturedFile ? capturedFile.size : null;
+                    const capturedParent = parentId ? {
+                        id: parentId,
+                        sender_name: replyNameEl ? replyNameEl.textContent : 'Pesan',
+                        body: replyBodyEl ? replyBodyEl.textContent : ''
+                    } : null;
+
+                    // Siapkan form data untuk background request
                     const formData = new FormData();
                     formData.append('receiver_id', receiverId);
                     if (parentId) formData.append('parent_id', parentId);
                     if (messageText) formData.append('body', messageText);
-                    if (selectedChatFile) formData.append('attachment', selectedChatFile);
+                    if (capturedFile) formData.append('attachment', capturedFile);
 
-                    const sendBtn = document.getElementById('btn-send-message');
-                    if (sendBtn) {
-                        sendBtn.disabled = true;
-                        sendBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Mengirim...';
-                    }
+                    // 1. OPTIMISTIC UI: Langsung bersihkan input & render balon pesan seketika (0ms delay)
+                    chatInput.value = '';
+                    cancelReplyState();
+                    cancelAttachmentState();
+                    chatInput.focus();
 
+                    const now = new Date();
+                    const timeFormatted = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+                    const optimisticMsg = {
+                        id: tempMsgId,
+                        temp_id: tempMsgId,
+                        is_sender: true,
+                        body: messageText,
+                        attachment_url: capturedFileUrl,
+                        attachment_name: capturedFileName,
+                        attachment_type: capturedFileType,
+                        attachment_size: capturedFileSize,
+                        attachment_size_formatted: capturedFileSize ? formatBytes(capturedFileSize) : null,
+                        parent_id: parentId,
+                        parent: capturedParent,
+                        time_formatted: timeFormatted,
+                        is_pending: true
+                    };
+
+                    appendSingleMessage(optimisticMsg);
+                    scrollToBottom(true);
+
+                    // Update ringkasan percakapan kontak aktif langsung di sidebar
+                    const summaryText = messageText || (capturedFileType === 'image' ? '📷 [Foto / Gambar]' : ('📎 [' + (capturedFileName || 'Berkas') + ']'));
+                    promoteContactToRecent(receiverId, summaryText, 'Baru saja');
+
+                    // 2. Kirim ke server di latar belakang
                     fetch('/admin/profil-pengguna/messages/send', {
                         method: 'POST',
                         headers: {
@@ -1008,56 +1064,76 @@
                     .then(function(res) { return res.json(); })
                     .then(function(data) {
                         if (data && data.success) {
-                            chatInput.value = '';
-                            cancelReplyState();
-                            cancelAttachmentState();
+                            // Update status & ID pesan dari server
+                            const tempEl = document.getElementById(`chat-msg-${tempMsgId}`);
+                            if (tempEl) {
+                                tempEl.id = `chat-msg-${data.message.id}`;
+                                tempEl.setAttribute('data-msg-id', data.message.id);
 
-                            // Append pesan baru langsung ke UI
-                            appendSingleMessage(data.message);
-                            scrollToBottom(true);
+                                const statusTimeEl = tempEl.querySelector('.chat-status-time');
+                                if (statusTimeEl) {
+                                    statusTimeEl.innerHTML = `<i class="ti ti-check text-primary me-0.5" title="Terkirim"></i> ${data.message.time_formatted || timeFormatted}`;
+                                }
 
-                            // Pindahkan kontak ke "Percakapan Aktif" dan update waktu & ringkasan pesan
-                            const summaryText = data.message.body || (data.message.attachment_type === 'image' ? '📷 [Foto / Gambar]' : ('📎 [' + (data.message.attachment_name || 'Berkas') + ']'));
-                            promoteContactToRecent(receiverId, summaryText, 'Baru saja');
-                            
-                            // Sinkronkan unread counts & topbar
+                                const btnReply = tempEl.querySelector('.btn-reply-msg');
+                                if (btnReply) {
+                                    btnReply.setAttribute('data-msg-id', data.message.id);
+                                }
+
+                                if (data.message.attachment_url) {
+                                    const previewLink = tempEl.querySelector('.btn-preview-img-modal');
+                                    if (previewLink) {
+                                        previewLink.setAttribute('data-img-url', data.message.attachment_url);
+                                        previewLink.href = data.message.attachment_url;
+                                    }
+                                    const downloadBtn = tempEl.querySelector('a[download]');
+                                    if (downloadBtn) {
+                                        downloadBtn.href = data.message.attachment_url;
+                                    }
+                                }
+                            }
+
+                            // Sinkronkan unread counts & topbar secara background
                             pollSidebarContacts();
                             if (typeof window.fetchMessagesSilently === 'function') {
                                 window.fetchMessagesSilently(false);
                             }
-                        } else if (data && data.message) {
-                            if (typeof window.showError === 'function') {
-                                window.showError(data.message, 'Gagal Mengirim');
-                            } else {
-                                alert(data.message);
-                            }
+                        } else {
+                            markMessageFailed(tempMsgId, data && data.message ? data.message : 'Gagal mengirim pesan.');
                         }
                     })
                     .catch(function(err) {
-                        if (typeof window.showError === 'function') {
-                            window.showError('Terjadi kesalahan saat mengirim pesan atau berkas.', 'Kesalahan Jaringan');
-                        }
-                    })
-                    .finally(function() {
-                        if (sendBtn) {
-                            sendBtn.disabled = false;
-                            sendBtn.innerHTML = 'Kirim <i class="ti ti-send ms-1 fs-14"></i>';
-                        }
+                        markMessageFailed(tempMsgId, 'Koneksi terputus saat mengirim.');
                     });
                 });
+            }
+
+            function markMessageFailed(tempId, errorText) {
+                const tempEl = document.getElementById(`chat-msg-${tempId}`);
+                if (tempEl) {
+                    const statusTimeEl = tempEl.querySelector('.chat-status-time');
+                    if (statusTimeEl) {
+                        statusTimeEl.innerHTML = `<span class="badge bg-danger-subtle text-danger fs-xxs py-0.5 px-1"><i class="ti ti-alert-circle me-1"></i>${escapeHtml(errorText)}</span>`;
+                    }
+                }
+                if (typeof window.showToast === 'function') {
+                    window.showToast(errorText, 'error');
+                }
             }
 
             function appendSingleMessage(msg) {
                 if (!chatContainer) return;
 
                 // Jika placeholder kosong ada, hapus
-                const emptyPlaceholder = chatContainer.querySelector('#empty-chat-placeholder');
+                const emptyPlaceholder = chatContainer.querySelector('#empty-chat-placeholder') || chatContainer.querySelector('#chat-loading-placeholder');
                 if (emptyPlaceholder) emptyPlaceholder.remove();
 
                 const isSender = msg.is_sender !== false;
+                const isPending = msg.is_pending === true;
                 const avatar = isSender ? currentUserAvatar : (msg.sender_avatar || currentUserAvatar);
                 const senderName = isSender ? 'Anda' : (msg.sender_name || 'Pengguna');
                 const replyText = msg.body || (msg.attachment_name || 'Lampiran');
+                const timeIndicator = isPending ? `<i class="ti ti-clock text-muted opacity-75 me-0.5" title="Mengirim..."></i> ${msg.time_formatted}` : `<i class="ti ti-check text-primary me-0.5" title="Terkirim"></i> ${msg.time_formatted}`;
 
                 let html = `<div class="d-flex align-items-start gap-2 my-3 chat-item ${isSender ? 'text-end justify-content-end' : ''}" id="chat-msg-${msg.id}" data-msg-id="${msg.id}">`;
                 if (!isSender) {
@@ -1084,7 +1160,7 @@
 
                 html += `</div>
                     <div class="d-flex align-items-center gap-2 text-muted fs-xs mt-1 ${isSender ? 'justify-content-end' : 'justify-content-start'}">
-                        <span><i class="ti ti-clock me-0.5"></i> ${msg.time_formatted}</span>
+                        <span class="chat-status-time">${timeIndicator}</span>
                         <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-1 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" data-sender-name="${escapeHtml(senderName)}" data-msg-body="${escapeHtml(replyText)}" title="Balas Pesan Ini">
                             <i class="ti ti-corner-up-left"></i> Balas
                         </button>
@@ -1095,19 +1171,7 @@
                 }
                 html += `</div>`;
 
-                if (window.SimpleBar) {
-                    const sb = window.SimpleBar.instances.get(chatContainer);
-                    if (sb) {
-                        const contentEl = sb.getContentElement();
-                        if (contentEl) {
-                            contentEl.insertAdjacentHTML('beforeend', html);
-                        }
-                    } else {
-                        chatContainer.insertAdjacentHTML('beforeend', html);
-                    }
-                } else {
-                    chatContainer.insertAdjacentHTML('beforeend', html);
-                }
+                appendChatContainerHtml(html);
             }
 
             function escapeHtml(text) {
