@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.4.0</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.4.1</strong>
                             </span>
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.4.0 -->
+                        <!-- Version 2.4.1 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,37 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.4.0</h5>
+                                        <h5 class="fw-bold mb-0">v2.4.1</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.1</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 16:05 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Chat Contact Avatar Spacing Optimization, Standard Framed Lightbox Modal Image Preview &amp; Interactive Reply Quote Jump Navigation</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Penyelarasan Spasi Avatar Kontak:</strong> Mengoreksi class layout daftar kontak obrolan sidebar ke standar <code>gap-3</code> (16px) sehingga posisi foto profil avatar dan nama pengguna berjarak proporsional dan rapi.</li>
+                                    <li><strong class="text-dark">Framing Elegan Lightbox Pratinjau Gambar:</strong> Penyempurnaan modal lightbox gambar obrolan dengan dimensi standar berbingkai (<code>max-width: 580px</code>, <code>max-height: 420px</code>) dan padding vertikal luas (<code>py-5 px-4</code>) berlatar gelap halus, tetap mempertahankan unduhan file beresolusi asli via tombol <em>Unduh Asli</em>.</li>
+                                    <li><strong class="text-dark">Navigasi Interaktif Kutipan Balasan Pesan (Reply Quote Jump):</strong> Kotak kutipan balasan obrolan (<em>reply quote box</em>) kini dapat diklik untuk melakukan <em>smooth scroll</em> otomatis langsung ke pesan target asal lengkap dengan animasi <em>pulse highlight</em> fokus biru yang memikat.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Messages Refinement</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Avatar Spacing</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Framed Image Modal</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Reply Quote Jump</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Pulse Highlight</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.4.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xl text-muted opacity-50"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.4.0</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.0</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 15:30 WIB</span>

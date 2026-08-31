@@ -27,20 +27,20 @@
                                     @php
                                         $isActive = $activeUser && $activeUser->id === $c['id'];
                                     @endphp
-                                    <a href="javascript:void(0);" data-user-id="{{ $c['id'] }}" data-user-name="{{ $c['name'] }}" data-user-avatar="{{ $c['avatar'] }}" data-user-role="{{ $c['role_name'] }}" class="list-group-item list-group-item-action d-flex gap-2 justify-content-between btn-select-chat {{ $isActive ? 'active' : '' }}">
-                                        <span class="d-flex justify-content-start align-items-center gap-2.5 overflow-hidden">
-                                            <span class="flex-shrink-0">
+                                    <a href="javascript:void(0);" data-user-id="{{ $c['id'] }}" data-user-name="{{ $c['name'] }}" data-user-avatar="{{ $c['avatar'] }}" data-user-role="{{ $c['role_name'] }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between py-2.5 px-3 btn-select-chat {{ $isActive ? 'active' : '' }}">
+                                        <div class="d-flex align-items-center gap-3 overflow-hidden flex-grow-1">
+                                            <div class="flex-shrink-0">
                                                 <img src="{{ $c['avatar'] }}" alt="{{ $c['name'] }}" class="rounded-circle object-fit-cover shadow-sm" style="width: 38px; height: 38px; min-width: 38px; min-height: 38px; object-fit: cover; object-position: top; display: block;" />
-                                            </span>
-                                            <span class="overflow-hidden">
+                                            </div>
+                                            <div class="overflow-hidden">
                                                 <span data-chat-search-field class="text-nowrap fw-semibold fs-base mb-0 lh-base text-dark d-block">{{ $c['name'] }}</span>
                                                 <span class="text-muted d-block fs-xs mb-0 text-truncate contact-last-msg">{{ $c['last_message'] }}</span>
-                                            </span>
-                                        </span>
-                                        <span class="d-flex flex-column gap-1 justify-content-center flex-shrink-0 align-items-end">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column gap-1 justify-content-center flex-shrink-0 align-items-end ms-2">
                                             <span class="text-muted fs-xs contact-last-time">{{ $c['last_message_time'] }}</span>
                                             <span class="badge text-bg-success fs-xxs contact-unread-badge {{ $c['unread_count'] > 0 ? '' : 'd-none' }}">{{ $c['unread_count'] }}</span>
-                                        </span>
+                                        </div>
                                     </a>
                                 @endforeach
                             </div>
@@ -56,20 +56,20 @@
                                     @php
                                         $isActive = $activeUser && $activeUser->id === $c['id'];
                                     @endphp
-                                    <a href="javascript:void(0);" data-user-id="{{ $c['id'] }}" data-user-name="{{ $c['name'] }}" data-user-avatar="{{ $c['avatar'] }}" data-user-role="{{ $c['role_name'] }}" class="list-group-item list-group-item-action d-flex gap-2 justify-content-between btn-select-chat {{ $isActive ? 'active' : '' }}">
-                                        <span class="d-flex justify-content-start align-items-center gap-2.5 overflow-hidden">
-                                            <span class="flex-shrink-0">
+                                    <a href="javascript:void(0);" data-user-id="{{ $c['id'] }}" data-user-name="{{ $c['name'] }}" data-user-avatar="{{ $c['avatar'] }}" data-user-role="{{ $c['role_name'] }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between py-2.5 px-3 btn-select-chat {{ $isActive ? 'active' : '' }}">
+                                        <div class="d-flex align-items-center gap-3 overflow-hidden flex-grow-1">
+                                            <div class="flex-shrink-0">
                                                 <img src="{{ $c['avatar'] }}" alt="{{ $c['name'] }}" class="rounded-circle object-fit-cover shadow-sm" style="width: 38px; height: 38px; min-width: 38px; min-height: 38px; object-fit: cover; object-position: top; display: block;" />
-                                            </span>
-                                            <span class="overflow-hidden">
+                                            </div>
+                                            <div class="overflow-hidden">
                                                 <span data-chat-search-field class="text-nowrap fw-semibold fs-base mb-0 lh-base text-dark d-block">{{ $c['name'] }}</span>
                                                 <span class="text-muted d-block fs-xs mb-0 text-truncate contact-last-msg">{{ $c['last_message'] }}</span>
-                                            </span>
-                                        </span>
-                                        <span class="d-flex flex-column gap-1 justify-content-center flex-shrink-0 align-items-end">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column gap-1 justify-content-center flex-shrink-0 align-items-end ms-2">
                                             <span class="text-muted fs-xs contact-last-time">{{ $c['last_message_time'] }}</span>
                                             <span class="badge text-bg-success fs-xxs contact-unread-badge {{ $c['unread_count'] > 0 ? '' : 'd-none' }}">{{ $c['unread_count'] }}</span>
-                                        </span>
+                                        </div>
                                     </a>
                                 @endforeach
                             </div>
@@ -126,14 +126,14 @@
                             $msgAvatar = $isSender ? auth()->user()->avatar_url : ($msg->sender ? $msg->sender->avatar_url : asset('assets/images/users/default-avatar.svg'));
                             $senderName = $isSender ? 'Anda' : ($msg->sender ? $msg->sender->name : 'Pengguna');
                         @endphp
-                        <div class="d-flex align-items-start gap-2 my-3 chat-item {{ $isSender ? 'text-end justify-content-end' : '' }}">
+                        <div class="d-flex align-items-start gap-2 my-3 chat-item {{ $isSender ? 'text-end justify-content-end' : '' }}" id="chat-msg-{{ $msg->id }}" data-msg-id="{{ $msg->id }}">
                             @if (!$isSender)
                                 <img src="{{ $msgAvatar }}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0 chat-avatar-opponent" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />
                             @endif
                             <div style="max-width: 75%;">
                                 <div class="chat-message py-2 px-3 {{ $isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border' }} rounded shadow-sm text-start">
                                     @if ($msg->parent)
-                                        <div class="p-2 mb-2 bg-white bg-opacity-75 rounded border-start border-3 border-primary text-start fs-12 shadow-sm">
+                                        <div class="p-2 mb-2 bg-white bg-opacity-75 rounded border-start border-3 border-primary text-start fs-12 shadow-sm reply-quote-box" data-parent-id="{{ $msg->parent_id }}" role="button" title="Klik untuk menuju pesan yang dibalas">
                                             <strong class="d-block text-primary fs-11 mb-0.5"><i class="ti ti-corner-up-left me-1"></i>{{ $msg->parent->sender ? ($msg->parent->sender_id === auth()->id() ? 'Anda' : $msg->parent->sender->name) : 'Pesan' }}</strong>
                                             <div class="text-muted text-truncate fs-12">{{ $msg->parent->body ?: ($msg->parent->attachment_name ?: 'Lampiran berkas') }}</div>
                                         </div>
@@ -146,11 +146,15 @@
                                         @php
                                             $isImg = $msg->attachment_type === 'image' || in_array(strtolower(pathinfo($msg->attachment_url, PATHINFO_EXTENSION)), ['jpg','jpeg','png','webp','gif']);
                                         @endphp
-                                        <div class="mt-1 mb-2">
+                                        <div class="my-2">
                                             @if ($isImg)
                                                 <div class="chat-attachment-image">
-                                                    <a href="{{ $msg->attachment_url }}" class="d-inline-block position-relative rounded overflow-hidden shadow-sm border btn-preview-img-modal" data-img-url="{{ $msg->attachment_url }}" data-img-name="{{ $msg->attachment_name ?: 'Gambar' }}">
-                                                        <img src="{{ $msg->attachment_url }}" alt="{{ $msg->attachment_name ?: 'Gambar' }}" class="img-fluid rounded" style="max-height: 220px; max-width: 100%; object-fit: cover; cursor: pointer;">
+                                                    <a href="{{ $msg->attachment_url }}" class="d-inline-block position-relative rounded-3 overflow-hidden shadow-sm border btn-preview-img-modal" data-img-url="{{ $msg->attachment_url }}" data-img-name="{{ $msg->attachment_name ?: 'Gambar' }}">
+                                                        <img src="{{ $msg->attachment_url }}" alt="{{ $msg->attachment_name ?: 'Gambar' }}" class="rounded-3" style="width: 240px; max-width: 100%; height: 160px; object-fit: cover; cursor: pointer; display: block; transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                                                        <div class="position-absolute bottom-0 start-0 end-0 py-1 px-2 bg-dark bg-opacity-50 text-white d-flex align-items-center justify-content-between fs-11">
+                                                            <span class="text-truncate me-2"><i class="ti ti-photo me-1"></i>{{ $msg->attachment_name ?: 'Gambar' }}</span>
+                                                            <i class="ti ti-zoom-in fs-13"></i>
+                                                        </div>
                                                     </a>
                                                 </div>
                                             @else
@@ -372,19 +376,27 @@
 
     <!-- MODAL LIGHTBOX PRATINJAU GAMBAR CHAT -->
     <div class="modal fade" id="chat-image-modal" tabindex="-1" aria-labelledby="chatImageModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content border-0 shadow-lg bg-dark">
-                <div class="modal-header border-0 py-2 px-3 d-flex justify-content-between align-items-center bg-dark text-white">
-                    <span class="modal-title text-white fs-13 text-truncate fw-semibold" id="chatImageModalLabel">Pratinjau Gambar</span>
-                    <div class="d-flex align-items-center gap-2">
-                        <a href="#" id="modal-download-image" download class="btn btn-sm btn-outline-light px-2.5 py-1 text-white" title="Unduh Gambar Asli">
-                            <i class="ti ti-download me-1"></i> Unduh
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 580px;">
+            <div class="modal-content border-0 shadow-lg bg-dark rounded-3 overflow-hidden">
+                <div class="modal-header border-bottom border-secondary border-opacity-25 py-2.5 px-3 d-flex justify-content-between align-items-center bg-dark text-white">
+                    <div class="d-flex align-items-center gap-2 overflow-hidden me-2">
+                        <i class="ti ti-photo text-primary fs-16 flex-shrink-0"></i>
+                        <span class="modal-title text-white fs-13 text-truncate fw-semibold" id="chatImageModalLabel">Pratinjau Gambar</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                        <a href="#" id="modal-download-image" download class="btn btn-sm btn-primary px-3 py-1 text-white shadow-sm" title="Unduh Gambar Ukuran Asli">
+                            <i class="ti ti-download me-1"></i> Unduh Asli
                         </a>
                         <button type="button" class="btn-close btn-close-white fs-12" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                 </div>
-                <div class="modal-body p-0 text-center bg-black d-flex align-items-center justify-content-center" style="min-height: 280px; max-height: 80vh; overflow: hidden;">
-                    <img id="modal-preview-full-img" src="" class="img-fluid" style="max-height: 78vh; object-fit: contain;" alt="Gambar Penuh">
+                <div class="modal-body py-5 px-4 text-center d-flex flex-column align-items-center justify-content-center" style="background-color: #0f172a; min-height: 380px;">
+                    <div class="position-relative d-inline-block shadow-lg rounded-3 overflow-hidden border border-secondary border-opacity-25 my-auto" style="max-width: 480px; width: 100%; max-height: 440px; background: #1e293b;">
+                        <img id="modal-preview-full-img" src="" class="img-fluid d-block mx-auto rounded-3" style="max-height: 420px; width: auto; max-width: 100%; object-fit: contain;" alt="Pratinjau Gambar">
+                    </div>
+                    <div class="mt-3 text-white-50 fs-11 d-flex align-items-center gap-1">
+                        <i class="ti ti-info-circle fs-13 text-info"></i> Pratinjau tampilan standar. Klik <strong class="text-white">Unduh Asli</strong> untuk resolusi penuh.
+                    </div>
                 </div>
             </div>
         </div>
@@ -500,9 +512,13 @@
                 const sizeStr = msg.attachment_size_formatted || (msg.attachment_size ? formatBytes(msg.attachment_size) : '');
 
                 if (isImg) {
-                    return `<div class="chat-attachment-image mt-1 mb-2">
-                        <a href="${msg.attachment_url}" class="d-inline-block position-relative rounded overflow-hidden shadow-sm border btn-preview-img-modal" data-img-url="${msg.attachment_url}" data-img-name="${name}">
-                            <img src="${msg.attachment_url}" alt="${name}" class="img-fluid rounded" style="max-height: 220px; max-width: 100%; object-fit: cover; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                    return `<div class="chat-attachment-image my-2">
+                        <a href="${msg.attachment_url}" class="d-inline-block position-relative rounded-3 overflow-hidden shadow-sm border btn-preview-img-modal" data-img-url="${msg.attachment_url}" data-img-name="${name}">
+                            <img src="${msg.attachment_url}" alt="${name}" class="rounded-3" style="width: 240px; max-width: 100%; height: 160px; object-fit: cover; cursor: pointer; display: block; transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                            <div class="position-absolute bottom-0 start-0 end-0 py-1 px-2 bg-dark bg-opacity-50 text-white d-flex align-items-center justify-content-between fs-11">
+                                <span class="text-truncate me-2"><i class="ti ti-photo me-1"></i>${name}</span>
+                                <i class="ti ti-zoom-in fs-13"></i>
+                            </div>
                         </a>
                     </div>`;
                 } else {
@@ -744,6 +760,33 @@
                 }
             });
 
+            // Event Delegation Klik Reply Quote Box untuk Scroll ke Pesan Asal (Rule 2 Compliance)
+            document.addEventListener('click', function(e) {
+                const replyBox = e.target.closest('.reply-quote-box');
+                if (!replyBox) return;
+
+                const parentId = replyBox.getAttribute('data-parent-id');
+                if (!parentId) return;
+
+                const targetMsgEl = document.getElementById(`chat-msg-${parentId}`);
+                if (targetMsgEl) {
+                    targetMsgEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    const msgBubble = targetMsgEl.querySelector('.chat-message') || targetMsgEl;
+                    msgBubble.classList.remove('chat-message-highlight');
+                    void msgBubble.offsetWidth; // Trigger DOM reflow to restart animation
+                    msgBubble.classList.add('chat-message-highlight');
+
+                    setTimeout(function() {
+                        msgBubble.classList.remove('chat-message-highlight');
+                    }, 1800);
+                } else {
+                    if (window.showToast) {
+                        window.showToast('Pesan asal berada di luar riwayat saat ini.', 'info');
+                    }
+                }
+            });
+
             // Event Delegation Tombol Balas Pesan (Rule 2 Compliance)
             document.addEventListener('click', function(e) {
                 const btnReply = e.target.closest('.btn-reply-msg');
@@ -846,7 +889,7 @@
                                 const senderName = isSender ? 'Anda' : (msg.sender_name || 'Pengguna');
                                 const replyText = msg.body || (msg.attachment_name || 'Lampiran');
 
-                                html += `<div class="d-flex align-items-start gap-2 my-3 chat-item ${isSender ? 'text-end justify-content-end' : ''}">`;
+                                html += `<div class="d-flex align-items-start gap-2 my-3 chat-item ${isSender ? 'text-end justify-content-end' : ''}" id="chat-msg-${msg.id}" data-msg-id="${msg.id}">`;
                                 if (!isSender) {
                                     html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0 chat-avatar-opponent" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
                                 }
@@ -854,7 +897,8 @@
                                     <div class="chat-message py-2 px-3 ${isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border'} rounded shadow-sm text-start">`;
                                 
                                 if (msg.parent) {
-                                    html += `<div class="p-2 mb-2 bg-white bg-opacity-75 rounded border-start border-3 border-primary text-start fs-12 shadow-sm">
+                                    const parentId = msg.parent_id || (msg.parent ? msg.parent.id : '');
+                                    html += `<div class="p-2 mb-2 bg-white bg-opacity-75 rounded border-start border-3 border-primary text-start fs-12 shadow-sm reply-quote-box" data-parent-id="${parentId}" role="button" title="Klik untuk menuju pesan yang dibalas">
                                         <strong class="d-block text-primary fs-11 mb-0.5"><i class="ti ti-corner-up-left me-1"></i>${escapeHtml(msg.parent.sender_name || 'Pesan')}</strong>
                                         <div class="text-muted text-truncate fs-12">${escapeHtml(msg.parent.body || '')}</div>
                                     </div>`;
@@ -1015,7 +1059,7 @@
                 const senderName = isSender ? 'Anda' : (msg.sender_name || 'Pengguna');
                 const replyText = msg.body || (msg.attachment_name || 'Lampiran');
 
-                let html = `<div class="d-flex align-items-start gap-2 my-3 chat-item ${isSender ? 'text-end justify-content-end' : ''}">`;
+                let html = `<div class="d-flex align-items-start gap-2 my-3 chat-item ${isSender ? 'text-end justify-content-end' : ''}" id="chat-msg-${msg.id}" data-msg-id="${msg.id}">`;
                 if (!isSender) {
                     html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0 chat-avatar-opponent" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
                 }
@@ -1023,7 +1067,8 @@
                     <div class="chat-message py-2 px-3 ${isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border'} rounded shadow-sm text-start">`;
                 
                 if (msg.parent) {
-                    html += `<div class="p-2 mb-2 bg-white bg-opacity-75 rounded border-start border-3 border-primary text-start fs-12 shadow-sm">
+                    const parentId = msg.parent_id || (msg.parent ? msg.parent.id : '');
+                    html += `<div class="p-2 mb-2 bg-white bg-opacity-75 rounded border-start border-3 border-primary text-start fs-12 shadow-sm reply-quote-box" data-parent-id="${parentId}" role="button" title="Klik untuk menuju pesan yang dibalas">
                         <strong class="d-block text-primary fs-11 mb-0.5"><i class="ti ti-corner-up-left me-1"></i>${escapeHtml(msg.parent.sender_name || 'Pesan')}</strong>
                         <div class="text-muted text-truncate fs-12">${escapeHtml(msg.parent.body || '')}</div>
                     </div>`;
@@ -1581,6 +1626,37 @@
             color: #0f172a;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             font-weight: bold;
+        }
+        .reply-quote-box {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+        .reply-quote-box:hover {
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08) !important;
+            transform: translateY(-1px);
+        }
+        .reply-quote-box:active {
+            transform: translateY(0);
+        }
+        @keyframes pulseMessageHighlight {
+            0% {
+                box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.8);
+                outline: 2px solid #0d6efd;
+            }
+            40% {
+                box-shadow: 0 0 0 8px rgba(13, 110, 253, 0);
+                outline: 3px solid #0d6efd;
+                background-color: rgba(13, 110, 253, 0.15) !important;
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(13, 110, 253, 0);
+                outline: 0px solid transparent;
+            }
+        }
+        .chat-message-highlight {
+            animation: pulseMessageHighlight 1.8s ease-in-out !important;
         }
     </style>
 @endsection
