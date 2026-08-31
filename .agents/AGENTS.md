@@ -78,3 +78,6 @@
 - Background colors, borders, and custom background images are dynamically managed via the `website_sections` table database (`bg_type`, `bg_color_class`, `bg_image`) and wrapped by `welcome.blade.php`.
 - Target anchor IDs (`id="{target_id}"`) MUST be present on the outer `<section>` tag to ensure smooth navbar scrolling.
 
+## 14. Icon and Label Spacing Standard
+- ALL icons (`<i>`, `<svg>`, etc.) paired with text labels, buttons, badges, table headers, info lists, or card descriptions MUST have explicit, visible spacing (e.g. `me-1.5`, `me-2`, or flex container with `gap-2`).
+- Never place icons flush against text labels without margin or spacing.

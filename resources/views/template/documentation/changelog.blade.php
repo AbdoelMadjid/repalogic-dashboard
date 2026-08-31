@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.4.8</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.5.0</strong>
                             </span>
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.4.9 -->
+                        <!-- Version 2.5.0 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,40 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.4.9</h5>
+                                        <h5 class="fw-bold mb-0">v2.5.0</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.5.0</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 00:05 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Interactive Today Logins Widget Card Suite, Dual View Switcher, Chat Header Online Indicator Clean-up &amp; Rule 14 (Icon &amp; Label Spacing Standard)</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Widget Kartu Pengguna Login Hari Ini:</strong> Transformasi tampilan daftar pengguna aktif hari ini menjadi Card Grid modern interaktif terinspirasi dari <code>moreapps/manage</code> lengkap dengan avatar border dinamis, badge online pulse, role pill, dan total akumulasi poin login.</li>
+                                    <li><strong class="text-dark">Tata Letak Informasi Sesi 2-Baris Vertikal:</strong> Penataan panel informasi sesi login (Login Terakhir, Perangkat &amp; Browser, Alamat IP &amp; Sesi) dengan format 2 baris vertikal yang lapang, terstruktur, berjarak lega, dan bebas tumpang tindih.</li>
+                                    <li><strong class="text-dark">Dual Mode View Switcher:</strong> Tombol pengalih tampilan (Widget Kartu vs Tabel Baris) dengan penyimpanan status otomatis pada <code>localStorage</code>.</li>
+                                    <li><strong class="text-dark">Perbaikan Modal Detail Login (Null-Safety):</strong> Penambahan baris tipe perangkat (<code>detailDeviceType</code>) dan null-check defensive pada JavaScript handler untuk mencegah error <code>Cannot set properties of null</code>.</li>
+                                    <li><strong class="text-dark">Pembersihan Indikator Online Header Chat:</strong> Menghapus ikon titik bulat statis di samping teks "Online Sekarang" pada header obrolan di <code>messages.blade.php</code> karena status kehadiran sudah terwakili jelas oleh online dot pada sudut avatar.</li>
+                                    <li><strong class="text-dark">Standarisasi Rule 14 (Icon and Label Spacing):</strong> Penambahan aturan proyek wajib pada <code>AGENTS.md</code> terkait standar spasi eksplisit antara ikon dan label teks di seluruh komponen aplikasi.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Data Login Card Widgets</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Dual View Switcher</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Chat Header Polish</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Modal Null-Safety</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Rule 14 Standard</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.4.9 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-md text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.4.9</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.9</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 22:05 WIB</span>

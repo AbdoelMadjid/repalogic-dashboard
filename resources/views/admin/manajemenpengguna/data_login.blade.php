@@ -4,9 +4,29 @@
     @include('layouts.partials.page-title', ['subtitle' => 'Manajemen Pengguna', 'title' => 'Data Login Pengguna'])
 
     <div class="container-fluid mt-2">
-        <!-- 1. KARTU STATISTIK LOGIN -->
+        <!-- 1. KARTU STATISTIK LOGIN & KEHADIRAN -->
         <div class="row g-3 mb-3">
-            <div class="col-sm-6 col-xl-3">
+            <div class="col-sm-6 col-xl-2-4 col-lg-4">
+                <div class="card border-0 shadow-sm rounded-3 h-100 mb-0">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-muted fs-12 fw-medium text-uppercase">Sedang Online</span>
+                                <h3 class="fw-bold my-1 text-success d-flex align-items-center gap-1.5">
+                                    <span class="badge-pulse-dot bg-success"></span>
+                                    {{ number_format($stats['online_now'] ?? 0) }}
+                                </h3>
+                                <span class="fs-12 text-muted">Aktivitas real-time</span>
+                            </div>
+                            <div class="avatar-md bg-success-subtle text-success rounded-3 d-flex align-items-center justify-content-center">
+                                <i class="ti ti-wifi fs-24"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-xl-2-4 col-lg-4">
                 <div class="card border-0 shadow-sm rounded-3 h-100 mb-0">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center justify-content-between">
@@ -23,16 +43,16 @@
                 </div>
             </div>
 
-            <div class="col-sm-6 col-xl-3">
+            <div class="col-sm-6 col-xl-2-4 col-lg-4">
                 <div class="card border-0 shadow-sm rounded-3 h-100 mb-0">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <span class="text-muted fs-12 fw-medium text-uppercase">Pengguna Aktif Hari Ini</span>
-                                <h3 class="fw-bold my-1 text-success">{{ number_format($stats['unique_users_today']) }}</h3>
+                                <h3 class="fw-bold my-1 text-teal">{{ number_format($stats['unique_users_today']) }}</h3>
                                 <span class="fs-12 text-muted">User unik terdeteksi</span>
                             </div>
-                            <div class="avatar-md bg-success-subtle text-success rounded-3 d-flex align-items-center justify-content-center">
+                            <div class="avatar-md bg-info-subtle text-info rounded-3 d-flex align-items-center justify-content-center">
                                 <i class="ti ti-users fs-24"></i>
                             </div>
                         </div>
@@ -40,7 +60,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-6 col-xl-3">
+            <div class="col-sm-6 col-xl-2-4 col-lg-6">
                 <div class="card border-0 shadow-sm rounded-3 h-100 mb-0">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center justify-content-between">
@@ -57,16 +77,16 @@
                 </div>
             </div>
 
-            <div class="col-sm-6 col-xl-3">
+            <div class="col-sm-6 col-xl-2-4 col-lg-6">
                 <div class="card border-0 shadow-sm rounded-3 h-100 mb-0">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <span class="text-muted fs-12 fw-medium text-uppercase">Total Riwayat Tersimpan</span>
-                                <h3 class="fw-bold my-1 text-info">{{ number_format($stats['total_all_time']) }}</h3>
+                                <span class="text-muted fs-12 fw-medium text-uppercase">Total Riwayat Log</span>
+                                <h3 class="fw-bold my-1 text-secondary">{{ number_format($stats['total_all_time']) }}</h3>
                                 <span class="fs-12 text-muted">Semua sesi waktu</span>
                             </div>
-                            <div class="avatar-md bg-info-subtle text-info rounded-3 d-flex align-items-center justify-content-center">
+                            <div class="avatar-md bg-secondary-subtle text-secondary rounded-3 d-flex align-items-center justify-content-center">
                                 <i class="ti ti-history fs-24"></i>
                             </div>
                         </div>
@@ -91,7 +111,16 @@
             <div class="card-body bg-light-subtle py-3">
                 <form method="GET" action="{{ route('admin.manajemenpengguna.data-login.index') }}" id="filterForm">
                     <div class="row g-2 align-items-end">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <label class="form-label fs-12 fw-semibold mb-1">Status Kehadiran:</label>
+                            <select name="presence_status" class="form-select form-select-sm">
+                                <option value="all" {{ ($presenceStatus ?? 'all') === 'all' ? 'selected' : '' }}>Semua Status</option>
+                                <option value="online" {{ ($presenceStatus ?? '') === 'online' ? 'selected' : '' }}>🟢 Sedang Online</option>
+                                <option value="offline" {{ ($presenceStatus ?? '') === 'offline' ? 'selected' : '' }}>⚪ Offline</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
                             <label class="form-label fs-12 fw-semibold mb-1">Periode Tanggal:</label>
                             <select name="period" id="filterPeriod" class="form-select form-select-sm">
                                 <option value="all" {{ $period === 'all' ? 'selected' : '' }}>Semua Waktu</option>
@@ -123,10 +152,10 @@
                             </select>
                         </div>
 
-                        <div class="col-md-3">
-                            <label class="form-label fs-12 fw-semibold mb-1">Kata Kunci Pencarian:</label>
+                        <div class="col-md-2">
+                            <label class="form-label fs-12 fw-semibold mb-1">Kata Kunci:</label>
                             <input type="text" name="search" class="form-control form-control-sm"
-                                placeholder="Cari IP, browser, nama, email..." value="{{ $searchTerm ?? '' }}">
+                                placeholder="IP, browser, nama..." value="{{ $searchTerm ?? '' }}">
                         </div>
 
                         <div class="col-md-12 d-flex justify-content-end gap-2 mt-2">
@@ -168,20 +197,168 @@
                     <!-- TAB 1: PENGGUNA LOGIN HARI INI -->
                     <div class="tab-pane fade show active" id="content-today-users" role="tabpanel" aria-labelledby="tab-today-users">
                         <div class="p-3 bg-light-subtle border-bottom d-flex flex-wrap justify-content-between align-items-center gap-2">
-                            <div class="fs-13 text-muted">
-                                <i class="ti ti-info-circle text-primary me-1"></i> Menampilkan daftar seluruh pengguna yang melakukan aktivitas login pada hari ini (<strong>{{ \Carbon\Carbon::today()->translatedFormat('l, d F Y') }}</strong>).
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-primary fs-12 px-2.5 py-1.5">
+                                    {{ count($todayUsers) }} Pengguna Aktif Hari Ini
+                                </span>
+                                <span class="fs-13 text-muted d-none d-md-inline">
+                                    ({{ \Carbon\Carbon::today()->translatedFormat('l, d F Y') }})
+                                </span>
                             </div>
-                            <span class="badge bg-primary fs-12 px-2.5 py-1.5">
-                                {{ count($todayUsers) }} Pengguna Aktif
-                            </span>
+
+                            <!-- Tombol Switch Tampilan Grid vs Tabel -->
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Mode Tampilan">
+                                    <button type="button" class="btn btn-primary btn-sm fw-medium d-flex align-items-center gap-1" id="btnToggleGridToday" title="Tampilan Widget Kartu">
+                                        <i class="ti ti-layout-grid"></i> Widget Kartu
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm fw-medium d-flex align-items-center gap-1" id="btnToggleTableToday" title="Tampilan Tabel Baris">
+                                        <i class="ti ti-list"></i> Tabel Baris
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="table-responsive">
+                        <!-- 1. TAMPILAN WIDGET KARTU (MODERN CARD GRID SEPERTI MOREAPPS/MANAGE) -->
+                        <div id="today-view-grid" class="p-3">
+                            <div class="row g-3">
+                                @forelse ($todayUsers as $index => $item)
+                                    <div class="col-sm-6 col-lg-4 col-xxl-3">
+                                        <div class="card h-100 mb-0 rounded-3 card-user-widget position-relative shadow-sm {{ $item->is_online ? 'is-online-card' : 'bg-white' }}">
+                                            <div class="card-body p-3.5 d-flex flex-column justify-content-between">
+                                                <div>
+                                                    <!-- Header Card: Avatar & Status Kehadiran -->
+                                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                                        <div class="position-relative">
+                                                            <img src="{{ $item->user?->avatar_url ?? asset('assets/images/users/default-avatar.svg') }}"
+                                                                alt="{{ $item->user?->name }}"
+                                                                class="rounded-circle object-fit-cover shadow-sm border border-2 {{ $item->is_online ? 'border-success' : 'border-light' }}"
+                                                                style="width: 50px; height: 50px; object-fit: cover; object-position: top; display: block;">
+                                                            @if ($item->is_online)
+                                                                <span class="position-absolute bottom-0 end-0 border border-2 border-white rounded-circle bg-success"
+                                                                    style="width: 13px; height: 13px; transform: translate(10%, 10%);"
+                                                                    title="Sedang Online">
+                                                                </span>
+                                                            @endif
+                                                        </div>
+
+                                                        <div>
+                                                            @if ($item->is_online)
+                                                                <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 fs-11 rounded-pill d-inline-flex align-items-center gap-1.5 fw-semibold shadow-xs">
+                                                                    <span class="badge-pulse-dot bg-success"></span> Online
+                                                                </span>
+                                                            @else
+                                                                <span class="badge bg-secondary-subtle text-muted border border-secondary-subtle px-2.5 py-1.5 fs-11 rounded-pill d-inline-flex align-items-center gap-1.5" title="{{ $item->last_seen_human }}">
+                                                                    <span class="badge-dot-gray"></span> {{ $item->last_seen_human }}
+                                                                </span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Info Pengguna -->
+                                                    <div class="mb-3">
+                                                        <h5 class="card-title fw-bold text-dark mb-1 text-truncate fs-15" title="{{ $item->user?->name }}">
+                                                            {{ $item->user?->name ?? 'User Tidak Diketahui' }}
+                                                        </h5>
+                                                        <p class="card-text text-muted fs-12 mb-0 text-truncate" title="{{ $item->user?->email }}">
+                                                            <i class="ti ti-mail me-1 text-secondary"></i>{{ $item->user?->email ?? '-' }}
+                                                        </p>
+                                                    </div>
+
+                                                    <!-- Badges Peran & Poin (Dengan Spacing Lega) -->
+                                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-11 py-1 px-2.5 rounded-pill">
+                                                            <i class="ti ti-shield-check me-1"></i>{{ $item->user?->role_name ?? 'User' }}
+                                                        </span>
+                                                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle fs-11 py-1 px-2.5 rounded-pill fw-semibold" title="Total Poin Akumulasi">
+                                                            <i class="ti ti-award me-1 text-warning"></i>{{ number_format($item->user?->login_count ?? 0) }} Poin
+                                                        </span>
+                                                        @if ($item->points_earned_today > 0)
+                                                            <span class="badge bg-success-subtle text-success border border-success-subtle fs-11 py-1 px-2.5 rounded-pill" title="Poin Diperoleh Hari Ini">
+                                                                <i class="ti ti-check me-1"></i>+{{ $item->points_earned_today }} Poin Hari Ini
+                                                            </span>
+                                                        @endif
+                                                    </div>
+
+                                                    <!-- Panel Informasi Sesi & Jaringan (Format 2 Baris Vertikal Lega & Rapi) -->
+                                                    <div class="bg-light-subtle rounded-3 p-3 border mb-3">
+                                                        <!-- Item 1: Login Terakhir -->
+                                                        <div class="mb-2">
+                                                            <div class="text-muted fs-11 text-uppercase fw-semibold mb-1 d-flex align-items-center">
+                                                                <i class="ti ti-clock text-primary fs-15 me-2"></i> Login Terakhir
+                                                            </div>
+                                                            <div class="ps-4 fs-13 text-dark">
+                                                                <span class="fw-bold">{{ $item->last_login_today ? $item->last_login_today->format('H:i') . ' WIB' : '-' }}</span>
+                                                                @if ($item->last_login_today)
+                                                                    <span class="text-muted fs-12 ms-1">({{ $item->last_login_today->diffForHumans() }})</span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+
+                                                        <hr class="my-2 border-secondary border-opacity-10">
+
+                                                        <!-- Item 2: Perangkat & Browser -->
+                                                        <div class="mb-2">
+                                                            <div class="text-muted fs-11 text-uppercase fw-semibold mb-1 d-flex align-items-center">
+                                                                <i class="ti ti-device-laptop text-info fs-15 me-2"></i> Perangkat & Browser
+                                                            </div>
+                                                            <div class="ps-4 fs-13 text-dark text-truncate" title="{{ $item->latest_browser }} · {{ $item->latest_platform }} ({{ $item->latest_device_type }})">
+                                                                <span class="fw-semibold">{{ $item->latest_browser }}</span>
+                                                                <span class="text-muted fs-12 ms-1">· {{ $item->latest_platform }} ({{ $item->latest_device_type }})</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <hr class="my-2 border-secondary border-opacity-10">
+
+                                                        <!-- Item 3: Alamat IP & Sesi -->
+                                                        <div>
+                                                            <div class="text-muted fs-11 text-uppercase fw-semibold mb-1 d-flex align-items-center">
+                                                                <i class="ti ti-world text-secondary fs-15 me-2"></i> Alamat IP & Sesi
+                                                            </div>
+                                                            <div class="ps-4 d-flex align-items-center gap-2 mt-1">
+                                                                <span class="font-monospace fw-semibold text-dark fs-12 bg-white px-2 py-0.5 rounded border">
+                                                                    {{ $item->latest_ip ?? '-' }}
+                                                                </span>
+                                                                <span class="badge bg-secondary-subtle text-secondary fs-11 px-2 py-1">
+                                                                    {{ $item->total_sessions_today }} Sesi Masuk
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Action Buttons Footer -->
+                                                <div class="d-flex gap-2 pt-2 border-top">
+                                                    <button type="button" class="btn btn-outline-info btn-sm flex-grow-1 btn-view-detail d-flex align-items-center justify-content-center gap-1 py-1.5 fw-medium" data-login-id="{{ $item->latest_login_id }}" title="Lihat Rincian Sesi">
+                                                        <i class="ti ti-eye fs-14"></i> Detail Sesi
+                                                    </button>
+                                                    <a href="{{ route('admin.profil-pengguna.messages.index') }}?user_id={{ $item->user?->id }}" class="btn btn-outline-primary btn-sm px-3 d-flex align-items-center justify-content-center py-1.5" title="Kirim Pesan Obrolan ke {{ $item->user?->name }}">
+                                                        <i class="ti ti-message fs-14"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="col-12 py-5 text-center">
+                                        <div class="text-muted">
+                                            <i class="ti ti-user-x fs-36 d-block mb-2 text-secondary opacity-50"></i>
+                                            <h5 class="fw-semibold">Belum Ada Pengguna Login Hari Ini</h5>
+                                            <p class="fs-13 mb-0">Belum ada aktivitas masuk akun pengguna yang tercatat pada hari ini.</p>
+                                        </div>
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+
+                        <!-- 2. TAMPILAN TABEL BARIS (OPSIONAL VIEW MODE) -->
+                        <div id="today-view-table" class="table-responsive d-none">
                             <table class="table table-hover table-bordered align-middle mb-0">
                                 <thead class="align-middle text-center text-nowrap table-light">
                                     <tr>
                                         <th style="width: 50px;">NO</th>
                                         <th>PENGGUNA</th>
+                                        <th>STATUS KEHADIRAN</th>
                                         <th>ROLE</th>
                                         <th>TOTAL POIN LOGIN</th>
                                         <th>SESI HARI INI</th>
@@ -199,14 +376,34 @@
                                             <td class="text-center fw-medium">{{ $index + 1 }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center gap-2">
-                                                    <img src="{{ $item->user?->avatar_url ?? asset('assets/images/users/default-avatar.svg') }}"
-                                                        alt="{{ $item->user?->name }}" class="rounded-circle avatar-sm border flex-shrink-0"
-                                                        style="width: 38px; height: 38px; object-fit: cover;">
+                                                    <div class="position-relative">
+                                                        <img src="{{ $item->user?->avatar_url ?? asset('assets/images/users/default-avatar.svg') }}"
+                                                            alt="{{ $item->user?->name }}" class="rounded-circle avatar-sm border flex-shrink-0"
+                                                            style="width: 38px; height: 38px; object-fit: cover;">
+                                                        @if ($item->is_online)
+                                                            <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-white rounded-circle" style="transform: translate(15%, 15%);" title="Sedang Online">
+                                                                <span class="visually-hidden">Online</span>
+                                                            </span>
+                                                        @endif
+                                                    </div>
                                                     <div>
                                                         <div class="fw-semibold text-dark">{{ $item->user?->name ?? 'User Tidak Diketahui' }}</div>
                                                         <div class="text-muted fs-12">{{ $item->user?->email ?? '-' }}</div>
                                                     </div>
                                                 </div>
+                                            </td>
+                                            <td class="text-center text-nowrap">
+                                                @if ($item->is_online)
+                                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1 d-inline-flex align-items-center gap-1.5 fw-semibold">
+                                                        <span class="badge-pulse-dot bg-success"></span>
+                                                        Online
+                                                    </span>
+                                                @else
+                                                    <span class="badge bg-secondary-subtle text-muted border border-secondary-subtle px-2.5 py-1 d-inline-flex align-items-center gap-1.5" title="{{ $item->last_seen_human }}">
+                                                        <span class="badge-dot-gray"></span>
+                                                        {{ $item->last_seen_human }}
+                                                    </span>
+                                                @endif
                                             </td>
                                             <td class="text-center">
                                                 <span class="badge bg-secondary-subtle text-secondary px-2 py-1">
@@ -271,7 +468,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="11" class="text-center py-5">
+                                            <td colspan="12" class="text-center py-5">
                                                 <div class="text-muted">
                                                     <i class="ti ti-user-x fs-36 d-block mb-2 text-secondary opacity-50"></i>
                                                     <h5 class="fw-semibold">Belum Ada Pengguna Login Hari Ini</h5>
@@ -432,14 +629,20 @@
 
                     <div id="modalDetailContent" class="d-none">
                         <!-- USER SUMMARY -->
-                        <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-3 mb-3 border">
-                            <img id="detailUserAvatar" src="" alt="Avatar" class="rounded-circle avatar-md border"
-                                style="width: 54px; height: 54px; object-fit: cover;">
-                            <div>
-                                <h5 class="fw-bold text-dark mb-0.5" id="detailUserName">-</h5>
-                                <div class="text-muted fs-13 mb-1" id="detailUserEmail">-</div>
-                                <span class="badge bg-primary-subtle text-primary" id="detailUserRole">-</span>
+                        <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-3 mb-3 border">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="position-relative">
+                                    <img id="detailUserAvatar" src="" alt="Avatar" class="rounded-circle avatar-md border"
+                                        style="width: 54px; height: 54px; object-fit: cover;">
+                                    <span id="detailUserOnlineDot" class="position-absolute bottom-0 end-0 p-1 bg-success border border-white rounded-circle d-none" style="transform: translate(10%, 10%);"></span>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-0.5" id="detailUserName">-</h5>
+                                    <div class="text-muted fs-13 mb-1" id="detailUserEmail">-</div>
+                                    <span class="badge bg-primary-subtle text-primary" id="detailUserRole">-</span>
+                                </div>
                             </div>
+                            <div id="detailUserPresenceBadge"></div>
                         </div>
 
                         <!-- DETAIL GRID -->
@@ -469,31 +672,30 @@
                                     <div class="fs-12 text-muted fw-semibold text-uppercase mb-2">Informasi Jaringan & Klien</div>
                                     <table class="table table-sm table-borderless fs-13 mb-0">
                                         <tr>
-                                            <td class="text-muted ps-0" style="width: 140px;">Alamat IP:</td>
-                                            <td class="fw-bold font-monospace text-dark" id="detailIpAddress">-</td>
+                                            <td class="text-muted ps-0" style="width: 140px;">IP Address:</td>
+                                            <td class="fw-semibold font-monospace text-primary" id="detailIpAddress">-</td>
                                         </tr>
                                         <tr>
                                             <td class="text-muted ps-0">Browser:</td>
                                             <td class="fw-semibold text-dark" id="detailBrowser">-</td>
                                         </tr>
                                         <tr>
-                                            <td class="text-muted ps-0">Sistem Operasi:</td>
-                                            <td class="fw-semibold text-dark" id="detailPlatform">-</td>
+                                            <td class="text-muted ps-0">Platform:</td>
+                                            <td class="text-dark" id="detailPlatform">-</td>
                                         </tr>
                                         <tr>
                                             <td class="text-muted ps-0">Tipe Perangkat:</td>
-                                            <td class="fw-semibold text-dark" id="detailDeviceType">-</td>
+                                            <td class="text-dark" id="detailDeviceType">-</td>
                                         </tr>
                                     </table>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- USER AGENT STRING -->
-                        <div class="p-3 border rounded-3 bg-light-subtle mb-3">
-                            <div class="fs-12 text-muted fw-semibold text-uppercase mb-1">User Agent Header</div>
-                            <div class="font-monospace fs-12 text-break text-muted bg-white p-2 rounded border" id="detailUserAgent">
-                                -
+                            <div class="col-md-12">
+                                <div class="p-3 border rounded-3 bg-white">
+                                    <div class="fs-12 text-muted fw-semibold text-uppercase mb-1">User-Agent Lengkap</div>
+                                    <div class="fs-12 font-monospace text-break bg-light p-2 rounded border" id="detailUserAgent">-</div>
+                                </div>
                             </div>
                         </div>
 
@@ -560,9 +762,114 @@
         </div>
     </div>
 
+    <style>
+        .badge-pulse-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            position: relative;
+        }
+        .badge-pulse-dot.bg-success {
+            background-color: #22c55e;
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            animation: pulse-green 1.8s infinite cubic-bezier(0.66, 0, 1);
+        }
+        @keyframes pulse-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+            }
+        }
+        .badge-dot-gray {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: #94a3b8;
+        }
+        .card-user-widget {
+            transition: all 0.22s ease-in-out;
+            border: 1px solid #e2e8f0;
+        }
+        .card-user-widget:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 22px -6px rgba(15, 23, 42, 0.09), 0 4px 6px -4px rgba(15, 23, 42, 0.04) !important;
+            border-color: #cbd5e1;
+        }
+        .card-user-widget.is-online-card {
+            border-color: rgba(34, 197, 94, 0.4) !important;
+            background: linear-gradient(180deg, rgba(240, 253, 244, 0.45) 0%, rgba(255, 255, 255, 1) 110px) !important;
+        }
+        .shadow-xs {
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        @media (min-width: 1200px) {
+            .col-xl-2-4 {
+                flex: 0 0 auto;
+                width: 20%;
+            }
+        }
+    </style>
+
     {{-- JAVASCRIPT LOGIC --}}
     <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // 0. Switch Tampilan Tab 1 (Widget Kartu vs Tabel Baris)
+        const btnToggleGridToday = document.getElementById('btnToggleGridToday');
+        const btnToggleTableToday = document.getElementById('btnToggleTableToday');
+        const todayViewGrid = document.getElementById('today-view-grid');
+        const todayViewTable = document.getElementById('today-view-table');
+
+        function setTodayViewMode(mode) {
+            if (mode === 'table') {
+                if (todayViewGrid) todayViewGrid.classList.add('d-none');
+                if (todayViewTable) todayViewTable.classList.remove('d-none');
+                if (btnToggleTableToday) {
+                    btnToggleTableToday.className = 'btn btn-primary btn-sm fw-medium d-flex align-items-center gap-1';
+                }
+                if (btnToggleGridToday) {
+                    btnToggleGridToday.className = 'btn btn-outline-secondary btn-sm fw-medium d-flex align-items-center gap-1';
+                }
+                try { localStorage.setItem('repalogic_today_view_mode', 'table'); } catch(e) {}
+            } else {
+                if (todayViewGrid) todayViewGrid.classList.remove('d-none');
+                if (todayViewTable) todayViewTable.classList.add('d-none');
+                if (btnToggleGridToday) {
+                    btnToggleGridToday.className = 'btn btn-primary btn-sm fw-medium d-flex align-items-center gap-1';
+                }
+                if (btnToggleTableToday) {
+                    btnToggleTableToday.className = 'btn btn-outline-secondary btn-sm fw-medium d-flex align-items-center gap-1';
+                }
+                try { localStorage.setItem('repalogic_today_view_mode', 'grid'); } catch(e) {}
+            }
+        }
+
+        if (btnToggleGridToday) {
+            btnToggleGridToday.addEventListener('click', function () {
+                setTodayViewMode('grid');
+            });
+        }
+
+        if (btnToggleTableToday) {
+            btnToggleTableToday.addEventListener('click', function () {
+                setTodayViewMode('table');
+            });
+        }
+
+        // Restore saved preference if any
+        try {
+            const savedMode = localStorage.getItem('repalogic_today_view_mode');
+            if (savedMode === 'table') {
+                setTodayViewMode('table');
+            }
+        } catch(e) {}
+
         // 1. Toggle Tampilan Rentang Tanggal Kustom pada Filter
         const periodSelect = document.getElementById('filterPeriod');
         const customDateRangeCol = document.getElementById('customDateRangeCol');
@@ -604,6 +911,8 @@
         const detailUserName = document.getElementById('detailUserName');
         const detailUserEmail = document.getElementById('detailUserEmail');
         const detailUserRole = document.getElementById('detailUserRole');
+        const detailUserOnlineDot = document.getElementById('detailUserOnlineDot');
+        const detailUserPresenceBadge = document.getElementById('detailUserPresenceBadge');
         const detailLoginAt = document.getElementById('detailLoginAt');
         const detailLoginHuman = document.getElementById('detailLoginHuman');
         const detailPointsAwarded = document.getElementById('detailPointsAwarded');
@@ -626,10 +935,10 @@
             if (!loginId || !bsModalDetail) return;
 
             // Reset modal state
-            modalLoadingSpinner.classList.remove('d-none');
-            modalDetailContent.classList.add('d-none');
-            detailMapSection.classList.add('d-none');
-            detailMapIframe.src = '';
+            if (modalLoadingSpinner) modalLoadingSpinner.classList.remove('d-none');
+            if (modalDetailContent) modalDetailContent.classList.add('d-none');
+            if (detailMapSection) detailMapSection.classList.add('d-none');
+            if (detailMapIframe) detailMapIframe.src = '';
             bsModalDetail.show();
 
             // Fetch detail data via AJAX
@@ -646,40 +955,58 @@
             .then(res => {
                 if (res.status === 'success' && res.data) {
                     const d = res.data;
-                    detailUserAvatar.src = d.user_avatar;
-                    detailUserName.textContent = d.user_name;
-                    detailUserEmail.textContent = d.user_email;
-                    detailUserRole.textContent = d.user_role;
-                    detailLoginAt.textContent = d.login_at;
-                    detailLoginHuman.textContent = d.created_at_human;
+                    if (detailUserAvatar) detailUserAvatar.src = d.user_avatar;
+                    if (detailUserName) detailUserName.textContent = d.user_name;
+                    if (detailUserEmail) detailUserEmail.textContent = d.user_email;
+                    if (detailUserRole) detailUserRole.textContent = d.user_role;
 
-                    if (d.points_awarded) {
-                        detailPointsAwarded.innerHTML = '<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1"><i class="ti ti-check me-1"></i>+1 Poin Diberikan</span>';
+                    // Update Online Presence
+                    if (d.is_online) {
+                        if (detailUserOnlineDot) detailUserOnlineDot.classList.remove('d-none');
+                        if (detailUserPresenceBadge) {
+                            detailUserPresenceBadge.innerHTML = '<span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 fs-12 d-inline-flex align-items-center gap-1.5 fw-semibold"><span class="badge-pulse-dot bg-success"></span> Sedang Online</span>';
+                        }
                     } else {
-                        detailPointsAwarded.innerHTML = '<span class="badge bg-secondary-subtle text-muted px-2 py-1">0 Poin (Maks 1 poin per 24 jam)</span>';
+                        if (detailUserOnlineDot) detailUserOnlineDot.classList.add('d-none');
+                        if (detailUserPresenceBadge) {
+                            detailUserPresenceBadge.innerHTML = `<span class="badge bg-secondary-subtle text-muted border border-secondary-subtle px-3 py-1.5 fs-12 d-inline-flex align-items-center gap-1.5"><span class="badge-dot-gray"></span> ${d.last_seen_human}</span>`;
+                        }
                     }
 
-                    detailIpAddress.textContent = d.ip_address;
-                    detailBrowser.textContent = d.browser;
-                    detailPlatform.textContent = d.platform;
-                    detailDeviceType.textContent = d.device_type;
-                    detailUserAgent.textContent = d.user_agent;
+                    if (detailLoginAt) detailLoginAt.textContent = d.login_at;
+                    if (detailLoginHuman) detailLoginHuman.textContent = d.created_at_human;
 
-                    if (d.latitude && d.longitude) {
-                        detailCoordinatesText.innerHTML = `<strong>Latitude:</strong> ${d.latitude} &nbsp;|&nbsp; <strong>Longitude:</strong> ${d.longitude}`;
-                        detailGoogleMapsBtn.href = d.map_url;
-                        detailMapIframe.src = d.osm_embed_url;
-                        detailMapSection.classList.remove('d-none');
-                    } else {
-                        detailMapSection.classList.add('d-none');
+                    if (detailPointsAwarded) {
+                        if (d.points_awarded) {
+                            detailPointsAwarded.innerHTML = '<span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1"><i class="ti ti-check me-1"></i>+1 Poin Diberikan</span>';
+                        } else {
+                            detailPointsAwarded.innerHTML = '<span class="badge bg-secondary-subtle text-muted px-2 py-1">0 Poin (Maks 1 poin per 24 jam)</span>';
+                        }
                     }
 
-                    modalLoadingSpinner.classList.add('d-none');
-                    modalDetailContent.classList.remove('d-none');
+                    if (detailIpAddress) detailIpAddress.textContent = d.ip_address;
+                    if (detailBrowser) detailBrowser.textContent = d.browser;
+                    if (detailPlatform) detailPlatform.textContent = d.platform;
+                    if (detailDeviceType) detailDeviceType.textContent = d.device_type;
+                    if (detailUserAgent) detailUserAgent.textContent = d.user_agent;
+
+                    if (detailMapSection) {
+                        if (d.latitude && d.longitude) {
+                            if (detailCoordinatesText) detailCoordinatesText.innerHTML = `<strong>Latitude:</strong> ${d.latitude} &nbsp;|&nbsp; <strong>Longitude:</strong> ${d.longitude}`;
+                            if (detailGoogleMapsBtn) detailGoogleMapsBtn.href = d.map_url;
+                            if (detailMapIframe) detailMapIframe.src = d.osm_embed_url;
+                            detailMapSection.classList.remove('d-none');
+                        } else {
+                            detailMapSection.classList.add('d-none');
+                        }
+                    }
+
+                    if (modalLoadingSpinner) modalLoadingSpinner.classList.add('d-none');
+                    if (modalDetailContent) modalDetailContent.classList.remove('d-none');
                 }
             })
             .catch(err => {
-                modalLoadingSpinner.classList.add('d-none');
+                if (modalLoadingSpinner) modalLoadingSpinner.classList.add('d-none');
                 if (window.showError) {
                     window.showError(err.message || 'Terjadi kesalahan saat memuat detail data.');
                 } else {

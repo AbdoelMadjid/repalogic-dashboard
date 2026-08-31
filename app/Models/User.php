@@ -61,6 +61,8 @@ class User extends Authenticatable
         'cover_height',
         'motto',
         'profile_completion_percentage',
+        'is_online',
+        'last_seen_human',
     ];
 
     /**
@@ -343,6 +345,75 @@ class User extends Authenticatable
         $this->save();
 
         return \App\Models\Admin\ManajemenPengguna\UserLogin::record($this, $request, $awardPoint);
+    }
+
+    /**
+     * Cek apakah pengguna saat ini sedang online (berdasarkan cache TTL).
+     */
+    public function getIsOnlineAttribute(): bool
+    {
+        return \Illuminate\Support\Facades\Cache::has('user-online-' . $this->id);
+    }
+
+    /**
+     * Waktu aktivitas terakhir pengguna (Carbon).
+     */
+    public function getLastSeenTimeAttribute(): ?\Carbon\Carbon
+    {
+        $lastSeenIso = \Illuminate\Support\Facades\Cache::get('user-last-seen-' . $this->id);
+        if ($lastSeenIso) {
+            return \Carbon\Carbon::parse($lastSeenIso);
+        }
+
+        return $this->last_login_at;
+    }
+
+    /**
+     * Teks waktu aktif terakhir yang mudah dipahami manusia.
+     */
+    public function getLastSeenHumanAttribute(): string
+    {
+        if ($this->is_online) {
+            return 'Online Sekarang';
+        }
+
+        $lastSeen = $this->last_seen_time;
+        if ($lastSeen) {
+            return 'Aktif ' . $lastSeen->diffForHumans();
+        }
+
+        return 'Offline';
+    }
+
+    /**
+     * Render badge HTML status kehadiran online/offline.
+     */
+    public function getOnlineStatusBadgeAttribute(): string
+    {
+        if ($this->is_online) {
+            return '<span class="badge bg-success-subtle text-success border border-success-subtle d-inline-flex align-items-center gap-1"><span class="badge-pulse-dot bg-success"></span> Online</span>';
+        }
+
+        $lastSeen = $this->last_seen_time;
+        $timeText = $lastSeen ? $lastSeen->diffForHumans() : 'Offline';
+
+        return '<span class="badge bg-secondary-subtle text-muted border border-secondary-subtle d-inline-flex align-items-center gap-1"><span class="badge-dot-gray"></span> ' . e($timeText) . '</span>';
+    }
+
+    /**
+     * Hitung total seluruh pengguna yang sedang online saat ini.
+     */
+    public static function getOnlineUsersCount(): int
+    {
+        $count = 0;
+        $activeUserIds = static::where('status', 'active')->pluck('id');
+        foreach ($activeUserIds as $id) {
+            if (\Illuminate\Support\Facades\Cache::has('user-online-' . $id)) {
+                $count++;
+            }
+        }
+
+        return $count;
     }
 }
 

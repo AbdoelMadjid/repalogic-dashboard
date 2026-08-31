@@ -27,10 +27,11 @@
                                     @php
                                         $isActive = $activeUser && $activeUser->id === $c['id'];
                                     @endphp
-                                    <a href="javascript:void(0);" data-user-id="{{ $c['id'] }}" data-user-name="{{ $c['name'] }}" data-user-avatar="{{ $c['avatar'] }}" data-user-role="{{ $c['role_name'] }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between py-2.5 px-3 btn-select-chat {{ $isActive ? 'active' : '' }}">
+                                    <a href="javascript:void(0);" data-user-id="{{ $c['id'] }}" data-user-name="{{ $c['name'] }}" data-user-avatar="{{ $c['avatar'] }}" data-user-role="{{ $c['role_name'] }}" data-user-online="{{ !empty($c['is_online']) ? '1' : '0' }}" data-user-last-seen="{{ $c['last_seen_human'] ?? 'Offline' }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between py-2.5 px-3 btn-select-chat {{ $isActive ? 'active' : '' }}">
                                         <div class="d-flex align-items-center gap-3 overflow-hidden flex-grow-1">
-                                            <div class="flex-shrink-0">
+                                            <div class="flex-shrink-0 position-relative">
                                                 <img src="{{ $c['avatar'] }}" alt="{{ $c['name'] }}" class="rounded-circle object-fit-cover shadow-sm" style="width: 38px; height: 38px; min-width: 38px; min-height: 38px; object-fit: cover; object-position: top; display: block;" />
+                                                <span class="position-absolute bottom-0 end-0 border border-2 border-white rounded-circle contact-online-dot {{ !empty($c['is_online']) ? 'bg-success' : 'bg-secondary opacity-50' }}" style="width: 11px; height: 11px; transform: translate(15%, 15%);" title="{{ !empty($c['is_online']) ? 'Online Sekarang' : ($c['last_seen_human'] ?? 'Offline') }}"></span>
                                             </div>
                                             <div class="overflow-hidden">
                                                 <span data-chat-search-field class="text-nowrap fw-semibold fs-base mb-0 lh-base text-dark d-block">{{ $c['name'] }}</span>
@@ -56,10 +57,11 @@
                                     @php
                                         $isActive = $activeUser && $activeUser->id === $c['id'];
                                     @endphp
-                                    <a href="javascript:void(0);" data-user-id="{{ $c['id'] }}" data-user-name="{{ $c['name'] }}" data-user-avatar="{{ $c['avatar'] }}" data-user-role="{{ $c['role_name'] }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between py-2.5 px-3 btn-select-chat {{ $isActive ? 'active' : '' }}">
+                                    <a href="javascript:void(0);" data-user-id="{{ $c['id'] }}" data-user-name="{{ $c['name'] }}" data-user-avatar="{{ $c['avatar'] }}" data-user-role="{{ $c['role_name'] }}" data-user-online="{{ !empty($c['is_online']) ? '1' : '0' }}" data-user-last-seen="{{ $c['last_seen_human'] ?? 'Offline' }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between py-2.5 px-3 btn-select-chat {{ $isActive ? 'active' : '' }}">
                                         <div class="d-flex align-items-center gap-3 overflow-hidden flex-grow-1">
-                                            <div class="flex-shrink-0">
+                                            <div class="flex-shrink-0 position-relative">
                                                 <img src="{{ $c['avatar'] }}" alt="{{ $c['name'] }}" class="rounded-circle object-fit-cover shadow-sm" style="width: 38px; height: 38px; min-width: 38px; min-height: 38px; object-fit: cover; object-position: top; display: block;" />
+                                                <span class="position-absolute bottom-0 end-0 border border-2 border-white rounded-circle contact-online-dot {{ !empty($c['is_online']) ? 'bg-success' : 'bg-secondary opacity-50' }}" style="width: 11px; height: 11px; transform: translate(15%, 15%);" title="{{ !empty($c['is_online']) ? 'Online Sekarang' : ($c['last_seen_human'] ?? 'Offline') }}"></span>
                                             </div>
                                             <div class="overflow-hidden">
                                                 <span data-chat-search-field class="text-nowrap fw-semibold fs-base mb-0 lh-base text-dark d-block">{{ $c['name'] }}</span>
@@ -95,16 +97,16 @@
                 </div>
 
                 <div class="d-flex align-items-center gap-3 flex-grow-1 overflow-hidden">
-                    <div class="flex-shrink-0" id="active-chat-avatar-wrapper">
+                    <div class="flex-shrink-0 position-relative" id="active-chat-avatar-wrapper">
                         <img id="active-chat-avatar" src="{{ $activeUser ? $activeUser->avatar_url : asset('assets/images/users/default-avatar.svg') }}" alt="Avatar" class="rounded-circle object-fit-cover shadow-sm {{ $activeUser ? '' : 'd-none' }}" style="width: 42px; height: 42px; min-width: 42px; min-height: 42px; object-fit: cover; object-position: top; display: block;" />
+                        <span id="active-chat-online-dot" class="position-absolute bottom-0 end-0 border border-2 border-white rounded-circle {{ ($activeUser && $activeUser->is_online) ? 'bg-success' : 'bg-secondary opacity-50' }} {{ $activeUser ? '' : 'd-none' }}" style="width: 12px; height: 12px; transform: translate(15%, 15%);"></span>
                     </div>
                     <div class="overflow-hidden">
                         <h5 class="mb-1 lh-base fs-lg fw-bold text-truncate" id="active-chat-name">
                             {{ $activeUser ? $activeUser->name : 'Pilih Kontak' }}
                         </h5>
                         <p class="mb-0 lh-sm text-muted d-flex align-items-center gap-1 fs-12">
-                            <i class="ti ti-circle-filled text-success fs-10"></i>
-                            <span id="active-chat-status">Aktif &amp; Terhubung</span>
+                            <span id="active-chat-status">{{ $activeUser ? ($activeUser->is_online ? 'Online Sekarang' : $activeUser->last_seen_human) : 'Pilih pengguna untuk mulai mengobrol' }}</span>
                             <span class="badge bg-primary-subtle text-primary border ms-2 fs-11" id="active-chat-role">{{ $activeUser ? $activeUser->role_name : '' }}</span>
                         </p>
                     </div>
@@ -924,6 +926,20 @@
                     activeChatAvatar.classList.remove('d-none');
                 }
 
+                // Update Status Kehadiran Header Seketika
+                const isOnline = btnSelect.getAttribute('data-user-online') === '1';
+                const lastSeenHuman = btnSelect.getAttribute('data-user-last-seen') || 'Offline';
+                const activeChatOnlineDot = document.getElementById('active-chat-online-dot');
+                const activeChatStatus = document.getElementById('active-chat-status');
+
+                if (activeChatOnlineDot) {
+                    activeChatOnlineDot.classList.remove('d-none');
+                    activeChatOnlineDot.className = `position-absolute bottom-0 end-0 border border-2 border-white rounded-circle ${isOnline ? 'bg-success' : 'bg-secondary opacity-50'}`;
+                }
+                if (activeChatStatus) {
+                    activeChatStatus.textContent = isOnline ? 'Online Sekarang' : lastSeenHuman;
+                }
+
                 // Aktifkan input chat langsung tanpa jeda
                 if (chatInput) {
                     chatInput.disabled = false;
@@ -1592,12 +1608,26 @@
                         const contactEl = document.querySelector(`.btn-select-chat[data-user-id="${c.id}"]`);
                         if (!contactEl) return;
 
-                        // Real-time update avatar kontak di sidebar
+                        // Real-time update avatar & presence kontak di sidebar
                         if (c.avatar) {
                             contactEl.setAttribute('data-user-avatar', c.avatar);
                             const contactImg = contactEl.querySelector('img');
                             if (contactImg && contactImg.src !== c.avatar) {
                                 contactImg.src = c.avatar;
+                            }
+                        }
+
+                        contactEl.setAttribute('data-user-online', c.is_online ? '1' : '0');
+                        contactEl.setAttribute('data-user-last-seen', c.last_seen_human || 'Offline');
+
+                        const contactDot = contactEl.querySelector('.contact-online-dot');
+                        if (contactDot) {
+                            if (c.is_online) {
+                                contactDot.className = 'position-absolute bottom-0 end-0 border border-2 border-white rounded-circle contact-online-dot bg-success';
+                                contactDot.title = 'Online Sekarang';
+                            } else {
+                                contactDot.className = 'position-absolute bottom-0 end-0 border border-2 border-white rounded-circle contact-online-dot bg-secondary opacity-50';
+                                contactDot.title = c.last_seen_human || 'Offline';
                             }
                         }
 
@@ -1610,22 +1640,35 @@
 
                         const isContactActive = String(activeUserId) === String(c.id);
 
-                        // Real-time update avatar header aktif, modal detail, dan chat bubbles lawan bicara
-                        if (isContactActive && c.avatar) {
-                            const activeHeaderAvatar = document.getElementById('active-chat-avatar');
-                            if (activeHeaderAvatar && activeHeaderAvatar.src !== c.avatar) {
-                                activeHeaderAvatar.src = c.avatar;
-                                activeHeaderAvatar.classList.remove('d-none');
-                            }
-                            const modalAvatar = document.getElementById('modal-user-avatar');
-                            if (modalAvatar && modalAvatar.src !== c.avatar) {
-                                modalAvatar.src = c.avatar;
-                            }
-                            document.querySelectorAll('#chat-container .chat-avatar-opponent').forEach(function(img) {
-                                if (img.src !== c.avatar) {
-                                    img.src = c.avatar;
+                        // Real-time update avatar & status kehadiran header aktif
+                        if (isContactActive) {
+                            if (c.avatar) {
+                                const activeHeaderAvatar = document.getElementById('active-chat-avatar');
+                                if (activeHeaderAvatar && activeHeaderAvatar.src !== c.avatar) {
+                                    activeHeaderAvatar.src = c.avatar;
+                                    activeHeaderAvatar.classList.remove('d-none');
                                 }
-                            });
+                                const modalAvatar = document.getElementById('modal-user-avatar');
+                                if (modalAvatar && modalAvatar.src !== c.avatar) {
+                                    modalAvatar.src = c.avatar;
+                                }
+                                document.querySelectorAll('#chat-container .chat-avatar-opponent').forEach(function(img) {
+                                    if (img.src !== c.avatar) {
+                                        img.src = c.avatar;
+                                    }
+                                });
+                            }
+
+                            const activeChatOnlineDot = document.getElementById('active-chat-online-dot');
+                            const activeChatStatus = document.getElementById('active-chat-status');
+
+                            if (activeChatOnlineDot) {
+                                activeChatOnlineDot.classList.remove('d-none');
+                                activeChatOnlineDot.className = `position-absolute bottom-0 end-0 border border-2 border-white rounded-circle ${c.is_online ? 'bg-success' : 'bg-secondary opacity-50'}`;
+                            }
+                            if (activeChatStatus) {
+                                activeChatStatus.textContent = c.is_online ? 'Online Sekarang' : (c.last_seen_human || 'Offline');
+                            }
                         }
 
                         if (unreadBadge) {

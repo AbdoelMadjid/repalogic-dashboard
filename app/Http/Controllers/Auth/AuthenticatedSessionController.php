@@ -40,6 +40,11 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        if ($user = Auth::user()) {
+            \Illuminate\Support\Facades\Cache::forget('user-online-' . $user->id);
+            \Illuminate\Support\Facades\Cache::put('user-last-seen-' . $user->id, now()->toIso8601String(), now()->addDays(30));
+        }
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

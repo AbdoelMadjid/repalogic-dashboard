@@ -23,6 +23,7 @@ class DataLoginController extends Controller
         $searchTerm = $request->input('search');
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
+        $presenceStatus = $request->input('presence_status', 'all');
 
         // 1. Ringkasan Statistik Utama
         $stats = [
@@ -30,6 +31,7 @@ class DataLoginController extends Controller
             'unique_users_today' => UserLogin::today()->distinct('user_id')->count('user_id'),
             'points_today' => UserLogin::today()->where('points_awarded', 1)->count(),
             'total_all_time' => UserLogin::count(),
+            'online_now' => User::getOnlineUsersCount(),
         ];
 
         // 2. Data Pengguna yang Login Hari Ini (Tab 1)
@@ -43,9 +45,13 @@ class DataLoginController extends Controller
             $latest = $logins->first();
             $first = $logins->last();
             $pointsEarnedToday = $logins->where('points_awarded', 1)->count();
+            $isOnline = $user ? $user->is_online : false;
+            $lastSeenHuman = $user ? $user->last_seen_human : 'Offline';
 
             return (object) [
                 'user' => $user,
+                'is_online' => $isOnline,
+                'last_seen_human' => $lastSeenHuman,
                 'total_sessions_today' => $logins->count(),
                 'points_earned_today' => $pointsEarnedToday,
                 'first_login_today' => $first->login_at,
@@ -60,6 +66,13 @@ class DataLoginController extends Controller
                 'latest_login_id' => $latest->id,
             ];
         })->values();
+
+        // Filter presence status untuk Tab 1 jika dipilih
+        if ($presenceStatus === 'online') {
+            $todayUsers = $todayUsers->where('is_online', true)->values();
+        } elseif ($presenceStatus === 'offline') {
+            $todayUsers = $todayUsers->where('is_online', false)->values();
+        }
 
         // 3. Query Riwayat Login Lengkap (Tab 2) dengan Filter Dinamis
         $query = UserLogin::with(['user.roles'])->orderBy('login_at', 'desc');
@@ -99,7 +112,8 @@ class DataLoginController extends Controller
             'userId',
             'searchTerm',
             'startDate',
-            'endDate'
+            'endDate',
+            'presenceStatus'
         ));
     }
 
@@ -109,15 +123,19 @@ class DataLoginController extends Controller
     public function show($id)
     {
         $login = UserLogin::with(['user.roles'])->findOrFail($id);
+        $user = $login->user;
 
         return response()->json([
             'status' => 'success',
             'data' => [
                 'id' => $login->id,
-                'user_name' => $login->user?->name ?? 'User Terhapus',
-                'user_email' => $login->user?->email ?? '-',
-                'user_avatar' => $login->user?->avatar_url ?? asset('assets/images/users/default-avatar.svg'),
-                'user_role' => $login->user?->role_name ?? 'User',
+                'user_name' => $user?->name ?? 'User Terhapus',
+                'user_email' => $user?->email ?? '-',
+                'user_avatar' => $user?->avatar_url ?? asset('assets/images/users/default-avatar.svg'),
+                'user_role' => $user?->role_name ?? 'User',
+                'is_online' => $user?->is_online ?? false,
+                'last_seen_human' => $user?->last_seen_human ?? '-',
+                'online_status_badge' => $user?->online_status_badge ?? '',
                 'ip_address' => $login->ip_address ?? '-',
                 'browser' => $login->browser ?? 'Unknown',
                 'platform' => $login->platform ?? 'Unknown',
