@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.4.2</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.4.3</strong>
                             </span>
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.4.2 -->
+                        <!-- Version 2.4.3 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,34 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.4.2</h5>
+                                        <h5 class="fw-bold mb-0">v2.4.3</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.3</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 16:22 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Instant Empty History Placeholder Disappearance on First Chat Send</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Pembersihan Instan Placeholder Obrolan Kosong:</strong> Kotak <em>"Belum Ada Riwayat Obrolan"</em> kini langsung hilang seketika (0ms delay) pada saat pesan pertama dikirim tanpa jeda render DOM.</li>
+                                    <li><strong class="text-dark">Standarisasi ID &amp; Class Placeholder:</strong> Penyeragaman atribut <code>chat-placeholder-box</code> pada seluruh kondisi state (Blade initial load, AJAX conversation switch, dan quick transition loading) untuk pembersihan DOM yang mulus dan bebas glitch.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Placeholder Cleanup</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Zero Delay</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Instant First Message</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.4.2 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xl text-muted opacity-50"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.4.2</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.2</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 16:15 WIB</span>

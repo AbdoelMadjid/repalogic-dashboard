@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v2.4.2`  
-> **Terakhir Diperbarui:** 31 Agustus 2026 16:15 WIB  
+> **Versi Terbaru:** `v2.4.3`  
+> **Terakhir Diperbarui:** 31 Agustus 2026 16:22 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v2.4.3`** | `2026-08-31 16:22 WIB` | Instant Empty History Placeholder Disappearance on First Chat Send & Unified Placeholder Engine |
 | **`v2.4.2`** | `2026-08-31 16:15 WIB` | Zero-Latency Optimistic UI Message Sending & Instant Seamless Contact Switch Engine |
 | **`v2.4.1`** | `2026-08-31 16:05 WIB` | Chat Contact Avatar Spacing Optimization, Standard Framed Lightbox Modal Image Preview & Interactive Reply Quote Jump Navigation |
 | **`v2.4.0`** | `2026-08-31 15:30 WIB` | User Impersonation Engine (Switch Akun), Floating Sticky Impersonation Alert Banner & Quick Switch-Back Action Hub |

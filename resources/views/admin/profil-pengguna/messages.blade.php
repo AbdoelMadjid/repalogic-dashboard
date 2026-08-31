@@ -199,7 +199,7 @@
                         </div>
                     @endforeach
                 @elseif ($activeUser)
-                    <div class="text-center py-5 text-muted" id="empty-chat-placeholder">
+                    <div class="text-center py-5 text-muted chat-placeholder-box" id="empty-chat-placeholder">
                         <div class="avatar-md mx-auto mb-2">
                             <span class="avatar-title text-bg-light text-primary rounded-circle fs-24">
                                 <i class="ti ti-messages"></i>
@@ -209,7 +209,7 @@
                         <p class="fs-12 mb-0">Mulai percakapan dengan mengetikkan pesan di bawah ini.</p>
                     </div>
                 @else
-                    <div class="text-center py-5 text-muted">
+                    <div class="text-center py-5 text-muted chat-placeholder-box" id="empty-select-contact-placeholder">
                         <h6 class="fs-14 fw-semibold text-dark">Pilih Kontak Pengguna</h6>
                         <p class="fs-12 mb-0">Pilih salah satu pengguna di sebelah kiri untuk memulai pesan.</p>
                     </div>
@@ -647,7 +647,7 @@
 
                 // Tampilkan placeholder transisi cepat di chat container
                 setChatContainerHtml(`
-                    <div class="text-center py-5 text-muted" id="chat-loading-placeholder">
+                    <div class="text-center py-5 text-muted chat-placeholder-box" id="chat-loading-placeholder">
                         <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
                         <div class="fs-12 fw-medium">Memuat percakapan dengan ${escapeHtml(userName)}...</div>
                     </div>
@@ -946,7 +946,7 @@
                                 html += `</div>`;
                             });
                         } else {
-                            html = `<div class="text-center py-5 text-muted">
+                            html = `<div class="text-center py-5 text-muted chat-placeholder-box" id="empty-chat-placeholder">
                                 <div class="avatar-md mx-auto mb-2">
                                     <span class="avatar-title text-bg-light text-primary rounded-circle fs-24">
                                         <i class="ti ti-messages"></i>
@@ -1124,9 +1124,11 @@
             function appendSingleMessage(msg) {
                 if (!chatContainer) return;
 
-                // Jika placeholder kosong ada, hapus
-                const emptyPlaceholder = chatContainer.querySelector('#empty-chat-placeholder') || chatContainer.querySelector('#chat-loading-placeholder');
-                if (emptyPlaceholder) emptyPlaceholder.remove();
+                // Hapus semua elemen placeholder (Belum Ada Riwayat Obrolan / Loading / Pilih Kontak) seketika detik itu juga
+                const placeholders = chatContainer.querySelectorAll('#empty-chat-placeholder, #chat-loading-placeholder, #empty-select-contact-placeholder, .chat-placeholder-box');
+                placeholders.forEach(function(el) {
+                    el.remove();
+                });
 
                 const isSender = msg.is_sender !== false;
                 const isPending = msg.is_pending === true;
