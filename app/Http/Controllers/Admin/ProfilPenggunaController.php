@@ -124,10 +124,14 @@ class ProfilPenggunaController extends Controller
         $request->validate([
             'cover_image' => 'nullable|image|mimes:jpeg,jpg,png,webp,svg|max:2048',
             'cover_position_y' => 'nullable|integer|min:0|max:100',
+            'cover_height' => 'nullable|integer|min:150|max:800',
         ], [
             'cover_image.image' => 'Berkas foto sampul harus berupa gambar.',
             'cover_image.max' => 'Ukuran gambar foto sampul tidak boleh melebihi 2MB.',
             'cover_position_y.integer' => 'Nilai posisi vertikal tidak valid.',
+            'cover_height.integer' => 'Nilai tinggi banner tidak valid.',
+            'cover_height.min' => 'Tinggi banner minimal 150px.',
+            'cover_height.max' => 'Tinggi banner maksimal 800px.',
         ]);
 
         $user = auth()->user();
@@ -146,9 +150,13 @@ class ProfilPenggunaController extends Controller
             $config->cover_position_y = (int) $request->input('cover_position_y');
         }
 
+        if ($request->has('cover_height')) {
+            $config->cover_height = (int) $request->input('cover_height');
+        }
+
         $config->save();
 
-        $this->notifySuccess('Foto sampul & posisi background header berhasil diperbarui.', 'Berhasil!');
+        $this->notifySuccess('Foto sampul, tinggi banner & posisi background header berhasil diperbarui.', 'Berhasil!');
 
         return redirect()->route('admin.profil-pengguna.index');
     }

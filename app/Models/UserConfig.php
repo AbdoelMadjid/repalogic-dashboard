@@ -16,6 +16,7 @@ class UserConfig extends Model
         'user_id',
         'cover_image',
         'cover_position_y',
+        'cover_height',
         'motto',
         'theme_mode',
         'settings',
@@ -23,6 +24,7 @@ class UserConfig extends Model
 
     protected $casts = [
         'cover_position_y' => 'integer',
+        'cover_height' => 'integer',
         'settings' => 'array',
     ];
 

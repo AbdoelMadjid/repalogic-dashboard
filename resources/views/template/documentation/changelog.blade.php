@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.4.6</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.4.7</strong>
                             </span>
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.4.6 -->
+                        <!-- Version 2.4.7 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,36 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.4.6</h5>
+                                        <h5 class="fw-bold mb-0">v2.4.7</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.7</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 17:18 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">User Profile Cover Height Customization Engine: Real-Time Proportional Slider, Inline Presets &amp; Synchronized Aspect Ratio WYSIWYG</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Pengatur Tinggi Foto Sampul Header Profil:</strong> Penambahan kontrol slider real-time (180px - 600px) dan tombol preset tinggi inline (Ringkas 220px, Standar 320px, Tinggi 450px) pada widget Foto Sampul di halaman Profil Pengguna (<code>admin/profil-pengguna</code>) yang tersimpan permanen di database.</li>
+                                    <li><strong class="text-dark">Sinkronisasi Rasio Dimensi Pratinjau (Aspect Ratio WYSIWYG):</strong> Sinkronisasi rasio aspek kotak pratinjau thumbnail di sidebar dengan ukuran banner header utama secara otomatis dan responsif saat diubah maupun di-resize.</li>
+                                    <li><strong class="text-dark">Sinkronisasi Halaman KTP:</strong> Header banner pada halaman kelengkapan data KTP (<code>admin/profil-pengguna/edit</code>) otomatis mengikuti preferensi tinggi yang telah disimpan.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Cover Height Slider</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Inline Presets</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Aspect Ratio WYSIWYG</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Live Preview</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.4.6 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-dot fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.4.6</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.6</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 17:00 WIB</span>
@@ -133,7 +161,6 @@
                                     <span class="badge bg-light text-dark border fs-xs">Message Reactions</span>
                                     <span class="badge bg-light text-dark border fs-xs">Forward Message</span>
                                     <span class="badge bg-light text-dark border fs-xs">Voice Note</span>
-                                    <span class="badge bg-light text-dark border fs-xs">Web Audio Player</span>
                                 </div>
                             </div>
                         </div>

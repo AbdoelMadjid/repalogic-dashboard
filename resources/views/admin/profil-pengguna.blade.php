@@ -10,7 +10,7 @@
         <div class="col-12">
             <article class="card card-out-of-container border-top-0 shadow-sm mb-4">
                 <div id="main-header-banner" class="position-relative card-side-img overflow-hidden"
-                    style="height: 250px; background-image: url('{{ $user->cover_bg_url }}'); background-size: cover; background-position: center {{ $user->cover_position_y }}%;">
+                    style="height: {{ $user->cover_height }}px; background-image: url('{{ $user->cover_bg_url }}'); background-size: cover; background-position: center {{ $user->cover_position_y }}%; transition: height 0.2s ease;">
                     <div class="p-4 card-img-overlay rounded-start-0 auth-overlay d-flex align-items-center justify-content-center">
                         <h3 class="text-white mb-0 fst-italic text-center px-3" id="main-motto-display">"{{ $user->motto }}"</h3>
                     </div>
@@ -122,13 +122,30 @@
                     <form action="{{ route('admin.profil-pengguna.update-cover') }}" method="POST" enctype="multipart/form-data" id="form-update-cover">
                         @csrf
                         <div class="mb-3 text-center">
-                            <div class="position-relative mb-2 overflow-hidden rounded border shadow-sm" style="height: 130px;">
+                            <div id="cover-preview-container" class="position-relative mb-2 overflow-hidden rounded border shadow-sm w-100"
+                                style="min-height: 70px; max-height: 280px; transition: aspect-ratio 0.2s ease, height 0.2s ease;">
                                 <img src="{{ $user->cover_bg_url }}" id="cover-preview-img" alt="Background Header" class="w-100 h-100 object-fit-cover" style="object-fit: cover; object-position: center {{ $user->cover_position_y }}%;" />
                             </div>
                             <label for="cover_bg_input" class="btn btn-sm btn-outline-primary fw-semibold cursor-pointer mb-2">
                                 <i class="ti ti-camera me-1"></i> Pilih / Ganti Foto Sampul
                             </label>
                             <input type="file" name="cover_image" id="cover_bg_input" class="d-none" accept="image/*">
+                        </div>
+
+                        <!-- Slider Pengatur Tinggi Banner Sampul -->
+                        <div class="mb-3 p-2 bg-light rounded border">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label for="cover-height-range" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
+                                    <i class="ti ti-arrows-maximize text-primary fs-15"></i> Tinggi Banner Sampul:
+                                </label>
+                                <span id="cover-height-val" class="badge bg-primary-subtle text-primary font-monospace fs-12 fw-bold">{{ $user->cover_height }}px</span>
+                            </div>
+                            <input type="range" class="form-range mb-2" id="cover-height-range" name="cover_height" min="180" max="600" step="10" value="{{ $user->cover_height }}">
+                            <div class="d-flex justify-content-between gap-1">
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-height" data-height="220">Ringkas (220px)</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-height" data-height="320">Standar (320px)</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-height" data-height="450">Tinggi (450px)</button>
+                            </div>
                         </div>
 
                         <!-- Slider Pengatur Posisi Vertikal -->
@@ -148,7 +165,7 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary btn-sm w-100 fw-semibold">
-                            <i class="ti ti-device-floppy me-1"></i> Simpan Posisi / Foto Sampul
+                            <i class="ti ti-device-floppy me-1"></i> Simpan Posisi & Tinggi Sampul
                         </button>
                     </form>
                 </div>
@@ -509,14 +526,27 @@
                 });
             }
 
-            // 2. Live Image Preview & Real-time Vertical Position Slider for Cover Background Header
+            // 2. Live Image Preview, Vertical Position Slider & Height Adjustment for Cover Background Header
             const coverInput = document.getElementById('cover_bg_input');
             const coverPreview = document.getElementById('cover-preview-img');
+            const coverPreviewContainer = document.getElementById('cover-preview-container');
             const coverForm = document.getElementById('form-update-cover');
             const mainHeaderBanner = document.getElementById('main-header-banner');
             const coverPosRange = document.getElementById('cover-position-range');
             const coverPosVal = document.getElementById('cover-pos-val');
             const presetButtons = document.querySelectorAll('.btn-preset-pos');
+
+            const coverHeightRange = document.getElementById('cover-height-range');
+            const coverHeightVal = document.getElementById('cover-height-val');
+            const presetHeightButtons = document.querySelectorAll('.btn-preset-height');
+
+            function syncCoverPreviewRatio() {
+                if (mainHeaderBanner && coverPreviewContainer && coverHeightRange) {
+                    const bannerWidth = mainHeaderBanner.offsetWidth || 1140;
+                    const currentHeight = parseInt(coverHeightRange.value) || 320;
+                    coverPreviewContainer.style.aspectRatio = `${bannerWidth} / ${currentHeight}`;
+                }
+            }
 
             function updateCoverPosition(pos) {
                 const posPercent = pos + '%';
@@ -534,6 +564,25 @@
                 }
             }
 
+            function updateCoverHeight(height) {
+                const heightPx = height + 'px';
+
+                if (coverHeightVal) {
+                    coverHeightVal.textContent = heightPx;
+                }
+                if (coverHeightRange) {
+                    coverHeightRange.value = height;
+                }
+                if (mainHeaderBanner) {
+                    mainHeaderBanner.style.height = heightPx;
+                }
+                syncCoverPreviewRatio();
+            }
+
+            // Sync initial aspect ratio and on window resize
+            syncCoverPreviewRatio();
+            window.addEventListener('resize', syncCoverPreviewRatio);
+
             if (coverPosRange) {
                 coverPosRange.addEventListener('input', function(e) {
                     updateCoverPosition(e.target.value);
@@ -544,6 +593,19 @@
                 btn.addEventListener('click', function() {
                     const pos = this.getAttribute('data-pos');
                     updateCoverPosition(pos);
+                });
+            });
+
+            if (coverHeightRange) {
+                coverHeightRange.addEventListener('input', function(e) {
+                    updateCoverHeight(e.target.value);
+                });
+            }
+
+            presetHeightButtons.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const h = this.getAttribute('data-height');
+                    updateCoverHeight(h);
                 });
             });
 

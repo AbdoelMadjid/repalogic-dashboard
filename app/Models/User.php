@@ -58,6 +58,7 @@ class User extends Authenticatable
         'role_name',
         'cover_bg_url',
         'cover_position_y',
+        'cover_height',
         'motto',
         'profile_completion_percentage',
     ];
@@ -231,6 +232,14 @@ class User extends Authenticatable
     public function getCoverPositionYAttribute(): int
     {
         return $this->config?->cover_position_y ?? 0;
+    }
+
+    /**
+     * Accessor for user cover background banner height in pixels (default: 320px).
+     */
+    public function getCoverHeightAttribute(): int
+    {
+        return (int) ($this->config?->cover_height ?: 320);
     }
 
     /**

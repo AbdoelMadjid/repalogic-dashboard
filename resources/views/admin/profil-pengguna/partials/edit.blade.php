@@ -10,7 +10,7 @@
         <div class="col-12">
             <article class="card card-out-of-container border-top-0 shadow-sm mb-4">
                 <div class="position-relative card-side-img overflow-hidden"
-                    style="height: 200px; background-image: url('{{ $user->cover_bg_url }}'); background-size: cover; background-position: center {{ $user->cover_position_y }}%;">
+                    style="height: {{ min($user->cover_height, 280) }}px; background-image: url('{{ $user->cover_bg_url }}'); background-size: cover; background-position: center {{ $user->cover_position_y }}%;">
                     <div class="p-4 card-img-overlay rounded-start-0 flex-column gap-2 auth-overlay d-flex align-items-center justify-content-center">
                         <h3 class="text-white mb-0 fst-italic text-center px-3">"{{ $user->motto }}"</h3>
                     </div>
