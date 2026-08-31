@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v2.3.5`  
-> **Terakhir Diperbarui:** 28 Agustus 2026 16:40 WIB  
+> **Versi Terbaru:** `v2.4.0`  
+> **Terakhir Diperbarui:** 31 Agustus 2026 15:30 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v2.4.0`** | `2026-08-31 15:30 WIB` | User Impersonation Engine (Switch Akun), Floating Sticky Impersonation Alert Banner & Quick Switch-Back Action Hub |
 | **`v2.3.5`** | `2026-08-28 16:40 WIB` | Direct Chat Image & File Attachment Upload, Pre-Upload Live File Preview Bar, Image Lightbox Modal & Real-Time Avatar Synchronization |
 | **`v2.3.4`** | `2026-08-28 16:11 WIB` | Real-Time Sidebar Contacts Sync Engine, Auto Unread Badges Counter, Background Contact Polling & Message Hub Bridge |
 | **`v2.3.3`** | `2026-08-28 15:58 WIB` | Interactive Chat Emoji & Emotion Picker, Multi-Category Emotion Grid, Real-Time Keyword Search & Cursor-Aware Insertion Engine |

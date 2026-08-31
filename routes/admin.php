@@ -31,6 +31,8 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
     Route::get('notifications/poll-messages', [NotificationController::class, 'pollMessages'])->name('notifications.poll-messages');
     Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
 
+    Route::post('switch-back', [UserController::class, 'switchBack'])->name('switch-back');
+
     Route::prefix('profil-pengguna')->name('profil-pengguna.')->group(function () {
         Route::get('/', [ProfilPenggunaController::class, 'index'])->name('index');
         Route::post('update-quick', [ProfilPenggunaController::class, 'updateQuick'])->name('update-quick');
@@ -89,6 +91,7 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
         Route::post('users/{id}/reject-deactivation', [UserController::class, 'rejectDeactivation'])->name('users.reject-deactivation');
         Route::post('users/{id}/activate', [UserController::class, 'activate'])->name('users.activate');
         Route::post('users/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
+        Route::post('users/{id}/switch-account', [UserController::class, 'switchAccount'])->name('users.switch-account');
         Route::resource('users', UserController::class);
         Route::post('data-login/clear', [DataLoginController::class, 'clearOldLogs'])->name('data-login.clear');
         Route::get('data-login/{id}', [DataLoginController::class, 'show'])->whereNumber('id')->name('data-login.show');

@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.3.0</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.4.0</strong>
                             </span>
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.3.5 -->
+                        <!-- Version 2.4.0 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,38 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.3.5</h5>
+                                        <h5 class="fw-bold mb-0">v2.4.0</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.0</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 15:30 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">User Impersonation Engine (Switch Akun), Floating Sticky Impersonation Alert Banner &amp; Quick Switch-Back Action Hub</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Fitur Switch Akun (User Impersonation):</strong> Administrator dengan permission <code>update manajemenpengguna/users</code> atau role <code>superadmin</code>/<code>admin</code> dapat langsung login sementara sebagai akun pengguna target tanpa memerlukan kata sandi.</li>
+                                    <li><strong class="text-dark">Proteksi Sesi &amp; Keamanan Terpadu:</strong> Sesi pengguna asli disimpan secara aman di Laravel session (<code>impersonator_id</code>, <code>impersonator_name</code>, <code>impersonator_role</code>) serta pencegahan <em>nested switch</em> bertingkat dan restriksi switch ke akun diri sendiri atau akun tidak aktif.</li>
+                                    <li><strong class="text-dark">Floating Sticky Impersonation Banner:</strong> Banner visual responsif di bagian atas seluruh halaman saat mode switch akun aktif, menampilkan identitas akun aktif beserta nama akun asli dan tombol cepat <em>Kembali ke Akun Utama</em>.</li>
+                                    <li><strong class="text-dark">Integrasi UI Tabel Pengguna &amp; Topbar Dropdown:</strong> Penambahan tombol aksi <code>ti-replace-user</code> pada tabel Manajemen Pengguna serta opsi pengembalian sesi instan pada menu dropdown akun di topbar navbar.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">User Impersonation</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Switch Akun</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Session Preservation</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Floating Impersonation Banner</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Quick Switch-Back</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.3.5 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xl text-muted opacity-50"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.3.5</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.3.5</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-28 16:40 WIB</span>

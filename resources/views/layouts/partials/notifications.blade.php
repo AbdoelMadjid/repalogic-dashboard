@@ -76,16 +76,52 @@
                 e.preventDefault();
                 e.stopPropagation();
 
+                const isDelete = form.getAttribute('data-confirm-type') === 'danger' ||
+                                 (!form.getAttribute('data-confirm-type') && /hapus|delete|trash/i.test(confirmMsg));
+                const isSwitch = form.getAttribute('data-confirm-type') === 'switch' ||
+                                 (!form.getAttribute('data-confirm-type') && /beralih|switch|kembali/i.test(confirmMsg));
+                const isApprove = form.getAttribute('data-confirm-type') === 'success' ||
+                                  (!form.getAttribute('data-confirm-type') && /setujui|aktifkan|approve/i.test(confirmMsg));
+
+                let title = form.getAttribute('data-confirm-title');
+                let icon = form.getAttribute('data-confirm-icon');
+                let confirmBtnText = form.getAttribute('data-confirm-btn');
+                let confirmBtnClass = form.getAttribute('data-confirm-btn-class');
+
+                if (!title) {
+                    if (isDelete) {
+                        title = 'Konfirmasi Hapus';
+                        confirmBtnText = confirmBtnText || '<i class="ti ti-trash me-1"></i> Ya, Hapus!';
+                        confirmBtnClass = confirmBtnClass || 'btn btn-danger';
+                        icon = icon || 'warning';
+                    } else if (isSwitch) {
+                        title = 'Konfirmasi Beralih Akun';
+                        confirmBtnText = confirmBtnText || '<i class="ti ti-replace-user me-1"></i> Ya, Beralih!';
+                        confirmBtnClass = confirmBtnClass || 'btn btn-primary';
+                        icon = icon || 'question';
+                    } else if (isApprove) {
+                        title = 'Konfirmasi Tindakan';
+                        confirmBtnText = confirmBtnText || '<i class="ti ti-check me-1"></i> Ya, Lanjutkan!';
+                        confirmBtnClass = confirmBtnClass || 'btn btn-success';
+                        icon = icon || 'question';
+                    } else {
+                        title = 'Konfirmasi Tindakan';
+                        confirmBtnText = confirmBtnText || '<i class="ti ti-check me-1"></i> Ya, Lanjutkan!';
+                        confirmBtnClass = confirmBtnClass || 'btn btn-primary';
+                        icon = icon || 'question';
+                    }
+                }
+
                 Swal.fire({
-                    title: 'Konfirmasi Hapus',
+                    title: title,
                     text: confirmMsg,
-                    icon: 'warning',
+                    icon: icon || 'question',
                     showCancelButton: true,
-                    confirmButtonText: '<i class="ti ti-trash me-1"></i> Ya, Hapus!',
+                    confirmButtonText: confirmBtnText || 'Ya, Lanjutkan!',
                     cancelButtonText: 'Batal',
                     reverseButtons: true,
                     customClass: {
-                        confirmButton: 'btn btn-danger',
+                        confirmButton: confirmBtnClass || 'btn btn-primary',
                         cancelButton: 'btn btn-light'
                     },
                     buttonsStyling: false

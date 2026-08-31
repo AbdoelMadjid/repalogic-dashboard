@@ -215,6 +215,18 @@
                                                         @endcan
                                                     @endif
 
+                                                    {{-- Tombol Switch Akun (Login Sebagai User Ini) --}}
+                                                    @if ($user->id !== auth()->id() && $user->status === 'active' && !session()->has('impersonator_id'))
+                                                        @if (auth()->user()->hasAnyRole(['superadmin', 'admin']) || auth()->user()->can('update manajemenpengguna/users'))
+                                                            <form action="{{ route('admin.manajemenpengguna.users.switch-account', $user->id) }}" method="POST" class="d-inline" data-confirm="Beralih akun dan login sementara sebagai &quot;{{ $user->name }}&quot;?" data-confirm-type="switch">
+                                                                @csrf
+                                                                <button type="submit" class="btn btn-sm btn-outline-primary" title="Switch Akun (Login Sebagai {{ $user->name }})">
+                                                                    <i class="ti ti-replace-user"></i>
+                                                                </button>
+                                                            </form>
+                                                        @endif
+                                                    @endif
+
                                                     @can('read manajemenpengguna/users')
                                                         <button type="button" class="btn btn-sm btn-outline-info btn-user-action" data-action="view" data-user='@json($user)' title="Detail Pengguna"><i class="ti ti-eye"></i></button>
                                                     @endcan

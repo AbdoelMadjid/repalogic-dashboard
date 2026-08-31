@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\ManajemenPengguna\UserRequest;
 use App\Models\User;
 use App\Traits\HasNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
@@ -352,6 +353,84 @@ class UserController extends Controller
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $this->notifySuccess("Pengguna \"{$user->name}\" berhasil dihapus.");
+
+        return redirect()->route('admin.manajemenpengguna.users.index');
+    }
+
+    /**
+     * Switch / Impersonate to another user account.
+     */
+    public function switchAccount(Request $request, $id)
+    {
+        $currentUser = auth()->user();
+
+        // Check authorization
+        if (!$currentUser->hasAnyRole(['superadmin', 'admin']) && !$currentUser->can('update manajemenpengguna/users')) {
+            $this->notifyError("Anda tidak memiliki izin untuk melakukan switch akun.");
+            return redirect()->back();
+        }
+
+        // Prevent nested switch
+        if (session()->has('impersonator_id')) {
+            $this->notifyWarning("Anda sedang dalam mode switch akun. Silakan kembali ke akun utama terlebih dahulu sebelum beralih ke akun lain.");
+            return redirect()->back();
+        }
+
+        $targetUser = User::findOrFail($id);
+
+        if ($targetUser->id === $currentUser->id) {
+            $this->notifyWarning("Anda sudah sedang login pada akun ini.");
+            return redirect()->back();
+        }
+
+        if ($targetUser->status !== 'active') {
+            $this->notifyError("Tidak dapat beralih ke akun yang berstatus tidak aktif atau belum disetujui.");
+            return redirect()->back();
+        }
+
+        // Store original impersonator data in session
+        session([
+            'impersonator_id' => $currentUser->id,
+            'impersonator_name' => $currentUser->name,
+            'impersonator_role' => $currentUser->roles->pluck('name')->implode(', ') ?: 'Administrator',
+        ]);
+
+        // Login as target user
+        Auth::loginUsingId($targetUser->id);
+
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
+        $this->notifySuccess("Berhasil beralih akun. Anda sekarang masuk sebagai \"{$targetUser->name}\".");
+
+        return redirect()->route('dashboard');
+    }
+
+    /**
+     * Leave impersonation and return to the original user account.
+     */
+    public function switchBack(Request $request)
+    {
+        if (!session()->has('impersonator_id')) {
+            $this->notifyWarning("Tidak ada sesi switch akun yang aktif.");
+            return redirect()->route('dashboard');
+        }
+
+        $impersonatorId = session()->pull('impersonator_id');
+        session()->forget('impersonator_name');
+        session()->forget('impersonator_role');
+
+        $originalUser = User::find($impersonatorId);
+
+        if (!$originalUser) {
+            $this->notifyError("Akun utama tidak ditemukan.");
+            return redirect()->route('login');
+        }
+
+        Auth::loginUsingId($originalUser->id);
+
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
+        $this->notifySuccess("Berhasil kembali ke akun utama \"{$originalUser->name}\".");
 
         return redirect()->route('admin.manajemenpengguna.users.index');
     }
