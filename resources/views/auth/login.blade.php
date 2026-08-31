@@ -30,11 +30,38 @@
         .input-group-merge .form-control:focus {
             z-index: 1;
         }
+
+        /* Hilangkan icon warning default bootstrap di dalam input agar tidak menumpuk dengan tombol mata */
+        .input-group-merge .form-control.is-invalid {
+            background-image: none !important;
+            padding-right: 0.75rem !important;
+            border-color: #ef4444 !important;
+        }
+
+        .input-group-merge .form-control.is-invalid:focus {
+            border-color: #dc2626 !important;
+            box-shadow: 0 0 0 0.2rem rgba(239, 68, 68, 0.15) !important;
+        }
+
+        /* Harmonisasi Input Group saat Invalid: Icon & Background Kiri/Kanan ikut berwarna merah elegan */
+        .input-group-merge:has(.form-control.is-invalid) .input-group-text,
+        .input-group-merge:has(.form-control.is-invalid) .btn {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            color: #dc2626 !important;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .input-group-merge:has(.form-control.is-invalid) .input-group-text i,
+        .input-group-merge:has(.form-control.is-invalid) .btn i {
+            color: #dc2626 !important;
+        }
+
         .invalid-feedback-custom {
             font-size: 0.8125rem;
             line-height: 1.4;
             margin-top: 0.5rem;
-            padding: 0.35rem 0.65rem;
+            padding: 0.45rem 0.75rem;
             border-radius: 0.375rem;
             background-color: #fef2f2;
             border: 1px solid #fee2e2;
@@ -85,6 +112,16 @@
                                 <div class="fs-13 lh-base">
                                     <strong class="d-block mb-0.5">Permintaan Reset Terkirim!</strong>
                                     {{ session('reset_requested') }}
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($errors->has('throttle'))
+                            <div class="alert alert-danger border-0 shadow-sm d-flex align-items-start gap-2 mb-3.5 py-3 px-3.5 rounded-3" role="alert" style="background-color: #fef2f2; color: #991b1b; border-left: 4px solid #ef4444 !important;">
+                                <i class="ti ti-shield-lock fs-18 text-danger flex-shrink-0 mt-0.5"></i>
+                                <div class="fs-13 lh-base w-100">
+                                    <strong class="d-block mb-0.5">Akses Login Dikunci Sementara</strong>
+                                    {{ $errors->first('throttle') }}
                                 </div>
                             </div>
                         @endif

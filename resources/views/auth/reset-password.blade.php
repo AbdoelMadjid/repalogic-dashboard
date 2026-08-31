@@ -1,18 +1,20 @@
+@php
+    $appProfil = $appProfil ?? (class_exists(\App\Models\Admin\DukunganAplikasi\ProfilAplikasi::class) ? \App\Models\Admin\DukunganAplikasi\ProfilAplikasi::getSettings() : null);
+    $appName = !empty($appProfil?->app_name) ? $appProfil->app_name : config('app.name', 'REPALOGIC Dashboard');
+@endphp
 <!doctype html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="utf-8" />
-    <title>New Password | INSPINIA - Responsive Bootstrap 5 Admin Dashboard Template</title>
+    <title>Kata Sandi Baru | {{ $appName }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description"
-        content="Inspinia is the #1 best-selling admin dashboard template on Wrapmarket. Perfect for building CRM, CMS, project management tools, and custom web apps with clean UI, responsive design, and powerful features." />
-    <meta name="keywords"
-        content="Inspinia, admin dashboard, Wrapmarket, Wrapbootstrap, HTML template, Bootstrap admin, CRM template, CMS template, responsive admin, web app UI, admin theme, best admin template" />
-    <meta name="author" content="WebAppLayers" />
+    <meta name="description" content="{{ $appProfil->meta_description ?? 'REPALOGIC Dashboard Management System' }}" />
+    <meta name="keywords" content="{{ $appProfil->meta_keywords ?? 'admin, dashboard, repalogic, bootstrap 5' }}" />
+    <meta name="author" content="{{ $appProfil->meta_author ?? 'Repalogic' }}" />
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}" />
+    <link rel="shortcut icon" href="{{ !empty($appProfil?->favicon) ? asset('storage/' . $appProfil->favicon) : asset('assets/images/favicon.ico') }}" />
     <!-- Theme Config Js -->
     <script src="{{ asset('assets/js/config.js') }}"></script>
 

@@ -1,13 +1,20 @@
+@php
+    $appProfil = $appProfil ?? (class_exists(\App\Models\Admin\DukunganAplikasi\ProfilAplikasi::class) ? \App\Models\Admin\DukunganAplikasi\ProfilAplikasi::getSettings() : null);
+@endphp
 <!doctype html>
 <html lang="id">
 
 <head>
     <meta charset="utf-8" />
-    <title>Mode Pemeliharaan Sistem | {{ config('app.name', 'REPALOGIC Dashboard') }}</title>
+    <title>Mode Pemeliharaan Sistem | {{ $appProfil->app_name ?? config('app.name', 'REPALOGIC Dashboard') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}" />
+    @if (isset($appProfil) && !empty($appProfil->favicon) && \Illuminate\Support\Facades\Storage::disk('public')->exists($appProfil->favicon))
+        <link rel="shortcut icon" href="{{ asset('storage/' . $appProfil->favicon) }}" />
+    @else
+        <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}" />
+    @endif
 
     <!-- Vendor css -->
     <link href="{{ asset('assets/css/vendors.min.css') }}" rel="stylesheet" type="text/css" />
@@ -25,13 +32,17 @@
                         <div class="card-body p-4 p-md-5 text-center">
                             <div class="auth-brand mb-4">
                                 <a href="/" class="d-inline-block">
-                                    <img src="{{ asset('assets/images/logo-black.png') }}" alt="logo" height="38" />
+                                    @if (isset($appProfil) && !empty($appProfil->logo_lg) && \Illuminate\Support\Facades\Storage::disk('public')->exists($appProfil->logo_lg))
+                                        <img src="{{ asset('storage/' . $appProfil->logo_lg) }}" alt="{{ $appProfil->app_name ?? 'logo' }}" height="38" style="object-fit: contain; max-height: 48px;" />
+                                    @else
+                                        <img src="{{ asset('assets/images/logo-black.png') }}" alt="logo" height="38" />
+                                    @endif
                                 </a>
                             </div>
 
                             <div class="mb-4">
-                                <div class="avatar-xl bg-danger-subtle text-danger rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 90px; height: 90px;">
-                                    <i class="ti ti-tool fs-44"></i>
+                                <div class="avatar-xl bg-danger-subtle text-danger rounded-circle d-inline-flex align-items-center justify-content-center mb-3 shadow-sm" style="width: 90px; height: 90px;">
+                                    <i class="ti ti-tool" style="font-size: 42px; line-height: 1;"></i>
                                 </div>
                                 <h3 class="fw-bold text-dark mb-2">Mode Pemeliharaan Aktif</h3>
                                 <div class="badge bg-warning-subtle text-warning fs-12 px-3 py-1.5 rounded-pill mb-3">

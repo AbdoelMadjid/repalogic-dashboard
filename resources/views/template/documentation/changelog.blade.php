@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.4.8 -->
+                        <!-- Version 2.4.9 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,37 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.4.8</h5>
+                                        <h5 class="fw-bold mb-0">v2.4.9</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.9</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 22:05 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Auth Security Rate Limiting Integration, Unified Form Error Aesthetics &amp; Meta Title Internationalization Sanitization</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Integrasi Rate Limit &amp; Auto Approval Pengguna:</strong> Menghubungkan pengaturan keamanan akun dari cache ke <code>LoginRequest</code> (kuota percobaan gagal) dengan banner notifikasi lockout di bagian atas form login serta aktivasi otomatis registrasi baru dari <code>RegisteredUserController</code>.</li>
+                                    <li><strong class="text-dark">Estetika Kolom Validasi Input Autentikasi:</strong> Harmonisasi warna border, background, dan icon sisi kiri/kanan input group menjadi merah lembut terpadu saat input berstatus invalid pada halaman Login, Register, Forgot Password, dan Permohonan Aktivasi.</li>
+                                    <li><strong class="text-dark">Pembersihan Suffix Meta Title Template:</strong> Menghapus teks template statis pada <code>title-meta.blade.php</code> dan <code>I18nManager</code> di <code>app.js</code> agar judul tab browser 100% konsisten dengan data dinamis nama halaman dan nama aplikasi.</li>
+                                    <li><strong class="text-dark">Perbaikan Ikon &amp; Branding Halaman 503 Maintenance:</strong> Penyesuaian ukuran ikon perkakas dan integrasi data dinamis <code>ProfilAplikasi</code> (favicon, logo, judul) pada halaman pemeliharaan sistem.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Rate Limit Engine</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Auth Input Aesthetics</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Meta Title Fix</span>
+                                    <span class="badge bg-light text-dark border fs-xs">503 Page Branding</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.4.8 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-dot fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.4.8</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.4.8</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-08-31 19:12 WIB</span>

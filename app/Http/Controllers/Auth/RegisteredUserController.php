@@ -56,14 +56,21 @@ class RegisteredUserController extends Controller
             'terms.accepted' => 'Anda wajib menyetujui syarat & ketentuan.',
         ]);
 
+        $autoApproval = (bool) \Illuminate\Support\Facades\Cache::get('app_setting_auto_user_approval', false);
+        $userStatus = $autoApproval ? 'active' : 'pending';
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'status' => 'pending',
+            'status' => $userStatus,
         ]);
 
         event(new Registered($user));
+
+        if ($autoApproval) {
+            return redirect()->route('login')->with('status', 'Pendaftaran berhasil! Akun Anda telah aktif dan langsung dapat digunakan untuk masuk.');
+        }
 
         return redirect()->route('login')->with('registered_pending', 'Pendaftaran berhasil! Akun Anda telah terdaftar dan sedang menunggu persetujuan dari Administrator sebelum dapat digunakan.');
     }

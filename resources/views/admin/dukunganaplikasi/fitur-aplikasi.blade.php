@@ -51,7 +51,7 @@
         <!-- WIDGET 2: PENGATURAN WAKTU IDLE (AUTO LOCK SCREEN) -->
         <div class="col-12 col-md-6 col-xl-4">
             <div class="card h-100 shadow-sm border-0 rounded-3">
-                <div class="card-header bg-warning text-white py-3 d-flex align-items-center justify-content-between" style="background-color: #f59e0b !important;">
+                <div class="card-header bg-primary text-white py-3 d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center gap-2">
                         <i class="ti ti-clock-pause fs-20"></i>
                         <h6 class="card-title text-white mb-0 fw-bold">Waktu Idle & Auto Lock</h6>
@@ -82,7 +82,7 @@
                         </p>
                     </div>
                     <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-sm btn-warning text-white w-100 fw-semibold" id="btn-save-idle-timeout" style="background-color: #f59e0b; border-color: #f59e0b;">
+                        <button type="button" class="btn btn-sm btn-primary w-100 fw-semibold" id="btn-save-idle-timeout">
                             <i class="ti ti-device-floppy me-1"></i> Simpan Durasi Idle
                         </button>
                         <button type="button" class="btn btn-sm btn-outline-secondary flex-shrink-0" id="btn-test-lock-screen" title="Uji Kunci Layar Sekarang">
@@ -96,7 +96,7 @@
         <!-- WIDGET 3: MODE PEMELIHARAAN (MAINTENANCE MODE) -->
         <div class="col-12 col-md-6 col-xl-4">
             <div class="card h-100 shadow-sm border-0 rounded-3">
-                <div class="card-header bg-danger text-white py-3 d-flex align-items-center justify-content-between">
+                <div class="card-header bg-primary text-white py-3 d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center gap-2">
                         <i class="ti ti-tool fs-20"></i>
                         <h6 class="card-title text-white mb-0 fw-bold">Status Sistem & Maintenance</h6>
@@ -107,9 +107,9 @@
                     <div>
                         <div class="d-flex align-items-center justify-content-between mb-2">
                             <span class="fs-12 fw-semibold text-dark">Mode Pemeliharaan:</span>
-                            <div class="form-check form-switch m-0">
+                            <div class="form-check form-switch m-0 ps-4">
                                 <input class="form-check-input" type="checkbox" role="switch" id="widget_maintenance_mode" {{ $appSettings['maintenance_mode'] ? 'checked' : '' }}>
-                                <label class="form-check-label fs-12 fw-bold text-danger ms-1" for="widget_maintenance_mode" id="maintenance-status-label">{{ $appSettings['maintenance_mode'] ? 'Aktif' : 'Nonaktif' }}</label>
+                                <label class="form-check-label fs-12 fw-bold text-danger ms-2" for="widget_maintenance_mode" id="maintenance-status-label">{{ $appSettings['maintenance_mode'] ? 'Aktif' : 'Nonaktif' }}</label>
                             </div>
                         </div>
                         <div class="mb-2">
@@ -119,7 +119,7 @@
                             Saat aktif, pengguna biasa akan diarahkan ke laman pemeliharaan sementara administrator tetap memiliki akses.
                         </p>
                     </div>
-                    <button type="button" class="btn btn-sm btn-danger w-100 fw-semibold" id="btn-save-maintenance">
+                    <button type="button" class="btn btn-sm btn-primary w-100 fw-semibold" id="btn-save-maintenance">
                         <i class="ti ti-device-floppy me-1"></i> Simpan Status Pemeliharaan
                     </button>
                 </div>
@@ -129,7 +129,7 @@
         <!-- WIDGET 4: KEAMANAN SESI & PROTEKSI LOGIN -->
         <div class="col-12 col-md-6 col-xl-4">
             <div class="card h-100 shadow-sm border-0 rounded-3">
-                <div class="card-header bg-info text-white py-3 d-flex align-items-center justify-content-between">
+                <div class="card-header bg-primary text-white py-3 d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center gap-2">
                         <i class="ti ti-shield-lock fs-20"></i>
                         <h6 class="card-title text-white mb-0 fw-bold">Keamanan & Proteksi Akun</h6>
@@ -146,16 +146,16 @@
                                 <option value="10" {{ $appSettings['rate_limit_attempts'] == 10 ? 'selected' : '' }}>10 Kali</option>
                             </select>
                         </div>
-                        <div class="form-check form-switch mb-2">
+                        <div class="form-check form-switch mb-2.5 ps-4">
                             <input class="form-check-input" type="checkbox" id="widget_auto_approval" {{ $appSettings['auto_user_approval'] ? 'checked' : '' }}>
-                            <label class="form-check-label fs-12 text-dark" for="widget_auto_approval">Otomatis Setujui Pendaftaran Akun Baru</label>
+                            <label class="form-check-label fs-12 text-dark ms-2" for="widget_auto_approval">Otomatis Setujui Pendaftaran Akun Baru</label>
                         </div>
-                        <div class="form-check form-switch mb-2">
+                        <div class="form-check form-switch mb-2.5 ps-4">
                             <input class="form-check-input" type="checkbox" id="widget_new_device" {{ $appSettings['new_device_alert'] ? 'checked' : '' }}>
-                            <label class="form-check-label fs-12 text-dark" for="widget_new_device">Notifikasi Login dari Perangkat Baru</label>
+                            <label class="form-check-label fs-12 text-dark ms-2" for="widget_new_device">Notifikasi Login dari Perangkat Baru</label>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-sm btn-info text-white w-100 fw-semibold" id="btn-save-security">
+                    <button type="button" class="btn btn-sm btn-primary w-100 fw-semibold" id="btn-save-security">
                         <i class="ti ti-device-floppy me-1"></i> Simpan Kebijakan Keamanan
                     </button>
                 </div>
@@ -165,7 +165,7 @@
         <!-- WIDGET 5: SINKRONISASI POLLING & NOTIFIKASI REAL-TIME -->
         <div class="col-12 col-md-6 col-xl-4">
             <div class="card h-100 shadow-sm border-0 rounded-3">
-                <div class="card-header bg-success text-white py-3 d-flex align-items-center justify-content-between">
+                <div class="card-header bg-primary text-white py-3 d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center gap-2">
                         <i class="ti ti-refresh fs-20"></i>
                         <h6 class="card-title text-white mb-0 fw-bold">Sinkronisasi Polling & Notifikasi</h6>
@@ -183,16 +183,16 @@
                                 <option value="60" {{ $appSettings['polling_interval'] == 60 ? 'selected' : '' }}>60 Detik</option>
                             </select>
                         </div>
-                        <div class="form-check form-switch mb-2">
+                        <div class="form-check form-switch mb-2.5 ps-4">
                             <input class="form-check-input" type="checkbox" id="widget_sound_notif" {{ $appSettings['sound_notification'] ? 'checked' : '' }}>
-                            <label class="form-check-label fs-12 text-dark" for="widget_sound_notif">Audio Nada Suara Notifikasi Masuk</label>
+                            <label class="form-check-label fs-12 text-dark ms-2" for="widget_sound_notif">Audio Nada Suara Notifikasi Masuk</label>
                         </div>
-                        <div class="form-check form-switch mb-2">
+                        <div class="form-check form-switch mb-2.5 ps-4">
                             <input class="form-check-input" type="checkbox" id="widget_toast_notif" {{ $appSettings['toast_notification'] ? 'checked' : '' }}>
-                            <label class="form-check-label fs-12 text-dark" for="widget_toast_notif">Pop-up Toast Notifikasi Otomatis</label>
+                            <label class="form-check-label fs-12 text-dark ms-2" for="widget_toast_notif">Pop-up Toast Notifikasi Otomatis</label>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-sm btn-success w-100 fw-semibold" id="btn-save-polling">
+                    <button type="button" class="btn btn-sm btn-primary w-100 fw-semibold" id="btn-save-polling">
                         <i class="ti ti-device-floppy me-1"></i> Simpan Konfigurasi Polling
                     </button>
                 </div>
@@ -202,7 +202,7 @@
         <!-- WIDGET 6: MANAJEMEN CACHE & OPTIMASI KINERJA -->
         <div class="col-12 col-md-6 col-xl-4">
             <div class="card h-100 shadow-sm border-0 rounded-3">
-                <div class="card-header bg-dark text-white py-3 d-flex align-items-center justify-content-between">
+                <div class="card-header bg-primary text-white py-3 d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center gap-2">
                         <i class="ti ti-cpu fs-20"></i>
                         <h6 class="card-title text-white mb-0 fw-bold">Cache & Optimasi Kinerja</h6>
@@ -222,7 +222,7 @@
                         </p>
                     </div>
                     <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-sm btn-dark w-100 fw-semibold" id="btn-clear-all-cache">
+                        <button type="button" class="btn btn-sm btn-primary w-100 fw-semibold" id="btn-clear-all-cache">
                             <i class="ti ti-trash me-1"></i> Bersihkan Semua Cache
                         </button>
                     </div>
@@ -479,6 +479,21 @@
     @include('admin.dukunganaplikasi.partials.fitur_aplikasi_modal')
 
     <style>
+        .form-check.form-switch {
+            padding-left: 2.85em !important;
+        }
+
+        .form-check.form-switch .form-check-input {
+            margin-left: -2.85em !important;
+            cursor: pointer;
+        }
+
+        .form-check.form-switch .form-check-label {
+            cursor: pointer;
+            user-select: none;
+            padding-left: 0.35rem;
+        }
+
         .switch-large {
             width: 2.5em !important;
             height: 1.35em !important;
