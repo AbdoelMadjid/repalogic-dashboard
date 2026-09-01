@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\DukunganAplikasi\ProfilAplikasi;
 use App\Models\Admin\DukunganAplikasi\WebsiteSection;
 use App\Models\Admin\ManajemenPengguna\UserLogin;
+use App\Models\Friendship;
 use App\Models\Message;
+use App\Models\ProfileLike;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -133,12 +135,14 @@ class DashboardController extends Controller
         // 8. Recent Unique Conversations
         $recentMessages = $this->getRecentConversations($user);
 
-        // 9. Active Contacts & Team Directory (Full Widget) - Tempatkan akun sendiri di paling pertama (kiri atas)
-        $contactUsers = User::with(['config', 'detail', 'roles'])
-            ->where('status', 'active')
-            ->orderByRaw('CASE WHEN id = ? THEN 0 ELSE 1 END', [$user->id])
-            ->orderBy('name', 'asc')
-            ->get();
+        // 9. Active Contacts & Team Directory (Full Widget) with Friendship & Like Indicators
+        $contactUsers = $this->prepareContactsForDashboard($user);
+
+        // 10. Friendship & Likes Stats for Current User
+        $incomingFriendRequestsCount = Friendship::where('receiver_id', $user->id)->pending()->count();
+        $outgoingFriendRequestsCount = Friendship::where('sender_id', $user->id)->pending()->count();
+        $totalFriendsCount = $user->friends_count;
+        $totalProfileLikesCount = $user->profile_likes_count;
 
         return view('dashboard', compact(
             'user',
@@ -163,7 +167,11 @@ class DashboardController extends Controller
             'pendingDeactivations',
             'recentLogins',
             'recentMessages',
-            'contactUsers'
+            'contactUsers',
+            'incomingFriendRequestsCount',
+            'outgoingFriendRequestsCount',
+            'totalFriendsCount',
+            'totalProfileLikesCount'
         ));
     }
 
@@ -207,13 +215,15 @@ class DashboardController extends Controller
             ->take(6)
             ->get();
 
-        // 6. Active Contacts & Team Directory (Full Widget) - Tempatkan akun sendiri di paling pertama (kiri atas)
-        $contactUsers = User::with(['config', 'detail', 'roles'])
-            ->where('status', 'active')
-            ->orderByRaw('CASE WHEN id = ? THEN 0 ELSE 1 END', [$user->id])
-            ->orderBy('name', 'asc')
-            ->get();
+        // 6. Active Contacts & Team Directory (Full Widget) with Friendship & Like Indicators
+        $contactUsers = $this->prepareContactsForDashboard($user);
         $rolesDistribution = Role::withCount('users')->get();
+
+        // 7. Friendship & Likes Stats for Current User
+        $incomingFriendRequestsCount = Friendship::where('receiver_id', $user->id)->pending()->count();
+        $outgoingFriendRequestsCount = Friendship::where('sender_id', $user->id)->pending()->count();
+        $totalFriendsCount = $user->friends_count;
+        $totalProfileLikesCount = $user->profile_likes_count;
 
         return view('dashboard', compact(
             'user',
@@ -228,8 +238,33 @@ class DashboardController extends Controller
             'completenessPercent',
             'myRecentLogins',
             'contactUsers',
-            'rolesDistribution'
+            'rolesDistribution',
+            'incomingFriendRequestsCount',
+            'outgoingFriendRequestsCount',
+            'totalFriendsCount',
+            'totalProfileLikesCount'
         ));
+    }
+
+    /**
+     * Prepare contacts with friendship status and like indicators.
+     */
+    protected function prepareContactsForDashboard(User $currentUser)
+    {
+        $contacts = User::with(['config', 'detail', 'roles', 'profileLikesReceived', 'sentFriendships', 'receivedFriendships'])
+            ->where('status', 'active')
+            ->orderByRaw('CASE WHEN id = ? THEN 0 ELSE 1 END', [$currentUser->id])
+            ->orderBy('name', 'asc')
+            ->get();
+
+        foreach ($contacts as $cUser) {
+            $friendship = $currentUser->getFriendshipWith($cUser);
+            $cUser->friendship_status = $friendship['status'];
+            $cUser->friendship_model = $friendship['friendship'];
+            $cUser->is_liked_by_me = $cUser->isLikedBy($currentUser);
+        }
+
+        return $contacts;
     }
 
     /**

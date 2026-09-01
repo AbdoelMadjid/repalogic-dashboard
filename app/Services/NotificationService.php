@@ -141,7 +141,38 @@ class NotificationService
             }
         }
 
-        // Urutkan seluruh notifikasi administratif berdasarkan waktu terbaru
+        // 5. Ajakan Berteman Masuk (Incoming Friend Requests)
+        if (\Illuminate\Support\Facades\Schema::hasTable('friendships')) {
+            $incomingFriends = \App\Models\Friendship::with('sender')
+                ->where('receiver_id', $user->id)
+                ->where('status', 'pending')
+                ->latest()
+                ->take(10)
+                ->get();
+
+            foreach ($incomingFriends as $fReq) {
+                if ($fReq->sender) {
+                    $items->push([
+                        'id' => 'friend-req-' . $fReq->id,
+                        'type' => 'friend_request',
+                        'category_label' => 'Ajakan Berteman',
+                        'title' => $fReq->sender->name,
+                        'subtitle' => $fReq->sender->email,
+                        'message' => 'Mengirimkan ajakan berteman kepada Anda.',
+                        'avatar' => $fReq->sender->avatar_url,
+                        'icon' => 'ti ti-user-plus',
+                        'badge_class' => 'bg-primary-subtle text-primary border-primary-subtle',
+                        'badge_label' => 'Ajakan Berteman',
+                        'url' => route('dashboard'),
+                        'created_at' => $fReq->created_at,
+                        'time_ago' => $fReq->created_at ? $fReq->created_at->diffForHumans() : 'Baru saja',
+                        'is_unread' => true,
+                    ]);
+                }
+            }
+        }
+
+        // Urutkan seluruh notifikasi berdasarkan waktu terbaru
         $sortedItems = $items->sortByDesc('created_at')->values();
 
         return [

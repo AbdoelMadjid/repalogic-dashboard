@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v2.7.3`  
-> **Terakhir Diperbarui:** 01 September 2026 13:55 WIB  
+> **Versi Terbaru:** `v2.7.4`  
+> **Terakhir Diperbarui:** 01 September 2026 14:18 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v2.7.4`** | `2026-09-01 14:18 WIB` | Comprehensive Friendship Network System, Profile Likes Engine, Interactive Friend Requests & Dashboard Directory Filter Tabs |
 | **`v2.7.3`** | `2026-09-01 13:55 WIB` | WhatsApp & Phone Number Field Extension in User Details, Cover Banner Motto Floating Overlay & Dashboard Contacts Sync |
 | **`v2.7.2`** | `2026-09-01 13:48 WIB` | Dynamic User Directory & Contacts Hub, Incremental 12-Card Load More Engine with Down Arrow Animation & Messages Detail Cover Photo Sync |
 | **`v2.7.1`** | `2026-09-01 13:00 WIB` | User Profile Cover Custom Overlay Engine: Dynamic Color Picker & Theme Swatches, Adjustable Overlay Opacity ($0\% - 100\%$), Layer Blur Intensity Slider ($0\text{px} - 20\text{px}$) & Real-Time Live WYSIWYG Integration |

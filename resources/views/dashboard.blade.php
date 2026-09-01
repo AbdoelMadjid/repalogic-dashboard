@@ -49,6 +49,16 @@
                                             <span class="text-white fw-medium">{{ $primaryRoleName }}</span>
                                         </div>
                                         <span class="text-white-50 opacity-25">•</span>
+                                        <div class="d-flex align-items-center" title="Total Teman Terhubung">
+                                            <i class="ti ti-friends text-info me-1.5"></i>
+                                            <span class="text-white fw-medium">{{ number_format($totalFriendsCount) }} Teman</span>
+                                        </div>
+                                        <span class="text-white-50 opacity-25">•</span>
+                                        <div class="d-flex align-items-center" title="Total Suka Profil yang Diterima">
+                                            <i class="ti ti-heart-filled text-danger me-1.5"></i>
+                                            <span class="text-white fw-medium">{{ number_format($totalProfileLikesCount) }} Suka</span>
+                                        </div>
+                                        <span class="text-white-50 opacity-25">•</span>
                                         <div class="d-flex align-items-center" title="Total Poin Login yang Dikumpulkan">
                                             <i class="ti ti-award text-warning me-1.5"></i>
                                             <span class="text-white fw-medium">{{ number_format($user->login_count ?? 0) }} Poin Login</span>
@@ -798,16 +808,39 @@
     <div class="row g-3 mb-4">
         <div class="col-12">
             <div class="card shadow-sm border-0 mb-0">
-                <div class="card-header bg-white py-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <div class="card-header bg-white py-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
                     <div>
                         <h5 class="card-title mb-0 fw-bold text-dark d-flex align-items-center">
-                            <i class="ti ti-users text-primary me-2 fs-18"></i>Direktori Pengguna &amp; Kontak
+                            <i class="ti ti-users text-primary me-2 fs-18"></i>Direktori Pengguna &amp; Jaringan Pertemanan
                         </h5>
-                        <p class="text-muted fs-12 mb-0 mt-0.5">Daftar seluruh pengguna aktif sistem dengan profil lengkap dan foto sampul personal.</p>
+                        <p class="text-muted fs-12 mb-0 mt-0.5">Temukan rekan kerja, kirim ajakan berteman, berikan apresiasi suka pada profil, dan mulai berkomunikasi.</p>
                     </div>
-                    <div class="d-flex flex-wrap align-items-center gap-2">
-                        <div class="app-search" style="min-width: 270px;">
-                            <input type="text" id="dashboard-contact-search" class="form-control" style="padding-left: 40px !important;" placeholder="Cari nama, email, no. telepon/WA, domisili, pekerjaan...">
+
+                    <!-- Filter Pertemanan Tabs & Search Input -->
+                    <div class="d-flex flex-wrap align-items-center gap-2.5">
+                        <div class="btn-group btn-group-sm friendship-filter-group" role="group" aria-label="Filter Pertemanan">
+                            <button type="button" class="btn btn-outline-primary active btn-friend-filter" data-filter="all">
+                                <i class="ti ti-users me-1"></i>Semua <span class="badge bg-primary text-white rounded-pill ms-1 fs-xxs">{{ $contactUsers->count() }}</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-friend-filter" data-filter="friends">
+                                <i class="ti ti-user-check me-1"></i>Teman Saya <span class="badge bg-success text-white rounded-pill ms-1 fs-xxs">{{ $totalFriendsCount }}</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-friend-filter" data-filter="incoming">
+                                <i class="ti ti-user-plus me-1"></i>Ajakan Masuk
+                                @if ($incomingFriendRequestsCount > 0)
+                                    <span class="badge bg-danger text-white rounded-pill ms-1 fs-xxs">{{ $incomingFriendRequestsCount }}</span>
+                                @endif
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-friend-filter" data-filter="outgoing">
+                                <i class="ti ti-clock-pause me-1"></i>Ajakan Terkirim
+                                @if ($outgoingFriendRequestsCount > 0)
+                                    <span class="badge bg-warning text-dark rounded-pill ms-1 fs-xxs">{{ $outgoingFriendRequestsCount }}</span>
+                                @endif
+                            </button>
+                        </div>
+
+                        <div class="app-search" style="min-width: 250px;">
+                            <input type="text" id="dashboard-contact-search" class="form-control" style="padding-left: 40px !important;" placeholder="Cari nama, email, no. telepon/WA...">
                             <i class="ti ti-search app-search-icon text-muted"></i>
                         </div>
                     </div>
@@ -818,25 +851,49 @@
                         @forelse ($contactUsers as $cUser)
                             @php
                                 $isMe = $cUser->id === auth()->id();
+                                $fStatus = $cUser->friendship_status ?? 'none';
+                                $fModel = $cUser->friendship_model;
+                                $isLiked = $cUser->is_liked_by_me ?? false;
+                                $likesTotal = $cUser->profile_likes_count ?? 0;
                             @endphp
                             <div class="col-sm-6 col-lg-4 col-xl-3 dashboard-contact-col"
                                 data-search-name="{{ strtolower($cUser->name) }}"
                                 data-search-email="{{ strtolower($cUser->email) }}"
                                 data-search-phone="{{ strtolower($cUser->detail->telepon ?? '') }}"
                                 data-search-city="{{ strtolower($cUser->detail->kabupaten_kota ?? '') }}"
-                                data-search-job="{{ strtolower($cUser->detail->pekerjaan ?? '') }}">
+                                data-search-job="{{ strtolower($cUser->detail->pekerjaan ?? '') }}"
+                                data-friendship-status="{{ $fStatus }}"
+                                data-user-id="{{ $cUser->id }}">
                                 <div class="card card-h-100 border shadow-sm rounded-3 overflow-hidden mb-0 contact-grid-card">
                                     <!-- Cover Banner Background -->
                                     <div class="position-relative contact-grid-cover overflow-hidden"
                                         style="height: 115px; background-image: url('{{ $cUser->cover_bg_url }}'); background-position: center {{ $cUser->cover_position_y }}%;">
                                         <div class="position-absolute top-0 start-0 end-0 bottom-0 p-2 d-flex flex-column justify-content-between contact-grid-cover-overlay">
-                                            <div class="d-flex justify-content-end align-items-start">
+                                            <!-- Top Badges (Online + Like Action) -->
+                                            <div class="d-flex justify-content-between align-items-start">
                                                 <span class="badge {{ $cUser->is_online ? 'bg-success text-white' : 'bg-dark bg-opacity-75 text-white-50' }} fs-xxs py-0.5 px-1.5 rounded-pill shadow-sm"
                                                     title="{{ $cUser->is_online ? 'Online Sekarang' : $cUser->last_seen_human }}">
                                                     <i class="ti {{ $cUser->is_online ? 'ti-circle-filled text-white' : 'ti-clock' }} me-0.5"></i>
                                                     {{ $cUser->is_online ? 'Online' : 'Offline' }}
                                                 </span>
+
+                                                <!-- Like Button / Counter Float Badge -->
+                                                @if ($isMe)
+                                                    <span class="badge bg-dark bg-opacity-75 text-white fs-xxs py-1 px-2 rounded-pill shadow-sm" title="Total like profil Anda">
+                                                        <i class="ti ti-heart-filled text-danger me-1"></i><span class="like-count">{{ $likesTotal }}</span> Suka
+                                                    </span>
+                                                @else
+                                                    <button type="button"
+                                                        class="btn btn-xs rounded-pill contact-like-btn {{ $isLiked ? 'liked active' : '' }}"
+                                                        data-user-id="{{ $cUser->id }}"
+                                                        data-user-name="{{ $cUser->name }}"
+                                                        title="{{ $isLiked ? 'Batal Suka Profil' : 'Sukai Profil Pengguna Ini' }}">
+                                                        <i class="ti {{ $isLiked ? 'ti-heart-filled text-danger' : 'ti-heart text-white' }} fs-12 me-1"></i>
+                                                        <span class="like-count fw-bold">{{ $likesTotal }}</span>
+                                                    </button>
+                                                @endif
                                             </div>
+
                                             @if (!empty($cUser->motto))
                                                 <div class="text-center px-1 pb-3 mb-1">
                                                     <p class="text-white mb-0 fst-italic contact-cover-motto"
@@ -860,10 +917,16 @@
                                         </div>
 
                                         <h5 class="fw-bold text-dark fs-14 mb-0.5 text-truncate" title="{{ $cUser->name }}">
-                                          {{ $cUser->name }}
-                                          @if ($isMe)
-                                              <span class="badge bg-primary text-white fs-xxs ms-1">Anda</span>
-                                          @endif
+                                            {{ $cUser->name }}
+                                            @if ($isMe)
+                                                <span class="badge bg-primary text-white fs-xxs ms-1">Anda</span>
+                                            @elseif ($fStatus === 'friends')
+                                                <span class="badge bg-success-subtle text-success fs-xxs ms-1" title="Sudah Berteman"><i class="ti ti-user-check me-0.5"></i>Teman</span>
+                                            @elseif ($fStatus === 'pending_sent')
+                                                <span class="badge bg-warning-subtle text-warning fs-xxs ms-1" title="Menunggu Respon Ajakan"><i class="ti ti-clock me-0.5"></i>Terkirim</span>
+                                            @elseif ($fStatus === 'pending_received')
+                                                <span class="badge bg-info-subtle text-info fs-xxs ms-1" title="Mengajak Anda Berteman"><i class="ti ti-user-plus me-0.5"></i>Ajakan Masuk</span>
+                                            @endif
                                         </h5>
                                         <p class="text-muted fs-12 mb-2 text-truncate" title="{{ $cUser->email }}">
                                             <i class="ti ti-mail me-1"></i>{{ $cUser->email }}
@@ -905,18 +968,61 @@
                                             </li>
                                         </ul>
 
-                                        <!-- Action Buttons -->
-                                        <div class="d-flex gap-1.5 justify-content-center">
-                                            @if (!$isMe)
-                                                <a href="{{ route('admin.profil-pengguna.messages.index', ['user_id' => $cUser->id]) }}"
-                                                    class="btn btn-sm btn-primary bg-primary text-white w-100 fw-semibold d-flex align-items-center justify-content-center gap-1">
-                                                    <i class="ti ti-messages"></i> Kirim Pesan
-                                                </a>
-                                            @else
+                                        <!-- Smart Friendship & Chat Action Buttons -->
+                                        <div class="d-flex gap-1.5 justify-content-center contact-action-wrapper" data-user-id="{{ $cUser->id }}">
+                                            @if ($isMe)
                                                 <a href="{{ route('admin.profil-pengguna.index') }}"
                                                     class="btn btn-sm btn-light border text-primary w-100 fw-semibold d-flex align-items-center justify-content-center gap-1">
                                                     <i class="ti ti-user"></i> Profil Saya
                                                 </a>
+                                            @elseif ($fStatus === 'friends')
+                                                <div class="d-flex gap-1.5 w-100">
+                                                    <a href="{{ route('admin.profil-pengguna.messages.index', ['user_id' => $cUser->id]) }}"
+                                                        class="btn btn-sm btn-primary bg-primary text-white flex-grow-1 fw-semibold d-flex align-items-center justify-content-center gap-1">
+                                                        <i class="ti ti-messages"></i> Chat
+                                                    </a>
+                                                    <div class="dropdown">
+                                                        <button type="button" class="btn btn-sm btn-success-subtle text-success border border-success-subtle dropdown-toggle fw-semibold px-2"
+                                                            data-bs-toggle="dropdown" aria-expanded="false" title="Menu Pertemanan">
+                                                            <i class="ti ti-user-check me-0.5"></i> Teman
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                                            <li>
+                                                                <button type="button" class="dropdown-item text-danger d-flex align-items-center gap-1.5 btn-unfriend-action"
+                                                                    data-user-id="{{ $cUser->id }}" data-user-name="{{ $cUser->name }}">
+                                                                    <i class="ti ti-user-x text-danger"></i> Hapus Pertemanan
+                                                                </button>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            @elseif ($fStatus === 'pending_sent')
+                                                <button type="button" class="btn btn-sm btn-warning-subtle text-warning border border-warning-subtle w-100 fw-semibold d-flex align-items-center justify-content-center gap-1 btn-cancel-friend-action"
+                                                    data-user-id="{{ $cUser->id }}" data-user-name="{{ $cUser->name }}">
+                                                    <i class="ti ti-clock-pause"></i> Menunggu Respon <span class="badge bg-warning text-dark fs-xxs ms-1">Batal</span>
+                                                </button>
+                                            @elseif ($fStatus === 'pending_received')
+                                                <div class="d-flex gap-1.5 w-100">
+                                                    <button type="button" class="btn btn-sm btn-success text-white flex-grow-1 fw-semibold d-flex align-items-center justify-content-center gap-1 btn-accept-friend-action"
+                                                        data-friendship-id="{{ $fModel->id ?? '' }}" data-user-name="{{ $cUser->name }}">
+                                                        <i class="ti ti-check"></i> Terima
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger px-2 fw-semibold btn-reject-friend-action"
+                                                        data-friendship-id="{{ $fModel->id ?? '' }}" data-user-name="{{ $cUser->name }}" title="Tolak Ajakan">
+                                                        <i class="ti ti-x"></i>
+                                                    </button>
+                                                </div>
+                                            @else
+                                                <div class="d-flex gap-1.5 w-100">
+                                                    <button type="button" class="btn btn-sm btn-outline-primary flex-grow-1 fw-semibold d-flex align-items-center justify-content-center gap-1 btn-add-friend-action"
+                                                        data-user-id="{{ $cUser->id }}" data-user-name="{{ $cUser->name }}">
+                                                        <i class="ti ti-user-plus"></i> Tambah Teman
+                                                    </button>
+                                                    <a href="{{ route('admin.profil-pengguna.messages.index', ['user_id' => $cUser->id]) }}"
+                                                        class="btn btn-sm btn-light border text-muted px-2" title="Kirim Pesan Langsung">
+                                                        <i class="ti ti-messages"></i>
+                                                    </a>
+                                                </div>
                                             @endif
                                         </div>
                                     </div>
@@ -932,7 +1038,7 @@
 
                     <div id="dashboard-contacts-empty" class="text-center py-5 text-muted d-none">
                         <i class="ti ti-search-off fs-32 text-muted mb-2 d-block"></i>
-                        <p class="fs-13 mb-0">Tidak ada pengguna yang cocok dengan kriteria pencarian.</p>
+                        <p class="fs-13 mb-0">Tidak ada pengguna yang cocok dengan filter atau kriteria pencarian.</p>
                     </div>
 
                     <!-- Tombol Anak Panah Muat Lebih Banyak (Load More Down Arrow) -->
@@ -954,6 +1060,17 @@
     <script src="{{ asset('assets/plugins/apexcharts/apexcharts.min.js') }}"></script>
     <script>
         window.DashboardConfig = {
+            userId: {{ auth()->id() }},
+            routes: {
+                toggleLike: "{{ url('admin/friendships/toggle-like') }}",
+                sendFriend: "{{ url('admin/friendships/send') }}",
+                acceptFriend: "{{ url('admin/friendships/accept') }}",
+                rejectFriend: "{{ url('admin/friendships/reject') }}",
+                cancelFriend: "{{ url('admin/friendships/cancel') }}",
+                unfriend: "{{ url('admin/friendships/unfriend') }}",
+                messagesIndex: "{{ route('admin.profil-pengguna.messages.index') }}",
+                profileIndex: "{{ route('admin.profil-pengguna.index') }}"
+            },
             @if (auth()->user()->hasAnyRole(['superadmin', 'admin']))
                 chartDates: @json($chartDates ?? []),
                 chartLogins: @json($chartLogins ?? []),

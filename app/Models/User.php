@@ -66,6 +66,8 @@ class User extends Authenticatable
         'profile_completion_percentage',
         'is_online',
         'last_seen_human',
+        'profile_likes_count',
+        'friends_count',
     ];
 
     /**
@@ -428,6 +430,121 @@ class User extends Authenticatable
     }
 
     /**
+     * Relationship to ProfileLike model (Likes given to other users).
+     */
+    public function profileLikesGiven(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\ProfileLike::class, 'user_id');
+    }
+
+    /**
+     * Relationship to ProfileLike model (Likes received on this user's profile).
+     */
+    public function profileLikesReceived(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\ProfileLike::class, 'target_user_id');
+    }
+
+    /**
+     * Get total profile likes received.
+     */
+    public function getProfileLikesCountAttribute(): int
+    {
+        if ($this->relationLoaded('profileLikesReceived')) {
+            return $this->profileLikesReceived->count();
+        }
+
+        return $this->profileLikesReceived()->count();
+    }
+
+    /**
+     * Check if this user's profile is liked by a specific user.
+     */
+    public function isLikedBy($user): bool
+    {
+        $userId = $user instanceof User ? $user->id : (int) $user;
+
+        if ($this->relationLoaded('profileLikesReceived')) {
+            return $this->profileLikesReceived->contains('user_id', $userId);
+        }
+
+        return $this->profileLikesReceived()->where('user_id', $userId)->exists();
+    }
+
+    /**
+     * Relationship to Friendship model (Sent friend requests).
+     */
+    public function sentFriendships(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\Friendship::class, 'sender_id');
+    }
+
+    /**
+     * Relationship to Friendship model (Received friend requests).
+     */
+    public function receivedFriendships(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\Friendship::class, 'receiver_id');
+    }
+
+    /**
+     * Get all accepted friendships (either as sender or receiver).
+     */
+    public function getFriendsCountAttribute(): int
+    {
+        $sentCount = $this->relationLoaded('sentFriendships')
+            ? $this->sentFriendships->where('status', 'accepted')->count()
+            : $this->sentFriendships()->accepted()->count();
+
+        $receivedCount = $this->relationLoaded('receivedFriendships')
+            ? $this->receivedFriendships->where('status', 'accepted')->count()
+            : $this->receivedFriendships()->accepted()->count();
+
+        return $sentCount + $receivedCount;
+    }
+
+    /**
+     * Get detailed friendship relationship with a specific user.
+     * Returns array with 'status' (self, friends, pending_sent, pending_received, none) and 'friendship' model if exists.
+     */
+    public function getFriendshipWith($targetUser): array
+    {
+        $targetId = $targetUser instanceof User ? $targetUser->id : (int) $targetUser;
+
+        if ($this->id === $targetId) {
+            return ['status' => 'self', 'friendship' => null];
+        }
+
+        // Check if sent by current user
+        $sentFriendship = $this->relationLoaded('sentFriendships')
+            ? $this->sentFriendships->firstWhere('receiver_id', $targetId)
+            : $this->sentFriendships()->where('receiver_id', $targetId)->first();
+
+        if ($sentFriendship) {
+            if ($sentFriendship->status === 'accepted') {
+                return ['status' => 'friends', 'friendship' => $sentFriendship];
+            } elseif ($sentFriendship->status === 'pending') {
+                return ['status' => 'pending_sent', 'friendship' => $sentFriendship];
+            }
+        }
+
+        // Check if received by current user
+        $receivedFriendship = $this->relationLoaded('receivedFriendships')
+            ? $this->receivedFriendships->firstWhere('sender_id', $targetId)
+            : $this->receivedFriendships()->where('sender_id', $targetId)->first();
+
+        if ($receivedFriendship) {
+            if ($receivedFriendship->status === 'accepted') {
+                return ['status' => 'friends', 'friendship' => $receivedFriendship];
+            } elseif ($receivedFriendship->status === 'pending') {
+                return ['status' => 'pending_received', 'friendship' => $receivedFriendship];
+            }
+        }
+
+        return ['status' => 'none', 'friendship' => null];
+    }
+
+    /**
      * Hitung total seluruh pengguna yang sedang online saat ini.
      */
     public static function getOnlineUsersCount(): int
@@ -443,4 +560,5 @@ class User extends Authenticatable
         return $count;
     }
 }
+
 

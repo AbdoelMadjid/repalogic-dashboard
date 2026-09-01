@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DukunganAplikasi\KonfigurasiWebsiteController;
 use App\Http\Controllers\Admin\DukunganAplikasi\MenuController;
 use App\Http\Controllers\Admin\DukunganAplikasi\ProfilAplikasiController;
 use App\Http\Controllers\Admin\DukunganAplikasi\TranslationController;
+use App\Http\Controllers\Admin\FriendshipController;
 use App\Http\Controllers\Admin\ManajemenPengguna\AksesRoleController;
 use App\Http\Controllers\Admin\ManajemenPengguna\AksesUserController;
 use App\Http\Controllers\Admin\ManajemenPengguna\DataLoginController;
@@ -57,6 +58,16 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
         Route::post('messages/{id}/forward', [MessageController::class, 'forward'])->whereNumber('id')->name('messages.forward');
         Route::delete('messages/conversation/{user}/clear', [MessageController::class, 'clearConversation'])->name('messages.clear-conversation');
         Route::delete('messages/{id}', [MessageController::class, 'destroy'])->whereNumber('id')->name('messages.destroy');
+    });
+
+    // Fitur Pertemanan & Like Profil (admin/friendships)
+    Route::prefix('friendships')->name('friendships.')->group(function () {
+        Route::post('toggle-like/{user}', [FriendshipController::class, 'toggleLike'])->name('toggle-like');
+        Route::post('send/{user}', [FriendshipController::class, 'sendRequest'])->name('send');
+        Route::post('accept/{id}', [FriendshipController::class, 'acceptRequest'])->whereNumber('id')->name('accept');
+        Route::post('reject/{id}', [FriendshipController::class, 'rejectRequest'])->whereNumber('id')->name('reject');
+        Route::post('cancel/{user}', [FriendshipController::class, 'cancelRequest'])->name('cancel');
+        Route::delete('unfriend/{user}', [FriendshipController::class, 'unfriend'])->name('unfriend');
     });
 
     Route::prefix('dukunganaplikasi')->name('dukunganaplikasi.')->group(function () {

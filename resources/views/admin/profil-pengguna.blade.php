@@ -47,6 +47,12 @@
                                 <p class="text-muted mb-1"><i class="ti ti-mail me-1"></i>{{ $user->email }}</p>
                                 <div class="d-flex align-items-center gap-2 flex-wrap mt-1">
                                     <span class="badge bg-primary-subtle text-primary fw-medium px-2 py-1 fs-xs">{{ $user->role_name }}</span>
+                                    <span class="badge bg-info-subtle text-info fw-medium px-2 py-1 fs-xs" title="Total Teman Terhubung">
+                                        <i class="ti ti-friends me-1"></i> {{ number_format($user->friends_count ?? 0) }} Teman
+                                    </span>
+                                    <span class="badge bg-danger-subtle text-danger fw-medium px-2 py-1 fs-xs" title="Total Suka Profil yang Diterima">
+                                        <i class="ti ti-heart-filled me-1"></i> {{ number_format($user->profile_likes_count ?? 0) }} Suka
+                                    </span>
                                     <span class="badge bg-warning-subtle text-warning fw-medium px-2 py-1 fs-xs" title="Total Poin Login yang Dikumpulkan">
                                         <i class="ti ti-award me-1"></i> {{ number_format($user->login_count ?? 0) }} Poin Login
                                     </span>

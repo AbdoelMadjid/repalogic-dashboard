@@ -107,7 +107,7 @@
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
                         <!-- Version 2.7.2 -->
-                        <!-- Version 2.7.3 -->
+                        <!-- Version 2.7.4 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -115,8 +115,39 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.7.3</h5>
+                                        <h5 class="fw-bold mb-0">v2.7.4</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.7.4</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 14:18 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Comprehensive Friendship Network System, Profile Likes Engine, Interactive Friend Requests &amp; Dashboard Directory Filter Tabs</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Sistem Manajemen Pertemanan &amp; Ajakan Berteman (Friend Requests):</strong> Implementasi database migration <code>friendships</code> (<code>sender_id</code>, <code>receiver_id</code>, <code>status: pending|accepted|rejected</code>), integrasi model <code>Friendship</code>, serta <code>FriendshipController</code> untuk mengirim ajakan, membatalkan ajakan, menerima/menolak ajakan, dan menghapus pertemanan (<em>unfriend</em>) dengan konfirmasi SweetAlert2.</li>
+                                    <li><strong class="text-dark">Fasilitas Apresiasi Suka Profil (Profile Likes Engine):</strong> Implementasi database migration <code>profile_likes</code> dengan relasi unik antar pengguna, tombol like melayang (<em>glassmorphism love button</em>) di sudut atas cover kartu kontak dengan efek detak jantung (<em>heart-pulse animation</em>) dan update hitungan like secara instan via AJAX tanpa reload halaman.</li>
+                                    <li><strong class="text-dark">Tab Filter Jaringan Pertemanan pada Direktori Dashboard:</strong> Menyediakan navigasi filter cepat di bagian header kartu direktori pengguna (Semua Pengguna, Teman Saya, Ajakan Masuk dengan badge merah, dan Ajakan Terkirim) yang terintegrasi secara mulus dengan live keyword search dan paginasi tombol panah muat lebih banyak.</li>
+                                    <li><strong class="text-dark">Smart State Action Buttons pada Kartu Kontak:</strong> Menampilkan tombol aksi kontekstual yang beradaptasi secara otomatis sesuai relasi (Tombol 'Profil Saya' untuk akun sendiri, 'Chat' + dropdown status 'Teman' jika sudah berteman, tombol 'Menunggu Respon / Batal' jika ajakan terkirim, tombol 'Terima / Tolak' jika ada ajakan masuk, dan '+ Tambah Teman' jika belum berteman).</li>
+                                    <li><strong class="text-dark">Integrasi Notifikasi &amp; Statistik Profil:</strong> Penambahan statistik total teman dan total like profil pada kartu ringkasan hero dashboard serta halaman Profil Pengguna, ditambah integrasi notifikasi otomatis saat menerima ajakan berteman baru di dropdown topbar notifikasi.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Friendship Network</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Profile Likes Engine</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Friend Requests (Ajakan Berteman)</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Directory Friendship Tabs</span>
+                                    <span class="badge bg-light text-dark border fs-xs">SweetAlert2 Friend Confirmations</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.7.3 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xs text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.7.3</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.7.3</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 13:55 WIB</span>
