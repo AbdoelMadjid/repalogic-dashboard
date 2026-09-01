@@ -170,7 +170,7 @@ class Menu extends Model
     }
 
     /**
-     * Auto-sync menu data_lang translation key to id.json and en.json
+     * Auto-sync menu data_lang translation key to modular sidebar_menu.json and root json files
      */
     public static function syncTranslationKey(Menu $menu): void
     {
@@ -178,9 +178,6 @@ class Menu extends Model
         if (empty($dataLang)) {
             return;
         }
-
-        $idPath = public_path('assets/data/translations/id.json');
-        $enPath = public_path('assets/data/translations/en.json');
 
         $readJson = function (string $path): array {
             if (!file_exists($path)) {
@@ -193,27 +190,57 @@ class Menu extends Model
 
         $writeJson = function (string $path, array $data): void {
             ksort($data);
+            $dir = dirname($path);
+            if (!is_dir($dir)) {
+                @mkdir($dir, 0777, true);
+            }
             $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             file_put_contents($path, $json);
         };
 
-        $idData = $readJson($idPath);
-        $enData = $readJson($enPath);
-        $updated = false;
+        // Modular sidebar_menu.json paths
+        $idModularPath = public_path('assets/data/translations/id/sidebar_menu.json');
+        $enModularPath = public_path('assets/data/translations/en/sidebar_menu.json');
 
-        if (!isset($idData[$dataLang])) {
-            $idData[$dataLang] = $menu->name;
-            $updated = true;
+        $idModular = $readJson($idModularPath);
+        $enModular = $readJson($enModularPath);
+        $modularUpdated = false;
+
+        if (!isset($idModular[$dataLang])) {
+            $idModular[$dataLang] = $menu->name;
+            $modularUpdated = true;
         }
 
-        if (!isset($enData[$dataLang])) {
-            $enData[$dataLang] = static::getEnglishDefault($menu->name);
-            $updated = true;
+        if (!isset($enModular[$dataLang])) {
+            $enModular[$dataLang] = static::getEnglishDefault($menu->name);
+            $modularUpdated = true;
         }
 
-        if ($updated) {
-            $writeJson($idPath, $idData);
-            $writeJson($enPath, $enData);
+        if ($modularUpdated) {
+            $writeJson($idModularPath, $idModular);
+            $writeJson($enModularPath, $enModular);
+        }
+
+        // Also sync root master files for backwards-compatibility
+        $idRootPath = public_path('assets/data/translations/id.json');
+        $enRootPath = public_path('assets/data/translations/en.json');
+
+        $idRoot = $readJson($idRootPath);
+        $enRoot = $readJson($enRootPath);
+        $rootUpdated = false;
+
+        if (!isset($idRoot[$dataLang])) {
+            $idRoot[$dataLang] = $menu->name;
+            $rootUpdated = true;
+        }
+        if (!isset($enRoot[$dataLang])) {
+            $enRoot[$dataLang] = static::getEnglishDefault($menu->name);
+            $rootUpdated = true;
+        }
+
+        if ($rootUpdated) {
+            $writeJson($idRootPath, $idRoot);
+            $writeJson($enRootPath, $enRoot);
         }
     }
 

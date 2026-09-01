@@ -20,40 +20,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // Pagination & Filter Client-Side Logic
     let currentPage = 1;
     let pageSize = 25;
+    let currentModule = config.activeModule || 'all';
 
     const searchInput = document.getElementById('table-search-input');
-    const categorySelect = document.getElementById('table-category-select');
     const lengthSelect = document.getElementById('table-length-select');
     const tableInfoBar = document.getElementById('table-info-bar');
     const paginationUl = document.getElementById('table-pagination');
+    const tabLinks = document.querySelectorAll('.translation-tab-filter');
 
     function updateTableDisplay() {
         const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
-        const selectedCat = categorySelect ? categorySelect.value : 'all';
         const selectedLength = lengthSelect ? lengthSelect.value : '25';
         pageSize = selectedLength === 'all' ? Infinity : parseInt(selectedLength, 10);
 
         let matchingRows = [];
-        const activeGroups = new Set();
 
         document.querySelectorAll('.translation-row').forEach(row => {
-            const rowGroup = row.getAttribute('data-group');
+            const rowMod = row.getAttribute('data-module');
             const text = row.textContent.toLowerCase();
-            const matchCat = (selectedCat === 'all' || rowGroup === selectedCat);
+            const matchMod = (currentModule === 'all' || rowMod === currentModule);
             const matchQuery = (query === '' || text.includes(query));
 
-            if (matchCat && matchQuery) {
+            if (matchMod && matchQuery) {
                 matchingRows.push(row);
-                activeGroups.add(rowGroup);
             } else {
                 row.style.display = 'none';
             }
-        });
-
-        // Toggle Header Rows visibility based on whether their group has visible items
-        document.querySelectorAll('.category-header-row').forEach(headerRow => {
-            const group = headerRow.getAttribute('data-group');
-            headerRow.style.display = activeGroups.has(group) ? '' : 'none';
         });
 
         const totalMatching = matchingRows.length;
@@ -113,8 +105,31 @@ document.addEventListener('DOMContentLoaded', function() {
         paginationUl.appendChild(nextLi);
     }
 
+    // Tab Filter Switching
+    tabLinks.forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            e.preventDefault();
+            const tabMod = this.getAttribute('data-tab-module');
+            currentModule = tabMod;
+            currentPage = 1;
+
+            tabLinks.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+
+            // Update URL query param without reload
+            const url = new URL(window.location);
+            if (tabMod === 'all') {
+                url.searchParams.delete('module');
+            } else {
+                url.searchParams.set('module', tabMod);
+            }
+            window.history.replaceState({}, '', url);
+
+            updateTableDisplay();
+        });
+    });
+
     if (searchInput) searchInput.addEventListener('input', () => { currentPage = 1; updateTableDisplay(); });
-    if (categorySelect) categorySelect.addEventListener('change', () => { currentPage = 1; updateTableDisplay(); });
     if (lengthSelect) lengthSelect.addEventListener('change', () => { currentPage = 1; updateTableDisplay(); });
 
     updateTableDisplay();
@@ -133,31 +148,36 @@ document.addEventListener('DOMContentLoaded', function() {
         inputs.forEach(i => i.removeAttribute('disabled'));
         if (btnSubmit) btnSubmit.classList.remove('d-none');
 
+        const moduleSelect = document.getElementById('form_module');
+        const keyInput = document.getElementById('form_key');
+        const textIdInput = document.getElementById('form_text_id');
+        const textEnInput = document.getElementById('form_text_en');
+
         if (action === 'create') {
-            if (modalTitle) modalTitle.textContent = 'Tambah Key Terjemahan Baru';
+            if (modalTitle) modalTitle.innerHTML = '<i class="ti ti-plus me-1"></i> Tambah Key Terjemahan Baru';
             translationForm.action = routes.store || '';
+            if (moduleSelect) {
+                const preselectedMod = btn.getAttribute('data-module') || (currentModule !== 'all' ? currentModule : 'sidebar_menu');
+                moduleSelect.value = preselectedMod;
+            }
             translationModal.show();
         } else if (action === 'edit' && rowData) {
-            if (modalTitle) modalTitle.textContent = 'Edit Key Terjemahan: ' + rowData.key;
+            if (modalTitle) modalTitle.innerHTML = '<i class="ti ti-edit me-1"></i> Edit Key Terjemahan: <code>' + rowData.key + '</code>';
             if (methodContainer) methodContainer.innerHTML = '<input type="hidden" name="_method" value="PUT">';
             const updateUrl = (routes.updateTemplate || '').replace(':key', encodeURIComponent(rowData.key));
             translationForm.action = updateUrl;
 
-            const keyInput = document.getElementById('form_key');
+            if (moduleSelect) moduleSelect.value = rowData.module;
             if (keyInput) keyInput.value = rowData.key;
-            const textIdInput = document.getElementById('form_text_id');
             if (textIdInput) textIdInput.value = rowData.text_id;
-            const textEnInput = document.getElementById('form_text_en');
             if (textEnInput) textEnInput.value = rowData.text_en;
 
             translationModal.show();
         } else if (action === 'view' && rowData) {
-            if (modalTitle) modalTitle.textContent = 'Detail Key Terjemahan: ' + rowData.key;
-            const keyInput = document.getElementById('form_key');
+            if (modalTitle) modalTitle.innerHTML = '<i class="ti ti-eye me-1"></i> Detail Key Terjemahan: <code>' + rowData.key + '</code>';
+            if (moduleSelect) moduleSelect.value = rowData.module;
             if (keyInput) keyInput.value = rowData.key;
-            const textIdInput = document.getElementById('form_text_id');
             if (textIdInput) textIdInput.value = rowData.text_id;
-            const textEnInput = document.getElementById('form_text_en');
             if (textEnInput) textEnInput.value = rowData.text_en;
 
             inputs.forEach(i => i.setAttribute('disabled', 'disabled'));

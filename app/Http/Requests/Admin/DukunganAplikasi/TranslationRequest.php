@@ -22,6 +22,7 @@ class TranslationRequest extends FormRequest
         $isUpdate = $this->isMethod('PUT') || $this->isMethod('PATCH');
 
         return [
+            'module' => 'nullable|string|in:sidebar_template,sidebar_menu,topbar,auth,customizer,frontpage',
             'key' => 'required|string|max:150|regex:/^[a-zA-Z0-9_\-\.]+$/',
             'text_id' => 'required|string',
             'text_en' => 'required|string',

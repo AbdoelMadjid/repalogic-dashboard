@@ -1,0 +1,19 @@
+{
+    "akses-role": "Role Access",
+    "akses-user": "User Access",
+    "backup-db": "Database Backup",
+    "data-login": "Data Login",
+    "dukungan-aplikasi": "App Support",
+    "fitur-aplikasi": "App Features",
+    "management-config-website": "Website Configuration",
+    "management-translation": "Language Translation",
+    "manajemen-pengguna": "User Management",
+    "master-data": "MASTER DATA",
+    "menu": "Menu",
+    "permission": "Permissions",
+    "profil-aplikasi": "App Profile",
+    "profil-pengguna": "User Profile",
+    "role": "Roles",
+    "terjemahan-bahasa": "Language Translation",
+    "users": "Users"
+}

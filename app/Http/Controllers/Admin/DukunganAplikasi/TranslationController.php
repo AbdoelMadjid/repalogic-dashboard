@@ -14,237 +14,343 @@ class TranslationController extends Controller
 {
     use HasNotification, HasMenuPermission;
 
-    private string $idJsonPath;
-    private string $enJsonPath;
+    private string $idBasePath;
+    private string $enBasePath;
+    private string $idRootPath;
+    private string $enRootPath;
+
+    /**
+     * Definisi 6 Domain Modul Kamus Modular
+     */
+    private array $modules = [
+        'sidebar_menu' => [
+            'name' => 'Sidebar: Menu Dinamis',
+            'icon' => 'ti ti-menu-2',
+            'badge' => 'bg-primary-subtle text-primary border-primary-subtle',
+            'desc' => 'Menu dinamis database (tabel menus) via Seeder & GUI Menu'
+        ],
+        'sidebar_template' => [
+            'name' => 'Sidebar: Template Bawaan',
+            'icon' => 'ti ti-layout-sidebar',
+            'badge' => 'bg-secondary-subtle text-secondary border-secondary-subtle',
+            'desc' => 'Menu statis template dari config/sidenav-template/*.php'
+        ],
+        'topbar' => [
+            'name' => 'Topbar & Navigasi Global',
+            'icon' => 'ti ti-layout-navbar',
+            'badge' => 'bg-info-subtle text-info border-info-subtle',
+            'desc' => 'Header bilah atas, pencarian, notifikasi, dan profil'
+        ],
+        'auth' => [
+            'name' => 'Autentikasi & Akun',
+            'icon' => 'ti ti-lock',
+            'badge' => 'bg-danger-subtle text-danger border-danger-subtle',
+            'desc' => 'Formulir login, register, lock screen, reset password'
+        ],
+        'customizer' => [
+            'name' => 'Admin Customizer',
+            'icon' => 'ti ti-palette',
+            'badge' => 'bg-warning-subtle text-warning-emphasis border-warning-subtle',
+            'desc' => 'Panel pengaturan tema, layout, warna, dan ukuran sidebar'
+        ],
+        'frontpage' => [
+            'name' => 'Landing Page & Website',
+            'icon' => 'ti ti-world',
+            'badge' => 'bg-success-subtle text-success border-success-subtle',
+            'desc' => 'Seksi halaman publik, landing page hero, fitur, dan footer'
+        ],
+    ];
 
     public function __construct()
     {
-        $this->idJsonPath = public_path('assets/data/translations/id.json');
-        $this->enJsonPath = public_path('assets/data/translations/en.json');
+        $this->idBasePath = public_path('assets/data/translations/id');
+        $this->enBasePath = public_path('assets/data/translations/en');
+        $this->idRootPath = public_path('assets/data/translations/id.json');
+        $this->enRootPath = public_path('assets/data/translations/en.json');
+
+        if (!is_dir($this->idBasePath)) {
+            @mkdir($this->idBasePath, 0777, true);
+        }
+        if (!is_dir($this->enBasePath)) {
+            @mkdir($this->enBasePath, 0777, true);
+        }
     }
 
     /**
-     * Display a listing of translation keys & values grouped by Sidebar Menu & Labels.
+     * Display a listing of modular translation dictionaries with Tab navigation.
      */
     public function index(Request $request)
     {
-        // 1. Auto-sync missing database menu keys to id.json & en.json
+        $activeModule = $request->query('module', 'all');
+        if ($activeModule !== 'all' && !array_key_exists($activeModule, $this->modules)) {
+            $activeModule = 'all';
+        }
+
+        // 1. Auto-sync missing database menu keys to sidebar_menu.json
         $dbMenus = Menu::with('parent')->get();
-        $idData = $this->readJson($this->idJsonPath);
-        $enData = $this->readJson($this->enJsonPath);
-        $jsonUpdated = false;
+        $idMenuData = $this->readModuleJson('id', 'sidebar_menu');
+        $enMenuData = $this->readModuleJson('en', 'sidebar_menu');
+        $menuUpdated = false;
 
         foreach ($dbMenus as $m) {
             $k = $m->data_lang ?: Str::slug($m->name);
             if (!empty($k)) {
-                if (!isset($idData[$k])) {
-                    $idData[$k] = $m->name;
-                    $jsonUpdated = true;
+                if (!isset($idMenuData[$k])) {
+                    $idMenuData[$k] = $m->name;
+                    $menuUpdated = true;
                 }
-                if (!isset($enData[$k])) {
-                    $enData[$k] = Menu::getEnglishDefault($m->name);
-                    $jsonUpdated = true;
-                }
-            }
-        }
-
-        if ($jsonUpdated) {
-            $this->writeJson($this->idJsonPath, $idData);
-            $this->writeJson($this->enJsonPath, $enData);
-            // Re-read fresh JSON data after auto-syncing missing keys
-            $idData = $this->readJson($this->idJsonPath);
-            $enData = $this->readJson($this->enJsonPath);
-        }
-
-        $allKeys = array_unique(array_merge(array_keys($idData), array_keys($enData)));
-        sort($allKeys);
-
-        // Map Database Menus
-        $dbKeyMap = [];
-
-        foreach ($dbMenus as $m) {
-            $k = $m->data_lang ?: Str::slug($m->name);
-            $catName = $m->category ? strtoupper($m->category) : 'MASTER DATA';
-            $typeLabel = $m->main_menu_id ? 'Sub-Menu: ' . $m->name : 'Menu Utama: ' . $m->name;
-            $dbKeyMap[$k] = [
-                'group' => "Database Menu ({$catName})",
-                'label' => $typeLabel
-            ];
-
-            if ($m->category) {
-                $cKey = Str::slug($m->category);
-                if (!isset($dbKeyMap[$cKey])) {
-                    $dbKeyMap[$cKey] = [
-                        'group' => "Database Menu ({$catName})",
-                        'label' => "Group Header: {$catName}"
-                    ];
+                if (!isset($enMenuData[$k])) {
+                    $enMenuData[$k] = Menu::getEnglishDefault($m->name);
+                    $menuUpdated = true;
                 }
             }
         }
 
-        // Map Template Config Menus
-        $templateKeyMap = [];
-        $templateFiles = glob(config_path('sidenav-template/*.php'));
-        foreach ($templateFiles as $tf) {
-            $cfg = include $tf;
-            $gTitle = $cfg['title'] ?? basename($tf, '.php');
-            if (isset($cfg['data_lang'])) {
-                $templateKeyMap[$cfg['data_lang']] = [
-                    'group' => "Template Menu ({$gTitle})",
-                    'label' => "Group Header: {$gTitle}"
+        if ($menuUpdated) {
+            $this->writeModuleJson('id', 'sidebar_menu', $idMenuData);
+            $this->writeModuleJson('en', 'sidebar_menu', $enMenuData);
+        }
+
+        // 2. Load all modular translations
+        $translations = [];
+        $moduleCounts = ['all' => 0];
+        $allMergedId = [];
+        $allMergedEn = [];
+
+        foreach (array_keys($this->modules) as $modKey) {
+            $idMod = $this->readModuleJson('id', $modKey);
+            $enMod = $this->readModuleJson('en', $modKey);
+
+            $modKeys = array_unique(array_merge(array_keys($idMod), array_keys($enMod)));
+            sort($modKeys);
+
+            $moduleCounts[$modKey] = count($modKeys);
+            $moduleCounts['all'] += count($modKeys);
+
+            foreach ($modKeys as $k) {
+                $tId = $idMod[$k] ?? '';
+                $tEn = $enMod[$k] ?? '';
+
+                $allMergedId[$k] = $tId;
+                $allMergedEn[$k] = $tEn;
+
+                $translations[] = [
+                    'id' => count($translations) + 1,
+                    'module' => $modKey,
+                    'module_name' => $this->modules[$modKey]['name'],
+                    'module_badge' => $this->modules[$modKey]['badge'],
+                    'module_icon' => $this->modules[$modKey]['icon'],
+                    'key' => $k,
+                    'label' => $this->getHumanLabel($modKey, $k),
+                    'text_id' => $tId,
+                    'text_en' => $tEn,
                 ];
             }
-            $mapItems = function($items) use (&$mapItems, $gTitle, &$templateKeyMap) {
-                foreach ($items as $it) {
-                    if (isset($it['data_lang'])) {
-                        $templateKeyMap[$it['data_lang']] = [
-                            'group' => "Template Menu ({$gTitle})",
-                            'label' => "Menu Item: " . ($it['title'] ?? '')
-                        ];
-                    }
-                    if (!empty($it['children'])) {
-                        $mapItems($it['children']);
-                    }
-                }
-            };
-            if (!empty($cfg['items'])) {
-                $mapItems($cfg['items']);
-            }
         }
 
-        $translations = [];
-        $categoriesList = [];
+        // 3. Sync merged root files for backward-compatibility
+        $this->syncRootMergedFiles($allMergedId, $allMergedEn);
 
-        foreach ($allKeys as $index => $k) {
-            if (isset($dbKeyMap[$k])) {
-                $groupName = $dbKeyMap[$k]['group'];
-                $label = $dbKeyMap[$k]['label'];
-            } elseif (isset($templateKeyMap[$k])) {
-                $groupName = $templateKeyMap[$k]['group'];
-                $label = $templateKeyMap[$k]['label'];
-            } else {
-                $groupName = 'Komponen & Label Umum';
-                $label = 'Label Sistem';
-            }
+        $modules = $this->modules;
 
-            $categoriesList[$groupName] = true;
-
-            $translations[] = [
-                'id' => $index + 1,
-                'key' => $k,
-                'group' => $groupName,
-                'label' => $label,
-                'text_id' => $idData[$k] ?? '',
-                'text_en' => $enData[$k] ?? '',
-            ];
-        }
-
-        $categories = array_keys($categoriesList);
-        sort($categories);
-
-        // Group translations by groupName
-        $groupedTranslations = [];
-        foreach ($translations as $item) {
-            $groupedTranslations[$item['group']][] = $item;
-        }
-
-        return view('admin.dukunganaplikasi.translation', compact('translations', 'groupedTranslations', 'categories'));
+        return view('admin.dukunganaplikasi.translation', compact(
+            'translations',
+            'modules',
+            'moduleCounts',
+            'activeModule'
+        ));
     }
 
     /**
-     * Store a newly created translation key in JSON files.
+     * Store a newly created translation key in modular JSON files.
      */
     public function store(TranslationRequest $request)
     {
+        $module = $request->input('module', 'sidebar_menu');
+        if (!array_key_exists($module, $this->modules)) {
+            $module = 'sidebar_menu';
+        }
+
         $key = trim($request->input('key'));
         $textId = trim($request->input('text_id'));
         $textEn = trim($request->input('text_en'));
 
-        $idData = $this->readJson($this->idJsonPath);
-        $enData = $this->readJson($this->enJsonPath);
+        $idMod = $this->readModuleJson('id', $module);
+        $enMod = $this->readModuleJson('en', $module);
 
-        $idData[$key] = $textId;
-        $enData[$key] = $textEn;
+        $idMod[$key] = $textId;
+        $enMod[$key] = $textEn;
 
-        $this->writeJson($this->idJsonPath, $idData);
-        $this->writeJson($this->enJsonPath, $enData);
+        $this->writeModuleJson('id', $module, $idMod);
+        $this->writeModuleJson('en', $module, $enMod);
 
-        $this->notifySuccess("Key terjemahan \"{$key}\" berhasil ditambahkan.");
+        $this->refreshRootMergedFiles();
 
-        return redirect()->route('admin.dukunganaplikasi.translation.index');
+        $this->notifySuccess("Key terjemahan \"{$key}\" berhasil ditambahkan pada modul " . $this->modules[$module]['name'] . ".");
+
+        return redirect()->route('admin.dukunganaplikasi.translation.index', ['module' => $module]);
     }
 
     /**
-     * Update the specified translation key in JSON files.
+     * Update the specified translation key in modular JSON files.
      */
     public function update(TranslationRequest $request, string $translationKey)
     {
         $translationKey = urldecode($translationKey);
+        $module = $request->input('module');
+
+        // If module not provided, auto-detect where this key currently exists
+        if (!$module || !array_key_exists($module, $this->modules)) {
+            $module = $this->findKeyModule($translationKey) ?: 'sidebar_menu';
+        }
+
         $newKey = trim($request->input('key'));
         $textId = trim($request->input('text_id'));
         $textEn = trim($request->input('text_en'));
 
-        $idData = $this->readJson($this->idJsonPath);
-        $enData = $this->readJson($this->enJsonPath);
+        $idMod = $this->readModuleJson('id', $module);
+        $enMod = $this->readModuleJson('en', $module);
 
         // If key was renamed, remove old key
         if ($translationKey !== $newKey) {
-            unset($idData[$translationKey], $enData[$translationKey]);
+            unset($idMod[$translationKey], $enMod[$translationKey]);
         }
 
-        $idData[$newKey] = $textId;
-        $enData[$newKey] = $textEn;
+        $idMod[$newKey] = $textId;
+        $enMod[$newKey] = $textEn;
 
-        $this->writeJson($this->idJsonPath, $idData);
-        $this->writeJson($this->enJsonPath, $enData);
+        $this->writeModuleJson('id', $module, $idMod);
+        $this->writeModuleJson('en', $module, $enMod);
 
-        $this->notifySuccess("Key terjemahan \"{$newKey}\" berhasil diperbarui.");
+        $this->refreshRootMergedFiles();
 
-        return redirect()->route('admin.dukunganaplikasi.translation.index');
+        $this->notifySuccess("Key terjemahan \"{$newKey}\" berhasil diperbarui pada modul " . $this->modules[$module]['name'] . ".");
+
+        return redirect()->route('admin.dukunganaplikasi.translation.index', ['module' => $module]);
     }
 
     /**
-     * Remove the specified translation key from JSON files.
+     * Remove the specified translation key from modular JSON files.
      */
-    public function destroy(string $translationKey)
+    public function destroy(Request $request, string $translationKey)
     {
         $translationKey = urldecode($translationKey);
+        $module = $request->input('module') ?: $this->findKeyModule($translationKey);
 
-        $idData = $this->readJson($this->idJsonPath);
-        $enData = $this->readJson($this->enJsonPath);
+        if ($module && array_key_exists($module, $this->modules)) {
+            $idMod = $this->readModuleJson('id', $module);
+            $enMod = $this->readModuleJson('en', $module);
 
-        unset($idData[$translationKey], $enData[$translationKey]);
+            unset($idMod[$translationKey], $enMod[$translationKey]);
 
-        $this->writeJson($this->idJsonPath, $idData);
-        $this->writeJson($this->enJsonPath, $enData);
+            $this->writeModuleJson('id', $module, $idMod);
+            $this->writeModuleJson('en', $module, $enMod);
+        } else {
+            // Remove across all modules if not specified
+            foreach (array_keys($this->modules) as $mKey) {
+                $idMod = $this->readModuleJson('id', $mKey);
+                $enMod = $this->readModuleJson('en', $mKey);
+                if (isset($idMod[$translationKey]) || isset($enMod[$translationKey])) {
+                    unset($idMod[$translationKey], $enMod[$translationKey]);
+                    $this->writeModuleJson('id', $mKey, $idMod);
+                    $this->writeModuleJson('en', $mKey, $enMod);
+                }
+            }
+        }
+
+        $this->refreshRootMergedFiles();
 
         $this->notifySuccess("Key terjemahan \"{$translationKey}\" berhasil dihapus.");
 
-        return redirect()->route('admin.dukunganaplikasi.translation.index');
+        return redirect()->route('admin.dukunganaplikasi.translation.index', $module ? ['module' => $module] : []);
     }
 
     /**
-     * Helper to read JSON file securely.
+     * Helper to read a specific modular JSON file.
      */
-    private function readJson(string $path): array
+    private function readModuleJson(string $lang, string $module): array
     {
+        $path = public_path("assets/data/translations/{$lang}/{$module}.json");
         if (!file_exists($path)) {
             return [];
         }
-
-        $content = file_get_contents($path);
+        $content = @file_get_contents($path);
         $data = json_decode($content, true);
-
         return is_array($data) ? $data : [];
     }
 
     /**
-     * Helper to write JSON file formatted cleanly.
+     * Helper to write a specific modular JSON file cleanly.
      */
-    private function writeJson(string $path, array $data): void
+    private function writeModuleJson(string $lang, string $module, array $data): void
     {
+        $dir = public_path("assets/data/translations/{$lang}");
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0777, true);
+        }
         ksort($data);
+        $path = "{$dir}/{$module}.json";
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         file_put_contents($path, $json);
+    }
+
+    /**
+     * Find which module contains the specified key.
+     */
+    private function findKeyModule(string $key): ?string
+    {
+        foreach (array_keys($this->modules) as $modKey) {
+            $data = $this->readModuleJson('id', $modKey);
+            if (isset($data[$key])) {
+                return $modKey;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Helper to re-generate merged root id.json and en.json.
+     */
+    private function refreshRootMergedFiles(): void
+    {
+        $mergedId = [];
+        $mergedEn = [];
+
+        foreach (array_keys($this->modules) as $modKey) {
+            $idMod = $this->readModuleJson('id', $modKey);
+            $enMod = $this->readModuleJson('en', $modKey);
+            $mergedId = array_merge($mergedId, $idMod);
+            $mergedEn = array_merge($mergedEn, $enMod);
+        }
+
+        $this->syncRootMergedFiles($mergedId, $mergedEn);
+    }
+
+    /**
+     * Write merged array to root id.json and en.json.
+     */
+    private function syncRootMergedFiles(array $idData, array $enData): void
+    {
+        ksort($idData);
+        ksort($enData);
+
+        file_put_contents($this->idRootPath, json_encode($idData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        file_put_contents($this->enRootPath, json_encode($enData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+    }
+
+    /**
+     * Helper to construct human-readable position/category label for a key.
+     */
+    private function getHumanLabel(string $module, string $key): string
+    {
+        return match ($module) {
+            'sidebar_menu' => 'Menu Dinamis App',
+            'sidebar_template' => 'Item Template Bawaan',
+            'topbar' => 'Topbar & Navigasi',
+            'auth' => 'Otentikasi & Akun',
+            'customizer' => 'Theme Customizer',
+            'frontpage' => 'Landing Page / Publik',
+            default => 'Label Sistem'
+        };
     }
 }

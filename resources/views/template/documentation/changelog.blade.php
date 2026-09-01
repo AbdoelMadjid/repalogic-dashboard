@@ -114,8 +114,38 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.8.0</h5>
+                                        <h5 class="fw-bold mb-0">v2.8.1</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.1</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 22:05 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Modular Translation Dictionaries Architecture (6 Isolated Domains), Parallel i18n Loader Engine (`Promise.all`), Tab-Based Translation Manager &amp; Auto-Sync Model Hooks</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Arsitektur 6 Domain Kamus Modular Terisolasi:</strong> Memecah kamus monolitik menjadi 6 sub-file terpisah di <code>public/assets/data/translations/id/</code> dan <code>en/</code>: <code>sidebar_template.json</code>, <code>sidebar_menu.json</code>, <code>topbar.json</code>, <code>auth.json</code>, <code>customizer.json</code>, dan <code>frontpage.json</code>.</li>
+                                    <li><strong class="text-dark">Parallel i18n Loader Engine (<code>I18nManager</code> di <code>app.js</code>):</strong> Mengadopsi <code>Promise.allSettled</code> untuk memuat seluruh modul kamus secara simultan dari server/cache dan menggabungkannya ke dalam satu runtime dictionary memori yang sangat cepat (&lt; 5ms) dengan graceful fallback ke root JSON.</li>
+                                    <li><strong class="text-dark">Navigasi Tab Interaktif di Admin Manager (<code>translation.blade.php</code>):</strong> Panel manajemen terjemahan kini dilengkapi Nav Pills Tab per domain modul dengan counter badge real-time, pencarian responsif, dan pembaruan URL query param tanpa reload (History API).</li>
+                                    <li><strong class="text-dark">Penyelarasan Model Hook &amp; CRUD Berbasis Domain (<code>TranslationController.php</code> &amp; <code>Menu.php</code>):</strong> Aksi simpan/edit/hapus dan event <code>Menu::saved</code> kini secara presisi menulis langsung ke sub-kamus domain bersangkutan serta menjaga file master auto-merged tetap sinkron.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Modular i18n Suite</span>
+                                    <span class="badge bg-light text-dark border fs-xs">6 Domain Dictionaries</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Parallel Loader Engine</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Tab-Based Admin UI</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Auto-Sync Model Hooks</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.8.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-check fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.8.0</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.0</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 21:30 WIB</span>
