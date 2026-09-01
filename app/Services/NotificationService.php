@@ -163,7 +163,7 @@ class NotificationService
                         'icon' => 'ti ti-user-plus',
                         'badge_class' => 'bg-primary-subtle text-primary border-primary-subtle',
                         'badge_label' => 'Ajakan Berteman',
-                        'url' => route('dashboard'),
+                        'url' => route('dashboard', ['contact_search' => $fReq->sender->name, 'filter' => 'incoming']),
                         'created_at' => $fReq->created_at,
                         'time_ago' => $fReq->created_at ? $fReq->created_at->diffForHumans() : 'Baru saja',
                         'is_unread' => true,

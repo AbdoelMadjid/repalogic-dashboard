@@ -22,6 +22,8 @@
         <a href="{{ $item['url'] }}"
             class="dropdown-item notification-item py-2 px-3 text-wrap overflow-hidden btn-view-notif-detail"
             data-notif-id="{{ $item['id'] }}"
+            data-notif-type="{{ $item['type'] ?? '' }}"
+            data-sender-name="{{ $item['title'] ?? '' }}"
             data-notif-title="{{ $item['title'] }}"
             data-notif-message="{{ $item['message'] }}"
             data-notif-reason="{{ $item['reason'] ?? '' }}"

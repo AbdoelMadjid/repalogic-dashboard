@@ -57,6 +57,22 @@
     border: 2px solid #1e293b;
 }
 
+@media (max-width: 767.98px) {
+    .dashboard-hero-card {
+        min-height: auto !important;
+    }
+    .hero-avatar-img {
+        width: 72px;
+        height: 72px;
+    }
+    .hero-status-dot {
+        width: 15px;
+        height: 15px;
+        bottom: 3px;
+        right: 3px;
+    }
+}
+
 /* 2. KPI Metric Cards */
 .kpi-card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -367,6 +383,12 @@
     font-size: 0.8125rem;
     padding: 0.35rem 0.75rem;
     transition: all 0.15s ease;
+}
+
+@media (max-width: 575.98px) {
+    .friendship-filter-group .btn-friend-filter {
+        padding: 0.35rem 0.55rem;
+    }
 }
 
 .friendship-filter-group .btn-friend-filter.active {

@@ -8,15 +8,17 @@
         <div class="col-12">
             <div class="card dashboard-hero-card border-0 shadow-sm"
                 style="min-height: {{ $user->cover_height }}px; background-image: url('{{ $user->cover_bg_url }}'); background-position: center {{ $user->cover_position_y }}%;">
-                <div class="card-body p-4 p-lg-4.5 d-flex align-items-center">
-                    <div class="row align-items-center g-3 w-100">
-                        <div class="col-md-8">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="hero-avatar-wrapper flex-shrink-0">
+                <div class="card-body p-3.5 p-sm-4 p-lg-4.5 d-flex align-items-center">
+                    <div class="row align-items-center g-3 w-100 mx-0">
+                        <div class="col-md-8 px-0">
+                            <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start gap-3">
+                                <!-- 1. Avatar Pengguna -->
+                                <div class="hero-avatar-wrapper flex-shrink-0 text-center">
                                     <img src="{{ $user->avatar_url }}"
                                         alt="{{ $user->name }}" class="rounded-circle hero-avatar-img shadow">
                                     <span class="hero-status-dot" title="Akun Aktif & Sedang Masuk"></span>
                                 </div>
+
                                 @php
                                     $rolePriority = ['superadmin' => 'Superadmin', 'admin' => 'Admin', 'operator' => 'Operator', 'user' => 'User'];
                                     $primaryRoleName = 'User';
@@ -30,54 +32,78 @@
                                         $primaryRoleName = ucfirst($user->roles->first()->name);
                                     }
                                 @endphp
-                                <div>
-                                    <h3 class="fw-bold text-white mb-1.5">{{ $greeting }}, {{ $user->name }}!</h3>
+
+                                <div class="text-center text-md-start w-100">
+                                    <!-- 2 & 3. Selamat Sore, Nama Pengguna -->
+                                    <h3 class="fw-bold text-white mb-1.5 fs-20 fs-md-22">
+                                        {{ $greeting }}, {{ $user->name }}!
+                                    </h3>
+
+                                    <!-- 4. Login Terakhir -->
                                     @if ($lastLoginRecord)
-                                        <p class="text-white-50 fs-13 mb-2">
+                                        <p class="text-white-50 fs-13 mb-2.5">
                                             Login terakhir Anda tercatat pada <span class="text-white fw-semibold">{{ \Carbon\Carbon::parse($lastLoginRecord->login_at)->translatedFormat('d M Y, H:i') }} WIB</span>
                                             dari IP <span class="badge bg-white bg-opacity-20 text-white font-monospace">{{ $lastLoginRecord->ip_address }}</span>.
                                         </p>
                                     @endif
-                                    <div class="d-flex flex-wrap align-items-center gap-3 text-white-50 fs-13 mb-2">
+
+                                    <!-- 5, 6, 7, 8. Email, Role, Teman & Suka, Poin Login -->
+                                    <div class="d-flex flex-column flex-md-row flex-md-wrap align-items-center justify-content-center justify-content-md-start gap-2 gap-md-3 text-white-50 fs-13 mb-2">
+                                        <!-- 5. Email -->
                                         <div class="d-flex align-items-center">
                                             <i class="ti ti-mail text-white-50 me-1.5"></i>
                                             <span class="text-white fw-medium">{{ $user->email }}</span>
                                         </div>
-                                        <span class="text-white-50 opacity-25">•</span>
+
+                                        <span class="text-white-50 opacity-25 d-none d-md-inline">•</span>
+
+                                        <!-- 6. Role -->
                                         <div class="d-flex align-items-center">
                                             <i class="ti ti-shield-check text-white-50 me-1.5"></i>
                                             <span class="text-white fw-medium">{{ $primaryRoleName }}</span>
                                         </div>
-                                        <span class="text-white-50 opacity-25">•</span>
-                                        <div class="d-flex align-items-center" title="Total Teman Terhubung">
-                                            <i class="ti ti-friends text-info me-1.5"></i>
-                                            <span class="text-white fw-medium">{{ number_format($totalFriendsCount) }} Teman</span>
+
+                                        <span class="text-white-50 opacity-25 d-none d-md-inline">•</span>
+
+                                        <!-- 7. Teman & Suka -->
+                                        <div class="d-flex align-items-center gap-2.5">
+                                            <div class="d-flex align-items-center" title="Total Teman Terhubung">
+                                                <i class="ti ti-friends text-info me-1.5"></i>
+                                                <span class="text-white fw-medium" id="hero-friends-count">{{ number_format($totalFriendsCount) }} Teman</span>
+                                            </div>
+                                            <span class="text-white-50 opacity-25">•</span>
+                                            <div class="d-flex align-items-center" title="Total Suka Profil yang Diterima">
+                                                <i class="ti ti-heart-filled text-danger me-1.5"></i>
+                                                <span class="text-white fw-medium" id="hero-likes-count">{{ number_format($totalProfileLikesCount) }} Suka</span>
+                                            </div>
                                         </div>
-                                        <span class="text-white-50 opacity-25">•</span>
-                                        <div class="d-flex align-items-center" title="Total Suka Profil yang Diterima">
-                                            <i class="ti ti-heart-filled text-danger me-1.5"></i>
-                                            <span class="text-white fw-medium">{{ number_format($totalProfileLikesCount) }} Suka</span>
-                                        </div>
-                                        <span class="text-white-50 opacity-25">•</span>
+
+                                        <span class="text-white-50 opacity-25 d-none d-md-inline">•</span>
+
+                                        <!-- 8. Point Login -->
                                         <div class="d-flex align-items-center" title="Total Poin Login yang Dikumpulkan">
                                             <i class="ti ti-award text-warning me-1.5"></i>
                                             <span class="text-white fw-medium">{{ number_format($user->login_count ?? 0) }} Poin Login</span>
                                         </div>
                                     </div>
+
+                                    <!-- 9. Moto Hidup -->
                                     @if (!empty($user->motto))
-                                        <div class="pt-2 border-top border-white border-opacity-10 d-flex align-items-center gap-1.5 fs-12 text-white-50 fst-italic">
+                                        <div class="pt-2 d-flex align-items-center justify-content-center justify-content-md-start gap-1.5 fs-12 text-white-50 fst-italic">
                                             <i class="ti ti-quote me-1"></i>"{{ $user->motto }}"
                                         </div>
                                     @endif
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4 text-md-end">
-                            <div class="d-inline-flex flex-wrap gap-2">
-                                <a href="{{ route('admin.profil-pengguna.index') }}" class="btn btn-sm btn-light text-dark fw-semibold px-3 py-1.5 rounded-pill shadow-sm">
+
+                        <!-- 10. Tombol Profil Saya & Buka Chat -->
+                        <div class="col-md-4 text-center text-md-end px-0 mt-3 mt-md-0">
+                            <div class="d-inline-flex flex-wrap justify-content-center justify-content-md-end gap-2">
+                                <a href="{{ route('admin.profil-pengguna.index') }}" class="btn btn-sm btn-light text-dark fw-semibold px-3.5 py-1.5 rounded-pill shadow-sm">
                                     <i class="ti ti-user me-1.5"></i>Profil Saya
                                 </a>
-                                <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="btn btn-sm btn-primary bg-primary text-white fw-semibold px-3 py-1.5 rounded-pill shadow-sm">
+                                <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="btn btn-sm btn-primary bg-primary text-white fw-semibold px-3.5 py-1.5 rounded-pill shadow-sm">
                                     <i class="ti ti-messages me-1.5"></i>Buka Chat
                                 </a>
                             </div>
@@ -816,37 +842,40 @@
                         <p class="text-muted fs-12 mb-0 mt-0.5">Temukan rekan kerja, kirim ajakan berteman, berikan apresiasi suka pada profil, dan mulai berkomunikasi.</p>
                     </div>
 
-                    <!-- Filter Pertemanan Tabs & Search Input -->
-                    <div class="d-flex flex-wrap align-items-center gap-2.5">
-                        <div class="btn-group btn-group-sm friendship-filter-group" role="group" aria-label="Filter Pertemanan">
-                            <button type="button" class="btn btn-outline-primary active btn-friend-filter" data-filter="all">
-                                <i class="ti ti-users me-1"></i>Semua <span class="badge bg-primary text-white rounded-pill ms-1 fs-xxs">{{ $contactUsers->count() }}</span>
-                            </button>
-                            <button type="button" class="btn btn-outline-primary btn-friend-filter" data-filter="friends">
-                                <i class="ti ti-user-check me-1"></i>Teman Saya <span class="badge bg-success text-white rounded-pill ms-1 fs-xxs">{{ $totalFriendsCount }}</span>
-                            </button>
-                            <button type="button" class="btn btn-outline-primary btn-friend-filter" data-filter="incoming">
-                                <i class="ti ti-user-plus me-1"></i>Ajakan Masuk
-                                @if ($incomingFriendRequestsCount > 0)
-                                    <span class="badge bg-danger text-white rounded-pill ms-1 fs-xxs">{{ $incomingFriendRequestsCount }}</span>
-                                @endif
-                            </button>
-                            <button type="button" class="btn btn-outline-primary btn-friend-filter" data-filter="outgoing">
-                                <i class="ti ti-clock-pause me-1"></i>Ajakan Terkirim
-                                @if ($outgoingFriendRequestsCount > 0)
-                                    <span class="badge bg-warning text-dark rounded-pill ms-1 fs-xxs">{{ $outgoingFriendRequestsCount }}</span>
-                                @endif
-                            </button>
-                        </div>
-
-                        <div class="app-search" style="min-width: 250px;">
-                            <input type="text" id="dashboard-contact-search" class="form-control" style="padding-left: 40px !important;" placeholder="Cari nama, email, no. telepon/WA...">
-                            <i class="ti ti-search app-search-icon text-muted"></i>
-                        </div>
+                    <!-- Search Input -->
+                    <div class="app-search" style="min-width: 250px;">
+                        <input type="text" id="dashboard-contact-search" class="form-control" style="padding-left: 40px !important;" placeholder="Cari nama, email, no. telepon/WA...">
+                        <i class="ti ti-search app-search-icon text-muted"></i>
                     </div>
                 </div>
 
                 <div class="card-body p-3.5">
+                    <!-- Filter Kategori Pertemanan (Content Widget - Right Aligned & Responsive Mobile) -->
+                    <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3.5 pb-3 border-bottom">
+                        <div class="btn-group btn-group-sm friendship-filter-group" role="group" aria-label="Filter Pertemanan">
+                            <button type="button" class="btn btn-outline-primary active btn-friend-filter d-inline-flex align-items-center gap-1.5" data-filter="all" title="Semua Pengguna ({{ $contactUsers->count() }})">
+                                <i class="ti ti-users"></i>
+                                <span class="d-none d-sm-inline">Semua</span>
+                                <span class="badge bg-primary text-white rounded-pill fs-xxs" id="filter-badge-all">{{ $contactUsers->count() }}</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center gap-1.5" data-filter="friends" title="Teman Saya ({{ $totalFriendsCount }})">
+                                <i class="ti ti-user-check"></i>
+                                <span class="d-none d-sm-inline">Teman Saya</span>
+                                <span class="badge bg-success text-white rounded-pill fs-xxs" id="filter-badge-friends">{{ $totalFriendsCount }}</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center gap-1.5" data-filter="incoming" title="Ajakan Masuk ({{ $incomingFriendRequestsCount }})">
+                                <i class="ti ti-user-plus"></i>
+                                <span class="d-none d-sm-inline">Ajakan Masuk</span>
+                                <span class="badge {{ $incomingFriendRequestsCount > 0 ? 'bg-danger text-white' : 'bg-secondary-subtle text-secondary' }} rounded-pill fs-xxs" id="filter-badge-incoming">{{ $incomingFriendRequestsCount }}</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center gap-1.5" data-filter="outgoing" title="Ajakan Terkirim ({{ $outgoingFriendRequestsCount }})">
+                                <i class="ti ti-clock-pause"></i>
+                                <span class="d-none d-sm-inline">Ajakan Terkirim</span>
+                                <span class="badge {{ $outgoingFriendRequestsCount > 0 ? 'bg-warning text-dark' : 'bg-secondary-subtle text-secondary' }} rounded-pill fs-xxs" id="filter-badge-outgoing">{{ $outgoingFriendRequestsCount }}</span>
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="row g-3" id="dashboard-contacts-grid">
                         @forelse ($contactUsers as $cUser)
                             @php
@@ -863,6 +892,8 @@
                                 data-search-city="{{ strtolower($cUser->detail->kabupaten_kota ?? '') }}"
                                 data-search-job="{{ strtolower($cUser->detail->pekerjaan ?? '') }}"
                                 data-friendship-status="{{ $fStatus }}"
+                                data-is-online="{{ $cUser->is_online ? '1' : '0' }}"
+                                data-is-me="{{ $isMe ? '1' : '0' }}"
                                 data-user-id="{{ $cUser->id }}">
                                 <div class="card card-h-100 border shadow-sm rounded-3 overflow-hidden mb-0 contact-grid-card">
                                     <!-- Cover Banner Background -->
@@ -1062,6 +1093,7 @@
         window.DashboardConfig = {
             userId: {{ auth()->id() }},
             routes: {
+                pollDashboard: "{{ route('admin.friendships.poll-dashboard') }}",
                 toggleLike: "{{ url('admin/friendships/toggle-like') }}",
                 sendFriend: "{{ url('admin/friendships/send') }}",
                 acceptFriend: "{{ url('admin/friendships/accept') }}",

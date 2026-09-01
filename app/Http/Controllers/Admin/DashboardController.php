@@ -253,8 +253,6 @@ class DashboardController extends Controller
     {
         $contacts = User::with(['config', 'detail', 'roles', 'profileLikesReceived', 'sentFriendships', 'receivedFriendships'])
             ->where('status', 'active')
-            ->orderByRaw('CASE WHEN id = ? THEN 0 ELSE 1 END', [$currentUser->id])
-            ->orderBy('name', 'asc')
             ->get();
 
         foreach ($contacts as $cUser) {
@@ -264,7 +262,47 @@ class DashboardController extends Controller
             $cUser->is_liked_by_me = $cUser->isLikedBy($currentUser);
         }
 
-        return $contacts;
+        // Urutan prioritas:
+        // 0. Akun sendiri
+        // 1. Teman & Online
+        // 2. Teman & Offline
+        // 3. Bukan teman & Online
+        // 4. Bukan teman & Offline
+        return $contacts->sort(function ($a, $b) use ($currentUser) {
+            $rankA = $this->getUserDisplayRank($a, $currentUser);
+            $rankB = $this->getUserDisplayRank($b, $currentUser);
+
+            if ($rankA !== $rankB) {
+                return $rankA <=> $rankB;
+            }
+
+            return strcasecmp($a->name, $b->name);
+        })->values();
+    }
+
+    /**
+     * Calculate display rank for contact sorting priority.
+     */
+    protected function getUserDisplayRank(User $u, User $currentUser): int
+    {
+        if ($u->id === $currentUser->id) {
+            return 0; // Widget kita sendiri
+        }
+
+        $isFriend = ($u->friendship_status === 'friends');
+        $isOnline = (bool) $u->is_online;
+
+        if ($isFriend && $isOnline) {
+            return 1; // Teman dan sedang Online
+        }
+        if ($isFriend && !$isOnline) {
+            return 2; // Teman dan Offline
+        }
+        if (!$isFriend && $isOnline) {
+            return 3; // Bukan teman tetapi sedang Online
+        }
+
+        return 4; // Bukan teman dan Offline
     }
 
     /**

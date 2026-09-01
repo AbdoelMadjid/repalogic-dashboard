@@ -10,10 +10,124 @@ use App\Traits\HasNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class FriendshipController extends Controller
 {
     use HasNotification;
+
+    /**
+     * Poll real-time friendship updates, like counts, online presence, and requests for the dashboard.
+     */
+    public function pollDashboard(Request $request): JsonResponse
+    {
+        $currentUser = Auth::user();
+        if (!$currentUser) {
+            return response()->json(['success' => false], 401);
+        }
+
+        // Bulk fetch all friendships involving currentUser
+        $allMyFriendships = Friendship::where('sender_id', $currentUser->id)
+            ->orWhere('receiver_id', $currentUser->id)
+            ->get();
+
+        $friendshipsMap = [];
+        $incomingCount = 0;
+        $outgoingCount = 0;
+        $friendsCount = 0;
+
+        foreach ($allMyFriendships as $f) {
+            $otherId = $f->sender_id === $currentUser->id ? $f->receiver_id : $f->sender_id;
+            if ($f->status === 'accepted') {
+                $status = 'friends';
+                $friendsCount++;
+            } elseif ($f->status === 'pending') {
+                if ($f->sender_id === $currentUser->id) {
+                    $status = 'pending_sent';
+                    $outgoingCount++;
+                } else {
+                    $status = 'pending_received';
+                    $incomingCount++;
+                }
+            } else {
+                $status = 'none';
+            }
+            $friendshipsMap[$otherId] = [
+                'status' => $status,
+                'id' => $f->id,
+            ];
+        }
+
+        // Bulk fetch like counts per target_user_id
+        $likesCountMap = ProfileLike::select('target_user_id', DB::raw('count(*) as total'))
+            ->groupBy('target_user_id')
+            ->pluck('total', 'target_user_id')
+            ->all();
+
+        // Bulk fetch all users liked by currentUser
+        $myLikesMap = ProfileLike::where('user_id', $currentUser->id)
+            ->pluck('target_user_id')
+            ->flip()
+            ->all();
+
+        $profileLikesCount = $likesCountMap[$currentUser->id] ?? 0;
+
+        $users = User::with(['config', 'detail', 'roles'])
+            ->where('status', 'active')
+            ->get();
+
+        $contactsData = [];
+        foreach ($users as $u) {
+            $isMe = $u->id === $currentUser->id;
+            $fInfo = $friendshipsMap[$u->id] ?? ['status' => 'none', 'id' => null];
+
+            $contactsData[$u->id] = [
+                'id' => $u->id,
+                'name' => $u->name,
+                'email' => $u->email,
+                'avatar_url' => $u->avatar_url,
+                'cover_bg_url' => $u->cover_bg_url,
+                'cover_position_y' => $u->cover_position_y ?? 50,
+                'motto' => $u->motto ?? '',
+                'pekerjaan' => $u->detail->pekerjaan ?? 'Belum diisi',
+                'telepon' => $u->detail->telepon ?? '',
+                'telepon_wa_url' => $u->detail->telepon_wa_url ?? '',
+                'kabupaten_kota' => $u->detail->kabupaten_kota ?? 'Belum diisi',
+                'login_count' => $u->login_count ?? 0,
+                'created_at_formatted' => $u->created_at ? $u->created_at->format('d M Y') : '',
+                'is_online' => $u->is_online,
+                'last_seen' => $u->last_seen_human,
+                'friendship_status' => $isMe ? 'self' : $fInfo['status'],
+                'friendship_id' => $fInfo['id'],
+                'likes_count' => $likesCountMap[$u->id] ?? 0,
+                'is_liked_by_me' => isset($myLikesMap[$u->id]),
+            ];
+        }
+
+        $currentUserData = [
+            'id' => $currentUser->id,
+            'name' => $currentUser->name,
+            'email' => $currentUser->email,
+            'avatar_url' => $currentUser->avatar_url,
+            'cover_bg_url' => $currentUser->cover_bg_url,
+            'cover_position_y' => $currentUser->cover_position_y ?? 50,
+            'motto' => $currentUser->motto ?? '',
+            'login_count' => $currentUser->login_count ?? 0,
+        ];
+
+        return response()->json([
+            'success' => true,
+            'current_user' => $currentUserData,
+            'stats' => [
+                'friends_count' => $friendsCount,
+                'profile_likes_count' => $profileLikesCount,
+                'incoming_requests_count' => $incomingCount,
+                'outgoing_requests_count' => $outgoingCount,
+                'total_users' => count($contactsData),
+            ],
+            'contacts' => $contactsData,
+        ]);
+    }
 
     /**
      * Toggle like/unlike for a user's profile.
@@ -120,14 +234,13 @@ class FriendshipController extends Controller
                 return back();
             }
 
-            if ($existing->status === 'rejected') {
-                $existing->update([
-                    'sender_id' => $currentUser->id,
-                    'receiver_id' => $user->id,
-                    'status' => 'pending',
-                ]);
-                $friendship = $existing;
-            }
+            // Jika sebelumnya pernah ditolak atau status lain, perbarui menjadi pending
+            $existing->update([
+                'sender_id' => $currentUser->id,
+                'receiver_id' => $user->id,
+                'status' => 'pending',
+            ]);
+            $friendship = $existing;
         } else {
             $friendship = Friendship::create([
                 'sender_id' => $currentUser->id,
@@ -157,9 +270,27 @@ class FriendshipController extends Controller
     public function acceptRequest(Request $request, $id)
     {
         $currentUser = Auth::user();
-        $friendship = Friendship::with('sender')->where('id', $id)
+        $friendship = Friendship::with('sender')
+            ->where(function ($q) use ($id, $currentUser) {
+                $q->where('id', $id)
+                    ->orWhere(function ($sq) use ($id, $currentUser) {
+                        $sq->where('sender_id', $id)
+                            ->where('receiver_id', $currentUser->id);
+                    });
+            })
             ->where('receiver_id', $currentUser->id)
-            ->firstOrFail();
+            ->first();
+
+        if (!$friendship) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ajakan berteman tidak ditemukan atau sudah diproses.',
+                ], 404);
+            }
+            $this->notifyError('Ajakan berteman tidak ditemukan.');
+            return back();
+        }
 
         $friendship->update(['status' => 'accepted']);
         $senderName = $friendship->sender->name ?? 'Pengguna';
@@ -185,9 +316,27 @@ class FriendshipController extends Controller
     public function rejectRequest(Request $request, $id)
     {
         $currentUser = Auth::user();
-        $friendship = Friendship::with('sender')->where('id', $id)
+        $friendship = Friendship::with('sender')
+            ->where(function ($q) use ($id, $currentUser) {
+                $q->where('id', $id)
+                    ->orWhere(function ($sq) use ($id, $currentUser) {
+                        $sq->where('sender_id', $id)
+                            ->where('receiver_id', $currentUser->id);
+                    });
+            })
             ->where('receiver_id', $currentUser->id)
-            ->firstOrFail();
+            ->first();
+
+        if (!$friendship) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ajakan berteman tidak ditemukan atau sudah diproses.',
+                ], 404);
+            }
+            $this->notifyError('Ajakan berteman tidak ditemukan.');
+            return back();
+        }
 
         $senderName = $friendship->sender->name ?? 'Pengguna';
         $senderId = $friendship->sender_id;

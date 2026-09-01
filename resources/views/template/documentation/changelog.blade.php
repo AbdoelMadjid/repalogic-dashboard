@@ -107,7 +107,7 @@
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
                         <!-- Version 2.7.2 -->
-                        <!-- Version 2.7.4 -->
+                        <!-- Version 2.7.5 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -115,8 +115,38 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.7.4</h5>
+                                        <h5 class="fw-bold mb-0">v2.7.5</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.7.5</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 16:55 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Real-Time Friendship &amp; Profile Synchronization Engine, Interactive Notification Search Auto-Fill, Contextual Filter Transitions &amp; Prioritized Contact Directory Hierarchy</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Real-Time Full User Profile &amp; Friendship Polling Engine:</strong> Sinkronisasi latar belakang setiap 3.5 detik pada endpoint <code>admin/friendships/poll-dashboard</code> untuk memperbarui seluruh data pengguna (foto sampul banner, avatar profil, motto hidup, nomor WhatsApp/telepon, domisili, pekerjaan, poin login, jumlah suka profil, status ajakan berteman, serta status online/offline) secara instan tanpa reload halaman.</li>
+                                    <li><strong class="text-dark">Hierarki Pengurutan Prioritas Direktori Kontak:</strong> Menyusun kartu pengguna secara cerdas dengan hierarki: (1) Akun Profil Sendiri di posisi terdepan, (2) Teman yang sedang Online, (3) Teman yang sedang Offline, (4) Bukan teman tetapi sedang Online, dan (5) Bukan teman yang sedang Offline.</li>
+                                    <li><strong class="text-dark">Auto-Fill Search &amp; Auto-Focus dari Notifikasi Ajakan Berteman:</strong> Mengklik notifikasi ajakan berteman di topbar langsung menutup dropdown, mengisi nama pengirim ke input live search, mengaktifkan tab 'Ajakan Masuk', dan mengarahkan tampilan ke kartu kontak yang bersangkutan.</li>
+                                    <li><strong class="text-dark">Transisi Tab Filter &amp; Reset Pencarian Responsif:</strong> Saat ajakan berteman diterima, kolom pencarian otomatis dikosongkan dan tab berpindah ke 'Teman Saya'. Saat ajakan ditolak, kolom pencarian dikosongkan dan tab berpindah ke 'Semua'.</li>
+                                    <li><strong class="text-dark">Robust Multi-Attempt Friendship Re-request Engine:</strong> Menangani pengajuan kembali ajakan berteman setelah sebelumnya pernah ditolak atau dibatalkan tanpa terjadi benturan database unique constraint.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Real-Time Profile Sync</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Prioritized Contact Hierarchy</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Notification Search Autofill</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Friendship Re-Request Engine</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.7.4 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-check fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.7.4</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.7.4</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 14:18 WIB</span>
@@ -125,9 +155,10 @@
                                 <ul class="text-muted fs-14 mb-3 ps-3">
                                     <li><strong class="text-dark">Sistem Manajemen Pertemanan &amp; Ajakan Berteman (Friend Requests):</strong> Implementasi database migration <code>friendships</code> (<code>sender_id</code>, <code>receiver_id</code>, <code>status: pending|accepted|rejected</code>), integrasi model <code>Friendship</code>, serta <code>FriendshipController</code> untuk mengirim ajakan, membatalkan ajakan, menerima/menolak ajakan, dan menghapus pertemanan (<em>unfriend</em>) dengan konfirmasi SweetAlert2.</li>
                                     <li><strong class="text-dark">Fasilitas Apresiasi Suka Profil (Profile Likes Engine):</strong> Implementasi database migration <code>profile_likes</code> dengan relasi unik antar pengguna, tombol like melayang (<em>glassmorphism love button</em>) di sudut atas cover kartu kontak dengan efek detak jantung (<em>heart-pulse animation</em>) dan update hitungan like secara instan via AJAX tanpa reload halaman.</li>
-                                    <li><strong class="text-dark">Tab Filter Jaringan Pertemanan pada Direktori Dashboard:</strong> Menyediakan navigasi filter cepat di bagian header kartu direktori pengguna (Semua Pengguna, Teman Saya, Ajakan Masuk dengan badge merah, dan Ajakan Terkirim) yang terintegrasi secara mulus dengan live keyword search dan paginasi tombol panah muat lebih banyak.</li>
-                                    <li><strong class="text-dark">Smart State Action Buttons pada Kartu Kontak:</strong> Menampilkan tombol aksi kontekstual yang beradaptasi secara otomatis sesuai relasi (Tombol 'Profil Saya' untuk akun sendiri, 'Chat' + dropdown status 'Teman' jika sudah berteman, tombol 'Menunggu Respon / Batal' jika ajakan terkirim, tombol 'Terima / Tolak' jika ada ajakan masuk, dan '+ Tambah Teman' jika belum berteman).</li>
+                                    <li><strong class="text-dark">Tab Filter Jaringan Pertemanan pada Direktori Dashboard:</strong> Menyediakan navigasi filter cepat di bagian atas konten widget direktori pengguna (Semua Pengguna, Teman Saya, Ajakan Masuk dengan badge merah, dan Ajakan Terkirim) yang terintegrasi secara mulus dengan live keyword search di header dan paginasi tombol panah muat lebih banyak.</li>
                                     <li><strong class="text-dark">Integrasi Notifikasi &amp; Statistik Profil:</strong> Penambahan statistik total teman dan total like profil pada kartu ringkasan hero dashboard serta halaman Profil Pengguna, ditambah integrasi notifikasi otomatis saat menerima ajakan berteman baru di dropdown topbar notifikasi.</li>
+                                    <li><strong class="text-dark">Real-Time Full User Profile &amp; Friendship Polling Engine:</strong> Sinkronisasi data real-time otomatis setiap 3.5 detik tanpa reload halaman pada endpoint <code>admin/friendships/poll-dashboard</code> untuk memperbarui seluruh data pengguna (foto sampul banner, avatar profil, motto hidup, nomor WhatsApp/telepon, domisili, pekerjaan, poin login, jumlah suka profil, status ajakan berteman, serta status online/offline) secara instan.</li>
+                                    <li><strong class="text-dark">Sistem Hierarki Pengurutan Kartu Kontak Direktori Pengguna:</strong> Kartu kontak pengguna diurutkan secara cerdas berdasarkan prioritas relasi dan kehadiran: (1) Profil kita sendiri selalu berada di urutan terdepan, (2) Teman yang sedang online, (3) Teman yang sedang offline, (4) Pengguna lain yang sedang online, dan (5) Pengguna lain yang sedang offline.</li>
                                 </ul>
                                 <div class="d-flex flex-wrap gap-1">
                                     <span class="badge bg-light text-dark border fs-xs">Friendship Network</span>
