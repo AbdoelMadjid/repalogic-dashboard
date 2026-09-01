@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.5.2</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.5.3</strong>
                             </span>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                                         <h6 class="fw-bold mb-0 text-dark">2. Update Changelog View</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Tambahkan riwayat entri timeline versi baru pada <code>resources/views/template/documentation/changelog.blade.php</code>.
+                                        Tambahkan riwayat rilis baru pada timeline di <code>resources/views/template/documentation/changelog.blade.php</code>.
                                     </p>
                                 </div>
                             </div>
@@ -68,11 +68,11 @@
                             <div class="col-md-6 col-lg-3">
                                 <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                     <div class="d-flex align-items-center mb-2">
-                                        <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-table fs-14"></i></span>
-                                        <h6 class="fw-bold mb-0 text-dark">3. Update Release Doc</h6>
+                                        <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-tag fs-14"></i></span>
+                                        <h6 class="fw-bold mb-0 text-dark">3. Update Release History</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Tambahkan baris rilis pada tabel riwayat rilis &amp; tag di <code>docs/riwayat_release_dan_tag.md</code>.
+                                        Tambahkan baris rilis baru pada tabel <code>docs/riwayat_release_dan_tag.md</code> beserta tanggal dan ringkasan.
                                     </p>
                                 </div>
                             </div>
@@ -80,11 +80,11 @@
                             <div class="col-md-6 col-lg-3">
                                 <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                     <div class="d-flex align-items-center mb-2">
-                                        <span class="badge bg-info rounded-circle p-1.5 me-2"><i class="ti ti-git-merge fs-14"></i></span>
-                                        <h6 class="fw-bold mb-0 text-dark">4. Git Tag Release</h6>
+                                        <span class="badge bg-danger rounded-circle p-1.5 me-2"><i class="ti ti-brand-git fs-14"></i></span>
+                                        <h6 class="fw-bold mb-0 text-dark">4. Git Commit &amp; Tag</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Lakukan commit perubahan lalu buat tag git baru dan lakukan push tag ke repositori.
+                                        Lakukan commit perubahan, buat Git Tag (misal: <code>git tag v2.5.3</code>), lalu push ke remote repository.
                                     </p>
                                 </div>
                             </div>
@@ -94,9 +94,9 @@
             </div>
         @endif
 
-        <!-- Changelog Timeline Section -->
+        <!-- Timeline Changelog List -->
         <div class="col-12">
-            <div class="card border-0 shadow-sm">
+            <div class="card shadow-sm border-0">
                 <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0 fw-bold">
                         <i class="ti ti-git-branch me-2 text-primary"></i> Timeline Pembaruan Sistem (Timeline Changelog)
@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.5.2 -->
+                        <!-- Version 2.5.3 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,38 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.5.2</h5>
+                                        <h5 class="fw-bold mb-0">v2.5.3</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.5.3</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 09:35 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Universal Checkbox &amp; Radio Button Design System (Spatie Matrix Table Alignment), Calibrated Toggle Switch Spacing Standard (<code>custom-datatables.css</code>), Universal Icon/Dot Spacing Utilities &amp; Ad-Hoc Margin Cleanup Across All Admin Pages</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Standarisasi Universal Checkbox &amp; Radio Button (Section 6 <code>custom-auth.css</code>):</strong> Mengadopsi desain checklist elegan dari Spatie Permission Matrix Table (dimensi <code>1.25em</code>, border <code>2px solid #475569</code>, centang modern <code>#0d6efd</code> dengan elevasi glow) ke seluruh komponen form checkbox dan radio button di semua halaman inti, modal popup, dan tabel data.</li>
+                                    <li><strong class="text-dark">Kalibrasi Jarak Presisi Toggle Switch (<code>custom-datatables.css</code>):</strong> Penyesuaian padding container (<code>2.85em</code>), lebar switch (<code>2.35em</code>), dan net gap <code>0.5em</code> (~7px) ke label teks sehingga presisi dan proporsional. Dilengkapi aturan khusus standalone switch di dalam tabel data untuk menghilangkan <em>ghost padding</em>.</li>
+                                    <li><strong class="text-dark">Penyelarasan Spasi Ikon &amp; Status Presence (Rule 14 &amp; Section 7 <code>custom-auth.css</code>):</strong> Implementasi utilitas <code>.me-1.5</code>, <code>.ms-1.5</code>, dan <code>.gap-1.5</code> (6px) untuk menjaga jarak harmonis antara ikon/dot indikator dengan teks label pada Data Login, User Profile, dan modul lainnya.</li>
+                                    <li><strong class="text-dark">Pembersihan Kelas Ad-hoc &amp; Inline Style Overrides:</strong> Menghapus class <code>ps-4</code>, <code>ms-2</code>, <code>.switch-large</code>, dan inline styles duplikat pada <code>fitur-aplikasi.blade.php</code>, <code>fitur_aplikasi_modal.blade.php</code>, <code>backup-db.blade.php</code>, serta file form modul manajemen pengguna.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Universal Checkbox System</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Calibrated Switch Spacing</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Architecture Rule 14</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Ad-Hoc Class Cleanup</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Visual Consistency</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.5.2 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle fs-xl text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.5.2</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.5.2</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 08:30 WIB</span>

@@ -110,9 +110,9 @@
                     <div>
                         <div class="d-flex align-items-center justify-content-between mb-2">
                             <span class="fs-12 fw-semibold text-dark">Mode Pemeliharaan:</span>
-                            <div class="form-check form-switch m-0 ps-4">
+                            <div class="form-check form-switch m-0">
                                 <input class="form-check-input" type="checkbox" role="switch" id="widget_maintenance_mode" {{ $appSettings['maintenance_mode'] ? 'checked' : '' }}>
-                                <label class="form-check-label fs-12 fw-bold text-danger ms-2" for="widget_maintenance_mode" id="maintenance-status-label">{{ $appSettings['maintenance_mode'] ? 'Aktif' : 'Nonaktif' }}</label>
+                                <label class="form-check-label fs-12 fw-bold text-danger" for="widget_maintenance_mode" id="maintenance-status-label">{{ $appSettings['maintenance_mode'] ? 'Aktif' : 'Nonaktif' }}</label>
                             </div>
                         </div>
                         <div class="mb-2">
@@ -149,13 +149,13 @@
                                 <option value="10" {{ $appSettings['rate_limit_attempts'] == 10 ? 'selected' : '' }}>10 Kali</option>
                             </select>
                         </div>
-                        <div class="form-check form-switch mb-2.5 ps-4">
+                        <div class="form-check form-switch mb-2.5">
                             <input class="form-check-input" type="checkbox" id="widget_auto_approval" {{ $appSettings['auto_user_approval'] ? 'checked' : '' }}>
-                            <label class="form-check-label fs-12 text-dark ms-2" for="widget_auto_approval">Otomatis Setujui Pendaftaran Akun Baru</label>
+                            <label class="form-check-label fs-12 text-dark" for="widget_auto_approval">Otomatis Setujui Pendaftaran Akun Baru</label>
                         </div>
-                        <div class="form-check form-switch mb-2.5 ps-4">
+                        <div class="form-check form-switch mb-2.5">
                             <input class="form-check-input" type="checkbox" id="widget_new_device" {{ $appSettings['new_device_alert'] ? 'checked' : '' }}>
-                            <label class="form-check-label fs-12 text-dark ms-2" for="widget_new_device">Notifikasi Login dari Perangkat Baru</label>
+                            <label class="form-check-label fs-12 text-dark" for="widget_new_device">Notifikasi Login dari Perangkat Baru</label>
                         </div>
                     </div>
                     <button type="button" class="btn btn-sm btn-primary w-100 fw-semibold" id="btn-save-security">
@@ -186,13 +186,13 @@
                                 <option value="60" {{ $appSettings['polling_interval'] == 60 ? 'selected' : '' }}>60 Detik</option>
                             </select>
                         </div>
-                        <div class="form-check form-switch mb-2.5 ps-4">
+                        <div class="form-check form-switch mb-2.5">
                             <input class="form-check-input" type="checkbox" id="widget_sound_notif" {{ $appSettings['sound_notification'] ? 'checked' : '' }}>
-                            <label class="form-check-label fs-12 text-dark ms-2" for="widget_sound_notif">Audio Nada Suara Notifikasi Masuk</label>
+                            <label class="form-check-label fs-12 text-dark" for="widget_sound_notif">Audio Nada Suara Notifikasi Masuk</label>
                         </div>
-                        <div class="form-check form-switch mb-2.5 ps-4">
+                        <div class="form-check form-switch mb-2.5">
                             <input class="form-check-input" type="checkbox" id="widget_toast_notif" {{ $appSettings['toast_notification'] ? 'checked' : '' }}>
-                            <label class="form-check-label fs-12 text-dark ms-2" for="widget_toast_notif">Pop-up Toast Notifikasi Otomatis</label>
+                            <label class="form-check-label fs-12 text-dark" for="widget_toast_notif">Pop-up Toast Notifikasi Otomatis</label>
                         </div>
                     </div>
                     <button type="button" class="btn btn-sm btn-primary w-100 fw-semibold" id="btn-save-polling">
@@ -308,7 +308,7 @@
                     @can('update dukunganaplikasi/fitur-aplikasi')
                         <div class="p-3 bg-light-subtle rounded-3 mb-3 border d-flex flex-wrap align-items-center justify-content-between gap-3" id="bulk-action-bar">
                             <div class="d-flex align-items-center gap-2">
-                                <div class="form-check m-0 d-flex align-items-center gap-2">
+                                <div class="form-check m-0">
                                     <input class="form-check-input high-contrast-checkbox" type="checkbox" id="check-all-global" title="Centang Semua Fitur pada Kategori/Filter Ini">
                                     <label class="form-check-label fw-semibold fs-13 text-dark user-select-none cursor-pointer" for="check-all-global" id="check-all-label">
                                         Pilih Semua Fitur ({{ $totalFeatures }})
@@ -406,14 +406,14 @@
                                             <span class="badge bg-light text-dark border">{{ $f->urutan }}</span>
                                         </td>
                                         <td class="text-center">
-                                            <div class="d-flex align-items-center justify-content-center gap-2">
-                                                <div class="form-check form-switch m-0">
-                                                    <input class="form-check-input switch-large switch-fitur-toggle" 
+                                            <div class="d-flex align-items-center justify-content-center gap-1.5">
+                                                <div class="form-check form-switch m-0 p-0">
+                                                    <input class="form-check-input switch-fitur-toggle m-0" 
                                                            type="checkbox" 
-                                                           role="switch"
+                                                           role="switch" 
                                                            id="switch_{{ $f->id }}" 
                                                            data-id="{{ $f->id }}" 
-                                                           data-code="{{ $f->kode_fitur }}"
+                                                           data-code="{{ $f->kode_fitur }}" 
                                                            value="1" 
                                                            {{ $f->status ? 'checked' : '' }}
                                                            @cannot('update dukunganaplikasi/fitur-aplikasi') disabled @endcannot>

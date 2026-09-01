@@ -3,12 +3,6 @@
  * Path: public/assets/css/admin/dukunganaplikasi/backup-db.css
  */
 
-.switch-large {
-    width: 2.75em !important;
-    height: 1.5em !important;
-    cursor: pointer;
-}
-
 .card-option, 
 .card-output {
     transition: all 0.2s ease-in-out;

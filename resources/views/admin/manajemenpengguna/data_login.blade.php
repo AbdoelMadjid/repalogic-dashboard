@@ -247,11 +247,11 @@
                                                         <div>
                                                             @if ($item->is_online)
                                                                 <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 fs-11 rounded-pill d-inline-flex align-items-center gap-1.5 fw-semibold shadow-xs">
-                                                                    <span class="badge-pulse-dot bg-success"></span> Online
+                                                                    <span class="badge-pulse-dot bg-success"></span>Online
                                                                 </span>
                                                             @else
                                                                 <span class="badge bg-secondary-subtle text-muted border border-secondary-subtle px-2.5 py-1.5 fs-11 rounded-pill d-inline-flex align-items-center gap-1.5" title="{{ $item->last_seen_human }}">
-                                                                    <span class="badge-dot-gray"></span> {{ $item->last_seen_human }}
+                                                                    <span class="badge-dot-gray"></span>{{ $item->last_seen_human }}
                                                                 </span>
                                                             @endif
                                                         </div>
@@ -263,21 +263,21 @@
                                                             {{ $item->user?->name ?? 'User Tidak Diketahui' }}
                                                         </h5>
                                                         <p class="card-text text-muted fs-12 mb-0 text-truncate" title="{{ $item->user?->email }}">
-                                                            <i class="ti ti-mail me-1 text-secondary"></i>{{ $item->user?->email ?? '-' }}
+                                                            <i class="ti ti-mail me-1.5 text-secondary"></i>{{ $item->user?->email ?? '-' }}
                                                         </p>
                                                     </div>
 
                                                     <!-- Badges Peran & Poin (Dengan Spacing Lega) -->
                                                     <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-                                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-11 py-1 px-2.5 rounded-pill">
-                                                            <i class="ti ti-shield-check me-1"></i>{{ $item->user?->role_name ?? 'User' }}
+                                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-11 py-1 px-2.5 rounded-pill d-inline-flex align-items-center gap-1.5">
+                                                            <i class="ti ti-shield-check"></i> {{ $item->user?->role_name ?? 'User' }}
                                                         </span>
-                                                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle fs-11 py-1 px-2.5 rounded-pill fw-semibold" title="Total Poin Akumulasi">
-                                                            <i class="ti ti-award me-1 text-warning"></i>{{ number_format($item->user?->login_count ?? 0) }} Poin
+                                                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle fs-11 py-1 px-2.5 rounded-pill fw-semibold d-inline-flex align-items-center gap-1.5" title="Total Poin Akumulasi">
+                                                            <i class="ti ti-award text-warning"></i> {{ number_format($item->user?->login_count ?? 0) }} Poin
                                                         </span>
                                                         @if ($item->points_earned_today > 0)
-                                                            <span class="badge bg-success-subtle text-success border border-success-subtle fs-11 py-1 px-2.5 rounded-pill" title="Poin Diperoleh Hari Ini">
-                                                                <i class="ti ti-check me-1"></i>+{{ $item->points_earned_today }} Poin Hari Ini
+                                                            <span class="badge bg-success-subtle text-success border border-success-subtle fs-11 py-1 px-2.5 rounded-pill d-inline-flex align-items-center gap-1.5" title="Poin Diperoleh Hari Ini">
+                                                                <i class="ti ti-check"></i> +{{ $item->points_earned_today }} Poin Hari Ini
                                                             </span>
                                                         @endif
                                                     </div>
@@ -331,8 +331,8 @@
 
                                                 <!-- Action Buttons Footer -->
                                                 <div class="d-flex gap-2 pt-2 border-top">
-                                                    <button type="button" class="btn btn-outline-info btn-sm flex-grow-1 btn-view-detail d-flex align-items-center justify-content-center gap-1 py-1.5 fw-medium" data-login-id="{{ $item->latest_login_id }}" title="Lihat Rincian Sesi">
-                                                        <i class="ti ti-eye fs-14"></i> Detail Sesi
+                                                    <button type="button" class="btn btn-outline-info btn-sm flex-grow-1 btn-view-detail d-flex align-items-center justify-content-center gap-1.5 py-1.5 fw-medium" data-login-id="{{ $item->latest_login_id }}" title="Lihat Rincian Sesi">
+                                                        <i class="ti ti-eye fs-14 me-1.5"></i> Detail Sesi
                                                     </button>
                                                     <a href="{{ route('admin.profil-pengguna.messages.index') }}?user_id={{ $item->user?->id }}" class="btn btn-outline-primary btn-sm px-3 d-flex align-items-center justify-content-center py-1.5" title="Kirim Pesan Obrolan ke {{ $item->user?->name }}">
                                                         <i class="ti ti-message fs-14"></i>
@@ -413,8 +413,8 @@
                                                 </span>
                                             </td>
                                             <td class="text-center">
-                                                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle fs-12 px-2.5 py-1 fw-bold">
-                                                    <i class="ti ti-award me-0.5"></i> {{ number_format($item->user?->login_count ?? 0) }} Poin
+                                                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle fs-12 px-2.5 py-1 fw-bold d-inline-flex align-items-center gap-1.5">
+                                                    <i class="ti ti-award text-warning"></i> {{ number_format($item->user?->login_count ?? 0) }} Poin
                                                 </span>
                                             </td>
                                             <td class="text-center">
@@ -424,8 +424,8 @@
                                             </td>
                                             <td class="text-center">
                                                 @if ($item->points_earned_today > 0)
-                                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">
-                                                        <i class="ti ti-check me-0.5"></i> +{{ $item->points_earned_today }} Poin
+                                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 d-inline-flex align-items-center gap-1.5">
+                                                        <i class="ti ti-check"></i> +{{ $item->points_earned_today }} Poin
                                                     </span>
                                                 @else
                                                     <span class="badge bg-secondary-subtle text-muted px-2 py-1" title="Sudah dapat poin hari ini">

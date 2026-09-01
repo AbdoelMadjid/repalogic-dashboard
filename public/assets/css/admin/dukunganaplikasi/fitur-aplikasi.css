@@ -3,26 +3,6 @@
  * Path: public/assets/css/admin/dukunganaplikasi/fitur-aplikasi.css
  */
 
-.form-check.form-switch {
-    padding-left: 2.85em !important;
-}
-
-.form-check.form-switch .form-check-input {
-    margin-left: -2.85em !important;
-    cursor: pointer;
-}
-
-.form-check.form-switch .form-check-label {
-    cursor: pointer;
-    user-select: none;
-    padding-left: 0.35rem;
-}
-
-.switch-large {
-    width: 2.5em !important;
-    height: 1.35em !important;
-    cursor: pointer;
-}
 
 /* High-contrast, ultra-reliable SVG checkmark styling */
 .high-contrast-checkbox {

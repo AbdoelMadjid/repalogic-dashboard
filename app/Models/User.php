@@ -391,13 +391,13 @@ class User extends Authenticatable
     public function getOnlineStatusBadgeAttribute(): string
     {
         if ($this->is_online) {
-            return '<span class="badge bg-success-subtle text-success border border-success-subtle d-inline-flex align-items-center gap-1"><span class="badge-pulse-dot bg-success"></span> Online</span>';
+            return '<span class="badge bg-success-subtle text-success border border-success-subtle d-inline-flex align-items-center gap-1.5"><span class="badge-pulse-dot bg-success"></span>Online</span>';
         }
 
         $lastSeen = $this->last_seen_time;
         $timeText = $lastSeen ? $lastSeen->diffForHumans() : 'Offline';
 
-        return '<span class="badge bg-secondary-subtle text-muted border border-secondary-subtle d-inline-flex align-items-center gap-1"><span class="badge-dot-gray"></span> ' . e($timeText) . '</span>';
+        return '<span class="badge bg-secondary-subtle text-muted border border-secondary-subtle d-inline-flex align-items-center gap-1.5"><span class="badge-dot-gray"></span>' . e($timeText) . '</span>';
     }
 
     /**

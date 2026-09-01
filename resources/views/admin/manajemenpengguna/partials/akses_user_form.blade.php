@@ -1,32 +1,3 @@
-<style>
-    /* High-contrast, clear checkbox styling for permission matrix */
-    #permission-matrix-table .form-check-input,
-    #check_all_permissions,
-    .user-role-checkbox {
-        width: 1.25em;
-        height: 1.25em;
-        border: 2px solid #475569 !important;
-        border-radius: 0.25rem;
-        cursor: pointer;
-        transition: all 0.15s ease-in-out;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-    }
-
-    #permission-matrix-table .form-check-input:checked,
-    #check_all_permissions:checked,
-    .user-role-checkbox:checked {
-        background-color: #0d6efd !important;
-        border-color: #0d6efd !important;
-        box-shadow: 0 2px 4px rgba(13, 110, 253, 0.3);
-    }
-
-    #permission-matrix-table .form-check-input:hover,
-    #check_all_permissions:hover,
-    .user-role-checkbox:hover {
-        border-color: #0f172a !important;
-    }
-</style>
-
 <!-- USER GENERAL INFO & ROLES ASSIGNMENT -->
 <div class="row mb-3">
     <div class="col-md-6">

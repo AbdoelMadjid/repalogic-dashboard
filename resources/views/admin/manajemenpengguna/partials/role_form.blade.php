@@ -1,29 +1,3 @@
-<style>
-    /* High-contrast, clear checkbox styling for permission matrix */
-    #permission-matrix-table .form-check-input,
-    #check_all_permissions {
-        width: 1.25em;
-        height: 1.25em;
-        border: 2px solid #475569 !important;
-        border-radius: 0.25rem;
-        cursor: pointer;
-        transition: all 0.15s ease-in-out;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-    }
-
-    #permission-matrix-table .form-check-input:checked,
-    #check_all_permissions:checked {
-        background-color: #0d6efd !important;
-        border-color: #0d6efd !important;
-        box-shadow: 0 2px 4px rgba(13, 110, 253, 0.3);
-    }
-
-    #permission-matrix-table .form-check-input:hover,
-    #check_all_permissions:hover {
-        border-color: #0f172a !important;
-    }
-</style>
-
 <div class="row">
     <div class="col-12 mb-3">
         <label for="form_role_name" class="form-label fw-semibold">Nama Role <span class="text-danger">*</span></label>

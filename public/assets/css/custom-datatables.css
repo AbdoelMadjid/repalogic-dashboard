@@ -3,9 +3,17 @@
    ========================================================================== */
 
 /* Form Switch Toggle Styling */
-.form-check.form-switch .form-check-input {
-    width: 2.5em !important;
+.form-check.form-switch,
+.form-switch {
+    padding-left: 2.85em !important;
+    min-height: 1.5rem;
+}
+
+.form-check.form-switch .form-check-input,
+.form-switch .form-check-input {
+    width: 2.35em !important;
     height: 1.25em !important;
+    margin-left: -2.85em !important;
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e") !important;
     background-position: left center !important;
     background-repeat: no-repeat !important;
@@ -18,10 +26,40 @@
     border: 1px solid #ced4da !important;
 }
 
-.form-check.form-switch .form-check-input:checked {
+.form-check.form-switch .form-check-input:checked,
+.form-switch .form-check-input:checked {
     background-position: right center !important;
     background-color: #0acf97 !important;
     border-color: #0acf97 !important;
+}
+
+.form-check.form-switch .form-check-label,
+.form-switch .form-check-label,
+.form-check.form-switch label,
+.form-switch label {
+    cursor: pointer !important;
+    user-select: none !important;
+    padding-left: 0 !important;
+}
+
+/* Standalone Switch (Tanpa Label Internal / Di dalam Tabel atau Bersama Badge) */
+.form-check.form-switch:not(:has(label)),
+.form-check.form-switch:not(:has(.form-check-label)),
+.table .form-check.form-switch,
+.form-check.form-switch.p-0 {
+    padding-left: 0 !important;
+    min-height: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+.form-check.form-switch:not(:has(label)) .form-check-input,
+.form-check.form-switch:not(:has(.form-check-label)) .form-check-input,
+.table .form-check.form-switch .form-check-input,
+.form-check.form-switch.p-0 .form-check-input {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    flex-shrink: 0 !important;
 }
 
 /* Sortable Drag & Ghost styling */

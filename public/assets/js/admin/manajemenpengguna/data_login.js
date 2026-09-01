@@ -154,12 +154,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (d.is_online) {
                     if (detailUserOnlineDot) detailUserOnlineDot.classList.remove('d-none');
                     if (detailUserPresenceBadge) {
-                        detailUserPresenceBadge.innerHTML = '<span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 fs-12 d-inline-flex align-items-center gap-1.5 fw-semibold"><span class="badge-pulse-dot bg-success"></span> Sedang Online</span>';
+                        detailUserPresenceBadge.innerHTML = '<span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1.5 fs-12 d-inline-flex align-items-center gap-1.5 fw-semibold"><span class="badge-pulse-dot bg-success"></span>Sedang Online</span>';
                     }
                 } else {
                     if (detailUserOnlineDot) detailUserOnlineDot.classList.add('d-none');
                     if (detailUserPresenceBadge) {
-                        detailUserPresenceBadge.innerHTML = `<span class="badge bg-secondary-subtle text-muted border border-secondary-subtle px-3 py-1.5 fs-12 d-inline-flex align-items-center gap-1.5"><span class="badge-dot-gray"></span> ${d.last_seen_human}</span>`;
+                        detailUserPresenceBadge.innerHTML = `<span class="badge bg-secondary-subtle text-muted border border-secondary-subtle px-3 py-1.5 fs-12 d-inline-flex align-items-center gap-1.5"><span class="badge-dot-gray"></span>${d.last_seen_human}</span>`;
                     }
                 }
 

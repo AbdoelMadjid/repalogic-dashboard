@@ -9,19 +9,19 @@
         <label class="form-label fw-semibold">Pilih Tipe Aksi Permission (CRUD) <span class="text-danger">*</span></label>
         <div class="d-flex flex-wrap gap-3 p-3 bg-light rounded border">
             <div class="form-check">
-                <input class="form-check-input action-checkbox permission-input" type="checkbox" name="actions[]" value="create" id="act_create" checked style="border: 2px solid #475569 !important; width: 1.25em; height: 1.25em;">
+                <input class="form-check-input action-checkbox permission-input" type="checkbox" name="actions[]" value="create" id="act_create" checked>
                 <label class="form-check-label fw-bold text-success" for="act_create">CREATE</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input action-checkbox permission-input" type="checkbox" name="actions[]" value="read" id="act_read" checked style="border: 2px solid #475569 !important; width: 1.25em; height: 1.25em;">
+                <input class="form-check-input action-checkbox permission-input" type="checkbox" name="actions[]" value="read" id="act_read" checked>
                 <label class="form-check-label fw-bold text-info" for="act_read">READ</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input action-checkbox permission-input" type="checkbox" name="actions[]" value="update" id="act_update" checked style="border: 2px solid #475569 !important; width: 1.25em; height: 1.25em;">
+                <input class="form-check-input action-checkbox permission-input" type="checkbox" name="actions[]" value="update" id="act_update" checked>
                 <label class="form-check-label fw-bold text-warning" for="act_update">UPDATE</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input action-checkbox permission-input" type="checkbox" name="actions[]" value="delete" id="act_delete" checked style="border: 2px solid #475569 !important; width: 1.25em; height: 1.25em;">
+                <input class="form-check-input action-checkbox permission-input" type="checkbox" name="actions[]" value="delete" id="act_delete" checked>
                 <label class="form-check-label fw-bold text-danger" for="act_delete">DELETE</label>
             </div>
         </div>

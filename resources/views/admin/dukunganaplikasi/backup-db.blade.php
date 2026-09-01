@@ -137,11 +137,11 @@
                         <!-- Checkbox Opsi Tambahan DROP & CREATE DATABASE -->
                         <div class="p-3 bg-light rounded border mb-4">
                             <div class="form-check form-switch mb-0">
-                                <input class="form-check-input switch-large" type="checkbox" name="include_create_db" id="include_create_db" value="1">
-                                <label class="form-check-label fw-bold text-dark fs-14 ms-2" for="include_create_db">
+                                <input class="form-check-input" type="checkbox" name="include_create_db" id="include_create_db" value="1">
+                                <label class="form-check-label fw-bold text-dark fs-14" for="include_create_db">
                                     Sertakan Perintah DROP & CREATE DATABASE
                                 </label>
-                                <p class="fs-12 text-muted mb-0 ms-2 mt-1">
+                                <p class="fs-12 text-muted mb-0 mt-1">
                                     Jika diaktifkan, berkas .SQL akan diawali dengan perintah <code>DROP DATABASE IF EXISTS `{{ $dbName }}`; CREATE DATABASE `{{ $dbName }}`; USE `{{ $dbName }}`;</code> untuk kemudahan restore utuh dari nol.
                                 </p>
                             </div>

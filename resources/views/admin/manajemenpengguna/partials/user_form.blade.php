@@ -86,7 +86,7 @@
                                     };
                                 @endphp
                                 <div class="form-check form-check-inline m-0">
-                                    <input type="checkbox" name="roles[]" value="{{ $r->name }}" id="u_role_{{ $r->id }}" class="form-check-input user-input user-role-checkbox" style="border: 2px solid #475569 !important; width: 1.2em; height: 1.2em; cursor: pointer;">
+                                    <input type="checkbox" name="roles[]" value="{{ $r->name }}" id="u_role_{{ $r->id }}" class="form-check-input user-input user-role-checkbox">
                                     <label class="form-check-label fw-bold {{ $roleBadge }} text-capitalize fs-13 ms-1" for="u_role_{{ $r->id }}" style="cursor: pointer;">
                                         {{ $r->name }}
                                     </label>

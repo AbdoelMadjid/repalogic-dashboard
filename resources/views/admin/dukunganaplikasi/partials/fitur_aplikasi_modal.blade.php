@@ -84,9 +84,9 @@
 
                         <div class="col-md-6 d-flex flex-column justify-content-center">
                             <label class="form-label fw-semibold mb-2">Status Visibilitas Awal</label>
-                            <div class="form-check form-switch form-switch-md">
+                            <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch" id="modal_status" name="status" value="1" checked>
-                                <label class="form-check-label fw-semibold ms-2" for="modal_status" id="modal_status_label">
+                                <label class="form-check-label fw-semibold" for="modal_status" id="modal_status_label">
                                     <span class="badge bg-success-subtle text-success">Aktif (Ditampilkan)</span>
                                 </label>
                             </div>
