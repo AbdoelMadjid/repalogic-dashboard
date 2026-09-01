@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.7.1</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.7.6</strong>
                             </span>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                                         <h6 class="fw-bold mb-0 text-dark">2. Update Changelog View</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Tambahkan entri rilis baru pada linimasa file <code>resources/views/template/documentation/changelog.blade.php</code>.
+                                        Tambahkan item timeline dengan timestamp presisi WIB di <code>resources/views/template/documentation/changelog.blade.php</code>.
                                     </p>
                                 </div>
                             </div>
@@ -68,11 +68,11 @@
                             <div class="col-md-6 col-lg-3">
                                 <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                     <div class="d-flex align-items-center mb-2">
-                                        <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-table fs-14 text-dark"></i></span>
-                                        <h6 class="fw-bold mb-0 text-dark">3. Update Release History</h6>
+                                        <span class="badge bg-warning text-white rounded-circle p-1.5 me-2"><i class="ti ti-file-text fs-14"></i></span>
+                                        <h6 class="fw-bold mb-0 text-dark">3. Update Release Doc</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Catat riwayat rilis ke dalam tabel file <code>docs/riwayat_release_dan_tag.md</code>.
+                                        Perbarui tabel riwayat release pada file <code>docs/riwayat_release_dan_tag.md</code>.
                                     </p>
                                 </div>
                             </div>
@@ -84,7 +84,7 @@
                                         <h6 class="fw-bold mb-0 text-dark">4. Git Commit &amp; Tag</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Lakukan commit dengan format konvensional lalu buat tag release (contoh: <code>git tag -a v2.7.1 -m "Release v2.7.1"</code>).
+                                        Lakukan commit dengan format konvensional lalu buat tag release (contoh: <code>git tag -a v2.7.6 -m "Release v2.7.6"</code>).
                                     </p>
                                 </div>
                             </div>
@@ -106,8 +106,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.7.2 -->
-                        <!-- Version 2.7.5 -->
+                        <!-- Version 2.7.6 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -115,8 +114,38 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.7.5</h5>
+                                        <h5 class="fw-bold mb-0">v2.7.6</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.7.6</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 17:40 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Overhaul Tata Letak &amp; Form Edit Langsung Profil Pengguna (Single-Page Architecture), Restrukturisasi Tabel KTP 2-Kolom, Perapihan Card Penonaktifan Akun &amp; Perbaikan Inisialisasi Script Cover Header</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Single-Page Direct Profile Management Architecture:</strong> Eliminasi halaman edit terpisah (<code>admin/profil-pengguna/edit</code>) dan modal edit profil cepat. Seluruh formulir (Edit Profil Singkat, Motto Hidup, Detail KTP &amp; Alamat, Pengaturan Foto Sampul, dan Penonaktifan Akun) kini terintegrasi langsung pada route <code>admin/profil-pengguna</code>.</li>
+                                    <li><strong class="text-dark">Restrukturisasi Tabel 2-Kolom Detail KTP &amp; Alamat:</strong> Transformasi antarmuka pengisian data KTP menjadi format tabel 2-kolom yang elegan dan presisi. Kolom kiri memuat label identitas beserta thumbnail foto KTP berukuran proporsional yang dilengkapi tombol <em>Preview</em> dan <em>Unduh</em> di bawah foto, sedangkan kolom kanan memuat kontrol input/upload data.</li>
+                                    <li><strong class="text-dark">Penyelarasan Tata Letak Kolom Sidebar:</strong> Memindahkan kartu <em>Permohonan Penonaktifan Akun</em> ke bawah kartu <em>Motto Hidup</em> pada kolom kiri dengan tata letak vertikal terstruktur (judul, deskripsi, dan tombol aksi berukuran penuh) serta penyematan badge <em>Danger Zone</em> sejajar di samping judul.</li>
+                                    <li><strong class="text-dark">Perbaikan Sintaks &amp; Inisialisasi Script Eksternal Cover Header:</strong> Pembersihan deklarasi variabel duplikat pada <code>profil-pengguna.js</code> dan standardisasi pemuatan fungsi inisialisasi dengan pengecekan <code>document.readyState</code>, memulihkan seluruh fungsionalitas real-time live preview (swatch warna, slider opacity, blur, height, dan posisi vertikal).</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Profile Layout Overhaul</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Single-Page Architecture</span>
+                                    <span class="badge bg-light text-dark border fs-xs">2-Column KTP Table</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Cover Header JS Sync</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Danger Zone Card Clean-up</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.7.5 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-check fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.7.5</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.7.5</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 16:55 WIB</span>

@@ -3,11 +3,11 @@
  * Path: public/assets/js/admin/profil-pengguna.js
  */
 
-document.addEventListener('DOMContentLoaded', function() {
+function initProfilPengguna() {
     'use strict';
 
     // =========================================================================
-    // 1. Live Image Preview for Modal Avatar Upload
+    // 1. Live Image Preview for Avatar & Foto KTP Upload
     // =========================================================================
     const modalAvatarInput = document.getElementById('modal-avatar-input');
     const modalAvatarPreview = document.getElementById('modal-avatar-preview');
@@ -19,6 +19,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 const reader = new FileReader();
                 reader.onload = function(evt) {
                     modalAvatarPreview.src = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    const fotoKtpInput = document.getElementById('foto_ktp_input');
+    const ktpPreview = document.getElementById('ktp-preview-img');
+    const ktpWrapper = document.getElementById('ktp-preview-wrapper');
+
+    if (fotoKtpInput && ktpPreview) {
+        fotoKtpInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    ktpPreview.src = evt.target.result;
+                    if (ktpWrapper) ktpWrapper.classList.remove('d-none');
                 };
                 reader.readAsDataURL(file);
             }
@@ -286,23 +304,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+}
 
-    // =========================================================================
-    // 6. Live KTP Image Preview (for edit.blade.php if loaded)
-    // =========================================================================
-    const ktpInput = document.getElementById('foto_ktp_input');
-    const ktpPreview = document.getElementById('ktp-preview-img');
-
-    if (ktpInput && ktpPreview) {
-        ktpInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    ktpPreview.src = evt.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-});
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProfilPengguna);
+} else {
+    initProfilPengguna();
+}

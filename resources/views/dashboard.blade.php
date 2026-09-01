@@ -657,7 +657,7 @@
                     <div class="card-body p-3">
                         <div class="row g-2">
                             <div class="col-sm-6">
-                                <a href="{{ route('admin.profil-pengguna.edit') }}" class="quick-action-tile">
+                                <a href="{{ route('admin.profil-pengguna.index') }}" class="quick-action-tile">
                                     <div class="quick-action-icon bg-primary-subtle text-primary">
                                         <i class="ti ti-user-edit"></i>
                                     </div>

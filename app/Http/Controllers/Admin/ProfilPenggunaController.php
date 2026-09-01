@@ -55,17 +55,6 @@ class ProfilPenggunaController extends Controller
     }
 
     /**
-     * Display the edit KTP detail & full address form view (edit in partials).
-     */
-    public function edit()
-    {
-        $user = auth()->user()->load('detail');
-        $detail = $user->detail ?? new UserDetail();
-
-        return view('admin.profil-pengguna.partials.edit', compact('user', 'detail'));
-    }
-
-    /**
      * Update complete KTP identity & detailed address information (user_details table).
      */
     public function updateDetail(Request $request)

@@ -60,16 +60,6 @@
                             </div>
                         </div>
                         <div class="d-flex gap-2 align-items-center">
-                            <!-- Tombol Modal Edit Profil Utama -->
-                            <button type="button" class="btn btn-primary fw-semibold" data-bs-toggle="modal" data-bs-target="#modal-edit-profil">
-                                <i class="ti ti-edit me-1"></i> Edit Profil
-                            </button>
-
-                            <!-- Tombol Kelengkapan Data KTP -->
-                            <a href="{{ route('admin.profil-pengguna.edit') }}" class="btn btn-outline-primary fw-semibold">
-                                <i class="ti ti-id me-1"></i> Kelengkapan Data KTP
-                            </a>
-
                             <!-- Tombol Pesan / Chat -->
                             <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="btn btn-outline-success fw-semibold" id="btn-user-messages" title="Fitur Pesan / Obrolan">
                                 <i class="ti ti-message me-1"></i> Pesan
@@ -152,114 +142,61 @@
                 </div>
             </div>
 
-            <!-- Card Foto Sampul / Background Header -->
+            <!-- Card Edit Profil Singkat -->
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-header bg-primary text-white py-3">
-                    <h5 class="card-title text-white mb-0 fw-bold"><i class="ti ti-photo me-1"></i> Foto Sampul Background Header</h5>
+                    <h5 class="card-title text-white mb-0 fw-bold"><i class="ti ti-user-edit me-1"></i> Edit Profil Singkat</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.profil-pengguna.update-cover') }}" method="POST" enctype="multipart/form-data" id="form-update-cover">
+                    <form action="{{ route('admin.profil-pengguna.update-quick') }}" method="POST" enctype="multipart/form-data" id="form-quick-edit-profil">
                         @csrf
                         <div class="mb-3 text-center">
-                            <div id="cover-preview-container" class="position-relative mb-2 overflow-hidden rounded border shadow-sm w-100"
-                                style="min-height: 70px; max-height: 280px; transition: aspect-ratio 0.2s ease, height 0.2s ease;">
-                                <img src="{{ $user->cover_bg_url }}" id="cover-preview-img" alt="Background Header" class="w-100 h-100 object-fit-cover" style="object-fit: cover; object-position: center {{ $user->cover_position_y }}%;" />
-                                <div id="cover-preview-overlay" class="position-absolute top-0 start-0 w-100 h-100"
-                                    style="background: linear-gradient(to top, {{ $rgbaCover }}, {{ $rgbaTop }}); backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }}; -webkit-backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }}; pointer-events: none;"></div>
+                            <div class="d-inline-block position-relative mb-2">
+                                <img src="{{ $user->avatar_url }}" id="modal-avatar-preview" alt="avatar"
+                                    class="rounded-circle img-thumbnail shadow-sm"
+                                    style="width: 90px; height: 90px; min-width: 90px; min-height: 90px; object-fit: cover; object-position: top; aspect-ratio: 1 / 1;" />
                             </div>
-                            <label for="cover_bg_input" class="btn btn-sm btn-outline-primary fw-semibold cursor-pointer mb-2">
-                                <i class="ti ti-camera me-1"></i> Pilih / Ganti Foto Sampul
-                            </label>
-                            <input type="file" name="cover_image" id="cover_bg_input" class="d-none" accept="image/*">
+                            <div>
+                                <label for="modal-avatar-input" class="btn btn-sm btn-outline-primary fw-semibold cursor-pointer mb-0">
+                                    <i class="ti ti-camera me-1"></i> Pilih Foto Avatar
+                                </label>
+                                <input type="file" name="avatar" id="modal-avatar-input" class="d-none" accept="image/*">
+                            </div>
+                            <span class="fs-12 text-muted d-block mt-1">Format: JPG, PNG, WEBP, SVG (Maks 2MB)</span>
                         </div>
 
-                        <!-- Warna Lapisan Overlay -->
-                        <div class="mb-3 p-2 bg-light rounded border">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <label for="cover-color-input" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
-                                    <i class="ti ti-palette text-primary fs-15"></i> Warna Lapisan:
-                                </label>
-                                <span id="cover-color-val" class="badge bg-primary-subtle text-primary font-monospace fs-11 fw-bold">{{ $user->cover_color }}</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-2">
-                                <input type="color" class="form-control form-control-color border-0 p-0 rounded-circle cursor-pointer flex-shrink-0" id="cover-color-input" name="cover_color" value="{{ $user->cover_color }}" title="Pilih warna kustom" style="width: 30px; height: 30px; min-width: 30px; min-height: 30px;">
-                                <div class="d-flex flex-wrap align-items-center gap-1.5">
-                                    <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#313a46' ? 'active' : '' }}" data-color="#313a46" style="background-color: #313a46;" title="Dark Slate (#313a46)"></span>
-                                    <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#000000' ? 'active' : '' }}" data-color="#000000" style="background-color: #000000;" title="Hitam (#000000)"></span>
-                                    <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#1e3a8a' ? 'active' : '' }}" data-color="#1e3a8a" style="background-color: #1e3a8a;" title="Navy (#1e3a8a)"></span>
-                                    <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#4338ca' ? 'active' : '' }}" data-color="#4338ca" style="background-color: #4338ca;" title="Indigo (#4338ca)"></span>
-                                    <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#065f46' ? 'active' : '' }}" data-color="#065f46" style="background-color: #065f46;" title="Emerald (#065f46)"></span>
-                                    <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#701a75' ? 'active' : '' }}" data-color="#701a75" style="background-color: #701a75;" title="Fuchsia (#701a75)"></span>
-                                </div>
-                            </div>
+                        <div class="mb-3">
+                            <label for="modal_name" class="form-label fw-semibold text-dark fs-13">Nama Lengkap <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="modal_name" name="name" value="{{ old('name', $user->name) }}" required>
                         </div>
 
-                        <!-- Slider Ketebalan Warna Overlay -->
-                        <div class="mb-3 p-2 bg-light rounded border">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label for="cover-opacity-range" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
-                                    <i class="ti ti-adjustments-horizontal text-primary fs-15"></i> Ketebalan Warna:
-                                </label>
-                                <span id="cover-opacity-val" class="badge bg-primary-subtle text-primary font-monospace fs-12 fw-bold">{{ $user->cover_opacity }}%</span>
-                            </div>
-                            <input type="range" class="form-range mb-2" id="cover-opacity-range" name="cover_opacity" min="0" max="100" step="5" value="{{ $user->cover_opacity }}">
-                            <div class="d-flex justify-content-between gap-1">
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-opacity" data-opacity="0">0% (Asli)</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-opacity" data-opacity="60">60% (Standar)</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-opacity" data-opacity="85">85% (Pekat)</button>
+                        <div class="mb-3">
+                            <label for="modal_email" class="form-label fw-semibold text-dark fs-13">Alamat Email <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="modal_email" name="email" value="{{ old('email', $user->email) }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="modal_password" class="form-label fw-semibold text-dark fs-13">Kata Sandi Baru</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="modal_password" name="password" placeholder="Kosongkan jika tidak diganti">
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-input-id="modal_password" title="Lihat/Sembunyikan Kata Sandi">
+                                    <i class="ti ti-eye"></i>
+                                </button>
                             </div>
                         </div>
 
-                        <!-- Slider Tingkat Blur Lapisan -->
-                        <div class="mb-3 p-2 bg-light rounded border">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label for="cover-blur-range" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
-                                    <i class="ti ti-blur text-primary fs-15"></i> Tingkat Blur Lapisan:
-                                </label>
-                                <span id="cover-blur-val" class="badge bg-primary-subtle text-primary font-monospace fs-12 fw-bold">{{ $user->cover_blur }}px</span>
-                            </div>
-                            <input type="range" class="form-range mb-2" id="cover-blur-range" name="cover_blur" min="0" max="20" step="1" value="{{ $user->cover_blur }}">
-                            <div class="d-flex justify-content-between gap-1">
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-blur" data-blur="0">0px (Tanpa Blur)</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-blur" data-blur="6">6px (Sedang)</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-blur" data-blur="14">14px (Kuat)</button>
-                            </div>
-                        </div>
-
-                        <!-- Slider Pengatur Tinggi Banner Sampul -->
-                        <div class="mb-3 p-2 bg-light rounded border">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label for="cover-height-range" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
-                                    <i class="ti ti-arrows-maximize text-primary fs-15"></i> Tinggi Banner Sampul:
-                                </label>
-                                <span id="cover-height-val" class="badge bg-primary-subtle text-primary font-monospace fs-12 fw-bold">{{ $user->cover_height }}px</span>
-                            </div>
-                            <input type="range" class="form-range mb-2" id="cover-height-range" name="cover_height" min="180" max="600" step="10" value="{{ $user->cover_height }}">
-                            <div class="d-flex justify-content-between gap-1">
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-height" data-height="220">Ringkas (220px)</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-height" data-height="320">Standar (320px)</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-height" data-height="450">Tinggi (450px)</button>
-                            </div>
-                        </div>
-
-                        <!-- Slider Pengatur Posisi Vertikal -->
-                        <div class="mb-3 p-2 bg-light rounded border">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <label for="cover-position-range" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
-                                    <i class="ti ti-arrows-vertical text-primary fs-15"></i> Posisi Atas - Bawah:
-                                </label>
-                                <span id="cover-pos-val" class="badge bg-primary-subtle text-primary font-monospace fs-12 fw-bold">{{ $user->cover_position_y }}%</span>
-                            </div>
-                            <input type="range" class="form-range mb-2" id="cover-position-range" name="cover_position_y" min="0" max="100" value="{{ $user->cover_position_y }}">
-                            <div class="d-flex justify-content-between gap-1">
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-pos" data-pos="0">Atas (0%)</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-pos" data-pos="50">Tengah (50%)</button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-pos" data-pos="100">Bawah (100%)</button>
+                        <div class="mb-3">
+                            <label for="modal_password_confirmation" class="form-label fw-semibold text-dark fs-13">Konfirmasi Kata Sandi</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="modal_password_confirmation" name="password_confirmation" placeholder="Ulangi kata sandi baru">
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-input-id="modal_password_confirmation" title="Lihat/Sembunyikan Kata Sandi">
+                                    <i class="ti ti-eye"></i>
+                                </button>
                             </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary btn-sm w-100 fw-semibold">
-                            <i class="ti ti-device-floppy me-1"></i> Simpan Pengaturan Foto Sampul
+                            <i class="ti ti-device-floppy me-1"></i> Simpan Perubahan Profil
                         </button>
                     </form>
                 </div>
@@ -282,6 +219,54 @@
                             <i class="ti ti-device-floppy me-1"></i> Simpan Motto Hidup
                         </button>
                     </form>
+                </div>
+            </div>
+
+            <!-- Card Permohonan Penonaktifan Akun (Danger Zone) -->
+            <div class="card shadow-sm border border-danger-subtle mb-4">
+                <div class="card-header bg-danger text-white py-3">
+                    <h5 class="card-title text-white mb-0 fw-bold fs-13 d-flex align-items-center gap-1.5">
+                        <i class="ti ti-user-x me-1"></i>
+                        <span>Permohonan Penonaktifan Akun</span>
+                        <span class="badge bg-white bg-opacity-25 text-white font-monospace fs-10">Danger Zone</span>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if ($user->isDeactivationRequested())
+                        <div class="alert alert-warning border-0 shadow-sm d-flex align-items-start gap-3 p-3 mb-0 rounded-3" style="background-color: #fffbeb; color: #92400e;">
+                            <div class="avatar-sm bg-warning text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 mt-1">
+                                <i class="ti ti-hourglass-low fs-20"></i>
+                            </div>
+                            <div class="w-100">
+                                <h6 class="fw-bold mb-1 text-dark">Permohonan Penonaktifan Sedang Diproses</h6>
+                                <p class="fs-13 mb-2 text-muted">
+                                    Anda telah mengajukan permohonan penonaktifan akun pada <strong class="text-dark">{{ $user->deactivation_requested_at->format('d F Y (H:i)') }} WIB</strong>. Permintaan ini sedang menunggu tinjauan dan konfirmasi dari Administrator sistem.
+                                </p>
+                                @if(!empty($user->deactivation_reason))
+                                    <div class="p-3 bg-white border border-warning-subtle rounded-2 fs-13 mb-2">
+                                        <strong class="text-dark d-block mb-1"><i class="ti ti-notes me-1"></i>Alasan Pengajuan:</strong>
+                                        <span class="text-secondary fst-italic">"{{ $user->deactivation_reason }}"</span>
+                                    </div>
+                                @endif
+                                <form action="{{ route('admin.profil-pengguna.cancel-deactivation') }}" method="POST" data-confirm="Apakah Anda yakin ingin membatalkan permohonan penonaktifan akun Anda?">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-outline-warning fw-semibold">
+                                        <i class="ti ti-x me-1"></i> Batalkan Permohonan Penonaktifan
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @else
+                        <div class="mb-3">
+                            <h5 class="fw-bold text-dark fs-15 mb-1.5">Ingin menonaktifkan akun Anda?</h5>
+                            <p class="text-muted fs-13 mb-0">
+                                Jika Anda ingin berhenti menggunakan layanan untuk sementara atau permanen, Anda dapat mengajukan permohonan penonaktifan akun kepada Administrator. Setelah disetujui, akun Anda tidak akan dapat digunakan untuk masuk ke dalam sistem.
+                            </p>
+                        </div>
+                        <button type="button" class="btn btn-outline-danger btn-sm w-100 fw-semibold" data-bs-toggle="modal" data-bs-target="#modal-request-deactivation">
+                            <i class="ti ti-user-off me-1"></i> Minta Nonaktifkan Akun
+                        </button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -311,215 +296,389 @@
                             @if ($completion >= 100)
                                 <i class="ti ti-circle-check-filled text-success me-1"></i> Data profil Anda sudah <strong>100% Lengkap!</strong>
                             @else
-                                <i class="ti ti-info-circle text-warning me-1"></i> Lengkapi data identitas KTP & rincian alamat untuk mencapai 100%.
+                                <i class="ti ti-info-circle text-warning me-1"></i> Lengkapi formulir identitas KTP & rincian alamat di bawah untuk mencapai 100%.
                             @endif
                         </span>
-                        @if ($completion < 100)
-                            <a href="{{ route('admin.profil-pengguna.edit') }}" class="text-primary fw-semibold text-decoration-none">Lengkapi Sekarang <i class="ti ti-arrow-right"></i></a>
-                        @endif
                     </div>
                 </div>
             </div>
 
+            <!-- Card Formulir Kelengkapan Data KTP & Alamat Langsung -->
             <div class="card shadow-sm border-0 mb-4">
-                <div class="card-header bg-primary text-white py-3 d-flex align-items-center justify-content-between">
+                <div class="card-header bg-primary text-white py-3">
                     <h5 class="card-title text-white mb-0 fw-bold"><i class="ti ti-id me-1"></i> Detail Kelengkapan Data KTP & Alamat</h5>
-                    <a href="{{ route('admin.profil-pengguna.edit') }}" class="btn btn-sm btn-light text-primary fw-semibold">
-                        <i class="ti ti-edit me-1"></i> Edit Data KTP
-                    </a>
                 </div>
                 <div class="card-body">
                     @php
-                        $detail = $user->detail;
+                        $detail = $user->detail ?? new \App\Models\UserDetail();
                     @endphp
 
-                    @if (!$detail || empty($detail->nik))
-                        <div class="alert alert-warning border-0 d-flex align-items-center gap-2 mb-4">
-                            <i class="ti ti-alert-triangle fs-20"></i>
-                            <div>
-                                <strong>Data KTP Belum Lengkap:</strong> Anda belum melengkapi data identitas KTP dan rincian alamat terpisah. Silakan klik tombol <strong>Edit Data KTP</strong> untuk melengkapi profil Anda.
-                            </div>
-                        </div>
-                    @endif
+                    <form action="{{ route('admin.profil-pengguna.update-detail') }}" method="POST" enctype="multipart/form-data" id="form-user-detail">
+                        @csrf
 
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle border mb-0">
-                            <thead class="table-light align-middle text-center text-nowrap">
-                                <tr class="align-middle text-center text-nowrap">
-                                    <th class="text-center align-middle text-nowrap" style="width: 1%;">Rincian Identitas KTP</th>
-                                    <th class="text-center align-middle text-nowrap">Nilai / Keterangan Data</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="fw-semibold text-dark text-nowrap"><i class="ti ti-credit-card me-1 text-muted"></i> NIK (Nomor Induk Kependudukan)</td>
-                                    <td><span class="fs-13 text-dark fw-semibold">{{ $detail?->nik ?? '-' }}</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-dark text-nowrap"><i class="ti ti-brand-whatsapp me-1 text-success"></i> Nomor Telepon / WhatsApp</td>
-                                    <td>
-                                        @if (!empty($detail?->telepon))
-                                            <div class="d-flex align-items-center gap-2">
-                                                <span class="fs-13 text-dark fw-semibold">{{ $detail->telepon }}</span>
-                                                <a href="{{ $detail->telepon_wa_url }}" target="_blank" class="btn btn-xs btn-success d-inline-flex align-items-center gap-1 py-0.5 px-2">
-                                                    <i class="ti ti-brand-whatsapp"></i> Chat WhatsApp
-                                                </a>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle border mb-0">
+                                <thead class="table-light align-middle text-center text-nowrap">
+                                    <tr class="align-middle text-center text-nowrap">
+                                        <th class="text-center align-middle text-nowrap" style="width: 32%;">Rincian Identitas KTP</th>
+                                        <th class="text-center align-middle text-nowrap">Nilai / Input Data</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-semibold text-dark text-nowrap align-middle">
+                                            <i class="ti ti-credit-card me-1 text-muted"></i> NIK (Nomor Induk Kependudukan)
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-control-sm" id="nik" name="nik" value="{{ old('nik', $detail->nik) }}" placeholder="16 Digit NIK KTP" maxlength="20">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold text-dark text-nowrap align-middle">
+                                            <i class="ti ti-brand-whatsapp me-1 text-success"></i> Nomor Telepon / WhatsApp
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-text bg-light text-muted"><i class="ti ti-phone"></i></span>
+                                                <input type="text" class="form-control form-control-sm" id="telepon" name="telepon" value="{{ old('telepon', $detail->telepon) }}" placeholder="Contoh: 081234567890" maxlength="30">
                                             </div>
-                                        @else
-                                            <span class="text-muted fs-13 fst-italic">Belum diisi</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-dark text-nowrap"><i class="ti ti-user me-1 text-muted"></i> Nama Lengkap (Sesuai KTP)</td>
-                                    <td><span class="fs-13 text-dark fw-semibold">{{ $detail?->nama_ktp ?? $user->name }}</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-dark text-nowrap"><i class="ti ti-map-pin me-1 text-muted"></i> Tempat & Tanggal Lahir</td>
-                                    <td>
-                                        <span class="fs-13 text-dark">
-                                            {{ $detail?->tempat_lahir ?? '-' }}, {{ $detail?->tanggal_lahir ? $detail->tanggal_lahir->format('d F Y') : '-' }}
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-dark text-nowrap"><i class="ti ti-gender-bigender me-1 text-muted"></i> Jenis Kelamin</td>
-                                    <td><span class="badge bg-info-subtle text-info fs-12">{{ $detail?->jenis_kelamin ?? '-' }}</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-dark text-nowrap"><i class="ti ti-droplet me-1 text-muted"></i> Golongan Darah</td>
-                                    <td><span class="badge bg-danger-subtle text-danger fs-12">{{ $detail?->golongan_darah ?? '-' }}</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-dark text-nowrap"><i class="ti ti-building-church me-1 text-muted"></i> Agama</td>
-                                    <td><span class="fs-13 text-dark">{{ $detail?->agama ?? '-' }}</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-dark text-nowrap"><i class="ti ti-heart me-1 text-muted"></i> Status Perkawinan</td>
-                                    <td><span class="fs-13 text-dark">{{ $detail?->status_perkawinan ?? '-' }}</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-dark text-nowrap"><i class="ti ti-briefcase me-1 text-muted"></i> Pekerjaan</td>
-                                    <td><span class="fs-13 text-dark">{{ $detail?->pekerjaan ?? '-' }}</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-dark text-nowrap"><i class="ti ti-world me-1 text-muted"></i> Kewarganegaraan</td>
-                                    <td><span class="fs-13 text-dark">{{ $detail?->kewarganegaraan ?? 'WNI' }}</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-dark text-nowrap"><i class="ti ti-home me-1 text-muted"></i> Alamat Jalan / Rumah</td>
-                                    <td><span class="fs-13 text-dark">{{ $detail?->alamat_jalan ?? '-' }}</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-dark text-nowrap"><i class="ti ti-map me-1 text-muted"></i> RT / RW / Blok</td>
-                                    <td>
-                                        <span class="fs-13 text-dark">
-                                            RT: <strong>{{ $detail?->rt ?? '-' }}</strong> | RW: <strong>{{ $detail?->rw ?? '-' }}</strong> | Blok: <strong>{{ $detail?->blok ?? '-' }}</strong>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-dark text-nowrap"><i class="ti ti-building-community me-1 text-muted"></i> Desa / Kelurahan & Kecamatan</td>
-                                    <td>
-                                        <span class="fs-13 text-dark">
-                                            Desa/Kel. {{ $detail?->desa_kelurahan ?? '-' }}, Kec. {{ $detail?->kecamatan ?? '-' }}
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-dark text-nowrap"><i class="ti ti-map-2 me-1 text-muted"></i> Kabupaten/Kota & Provinsi</td>
-                                    <td>
-                                        <span class="fs-13 text-dark">
-                                            {{ $detail?->kabupaten_kota ?? '-' }}, {{ $detail?->provinsi ?? '-' }} (Kode Pos: {{ $detail?->kode_pos ?? '-' }})
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-semibold text-dark text-nowrap align-middle"><i class="ti ti-photo me-1 text-muted"></i> Foto Dokumen KTP</td>
-                                    <td>
-                                        @if (!empty($detail?->foto_ktp_url))
-                                            <div class="d-flex flex-wrap align-items-center gap-3">
-                                                <div class="position-relative border rounded p-1 shadow-sm bg-light" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modal-preview-ktp" title="Klik untuk memperbesar Foto KTP">
-                                                    <img src="{{ $detail->foto_ktp_url }}" alt="Foto KTP {{ $user->name }}" class="img-fluid rounded" style="max-height: 80px; max-width: 160px; object-fit: cover;" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold text-dark text-nowrap align-middle">
+                                            <i class="ti ti-user me-1 text-muted"></i> Nama Lengkap (Sesuai KTP)
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-control-sm" id="nama_ktp" name="nama_ktp" value="{{ old('nama_ktp', $detail->nama_ktp ?? $user->name) }}" placeholder="Nama lengkap sesuai KTP">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold text-dark text-nowrap align-middle">
+                                            <i class="ti ti-map-pin me-1 text-muted"></i> Tempat & Tanggal Lahir
+                                        </td>
+                                        <td>
+                                            <div class="row g-2">
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control form-control-sm" id="tempat_lahir" name="tempat_lahir" value="{{ old('tempat_lahir', $detail->tempat_lahir) }}" placeholder="Kota / Tempat Lahir">
                                                 </div>
-                                                <div>
-                                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal-preview-ktp">
-                                                        <i class="ti ti-zoom-in me-1"></i> Preview Foto KTP
-                                                    </button>
-                                                    <a href="{{ $detail->foto_ktp_url }}" download="KTP-{{ \Illuminate\Support\Str::slug($user->name) }}" class="btn btn-sm btn-outline-secondary ms-1">
-                                                        <i class="ti ti-download me-1"></i> Unduh
-                                                    </a>
-                                                    <div class="text-muted fs-12 mt-1">
-                                                        <i class="ti ti-info-circle me-1"></i> Berkas fisik KTP yang tersimpan di sistem. Klik preview untuk tampilan penuh.
+                                                <div class="col-sm-6">
+                                                    <input type="date" class="form-control form-control-sm" id="tanggal_lahir" name="tanggal_lahir" value="{{ old('tanggal_lahir', $detail->tanggal_lahir ? $detail->tanggal_lahir->format('Y-m-d') : '') }}">
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold text-dark text-nowrap align-middle">
+                                            <i class="ti ti-gender-bigender me-1 text-muted"></i> Jenis Kelamin
+                                        </td>
+                                        <td>
+                                            <select class="form-select form-select-sm" id="jenis_kelamin" name="jenis_kelamin">
+                                                <option value="">-- Pilih Jenis Kelamin --</option>
+                                                <option value="Laki-Laki" {{ old('jenis_kelamin', $detail->jenis_kelamin) == 'Laki-Laki' ? 'selected' : '' }}>Laki-Laki</option>
+                                                <option value="Perempuan" {{ old('jenis_kelamin', $detail->jenis_kelamin) == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold text-dark text-nowrap align-middle">
+                                            <i class="ti ti-droplet me-1 text-muted"></i> Golongan Darah
+                                        </td>
+                                        <td>
+                                            <select class="form-select form-select-sm" id="golongan_darah" name="golongan_darah">
+                                                <option value="">-- Pilih Golongan Darah --</option>
+                                                <option value="A" {{ old('golongan_darah', $detail->golongan_darah) == 'A' ? 'selected' : '' }}>A</option>
+                                                <option value="B" {{ old('golongan_darah', $detail->golongan_darah) == 'B' ? 'selected' : '' }}>B</option>
+                                                <option value="AB" {{ old('golongan_darah', $detail->golongan_darah) == 'AB' ? 'selected' : '' }}>AB</option>
+                                                <option value="O" {{ old('golongan_darah', $detail->golongan_darah) == 'O' ? 'selected' : '' }}>O</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold text-dark text-nowrap align-middle">
+                                            <i class="ti ti-building-church me-1 text-muted"></i> Agama
+                                        </td>
+                                        <td>
+                                            <select class="form-select form-select-sm" id="agama" name="agama">
+                                                <option value="">-- Pilih Agama --</option>
+                                                <option value="Islam" {{ old('agama', $detail->agama) == 'Islam' ? 'selected' : '' }}>Islam</option>
+                                                <option value="Kristen" {{ old('agama', $detail->agama) == 'Kristen' ? 'selected' : '' }}>Kristen</option>
+                                                <option value="Katholik" {{ old('agama', $detail->agama) == 'Katholik' ? 'selected' : '' }}>Katholik</option>
+                                                <option value="Hindu" {{ old('agama', $detail->agama) == 'Hindu' ? 'selected' : '' }}>Hindu</option>
+                                                <option value="Buddha" {{ old('agama', $detail->agama) == 'Buddha' ? 'selected' : '' }}>Buddha</option>
+                                                <option value="Khonghucu" {{ old('agama', $detail->agama) == 'Khonghucu' ? 'selected' : '' }}>Khonghucu</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold text-dark text-nowrap align-middle">
+                                            <i class="ti ti-heart me-1 text-muted"></i> Status Perkawinan
+                                        </td>
+                                        <td>
+                                            <select class="form-select form-select-sm" id="status_perkawinan" name="status_perkawinan">
+                                                <option value="">-- Pilih Status --</option>
+                                                <option value="Belum Kawin" {{ old('status_perkawinan', $detail->status_perkawinan) == 'Belum Kawin' ? 'selected' : '' }}>Belum Kawin</option>
+                                                <option value="Kawin" {{ old('status_perkawinan', $detail->status_perkawinan) == 'Kawin' ? 'selected' : '' }}>Kawin</option>
+                                                <option value="Cerai Hidup" {{ old('status_perkawinan', $detail->status_perkawinan) == 'Cerai Hidup' ? 'selected' : '' }}>Cerai Hidup</option>
+                                                <option value="Cerai Mati" {{ old('status_perkawinan', $detail->status_perkawinan) == 'Cerai Mati' ? 'selected' : '' }}>Cerai Mati</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold text-dark text-nowrap align-middle">
+                                            <i class="ti ti-briefcase me-1 text-muted"></i> Pekerjaan
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-control-sm" id="pekerjaan" name="pekerjaan" value="{{ old('pekerjaan', $detail->pekerjaan) }}" placeholder="e.g. Karyawan Swasta, PNS, Pengusaha">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold text-dark text-nowrap align-middle">
+                                            <i class="ti ti-world me-1 text-muted"></i> Kewarganegaraan
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-control-sm" id="kewarganegaraan" name="kewarganegaraan" value="{{ old('kewarganegaraan', $detail->kewarganegaraan ?? 'WNI') }}" placeholder="WNI / WNA">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold text-dark text-nowrap align-middle">
+                                            <i class="ti ti-home me-1 text-muted"></i> Alamat Jalan / Rumah
+                                        </td>
+                                        <td>
+                                            <textarea class="form-control form-control-sm" id="alamat_jalan" name="alamat_jalan" rows="2" placeholder="Nama Jalan, Nomor Rumah, Dusun / Komplek">{{ old('alamat_jalan', $detail->alamat_jalan) }}</textarea>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold text-dark text-nowrap align-middle">
+                                            <i class="ti ti-map me-1 text-muted"></i> RT / RW / Blok
+                                        </td>
+                                        <td>
+                                            <div class="row g-2">
+                                                <div class="col-sm-4">
+                                                    <div class="input-group input-group-sm">
+                                                        <span class="input-group-text">RT</span>
+                                                        <input type="text" class="form-control form-control-sm" id="rt" name="rt" value="{{ old('rt', $detail->rt) }}" placeholder="001">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="input-group input-group-sm">
+                                                        <span class="input-group-text">RW</span>
+                                                        <input type="text" class="form-control form-control-sm" id="rw" name="rw" value="{{ old('rw', $detail->rw) }}" placeholder="005">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="input-group input-group-sm">
+                                                        <span class="input-group-text">Blok</span>
+                                                        <input type="text" class="form-control form-control-sm" id="blok" name="blok" value="{{ old('blok', $detail->blok) }}" placeholder="Blok A3">
                                                     </div>
                                                 </div>
                                             </div>
-                                        @else
-                                            <span class="badge bg-secondary-subtle text-secondary fs-12 py-2 px-3">
-                                                <i class="ti ti-alert-circle me-1"></i> Belum ada berkas foto KTP yang diunggah
-                                            </span>
-                                            <a href="{{ route('admin.profil-pengguna.edit') }}" class="btn btn-sm btn-link text-primary p-0 ms-2 text-decoration-none">
-                                                <i class="ti ti-upload me-1"></i> Unggah Sekarang
-                                            </a>
-                                        @endif
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold text-dark text-nowrap align-middle">
+                                            <i class="ti ti-building-community me-1 text-muted"></i> Desa / Kelurahan & Kecamatan
+                                        </td>
+                                        <td>
+                                            <div class="row g-2">
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control form-control-sm" id="desa_kelurahan" name="desa_kelurahan" value="{{ old('desa_kelurahan', $detail->desa_kelurahan) }}" placeholder="Desa / Kelurahan">
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control form-control-sm" id="kecamatan" name="kecamatan" value="{{ old('kecamatan', $detail->kecamatan) }}" placeholder="Kecamatan">
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold text-dark text-nowrap align-middle">
+                                            <i class="ti ti-map-2 me-1 text-muted"></i> Kabupaten/Kota, Provinsi & Kode Pos
+                                        </td>
+                                        <td>
+                                            <div class="row g-2">
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control form-control-sm" id="kabupaten_kota" name="kabupaten_kota" value="{{ old('kabupaten_kota', $detail->kabupaten_kota) }}" placeholder="Kabupaten / Kota">
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <input type="text" class="form-control form-control-sm" id="provinsi" name="provinsi" value="{{ old('provinsi', $detail->provinsi) }}" placeholder="Provinsi">
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <input type="text" class="form-control form-control-sm" id="kode_pos" name="kode_pos" value="{{ old('kode_pos', $detail->kode_pos) }}" placeholder="Kode Pos" maxlength="10">
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold text-dark align-top">
+                                            <div class="d-flex align-items-center gap-1.5 mb-2">
+                                                <i class="ti ti-photo text-muted fs-15"></i>
+                                                <span class="text-nowrap">Foto Dokumen KTP</span>
+                                            </div>
+                                            <div id="ktp-preview-wrapper" class="{{ !empty($detail?->foto_ktp_url) ? '' : 'd-none' }} mt-2 pe-1">
+                                                <div class="position-relative border rounded p-1.5 shadow-sm bg-light mb-2 w-100 text-center" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#modal-preview-ktp" title="Klik untuk memperbesar Foto KTP">
+                                                    <img src="{{ !empty($detail?->foto_ktp) && \Illuminate\Support\Facades\Storage::disk('public')->exists($detail->foto_ktp) ? asset('storage/' . $detail->foto_ktp) : asset('assets/images/stock/small-1.jpg') }}" id="ktp-preview-img" alt="Foto KTP" class="img-fluid rounded w-100" style="max-height: 180px; object-fit: contain; background: #ffffff;" />
+                                                </div>
+                                                <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                                                    <button type="button" class="btn btn-xs btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal-preview-ktp">
+                                                        <i class="ti ti-zoom-in me-1"></i> Preview
+                                                    </button>
+                                                    @if (!empty($detail?->foto_ktp_url))
+                                                        <a href="{{ $detail->foto_ktp_url }}" download="KTP-{{ \Illuminate\Support\Str::slug($user->name) }}" class="btn btn-xs btn-outline-secondary" id="btn-download-ktp">
+                                                            <i class="ti ti-download me-1"></i> Unduh
+                                                        </a>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="align-top">
+                                            <div>
+                                                <label for="foto_ktp_input" class="form-label fs-12 text-muted mb-1 fw-semibold">
+                                                    {{ !empty($detail?->foto_ktp_url) ? 'Ganti / Unggah Berkas KTP Baru:' : 'Unggah Berkas KTP:' }}
+                                                </label>
+                                                <input class="form-control form-control-sm" type="file" id="foto_ktp_input" name="foto_ktp" accept="image/*" />
+                                                <span class="fs-11 text-muted mt-1 d-block">Format berkas: JPG, PNG, WEBP (Maksimal 2MB).</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="text-end pt-3">
+                            <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                                <i class="ti ti-device-floppy me-1"></i> Simpan Kelengkapan Data KTP
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
-            <!-- Card Permohonan Penonaktifan Akun (Danger Zone) -->
-            <div class="card shadow-sm border border-danger-subtle mb-4">
-                <div class="card-header bg-danger text-white py-3 d-flex align-items-center justify-content-between">
-                    <h5 class="card-title text-white mb-0 fw-bold">
-                        <i class="ti ti-user-x me-1"></i> Permohonan Penonaktifan Akun
-                    </h5>
-                    <span class="badge bg-white bg-opacity-25 text-white font-monospace fs-11">Danger Zone</span>
+            <!-- Card Foto Sampul / Background Header -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="card-title text-white mb-0 fw-bold"><i class="ti ti-photo me-1"></i> Foto Sampul Background Header</h5>
                 </div>
                 <div class="card-body">
-                    @if ($user->isDeactivationRequested())
-                        <div class="alert alert-warning border-0 shadow-sm d-flex align-items-start gap-3 p-3 mb-0 rounded-3" style="background-color: #fffbeb; color: #92400e;">
-                            <div class="avatar-sm bg-warning text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0 mt-1">
-                                <i class="ti ti-hourglass-low fs-20"></i>
+                    <form action="{{ route('admin.profil-pengguna.update-cover') }}" method="POST" enctype="multipart/form-data" id="form-update-cover">
+                        @csrf
+                        <div class="mb-2 text-center">
+                            <div id="cover-preview-container" class="position-relative mb-2 overflow-hidden rounded border shadow-sm w-100"
+                                style="min-height: 70px; max-height: 280px; transition: aspect-ratio 0.2s ease, height 0.2s ease;">
+                                <img src="{{ $user->cover_bg_url }}" id="cover-preview-img" alt="Background Header" class="w-100 h-100 object-fit-cover" style="object-fit: cover; object-position: center {{ $user->cover_position_y }}%;" />
+                                <div id="cover-preview-overlay" class="position-absolute top-0 start-0 w-100 h-100"
+                                    style="background: linear-gradient(to top, {{ $rgbaCover }}, {{ $rgbaTop }}); backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }}; -webkit-backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }}; pointer-events: none;"></div>
                             </div>
-                            <div class="w-100">
-                                <h6 class="fw-bold mb-1 text-dark">Permohonan Penonaktifan Sedang Diproses</h6>
-                                <p class="fs-13 mb-2 text-muted">
-                                    Anda telah mengajukan permohonan penonaktifan akun pada <strong class="text-dark">{{ $user->deactivation_requested_at->format('d F Y (H:i)') }} WIB</strong>. Permintaan ini sedang menunggu tinjauan dan konfirmasi dari Administrator sistem.
-                                </p>
-                                @if(!empty($user->deactivation_reason))
-                                    <div class="p-3 bg-white border border-warning-subtle rounded-2 fs-13 mb-2">
-                                        <strong class="text-dark d-block mb-1"><i class="ti ti-notes me-1"></i>Alasan Pengajuan:</strong>
-                                        <span class="text-secondary fst-italic">"{{ $user->deactivation_reason }}"</span>
+                            <label for="cover_bg_input" class="btn btn-sm btn-outline-primary fw-semibold cursor-pointer mb-0">
+                                <i class="ti ti-camera me-1"></i> Pilih / Ganti Foto Sampul
+                            </label>
+                            <input type="file" name="cover_image" id="cover_bg_input" class="d-none" accept="image/*">
+                        </div>
+
+                        <!-- Warna Lapisan Overlay -->
+                        <div class="mb-3 p-2 bg-light rounded border">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <div class="d-flex align-items-center flex-wrap gap-2">
+                                    <label for="cover-color-input" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
+                                        <i class="ti ti-palette text-primary fs-15"></i> Warna Lapisan:
+                                    </label>
+                                    <input type="color" class="form-control form-control-color border-0 p-0 rounded-circle cursor-pointer flex-shrink-0" id="cover-color-input" name="cover_color" value="{{ $user->cover_color }}" title="Pilih warna kustom" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px;">
+                                    <div class="d-flex flex-wrap align-items-center gap-1.5">
+                                        <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#313a46' ? 'active' : '' }}" data-color="#313a46" style="background-color: #313a46;" title="Dark Slate (#313a46)"></span>
+                                        <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#000000' ? 'active' : '' }}" data-color="#000000" style="background-color: #000000;" title="Hitam (#000000)"></span>
+                                        <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#1e3a8a' ? 'active' : '' }}" data-color="#1e3a8a" style="background-color: #1e3a8a;" title="Navy (#1e3a8a)"></span>
+                                        <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#4338ca' ? 'active' : '' }}" data-color="#4338ca" style="background-color: #4338ca;" title="Indigo (#4338ca)"></span>
+                                        <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#065f46' ? 'active' : '' }}" data-color="#065f46" style="background-color: #065f46;" title="Emerald (#065f46)"></span>
+                                        <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#701a75' ? 'active' : '' }}" data-color="#701a75" style="background-color: #701a75;" title="Fuchsia (#701a75)"></span>
                                     </div>
-                                @endif
-                                <form action="{{ route('admin.profil-pengguna.cancel-deactivation') }}" method="POST" data-confirm="Apakah Anda yakin ingin membatalkan permohonan penonaktifan akun Anda?">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm btn-outline-warning fw-semibold">
-                                        <i class="ti ti-x me-1"></i> Batalkan Permohonan Penonaktifan
-                                    </button>
-                                </form>
+                                </div>
+                                <span id="cover-color-val" class="badge bg-primary-subtle text-primary font-monospace fs-11 fw-bold">{{ $user->cover_color }}</span>
                             </div>
                         </div>
-                    @else
-                        <div class="row align-items-center g-3">
-                            <div class="col-md-8">
-                                <h6 class="fw-bold text-dark mb-1">Ingin menonaktifkan akun Anda?</h6>
-                                <p class="text-muted fs-13 mb-0">
-                                    Jika Anda ingin berhenti menggunakan layanan untuk sementara atau permanen, Anda dapat mengajukan permohonan penonaktifan akun kepada Administrator. Setelah disetujui, akun Anda tidak akan dapat digunakan untuk masuk ke dalam sistem.
-                                </p>
+
+                        <!-- Row Slider Ketebalan & Tingkat Blur -->
+                        <div class="row g-3 mb-3">
+                            <!-- Slider Ketebalan Warna Overlay -->
+                            <div class="col-md-6">
+                                <div class="p-2 bg-light rounded border h-100">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <label for="cover-opacity-range" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
+                                            <i class="ti ti-adjustments-horizontal text-primary fs-15"></i> Ketebalan Warna:
+                                        </label>
+                                        <span id="cover-opacity-val" class="badge bg-primary-subtle text-primary font-monospace fs-12 fw-bold">{{ $user->cover_opacity }}%</span>
+                                    </div>
+                                    <input type="range" class="form-range mb-2" id="cover-opacity-range" name="cover_opacity" min="0" max="100" step="5" value="{{ $user->cover_opacity }}">
+                                    <div class="d-flex justify-content-between gap-1">
+                                        <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-opacity" data-opacity="0">0% (Asli)</button>
+                                        <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-opacity" data-opacity="60">60% (Standar)</button>
+                                        <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-opacity" data-opacity="85">85% (Pekat)</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-4 text-md-end">
-                                <button type="button" class="btn btn-outline-danger fw-semibold" data-bs-toggle="modal" data-bs-target="#modal-request-deactivation">
-                                    <i class="ti ti-user-off me-1"></i> Minta Nonaktifkan Akun
-                                </button>
+
+                            <!-- Slider Tingkat Blur Lapisan -->
+                            <div class="col-md-6">
+                                <div class="p-2 bg-light rounded border h-100">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <label for="cover-blur-range" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
+                                            <i class="ti ti-blur text-primary fs-15"></i> Tingkat Blur Lapisan:
+                                        </label>
+                                        <span id="cover-blur-val" class="badge bg-primary-subtle text-primary font-monospace fs-12 fw-bold">{{ $user->cover_blur }}px</span>
+                                    </div>
+                                    <input type="range" class="form-range mb-2" id="cover-blur-range" name="cover_blur" min="0" max="20" step="1" value="{{ $user->cover_blur }}">
+                                    <div class="d-flex justify-content-between gap-1">
+                                        <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-blur" data-blur="0">0px (Tanpa Blur)</button>
+                                        <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-blur" data-blur="6">6px (Sedang)</button>
+                                        <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-blur" data-blur="14">14px (Kuat)</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    @endif
+
+                        <!-- Row Slider Tinggi Banner & Posisi Vertikal -->
+                        <div class="row g-3 mb-3">
+                            <!-- Slider Pengatur Tinggi Banner Sampul -->
+                            <div class="col-md-6">
+                                <div class="p-2 bg-light rounded border h-100">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <label for="cover-height-range" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
+                                            <i class="ti ti-arrows-maximize text-primary fs-15"></i> Tinggi Banner Sampul:
+                                        </label>
+                                        <span id="cover-height-val" class="badge bg-primary-subtle text-primary font-monospace fs-12 fw-bold">{{ $user->cover_height }}px</span>
+                                    </div>
+                                    <input type="range" class="form-range mb-2" id="cover-height-range" name="cover_height" min="180" max="600" step="10" value="{{ $user->cover_height }}">
+                                    <div class="d-flex justify-content-between gap-1">
+                                        <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-height" data-height="220">Ringkas (220px)</button>
+                                        <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-height" data-height="320">Standar (320px)</button>
+                                        <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-height" data-height="450">Tinggi (450px)</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slider Pengatur Posisi Vertikal -->
+                            <div class="col-md-6">
+                                <div class="p-2 bg-light rounded border h-100">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <label for="cover-position-range" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
+                                            <i class="ti ti-arrows-vertical text-primary fs-15"></i> Posisi Atas - Bawah:
+                                        </label>
+                                        <span id="cover-pos-val" class="badge bg-primary-subtle text-primary font-monospace fs-12 fw-bold">{{ $user->cover_position_y }}%</span>
+                                    </div>
+                                    <input type="range" class="form-range mb-2" id="cover-position-range" name="cover_position_y" min="0" max="100" value="{{ $user->cover_position_y }}">
+                                    <div class="d-flex justify-content-between gap-1">
+                                        <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-pos" data-pos="0">Atas (0%)</button>
+                                        <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-pos" data-pos="50">Tengah (50%)</button>
+                                        <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-pos" data-pos="100">Bawah (100%)</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-sm w-100 fw-semibold">
+                            <i class="ti ti-device-floppy me-1"></i> Simpan Pengaturan Foto Sampul
+                        </button>
+                    </form>
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -556,88 +715,6 @@
                         <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-danger px-4 fw-semibold">
                             <i class="ti ti-send me-1"></i> Kirim Permohonan
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL EDIT PROFIL (RULE 4 COMPLIANCE: Clean modal-lg layout) -->
-    <div class="modal fade" id="modal-edit-profil" tabindex="-1" aria-labelledby="modalEditProfilLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-primary text-white py-3">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="ti ti-user-edit fs-22"></i>
-                        <h5 class="modal-title text-white mb-0" id="modalEditProfilLabel">Edit Profil Singkat</h5>
-                    </div>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <form action="{{ route('admin.profil-pengguna.update-quick') }}" method="POST" enctype="multipart/form-data" id="form-quick-edit-profil">
-                    @csrf
-                    <div class="modal-body p-4">
-                        <div class="mb-4 text-center">
-                            <div class="d-inline-block position-relative mb-2">
-                                <img src="{{ $user->avatar_url }}" id="modal-avatar-preview" alt="avatar"
-                                    class="rounded-circle img-thumbnail shadow-sm"
-                                    style="width: 100px; height: 100px; min-width: 100px; min-height: 100px; object-fit: cover; object-position: top; aspect-ratio: 1 / 1;" />
-                            </div>
-                            <div>
-                                <label for="modal-avatar-input" class="btn btn-sm btn-outline-primary fw-semibold cursor-pointer mb-0">
-                                    <i class="ti ti-camera me-1"></i> Pilih Foto Avatar
-                                </label>
-                                <input type="file" name="avatar" id="modal-avatar-input" class="d-none" accept="image/*">
-                            </div>
-                            <span class="fs-12 text-muted d-block mt-1">Format: JPG, PNG, WEBP, SVG (Maks 2MB)</span>
-                        </div>
-
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="modal_name" class="form-label fw-semibold text-dark">Nama Lengkap <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="modal_name" name="name" value="{{ old('name', $user->name) }}" required>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="modal_email" class="form-label fw-semibold text-dark">Alamat Email <span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control" id="modal_email" name="email" value="{{ old('email', $user->email) }}" required>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="modal_password" class="form-label fw-semibold text-dark">Kata Sandi Baru</label>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control" id="modal_password" name="password" placeholder="Kosongkan jika tidak diganti">
-                                        <button class="btn btn-outline-secondary toggle-password" type="button" data-input-id="modal_password" title="Lihat/Sembunyikan Kata Sandi">
-                                            <i class="ti ti-eye"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="modal_password_confirmation" class="form-label fw-semibold text-dark">Konfirmasi Kata Sandi</label>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control" id="modal_password_confirmation" name="password_confirmation" placeholder="Ulangi kata sandi baru">
-                                        <button class="btn btn-outline-secondary toggle-password" type="button" data-input-id="modal_password_confirmation" title="Lihat/Sembunyikan Kata Sandi">
-                                            <i class="ti ti-eye"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer bg-light py-3">
-                        <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary px-4 fw-semibold">
-                            <i class="ti ti-device-floppy me-1"></i> Simpan Perubahan
                         </button>
                     </div>
                 </form>

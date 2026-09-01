@@ -41,7 +41,6 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
     Route::prefix('profil-pengguna')->name('profil-pengguna.')->group(function () {
         Route::get('/', [ProfilPenggunaController::class, 'index'])->name('index');
         Route::post('update-quick', [ProfilPenggunaController::class, 'updateQuick'])->name('update-quick');
-        Route::get('edit', [ProfilPenggunaController::class, 'edit'])->name('edit');
         Route::post('update-detail', [ProfilPenggunaController::class, 'updateDetail'])->name('update-detail');
         Route::post('update-cover', [ProfilPenggunaController::class, 'updateCover'])->name('update-cover');
         Route::post('update-motto', [ProfilPenggunaController::class, 'updateMotto'])->name('update-motto');
