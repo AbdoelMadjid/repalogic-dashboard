@@ -392,8 +392,31 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update Status Kehadiran Header Seketika
         const isOnline = btnSelect.getAttribute('data-user-online') === '1';
         const lastSeenHuman = btnSelect.getAttribute('data-user-last-seen') || 'Offline';
+        const userCover = btnSelect.getAttribute('data-user-cover');
+        const userCoverPos = btnSelect.getAttribute('data-user-cover-pos') || '0';
+        const userMotto = btnSelect.getAttribute('data-user-motto') || '';
         const activeChatOnlineDot = document.getElementById('active-chat-online-dot');
         const activeChatStatus = document.getElementById('active-chat-status');
+
+        // Update Modal Detail Akun Seketika (Instant 0ms Feedback)
+        const modalUserCover = document.getElementById('modal-user-cover');
+        if (modalUserCover && userCover) {
+            modalUserCover.style.backgroundImage = `url('${userCover}')`;
+            modalUserCover.style.backgroundPosition = `center ${userCoverPos}%`;
+        }
+        const modalUserAvatar = document.getElementById('modal-user-avatar');
+        if (modalUserAvatar && userAvatar) {
+            modalUserAvatar.src = userAvatar;
+        }
+        const modalUserName = document.getElementById('modal-user-name');
+        if (modalUserName) modalUserName.textContent = userName;
+        const modalUserRole = document.getElementById('modal-user-role');
+        if (modalUserRole) modalUserRole.innerHTML = `<i class="ti ti-shield-check me-1"></i>${userRole}`;
+        const modalUserMotto = document.getElementById('modal-user-motto');
+        if (modalUserMotto) {
+            modalUserMotto.textContent = `"${userMotto || 'Setiap hari adalah kesempatan baru untuk belajar dan berkarya.'}"`;
+            modalUserMotto.setAttribute('title', userMotto);
+        }
 
         if (activeChatOnlineDot) {
             activeChatOnlineDot.classList.remove('d-none');
@@ -628,6 +651,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.target_user) {
                     const tu = data.target_user;
                     if (document.getElementById('modal-user-avatar')) document.getElementById('modal-user-avatar').src = tu.avatar;
+                    if (document.getElementById('modal-user-cover')) {
+                        const coverUrl = tu.cover_bg_url || window.MessagesConfig?.defaultCover || '/assets/images/profile-bg.jpg';
+                        const coverPosY = (tu.cover_position_y !== undefined && tu.cover_position_y !== null) ? tu.cover_position_y : 0;
+                        document.getElementById('modal-user-cover').style.backgroundImage = `url('${coverUrl}')`;
+                        document.getElementById('modal-user-cover').style.backgroundPosition = `center ${coverPosY}%`;
+                    }
+                    if (document.getElementById('modal-user-motto')) {
+                        document.getElementById('modal-user-motto').textContent = `"${tu.motto || 'Setiap hari adalah kesempatan baru untuk belajar dan berkarya.'}"`;
+                        document.getElementById('modal-user-motto').setAttribute('title', tu.motto || '');
+                    }
                     if (document.getElementById('modal-user-name')) document.getElementById('modal-user-name').textContent = tu.name;
                     if (document.getElementById('modal-user-email')) document.getElementById('modal-user-email').textContent = tu.email;
                     if (document.getElementById('modal-user-role')) document.getElementById('modal-user-role').innerHTML = `<i class="ti ti-shield-check me-1"></i>${tu.role_name}`;

@@ -794,6 +794,145 @@
         </div>
     @endif
 
+    <!-- 6. WIDGET DIREKTORI DATA PENGGUNA & KONTAK (FULL WIDTH) -->
+    <div class="row g-3 mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0 mb-0">
+                <div class="card-header bg-white py-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <div>
+                        <h5 class="card-title mb-0 fw-bold text-dark d-flex align-items-center">
+                            <i class="ti ti-users text-primary me-2 fs-18"></i>Direktori Pengguna &amp; Kontak
+                        </h5>
+                        <p class="text-muted fs-12 mb-0 mt-0.5">Daftar seluruh pengguna aktif sistem dengan profil lengkap dan foto sampul personal.</p>
+                    </div>
+                    <div class="d-flex flex-wrap align-items-center gap-2">
+                        <div class="app-search" style="min-width: 270px;">
+                            <input type="text" id="dashboard-contact-search" class="form-control" style="padding-left: 40px !important;" placeholder="Cari nama, email, domisili, pekerjaan...">
+                            <i class="ti ti-search app-search-icon text-muted"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-3.5">
+                    <div class="row g-3" id="dashboard-contacts-grid">
+                        @forelse ($contactUsers as $cUser)
+                            @php
+                                $isMe = $cUser->id === auth()->id();
+                            @endphp
+                            <div class="col-sm-6 col-lg-4 col-xl-3 dashboard-contact-col"
+                                data-search-name="{{ strtolower($cUser->name) }}"
+                                data-search-email="{{ strtolower($cUser->email) }}"
+                                data-search-city="{{ strtolower($cUser->detail->kabupaten_kota ?? '') }}"
+                                data-search-job="{{ strtolower($cUser->detail->pekerjaan ?? '') }}">
+                                <div class="card card-h-100 border shadow-sm rounded-3 overflow-hidden mb-0 contact-grid-card">
+                                    <!-- Cover Banner Background -->
+                                    <div class="position-relative contact-grid-cover"
+                                        style="height: 105px; background-image: url('{{ $cUser->cover_bg_url }}'); background-position: center {{ $cUser->cover_position_y }}%;">
+                                        <div class="position-absolute top-0 start-0 end-0 bottom-0 p-2 d-flex justify-content-end align-items-start contact-grid-cover-overlay">
+                                            <span class="badge {{ $cUser->is_online ? 'bg-success text-white' : 'bg-dark bg-opacity-75 text-white-50' }} fs-xxs py-0.5 px-1.5 rounded-pill"
+                                                title="{{ $cUser->is_online ? 'Online Sekarang' : $cUser->last_seen_human }}">
+                                                <i class="ti {{ $cUser->is_online ? 'ti-circle-filled text-white' : 'ti-clock' }} me-0.5"></i>
+                                                {{ $cUser->is_online ? 'Online' : 'Offline' }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Card Body -->
+                                    <div class="card-body p-3 text-center d-flex flex-column">
+                                        <!-- Overlapping Avatar -->
+                                        <div class="position-relative d-inline-block mx-auto mb-2" style="margin-top: -42px;">
+                                            <img src="{{ $cUser->avatar_url }}" alt="{{ $cUser->name }}"
+                                                class="rounded-circle border border-3 border-white shadow-sm contact-grid-avatar">
+                                            <span class="position-absolute bottom-0 end-0 border border-2 border-white rounded-circle {{ $cUser->is_online ? 'bg-success' : 'bg-secondary opacity-50' }}"
+                                                style="width: 12px; height: 12px; transform: translate(10%, 10%);"></span>
+                                        </div>
+
+                                        <h5 class="fw-bold text-dark fs-14 mb-0.5 text-truncate" title="{{ $cUser->name }}">
+                                          {{ $cUser->name }}
+                                          @if ($isMe)
+                                              <span class="badge bg-primary text-white fs-xxs ms-1">Anda</span>
+                                          @endif
+                                        </h5>
+                                        <p class="text-muted fs-12 mb-2 text-truncate" title="{{ $cUser->email }}">
+                                            <i class="ti ti-mail me-1"></i>{{ $cUser->email }}
+                                        </p>
+
+                                        @if (!empty($cUser->motto))
+                                            <div class="text-muted fs-11 fst-italic text-truncate px-2 py-1 mb-2 bg-light-subtle rounded border border-light"
+                                                title="{{ $cUser->motto }}">
+                                                "{{ $cUser->motto }}"
+                                            </div>
+                                        @endif
+
+                                        <!-- Meta Info List -->
+                                        <ul class="list-unstyled text-muted fs-12 text-start mb-3 mt-auto pt-2 border-top">
+                                            <li class="d-flex align-items-center justify-content-between mb-1.5">
+                                                <span class="text-muted"><i class="ti ti-briefcase me-1 text-primary"></i>Pekerjaan:</span>
+                                                <strong class="text-dark text-truncate ps-2" style="max-width: 140px;">
+                                                    {{ $cUser->detail->pekerjaan ?? 'Belum diisi' }}
+                                                </strong>
+                                            </li>
+                                            <li class="d-flex align-items-center justify-content-between mb-1.5">
+                                                <span class="text-muted"><i class="ti ti-map-pin me-1 text-danger"></i>Domisili:</span>
+                                                <strong class="text-dark text-truncate ps-2" style="max-width: 140px;">
+                                                    {{ $cUser->detail->kabupaten_kota ?? 'Belum diisi' }}
+                                                </strong>
+                                            </li>
+                                            <li class="d-flex align-items-center justify-content-between mb-1.5">
+                                                <span class="text-muted"><i class="ti ti-award me-1 text-warning"></i>Poin Login:</span>
+                                                <strong class="text-dark">{{ number_format($cUser->login_count ?? 0) }} Poin</strong>
+                                            </li>
+                                            <li class="d-flex align-items-center justify-content-between">
+                                                <span class="text-muted"><i class="ti ti-calendar me-1 text-info"></i>Bergabung:</span>
+                                                <span class="text-dark">{{ $cUser->created_at->format('d M Y') }}</span>
+                                            </li>
+                                        </ul>
+
+                                        <!-- Action Buttons -->
+                                        <div class="d-flex gap-1.5 justify-content-center">
+                                            @if (!$isMe)
+                                                <a href="{{ route('admin.profil-pengguna.messages.index', ['user_id' => $cUser->id]) }}"
+                                                    class="btn btn-sm btn-primary bg-primary text-white w-100 fw-semibold d-flex align-items-center justify-content-center gap-1">
+                                                    <i class="ti ti-messages"></i> Kirim Pesan
+                                                </a>
+                                            @else
+                                                <a href="{{ route('admin.profil-pengguna.index') }}"
+                                                    class="btn btn-sm btn-light border text-primary w-100 fw-semibold d-flex align-items-center justify-content-center gap-1">
+                                                    <i class="ti ti-user"></i> Profil Saya
+                                                </a>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="col-12 text-center py-5 text-muted">
+                                <i class="ti ti-users-minus fs-32 text-muted mb-2 d-block"></i>
+                                <p class="fs-13 mb-0">Belum ada data pengguna aktif terdaftar.</p>
+                            </div>
+                        @endforelse
+                    </div>
+
+                    <div id="dashboard-contacts-empty" class="text-center py-5 text-muted d-none">
+                        <i class="ti ti-search-off fs-32 text-muted mb-2 d-block"></i>
+                        <p class="fs-13 mb-0">Tidak ada pengguna yang cocok dengan kriteria pencarian.</p>
+                    </div>
+
+                    <!-- Tombol Anak Panah Muat Lebih Banyak (Load More Down Arrow) -->
+                    <div class="text-center pt-4 pb-2" id="dashboard-contacts-loadmore-container">
+                        <button type="button" id="dashboard-contacts-loadmore-btn" class="btn btn-sm btn-outline-primary rounded-pill px-4 py-1.5 shadow-sm fw-semibold d-inline-flex align-items-center gap-1.5">
+                            <span>Tampilkan 12 Pengguna Berikutnya</span>
+                            <i class="ti ti-chevron-down fs-16 animated-bounce-down"></i>
+                        </button>
+                        <div class="text-muted fs-12 mt-3" id="dashboard-contacts-loadmore-info">
+                            Menampilkan <span id="contacts-visible-count" class="fw-semibold text-dark">{{ min(12, $contactUsers->count()) }}</span> dari <span id="contacts-total-count" class="fw-semibold text-dark">{{ $contactUsers->count() }}</span> pengguna
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ApexCharts Plugin & Data Bridge (Rule 1 & Rule 15 Standard) -->
     <script src="{{ asset('assets/plugins/apexcharts/apexcharts.min.js') }}"></script>
     <script>

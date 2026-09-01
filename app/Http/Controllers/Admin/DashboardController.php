@@ -133,6 +133,13 @@ class DashboardController extends Controller
         // 8. Recent Unique Conversations
         $recentMessages = $this->getRecentConversations($user);
 
+        // 9. Active Contacts & Team Directory (Full Widget) - Tempatkan akun sendiri di paling pertama (kiri atas)
+        $contactUsers = User::with(['config', 'detail', 'roles'])
+            ->where('status', 'active')
+            ->orderByRaw('CASE WHEN id = ? THEN 0 ELSE 1 END', [$user->id])
+            ->orderBy('name', 'asc')
+            ->get();
+
         return view('dashboard', compact(
             'user',
             'greeting',
@@ -155,7 +162,8 @@ class DashboardController extends Controller
             'pendingApprovals',
             'pendingDeactivations',
             'recentLogins',
-            'recentMessages'
+            'recentMessages',
+            'contactUsers'
         ));
     }
 
@@ -199,6 +207,14 @@ class DashboardController extends Controller
             ->take(6)
             ->get();
 
+        // 6. Active Contacts & Team Directory (Full Widget) - Tempatkan akun sendiri di paling pertama (kiri atas)
+        $contactUsers = User::with(['config', 'detail', 'roles'])
+            ->where('status', 'active')
+            ->orderByRaw('CASE WHEN id = ? THEN 0 ELSE 1 END', [$user->id])
+            ->orderBy('name', 'asc')
+            ->get();
+        $rolesDistribution = Role::withCount('users')->get();
+
         return view('dashboard', compact(
             'user',
             'greeting',
@@ -210,7 +226,9 @@ class DashboardController extends Controller
             'unreadNotificationsCount',
             'myNotifications',
             'completenessPercent',
-            'myRecentLogins'
+            'myRecentLogins',
+            'contactUsers',
+            'rolesDistribution'
         ));
     }
 

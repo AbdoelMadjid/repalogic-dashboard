@@ -195,4 +195,114 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
     });
+
+    // 4. Live Search & Modern Incremental Load More (12 Pengguna per Klik Anak Panah)
+    const contactSearchInput = document.querySelector('#dashboard-contact-search');
+    const contactCards = Array.from(document.querySelectorAll('.dashboard-contact-col'));
+    const contactEmptyMsg = document.querySelector('#dashboard-contacts-empty');
+    const loadmoreContainer = document.querySelector('#dashboard-contacts-loadmore-container');
+    const loadmoreBtn = document.querySelector('#dashboard-contacts-loadmore-btn');
+    const visibleCountSpan = document.querySelector('#contacts-visible-count');
+    const totalCountSpan = document.querySelector('#contacts-total-count');
+
+    const STEP_SIZE = 12;
+    let visibleLimit = 12;
+    let matchedCards = [...contactCards];
+
+    function renderVisibleContacts(isAppending = false) {
+        if (!contactCards.length) return;
+
+        const totalItems = matchedCards.length;
+        const currentVisible = Math.min(visibleLimit, totalItems);
+
+        // Hide all cards first
+        contactCards.forEach(card => card.classList.add('d-none'));
+
+        // Reveal matching cards up to visibleLimit
+        const newlyRevealed = [];
+        matchedCards.slice(0, currentVisible).forEach((card, idx) => {
+            card.classList.remove('d-none');
+            if (isAppending && idx >= (visibleLimit - STEP_SIZE)) {
+                newlyRevealed.push(card);
+            }
+        });
+
+        // Update Empty state
+        if (contactEmptyMsg) {
+            if (totalItems === 0) {
+                contactEmptyMsg.classList.remove('d-none');
+            } else {
+                contactEmptyMsg.classList.add('d-none');
+            }
+        }
+
+        // Update Counter Text
+        if (visibleCountSpan) {
+            visibleCountSpan.textContent = currentVisible;
+        }
+        if (totalCountSpan) {
+            totalCountSpan.textContent = totalItems;
+        }
+
+        // Handle Down Arrow Button Visibility (Hilang otomatis jika seluruh pengguna sudah tampil)
+        if (loadmoreContainer) {
+            if (currentVisible >= totalItems || totalItems === 0) {
+                loadmoreContainer.classList.add('d-none');
+            } else {
+                loadmoreContainer.classList.remove('d-none');
+                const remaining = totalItems - currentVisible;
+                const nextStep = Math.min(STEP_SIZE, remaining);
+                const btnTextSpan = loadmoreBtn?.querySelector('span');
+                if (btnTextSpan) {
+                    btnTextSpan.textContent = `Tampilkan ${nextStep} Pengguna Berikutnya`;
+                }
+            }
+        }
+
+        // Smooth scroll to the newly revealed cards if clicking load more
+        if (isAppending && newlyRevealed.length > 0) {
+            newlyRevealed[0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }
+
+    function filterContacts() {
+        if (!contactCards.length) return;
+
+        const keyword = (contactSearchInput?.value || '').toLowerCase().trim();
+
+        matchedCards = contactCards.filter(function (card) {
+            const name = (card.getAttribute('data-search-name') || '').toLowerCase();
+            const email = (card.getAttribute('data-search-email') || '').toLowerCase();
+            const city = (card.getAttribute('data-search-city') || '').toLowerCase();
+            const job = (card.getAttribute('data-search-job') || '').toLowerCase();
+
+            return !keyword || name.includes(keyword) || email.includes(keyword) || city.includes(keyword) || job.includes(keyword);
+        });
+
+        // Reset visible limit to initial 12 on new search
+        visibleLimit = 12;
+        renderVisibleContacts(false);
+    }
+
+    if (contactSearchInput) {
+        contactSearchInput.addEventListener('input', filterContacts);
+    }
+
+    // Event Delegation: Klik Tombol Anak Panah ke Bawah (Rule 2 Standard)
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('#dashboard-contacts-loadmore-btn');
+        if (btn) {
+            e.preventDefault();
+            visibleLimit += STEP_SIZE;
+            renderVisibleContacts(true);
+        }
+    });
+
+    // Initial Render
+    if (contactCards.length > 0) {
+        renderVisibleContacts(false);
+    }
 });
+
+
+

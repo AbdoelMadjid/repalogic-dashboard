@@ -41,6 +41,9 @@
                                     @endphp
                                     <a href="javascript:void(0);" data-user-id="{{ $c['id'] }}"
                                         data-user-name="{{ $c['name'] }}" data-user-avatar="{{ $c['avatar'] }}"
+                                        data-user-cover="{{ $c['cover_bg_url'] ?? asset('assets/images/profile-bg.jpg') }}"
+                                        data-user-cover-pos="{{ $c['cover_position_y'] ?? 0 }}"
+                                        data-user-motto="{{ $c['motto'] ?? '' }}"
                                         data-user-role="{{ $c['role_name'] }}"
                                         data-user-online="{{ !empty($c['is_online']) ? '1' : '0' }}"
                                         data-user-last-seen="{{ $c['last_seen_human'] ?? 'Offline' }}"
@@ -89,6 +92,9 @@
                                     @endphp
                                     <a href="javascript:void(0);" data-user-id="{{ $c['id'] }}"
                                         data-user-name="{{ $c['name'] }}" data-user-avatar="{{ $c['avatar'] }}"
+                                        data-user-cover="{{ $c['cover_bg_url'] ?? asset('assets/images/profile-bg.jpg') }}"
+                                        data-user-cover-pos="{{ $c['cover_position_y'] ?? 0 }}"
+                                        data-user-motto="{{ $c['motto'] ?? '' }}"
                                         data-user-role="{{ $c['role_name'] }}"
                                         data-user-online="{{ !empty($c['is_online']) ? '1' : '0' }}"
                                         data-user-last-seen="{{ $c['last_seen_human'] ?? 'Offline' }}"
@@ -666,25 +672,37 @@
     <div class="modal fade" id="user-detail-modal" tabindex="-1" aria-labelledby="userDetailModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg">
-                <div class="modal-header bg-primary text-white py-3">
-                    <h5 class="modal-title text-white fs-15 fw-semibold" id="userDetailModalLabel">
-                        <i class="ti ti-id me-1"></i> Detail Profil Pengguna
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+            <div class="modal-content border-0 shadow-lg overflow-hidden">
+                <!-- TOP COVER BANNER WITH FOTO SAMPUL PENGGUNA -->
+                <div id="modal-user-cover" class="position-relative overflow-hidden user-detail-cover"
+                    style="height: 140px; background-image: url('{{ $activeUser ? $activeUser->cover_bg_url : asset('assets/images/profile-bg.jpg') }}'); background-size: cover; background-position: center {{ $activeUser ? $activeUser->cover_position_y : 0 }}%;">
+                    <div class="position-absolute top-0 start-0 end-0 bottom-0 d-flex justify-content-between align-items-start p-3 user-detail-cover-overlay"
+                        style="background: linear-gradient(180deg, rgba(15,23,42,0.7) 0%, rgba(15,23,42,0.2) 60%, rgba(15,23,42,0.8) 100%);">
+                        <div class="d-flex align-items-center gap-1.5 text-white">
+                            <i class="ti ti-id fs-18"></i>
+                            <span class="fs-14 fw-semibold text-white">Detail Profil Pengguna</span>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
                 </div>
-                <div class="modal-body p-4 text-center">
-                    <div class="mb-3 position-relative d-inline-block">
+
+                <div class="modal-body px-4 pt-0 pb-4 text-center">
+                    <!-- AVATAR OVERLAPPING COVER BANNER -->
+                    <div class="mb-3 position-relative d-inline-block" style="margin-top: -48px;">
                         <img id="modal-user-avatar"
                             src="{{ $activeUser ? $activeUser->avatar_url : asset('assets/images/users/default-avatar.svg') }}"
-                            class="rounded-circle img-thumbnail shadow-sm"
-                            style="width: 90px; height: 90px; object-fit: cover; object-position: top;"
+                            class="rounded-circle border border-3 border-white shadow"
+                            style="width: 96px; height: 96px; min-width: 96px; min-height: 96px; object-fit: cover; object-position: top; background-color: #fff;"
                             alt="Avatar Pengguna">
                     </div>
                     <h5 class="fw-bold mb-1 text-dark fs-16" id="modal-user-name">
                         {{ $activeUser ? $activeUser->name : '-' }}</h5>
-                    <p class="text-muted fs-13 mb-3" id="modal-user-email">{{ $activeUser ? $activeUser->email : '-' }}
+                    <p class="text-muted fs-13 mb-2" id="modal-user-email">{{ $activeUser ? $activeUser->email : '-' }}
+                    </p>
+
+                    <p class="text-muted fst-italic fs-12 px-3 mb-3 text-truncate" id="modal-user-motto" title="{{ $activeUser ? $activeUser->motto : '' }}">
+                        "{{ $activeUser ? $activeUser->motto : 'Setiap hari adalah kesempatan baru untuk belajar dan berkarya.' }}"
                     </p>
 
                     <div class="d-flex justify-content-center gap-2 mb-4">
@@ -797,6 +815,7 @@
             currentUserId: {{ auth()->id() }},
             currentUserAvatar: "{{ auth()->user()->avatar_url }}",
             defaultAvatar: "{{ asset('assets/images/users/default-avatar.svg') }}",
+            defaultCover: "{{ asset('assets/images/profile-bg.jpg') }}",
             initialMessageCount: {{ $messages->count() }},
             initialLastMessageId: {{ $messages->isNotEmpty() ? $messages->last()->id : 'null' }}
         };

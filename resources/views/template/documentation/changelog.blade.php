@@ -106,7 +106,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.7.1 -->
+                        <!-- Version 2.7.2 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -114,8 +114,37 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.7.1</h5>
+                                        <h5 class="fw-bold mb-0">v2.7.2</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.7.2</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 13:48 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Dynamic User Directory &amp; Contacts Hub, Incremental 12-Card Load More Engine with Down Arrow Animation &amp; Messages Detail Cover Photo Sync</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Widget Penuh Direktori Pengguna &amp; Kontak (<code>dashboard.blade.php</code>):</strong> Menyajikan widget direktori kontak responsif dengan kartu pengguna (berdasar inspirasi <code>template/apps/users/contacts</code>) yang dilengkapi banner foto sampul dinamis (<code>$u-&gt;cover_bg_url</code>), avatar bertumpuk (*overlapping*), status kehadiran online/offline, rincian metadata (pekerjaan, domisili, poin login), tombol kirim pesan instan, dan penempatan kartu akun sendiri di paling kiri atas (*slot #1*).</li>
+                                    <li><strong class="text-dark">Pola Perluasan *Incremental Load More* dengan Anak Panah ke Bawah:</strong> Menampilkan 12 kartu pengguna awal dan tombol *"Tampilkan 12 Pengguna Berikutnya"* beranimasi membal lembut (<code>.animated-bounce-down</code>) yang otomatis berpindah ke bawah setiap kali diklik dan hilang secara otomatis saat seluruh data telah ditampilkan.</li>
+                                    <li><strong class="text-dark">Pencarian Langsung Terintegrasi (*Live Search*):</strong> Fitur *instant client-side search* berdasarkan nama, email, domisili/kota, dan pekerjaan yang secara cerdas me-reset batas *load more* tanpa reload halaman.</li>
+                                    <li><strong class="text-dark">Modal Detail Akun Pesan dengan Foto Sampul Dinamis (<code>admin/profil-pengguna/messages</code>):</strong> Mengintegrasikan banner foto sampul pengguna (<code>$user-&gt;cover_bg_url</code>), perataan vertikal (<code>$user-&gt;cover_position_y</code>), motto kutipan, dan overlay kontras tinggi pada bagian atas modal *Detail Akun* (<code>#user-detail-modal</code>), lengkap dengan sinkronisasi instan via AJAX dan event delegation.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">User Directory Hub</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Incremental Load More</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Down Arrow Animation</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Messages Modal Cover Sync</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.7.1 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-check fs-xl text-success"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.7.1</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.7.1</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 13:00 WIB</span>

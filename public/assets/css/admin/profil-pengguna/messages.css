@@ -110,3 +110,16 @@ mark.search-match.bg-danger {
 .btn-reaction-pill:hover {
     transform: scale(1.1);
 }
+
+/* User Detail Modal Cover Banner */
+.user-detail-cover {
+    height: 140px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    transition: background-image 0.25s ease, background-position 0.25s ease;
+}
+
+.user-detail-cover-overlay {
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.7) 0%, rgba(15, 23, 42, 0.25) 50%, rgba(15, 23, 42, 0.8) 100%);
+}
+

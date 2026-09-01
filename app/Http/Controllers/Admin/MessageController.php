@@ -20,7 +20,8 @@ class MessageController extends Controller
         $currentUser = Auth::user();
 
         // Ambil daftar seluruh pengguna lain (selain user aktif)
-        $users = User::where('id', '!=', $currentUser->id)
+        $users = User::with('config')
+            ->where('id', '!=', $currentUser->id)
             ->where('status', 'active')
             ->orderBy('name', 'asc')
             ->get();
@@ -43,6 +44,9 @@ class MessageController extends Controller
                 'name' => $u->name,
                 'email' => $u->email,
                 'avatar' => $u->avatar_url,
+                'cover_bg_url' => $u->cover_bg_url,
+                'cover_position_y' => $u->cover_position_y,
+                'motto' => $u->motto,
                 'role_name' => $u->role_name,
                 'is_online' => $u->is_online,
                 'last_seen_human' => $u->last_seen_human,
@@ -100,7 +104,8 @@ class MessageController extends Controller
     {
         $currentUser = Auth::user();
 
-        $users = User::where('id', '!=', $currentUser->id)
+        $users = User::with('config')
+            ->where('id', '!=', $currentUser->id)
             ->where('status', 'active')
             ->orderBy('name', 'asc')
             ->get();
@@ -129,6 +134,9 @@ class MessageController extends Controller
                 'name' => $u->name,
                 'email' => $u->email,
                 'avatar' => $u->avatar_url,
+                'cover_bg_url' => $u->cover_bg_url,
+                'cover_position_y' => $u->cover_position_y,
+                'motto' => $u->motto,
                 'role_name' => $u->role_name,
                 'is_online' => $u->is_online,
                 'last_seen_human' => $u->last_seen_human,
@@ -155,7 +163,7 @@ class MessageController extends Controller
     public function getMessages(Request $request, $user): JsonResponse
     {
         $currentUser = Auth::user();
-        $targetUser = $user instanceof User ? $user : User::findOrFail((int) $user);
+        $targetUser = $user instanceof User ? $user : User::with('config')->findOrFail((int) $user);
 
         $convId = Message::makeConversationId($currentUser->id, $targetUser->id);
 
@@ -209,6 +217,9 @@ class MessageController extends Controller
                 'name' => $targetUser->name,
                 'email' => $targetUser->email,
                 'avatar' => $targetUser->avatar_url,
+                'cover_bg_url' => $targetUser->cover_bg_url,
+                'cover_position_y' => $targetUser->cover_position_y,
+                'motto' => $targetUser->motto,
                 'role_name' => $targetUser->role_name,
                 'status' => ucfirst($targetUser->status),
                 'joined_at' => $targetUser->created_at ? $targetUser->created_at->format('d M Y') : '-',
