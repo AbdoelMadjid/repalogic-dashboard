@@ -7,6 +7,11 @@
     transition: height 0.2s ease, background-position 0.2s ease;
 }
 
+#main-header-overlay,
+#cover-preview-overlay {
+    transition: background-color 0.2s ease, backdrop-filter 0.2s ease, -webkit-backdrop-filter 0.2s ease;
+}
+
 #cover-preview-container {
     transition: aspect-ratio 0.2s ease, height 0.2s ease;
 }
@@ -18,4 +23,32 @@
 .toggle-password {
     cursor: pointer;
     user-select: none;
+}
+
+/* Color Swatches Helper */
+.btn-color-swatch {
+    display: inline-block !important;
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    min-height: 24px !important;
+    max-width: 24px !important;
+    max-height: 24px !important;
+    border-radius: 50% !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+    cursor: pointer !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+    flex-shrink: 0 !important;
+    vertical-align: middle !important;
+}
+
+.btn-color-swatch:hover {
+    transform: scale(1.2);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4) !important;
+}
+
+.btn-color-swatch.active {
+    outline: 2px solid #3b82f6 !important;
+    outline-offset: 2px !important;
 }

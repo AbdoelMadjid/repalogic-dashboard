@@ -17,6 +17,9 @@ class UserConfig extends Model
         'cover_image',
         'cover_position_y',
         'cover_height',
+        'cover_color',
+        'cover_opacity',
+        'cover_blur',
         'motto',
         'theme_mode',
         'settings',
@@ -25,6 +28,8 @@ class UserConfig extends Model
     protected $casts = [
         'cover_position_y' => 'integer',
         'cover_height' => 'integer',
+        'cover_opacity' => 'integer',
+        'cover_blur' => 'integer',
         'settings' => 'array',
     ];
 

@@ -59,6 +59,9 @@ class User extends Authenticatable
         'cover_bg_url',
         'cover_position_y',
         'cover_height',
+        'cover_color',
+        'cover_opacity',
+        'cover_blur',
         'motto',
         'profile_completion_percentage',
         'is_online',
@@ -242,6 +245,30 @@ class User extends Authenticatable
     public function getCoverHeightAttribute(): int
     {
         return (int) ($this->config?->cover_height ?: 320);
+    }
+
+    /**
+     * Accessor for user cover overlay color (default: #313a46).
+     */
+    public function getCoverColorAttribute(): string
+    {
+        return $this->config?->cover_color ?: '#313a46';
+    }
+
+    /**
+     * Accessor for user cover overlay opacity percentage (default: 60%).
+     */
+    public function getCoverOpacityAttribute(): int
+    {
+        return isset($this->config?->cover_opacity) ? (int) $this->config->cover_opacity : 60;
+    }
+
+    /**
+     * Accessor for user cover overlay blur level in pixels (default: 0px).
+     */
+    public function getCoverBlurAttribute(): int
+    {
+        return isset($this->config?->cover_blur) ? (int) $this->config->cover_blur : 0;
     }
 
     /**

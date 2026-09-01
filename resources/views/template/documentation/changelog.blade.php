@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.7.0</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.7.1</strong>
                             </span>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                                         <h6 class="fw-bold mb-0 text-dark">2. Update Changelog View</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Tambahkan riwayat rilis baru pada timeline di <code>resources/views/template/documentation/changelog.blade.php</code>.
+                                        Tambahkan entri rilis baru pada linimasa file <code>resources/views/template/documentation/changelog.blade.php</code>.
                                     </p>
                                 </div>
                             </div>
@@ -68,11 +68,11 @@
                             <div class="col-md-6 col-lg-3">
                                 <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                     <div class="d-flex align-items-center mb-2">
-                                        <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-tag fs-14"></i></span>
+                                        <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-table fs-14 text-dark"></i></span>
                                         <h6 class="fw-bold mb-0 text-dark">3. Update Release History</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Tambahkan baris rilis baru pada tabel <code>docs/riwayat_release_dan_tag.md</code> beserta tanggal dan ringkasan.
+                                        Catat riwayat rilis ke dalam tabel file <code>docs/riwayat_release_dan_tag.md</code>.
                                     </p>
                                 </div>
                             </div>
@@ -80,11 +80,11 @@
                             <div class="col-md-6 col-lg-3">
                                 <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                     <div class="d-flex align-items-center mb-2">
-                                        <span class="badge bg-danger rounded-circle p-1.5 me-2"><i class="ti ti-brand-git fs-14"></i></span>
+                                        <span class="badge bg-danger rounded-circle p-1.5 me-2"><i class="ti ti-tag fs-14"></i></span>
                                         <h6 class="fw-bold mb-0 text-dark">4. Git Commit &amp; Tag</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Lakukan commit perubahan, buat Git Tag (misal: <code>git tag v2.7.0</code>), lalu push ke remote repository.
+                                        Lakukan commit dengan format konvensional lalu buat tag release (contoh: <code>git tag -a v2.7.1 -m "Release v2.7.1"</code>).
                                     </p>
                                 </div>
                             </div>
@@ -94,18 +94,19 @@
             </div>
         @endif
 
-        <!-- Timeline Changelog List -->
+        <!-- Changelog Timeline Card -->
         <div class="col-12">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0 fw-bold">
-                        <i class="ti ti-git-branch me-2 text-primary"></i> Timeline Pembaruan Sistem (Timeline Changelog)
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0 fw-bold d-flex align-items-center gap-2">
+                        <i class="ti ti-timeline text-primary fs-20"></i>
+                        <span>Linimasa Pembaruan Aplikasi</span>
                     </h5>
-                    <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-1.5 rounded-pill">Production Ready</span>
+                    <span class="badge bg-primary-subtle text-primary font-monospace">Full History</span>
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.7.0 -->
+                        <!-- Version 2.7.1 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +114,38 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.7.0</h5>
+                                        <h5 class="fw-bold mb-0">v2.7.1</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.7.1</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 13:00 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">User Profile Cover Custom Overlay Engine: Dynamic Color Picker &amp; Theme Swatches, Adjustable Overlay Opacity (0% - 100%), Layer Blur Intensity Slider (0px - 20px) &amp; Real-Time Live WYSIWYG Integration</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Dynamic Color Picker &amp; Theme Swatches:</strong> Memungkinkan pengguna memilih warna dasar lapisan overlay foto sampul menggunakan color picker kustom dan 6 palet preset warna tema cepat.</li>
+                                    <li><strong class="text-dark">Adjustable Overlay Opacity Slider (0% - 100%):</strong> Menghadirkan pengaturan ketebalan warna overlay dari 0% (transparan penuh / foto murni) hingga 100% (pekat) dengan preset instan (0%, 60%, 85%).</li>
+                                    <li><strong class="text-dark">Layer Blur Intensity Slider (0px - 20px):</strong> Memberikan kebebasan mengatur tingkat blur lapisan dari 0px (tanpa blur / foto tajam jernih) hingga 20px (efek *frosted glass blur*) dengan preset cepat (0px, 6px, 14px).</li>
+                                    <li><strong class="text-dark">Real-Time WYSIWYG Integration (<code>profil-pengguna.js</code>):</strong> Perubahan warna, ketebalan, dan blur langsung ter-render secara instan (*real-time*) di banner header utama dan kotak preview mini sebelum form disimpan.</li>
+                                    <li><strong class="text-dark">Preserved Native Architecture &amp; Sidebar Flow:</strong> Mempertahankan 100% struktur halaman asli, alur cropping tinggi bingkai banner, posisi vertikal, ganti foto sampul, motto, avatar, dan dokumen KTP tanpa gangguan.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Dynamic Cover Overlay</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Color Swatches</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Adjustable Blur Intensity</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Live WYSIWYG Preview</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.7.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-check fs-xl text-success"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.7.0</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.7.0</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 11:36 WIB</span>

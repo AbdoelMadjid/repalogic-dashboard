@@ -125,6 +125,9 @@ class ProfilPenggunaController extends Controller
             'cover_image' => 'nullable|image|mimes:jpeg,jpg,png,webp,svg|max:2048',
             'cover_position_y' => 'nullable|integer|min:0|max:100',
             'cover_height' => 'nullable|integer|min:150|max:800',
+            'cover_color' => 'nullable|string|max:50',
+            'cover_opacity' => 'nullable|integer|min:0|max:100',
+            'cover_blur' => 'nullable|integer|min:0|max:30',
         ], [
             'cover_image.image' => 'Berkas foto sampul harus berupa gambar.',
             'cover_image.max' => 'Ukuran gambar foto sampul tidak boleh melebihi 2MB.',
@@ -132,6 +135,8 @@ class ProfilPenggunaController extends Controller
             'cover_height.integer' => 'Nilai tinggi banner tidak valid.',
             'cover_height.min' => 'Tinggi banner minimal 150px.',
             'cover_height.max' => 'Tinggi banner maksimal 800px.',
+            'cover_opacity.integer' => 'Ketebalan warna overlay tidak valid.',
+            'cover_blur.integer' => 'Tingkat blur lapisan tidak valid.',
         ]);
 
         $user = auth()->user();
@@ -154,9 +159,21 @@ class ProfilPenggunaController extends Controller
             $config->cover_height = (int) $request->input('cover_height');
         }
 
+        if ($request->has('cover_color')) {
+            $config->cover_color = $request->input('cover_color');
+        }
+
+        if ($request->has('cover_opacity')) {
+            $config->cover_opacity = (int) $request->input('cover_opacity');
+        }
+
+        if ($request->has('cover_blur')) {
+            $config->cover_blur = (int) $request->input('cover_blur');
+        }
+
         $config->save();
 
-        $this->notifySuccess('Foto sampul, tinggi banner & posisi background header berhasil diperbarui.', 'Berhasil!');
+        $this->notifySuccess('Pengaturan foto sampul, warna lapisan & efek blur berhasil diperbarui.', 'Berhasil!');
 
         return redirect()->route('admin.profil-pengguna.index');
     }

@@ -26,19 +26,83 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // =========================================================================
-    // 2. Live Image Preview, Vertical Position Slider & Height Adjustment for Cover Header
+    // 2. Live Image Preview, Color, Opacity, Blur, Vertical Position & Height for Cover Header
     // =========================================================================
     const coverInput = document.getElementById('cover_bg_input');
     const coverPreview = document.getElementById('cover-preview-img');
     const coverPreviewContainer = document.getElementById('cover-preview-container');
+    const coverPreviewOverlay = document.getElementById('cover-preview-overlay');
     const mainHeaderBanner = document.getElementById('main-header-banner');
+    const mainHeaderOverlay = document.getElementById('main-header-overlay');
+
+    const coverColorInput = document.getElementById('cover-color-input');
+    const coverColorVal = document.getElementById('cover-color-val');
+    const coverOpacityRange = document.getElementById('cover-opacity-range');
+    const coverOpacityVal = document.getElementById('cover-opacity-val');
+    const coverBlurRange = document.getElementById('cover-blur-range');
+    const coverBlurVal = document.getElementById('cover-blur-val');
+
     const coverPosRange = document.getElementById('cover-position-range');
     const coverPosVal = document.getElementById('cover-pos-val');
-    const presetButtons = document.querySelectorAll('.btn-preset-pos');
-
     const coverHeightRange = document.getElementById('cover-height-range');
     const coverHeightVal = document.getElementById('cover-height-val');
-    const presetHeightButtons = document.querySelectorAll('.btn-preset-height');
+
+    let currentCoverColor = coverColorInput ? coverColorInput.value : '#313a46';
+    let currentCoverOpacity = coverOpacityRange ? parseInt(coverOpacityRange.value, 10) : 60;
+    let currentCoverBlur = coverBlurRange ? parseInt(coverBlurRange.value, 10) : 0;
+
+    function hexToRgba(hex, alpha) {
+        if (!hex || !hex.startsWith('#')) return hex || 'rgba(49, 58, 70, 0.6)';
+        let c = hex.replace('#', '');
+        if (c.length === 3) {
+            c = c.split('').map(x => x + x).join('');
+        }
+        const num = parseInt(c, 16);
+        const r = (num >> 16) & 255;
+        const g = (num >> 8) & 255;
+        const b = num & 255;
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    function applyCoverStyling() {
+        const alpha = currentCoverOpacity / 100;
+        const rgbaBottom = hexToRgba(currentCoverColor, alpha);
+        const rgbaTop = hexToRgba(currentCoverColor, Math.max(0, alpha - 0.25));
+        const gradientBg = `linear-gradient(to top, ${rgbaBottom}, ${rgbaTop})`;
+        const blurVal = currentCoverBlur > 0 ? `blur(${currentCoverBlur}px)` : 'none';
+
+        // 1. Update Main Header Banner Overlay
+        if (mainHeaderOverlay) {
+            mainHeaderOverlay.style.background = gradientBg;
+            mainHeaderOverlay.style.backdropFilter = blurVal;
+            mainHeaderOverlay.style.webkitBackdropFilter = blurVal;
+        }
+
+        // 2. Update Sidebar Preview Overlay
+        if (coverPreviewOverlay) {
+            coverPreviewOverlay.style.background = gradientBg;
+            coverPreviewOverlay.style.backdropFilter = blurVal;
+            coverPreviewOverlay.style.webkitBackdropFilter = blurVal;
+        }
+
+        // 3. Update Inputs and Labels
+        if (coverColorVal) coverColorVal.textContent = currentCoverColor;
+        if (coverColorInput) coverColorInput.value = currentCoverColor;
+        if (coverOpacityVal) coverOpacityVal.textContent = currentCoverOpacity + '%';
+        if (coverOpacityRange) coverOpacityRange.value = currentCoverOpacity;
+        if (coverBlurVal) coverBlurVal.textContent = currentCoverBlur + 'px';
+        if (coverBlurRange) coverBlurRange.value = currentCoverBlur;
+
+        // 4. Update Swatch Active State
+        document.querySelectorAll('.btn-color-swatch').forEach(function(swatch) {
+            const swColor = swatch.getAttribute('data-color');
+            if (swColor && swColor.toLowerCase() === currentCoverColor.toLowerCase()) {
+                swatch.classList.add('active');
+            } else {
+                swatch.classList.remove('active');
+            }
+        });
+    }
 
     function syncCoverPreviewRatio() {
         if (mainHeaderBanner && coverPreviewContainer && coverHeightRange) {
@@ -50,86 +114,123 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateCoverPosition(pos) {
         const posPercent = pos + '%';
-        if (coverPosVal) {
-            coverPosVal.textContent = posPercent;
-        }
-        if (coverPosRange) {
-            coverPosRange.value = pos;
-        }
-        if (coverPreview) {
-            coverPreview.style.objectPosition = 'center ' + posPercent;
-        }
-        if (mainHeaderBanner) {
-            mainHeaderBanner.style.backgroundPosition = 'center ' + posPercent;
-        }
+        if (coverPosVal) coverPosVal.textContent = posPercent;
+        if (coverPosRange) coverPosRange.value = pos;
+        if (coverPreview) coverPreview.style.objectPosition = 'center ' + posPercent;
+        if (mainHeaderBanner) mainHeaderBanner.style.backgroundPosition = 'center ' + posPercent;
     }
 
     function updateCoverHeight(height) {
         const heightPx = height + 'px';
-
-        if (coverHeightVal) {
-            coverHeightVal.textContent = heightPx;
-        }
-        if (coverHeightRange) {
-            coverHeightRange.value = height;
-        }
-        if (mainHeaderBanner) {
-            mainHeaderBanner.style.height = heightPx;
-        }
+        if (coverHeightVal) coverHeightVal.textContent = heightPx;
+        if (coverHeightRange) coverHeightRange.value = height;
+        if (mainHeaderBanner) mainHeaderBanner.style.height = heightPx;
         syncCoverPreviewRatio();
     }
 
-    // Sync initial aspect ratio and on window resize
-    syncCoverPreviewRatio();
-    window.addEventListener('resize', syncCoverPreviewRatio);
+    // Color Input
+    if (coverColorInput) {
+        coverColorInput.addEventListener('input', function(e) {
+            currentCoverColor = e.target.value;
+            applyCoverStyling();
+        });
+    }
 
+    // Opacity Range
+    if (coverOpacityRange) {
+        coverOpacityRange.addEventListener('input', function(e) {
+            currentCoverOpacity = parseInt(e.target.value, 10) || 0;
+            applyCoverStyling();
+        });
+    }
+
+    // Blur Range
+    if (coverBlurRange) {
+        coverBlurRange.addEventListener('input', function(e) {
+            currentCoverBlur = parseInt(e.target.value, 10) || 0;
+            applyCoverStyling();
+        });
+    }
+
+    // Position Range
     if (coverPosRange) {
         coverPosRange.addEventListener('input', function(e) {
             updateCoverPosition(e.target.value);
         });
     }
 
-    presetButtons.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            const pos = this.getAttribute('data-pos');
-            if (pos !== null) {
-                updateCoverPosition(pos);
-            }
-        });
-    });
-
+    // Height Range
     if (coverHeightRange) {
         coverHeightRange.addEventListener('input', function(e) {
             updateCoverHeight(e.target.value);
         });
     }
 
-    presetHeightButtons.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            const h = this.getAttribute('data-height');
-            if (h !== null) {
-                updateCoverHeight(h);
+    // Event Delegation for Swatches & Preset Buttons (Rule 2 Compliance)
+    document.addEventListener('click', function(e) {
+        const swatch = e.target.closest('.btn-color-swatch');
+        if (swatch) {
+            const color = swatch.getAttribute('data-color');
+            if (color) {
+                currentCoverColor = color;
+                applyCoverStyling();
             }
-        });
+            return;
+        }
+
+        const opacityBtn = e.target.closest('.btn-preset-opacity');
+        if (opacityBtn) {
+            const op = opacityBtn.getAttribute('data-opacity');
+            if (op !== null) {
+                currentCoverOpacity = parseInt(op, 10);
+                applyCoverStyling();
+            }
+            return;
+        }
+
+        const blurBtn = e.target.closest('.btn-preset-blur');
+        if (blurBtn) {
+            const bl = blurBtn.getAttribute('data-blur');
+            if (bl !== null) {
+                currentCoverBlur = parseInt(bl, 10);
+                applyCoverStyling();
+            }
+            return;
+        }
+
+        const heightBtn = e.target.closest('.btn-preset-height');
+        if (heightBtn) {
+            const h = heightBtn.getAttribute('data-height');
+            if (h !== null) updateCoverHeight(h);
+            return;
+        }
+
+        const posBtn = e.target.closest('.btn-preset-pos');
+        if (posBtn) {
+            const p = posBtn.getAttribute('data-pos');
+            if (p !== null) updateCoverPosition(p);
+            return;
+        }
     });
 
+    // File Input
     if (coverInput) {
         coverInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(evt) {
-                    if (coverPreview) {
-                        coverPreview.src = evt.target.result;
-                    }
-                    if (mainHeaderBanner) {
-                        mainHeaderBanner.style.backgroundImage = 'url("' + evt.target.result + '")';
-                    }
+                    if (coverPreview) coverPreview.src = evt.target.result;
+                    if (mainHeaderBanner) mainHeaderBanner.style.backgroundImage = 'url("' + evt.target.result + '")';
                 };
                 reader.readAsDataURL(file);
             }
         });
     }
+
+    // Initial sync
+    syncCoverPreviewRatio();
+    window.addEventListener('resize', syncCoverPreviewRatio);
 
     // =========================================================================
     // 3. Real-time Motto Typing Preview

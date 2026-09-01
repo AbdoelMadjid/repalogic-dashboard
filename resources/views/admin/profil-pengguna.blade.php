@@ -8,13 +8,28 @@
     <!-- Header Page Title -->
     @include('layouts.partials.page-title', ['title' => 'Profil Pengguna', 'subtitle' => 'Master Data'])
 
+@php
+    $hex = ltrim($user->cover_color ?: '#313a46', '#');
+    if (strlen($hex) == 3) {
+        $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2];
+    }
+    $r = hexdec(substr($hex, 0, 2));
+    $g = hexdec(substr($hex, 2, 2));
+    $b = hexdec(substr($hex, 4, 2));
+    $alpha = ($user->cover_opacity ?? 60) / 100;
+    $rgbaCover = "rgba({$r}, {$g}, {$b}, {$alpha})";
+    $rgbaTop = "rgba({$r}, {$g}, {$b}, " . max(0, $alpha - 0.25) . ")";
+    $blurPx = (int) ($user->cover_blur ?? 0);
+@endphp
+
     <div class="row">
         <div class="col-12">
             <article class="card card-out-of-container border-top-0 shadow-sm mb-4">
                 <div id="main-header-banner" class="position-relative card-side-img overflow-hidden"
-                    style="height: {{ $user->cover_height }}px; background-image: url('{{ $user->cover_bg_url }}'); background-size: cover; background-position: center {{ $user->cover_position_y }}%; transition: height 0.2s ease;">
-                    <div class="p-4 card-img-overlay rounded-start-0 auth-overlay d-flex align-items-center justify-content-center">
-                        <h3 class="text-white mb-0 fst-italic text-center px-3" id="main-motto-display">"{{ $user->motto }}"</h3>
+                    style="height: {{ $user->cover_height }}px; background-image: url('{{ $user->cover_bg_url }}'); background-size: cover; background-position: center {{ $user->cover_position_y }}%; transition: height 0.2s ease, background-position 0.2s ease;">
+                    <div id="main-header-overlay" class="p-4 card-img-overlay rounded-start-0 d-flex align-items-center justify-content-center"
+                        style="background: linear-gradient(to top, {{ $rgbaCover }}, {{ $rgbaTop }}); backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }}; -webkit-backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }};">
+                        <h3 class="text-white mb-0 fst-italic text-center px-3" id="main-motto-display" style="text-shadow: 0 2px 8px rgba(0,0,0,0.65);">"{{ $user->motto }}"</h3>
                     </div>
                 </div>
 
@@ -127,11 +142,66 @@
                             <div id="cover-preview-container" class="position-relative mb-2 overflow-hidden rounded border shadow-sm w-100"
                                 style="min-height: 70px; max-height: 280px; transition: aspect-ratio 0.2s ease, height 0.2s ease;">
                                 <img src="{{ $user->cover_bg_url }}" id="cover-preview-img" alt="Background Header" class="w-100 h-100 object-fit-cover" style="object-fit: cover; object-position: center {{ $user->cover_position_y }}%;" />
+                                <div id="cover-preview-overlay" class="position-absolute top-0 start-0 w-100 h-100"
+                                    style="background: linear-gradient(to top, {{ $rgbaCover }}, {{ $rgbaTop }}); backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }}; -webkit-backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }}; pointer-events: none;"></div>
                             </div>
                             <label for="cover_bg_input" class="btn btn-sm btn-outline-primary fw-semibold cursor-pointer mb-2">
                                 <i class="ti ti-camera me-1"></i> Pilih / Ganti Foto Sampul
                             </label>
                             <input type="file" name="cover_image" id="cover_bg_input" class="d-none" accept="image/*">
+                        </div>
+
+                        <!-- Warna Lapisan Overlay -->
+                        <div class="mb-3 p-2 bg-light rounded border">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label for="cover-color-input" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
+                                    <i class="ti ti-palette text-primary fs-15"></i> Warna Lapisan:
+                                </label>
+                                <span id="cover-color-val" class="badge bg-primary-subtle text-primary font-monospace fs-11 fw-bold">{{ $user->cover_color }}</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <input type="color" class="form-control form-control-color border-0 p-0 rounded-circle cursor-pointer flex-shrink-0" id="cover-color-input" name="cover_color" value="{{ $user->cover_color }}" title="Pilih warna kustom" style="width: 30px; height: 30px; min-width: 30px; min-height: 30px;">
+                                <div class="d-flex flex-wrap align-items-center gap-1.5">
+                                    <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#313a46' ? 'active' : '' }}" data-color="#313a46" style="background-color: #313a46;" title="Dark Slate (#313a46)"></span>
+                                    <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#000000' ? 'active' : '' }}" data-color="#000000" style="background-color: #000000;" title="Hitam (#000000)"></span>
+                                    <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#1e3a8a' ? 'active' : '' }}" data-color="#1e3a8a" style="background-color: #1e3a8a;" title="Navy (#1e3a8a)"></span>
+                                    <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#4338ca' ? 'active' : '' }}" data-color="#4338ca" style="background-color: #4338ca;" title="Indigo (#4338ca)"></span>
+                                    <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#065f46' ? 'active' : '' }}" data-color="#065f46" style="background-color: #065f46;" title="Emerald (#065f46)"></span>
+                                    <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#701a75' ? 'active' : '' }}" data-color="#701a75" style="background-color: #701a75;" title="Fuchsia (#701a75)"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Slider Ketebalan Warna Overlay -->
+                        <div class="mb-3 p-2 bg-light rounded border">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label for="cover-opacity-range" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
+                                    <i class="ti ti-adjustments-horizontal text-primary fs-15"></i> Ketebalan Warna:
+                                </label>
+                                <span id="cover-opacity-val" class="badge bg-primary-subtle text-primary font-monospace fs-12 fw-bold">{{ $user->cover_opacity }}%</span>
+                            </div>
+                            <input type="range" class="form-range mb-2" id="cover-opacity-range" name="cover_opacity" min="0" max="100" step="5" value="{{ $user->cover_opacity }}">
+                            <div class="d-flex justify-content-between gap-1">
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-opacity" data-opacity="0">0% (Asli)</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-opacity" data-opacity="60">60% (Standar)</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-opacity" data-opacity="85">85% (Pekat)</button>
+                            </div>
+                        </div>
+
+                        <!-- Slider Tingkat Blur Lapisan -->
+                        <div class="mb-3 p-2 bg-light rounded border">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label for="cover-blur-range" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
+                                    <i class="ti ti-blur text-primary fs-15"></i> Tingkat Blur Lapisan:
+                                </label>
+                                <span id="cover-blur-val" class="badge bg-primary-subtle text-primary font-monospace fs-12 fw-bold">{{ $user->cover_blur }}px</span>
+                            </div>
+                            <input type="range" class="form-range mb-2" id="cover-blur-range" name="cover_blur" min="0" max="20" step="1" value="{{ $user->cover_blur }}">
+                            <div class="d-flex justify-content-between gap-1">
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-blur" data-blur="0">0px (Tanpa Blur)</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-blur" data-blur="6">6px (Sedang)</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 btn-preset-blur" data-blur="14">14px (Kuat)</button>
+                            </div>
                         </div>
 
                         <!-- Slider Pengatur Tinggi Banner Sampul -->
@@ -167,7 +237,7 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary btn-sm w-100 fw-semibold">
-                            <i class="ti ti-device-floppy me-1"></i> Simpan Posisi & Tinggi Sampul
+                            <i class="ti ti-device-floppy me-1"></i> Simpan Pengaturan Foto Sampul
                         </button>
                     </form>
                 </div>
