@@ -104,6 +104,22 @@
                     </div>
 
                     <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="avatar-sm bg-success-subtle text-success d-flex align-items-center justify-content-center rounded">
+                            <i class="ti ti-brand-whatsapp fs-18"></i>
+                        </div>
+                        <div>
+                            <span class="fs-12 text-muted d-block">Nomor Telepon / WhatsApp</span>
+                            @if (!empty($user->detail?->telepon))
+                                <a href="{{ $user->detail->telepon_wa_url }}" target="_blank" class="text-success fw-semibold fs-14 text-decoration-none d-inline-flex align-items-center">
+                                    {{ $user->detail->telepon }} <i class="ti ti-external-link fs-12 ms-1"></i>
+                                </a>
+                            @else
+                                <span class="text-muted fst-italic fs-13">Belum diisi</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 mb-3">
                         <div class="avatar-sm bg-warning-subtle text-warning d-flex align-items-center justify-content-center rounded">
                             <i class="ti ti-shield-lock fs-18"></i>
                         </div>
@@ -332,6 +348,21 @@
                                 <tr>
                                     <td class="fw-semibold text-dark text-nowrap"><i class="ti ti-credit-card me-1 text-muted"></i> NIK (Nomor Induk Kependudukan)</td>
                                     <td><span class="fs-13 text-dark fw-semibold">{{ $detail?->nik ?? '-' }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-semibold text-dark text-nowrap"><i class="ti ti-brand-whatsapp me-1 text-success"></i> Nomor Telepon / WhatsApp</td>
+                                    <td>
+                                        @if (!empty($detail?->telepon))
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="fs-13 text-dark fw-semibold">{{ $detail->telepon }}</span>
+                                                <a href="{{ $detail->telepon_wa_url }}" target="_blank" class="btn btn-xs btn-success d-inline-flex align-items-center gap-1 py-0.5 px-2">
+                                                    <i class="ti ti-brand-whatsapp"></i> Chat WhatsApp
+                                                </a>
+                                            </div>
+                                        @else
+                                            <span class="text-muted fs-13 fst-italic">Belum diisi</span>
+                                        @endif
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="fw-semibold text-dark text-nowrap"><i class="ti ti-user me-1 text-muted"></i> Nama Lengkap (Sesuai KTP)</td>

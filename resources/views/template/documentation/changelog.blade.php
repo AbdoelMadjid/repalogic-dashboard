@@ -107,6 +107,7 @@
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
                         <!-- Version 2.7.2 -->
+                        <!-- Version 2.7.3 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -114,8 +115,38 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.7.2</h5>
+                                        <h5 class="fw-bold mb-0">v2.7.3</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.7.3</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 13:55 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">WhatsApp &amp; Phone Number Field Extension in User Details, Instant Click-to-Chat Integration &amp; Dashboard Contacts Directory Sync</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Penambahan Kolom Telepon pada <code>user_details</code>:</strong> Menambahkan kolom <code>telepon</code> (string 30, nullable) melalui database migration terstruktur, integrasi model <code>UserDetail</code> ($fillable, $appends), dan accessor cerdas <code>telepon_wa_url</code> yang mengonversi format nomor lokal (<code>08xxx</code>) menjadi tautan pesan instan resmi WhatsApp (<code>https://wa.me/628xxx</code>).</li>
+                                    <li><strong class="text-dark">Visualisasi Telepon &amp; WhatsApp di Widget Dashboard (<code>dashboard.blade.php</code>):</strong> Menampilkan nomor telepon / WhatsApp pada setiap kartu kontak di widget Direktori Pengguna &amp; Kontak lengkap dengan ikon WhatsApp hijau, tautan langsung ke WhatsApp Web/App, serta penambahan atribut pencarian <code>data-search-phone</code> untuk filter instan berdasarkan nomor HP.</li>
+                                    <li><strong class="text-dark">Form Kelengkapan Profil &amp; Modal Detail Pengguna:</strong> Menyediakan input nomor telepon/WhatsApp pada form edit profil KTP (<code>admin/profil-pengguna/edit</code>), visualisasi pada kartu ringkasan profil dan tabel rincian KTP, sinkronisasi pada modal detail akun obrolan (<code>#user-detail-modal</code>), serta pembaruan data pengguna di Manajemen Pengguna.</li>
+                                    <li><strong class="text-dark">Kutipan Motto Mengambang di Atas Foto Sampul (Cover Banner Overlay):</strong> Menempatkan teks motto langsung di atas banner foto sampul setiap kartu pengguna dengan lapisan gradien kontras dan bayangan teks (`contact-cover-motto`), persis seperti pada halaman Profil Pengguna. Hal ini memastikan teks kutipan langsung terbaca tanpa perlu diklik, sekaligus menjamin tinggi seluruh kartu direktori tetap 100% simetris dan seragam.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">User Details Telepon</span>
+                                    <span class="badge bg-light text-dark border fs-xs">WhatsApp Click-to-Chat</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Dashboard Contact Phone Sync</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Cover Motto Overlay</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Profile Completeness Score</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.7.2 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xs text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.7.2</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.7.2</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 13:48 WIB</span>

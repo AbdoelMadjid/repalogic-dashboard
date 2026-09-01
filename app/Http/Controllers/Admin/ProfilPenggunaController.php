@@ -74,6 +74,7 @@ class ProfilPenggunaController extends Controller
 
         $validated = $request->validate([
             'nik' => 'nullable|string|max:20',
+            'telepon' => 'nullable|string|max:30',
             'nama_ktp' => 'nullable|string|max:255',
             'tempat_lahir' => 'nullable|string|max:255',
             'tanggal_lahir' => 'nullable|date',

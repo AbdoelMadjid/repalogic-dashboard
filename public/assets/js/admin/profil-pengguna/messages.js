@@ -666,6 +666,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (document.getElementById('modal-user-role')) document.getElementById('modal-user-role').innerHTML = `<i class="ti ti-shield-check me-1"></i>${tu.role_name}`;
                     if (document.getElementById('modal-user-status')) document.getElementById('modal-user-status').innerHTML = `<i class="ti ti-circle-check me-1"></i>${tu.status}`;
                     if (document.getElementById('modal-info-email')) document.getElementById('modal-info-email').textContent = tu.email;
+                    if (document.getElementById('modal-info-telepon')) {
+                        if (tu.telepon) {
+                            const waUrl = tu.telepon_wa_url || `https://wa.me/${tu.telepon.replace(/\D/g, '')}`;
+                            document.getElementById('modal-info-telepon').innerHTML = `<a href="${waUrl}" target="_blank" class="text-success text-decoration-none fw-semibold d-inline-flex align-items-center">${tu.telepon} <i class="ti ti-external-link fs-11 ms-1"></i></a>`;
+                        } else {
+                            document.getElementById('modal-info-telepon').innerHTML = `<span class="text-muted fst-italic fw-normal">-</span>`;
+                        }
+                    }
                     if (document.getElementById('modal-info-role')) document.getElementById('modal-info-role').textContent = tu.role_name;
                     if (document.getElementById('modal-info-joined')) document.getElementById('modal-info-joined').textContent = tu.joined_at;
 

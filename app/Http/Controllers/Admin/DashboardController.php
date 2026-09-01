@@ -194,11 +194,11 @@ class DashboardController extends Controller
         if (!empty($user->name)) $completenessScore++;
         if (!empty($user->email)) $completenessScore++;
         if (!empty($user->avatar) && $user->avatar !== 'assets/images/users/avatar-1.jpg') $completenessScore++;
-        if (!empty($user->detail->phone)) $completenessScore++;
-        if (!empty($user->detail->address)) $completenessScore++;
-        if (!empty($user->detail->ktp_photo)) $completenessScore++;
-        if (!empty($user->detail->bio)) $completenessScore++;
-        if (!empty($user->detail->motto)) $completenessScore++;
+        if (!empty($user->detail->telepon)) $completenessScore++;
+        if (!empty($user->detail->alamat_jalan)) $completenessScore++;
+        if (!empty($user->detail->foto_ktp)) $completenessScore++;
+        if (!empty($user->config->cover_image)) $completenessScore++;
+        if (!empty($user->config->motto)) $completenessScore++;
         $completenessPercent = round(($completenessScore / $totalFields) * 100);
 
         // 5. My Recent Logins

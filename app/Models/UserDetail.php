@@ -15,6 +15,7 @@ class UserDetail extends Model
     protected $fillable = [
         'user_id',
         'nik',
+        'telepon',
         'nama_ktp',
         'tempat_lahir',
         'tanggal_lahir',
@@ -44,6 +45,7 @@ class UserDetail extends Model
         'alamat_lengkap',
         'cover_bg_url',
         'foto_ktp_url',
+        'telepon_wa_url',
     ];
 
     /**
@@ -52,6 +54,25 @@ class UserDetail extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Accessor for WhatsApp click URL.
+     */
+    public function getTeleponWaUrlAttribute(): ?string
+    {
+        if (empty($this->telepon)) {
+            return null;
+        }
+
+        $cleaned = preg_replace('/[^0-9]/', '', $this->telepon);
+        if (str_starts_with($cleaned, '0')) {
+            $cleaned = '62' . substr($cleaned, 1);
+        } elseif (str_starts_with($cleaned, '8')) {
+            $cleaned = '62' . $cleaned;
+        }
+
+        return 'https://wa.me/' . $cleaned;
     }
 
     /**

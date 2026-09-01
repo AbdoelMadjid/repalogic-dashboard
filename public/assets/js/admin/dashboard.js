@@ -273,10 +273,11 @@ document.addEventListener('DOMContentLoaded', function () {
         matchedCards = contactCards.filter(function (card) {
             const name = (card.getAttribute('data-search-name') || '').toLowerCase();
             const email = (card.getAttribute('data-search-email') || '').toLowerCase();
+            const phone = (card.getAttribute('data-search-phone') || '').toLowerCase();
             const city = (card.getAttribute('data-search-city') || '').toLowerCase();
             const job = (card.getAttribute('data-search-job') || '').toLowerCase();
 
-            return !keyword || name.includes(keyword) || email.includes(keyword) || city.includes(keyword) || job.includes(keyword);
+            return !keyword || name.includes(keyword) || email.includes(keyword) || phone.includes(keyword) || city.includes(keyword) || job.includes(keyword);
         });
 
         // Reset visible limit to initial 12 on new search

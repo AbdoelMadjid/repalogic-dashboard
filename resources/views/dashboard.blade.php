@@ -807,7 +807,7 @@
                     </div>
                     <div class="d-flex flex-wrap align-items-center gap-2">
                         <div class="app-search" style="min-width: 270px;">
-                            <input type="text" id="dashboard-contact-search" class="form-control" style="padding-left: 40px !important;" placeholder="Cari nama, email, domisili, pekerjaan...">
+                            <input type="text" id="dashboard-contact-search" class="form-control" style="padding-left: 40px !important;" placeholder="Cari nama, email, no. telepon/WA, domisili, pekerjaan...">
                             <i class="ti ti-search app-search-icon text-muted"></i>
                         </div>
                     </div>
@@ -822,18 +822,30 @@
                             <div class="col-sm-6 col-lg-4 col-xl-3 dashboard-contact-col"
                                 data-search-name="{{ strtolower($cUser->name) }}"
                                 data-search-email="{{ strtolower($cUser->email) }}"
+                                data-search-phone="{{ strtolower($cUser->detail->telepon ?? '') }}"
                                 data-search-city="{{ strtolower($cUser->detail->kabupaten_kota ?? '') }}"
                                 data-search-job="{{ strtolower($cUser->detail->pekerjaan ?? '') }}">
                                 <div class="card card-h-100 border shadow-sm rounded-3 overflow-hidden mb-0 contact-grid-card">
                                     <!-- Cover Banner Background -->
-                                    <div class="position-relative contact-grid-cover"
-                                        style="height: 105px; background-image: url('{{ $cUser->cover_bg_url }}'); background-position: center {{ $cUser->cover_position_y }}%;">
-                                        <div class="position-absolute top-0 start-0 end-0 bottom-0 p-2 d-flex justify-content-end align-items-start contact-grid-cover-overlay">
-                                            <span class="badge {{ $cUser->is_online ? 'bg-success text-white' : 'bg-dark bg-opacity-75 text-white-50' }} fs-xxs py-0.5 px-1.5 rounded-pill"
-                                                title="{{ $cUser->is_online ? 'Online Sekarang' : $cUser->last_seen_human }}">
-                                                <i class="ti {{ $cUser->is_online ? 'ti-circle-filled text-white' : 'ti-clock' }} me-0.5"></i>
-                                                {{ $cUser->is_online ? 'Online' : 'Offline' }}
-                                            </span>
+                                    <div class="position-relative contact-grid-cover overflow-hidden"
+                                        style="height: 115px; background-image: url('{{ $cUser->cover_bg_url }}'); background-position: center {{ $cUser->cover_position_y }}%;">
+                                        <div class="position-absolute top-0 start-0 end-0 bottom-0 p-2 d-flex flex-column justify-content-between contact-grid-cover-overlay">
+                                            <div class="d-flex justify-content-end align-items-start">
+                                                <span class="badge {{ $cUser->is_online ? 'bg-success text-white' : 'bg-dark bg-opacity-75 text-white-50' }} fs-xxs py-0.5 px-1.5 rounded-pill shadow-sm"
+                                                    title="{{ $cUser->is_online ? 'Online Sekarang' : $cUser->last_seen_human }}">
+                                                    <i class="ti {{ $cUser->is_online ? 'ti-circle-filled text-white' : 'ti-clock' }} me-0.5"></i>
+                                                    {{ $cUser->is_online ? 'Online' : 'Offline' }}
+                                                </span>
+                                            </div>
+                                            @if (!empty($cUser->motto))
+                                                <div class="text-center px-1 pb-3 mb-1">
+                                                    <p class="text-white mb-0 fst-italic contact-cover-motto"
+                                                        style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"
+                                                        title="{{ $cUser->motto }}">
+                                                        "{{ $cUser->motto }}"
+                                                    </p>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -857,13 +869,6 @@
                                             <i class="ti ti-mail me-1"></i>{{ $cUser->email }}
                                         </p>
 
-                                        @if (!empty($cUser->motto))
-                                            <div class="text-muted fs-11 fst-italic text-truncate px-2 py-1 mb-2 bg-light-subtle rounded border border-light"
-                                                title="{{ $cUser->motto }}">
-                                                "{{ $cUser->motto }}"
-                                            </div>
-                                        @endif
-
                                         <!-- Meta Info List -->
                                         <ul class="list-unstyled text-muted fs-12 text-start mb-3 mt-auto pt-2 border-top">
                                             <li class="d-flex align-items-center justify-content-between mb-1.5">
@@ -871,6 +876,18 @@
                                                 <strong class="text-dark text-truncate ps-2" style="max-width: 140px;">
                                                     {{ $cUser->detail->pekerjaan ?? 'Belum diisi' }}
                                                 </strong>
+                                            </li>
+                                            <li class="d-flex align-items-center justify-content-between mb-1.5">
+                                                <span class="text-muted"><i class="ti ti-brand-whatsapp me-1 text-success"></i>Telepon / WA:</span>
+                                                @if (!empty($cUser->detail?->telepon))
+                                                    <a href="{{ $cUser->detail->telepon_wa_url }}" target="_blank"
+                                                        class="text-success fw-semibold text-truncate ps-2 text-decoration-none d-inline-flex align-items-center"
+                                                        style="max-width: 140px;" title="Hubungi via WhatsApp ({{ $cUser->detail->telepon }})">
+                                                        {{ $cUser->detail->telepon }} <i class="ti ti-external-link fs-10 ms-1"></i>
+                                                    </a>
+                                                @else
+                                                    <span class="text-muted fw-normal fst-italic ps-2">Belum diisi</span>
+                                                @endif
                                             </li>
                                             <li class="d-flex align-items-center justify-content-between mb-1.5">
                                                 <span class="text-muted"><i class="ti ti-map-pin me-1 text-danger"></i>Domisili:</span>

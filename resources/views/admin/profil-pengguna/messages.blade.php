@@ -722,6 +722,17 @@
                             <div class="col-7 fw-semibold text-dark text-truncate" id="modal-info-email">
                                 {{ $activeUser ? $activeUser->email : '-' }}</div>
 
+                            <div class="col-5 text-muted"><i class="ti ti-brand-whatsapp me-1 text-success"></i> Telepon / WA:</div>
+                            <div class="col-7 fw-semibold text-dark text-truncate" id="modal-info-telepon">
+                                @if ($activeUser && !empty($activeUser->detail?->telepon))
+                                    <a href="{{ $activeUser->detail->telepon_wa_url }}" target="_blank" class="text-success text-decoration-none">
+                                        {{ $activeUser->detail->telepon }} <i class="ti ti-external-link fs-11 ms-0.5"></i>
+                                    </a>
+                                @else
+                                    <span class="text-muted fst-italic fw-normal">-</span>
+                                @endif
+                            </div>
+
                             <div class="col-5 text-muted"><i class="ti ti-shield me-1"></i> Peran Akun:</div>
                             <div class="col-7 fw-semibold text-dark" id="modal-info-role">
                                 {{ $activeUser ? $activeUser->role_name : '-' }}</div>

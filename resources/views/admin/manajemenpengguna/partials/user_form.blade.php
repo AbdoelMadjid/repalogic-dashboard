@@ -144,6 +144,10 @@
                                     <td class="fw-semibold text-dark" id="view_detail_nik">-</td>
                                 </tr>
                                 <tr>
+                                    <td class="text-muted text-nowrap"><i class="ti ti-brand-whatsapp text-success me-1"></i> Telepon / WA</td>
+                                    <td class="fw-semibold text-dark" id="view_detail_telepon">-</td>
+                                </tr>
+                                <tr>
                                     <td class="text-muted text-nowrap">Nama di KTP</td>
                                     <td class="fw-semibold text-dark" id="view_detail_nama_ktp">-</td>
                                 </tr>

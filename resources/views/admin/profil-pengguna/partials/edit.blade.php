@@ -59,6 +59,20 @@
 
                             <div class="col-md-6">
                                 <div class="mb-3">
+                                    <label for="telepon" class="form-label fw-semibold text-dark d-flex align-items-center justify-content-between">
+                                        <span><i class="ti ti-brand-whatsapp text-success me-1"></i> Nomor Telepon / WhatsApp</span>
+                                        <span class="badge bg-success-subtle text-success fs-xxs">WhatsApp Link</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light text-muted"><i class="ti ti-phone"></i></span>
+                                        <input type="text" class="form-control" id="telepon" name="telepon" value="{{ old('telepon', $detail->telepon) }}" placeholder="Contoh: 081234567890" maxlength="30">
+                                    </div>
+                                    <div class="form-text fs-11 text-muted mt-1">Nomor telepon/WA aktif untuk komunikasi dan direktori kontak.</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
                                     <label for="nama_ktp" class="form-label fw-semibold text-dark">Nama Lengkap Sesuai KTP</label>
                                     <input type="text" class="form-control" id="nama_ktp" name="nama_ktp" value="{{ old('nama_ktp', $detail->nama_ktp ?? $user->name) }}" placeholder="Nama lengkap sesuai KTP">
                                 </div>

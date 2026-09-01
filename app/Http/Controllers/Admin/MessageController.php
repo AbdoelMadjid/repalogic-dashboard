@@ -216,6 +216,8 @@ class MessageController extends Controller
                 'id' => $targetUser->id,
                 'name' => $targetUser->name,
                 'email' => $targetUser->email,
+                'telepon' => $targetUser->detail?->telepon,
+                'telepon_wa_url' => $targetUser->detail?->telepon_wa_url,
                 'avatar' => $targetUser->avatar_url,
                 'cover_bg_url' => $targetUser->cover_bg_url,
                 'cover_position_y' => $targetUser->cover_position_y,

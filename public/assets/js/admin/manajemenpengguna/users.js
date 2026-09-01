@@ -304,45 +304,81 @@ document.addEventListener('DOMContentLoaded', function() {
         if (genderInput) genderInput.value = detail ? (detail.gender || '') : '';
         if (addressInput) addressInput.value = detail ? (detail.address || '') : '';
 
+        const detailEmptyAlert = document.getElementById('detail_empty_alert');
+        const hasDetail = detail && (detail.nik || detail.telepon || detail.nama_ktp || detail.alamat_jalan || detail.foto_ktp);
+        if (detailEmptyAlert) {
+            if (hasDetail) {
+                detailEmptyAlert.classList.add('d-none');
+            } else {
+                detailEmptyAlert.classList.remove('d-none');
+            }
+        }
+
         const viewNik = document.getElementById('view_detail_nik');
-        const viewPhone = document.getElementById('view_detail_phone_number');
-        const viewBirth = document.getElementById('view_detail_birth');
-        const viewGender = document.getElementById('view_detail_gender');
-        const viewAddress = document.getElementById('view_detail_address');
+        const viewTelepon = document.getElementById('view_detail_telepon');
+        const viewNamaKtp = document.getElementById('view_detail_nama_ktp');
+        const viewTtl = document.getElementById('view_detail_ttl');
+        const viewGender = document.getElementById('view_detail_jenis_kelamin');
+        const viewGoldar = document.getElementById('view_detail_golongan_darah');
+        const viewAgama = document.getElementById('view_detail_agama');
+        const viewStatusNikah = document.getElementById('view_detail_status_perkawinan');
+        const viewPekerjaan = document.getElementById('view_detail_pekerjaan');
+        const viewWarga = document.getElementById('view_detail_kewarganegaraan');
+        const viewAlamat = document.getElementById('view_detail_alamat_jalan');
+        const viewRtRw = document.getElementById('view_detail_rt_rw_blok');
+        const viewDesa = document.getElementById('view_detail_desa_kelurahan');
+        const viewKec = document.getElementById('view_detail_kecamatan');
+        const viewKab = document.getElementById('view_detail_kabupaten_kota');
+        const viewProv = document.getElementById('view_detail_provinsi');
+        const viewKodePos = document.getElementById('view_detail_kode_pos');
+        const viewFotoKtpContainer = document.getElementById('view_detail_foto_ktp_container');
 
         if (viewNik) viewNik.textContent = detail && detail.nik ? detail.nik : '-';
-        if (viewPhone) viewPhone.textContent = detail && detail.phone_number ? detail.phone_number : '-';
-        if (viewBirth) {
-            const bp = detail && detail.birth_place ? detail.birth_place : '';
-            const bd = detail && detail.birth_date ? formatDateOnly(detail.birth_date) : '';
-            viewBirth.textContent = (bp && bd) ? `${bp}, ${bd}` : (bp || bd || '-');
-        }
-        if (viewGender) {
-            const g = detail ? detail.gender : '';
-            viewGender.textContent = g === 'L' ? 'Laki-Laki' : (g === 'P' ? 'Perempuan' : '-');
-        }
-        if (viewAddress) viewAddress.textContent = detail && detail.address ? detail.address : '-';
-
-        const ktpPreview = document.getElementById('form_ktp_preview');
-        const ktpEmptyState = document.getElementById('form_ktp_empty_state');
-        const btnViewKtpModal = document.getElementById('btn_view_ktp_modal');
-        const ktpUrl = (detail && detail.id_card_photo) ? `/storage/${detail.id_card_photo}` : null;
-
-        if (ktpPreview && ktpEmptyState) {
-            if (ktpUrl) {
-                ktpPreview.src = ktpUrl;
-                ktpPreview.classList.remove('d-none');
-                ktpEmptyState.classList.add('d-none');
-                if (btnViewKtpModal) {
-                    btnViewKtpModal.classList.remove('d-none');
-                    btnViewKtpModal.setAttribute('data-ktp-url', ktpUrl);
-                    btnViewKtpModal.setAttribute('data-user-name', user ? user.name : 'Pengguna');
-                }
+        if (viewTelepon) {
+            if (detail && detail.telepon) {
+                const waUrl = detail.telepon_wa_url || `https://wa.me/${detail.telepon.replace(/\D/g, '')}`;
+                viewTelepon.innerHTML = `<a href="${waUrl}" target="_blank" class="text-success text-decoration-none fw-semibold d-inline-flex align-items-center"><i class="ti ti-brand-whatsapp me-1"></i>${detail.telepon} <i class="ti ti-external-link fs-11 ms-1"></i></a>`;
             } else {
-                ktpPreview.src = '';
-                ktpPreview.classList.add('d-none');
-                ktpEmptyState.classList.remove('d-none');
-                if (btnViewKtpModal) btnViewKtpModal.classList.add('d-none');
+                viewTelepon.textContent = '-';
+            }
+        }
+        if (viewNamaKtp) viewNamaKtp.textContent = detail && detail.nama_ktp ? detail.nama_ktp : (user ? user.name : '-');
+        if (viewTtl) {
+            const bp = detail && detail.tempat_lahir ? detail.tempat_lahir : '';
+            const bd = detail && detail.tanggal_lahir ? formatDateOnly(detail.tanggal_lahir) : '';
+            viewTtl.textContent = (bp && bd) ? `${bp}, ${bd}` : (bp || bd || '-');
+        }
+        if (viewGender) viewGender.textContent = detail && detail.jenis_kelamin ? detail.jenis_kelamin : '-';
+        if (viewGoldar) viewGoldar.textContent = detail && detail.golongan_darah ? detail.golongan_darah : '-';
+        if (viewAgama) viewAgama.textContent = detail && detail.agama ? detail.agama : '-';
+        if (viewStatusNikah) viewStatusNikah.textContent = detail && detail.status_perkawinan ? detail.status_perkawinan : '-';
+        if (viewPekerjaan) viewPekerjaan.textContent = detail && detail.pekerjaan ? detail.pekerjaan : '-';
+        if (viewWarga) viewWarga.textContent = detail && detail.kewarganegaraan ? detail.kewarganegaraan : 'WNI';
+
+        if (viewAlamat) viewAlamat.textContent = detail && detail.alamat_jalan ? detail.alamat_jalan : '-';
+        if (viewRtRw) {
+            const rt = detail && detail.rt ? detail.rt : '-';
+            const rw = detail && detail.rw ? detail.rw : '-';
+            const blok = detail && detail.blok ? detail.blok : '-';
+            viewRtRw.textContent = `RT: ${rt} / RW: ${rw} / Blok: ${blok}`;
+        }
+        if (viewDesa) viewDesa.textContent = detail && detail.desa_kelurahan ? detail.desa_kelurahan : '-';
+        if (viewKec) viewKec.textContent = detail && detail.kecamatan ? detail.kecamatan : '-';
+        if (viewKab) viewKab.textContent = detail && detail.kabupaten_kota ? detail.kabupaten_kota : '-';
+        if (viewProv) viewProv.textContent = detail && detail.provinsi ? detail.provinsi : '-';
+        if (viewKodePos) viewKodePos.textContent = detail && detail.kode_pos ? detail.kode_pos : '-';
+
+        if (viewFotoKtpContainer) {
+            const ktpUrl = detail && detail.foto_ktp_url ? detail.foto_ktp_url : (detail && detail.foto_ktp ? `/storage/${detail.foto_ktp}` : null);
+            if (ktpUrl) {
+                viewFotoKtpContainer.innerHTML = `
+                    <div class="d-flex align-items-center gap-2 mt-1">
+                        <img src="${ktpUrl}" alt="KTP ${user ? user.name : ''}" class="img-thumbnail" style="max-height: 70px; max-width: 140px; object-fit: cover;">
+                        <a href="${ktpUrl}" target="_blank" class="btn btn-xs btn-outline-primary"><i class="ti ti-zoom-in me-1"></i>Lihat Foto KTP</a>
+                    </div>
+                `;
+            } else {
+                viewFotoKtpContainer.innerHTML = `<span class="text-muted fs-12 fst-italic">Belum mengunggah berkas KTP</span>`;
             }
         }
 
