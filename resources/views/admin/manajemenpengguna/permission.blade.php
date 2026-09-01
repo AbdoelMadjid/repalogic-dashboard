@@ -1,6 +1,8 @@
 @extends('layouts.vertical', ['title' => 'Data Permission'])
 
 @section('content')
+    <link href="{{ asset('assets/css/admin/manajemenpengguna/permission.css') }}" rel="stylesheet" type="text/css" />
+
     @include('layouts.partials.page-title', ['subtitle' => 'Manajemen Pengguna', 'title' => 'Data Permission'])
     <div class="container-fluid mt-2">
         <div class="row">
@@ -213,184 +215,14 @@
         </div>
     </div>
 
+    <!-- Bridge Config & Module JS (Rule 1 & 15 Compliance) -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let currentPage = 1;
-            let pageSize = 25;
-
-            const searchInput = document.getElementById('table-search-input');
-            const lengthSelect = document.getElementById('table-length-select');
-            const tableInfoBar = document.getElementById('table-info-bar');
-            const paginationUl = document.getElementById('table-pagination');
-
-            function updateTableDisplay() {
-                const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
-                const selectedLength = lengthSelect ? lengthSelect.value : '25';
-                pageSize = selectedLength === 'all' ? Infinity : parseInt(selectedLength, 10);
-
-                let matchingRows = [];
-                document.querySelectorAll('.permission-row').forEach(row => {
-                    const text = row.textContent.toLowerCase();
-                    if (query === '' || text.includes(query)) {
-                        matchingRows.push(row);
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-
-                const totalMatching = matchingRows.length;
-                const totalPages = pageSize === Infinity ? 1 : (Math.ceil(totalMatching / pageSize) || 1);
-
-                if (currentPage > totalPages) currentPage = totalPages;
-                if (currentPage < 1) currentPage = 1;
-
-                const startIndex = pageSize === Infinity ? 0 : (currentPage - 1) * pageSize;
-                const endIndex = pageSize === Infinity ? totalMatching : Math.min(startIndex + pageSize, totalMatching);
-
-                matchingRows.forEach((row, index) => {
-                    if (index >= startIndex && index < endIndex) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-
-                if (tableInfoBar) {
-                    if (totalMatching === 0) {
-                        tableInfoBar.innerHTML = 'Menampilkan <strong>0</strong> modul';
-                    } else if (pageSize === Infinity) {
-                        tableInfoBar.innerHTML = `Menampilkan semua <strong>${totalMatching}</strong> modul`;
-                    } else {
-                        tableInfoBar.innerHTML = `Menampilkan <strong>${startIndex + 1}</strong> sampai <strong>${endIndex}</strong> dari <strong>${totalMatching}</strong> modul`;
-                    }
-                }
-
-                renderPagination(totalPages);
+        window.PermissionConfig = {
+            routes: {
+                store: "{{ route('admin.manajemenpengguna.permission.store') }}",
+                base: "{{ url('admin/manajemenpengguna/permission') }}"
             }
-
-            function renderPagination(totalPages) {
-                if (!paginationUl) return;
-
-                if (totalPages <= 1 || pageSize === Infinity) {
-                    paginationUl.innerHTML = '';
-                    return;
-                }
-
-                let html = '';
-                const prevDisabled = currentPage === 1 ? ' disabled' : '';
-                html += `<li class="page-item${prevDisabled}" data-page="1" title="Halaman Awal"><a class="page-link" href="javascript:void(0);"><i class="ti ti-chevrons-left fs-14"></i></a></li>`;
-                html += `<li class="page-item${prevDisabled}" data-page="${currentPage - 1}" title="Sebelumnya"><a class="page-link" href="javascript:void(0);"><i class="ti ti-chevron-left fs-14"></i></a></li>`;
-
-                let startPage = Math.max(1, currentPage - 2);
-                let endPage = Math.min(totalPages, startPage + 4);
-                if (endPage - startPage < 4) {
-                    startPage = Math.max(1, endPage - 4);
-                }
-
-                for (let p = startPage; p <= endPage; p++) {
-                    const activeClass = p === currentPage ? ' active' : '';
-                    html += `<li class="page-item${activeClass}" data-page="${p}"><a class="page-link" href="javascript:void(0);">${p}</a></li>`;
-                }
-
-                const nextDisabled = currentPage === totalPages ? ' disabled' : '';
-                html += `<li class="page-item${nextDisabled}" data-page="${currentPage + 1}" title="Berikutnya"><a class="page-link" href="javascript:void(0);"><i class="ti ti-chevron-right fs-14"></i></a></li>`;
-                html += `<li class="page-item${nextDisabled}" data-page="${totalPages}" title="Halaman Akhir"><a class="page-link" href="javascript:void(0);"><i class="ti ti-chevrons-right fs-14"></i></a></li>`;
-
-                paginationUl.innerHTML = html;
-
-                paginationUl.querySelectorAll('.page-item:not(.disabled)').forEach(item => {
-                    item.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const targetPage = parseInt(this.getAttribute('data-page'), 10);
-                        if (targetPage && targetPage !== currentPage) {
-                            currentPage = targetPage;
-                            updateTableDisplay();
-                        }
-                    });
-                });
-            }
-
-            if (lengthSelect) {
-                lengthSelect.addEventListener('change', function() {
-                    currentPage = 1;
-                    updateTableDisplay();
-                });
-            }
-
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    currentPage = 1;
-                    updateTableDisplay();
-                });
-            }
-
-            updateTableDisplay();
-
-            // Modal & Action Handlers (Event Delegation)
-            const permissionModalElement = document.getElementById('permissionModal');
-            const permissionModal = new bootstrap.Modal(permissionModalElement);
-            const permissionForm = document.getElementById('permissionForm');
-            const modalTitle = document.getElementById('permissionModalTitle');
-            const methodSpoofingContainer = document.getElementById('methodSpoofingContainer');
-            const btnSubmitForm = document.getElementById('btnSubmitForm');
-            const formInputs = document.querySelectorAll('.permission-input');
-
-            document.addEventListener('click', function(e) {
-                const btn = e.target.closest('.btn-modul-permission-trigger');
-                if (!btn) return;
-                e.preventDefault();
-
-                const actionType = btn.getAttribute('data-type');
-                const target = btn.getAttribute('data-module');
-                const menuId = btn.getAttribute('data-menu-id');
-                const actionsStr = btn.getAttribute('data-actions') || '';
-                const firstId = btn.getAttribute('data-first-id') || 0;
-                const actionsArr = actionsStr ? actionsStr.split(',') : [];
-
-                permissionForm.reset();
-                methodSpoofingContainer.innerHTML = '';
-                formInputs.forEach(input => input.disabled = false);
-                btnSubmitForm.classList.remove('d-none');
-
-                document.querySelectorAll('.action-checkbox').forEach(cb => cb.checked = false);
-
-                if (actionType === 'create') {
-                    modalTitle.innerHTML = '<i class="ti ti-plus me-1"></i> Tambah Permission Baru';
-                    permissionForm.action = "{{ route('admin.manajemenpengguna.permission.store') }}";
-                    btnSubmitForm.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Permission';
-
-                    document.querySelectorAll('.action-checkbox').forEach(cb => cb.checked = true);
-
-                } else if (actionType === 'edit' && target) {
-                    modalTitle.innerHTML = `<i class="ti ti-edit me-1"></i> Edit Permission Modul: ${target}`;
-                    permissionForm.action = `{{ url('admin/manajemenpengguna/permission') }}/${firstId}`;
-                    methodSpoofingContainer.innerHTML = '@method("PUT")';
-                    btnSubmitForm.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Perbarui Permission';
-
-                    document.getElementById('form_permission_target').value = target;
-                    document.getElementById('form_permission_menu_id').value = menuId || '';
-
-                    document.querySelectorAll('.action-checkbox').forEach(cb => {
-                        cb.checked = actionsArr.includes(cb.value);
-                    });
-
-                } else if (actionType === 'view' && target) {
-                    modalTitle.innerHTML = `<i class="ti ti-eye me-1"></i> Detail Permission Modul: ${target}`;
-                    permissionForm.action = '#';
-                    btnSubmitForm.classList.add('d-none');
-
-                    document.getElementById('form_permission_target').value = target;
-                    document.getElementById('form_permission_menu_id').value = menuId || '';
-
-                    document.querySelectorAll('.action-checkbox').forEach(cb => {
-                        cb.checked = actionsArr.includes(cb.value);
-                    });
-
-                    formInputs.forEach(input => input.disabled = true);
-                }
-
-                permissionModal.show();
-            });
-        });
+        };
     </script>
+    <script src="{{ asset('assets/js/admin/manajemenpengguna/permission.js') }}"></script>
 @endsection

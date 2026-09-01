@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.5.1</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.5.2</strong>
                             </span>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                                         <h6 class="fw-bold mb-0 text-dark">2. Update Changelog View</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Tambahkan item rilis baru pada file <code>resources/views/template/documentation/changelog.blade.php</code>.
+                                        Tambahkan riwayat entri timeline versi baru pada <code>resources/views/template/documentation/changelog.blade.php</code>.
                                     </p>
                                 </div>
                             </div>
@@ -68,11 +68,11 @@
                             <div class="col-md-6 col-lg-3">
                                 <div class="p-3 border rounded-3 bg-light-subtle h-100">
                                     <div class="d-flex align-items-center mb-2">
-                                        <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-tag fs-14"></i></span>
+                                        <span class="badge bg-warning rounded-circle p-1.5 me-2"><i class="ti ti-table fs-14"></i></span>
                                         <h6 class="fw-bold mb-0 text-dark">3. Update Release Doc</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Catat riwayat rilis baru pada tabel <code>docs/riwayat_release_dan_tag.md</code>.
+                                        Tambahkan baris rilis pada tabel riwayat rilis &amp; tag di <code>docs/riwayat_release_dan_tag.md</code>.
                                     </p>
                                 </div>
                             </div>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.5.1 -->
+                        <!-- Version 2.5.2 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,38 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.5.1</h5>
+                                        <h5 class="fw-bold mb-0">v2.5.2</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.5.2</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 08:30 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Complete Architecture Separation of Modular External CSS &amp; JS Assets Across All Admin Pages (Rule 15), Global Custom Auth &amp; DataTables Styling, Unused Raw Asset Cleanup &amp; High-Contrast Red Notification Badge Glow</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Pemisahan Aset Eksternal Modular (Rule 15 Compliance):</strong> Seluruh kode CSS dan JavaScript yang sebelumnya berada inline di dalam Blade view pada semua modul admin telah diekstrak menjadi file eksternal 1-to-1 di <code>public/assets/css/admin/</code> dan <code>public/assets/js/admin/</code> (mencakup modul Profil Pengguna, Messages, Menu, Role, Permission, Akses Role, Akses User, Users, Data Login, Profil Aplikasi, Fitur Aplikasi, Backup DB, Translation, dan Konfigurasi Website).</li>
+                                    <li><strong class="text-dark">Arsitektur Bridge Data Dinamis:</strong> Penggunaan objek konfigurasi global terstandarisasi (<code>window.ModuleNameConfig</code>) sebagai jembatan passing data server ke file JavaScript eksternal secara aman dan terisolasi.</li>
+                                    <li><strong class="text-dark">Pembersihan Aset Mentah &amp; Direktori Font Tak Terpakai:</strong> Menghapus direktori <code>public/assets/css/s/</code> dan berkas <code>css2</code>, <code>css2-1</code> s.d. <code>css2-11</code> sisa crawler Google Fonts yang tidak lagi digunakan sistem.</li>
+                                    <li><strong class="text-dark">Efek Glow &amp; Drop-Shadow Merah Notifikasi:</strong> Penyempurnaan styling badge notifikasi merah pada icon topbar dan form input saat kondisi invalid/error dengan efek ambient shadow konsisten.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Modular External CSS &amp; JS</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Architecture Rule 15</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Asset Cleanup</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Dynamic Server Bridge</span>
+                                    <span class="badge bg-light text-dark border fs-xs">UI Consistency</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.5.1 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-check fs-xl text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.5.1</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.5.1</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 02:42 WIB</span>

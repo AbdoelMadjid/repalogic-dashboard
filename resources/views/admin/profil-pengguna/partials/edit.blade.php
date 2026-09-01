@@ -3,6 +3,8 @@
 @section('title', 'Kelengkapan Data KTP & Alamat')
 
 @section('content')
+    <link href="{{ asset('assets/css/admin/profil-pengguna.css') }}" rel="stylesheet" type="text/css" />
+
     <!-- Header Page Title -->
     @include('layouts.partials.page-title', ['title' => 'Kelengkapan Data KTP & Alamat', 'subtitle' => 'Profil Pengguna'])
 
@@ -250,23 +252,5 @@
     </div>
 
     {{-- Page JS (Rule 1 Compliance: Place scripts inside @section('content') before @endsection) --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const ktpInput = document.getElementById('foto_ktp_input');
-            const ktpPreview = document.getElementById('ktp-preview-img');
-
-            if (ktpInput && ktpPreview) {
-                ktpInput.addEventListener('change', function(e) {
-                    const file = e.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(evt) {
-                            ktpPreview.src = evt.target.result;
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
-            }
-        });
-    </script>
+    <script src="{{ asset('assets/js/admin/profil-pengguna.js') }}"></script>
 @endsection

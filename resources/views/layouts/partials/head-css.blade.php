@@ -77,3 +77,6 @@
 
 <!-- Global Custom DataTables & Switch Table CSS -->
 <link href="{{ asset('assets/css/custom-datatables.css') }}" rel="stylesheet" type="text/css" />
+
+<!-- Global Custom Auth & Form Input Styling -->
+<link href="{{ asset('assets/css/custom-auth.css') }}" rel="stylesheet" type="text/css" />

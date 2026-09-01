@@ -24,6 +24,8 @@
     <!-- App css -->
     <link id="app-style" href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" />
 
+    <!-- Custom Auth & Form Input Styling -->
+    <link href="{{ asset('assets/css/custom-auth.css') }}" rel="stylesheet" type="text/css" />
 </head>
 
 <body>

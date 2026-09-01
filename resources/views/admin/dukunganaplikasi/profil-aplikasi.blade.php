@@ -3,6 +3,8 @@
 @section('title', 'Profil Aplikasi')
 
 @section('content')
+    <link href="{{ asset('assets/css/admin/dukunganaplikasi/profil-aplikasi.css') }}" rel="stylesheet" type="text/css" />
+
     <!-- Header Page Title -->
     @include('layouts.partials.page-title', ['title' => 'Profil Aplikasi', 'subtitle' => 'Dukungan Aplikasi'])
 
@@ -279,25 +281,6 @@
         </div>
     </div>
 
-    {{-- Page JS (Rule 1 Compliance: Place scripts inside @section('content') before @endsection) --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Live Preview Image Uploads using Event Delegation
-            document.addEventListener('change', function(e) {
-                const target = e.target;
-                if (target && target.matches('input[type="file"][data-preview-id]')) {
-                    const previewId = target.getAttribute('data-preview-id');
-                    const previewImg = document.getElementById(previewId);
-                    
-                    if (previewImg && target.files && target.files[0]) {
-                        const reader = new FileReader();
-                        reader.onload = function(evt) {
-                            previewImg.src = evt.target.result;
-                        };
-                        reader.readAsDataURL(target.files[0]);
-                    }
-                }
-            });
-        });
-    </script>
+    <!-- Page JS (Rule 1 & 15 Compliance) -->
+    <script src="{{ asset('assets/js/admin/dukunganaplikasi/profil-aplikasi.js') }}"></script>
 @endsection

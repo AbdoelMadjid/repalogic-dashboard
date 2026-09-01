@@ -1,0 +1,16 @@
+/**
+ * Dukungan Aplikasi - Translation Module CSS
+ * Path: public/assets/css/admin/dukunganaplikasi/translation.css
+ */
+
+.table-responsive {
+    min-height: 280px;
+}
+
+.category-header-row {
+    background-color: rgba(var(--bs-primary-rgb), 0.05);
+}
+
+.translation-row:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.02);
+}

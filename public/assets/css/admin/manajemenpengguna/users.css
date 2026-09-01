@@ -1,0 +1,18 @@
+/**
+ * Manajemen Pengguna (Users) Module CSS
+ * Path: public/assets/css/admin/manajemenpengguna/users.css
+ */
+
+.table-responsive {
+    min-height: 280px;
+}
+
+.user-role-checkbox {
+    border: 2px solid #475569 !important;
+    width: 1.15em;
+    height: 1.15em;
+}
+
+#view_config_cover_preview {
+    transition: object-position 0.2s ease-in-out;
+}

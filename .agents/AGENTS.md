@@ -81,3 +81,44 @@
 ## 14. Icon and Label Spacing Standard
 - ALL icons (`<i>`, `<svg>`, etc.) paired with text labels, buttons, badges, table headers, info lists, or card descriptions MUST have explicit, visible spacing (e.g. `me-1.5`, `me-2`, or flex container with `gap-2`).
 - Never place icons flush against text labels without margin or spacing.
+
+## 15. External Page Assets (CSS & JS) Separation Standard
+- All custom styles and JavaScript logic for admin pages MUST be separated into dedicated external `.css` and `.js` files in `public/assets/`:
+  - CSS Path: `public/assets/css/admin/{kelompok}/{modul}.css` (or `public/assets/css/admin/{modul}.css` for top-level admin pages).
+  - JS Path: `public/assets/js/admin/{kelompok}/{modul}.js` (or `public/assets/js/admin/{modul}.js` for top-level admin pages).
+  - The asset filenames MUST mirror the Blade view filename (e.g. `fitur-aplikasi.blade.php` $\rightarrow$ `fitur-aplikasi.css` & `fitur-aplikasi.js`).
+- **Blade File Cleanliness**:
+  - Do NOT write large inline `<style>...</style>` or `<script>...</script>` blocks inside Blade views.
+  - Blade views should focus purely on markup, layout, and component includes.
+- **Asset Inclusion Syntax**:
+  - CSS Link: Place at the very beginning of `@section('content')`:
+    ```html
+    @section('content')
+        <link href="{{ asset('assets/css/admin/{kelompok}/{modul}.css') }}" rel="stylesheet" type="text/css" />
+        ...
+    ```
+  - JS Script: Place at the very end of `@section('content')` before `@endsection`:
+    ```html
+        ...
+        <script src="{{ asset('assets/js/admin/{kelompok}/{modul}.js') }}"></script>
+    @endsection
+    ```
+- **Dynamic Backend Data Bridge (Blade $\rightarrow$ External JS)**:
+  - If external JS requires dynamic server data (e.g. auth user ID, initial counts, route URLs), pass it via a compact bridge object before the script tag:
+    ```html
+    <script>
+        window.ModuleNameConfig = {
+            userId: {{ auth()->id() }},
+            routes: {
+                fetchData: "{{ route('admin.modul.fetch') }}",
+                storeData: "{{ route('admin.modul.store') }}"
+            }
+        };
+    </script>
+    <script src="{{ asset('assets/js/admin/{kelompok}/{modul}.js') }}"></script>
+    ```
+  - For CSRF token in fetch/AJAX:
+    ```javascript
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    ```
+

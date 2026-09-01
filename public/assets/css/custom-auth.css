@@ -1,0 +1,157 @@
+/**
+ * Custom Auth & Form Input Styling
+ * Repalogic Dashboard - Modifikasi Form Autentikasi & Input Group
+ */
+
+/* ==========================================================================
+   1. Transisi & Harmonisasi Input Group
+   ========================================================================== */
+.input-group,
+.input-group-merge {
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.input-group-merge .input-group-text,
+.input-group-merge .form-control,
+.input-group-merge .btn,
+.input-group .input-group-text,
+.input-group .form-control,
+.input-group .btn {
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+/* ==========================================================================
+   2. Efek Hover (Garis Border Luar Tegas & Sinkron)
+   ========================================================================== */
+.input-group-merge:hover:not(:has(.form-control.is-invalid)):not(:focus-within) .input-group-text,
+.input-group-merge:hover:not(:has(.form-control.is-invalid)):not(:focus-within) .form-control,
+.input-group-merge:hover:not(:has(.form-control.is-invalid)):not(:focus-within) .btn,
+.input-group:hover:not(:has(.form-control.is-invalid)):not(:focus-within) .input-group-text,
+.input-group:hover:not(:has(.form-control.is-invalid)):not(:focus-within) .form-control,
+.input-group:hover:not(:has(.form-control.is-invalid)):not(:focus-within) .btn {
+    border-color: #94a3b8 !important;
+}
+
+.input-group-merge:hover:not(:has(.form-control.is-invalid)):not(:focus-within) .input-group-text i,
+.input-group-merge:hover:not(:has(.form-control.is-invalid)):not(:focus-within) .btn i,
+.input-group:hover:not(:has(.form-control.is-invalid)):not(:focus-within) .input-group-text i,
+.input-group:hover:not(:has(.form-control.is-invalid)):not(:focus-within) .btn i {
+    color: #334155 !important;
+}
+
+/* Standalone inputs & textarea hover */
+.form-control:hover:not(.is-invalid):not(:focus),
+textarea.form-control:hover:not(.is-invalid):not(:focus) {
+    border-color: #94a3b8 !important;
+}
+
+/* ==========================================================================
+   3. Efek Fokus / Aktif (Glow & Border Fokus Menyatu)
+   ========================================================================== */
+.input-group-merge:focus-within:not(:has(.form-control.is-invalid)) .input-group-text,
+.input-group-merge:focus-within:not(:has(.form-control.is-invalid)) .form-control,
+.input-group-merge:focus-within:not(:has(.form-control.is-invalid)) .btn,
+.input-group:focus-within:not(:has(.form-control.is-invalid)) .input-group-text,
+.input-group:focus-within:not(:has(.form-control.is-invalid)) .form-control,
+.input-group:focus-within:not(:has(.form-control.is-invalid)) .btn {
+    border-color: #1ab394 !important;
+}
+
+.input-group-merge:focus-within:not(:has(.form-control.is-invalid)),
+.input-group:focus-within:not(:has(.form-control.is-invalid)) {
+    box-shadow: 0 0 0 0.2rem rgba(26, 179, 148, 0.18) !important;
+    border-radius: 0.375rem;
+}
+
+.input-group-merge .form-control:focus,
+.input-group .form-control:focus {
+    z-index: 1;
+    box-shadow: none !important;
+}
+
+.input-group-merge:focus-within:not(:has(.form-control.is-invalid)) .input-group-text i,
+.input-group:focus-within:not(:has(.form-control.is-invalid)) .input-group-text i {
+    color: #1ab394 !important;
+}
+
+/* ==========================================================================
+   4. Efek Notifikasi / Invalid Error State (Red Glow Melingkari Seluruh Kotak)
+   ========================================================================== */
+.input-group-merge .form-control.is-invalid,
+.input-group .form-control.is-invalid,
+.input-group-merge .form-control.is-invalid:focus,
+.input-group .form-control.is-invalid:focus {
+    background-image: none !important;
+    padding-right: 0.75rem !important;
+    box-shadow: none !important;
+    border-color: #ef4444 !important;
+}
+
+.input-group-merge:has(.form-control.is-invalid),
+.input-group:has(.form-control.is-invalid) {
+    box-shadow: 0 0 0 0.2rem rgba(239, 68, 68, 0.15) !important;
+    border-radius: 0.375rem;
+}
+
+.input-group-merge:has(.form-control.is-invalid) .input-group-text,
+.input-group-merge:has(.form-control.is-invalid) .form-control,
+.input-group-merge:has(.form-control.is-invalid) .btn,
+.input-group:has(.form-control.is-invalid) .input-group-text,
+.input-group:has(.form-control.is-invalid) .form-control,
+.input-group:has(.form-control.is-invalid) .btn {
+    border-color: #ef4444 !important;
+    transition: all 0.2s ease-in-out;
+}
+
+.input-group-merge:has(.form-control.is-invalid) .input-group-text,
+.input-group-merge:has(.form-control.is-invalid) .btn,
+.input-group:has(.form-control.is-invalid) .input-group-text,
+.input-group:has(.form-control.is-invalid) .btn {
+    background-color: #fef2f2 !important;
+    color: #dc2626 !important;
+}
+
+.input-group-merge:has(.form-control.is-invalid) .input-group-text i,
+.input-group-merge:has(.form-control.is-invalid) .btn i,
+.input-group:has(.form-control.is-invalid) .input-group-text i,
+.input-group:has(.form-control.is-invalid) .btn i {
+    color: #dc2626 !important;
+}
+
+/* Saat Invalid sedang di-Hover atau di-Fokus */
+.input-group-merge:has(.form-control.is-invalid):hover,
+.input-group-merge:has(.form-control.is-invalid):focus-within,
+.input-group:has(.form-control.is-invalid):hover,
+.input-group:has(.form-control.is-invalid):focus-within {
+    box-shadow: 0 0 0 0.22rem rgba(220, 38, 38, 0.22) !important;
+}
+
+.input-group-merge:has(.form-control.is-invalid):hover .input-group-text,
+.input-group-merge:has(.form-control.is-invalid):hover .form-control,
+.input-group-merge:has(.form-control.is-invalid):hover .btn,
+.input-group-merge:has(.form-control.is-invalid):focus-within .input-group-text,
+.input-group-merge:has(.form-control.is-invalid):focus-within .form-control,
+.input-group-merge:has(.form-control.is-invalid):focus-within .btn,
+.input-group:has(.form-control.is-invalid):hover .input-group-text,
+.input-group:has(.form-control.is-invalid):hover .form-control,
+.input-group:has(.form-control.is-invalid):hover .btn,
+.input-group:has(.form-control.is-invalid):focus-within .input-group-text,
+.input-group:has(.form-control.is-invalid):focus-within .form-control,
+.input-group:has(.form-control.is-invalid):focus-within .btn {
+    border-color: #dc2626 !important;
+}
+
+/* ==========================================================================
+   5. Pesan Validasi Kustom (Invalid Feedback)
+   ========================================================================== */
+.invalid-feedback-custom {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    margin-top: 0.5rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: 0.375rem;
+    background-color: #fef2f2;
+    border: 1px solid #fee2e2;
+    color: #dc2626 !important;
+    transition: all 0.2s ease-in-out;
+}

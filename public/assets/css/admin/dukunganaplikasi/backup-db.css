@@ -1,0 +1,44 @@
+/**
+ * Dukungan Aplikasi - Backup Database Module CSS
+ * Path: public/assets/css/admin/dukunganaplikasi/backup-db.css
+ */
+
+.switch-large {
+    width: 2.75em !important;
+    height: 1.5em !important;
+    cursor: pointer;
+}
+
+.card-option, 
+.card-output {
+    transition: all 0.2s ease-in-out;
+    border-width: 2px !important;
+}
+
+.card-option:hover,
+.card-output:hover,
+.hover-border-primary:hover {
+    border-color: var(--bs-primary) !important;
+    background-color: rgba(var(--bs-primary-rgb), 0.04) !important;
+}
+
+.card-option.active,
+.card-output.active {
+    border-color: var(--bs-primary) !important;
+    background-color: rgba(var(--bs-primary-rgb), 0.04) !important;
+    box-shadow: 0 4px 12px rgba(62, 96, 213, 0.12);
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.checkbox-table-item {
+    border: 2px solid #475569 !important;
+    width: 1.15em;
+    height: 1.15em;
+}
+
+#table-selective-list tbody tr:hover {
+    background-color: rgba(62, 96, 213, 0.04);
+}

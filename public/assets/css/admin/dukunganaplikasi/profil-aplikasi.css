@@ -1,0 +1,20 @@
+/**
+ * Dukungan Aplikasi - Profil Aplikasi Module CSS
+ * Path: public/assets/css/admin/dukunganaplikasi/profil-aplikasi.css
+ */
+
+.preview-box-logo,
+.preview-box-favicon {
+    min-height: 120px;
+    transition: all 0.2s ease-in-out;
+}
+
+.preview-box-logo img,
+.preview-box-favicon img {
+    transition: transform 0.2s ease;
+}
+
+.preview-box-logo:hover img,
+.preview-box-favicon:hover img {
+    transform: scale(1.03);
+}

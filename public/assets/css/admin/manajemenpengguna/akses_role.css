@@ -1,0 +1,15 @@
+/**
+ * Manajemen Hak Akses Role Module CSS
+ * Path: public/assets/css/admin/manajemenpengguna/akses_role.css
+ */
+
+.table-responsive {
+    min-height: 280px;
+}
+
+.role-permission-checkbox,
+.check-row-all {
+    border: 2px solid #475569 !important;
+    width: 1.2em;
+    height: 1.2em;
+}

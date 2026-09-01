@@ -1,0 +1,21 @@
+/**
+ * Profil Pengguna Module CSS
+ * Path: public/assets/css/admin/profil-pengguna.css
+ */
+
+#main-header-banner {
+    transition: height 0.2s ease, background-position 0.2s ease;
+}
+
+#cover-preview-container {
+    transition: aspect-ratio 0.2s ease, height 0.2s ease;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
+.toggle-password {
+    cursor: pointer;
+    user-select: none;
+}

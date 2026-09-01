@@ -1,0 +1,112 @@
+/**
+ * Profil Pengguna - Messages & Chat Module CSS
+ * Path: public/assets/css/admin/profil-pengguna/messages.css
+ */
+
+.emoji-btn {
+    font-size: 1.3rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: transform 0.12s ease, background-color 0.12s ease;
+    user-select: none;
+}
+.emoji-btn:hover {
+    background-color: #f1f5f9;
+    transform: scale(1.25);
+    z-index: 2;
+}
+.emoji-btn:active {
+    transform: scale(0.92);
+}
+.emoji-tabs .nav-link {
+    color: #64748b;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+}
+.emoji-tabs .nav-link.active {
+    background-color: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    font-weight: bold;
+}
+.reply-quote-box {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+.reply-quote-box:hover {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08) !important;
+    transform: translateY(-1px);
+}
+.reply-quote-box:active {
+    transform: translateY(0);
+}
+mark.search-match {
+    background-color: #fef08a !important;
+    color: #854d0e !important;
+    border-radius: 3px;
+    padding: 1px 3px;
+    box-shadow: 0 0 0 1px rgba(234, 179, 8, 0.4);
+    font-weight: 600;
+}
+mark.search-match.bg-danger {
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.6);
+}
+@keyframes pulseMessageHighlight {
+    0% {
+        box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.8);
+        outline: 2px solid #0d6efd;
+    }
+    40% {
+        box-shadow: 0 0 0 8px rgba(13, 110, 253, 0);
+        outline: 3px solid #0d6efd;
+        background-color: rgba(13, 110, 253, 0.15) !important;
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(13, 110, 253, 0);
+        outline: 0px solid transparent;
+    }
+}
+.chat-message-highlight {
+    animation: pulseMessageHighlight 1.8s ease-in-out !important;
+}
+#quick-reaction-popover {
+    background: #ffffff;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    animation: popoverFadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes popoverFadeIn {
+    from { opacity: 0; transform: translateY(4px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.btn-quick-react {
+    font-size: 1.35rem;
+    line-height: 1;
+    padding: 4px 6px !important;
+    border-radius: 50%;
+    transition: transform 0.12s ease, background-color 0.12s ease;
+}
+.btn-quick-react:hover {
+    transform: scale(1.35);
+    background-color: #f1f5f9;
+}
+.btn-reaction-pill {
+    transition: all 0.15s ease;
+    cursor: pointer;
+    user-select: none;
+}
+.btn-reaction-pill:hover {
+    transform: scale(1.1);
+}

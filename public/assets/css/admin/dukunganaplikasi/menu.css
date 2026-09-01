@@ -1,0 +1,39 @@
+/**
+ * Manajemen Menu Module CSS
+ * Path: public/assets/css/admin/dukunganaplikasi/menu.css
+ */
+
+.handle-category,
+.handle-parent,
+.handle-submenu {
+    cursor: grab;
+    user-select: none;
+}
+
+.handle-category:active,
+.handle-parent:active,
+.handle-submenu:active {
+    cursor: grabbing;
+}
+
+.sortable-ghost {
+    opacity: 0.4;
+    background-color: #e0f2fe !important;
+}
+
+.sortable-drag {
+    background-color: #ffffff !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+.category-header-row {
+    background-color: #f8fafc;
+}
+
+.category-header-row td {
+    font-weight: 600;
+}
+
+.table-custom-datatable tbody tr {
+    transition: background-color 0.15s ease-in-out;
+}
