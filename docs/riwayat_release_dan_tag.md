@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v2.7.6`  
-> **Terakhir Diperbarui:** 01 September 2026 17:40 WIB  
+> **Versi Terbaru:** `v2.8.0`  
+> **Terakhir Diperbarui:** 01 September 2026 21:30 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v2.8.0`** | `2026-09-01 21:30 WIB` | Comprehensive Technical Architecture Documentation Suite (Manajemen Menu, Pertemanan-Notifikasi-Chat Triad, Manajemen Pengguna 6-Pilar, Sistem Bilingual i18n) & Standardisasi GitHub-Relative Markdown Links |
 | **`v2.7.6`** | `2026-09-01 17:40 WIB` | Overhaul Tata Letak & Form Edit Langsung Profil Pengguna (Single-Page Profile Architecture), Restrukturisasi Tabel KTP 2-Kolom, Perapihan Card Penonaktifan Akun & Perbaikan Inisialisasi Script Cover Header |
 | **`v2.7.5`** | `2026-09-01 16:55 WIB` | Real-Time Friendship & Profile Synchronization Engine, Interactive Notification Search Auto-Fill, Contextual Filter Transitions & Prioritized Contact Directory Hierarchy |
 | **`v2.7.4`** | `2026-09-01 14:18 WIB` | Comprehensive Friendship Network System, Profile Likes Engine, Interactive Friend Requests & Dashboard Directory Filter Tabs |

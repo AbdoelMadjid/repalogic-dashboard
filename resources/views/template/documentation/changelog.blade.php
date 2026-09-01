@@ -114,8 +114,40 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.7.6</h5>
+                                        <h5 class="fw-bold mb-0">v2.8.0</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.0</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 21:30 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Comprehensive Technical Architecture Documentation Suite (Manajemen Menu, Pertemanan-Notifikasi-Chat Triad, Manajemen Pengguna 6-Pilar &amp; Sistem Bilingual i18n) &amp; Standardisasi GitHub-Relative Markdown Links</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Arsitektur &amp; Operasional Manajemen Menu (<code>docs/arsitektur_dan_operasional_manajemen_menu.md</code>):</strong> Dokumentasi komprehensif struktur navigasi hierarkis 3-level (Kategori &gt; Menu Utama &gt; Sub-Menu L2 &amp; L3), drag &amp; drop reordering SortableJS, cascading status toggle berjenjang, sinkronisasi otomatis Spatie permission CRUD, auto-sync kamus bilingual multi-bahasa, dan dynamic sidebar <code>SidebarComposer</code>.</li>
+                                    <li><strong class="text-dark">Arsitektur &amp; Operasional Pertemanan, Notifikasi &amp; Chat Triad (<code>docs/arsitektur_dan_operasional_pertemanan_notifikasi_chat.md</code>):</strong> Dokumentasi mendalam triad ekosistem sosial interaktif (ajakan berteman, profile likes, lonceng notifikasi real-time, intersepsi deep link dashboard, mutasi kartu chat 1-on-1, dan quad-polling synchronization engine).</li>
+                                    <li><strong class="text-dark">Arsitektur &amp; Operasional Manajemen Pengguna (<code>docs/arsitektur_dan_operasional_manajemen_pengguna.md</code>):</strong> Dokumentasi lengkap 6 sub-modul inti: Role, Permission, Akses Role matrix table, Akses User direct permissions, Users lifecycle (approval, impersonation, deactivation, bulk role), dan Data Login audit trail.</li>
+                                    <li><strong class="text-dark">Arsitektur &amp; Operasional Sistem Bilingual (<code>docs/arsitektur_dan_operasional_bilingual.md</code>):</strong> Dokumentasi lengkap engine multi-bahasa dua arah (ID &amp; EN), kamus <code>id.json</code> &amp; <code>en.json</code>, alih bahasa instan tanpa reload melalui atribut <code>data-lang</code>, model listener <code>Menu::saved</code>, dan artisan scanner CLI <code>menu:lang-sync</code>.</li>
+                                    <li><strong class="text-dark">Standardisasi Tautan Markdown Relatif GitHub:</strong> Pembersihan seluruh tautan protokol absolut lokal (<code>file:///</code>) pada seluruh berkas dokumentasi menjadi relative repository path (<code>../app/...</code>, <code>../resources/...</code>, <code>../public/...</code>) untuk penjelajahan langsung dan mulus di repositori GitHub.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Technical Docs Suite</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Menu Management Arch</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Social Triad Engine</span>
+                                    <span class="badge bg-light text-dark border fs-xs">User Management 6-Pillars</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Bilingual i18n Arch</span>
+                                    <span class="badge bg-light text-dark border fs-xs">GitHub-Relative Links</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.7.6 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-check fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.7.6</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.7.6</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 17:40 WIB</span>

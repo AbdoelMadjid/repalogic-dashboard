@@ -102,7 +102,7 @@ erDiagram
 
 ## ⚙️ 3. Pola Desain Backend & Endpoint API (`MessageController`)
 
-Seluruh logika operasional chat dikendalikan oleh Controller tunggal [`MessageController.php`](file:///F:/laragon/finaly/repalogic-dashboard/app/Http/Controllers/Admin/MessageController.php).
+Seluruh logika operasional chat dikendalikan oleh Controller tunggal [`MessageController.php`](../app/Http/Controllers/Admin/MessageController.php).
 
 ### 3.1 Endpoint & Routing
 
@@ -134,7 +134,7 @@ flowchart TD
 
 ## 🖥️ 4. Pola Desain Frontend & Komponen Interaktif (`messages.blade.php`)
 
-Antarmuka chat pada [`messages.blade.php`](file:///F:/laragon/finaly/repalogic-dashboard/resources/views/admin/profil-pengguna/messages.blade.php) dibangun secara modular menggunakan Bootstrap 5 dan Javascript Vanilla yang mematuhi seluruh Project Rules.
+Antarmuka chat pada [`messages.blade.php`](../resources/views/admin/profil-pengguna/messages.blade.php) dibangun secara modular menggunakan Bootstrap 5 dan Javascript Vanilla yang mematuhi seluruh Project Rules.
 
 ### 4.1 Struktur Tata Letak 2-Kolom
 
