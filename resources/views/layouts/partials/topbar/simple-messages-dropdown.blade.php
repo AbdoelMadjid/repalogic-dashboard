@@ -54,6 +54,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         })
         .then(function(response) {
+            if (response.status === 401) {
+                window.location.href = "{{ route('login') }}";
+                return null;
+            }
             if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
         })

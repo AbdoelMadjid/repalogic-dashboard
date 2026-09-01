@@ -192,6 +192,18 @@ class UserController extends Controller
             'deactivation_reason' => null,
         ]);
 
+        // Hancurkan seluruh sesi aktif akun ini dan bersihkan status online
+        try {
+            \Illuminate\Support\Facades\DB::table('sessions')->where('user_id', $user->id)->delete();
+        } catch (\Throwable $e) {}
+
+        \Illuminate\Support\Facades\Cache::forget('user-online-' . $user->id);
+        $onlineList = \Illuminate\Support\Facades\Cache::get('online-users-list', []);
+        if (in_array($user->id, $onlineList)) {
+            $onlineList = array_values(array_diff($onlineList, [$user->id]));
+            \Illuminate\Support\Facades\Cache::put('online-users-list', $onlineList, now()->addMinutes(3));
+        }
+
         $this->notifySuccess("Akun pengguna \"{$user->name}\" telah dinonaktifkan sesuai permohonan.");
 
         return redirect()->route('admin.manajemenpengguna.users.index');
@@ -218,7 +230,7 @@ class UserController extends Controller
                 'receiver_id' => $user->id,
                 'conversation_id' => $convId,
                 'subject' => 'Pendaftaran Akun Ditolak',
-                'body' => "Pendaftaran akun Anda ditolak oleh Administrator.\nAlasan Penolakan: {$reason}",
+                'body' => "Pendaftaran akun Anda ditolak oleh Administrator.",
                 'reason' => $reason,
                 'message_type' => 'registration_rejected',
                 'is_read' => false,
@@ -252,7 +264,7 @@ class UserController extends Controller
                 'receiver_id' => $user->id,
                 'conversation_id' => $convId,
                 'subject' => 'Permohonan Non Aktif Akun Ditolak',
-                'body' => "Permohonan penonaktifan akun Anda ditolak oleh Administrator.\nAlasan Penolakan: {$reason}",
+                'body' => "Permohonan penonaktifan akun Anda ditolak oleh Administrator.",
                 'reason' => $reason,
                 'message_type' => 'deactivation_rejected',
                 'is_read' => false,
@@ -431,6 +443,66 @@ class UserController extends Controller
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $this->notifySuccess("Berhasil kembali ke akun utama \"{$originalUser->name}\".");
+
+        return redirect()->route('admin.manajemenpengguna.users.index');
+    }
+
+    /**
+     * Bulk assign, append, or remove roles for selected users.
+     */
+    public function bulkAssignRole(Request $request)
+    {
+        $validated = $request->validate([
+            'user_ids' => 'required|array|min:1',
+            'user_ids.*' => 'exists:users,id',
+            'roles' => 'nullable|array',
+            'roles.*' => 'exists:roles,name',
+            'action_mode' => 'required|in:sync,append,remove',
+        ], [
+            'user_ids.required' => 'Pilih minimal satu pengguna untuk diperbarui perannya.',
+            'action_mode.required' => 'Pilih mode tindakan perubahan role.',
+        ]);
+
+        $userIds = $validated['user_ids'];
+        $selectedRoles = $validated['roles'] ?? [];
+        $mode = $validated['action_mode'];
+
+        if (empty($selectedRoles) && $mode !== 'sync') {
+            $this->notifyWarning('Pilih minimal satu peran (role) untuk mode ini.');
+            return redirect()->back();
+        }
+
+        $users = User::whereIn('id', $userIds)->get();
+        $updatedCount = 0;
+
+        foreach ($users as $user) {
+            if ($mode === 'sync') {
+                $user->syncRoles($selectedRoles);
+                $updatedCount++;
+            } elseif ($mode === 'append') {
+                if (!empty($selectedRoles)) {
+                    $user->assignRole($selectedRoles);
+                    $updatedCount++;
+                }
+            } elseif ($mode === 'remove') {
+                foreach ($selectedRoles as $roleName) {
+                    if ($user->hasRole($roleName)) {
+                        $user->removeRole($roleName);
+                    }
+                }
+                $updatedCount++;
+            }
+        }
+
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
+        $actionText = match ($mode) {
+            'sync' => 'disinkronisasi / diatur ulang',
+            'append' => 'ditambahkan',
+            'remove' => 'dicabut',
+        };
+
+        $this->notifySuccess("Peran (Role) berhasil {$actionText} untuk {$updatedCount} pengguna terpilih.");
 
         return redirect()->route('admin.manajemenpengguna.users.index');
     }

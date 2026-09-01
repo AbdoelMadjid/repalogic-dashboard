@@ -97,3 +97,10 @@
     max-width: 320px !important;
     width: 100% !important;
 }
+
+/* Indeterminate Checkbox Styling (Unified with Primary Theme) */
+.form-check-input:indeterminate {
+    background-color: var(--bs-primary, #3e60d5) !important;
+    border-color: var(--bs-primary, #3e60d5) !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e") !important;
+}

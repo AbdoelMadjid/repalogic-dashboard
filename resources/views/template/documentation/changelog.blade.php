@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.5.3</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.6.0</strong>
                             </span>
                         </div>
                     </div>
@@ -84,7 +84,7 @@
                                         <h6 class="fw-bold mb-0 text-dark">4. Git Commit &amp; Tag</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Lakukan commit perubahan, buat Git Tag (misal: <code>git tag v2.5.3</code>), lalu push ke remote repository.
+                                        Lakukan commit perubahan, buat Git Tag (misal: <code>git tag v2.6.0</code>), lalu push ke remote repository.
                                     </p>
                                 </div>
                             </div>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.5.3 -->
+                        <!-- Version 2.6.0 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,40 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.5.3</h5>
+                                        <h5 class="fw-bold mb-0">v2.6.0</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.6.0</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 10:45 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Bulk &amp; Quick Role Assignment Engine, Live Role &amp; Status Table Filtering, Zero-Trust Session Invalidation on Account Deactivation &amp; Deduplicated Rejection Notification Architecture</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Fasilitas Penetapan Role Massal &amp; Aksi Cepat (<code>admin/manajemenpengguna/users</code>):</strong> Checkbox seleksi tabel multi-halaman (<code>#check-all-page-users</code>, <code>#check-all-global-users</code>, <code>.user-check-item</code>), toolbar dinamis dengan badge counter <code>[X] terpilih</code>, tombol aksi massal, serta tombol aksi cepat per-baris (<code>.btn-quick-role</code>) berikon perisai untuk mengonfigurasi role pengguna secara instan.</li>
+                                    <li><strong class="text-dark">Dialog Modal Penetapan Peran Terpadu (<code>bulk_role_modal.blade.php</code>):</strong> Mendukung 3 mode tindakan fleksibel (<em>Sync</em>, <em>Append</em>, <em>Remove</em>), single-user profile preview card dengan avatar dan role aktif saat ini, multi-user avatar chips, serta matriks pilihan role Spatie dengan proteksi konfirmasi SweetAlert2.</li>
+                                    <li><strong class="text-dark">Live Table Filters (Role &amp; Status) &amp; Reset Control:</strong> Integrasi filter dropdown <em>Role</em> dan <em>Status Akun</em> (Aktif, Menunggu Persetujuan, Nonaktif, Ditolak) pada DataTables header bar, serta tombol <em>Reset Filter</em> 1-klik yang tersinkronisasi dengan pagination dan checklist.</li>
+                                    <li><strong class="text-dark">Zero-Trust Active Session Termination (<code>TrackUserActivity.php</code>):</strong> Pemutusan sesi aktif instan (<code>Auth::logout()</code>, penghapusan database sessions &amp; online cache) saat admin menonaktifkan akun pengguna yang sedang berada di dashboard, dilengkapi penerusan error bag <code>inactive</code> dan alert banner merah di halaman login dengan tombol langsung menuju permohonan aktivasi akun.</li>
+                                    <li><strong class="text-dark">Pemberitahuan Penolakan Terstruktur &amp; Penghapusan Duplikasi:</strong> Menghilangkan duplikasi teks alasan pada body pesan notifikasi penolakan registrasi dan penonaktifan akun, memusatkan tampilan alasan ke dalam kotak merah <em>Alasan dari Admin</em>, dan membersihkan record pesan yang ada di database.</li>
+                                    <li><strong class="text-dark">Standarisasi Warna Checkbox Indeterminate (<code>:indeterminate</code>):</strong> Menyelaraskan warna checkbox tanda minus (<em>partially selected</em>) dengan warna primary blue tema di level modul (<code>users.css</code>) dan global (<code>custom-datatables.css</code>).</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Bulk Role Assignment</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Quick Role Action</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Live Role &amp; Status Filters</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Zero-Trust Session Invalidation</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Clean Notification Architecture</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.5.3 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-check fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.5.3</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.5.3</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 09:35 WIB</span>

@@ -234,14 +234,6 @@ php artisan pail
 
 ---
 
-## 🏷️ Riwayat Release / Git Tag
-
-Catatan riwayat rilis versi, git tag, dan ringkasan pembaruan fitur dikelola secara terpusat pada file dokumentasi:
-
-👉 **[Lihat Riwayat Lengkap Release & Git Tag (`docs/riwayat_release_dan_tag.md`)](docs/riwayat_release_dan_tag.md)**
-
----
-
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

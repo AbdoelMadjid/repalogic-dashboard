@@ -104,6 +104,16 @@
                             </div>
                         @endif
 
+                        @if (session('error_message') && !$errors->has('inactive') && !$errors->has('rejected') && !$errors->has('unapproved'))
+                            <div class="alert alert-danger border-0 shadow-sm d-flex align-items-start gap-2 mb-3.5 py-3 px-3.5 rounded-3" role="alert" style="background-color: #fef2f2; color: #991b1b; border-left: 4px solid #ef4444 !important;">
+                                <i class="ti ti-alert-circle fs-18 text-danger flex-shrink-0 mt-0.5"></i>
+                                <div class="fs-13 lh-base w-100">
+                                    <strong class="d-block mb-0.5">Pemberitahuan Akun</strong>
+                                    {{ session('error_message') }}
+                                </div>
+                            </div>
+                        @endif
+
                         @if ($errors->has('unapproved'))
                             <div class="alert alert-warning border-0 shadow-sm d-flex align-items-start gap-2 mb-3.5 py-3 px-3.5 rounded-3" role="alert" style="background-color: #fffbeb; color: #92400e; border-left: 4px solid #f59e0b !important;">
                                 <i class="ti ti-clock-pause fs-18 text-warning flex-shrink-0 mt-0.5"></i>

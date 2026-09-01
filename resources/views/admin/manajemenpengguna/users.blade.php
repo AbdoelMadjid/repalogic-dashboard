@@ -40,11 +40,11 @@
                             </div>
                         @endif
 
-                        <!-- DATATABLES HEADER CONTROLS (JUMLAH BARIS & LIVE SEARCH) -->
-                        <div class="row align-items-center mb-3">
-                            <div class="col-md-6 d-flex align-items-center">
-                                <label class="me-2 fs-13 text-muted mb-0">Tampilkan:</label>
-                                <select id="table-length-select" class="form-select form-select-sm datatable-length-select" style="width: 120px;">
+                        <!-- DATATABLES HEADER CONTROLS (JUMLAH BARIS, FILTER ROLE, FILTER STATUS & LIVE SEARCH) -->
+                        <div class="row g-2 align-items-center mb-3">
+                            <div class="col-12 col-md-auto d-flex align-items-center">
+                                <label class="me-2 fs-13 text-muted mb-0 text-nowrap">Tampilkan:</label>
+                                <select id="table-length-select" class="form-select form-select-sm" style="width: 105px;">
                                     <option value="10">10 baris</option>
                                     <option value="25" selected>25 baris</option>
                                     <option value="50">50 baris</option>
@@ -52,30 +52,91 @@
                                     <option value="all">Semua Baris</option>
                                 </select>
                             </div>
-                            <div class="col-md-6 d-flex justify-content-md-end mt-2 mt-md-0">
-                                <div class="d-flex align-items-center datatable-search-input">
-                                    <label class="me-2 fs-13 text-muted mb-0 text-nowrap">Cari Pengguna:</label>
-                                    <input type="text" id="table-search-input" class="form-control form-control-sm" placeholder="Ketik nama, email, atau role..." value="{{ request('search', '') }}">
+
+                            <div class="col-12 col-sm-6 col-md-auto d-flex align-items-center">
+                                <label class="me-2 fs-13 text-muted mb-0 text-nowrap"><i class="ti ti-shield me-1"></i>Role:</label>
+                                <select id="table-filter-role" class="form-select form-select-sm" style="min-width: 130px;">
+                                    <option value="">Semua Role</option>
+                                    @foreach ($roles as $roleItem)
+                                        <option value="{{ $roleItem->name }}">{{ ucfirst($roleItem->name) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-sm-6 col-md-auto d-flex align-items-center">
+                                <label class="me-2 fs-13 text-muted mb-0 text-nowrap"><i class="ti ti-circle-check me-1"></i>Status:</label>
+                                <select id="table-filter-status" class="form-select form-select-sm" style="min-width: 140px;">
+                                    <option value="">Semua Status</option>
+                                    <option value="active">Aktif</option>
+                                    <option value="pending">Menunggu Persetujuan</option>
+                                    <option value="inactive">Nonaktif</option>
+                                    <option value="rejected">Ditolak</option>
+                                </select>
+                            </div>
+
+                            <div class="col-12 col-md d-flex justify-content-md-end align-items-center gap-2 mt-2 mt-md-0">
+                                <div class="input-group input-group-sm" style="max-width: 280px;">
+                                    <span class="input-group-text bg-light text-muted border-end-0"><i class="ti ti-search"></i></span>
+                                    <input type="text" id="table-search-input" class="form-control form-control-sm border-start-0 ps-0" placeholder="Cari nama, email, role..." value="{{ request('search', '') }}">
                                 </div>
+                                <button type="button" class="btn btn-sm btn-outline-secondary text-nowrap" id="btn-reset-filters" title="Reset Semua Filter & Pencarian">
+                                    <i class="ti ti-refresh me-1"></i>Reset
+                                </button>
                             </div>
                         </div>
 
+                        <!-- BULK ACTION TOOLBAR (PILIHAN CENTANG CHECKBOX USER) -->
+                        @can('update manajemenpengguna/users')
+                            <div class="p-3 bg-light-subtle rounded-3 mb-3 border d-flex flex-wrap align-items-center justify-content-between gap-3" id="bulk-user-action-bar">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="form-check m-0">
+                                        <input class="form-check-input" type="checkbox" id="check-all-global-users" title="Pilih Semua Pengguna">
+                                        <label class="form-check-label fw-semibold fs-13 text-dark user-select-none cursor-pointer" for="check-all-global-users" id="check-all-users-label">
+                                            Pilih Semua ({{ $users->count() }})
+                                        </label>
+                                    </div>
+                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-12 px-2.5 py-1 ms-2" id="selected-user-badge" style="display: none;">
+                                        <i class="ti ti-check me-1"></i><span id="selected-user-count">0</span> terpilih
+                                    </span>
+                                </div>
+
+                                <div class="d-flex flex-wrap align-items-center gap-2">
+                                    <button type="button" class="btn btn-sm btn-primary" id="btn-bulk-assign-role" disabled>
+                                        <i class="ti ti-shield-check me-1"></i> Berikan / Atur Role Terpilih
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-deselect-all-users" style="display: none;">
+                                        <i class="ti ti-x me-1"></i> Batal Pilih
+                                    </button>
+                                </div>
+                            </div>
+                        @endcan
+
                         <div class="table-responsive">
                             <table class="table table-hover align-middle table-bordered mb-0" id="users-table">
-                                <thead class="table-light align-middle text-center text-nowrap">
-                                    <tr class="align-middle text-center text-nowrap">
+                                <thead class="align-middle text-center text-nowrap">
+                                    <tr>
+                                        @can('update manajemenpengguna/users')
+                                            <th style="width: 40px;" class="text-center align-middle check-cell">
+                                                <input type="checkbox" class="form-check-input" id="check-all-page-users" title="Pilih Semua Baris di Halaman Ini">
+                                            </th>
+                                        @endcan
                                         <th style="width: 50px;" class="text-center align-middle text-nowrap">#</th>
                                         <th class="text-center align-middle text-nowrap">Identitas Pengguna</th>
                                         <th class="text-center align-middle text-nowrap">Peran (Role)</th>
                                         <th class="text-center align-middle text-nowrap">Status Akun</th>
                                         <th class="text-center align-middle text-nowrap">Tanggal Terdaftar</th>
-                                        <th style="width: 180px;" class="text-center align-middle text-nowrap">Aksi</th>
+                                        <th style="width: 190px;" class="text-center align-middle text-nowrap">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($users as $user)
-                                        <tr class="user-row">
-                                            <td class="text-center fw-semibold text-muted">{{ $loop->iteration }}</td>
+                                        <tr class="user-row" data-id="{{ $user->id }}" data-name="{{ $user->name }}" data-email="{{ $user->email }}" data-avatar="{{ $user->avatar_url }}" data-roles='@json($user->role_names)' data-status="{{ $user->status }}">
+                                            @can('update manajemenpengguna/users')
+                                                <td class="text-center check-cell cursor-pointer">
+                                                    <input type="checkbox" class="form-check-input user-check-item" value="{{ $user->id }}" data-id="{{ $user->id }}" data-name="{{ $user->name }}" data-avatar="{{ $user->avatar_url }}" data-roles='@json($user->role_names)'>
+                                                </td>
+                                            @endcan
+                                            <td class="text-center fw-semibold text-muted user-no">{{ $loop->iteration }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="rounded-circle me-2 object-fit-cover border" style="width: 38px; height: 38px; object-fit: cover; object-position: top;">
@@ -229,6 +290,9 @@
                                                         @endif
                                                     @endif
 
+                                                    @can('update manajemenpengguna/users')
+                                                        <button type="button" class="btn btn-sm btn-outline-primary btn-quick-role" data-user-id="{{ $user->id }}" data-user-name="{{ $user->name }}" data-user-email="{{ $user->email }}" data-user-avatar="{{ $user->avatar_url }}" data-user-roles='@json($user->role_names)' title="Atur Role Pengguna Ini"><i class="ti ti-shield-check"></i></button>
+                                                    @endcan
                                                     @can('read manajemenpengguna/users')
                                                         <button type="button" class="btn btn-sm btn-outline-info btn-user-action" data-action="view" data-user='@json($user)' title="Detail Pengguna"><i class="ti ti-eye"></i></button>
                                                     @endcan
@@ -251,7 +315,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="6" class="text-center text-muted py-4">Belum ada data pengguna yang terdaftar.</td>
+                                            <td colspan="7" class="text-center text-muted py-4">Belum ada data pengguna yang terdaftar.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -296,6 +360,9 @@
             </div>
         </div>
     </div>
+
+    <!-- BULK & QUICK ROLE ASSIGNMENT MODAL -->
+    @include('admin.manajemenpengguna.partials.bulk_role_modal')
 
     <!-- MODAL TOLAK PENDAFTARAN REGISTRASI -->
     <div class="modal fade" id="modal-reject-registration" tabindex="-1" aria-hidden="true">
@@ -358,6 +425,7 @@
             defaultCoverUrl: "{{ asset('assets/images/profile-bg.jpg') }}",
             routes: {
                 store: "{{ route('admin.manajemenpengguna.users.store') }}",
+                bulkAssignRole: "{{ route('admin.manajemenpengguna.users.bulk-assign-role') }}",
                 base: "{{ url('admin/manajemenpengguna/users') }}"
             }
         };
