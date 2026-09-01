@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v2.6.0`  
-> **Terakhir Diperbarui:** 01 September 2026 10:45 WIB  
+> **Versi Terbaru:** `v2.7.0`  
+> **Terakhir Diperbarui:** 01 September 2026 11:36 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v2.7.0`** | `2026-09-01 11:36 WIB` | Dynamic Data-Driven & Role-Based Dashboard Engine, User-Configured Cover Banner & Height Sync, Precision WIB Greeting Engine, Deduplicated Chat Preview Card Suite & Symmetrical Rhythm Architecture |
 | **`v2.6.0`** | `2026-09-01 10:45 WIB` | Bulk & Quick Role Assignment Engine, Live Role & Status Table Filtering, Zero-Trust Session Invalidation on Account Deactivation & Deduplicated Rejection Notification Architecture |
 | **`v2.5.3`** | `2026-09-01 09:35 WIB` | Universal Checkbox & Radio Button Design System (Spatie Matrix Table Alignment), Calibrated Toggle Switch Spacing Standard (`custom-datatables.css`), Universal Icon/Dot Spacing Utilities & Ad-Hoc Margin Cleanup Across All Admin Pages |
 | **`v2.5.2`** | `2026-09-01 08:30 WIB` | Complete Architecture Separation of Modular External CSS & JS Assets Across All Admin Pages (Rule 15), Global Custom Auth & DataTables Styling, Unused Raw Asset Cleanup & High-Contrast Red Notification Badge Glow |

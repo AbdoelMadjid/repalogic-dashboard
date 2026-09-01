@@ -21,7 +21,7 @@
                         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
                             <span
                                 class="badge bg-white bg-opacity-20 text-white fs-14 px-3 py-2 border border-white border-opacity-20 rounded-3">
-                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.6.0</strong>
+                                <i class="ti ti-git-commit me-1"></i> Current Build: <strong>v2.7.0</strong>
                             </span>
                         </div>
                     </div>
@@ -84,7 +84,7 @@
                                         <h6 class="fw-bold mb-0 text-dark">4. Git Commit &amp; Tag</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Lakukan commit perubahan, buat Git Tag (misal: <code>git tag v2.6.0</code>), lalu push ke remote repository.
+                                        Lakukan commit perubahan, buat Git Tag (misal: <code>git tag v2.7.0</code>), lalu push ke remote repository.
                                     </p>
                                 </div>
                             </div>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.6.0 -->
+                        <!-- Version 2.7.0 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -113,8 +113,41 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.6.0</h5>
+                                        <h5 class="fw-bold mb-0">v2.7.0</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.7.0</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 11:36 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Dynamic Data-Driven &amp; Role-Based Dashboard Engine, User-Configured Cover Banner &amp; Height Sync, Precision WIB Greeting Engine, Deduplicated Chat Preview Card Suite &amp; Symmetrical Rhythm Architecture</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Dynamic Data-Driven Dashboard Architecture (<code>DashboardController.php</code>):</strong> Transformasi penuh halaman utama dari dummy template menjadi dasbor live analitik yang menyajikan KPI ringkasan akun, ApexCharts tren login &amp; pendaftaran 7 hari, Donut Chart distribusi Spatie Role, Pusat Tindakan Tertunda (Persetujuan &amp; Penonaktifan Akun), serta Pintasan Cepat (*Quick Action Tiles*).</li>
+                                    <li><strong class="text-dark">Dual Role-Based Dashboard View (Admin vs Regular User):</strong> Menyajikan dasbor terpisah berbasis hak akses; Superadmin/Admin mendapatkan metrik operasional sistem, sedangkan pengguna umum (Role: User) disajikan statistik personal (Poin Login, Obrolan Saya, Status Verifikasi, Progres Kelengkapan Profil %, dan Riwayat Sesi Masuk).</li>
+                                    <li><strong class="text-dark">Hero Greeting Card dengan Foto Sampul Dinamis &amp; Sinkronisasi Ketinggian:</strong> Mengintegrasikan foto sampul profil kustom (<code>$user-&gt;cover_bg_url</code>), perataan vertikal (<code>$user-&gt;cover_position_y</code>), dan pengaturan tinggi banner kustom (<code>min-height: {{ $user-&gt;cover_height }}px</code>) dengan lapisan *dark glassmorphism overlay* untuk kontras teks optimal.</li>
+                                    <li><strong class="text-dark">Mesin Sapaan Waktu Presisi WIB (<code>Asia/Jakarta</code>):</strong> Engine greeting dinamis (*Selamat Pagi, Siang, Sore, Malam*) yang diselaraskan dengan zona waktu lokal Indonesia Barat.</li>
+                                    <li><strong class="text-dark">Hierarki Metadata &amp; Irama Garis Vertikal Simetris:</strong> Penataan terstruktur baris informasi di bawah login terakhir (Email • Role Utama Tunggal • Poin Login Keemasan) tanpa badge, serta pembagian jarak simetris (8px / <code>0.5rem</code>) menuju garis pembatas dan kutipan motto profil.</li>
+                                    <li><strong class="text-dark">Widget Obrolan Elegan &amp; Bebas Duplikasi (<code>.chat-preview-item</code>):</strong> Pengelompokan percakapan berbasis kontak lawan bicara (1 kontak = 1 baris preview dengan pesan terbaru), pemotongan foto avatar proporsional (<code>object-position: top</code>), dan penataan layout lega dengan stempel waktu dan cuplikan teks satu baris.</li>
+                                    <li><strong class="text-dark">Universal Accessor &amp; Safe Seeder Fallbacks:</strong> Penggunaan menyeluruh <code>$user-&gt;avatar_url</code>, perbaikan rute Spatie role (<code>admin.manajemenpengguna.role.index</code>), serta perlindungan *null-safety* menjamin dasbor 100% aman saat dieksekusi <code>php artisan migrate --seed</code>.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Role-Based Dashboard</span>
+                                    <span class="badge bg-light text-dark border fs-xs">ApexCharts KPI Suite</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Custom Cover &amp; Height Sync</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Deduplicated Chat Hub</span>
+                                    <span class="badge bg-light text-dark border fs-xs">WIB Time Engine</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.6.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-check fs-xl text-success"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.6.0</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.6.0</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-01 10:45 WIB</span>

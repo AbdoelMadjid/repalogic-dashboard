@@ -1,750 +1,811 @@
 @extends('layouts.vertical')
 
 @section('content')
-    <div class="row mt-3">
+    <link href="{{ asset('assets/css/admin/dashboard.css') }}" rel="stylesheet" type="text/css" />
+
+    <!-- 1. HERO GREETING & PROFILE OVERVIEW CARD WITH USER CUSTOM COVER PHOTO -->
+    <div class="row mt-3 mb-4">
         <div class="col-12">
-            <div class="card">
-                <div class="card-body p-0">
-                    <div class="row g-0">
-                        <div class="col-xxl-3 col-xl-6 order-xl-1 order-xxl-0">
-                            <div class="p-4 border-end border-dashed">
-                                <h4 class="fs-lg mb-1">Welcome to INSPINIA+ Admin Theme.</h4>
-                                <span class="text-muted">You have <span class="text-primary fw-semibold">42</span>
-                                    messages and 6
-                                    notifications.</span>
-                                <ul class="list-group list-group-flush mt-3">
-                                    <li
-                                        class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
-                                        <div>
-                                            <span class="badge text-bg-primary avatar-xs me-2"><span
-                                                    class="avatar-title fw-medium fs-sm">1</span></span>
-                                            Reviewed project proposal
-                                        </div>
-                                        <span class="text-muted">09:30 AM</span>
-                                    </li>
-                                    <li
-                                        class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
-                                        <div>
-                                            <span class="badge text-bg-info avatar-xs me-2"><span
-                                                    class="avatar-title fw-medium fs-sm">2</span></span>
-                                            Team stand-up meeting
-                                        </div>
-                                        <span class="text-muted">11:00 AM</span>
-                                    </li>
-                                    <li
-                                        class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
-                                        <div>
-                                            <span class="badge text-bg-secondary avatar-xs me-2"><span
-                                                    class="avatar-title fw-medium fs-sm">3</span></span>
-                                            Sent client invoice
-                                        </div>
-                                        <span class="text-muted">01:15 PM</span>
-                                    </li>
-                                    <li
-                                        class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
-                                        <div>
-                                            <span class="badge text-bg-light avatar-xs me-2"><span
-                                                    class="avatar-title fw-medium fs-sm">4</span></span>
-                                            Responded to support tickets
-                                        </div>
-                                        <span class="text-muted">03:40 PM</span>
-                                    </li>
-                                    <li
-                                        class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
-                                        <div>
-                                            <span class="badge text-bg-warning avatar-xs me-2"><span
-                                                    class="avatar-title fw-medium fs-sm">5</span></span>
-                                            Finalized design mockups
-                                        </div>
-                                        <span class="text-muted">05:10 PM</span>
-                                    </li>
-                                </ul>
-
-                                <div class="text-center mt-2">
-                                    <a href="#!" class="btn btn-secondary rounded-pill">View
-                                        Messages</a>
+            <div class="card dashboard-hero-card border-0 shadow-sm"
+                style="min-height: {{ $user->cover_height }}px; background-image: url('{{ $user->cover_bg_url }}'); background-position: center {{ $user->cover_position_y }}%;">
+                <div class="card-body p-4 p-lg-4.5 d-flex align-items-center">
+                    <div class="row align-items-center g-3 w-100">
+                        <div class="col-md-8">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="hero-avatar-wrapper flex-shrink-0">
+                                    <img src="{{ $user->avatar_url }}"
+                                        alt="{{ $user->name }}" class="rounded-circle hero-avatar-img shadow">
+                                    <span class="hero-status-dot" title="Akun Aktif & Sedang Masuk"></span>
                                 </div>
-                            </div>
-                            <!-- end .p-4-->
-                            <hr class="d-xxl-none border-light m-0" />
-                        </div>
-                        <!-- end col-->
-                        <div class="col-xxl-6 order-xl-3 order-xxl-1">
-                            <div class="px-4 py-3 border-end border-dashed">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <h4 class="card-title">Revenue</h4>
-                                    <a href="#!"
-                                        class="link-reset text-decoration-underline fw-semibold link-offset-3">View
-                                        Reports <i class="ti ti-arrow-right"></i></a>
-                                </div>
-
-                                <div class="row text-center mb-3">
-                                    <div class="col">
-                                        <div class="bg-light bg-opacity-50 p-2">
-                                            <h5 class="m-0"><span class="text-muted">Total
-                                                    Revenue:</span>$ <span data-target="40">0</span>M
-                                            </h5>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="bg-light bg-opacity-50 p-2">
-                                            <h5 class="m-0"><span class="text-muted">Total
-                                                    Orders:</span> <span data-target="50.9">0</span>k
-                                            </h5>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div dir="ltr" class="position-relative">
-                                    <div class="py-2 px-3 rounded-3 bg-light-subtle border text-primary z-1 position-absolute"
-                                        style="top: 4.5%; left: 12%">
-                                        <p class="mb-2 text-uppercase fs-xxs fw-semibold">Growth Rate
+                                @php
+                                    $rolePriority = ['superadmin' => 'Superadmin', 'admin' => 'Admin', 'operator' => 'Operator', 'user' => 'User'];
+                                    $primaryRoleName = 'User';
+                                    foreach ($rolePriority as $roleKey => $roleLabel) {
+                                        if ($user->hasRole($roleKey)) {
+                                            $primaryRoleName = $roleLabel;
+                                            break;
+                                        }
+                                    }
+                                    if ($primaryRoleName === 'User' && $user->roles->isNotEmpty()) {
+                                        $primaryRoleName = ucfirst($user->roles->first()->name);
+                                    }
+                                @endphp
+                                <div>
+                                    <h3 class="fw-bold text-white mb-1.5">{{ $greeting }}, {{ $user->name }}!</h3>
+                                    @if ($lastLoginRecord)
+                                        <p class="text-white-50 fs-13 mb-2">
+                                            Login terakhir Anda tercatat pada <span class="text-white fw-semibold">{{ \Carbon\Carbon::parse($lastLoginRecord->login_at)->translatedFormat('d M Y, H:i') }} WIB</span>
+                                            dari IP <span class="badge bg-white bg-opacity-20 text-white font-monospace">{{ $lastLoginRecord->ip_address }}</span>.
                                         </p>
-                                        <h4 class="mb-0 fw-bold text-primary">89.24% <i class="ti ti-trending-up"></i>
-                                        </h4>
-                                    </div>
-                                    <div id="revenue-chart" style="min-height: 252px"></div>
-                                </div>
-                            </div>
-                            <!-- end .px-4-->
-                        </div>
-                        <!-- end col-->
-                        <div class="col-xxl-3 col-xl-6 order-xl-2 order-xxl-2">
-                            <div class="p-3">
-                                <h4 class="card-title mb-1">Project Progress</h4>
-                                <p class="text-muted fs-xs">You have 21 projects with not completed
-                                    task.
-                                </p>
-                                <div class="row mt-4">
-                                    <div class="col-lg-12">
-                                        <div dir="ltr">
-                                            <div id="project-progress-chart" style="min-height: 278px">
-                                            </div>
+                                    @endif
+                                    <div class="d-flex flex-wrap align-items-center gap-3 text-white-50 fs-13 mb-2">
+                                        <div class="d-flex align-items-center">
+                                            <i class="ti ti-mail text-white-50 me-1.5"></i>
+                                            <span class="text-white fw-medium">{{ $user->email }}</span>
+                                        </div>
+                                        <span class="text-white-50 opacity-25">•</span>
+                                        <div class="d-flex align-items-center">
+                                            <i class="ti ti-shield-check text-white-50 me-1.5"></i>
+                                            <span class="text-white fw-medium">{{ $primaryRoleName }}</span>
+                                        </div>
+                                        <span class="text-white-50 opacity-25">•</span>
+                                        <div class="d-flex align-items-center" title="Total Poin Login yang Dikumpulkan">
+                                            <i class="ti ti-award text-warning me-1.5"></i>
+                                            <span class="text-white fw-medium">{{ number_format($user->login_count ?? 0) }} Poin Login</span>
                                         </div>
                                     </div>
+                                    @if (!empty($user->motto))
+                                        <div class="pt-2 border-top border-white border-opacity-10 d-flex align-items-center gap-1.5 fs-12 text-white-50 fst-italic">
+                                            <i class="ti ti-quote me-1"></i>"{{ $user->motto }}"
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
-                            <hr class="d-xxl-none border-light m-0" />
                         </div>
-                        <!-- end col-->
+                        <div class="col-md-4 text-md-end">
+                            <div class="d-inline-flex flex-wrap gap-2">
+                                <a href="{{ route('admin.profil-pengguna.index') }}" class="btn btn-sm btn-light text-dark fw-semibold px-3 py-1.5 rounded-pill shadow-sm">
+                                    <i class="ti ti-user me-1.5"></i>Profil Saya
+                                </a>
+                                <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="btn btn-sm btn-primary bg-primary text-white fw-semibold px-3 py-1.5 rounded-pill shadow-sm">
+                                    <i class="ti ti-messages me-1.5"></i>Buka Chat
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <!-- end row-->
                 </div>
-                <!-- end card-body-->
             </div>
-            <!-- end card-->
         </div>
-        <!-- end col-->
     </div>
-    <!-- end row-->
 
-    <div class="row row-cols-xxl-5 row-cols-md-3 row-cols-1 align-items-center">
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <a href="#!" class="text-muted float-end mt-n1 fs-xl"><i class="ti ti-external-link"></i></a>
-                    <h5 title="Number of Tasks">My Tasks</h5>
-                    <div class="d-flex align-items-center gap-2 my-3">
-                        <div class="avatar-md flex-shrink-0">
-                            <span class="avatar-title text-bg-light rounded-circle fs-22">
-                                <i class="ti ti-checklist"></i>
-                            </span>
-                        </div>
-                        <h3 class="mb-0"><span data-target="124">0</span></h3>
-                        <span class="badge badge-soft-primary fw-medium ms-2 fs-xs ms-auto">+3
-                            New</span>
-                    </div>
-                    <p class="mb-0">
-                        <span class="text-primary"><i class="ti ti-point-filled"></i></span>
-                        <span class="text-nowrap text-muted">Total Tasks</span>
-                        <span class="float-end"><b>12,450</b></span>
-                    </p>
-                </div>
-                <!-- end card-body-->
-            </div>
-            <!-- end card-->
-        </div>
-        <!-- end col-->
+    @if (auth()->user()->hasAnyRole(['superadmin', 'admin']))
+        <!-- ========================================================================= -->
+        <!-- 👑 DASHBOARD KHUSUS ADMINISTRATOR (SUPERADMIN & ADMIN)                    -->
+        <!-- ========================================================================= -->
 
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <a href="#!" class="text-muted float-end mt-n1 fs-xl"><i class="ti ti-external-link"></i></a>
-                    <h5 title="Number of Messages">Messages</h5>
-                    <div class="d-flex align-items-center gap-2 my-3">
-                        <div class="avatar-md flex-shrink-0">
-                            <span class="avatar-title text-bg-light rounded-circle fs-22">
-                                <i class="ti ti-message-circle"></i>
-                            </span>
-                        </div>
-                        <h3 class="mb-0"><span data-target="69.5">0</span>k</h3>
-                        <span class="badge badge-soft-secondary fw-medium ms-2 fs-xs ms-auto">+5
-                            New</span>
-                    </div>
-                    <p class="mb-0">
-                        <span class="text-secondary"><i class="ti ti-point-filled"></i></span>
-                        <span class="text-nowrap text-muted">Total Messages</span>
-                        <span class="float-end"><b>32.1M</b></span>
-                    </p>
-                </div>
-                <!-- end card-body-->
-            </div>
-            <!-- end card-->
-        </div>
-        <!-- end col-->
-
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <a href="#!" class="text-muted float-end mt-n1 fs-xl"><i class="ti ti-external-link"></i></a>
-                    <h5 title="Pending Approvals">Approvals</h5>
-                    <div class="d-flex align-items-center gap-2 my-3">
-                        <div class="avatar-md flex-shrink-0">
-                            <span class="avatar-title text-bg-light rounded-circle fs-22">
-                                <i class="ti ti-file-check"></i>
-                            </span>
-                        </div>
-                        <h3 class="mb-0"><span data-target="32">0</span></h3>
-                        <span class="badge text-bg-light fw-medium ms-2 fs-xs ms-auto">+2 New</span>
-                    </div>
-                    <p class="mb-0">
-                        <span class="text-primary"><i class="ti ti-point-filled"></i></span>
-                        <span class="text-nowrap text-muted">Total Approvals</span>
-                        <span class="float-end"><b>1,024</b></span>
-                    </p>
-                </div>
-                <!-- end card-body-->
-            </div>
-            <!-- end card-->
-        </div>
-        <!-- end col-->
-
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <a href="#!" class="text-muted float-end mt-n1 fs-xl"><i class="ti ti-external-link"></i></a>
-                    <h5 title="Total Clients">Clients</h5>
-                    <div class="d-flex align-items-center gap-2 my-3">
-                        <div class="avatar-md flex-shrink-0">
-                            <span class="avatar-title text-bg-light rounded-circle fs-22">
+        <!-- 2. KPI METRIC STATS CARDS (ADMIN) -->
+        <div class="row g-3 mb-4">
+            <!-- Card 1: Total Pengguna -->
+            <div class="col-sm-6 col-xl-3">
+                <div class="card kpi-card shadow-sm h-100 mb-0">
+                    <div class="card-body p-3.5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-muted fs-13 fw-semibold text-uppercase">Total Pengguna</span>
+                            <div class="kpi-icon-box bg-primary-subtle text-primary">
                                 <i class="ti ti-users"></i>
-                            </span>
+                            </div>
                         </div>
-                        <h3 class="mb-0"><span data-target="184">0</span></h3>
-                        <span class="badge badge-soft-secondary fw-medium ms-2 fs-xs ms-auto">+4
-                            New</span>
+                        <h2 class="fw-bold mb-1.5 text-dark">{{ number_format($userStats['total']) }}</h2>
+                        <div class="d-flex align-items-center gap-2 fs-12 text-muted">
+                            <span class="badge bg-success-subtle text-success"><i class="ti ti-check me-1"></i>{{ $userStats['active'] }} Aktif</span>
+                            @if ($userStats['pending'] > 0)
+                                <span class="badge bg-warning-subtle text-warning"><i class="ti ti-clock me-1"></i>{{ $userStats['pending'] }} Menunggu</span>
+                            @endif
+                            @if ($userStats['inactive'] > 0)
+                                <span class="badge bg-secondary-subtle text-secondary">{{ $userStats['inactive'] }} Nonaktif</span>
+                            @endif
+                        </div>
                     </div>
-                    <p class="mb-0">
-                        <span class="text-secondary"><i class="ti ti-point-filled"></i></span>
-                        <span class="text-nowrap text-muted">Total Clients</span>
-                        <span class="float-end"><b>9,835</b></span>
-                    </p>
                 </div>
-                <!-- end card-body-->
             </div>
-            <!-- end card-->
+
+            <!-- Card 2: Spatie Role & Hak Akses -->
+            <div class="col-sm-6 col-xl-3">
+                <div class="card kpi-card shadow-sm h-100 mb-0">
+                    <div class="card-body p-3.5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-muted fs-13 fw-semibold text-uppercase">Role &amp; Hak Akses</span>
+                            <div class="kpi-icon-box bg-info-subtle text-info">
+                                <i class="ti ti-shield-lock"></i>
+                            </div>
+                        </div>
+                        <h2 class="fw-bold mb-1.5 text-dark">{{ $totalRoles }} <span class="fs-14 fw-normal text-muted">Peran</span></h2>
+                        <div class="d-flex align-items-center gap-1.5 fs-12 text-muted">
+                            <i class="ti ti-key text-info"></i>
+                            <span>Terdaftar <strong>{{ $totalPermissions }}</strong> Spatie Permissions</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Aktivitas Login Hari Ini -->
+            <div class="col-sm-6 col-xl-3">
+                <div class="card kpi-card shadow-sm h-100 mb-0">
+                    <div class="card-body p-3.5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-muted fs-13 fw-semibold text-uppercase">Aktivitas Login</span>
+                            <div class="kpi-icon-box bg-success-subtle text-success">
+                                <i class="ti ti-activity"></i>
+                            </div>
+                        </div>
+                        <h2 class="fw-bold mb-1.5 text-dark">{{ number_format($todayLogins) }} <span class="fs-14 fw-normal text-muted">Hari Ini</span></h2>
+                        <div class="d-flex align-items-center gap-1.5 fs-12 text-muted">
+                            <span class="badge bg-success text-white rounded-pill px-2 py-0.5"><i class="ti ti-circle-filled fs-xxs me-1"></i>{{ $activeOnlineCount }} Online</span>
+                            <span>Sesi saat ini</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Kesehatan Sistem & Backup DB -->
+            <div class="col-sm-6 col-xl-3">
+                <div class="card kpi-card shadow-sm h-100 mb-0">
+                    <div class="card-body p-3.5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-muted fs-13 fw-semibold text-uppercase">Backup DB &amp; Sistem</span>
+                            <div class="kpi-icon-box bg-warning-subtle text-warning">
+                                <i class="ti ti-database"></i>
+                            </div>
+                        </div>
+                        <h2 class="fw-bold mb-1.5 text-dark">{{ count($backupFiles) }} <span class="fs-14 fw-normal text-muted">Arsip</span></h2>
+                        <div class="d-flex align-items-center gap-1.5 fs-12 text-muted">
+                            @if ($isMaintenance)
+                                <span class="badge bg-danger-subtle text-danger"><i class="ti ti-tool me-1"></i>Maintenance On</span>
+                            @else
+                                <span class="badge bg-success-subtle text-success"><i class="ti ti-shield-check me-1"></i>Sistem Normal</span>
+                            @endif
+                            <span>{{ round($totalBackupSize / 1024 / 1024, 2) }} MB</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- end col-->
 
-        <div class="col-lg col-md-auto">
-            <div class="card">
-                <div class="card-body">
-                    <a href="#!" class="text-muted float-end mt-n1 fs-xl"><i class="ti ti-external-link"></i></a>
-                    <h5 title="Revenue Generated">Revenue</h5>
-                    <div class="d-flex align-items-center gap-2 my-3">
-                        <div class="avatar-md flex-shrink-0">
-                            <span class="avatar-title text-bg-light rounded-circle fs-22">
-                                <i class="ti ti-credit-card"></i>
-                            </span>
-                        </div>
-                        <h3 class="mb-0">$<span data-target="125.5">0</span>k</h3>
-                        <span class="badge badge-soft-primary fw-medium ms-2 fs-xs ms-auto">+1.5%</span>
+        <!-- 3. GRAFIK ANALITIK APEXCHARTS (ADMIN) -->
+        <div class="row g-3 mb-4">
+            <!-- Grafik Tren Login 7 Hari -->
+            <div class="col-xl-8">
+                <div class="card shadow-sm border-0 h-100 mb-0">
+                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0 fw-bold">
+                            <i class="ti ti-chart-area-line text-primary me-1.5"></i>Tren Aktivitas Login &amp; Pendaftaran (7 Hari Terakhir)
+                        </h5>
+                        <span class="badge bg-primary-subtle text-primary fs-xs font-monospace">Real-Time Sync</span>
                     </div>
-                    <p class="mb-0">
-                        <span class="text-primary"><i class="ti ti-point-filled"></i></span>
-                        <span class="text-nowrap text-muted">Total Revenue</span>
-                        <span class="float-end"><b>$12.5M</b></span>
-                    </p>
+                    <div class="card-body p-3">
+                        <div id="chart-logins-trend"></div>
+                    </div>
                 </div>
-                <!-- end card-body-->
             </div>
-            <!-- end card-->
+
+            <!-- Grafik Donut Distribusi Role -->
+            <div class="col-xl-4">
+                <div class="card shadow-sm border-0 h-100 mb-0">
+                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0 fw-bold">
+                            <i class="ti ti-chart-pie text-primary me-1.5"></i>Distribusi Peran Pengguna
+                        </h5>
+                        <span class="badge bg-light text-dark border fs-xs">Spatie Roles</span>
+                    </div>
+                    <div class="card-body p-3">
+                        <div id="chart-roles-donut"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- end col-->
-    </div>
-    <!-- end row -->
 
-    <div class="row">
-        <div class="col-xxl-4">
-            <div class="card">
-                <div class="card-header justify-content-between align-items-center">
-                    <h5 class="card-title">Quarterly Reports <span class="badge text-bg-primary">IN+</span></h5>
-                    <div class="card-action">
-                        <a href="#!" class="card-action-item" data-action="card-toggle"><i
-                                class="ti ti-chevron-up"></i></a>
-                        <a href="#!" class="card-action-item" data-action="card-refresh"><i
-                                class="ti ti-refresh"></i></a>
-                        <a href="#!" class="card-action-item" data-action="card-close"><i class="ti ti-x"></i></a>
+        <!-- 4. PUSAT AKSI TERTUNDA & PINTASAN CEPAT (ADMIN) -->
+        <div class="row g-3 mb-4">
+            <!-- Pusat Aksi Tertunda (Pending Approvals & Deactivations) -->
+            <div class="col-xl-7">
+                <div class="card shadow-sm border-0 h-100 mb-0">
+                    <div class="card-header bg-primary text-white py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="card-title text-white mb-0 fw-bold">
+                            <i class="ti ti-bell-ringing me-1.5"></i>Pusat Tindakan &amp; Permohonan Tertunda
+                        </h5>
+                        <span class="badge bg-white text-primary fw-bold font-monospace">
+                            {{ $userStats['pending'] + $userStats['pending_deactivations'] }} Menunggu
+                        </span>
                     </div>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-custom table-nowrap table-hover table-centered mb-0">
-                            <thead class="bg-light bg-opacity-25 thead-sm">
-                                <tr class="text-uppercase fs-xxs">
-                                    <th class="text-muted">Quarter</th>
-                                    <th class="text-muted">Revenue</th>
-                                    <th class="text-muted">Expense</th>
-                                    <th class="text-muted">Margin</th>
-                                    <th class="text-muted">•••</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <h5 class="fs-sm mb-1 fw-normal">Quarter 1</h5>
-                                        <span class="text-muted fs-xs">January - March 2024</span>
-                                    </td>
-                                    <td>$210k</td>
-                                    <td>$165k</td>
-                                    <td>$45k</td>
-                                    <td style="width: 60px">
-                                        <div dir="ltr">
-                                            <div class="donut-chart" data-chart="donut" style="min-height: 30px">
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h5 class="fs-sm mb-1 fw-normal">Quarter 2</h5>
-                                        <span class="text-muted fs-xs">April - June 2024</span>
-                                    </td>
-                                    <td>$225k</td>
-                                    <td>$175k</td>
-                                    <td>$50k</td>
-                                    <td style="width: 60px">
-                                        <div dir="ltr">
-                                            <div class="donut-chart" data-chart="donut" style="min-height: 30px">
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h5 class="fs-sm mb-1 fw-normal">Quarter 3</h5>
-                                        <span class="text-muted fs-xs">July - September 2024</span>
-                                    </td>
-                                    <td>$240k</td>
-                                    <td>$190k</td>
-                                    <td>$50k</td>
-                                    <td style="width: 60px">
-                                        <div dir="ltr">
-                                            <div class="donut-chart" data-chart="donut" style="min-height: 30px">
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h5 class="fs-sm mb-1 fw-normal">Quarter 4</h5>
-                                        <span class="text-muted fs-xs">October - December 2024</span>
-                                    </td>
-                                    <td>$260k</td>
-                                    <td>$200k</td>
-                                    <td>$60k</td>
-                                    <td style="width: 60px">
-                                        <div dir="ltr">
-                                            <div class="donut-chart" data-chart="donut" style="min-height: 30px">
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- end table-responsive-->
-                </div>
-                <!-- end card-body-->
-            </div>
-            <!-- end card-->
+                    <div class="card-body p-0">
+                        <ul class="nav nav-tabs nav-bordered px-3 pt-2 bg-light-subtle" role="tablist">
+                            <li class="nav-item">
+                                <a href="#tab-pending-approvals" data-bs-toggle="tab" aria-expanded="true" class="nav-link active py-2 fs-13">
+                                    <i class="ti ti-user-plus me-1.5"></i>Pendaftaran Baru ({{ $pendingApprovals->count() }})
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#tab-pending-deactivations" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2 fs-13">
+                                    <i class="ti ti-user-x me-1.5"></i>Permohonan Nonaktif ({{ $pendingDeactivations->count() }})
+                                </a>
+                            </li>
+                        </ul>
 
-            <div class="card">
-                <div class="card-header justify-content-between align-items-center">
-                    <h5 class="card-title">Project Performance</h5>
-                    <div class="card-action">
-                        <a href="#!" class="card-action-item" data-action="card-toggle"><i
-                                class="ti ti-chevron-up"></i></a>
-                        <a href="#!" class="card-action-item" data-action="card-refresh"><i
-                                class="ti ti-refresh"></i></a>
-                        <a href="#!" class="card-action-item" data-action="card-close"><i class="ti ti-x"></i></a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div>
-                        <div class="d-flex justify-content-between">
-                            <h5 class="fs-base mb-2">Completed Projects</h5>
-                            <div>
-                                <span>+ 180</span>
-                                <span><i class="ti ti-circle-filled text-light mx-3 fs-10"></i>
-                                    54.20%</span>
-                            </div>
-                        </div>
-                        <div class="progress progress-sm mb-1">
-                            <div class="progress-bar bg-secondary" role="progressbar" style="width: 54.2%"
-                                aria-valuenow="54.20" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-
-                    <div class="mt-4">
-                        <div class="d-flex justify-content-between">
-                            <h5 class="fs-base mb-2">Ongoing Projects</h5>
-                            <div>
-                                <span>+ 120</span>
-                                <span><i class="ti ti-circle-filled text-light mx-3 fs-10"></i>
-                                    36.15%</span>
-                            </div>
-                        </div>
-                        <div class="progress progress-sm mb-1">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: 36.15%"
-                                aria-valuenow="36.15" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-
-                    <div class="mt-4">
-                        <div class="d-flex justify-content-between">
-                            <h5 class="fs-base mb-2">Pending Approvals</h5>
-                            <div>
-                                <span>+ 32</span>
-                                <span><i class="ti ti-circle-filled text-light mx-3 fs-10"></i>
-                                    9.65%</span>
-                            </div>
-                        </div>
-                        <div class="progress progress-sm mb-1">
-                            <div class="progress-bar bg-secondary" role="progressbar" style="width: 9.65%"
-                                aria-valuenow="9.65" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card-body-->
-            </div>
-            <!-- end card-->
-        </div>
-        <!-- end col-->
-
-        <div class="col-xxl-4 col-xl-6">
-            <div class="card">
-                <div class="card-header justify-content-between align-items-center">
-                    <h5 class="card-title">Latest Project Updates</h5>
-                    <span class="badge text-bg-warning fs-xxs p-1"> 8 Notifications</span>
-                </div>
-                <div class="card-body">
-                    <div class="timeline timeline-icon-bordered">
-                        <!-- Event 1 -->
-                        <div class="timeline-item d-flex align-items-stretch">
-                            <div class="timeline-dot">
-                                <i class="ti ti-rocket fs-xl text-primary"></i>
-                            </div>
-                            <div class="timeline-content ps-3">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="mb-1 fs-base">New Feature Released <span
-                                            class="badge badge-label badge-soft-info ms-2">Deploy</span>
-                                    </h5>
-                                    <span class="text-muted fs-xxs">Today at 3:45 PM</span>
-                                </div>
-                                <p class="mb-1 text-muted">Launched the real-time chat feature across
-                                    all
-                                    user accounts.</p>
-                                <div class="d-flex align-items-center gap-2">
-                                    <img src="{{ asset('assets/images/users/user-6.jpg') }}" alt="Natalie Brooks"
-                                        class="rounded-circle avatar-xxs" />
-                                    <a href="{{ asset('pages-profile.html') }}"
-                                        class="fw-medium link-reset text-muted">Natalie Brooks</a>
-                                </div>
-
-                                <hr class="border-dashed" />
-                            </div>
-                        </div>
-
-                        <!-- Event 2 -->
-                        <div class="timeline-item d-flex align-items-stretch">
-                            <div class="timeline-dot">
-                                <i class="ti ti-calendar-event fs-xl text-warning"></i>
-                            </div>
-                            <div class="timeline-content ps-3">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="mb-1 fs-base">Team Sync-Up <span
-                                            class="badge badge-label badge-soft-secondary ms-2">Meeting</span>
-                                    </h5>
-                                    <span class="text-muted fs-xxs">Today at 2:00 PM</span>
-                                </div>
-                                <p class="mb-1 text-muted">Reviewed sprint progress and discussed
-                                    remaining tasks with the dev team.</p>
-                                <div class="d-flex align-items-center gap-2">
-                                    <img src="{{ asset('assets/images/users/user-4.jpg') }}" alt="Oliver Grant"
-                                        class="rounded-circle avatar-xxs" />
-                                    <a href="{{ asset('pages-profile.html') }}"
-                                        class="fw-medium link-reset text-muted">Oliver Grant</a>
-                                </div>
-
-                                <hr class="border-dashed" />
-                            </div>
-                        </div>
-
-                        <!-- Event 3 -->
-                        <div class="timeline-item d-flex align-items-stretch">
-                            <div class="timeline-dot">
-                                <i class="ti ti-palette fs-xl text-success"></i>
-                            </div>
-                            <div class="timeline-content ps-3">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="mb-1 fs-base">UI Design Review <span
-                                            class="badge badge-label badge-soft-success ms-2">Design</span>
-                                    </h5>
-                                    <span class="text-muted fs-xxs">Today at 1:15 PM</span>
-                                </div>
-                                <p class="mb-1 text-muted">Updated component spacing and colors for
-                                    improved accessibility.</p>
-                                <div class="d-flex align-items-center gap-2">
-                                    <img src="{{ asset('assets/images/users/user-9.jpg') }}" alt="Clara Jensen"
-                                        class="rounded-circle avatar-xxs" />
-                                    <a href="{{ asset('pages-profile.html') }}"
-                                        class="fw-medium link-reset text-muted">Clara Jensen</a>
-                                </div>
-
-                                <hr class="border-dashed" />
-                            </div>
-                        </div>
-
-                        <!-- Event 4 -->
-                        <div class="timeline-item d-flex align-items-stretch">
-                            <div class="timeline-dot">
-                                <i class="ti ti-database fs-xl text-danger"></i>
-                            </div>
-                            <div class="timeline-content ps-3">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="mb-1 fs-base">Database Optimization <span
-                                            class="badge badge-label badge-soft-danger ms-2">Backend</span>
-                                    </h5>
-                                    <span class="text-muted fs-xxs">Today at 12:30 PM</span>
-                                </div>
-                                <p class="mb-1 text-muted">Improved DB query performance, reducing
-                                    load
-                                    time by 35%.</p>
-                                <div class="d-flex align-items-center gap-2">
-                                    <img src="{{ asset('assets/images/users/user-10.jpg') }}" alt="Leo Armstrong"
-                                        class="rounded-circle avatar-xxs" />
-                                    <a href="{{ asset('pages-profile.html') }}"
-                                        class="fw-medium link-reset text-muted">Leo Armstrong</a>
-                                </div>
-
-                                <hr class="border-dashed" />
-                            </div>
-                        </div>
-
-                        <!-- Event 5 -->
-                        <div class="timeline-item d-flex align-items-stretch">
-                            <div class="timeline-dot">
-                                <i class="ti ti-shield-check fs-xl text-info"></i>
-                            </div>
-                            <div class="timeline-content ps-3">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="mb-1 fs-base">Security Audit Completed <span
-                                            class="badge badge-label badge-soft-warning ms-2">Audit</span>
-                                    </h5>
-                                    <span class="text-muted fs-xxs">Today at 11:00 AM</span>
-                                </div>
-                                <p class="mb-1 text-muted">Completed internal security audit with no
-                                    critical issues found.</p>
-                                <div class="d-flex align-items-center gap-2">
-                                    <img src="{{ asset('assets/images/users/user-8.jpg') }}" alt="Liam Carter"
-                                        class="rounded-circle avatar-xxs" />
-                                    <a href="{{ asset('pages-profile.html') }}"
-                                        class="fw-medium link-reset text-muted">Liam Carter</a>
-                                </div>
-
-                                <hr class="border-dashed" />
-                            </div>
-                        </div>
-
-                        <!-- Event 6 -->
-                        <div class="timeline-item d-flex align-items-stretch">
-                            <div class="timeline-dot">
-                                <i class="ti ti-user-plus fs-xl text-success"></i>
-                            </div>
-                            <div class="timeline-content ps-3">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="mb-1 fs-base">New Team Member Joined <span
-                                            class="badge badge-label badge-soft-primary ms-2">Onboarding</span>
-                                    </h5>
-                                    <span class="text-muted fs-xxs">Today at 10:15 AM</span>
-                                </div>
-                                <p class="mb-1 text-muted">Michael Lee has joined the development team
-                                    as
-                                    a Frontend Engineer.</p>
-                                <div class="d-flex align-items-center gap-2">
-                                    <img src="{{ asset('assets/images/users/user-7.jpg') }}" alt="Emma Davis"
-                                        class="rounded-circle avatar-xxs" />
-                                    <a href="{{ asset('pages-profile.html') }}"
-                                        class="fw-medium link-reset text-muted">Emma Davis</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end timeline-->
-                </div>
-                <!-- end card-body-->
-            </div>
-            <!-- end card-->
-        </div>
-        <!-- end col-->
-
-        <div class="col-xxl-4 col-xl-6">
-            <div class="card">
-                <div class="card-header justify-content-between align-items-center">
-                    <h5 class="card-title">
-                        Discussions
-                        <span class="badge bg-primary-subtle text-primary">Pro+</span>
-                    </h5>
-                    <a href="#!" class="badge text-bg-light fs-xs fw-semibold p-1">Mark all as
-                        read</a>
-                </div>
-
-                <div class="card-body bg-light-subtle border-bottom border-dashed">
-                    <div class="d-flex gap-2">
-                        <div class="me-2 flex-shrink-0">
-                            <img src="{{ asset('assets/images/message-mail.png') }}" height="36" alt="message img" />
-                        </div>
-                        <div class="flex-grow-1">
-                            <h4 class="fs-sm mb-1">New messages</h4>
-                            <p class="fs-xs mb-0 text-body-secondary">You have <span
-                                    class="text-body fw-semibold">22</span> new messages and <span
-                                    class="text-body fw-semibold">16</span> waiting in draft folder.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <!-- end card-body-->
-
-                <div class="card-body pt-1">
-                    <ul class="list-group list-group-flush mb-3">
-                        <!-- User 1 -->
-                        <li class="list-group-item px-0 border-light">
-                            <div class="d-flex gap-2">
-                                <div class="me-2 flex-shrink-0">
-                                    <img src="{{ asset('assets/images/users/user-8.jpg') }}"
-                                        class="avatar-md rounded-circle" alt="user-8" />
-                                </div>
-                                <div class="flex-grow-1 text-muted">
-                                    <h6 class="text-body mb-1 fs-base d-flex justify-content-between">
-                                        Alex Johnson
-                                        <small class="fs-xs text-body-secondary">10m ago</small>
-                                    </h6>
-                                    <p class="mb-1">Excited to share our latest project update with
-                                        everyone!</p>
-                                    <a href="{{ asset('chat.html') }}" class="badge badge-soft-primary p-1">Reply</a>
-                                </div>
-                            </div>
-                        </li>
-
-                        <!-- User 2 -->
-                        <li class="list-group-item px-0 border-light">
-                            <div class="d-flex gap-2">
-                                <div class="me-2 flex-shrink-0">
-                                    <div class="avatar avatar-md">
-                                        <span
-                                            class="avatar-title bg-purple-subtle text-purple rounded-circle fw-bold">DN</span>
+                        <div class="tab-content p-3">
+                            <!-- Tab Pendaftaran Baru -->
+                            <div class="tab-pane show active" id="tab-pending-approvals">
+                                @if ($pendingApprovals->isEmpty())
+                                    <div class="text-center py-4 text-muted">
+                                        <i class="ti ti-circle-check fs-24 text-success d-block mb-1.5"></i>
+                                        <p class="fs-13 mb-0">Tidak ada pendaftaran pengguna baru yang menunggu persetujuan.</p>
                                     </div>
-                                </div>
-                                <div class="flex-grow-1 text-muted">
-                                    <h6 class="text-body mb-1 fs-base d-flex justify-content-between">
-                                        Den Nowdya
-                                        <small class="fs-xs text-body-secondary">1h ago</small>
-                                    </h6>
-                                    <p class="mb-1">Looking forward to the upcoming team meeting.
-                                    </p>
-                                    <a href="{{ asset('chat.html') }}" class="badge badge-soft-primary p-1">Reply</a>
-                                </div>
+                                @else
+                                    <div class="table-responsive">
+                                        <table class="table table-hover align-middle mb-0 dashboard-mini-table">
+                                            <thead class="align-middle text-center text-nowrap">
+                                                <tr>
+                                                    <th>Pengguna</th>
+                                                    <th>Email</th>
+                                                    <th>Waktu Daftar</th>
+                                                    <th>Aksi Cepat</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($pendingApprovals as $pUser)
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <img src="{{ $pUser->avatar_url }}" alt="{{ $pUser->name }}" class="dashboard-user-avatar">
+                                                                <span class="fw-semibold text-dark">{{ $pUser->name }}</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-muted">{{ $pUser->email }}</td>
+                                                        <td class="text-center text-muted fs-12">{{ $pUser->created_at->diffForHumans() }}</td>
+                                                        <td class="text-center">
+                                                            <form action="{{ route('admin.manajemenpengguna.users.approve', $pUser->id) }}" method="POST" class="d-inline">
+                                                                @csrf
+                                                                <button type="button" class="btn btn-xs btn-success text-white px-2 py-1 rounded btn-quick-approve-user" data-user-name="{{ $pUser->name }}" title="Setujui &amp; Aktifkan Akun">
+                                                                    <i class="ti ti-check me-1"></i>Setujui
+                                                                </button>
+                                                            </form>
+                                                            <a href="{{ route('admin.manajemenpengguna.users.index') }}" class="btn btn-xs btn-light border px-2 py-1 rounded" title="Lihat di Tabel Pengguna">
+                                                                <i class="ti ti-eye"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                @endif
                             </div>
-                        </li>
 
-                        <!-- User 3 -->
-                        <li class="list-group-item px-0 border-light">
-                            <div class="d-flex gap-2">
-                                <div class="me-2 flex-shrink-0">
-                                    <img src="{{ asset('assets/images/users/user-10.jpg') }}"
-                                        class="avatar-md rounded-circle" alt="user-10" />
-                                </div>
-                                <div class="flex-grow-1 text-muted">
-                                    <h6 class="text-body mb-1 fs-base d-flex justify-content-between">
-                                        Michael Brown
-                                        <small class="fs-xs text-body-secondary">16h ago</small>
-                                    </h6>
-                                    <p class="mb-1">Great insights shared in today's brainstorming
-                                        session!</p>
-                                    <a href="{{ asset('chat.html') }}" class="badge badge-soft-primary p-1">Reply</a>
-                                </div>
+                            <!-- Tab Permohonan Nonaktif -->
+                            <div class="tab-pane" id="tab-pending-deactivations">
+                                @if ($pendingDeactivations->isEmpty())
+                                    <div class="text-center py-4 text-muted">
+                                        <i class="ti ti-circle-check fs-24 text-success d-block mb-1.5"></i>
+                                        <p class="fs-13 mb-0">Tidak ada permohonan penonaktifan akun yang menunggu tindakan.</p>
+                                    </div>
+                                @else
+                                    <div class="table-responsive">
+                                        <table class="table table-hover align-middle mb-0 dashboard-mini-table">
+                                            <thead class="align-middle text-center text-nowrap">
+                                                <tr>
+                                                    <th>Pengguna</th>
+                                                    <th>Alasan Permohonan</th>
+                                                    <th>Diajukan</th>
+                                                    <th>Aksi Cepat</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($pendingDeactivations as $dUser)
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <img src="{{ $dUser->avatar_url }}" alt="{{ $dUser->name }}" class="dashboard-user-avatar">
+                                                                <span class="fw-semibold text-dark">{{ $dUser->name }}</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-muted fs-12 text-truncate" style="max-width: 180px;">
+                                                            {{ $dUser->deactivation_reason ?? 'Tidak mencantumkan alasan' }}
+                                                        </td>
+                                                        <td class="text-center text-muted fs-12">{{ \Carbon\Carbon::parse($dUser->deactivation_requested_at)->diffForHumans() }}</td>
+                                                        <td class="text-center">
+                                                            <form action="{{ route('admin.manajemenpengguna.users.deactivate', $dUser->id) }}" method="POST" class="d-inline">
+                                                                @csrf
+                                                                <button type="button" class="btn btn-xs btn-danger text-white px-2 py-1 rounded btn-quick-approve-deact" data-user-name="{{ $dUser->name }}" title="Setujui Penonaktifan">
+                                                                    <i class="ti ti-check me-1"></i>Setujui
+                                                                </button>
+                                                            </form>
+                                                            <a href="{{ route('admin.manajemenpengguna.users.index') }}" class="btn btn-xs btn-light border px-2 py-1 rounded" title="Lihat di Tabel Pengguna">
+                                                                <i class="ti ti-eye"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                @endif
                             </div>
-                        </li>
-
-                        <!-- User 4 -->
-                        <li class="list-group-item px-0 border-light">
-                            <div class="d-flex gap-2">
-                                <div class="me-2 flex-shrink-0">
-                                    <img src="{{ asset('assets/images/users/user-1.jpg') }}"
-                                        class="avatar-md rounded-circle" alt="user-1" />
-                                </div>
-                                <div class="flex-grow-1 text-muted">
-                                    <h6 class="text-body mb-1 fs-base d-flex justify-content-between">
-                                        Emily Watson
-                                        <small class="fs-xs text-body-secondary">20h ago</small>
-                                    </h6>
-                                    <p class="mb-1">Wrapping up an amazing design concept for the
-                                        client.</p>
-                                    <a href="{{ asset('chat.html') }}" class="badge badge-soft-primary p-1">Reply</a>
-                                </div>
-                            </div>
-                        </li>
-
-                        <!-- User 5 -->
-                        <li class="list-group-item px-0 border-light">
-                            <div class="d-flex gap-2">
-                                <div class="me-2 flex-shrink-0">
-                                    <img src="{{ asset('assets/images/users/user-6.jpg') }}"
-                                        class="avatar-md rounded-circle" alt="user-6" />
-                                </div>
-                                <div class="flex-grow-1 text-muted">
-                                    <h6 class="text-body mb-1 fs-base d-flex justify-content-between">
-                                        Monica Smith
-                                        <small class="fs-xs text-body-secondary">2 days ago</small>
-                                    </h6>
-                                    <p class="mb-1">Testing some new UI enhancements—excited for
-                                        feedback!</p>
-                                    <a href="{{ asset('chat.html') }}" class="badge badge-soft-primary p-1">Reply</a>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-
-                    <div class="text-center mt-3">
-                        <a href="{{ asset('chat.html') }}"
-                            class="link-reset text-decoration-underline fw-semibold link-offset-3"> Go
-                            to
-                            Chat Room <i class="ti ti-send-2"></i> </a>
+                        </div>
                     </div>
                 </div>
-                <!-- end card-body-->
             </div>
-            <!-- end card-->
-        </div>
-        <!-- end col-->
-    </div>
-    <!-- end row-->
-@endsection
-@section('scripts')
-    <!-- E Charts js -->
-    <script src="{{ asset('assets/plugins/echarts/echarts.min.js') }}"></script>
 
-    <!-- Dashboard js -->
-    <script src="{{ asset('assets/js/pages/dashboard-projects.js') }}"></script>
+            <!-- Pusat Pintasan Cepat Admin -->
+            <div class="col-xl-5">
+                <div class="card shadow-sm border-0 h-100 mb-0">
+                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0 fw-bold">
+                            <i class="ti ti-bolt text-warning me-1.5"></i>Pusat Akses Pintas Admin
+                        </h5>
+                        <span class="badge bg-light text-dark border fs-xs">Shortcuts</span>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <a href="{{ route('admin.manajemenpengguna.users.index') }}" class="quick-action-tile">
+                                    <div class="quick-action-icon bg-primary-subtle text-primary">
+                                        <i class="ti ti-users"></i>
+                                    </div>
+                                    <span class="fw-semibold fs-13 text-center">Manajemen User</span>
+                                    <span class="fs-xxs text-muted mt-0.5">Kelola data akun</span>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{{ route('admin.manajemenpengguna.role.index') }}" class="quick-action-tile">
+                                    <div class="quick-action-icon bg-info-subtle text-info">
+                                        <i class="ti ti-shield-lock"></i>
+                                    </div>
+                                    <span class="fw-semibold fs-13 text-center">Spatie Roles</span>
+                                    <span class="fs-xxs text-muted mt-0.5">Matrix Hak Akses</span>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{{ route('admin.dukunganaplikasi.fitur-aplikasi.index') }}" class="quick-action-tile">
+                                    <div class="quick-action-icon bg-danger-subtle text-danger">
+                                        <i class="ti ti-settings-cog"></i>
+                                    </div>
+                                    <span class="fw-semibold fs-13 text-center">Pengaturan Fitur</span>
+                                    <span class="fs-xxs text-muted mt-0.5">Maintenance &amp; Hub</span>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{{ route('admin.dukunganaplikasi.backup-db.index') }}" class="quick-action-tile">
+                                    <div class="quick-action-icon bg-warning-subtle text-warning">
+                                        <i class="ti ti-database"></i>
+                                    </div>
+                                    <span class="fw-semibold fs-13 text-center">Backup Database</span>
+                                    <span class="fs-xxs text-muted mt-0.5">Cadangkan data SQL</span>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{{ route('admin.manajemenpengguna.data-login.index') }}" class="quick-action-tile">
+                                    <div class="quick-action-icon bg-success-subtle text-success">
+                                        <i class="ti ti-chart-bar"></i>
+                                    </div>
+                                    <span class="fw-semibold fs-13 text-center">Log Aktivitas</span>
+                                    <span class="fs-xxs text-muted mt-0.5">Data Login Harian</span>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{{ route('template.documentation.changelog') }}" class="quick-action-tile">
+                                    <div class="quick-action-icon bg-secondary-subtle text-secondary">
+                                        <i class="ti ti-git-branch"></i>
+                                    </div>
+                                    <span class="fw-semibold fs-13 text-center">Riwayat Rilis</span>
+                                    <span class="fs-xxs text-muted mt-0.5">Changelog v{{ config('app.version', '2.6.0') }}</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. FEED AKTIVITAS LOGIN TERKINI & PESAN (ADMIN) -->
+        <div class="row g-3 mb-4">
+            <!-- Tabel Aktivitas Login Terkini -->
+            <div class="col-xl-8">
+                <div class="card shadow-sm border-0 h-100 mb-0">
+                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0 fw-bold">
+                            <i class="ti ti-history text-primary me-1.5"></i>Riwayat Aktivitas Login Pengguna Terkini
+                        </h5>
+                        <a href="{{ route('admin.manajemenpengguna.data-login.index') }}" class="btn btn-xs btn-light border px-2.5 py-1 rounded">
+                            Lihat Semua Log <i class="ti ti-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0 dashboard-mini-table">
+                                <thead class="align-middle text-center text-nowrap">
+                                    <tr>
+                                        <th>Pengguna</th>
+                                        <th>Peran</th>
+                                        <th>Alamat IP</th>
+                                        <th>Perangkat / Browser</th>
+                                        <th>Waktu Masuk</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($recentLogins as $lLog)
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <img src="{{ $lLog->user?->avatar_url ?? asset('assets/images/users/default-avatar.svg') }}" alt="{{ $lLog->user->name ?? 'User' }}" class="dashboard-user-avatar">
+                                                    <div>
+                                                        <span class="fw-semibold text-dark d-block">{{ $lLog->user->name ?? 'User #' . $lLog->user_id }}</span>
+                                                        <span class="text-muted fs-xxs">{{ $lLog->user->email ?? '-' }}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                @if ($lLog->user && $lLog->user->roles->isNotEmpty())
+                                                    @foreach ($lLog->user->roles as $r)
+                                                        <span class="badge bg-secondary-subtle text-dark fs-xxs">{{ strtoupper($r->name) }}</span>
+                                                    @endforeach
+                                                @else
+                                                    <span class="badge bg-light text-muted fs-xxs">-</span>
+                                                @endif
+                                            </td>
+                                            <td class="text-center font-monospace fs-12 text-muted">{{ $lLog->ip_address }}</td>
+                                            <td class="text-center text-muted fs-12">
+                                                <i class="ti ti-device-desktop me-1"></i>{{ $lLog->user_agent ? Str::limit($lLog->user_agent, 24) : 'Web Client' }}
+                                            </td>
+                                            <td class="text-center text-muted fs-12">
+                                                {{ \Carbon\Carbon::parse($lLog->login_at)->diffForHumans() }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center py-4 text-muted">Belum ada riwayat aktivitas login tercatat.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pesan & Obrolan Terkini -->
+            <div class="col-xl-4">
+                <div class="card shadow-sm border-0 h-100 mb-0">
+                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0 fw-bold">
+                            <i class="ti ti-messages text-primary me-1.5"></i>Pesan &amp; Obrolan Terkini
+                        </h5>
+                        <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="btn btn-xs btn-primary bg-primary text-white px-2.5 py-1 rounded">
+                            Buka Chat Hub
+                        </a>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-column">
+                            @forelse ($recentMessages as $msg)
+                                @php
+                                    $isMe = $msg->sender_id === auth()->id();
+                                    $partner = $isMe ? $msg->receiver : $msg->sender;
+                                @endphp
+                                <a href="{{ route('admin.profil-pengguna.messages.index', ['user_id' => $partner->id ?? '']) }}" class="chat-preview-item">
+                                    <div class="chat-avatar-wrapper">
+                                        <img src="{{ $partner?->avatar_url ?? asset('assets/images/users/default-avatar.svg') }}" alt="{{ $partner->name ?? 'User' }}" class="chat-preview-avatar">
+                                    </div>
+                                    <div class="chat-content-box">
+                                        <div class="chat-preview-header">
+                                            <span class="chat-preview-name">{{ $partner->name ?? 'Pengguna' }}</span>
+                                            <span class="chat-preview-time"><i class="ti ti-clock me-1"></i>{{ $msg->created_at->diffForHumans() }}</span>
+                                        </div>
+                                        <p class="chat-preview-body mb-0">
+                                            @if ($isMe)
+                                                <span class="text-primary fw-semibold me-1">Anda:</span>
+                                            @endif
+                                            {{ $msg->body ?: ($msg->attachment_name ? 'Mengirim lampiran berkas' : ($msg->reason ? 'Alasan: ' . $msg->reason : 'Pesan')) }}
+                                        </p>
+                                    </div>
+                                </a>
+                            @empty
+                                <div class="text-center py-4 text-muted">
+                                    <i class="ti ti-message-off fs-24 text-muted d-block mb-1.5"></i>
+                                    <p class="fs-13 mb-0">Belum ada obrolan terkini.</p>
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    @else
+        <!-- ========================================================================= -->
+        <!-- 👤 DASHBOARD KHUSUS PENGGUNA UMUM (ROLE: USER)                            -->
+        <!-- ========================================================================= -->
+
+        <!-- 2. KPI METRIC STATS CARDS (USER) -->
+        <div class="row g-3 mb-4">
+            <!-- Card 1: Pesan Masuk -->
+            <div class="col-sm-6 col-xl-3">
+                <div class="card kpi-card shadow-sm h-100 mb-0">
+                    <div class="card-body p-3.5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-muted fs-13 fw-semibold text-uppercase">Pesan &amp; Obrolan</span>
+                            <div class="kpi-icon-box bg-primary-subtle text-primary">
+                                <i class="ti ti-messages"></i>
+                            </div>
+                        </div>
+                        <h2 class="fw-bold mb-1.5 text-dark">{{ $myRecentMessages->count() }} <span class="fs-14 fw-normal text-muted">Obrolan</span></h2>
+                        <div class="d-flex align-items-center gap-1.5 fs-12 text-muted">
+                            @if ($unreadMessagesCount > 0)
+                                <span class="badge bg-danger text-white">{{ $unreadMessagesCount }} Belum Dibaca</span>
+                            @else
+                                <span class="badge bg-success-subtle text-success"><i class="ti ti-check me-1"></i>Semua Terbaca</span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Notifikasi Sistem -->
+            <div class="col-sm-6 col-xl-3">
+                <div class="card kpi-card shadow-sm h-100 mb-0">
+                    <div class="card-body p-3.5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-muted fs-13 fw-semibold text-uppercase">Notifikasi Saya</span>
+                            <div class="kpi-icon-box bg-info-subtle text-info">
+                                <i class="ti ti-bell"></i>
+                            </div>
+                        </div>
+                        <h2 class="fw-bold mb-1.5 text-dark">{{ $myNotifications->count() }} <span class="fs-14 fw-normal text-muted">Pemberitahuan</span></h2>
+                        <div class="d-flex align-items-center gap-1.5 fs-12 text-muted">
+                            @if ($unreadNotificationsCount > 0)
+                                <span class="badge bg-warning text-dark">{{ $unreadNotificationsCount }} Baru</span>
+                            @else
+                                <span class="badge bg-success-subtle text-success"><i class="ti ti-check me-1"></i>Terpantau</span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Poin Aktivitas Login -->
+            <div class="col-sm-6 col-xl-3">
+                <div class="card kpi-card shadow-sm h-100 mb-0">
+                    <div class="card-body p-3.5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-muted fs-13 fw-semibold text-uppercase">Poin Login Saya</span>
+                            <div class="kpi-icon-box bg-warning-subtle text-warning">
+                                <i class="ti ti-award"></i>
+                            </div>
+                        </div>
+                        <h2 class="fw-bold mb-1.5 text-dark">{{ number_format($myPoints) }} <span class="fs-14 fw-normal text-muted">Poin</span></h2>
+                        <div class="d-flex align-items-center gap-1.5 fs-12 text-muted">
+                            <i class="ti ti-chart-line text-success"></i>
+                            <span>Total <strong>{{ $totalMyLogins }}x</strong> sesi masuk aktif</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Kelengkapan Profil -->
+            <div class="col-sm-6 col-xl-3">
+                <div class="card kpi-card shadow-sm h-100 mb-0">
+                    <div class="card-body p-3.5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="text-muted fs-13 fw-semibold text-uppercase">Kelengkapan Profil</span>
+                            <div class="kpi-icon-box bg-success-subtle text-success">
+                                <i class="ti ti-user-check"></i>
+                            </div>
+                        </div>
+                        <h2 class="fw-bold mb-1.5 text-dark">{{ $completenessPercent }}%</h2>
+                        <div class="completeness-progress-container mb-1">
+                            <div class="completeness-progress-bar bg-success" style="width: {{ $completenessPercent }}%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. PUSAT PINTASAN PENGGUNA & RINGKASAN PROFIL (USER) -->
+        <div class="row g-3 mb-4">
+            <!-- Pusat Pintasan Pengguna -->
+            <div class="col-xl-7">
+                <div class="card shadow-sm border-0 h-100 mb-0">
+                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0 fw-bold">
+                            <i class="ti ti-bolt text-warning me-1.5"></i>Pusat Akses Pintas Pengguna
+                        </h5>
+                        <span class="badge bg-light text-dark border fs-xs">Shortcuts</span>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="row g-2">
+                            <div class="col-sm-6">
+                                <a href="{{ route('admin.profil-pengguna.edit') }}" class="quick-action-tile">
+                                    <div class="quick-action-icon bg-primary-subtle text-primary">
+                                        <i class="ti ti-user-edit"></i>
+                                    </div>
+                                    <span class="fw-semibold fs-13 text-center">Edit Profil &amp; Foto</span>
+                                    <span class="fs-xxs text-muted mt-0.5">Perbarui biodata dan avatar</span>
+                                </a>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="quick-action-tile">
+                                    <div class="quick-action-icon bg-info-subtle text-info">
+                                        <i class="ti ti-messages"></i>
+                                    </div>
+                                    <span class="fw-semibold fs-13 text-center">Pesan &amp; Obrolan</span>
+                                    <span class="fs-xxs text-muted mt-0.5">Komunikasi dengan rekan</span>
+                                </a>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="{{ route('admin.profil-pengguna.index') }}" class="quick-action-tile">
+                                    <div class="quick-action-icon bg-success-subtle text-success">
+                                        <i class="ti ti-id"></i>
+                                    </div>
+                                    <span class="fw-semibold fs-13 text-center">Kartu Profil Saya</span>
+                                    <span class="fs-xxs text-muted mt-0.5">Lihat pratinjau publik</span>
+                                </a>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="{{ route('template.documentation.changelog') }}" class="quick-action-tile">
+                                    <div class="quick-action-icon bg-secondary-subtle text-secondary">
+                                        <i class="ti ti-git-branch"></i>
+                                    </div>
+                                    <span class="fw-semibold fs-13 text-center">Riwayat &amp; Rilis</span>
+                                    <span class="fs-xxs text-muted mt-0.5">Changelog Sistem</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kartu Status Profil & Akun -->
+            <div class="col-xl-5">
+                <div class="card shadow-sm border-0 h-100 mb-0">
+                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0 fw-bold">
+                            <i class="ti ti-shield-check text-primary me-1.5"></i>Status Akun &amp; Keamanan
+                        </h5>
+                        <span class="badge bg-success-subtle text-success">Aktif &amp; Terverifikasi</span>
+                    </div>
+                    <div class="card-body p-3.5">
+                        <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom">
+                            <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="rounded-circle border" style="width: 54px; height: 54px; object-fit: cover; object-position: top;">
+                            <div>
+                                <h6 class="fw-bold mb-0.5 text-dark">{{ $user->name }}</h6>
+                                <span class="text-muted fs-12 d-block mb-1">{{ $user->email }}</span>
+                                <span class="badge bg-primary-subtle text-primary fs-xxs">Pengguna Terdaftar</span>
+                            </div>
+                        </div>
+                        <div class="fs-13 text-muted">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Bergabung Sejak:</span>
+                                <strong class="text-dark">{{ $user->created_at->translatedFormat('d F Y') }}</strong>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Total Sesi Masuk:</span>
+                                <strong class="text-dark">{{ $totalMyLogins }} Kali</strong>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Status Keamanan:</span>
+                                <span class="text-success fw-semibold"><i class="ti ti-lock me-1"></i>Terkonfigurasi</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. RIWAYAT LOGIN PRIBADI & OBROLAN SAYA (USER) -->
+        <div class="row g-3 mb-4">
+            <!-- Riwayat Login Akun Sendiri -->
+            <div class="col-xl-7">
+                <div class="card shadow-sm border-0 h-100 mb-0">
+                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0 fw-bold">
+                            <i class="ti ti-history text-primary me-1.5"></i>Riwayat Aktivitas Masuk Akun Saya
+                        </h5>
+                        <span class="badge bg-light text-dark border fs-xs">Recent Logins</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0 dashboard-mini-table">
+                                <thead class="align-middle text-center text-nowrap">
+                                    <tr>
+                                        <th>Alamat IP</th>
+                                        <th>Perangkat / Browser</th>
+                                        <th>Waktu Masuk</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($myRecentLogins as $mLog)
+                                        <tr>
+                                            <td class="text-center font-monospace fs-12 text-dark fw-semibold">{{ $mLog->ip_address }}</td>
+                                            <td class="text-center text-muted fs-12">
+                                                <i class="ti ti-device-desktop me-1"></i>{{ $mLog->user_agent ? Str::limit($mLog->user_agent, 28) : 'Web Client' }}
+                                            </td>
+                                            <td class="text-center text-muted fs-12">
+                                                {{ \Carbon\Carbon::parse($mLog->login_at)->translatedFormat('d M Y, H:i') }} WIB
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="badge bg-success-subtle text-success fs-xxs"><i class="ti ti-check me-1"></i>Berhasil</span>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center py-4 text-muted">Belum ada catatan aktivitas masuk.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Percakapan Obrolan Terkini -->
+            <div class="col-xl-5">
+                <div class="card shadow-sm border-0 h-100 mb-0">
+                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0 fw-bold">
+                            <i class="ti ti-messages text-primary me-1.5"></i>Obrolan &amp; Pesan Saya
+                        </h5>
+                        <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="btn btn-xs btn-primary bg-primary text-white px-2.5 py-1 rounded">
+                            Buka Chat
+                        </a>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-column">
+                            @forelse ($myRecentMessages as $msg)
+                                @php
+                                    $isMe = $msg->sender_id === auth()->id();
+                                    $partner = $isMe ? $msg->receiver : $msg->sender;
+                                @endphp
+                                <a href="{{ route('admin.profil-pengguna.messages.index', ['user_id' => $partner->id ?? '']) }}" class="chat-preview-item">
+                                    <div class="chat-avatar-wrapper">
+                                        <img src="{{ $partner?->avatar_url ?? asset('assets/images/users/default-avatar.svg') }}" alt="{{ $partner->name ?? 'User' }}" class="chat-preview-avatar">
+                                    </div>
+                                    <div class="chat-content-box">
+                                        <div class="chat-preview-header">
+                                            <span class="chat-preview-name">{{ $partner->name ?? 'Pengguna' }}</span>
+                                            <span class="chat-preview-time"><i class="ti ti-clock me-1"></i>{{ $msg->created_at->diffForHumans() }}</span>
+                                        </div>
+                                        <p class="chat-preview-body mb-0">
+                                            @if ($isMe)
+                                                <span class="text-primary fw-semibold me-1">Anda:</span>
+                                            @endif
+                                            {{ $msg->body ?: ($msg->attachment_name ? 'Mengirim lampiran berkas' : ($msg->reason ? 'Alasan: ' . $msg->reason : 'Pesan')) }}
+                                        </p>
+                                    </div>
+                                </a>
+                            @empty
+                                <div class="text-center py-4 text-muted">
+                                    <i class="ti ti-message-off fs-24 text-muted d-block mb-1.5"></i>
+                                    <p class="fs-13 mb-0">Belum ada obrolan terkini.</p>
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- ApexCharts Plugin & Data Bridge (Rule 1 & Rule 15 Standard) -->
+    <script src="{{ asset('assets/plugins/apexcharts/apexcharts.min.js') }}"></script>
+    <script>
+        window.DashboardConfig = {
+            @if (auth()->user()->hasAnyRole(['superadmin', 'admin']))
+                chartDates: @json($chartDates ?? []),
+                chartLogins: @json($chartLogins ?? []),
+                chartRegistrations: @json($chartRegistrations ?? []),
+                roleLabels: @json($rolesDistribution->pluck('name')->map(fn($n) => strtoupper($n))->values() ?? []),
+                roleCounts: @json($rolesDistribution->pluck('users_count')->values() ?? [])
+            @endif
+        };
+    </script>
+    <script src="{{ asset('assets/js/admin/dashboard.js') }}"></script>
 @endsection

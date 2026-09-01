@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DukunganAplikasi\BackupDbController;
 use App\Http\Controllers\Admin\DukunganAplikasi\FiturAplikasiController;
 use App\Http\Controllers\Admin\DukunganAplikasi\KonfigurasiWebsiteController;
@@ -27,6 +28,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('index');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
     Route::get('notifications/poll', [NotificationController::class, 'poll'])->name('notifications.poll');
     Route::get('notifications/poll-messages', [NotificationController::class, 'pollMessages'])->name('notifications.poll-messages');
     Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');

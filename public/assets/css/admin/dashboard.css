@@ -1,0 +1,241 @@
+/**
+ * Dashboard Hub Custom Styles
+ * Module: Admin & User Dynamic Dashboard
+ * Follows AGENTS.md Theme Standard
+ */
+
+/* 1. Hero Welcome Card with User Custom Cover Photo */
+.dashboard-hero-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15);
+}
+
+.dashboard-hero-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(30, 41, 59, 0.78) 50%, rgba(15, 23, 42, 0.85) 100%);
+    backdrop-filter: blur(1.5px);
+    z-index: 1;
+}
+
+.dashboard-hero-card .card-body {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-avatar-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.hero-avatar-img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    object-position: top;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-status-dot {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #22c55e;
+    border: 2px solid #1e293b;
+}
+
+/* 2. KPI Metric Cards */
+.kpi-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 0.875rem;
+}
+
+.kpi-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+}
+
+.kpi-icon-box {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+/* 3. Quick Action Shortcut Buttons */
+.quick-action-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem 0.75rem;
+    border-radius: 0.75rem;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+    height: 100%;
+}
+
+.quick-action-tile:hover {
+    background-color: #ffffff;
+    border-color: #3b82f6;
+    color: #2563eb;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.12);
+    transform: translateY(-2px);
+}
+
+.quick-action-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+    transition: transform 0.2s ease;
+}
+
+.quick-action-tile:hover .quick-action-icon {
+    transform: scale(1.1);
+}
+
+/* 4. Mini Tables and Activity Feed */
+.dashboard-mini-table thead th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
+}
+
+.dashboard-mini-table tbody td {
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
+    font-size: 0.8125rem;
+}
+
+.dashboard-user-avatar {
+    width: 38px;
+    height: 38px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* 5. Profile Completeness Bar */
+.completeness-progress-container {
+    background-color: #f1f5f9;
+    border-radius: 9999px;
+    overflow: hidden;
+    height: 10px;
+}
+
+.completeness-progress-bar {
+    height: 100%;
+    border-radius: 9999px;
+    transition: width 0.6s ease;
+}
+
+/* 6. Chat Preview Items (Spacious & Elegant) */
+.chat-preview-item {
+    display: flex;
+    align-items: center;
+    padding: 0.85rem 1rem;
+    border-radius: 0.75rem;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    text-decoration: none !important;
+    color: #1e293b;
+    transition: all 0.2s ease;
+    margin-bottom: 0.65rem;
+}
+
+.chat-preview-item:last-child {
+    margin-bottom: 0;
+}
+
+.chat-preview-item:hover {
+    background-color: #ffffff;
+    border-color: #3b82f6;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+    transform: translateY(-1px);
+}
+
+.chat-avatar-wrapper {
+    position: relative;
+    flex-shrink: 0;
+    margin-right: 0.85rem;
+}
+
+.chat-preview-avatar {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.chat-content-box {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.chat-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+.chat-preview-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #0f172a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chat-preview-time {
+    font-size: 0.725rem;
+    color: #64748b;
+    white-space: nowrap;
+    margin-left: 0.5rem;
+    flex-shrink: 0;
+}
+
+.chat-preview-body {
+    font-size: 0.8125rem;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+}
