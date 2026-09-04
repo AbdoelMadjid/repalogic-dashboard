@@ -3,8 +3,9 @@
     $isEn = $currentLang === 'en';
     $currentFlag = $isEn ? asset('assets/images/flags/us.svg') : asset('assets/images/flags/id.svg');
     $currentCode = $isEn ? 'EN' : 'ID';
+    $showLanguage = empty($appFeatures) || !empty($appFeatures->topbar_language);
 @endphp
-<div id="language-selector" class="topbar-item">
+<div id="language-selector" data-feature="topbar_language" class="topbar-item" style="{{ $showLanguage ? '' : 'display: none !important;' }}">
     <div class="dropdown">
         <button class="topbar-link fw-bold" data-bs-toggle="dropdown" type="button" aria-haspopup="false"
             aria-expanded="false">

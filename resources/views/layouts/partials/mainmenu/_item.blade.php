@@ -93,7 +93,9 @@
     $badgeClass = trim(preg_replace('/\s+/', ' ', $badgeClass));
 @endphp
 
-<li class="side-nav-item{{ $isActive ? ' active' : '' }}">
+<li class="side-nav-item{{ $isActive ? ' active' : '' }} {{ !empty($featureKey) ? 'feature-group-' . $featureKey : '' }}"
+    @if (!empty($featureKey)) data-feature="{{ $featureKey }}" @endif
+    @if (isset($isGroupVisible) && !$isGroupVisible) style="display: none !important;" @endif>
     @if ($hasChildren)
         <a data-bs-toggle="collapse" href="#{{ $collapseId }}" aria-expanded="{{ $isActive ? 'true' : 'false' }}"
             aria-controls="{{ $collapseId }}" class="{{ $linkClasses }}">

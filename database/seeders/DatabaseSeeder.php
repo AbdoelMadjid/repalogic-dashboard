@@ -61,7 +61,10 @@ class DatabaseSeeder extends Seeder
         // 6. Seed Fitur Aplikasi
         $this->call(FiturAplikasiSeeder::class);
 
-        // 7. Seed Tema & Seksi Website Landing Page
+        // 7. Seed Pengaturan Sistem Aplikasi
+        $this->call(AppSettingSeeder::class);
+
+        // 8. Seed Tema & Seksi Website Landing Page
         $this->call(WebsiteThemeSeeder::class);
     }
 }

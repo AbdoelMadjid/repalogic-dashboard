@@ -117,7 +117,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.8.3 -->
+                        <!-- Version 2.8.4 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -125,8 +125,39 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.8.3</h5>
+                                        <h5 class="fw-bold mb-0">v2.8.4</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.4</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-04 11:35 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Card with Tabs System Control Center, Persistent Database Settings (`app_settings`), Topbar Realtime Instant DOM Toggle, Zero-Reload Bulk Actions, Active Tab Persistence &amp; Factory Reset to Seeder</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Arsitektur Card with Tabs Terstandarisasi (<code>fitur-aplikasi.blade.php</code> &amp; <code>fitur-aplikasi.css</code>):</strong> Merestrukturisasi halaman kontrol fitur menjadi 2 tab navigasi (<em>Tab 1: Pengaturan Sistem</em> dan <em>Tab 2: Visibilitas Fitur &amp; Komponen</em>) menggunakan standar tema <code>.card-tabs</code> dan <code>.card-header-tabs.nav-bordered</code> yang bersih dan responsif.</li>
+                                    <li><strong class="text-dark">Penyimpanan Pengaturan Persisten Database (<code>AppSetting.php</code> &amp; <code>AppSettingSeeder.php</code>):</strong> Migrasi penyimpanan seluruh pengaturan sistem (Idle Timeout, Maintenance Mode, Rate Limit, Polling Interval, Audio &amp; Toast Notification) ke tabel persisten <code>app_settings</code> dengan dual-layer caching dan kamus fallback default.</li>
+                                    <li><strong class="text-dark">Engine Visibilitas Realtime Topbar Header &amp; Sidebar (<code>topbar.blade.php</code> &amp; <code>fitur-aplikasi.js</code>):</strong> Menghilangkan server-side omission pada partial Topbar sehingga seluruh elemen selalu ada di DOM dengan atribut <code>data-feature</code>. Fungsi <code>toggleFeatureElementInDOM</code> langsung menampilkan atau menyembunyikan elemen Topbar &amp; grup menu Sidebar secara instan saat sakelar tabel diubah via AJAX tanpa reload.</li>
+                                    <li><strong class="text-dark">Persistensi Tab Aktif &amp; Aksi Massal Tanpa Reload (<code>fitur-aplikasi.js</code>):</strong> Menjaga tab aktif pengguna melalui <code>localStorage</code> dan URL hash (<code>history.replaceState</code>). Aksi massal (Aktifkan, Nonaktifkan, Hapus Terpilih) kini mengeksekusi pembaruan status dan DOM secara instan tanpa reload halaman, memastikan pengguna tetap di tab aktif.</li>
+                                    <li><strong class="text-dark">Fitur Kembalikan Default Pabrik (Factory Reset to Seeder):</strong> Menambahkan tombol <em>Kembalikan Default</em> di header kartu dengan dialog konfirmasi SweetAlert2 untuk mereset seluruh nilai <code>app_settings</code> dan status <code>fitur_aplikasi</code> kembali ke data seeder bawaan secara otomatis.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Control Center</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Card with Tabs</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Realtime Topbar Toggle</span>
+                                    <span class="badge bg-light text-dark border fs-xs">AppSetting Model</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Reset to Seeder</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.8.3 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xs text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.8.3</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.3</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-04 09:22 WIB</span>

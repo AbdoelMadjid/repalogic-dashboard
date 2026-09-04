@@ -125,22 +125,20 @@
 </style>
 
 @php
-    $serverIdleMinutes = \Illuminate\Support\Facades\Cache::get('app_setting_idle_timeout_minutes', 5);
+    $serverIdleMinutes = (int) \App\Models\Admin\DukunganAplikasi\AppSetting::get('idle_timeout_minutes', 5);
 @endphp
 
 <script>
 (function() {
     'use strict';
 
-    // Durasi Idle: Konfigurasi Dinamis (localStorage -> Server Setting -> Default 5 Menit)
-    const serverIdleMinutes = {{ (int) $serverIdleMinutes }};
+    // Durasi Idle: Konfigurasi Terpusat dari Server Database
+    let serverIdleMinutes = {{ (int) $serverIdleMinutes }};
     const STORAGE_KEY_LOCKED = 'repalogic_screen_locked';
 
     function getIdleTimeoutMs() {
-        const stored = localStorage.getItem('repalogic_idle_timeout_minutes');
-        const mins = (stored !== null && stored !== '') ? parseInt(stored) : serverIdleMinutes;
-        if (mins <= 0) return 0; // 0 = Fitur Auto Lock Dinonaktifkan
-        return mins * 60 * 1000;
+        if (serverIdleMinutes <= 0) return 0; // 0 = Fitur Auto Lock Dinonaktifkan
+        return serverIdleMinutes * 60 * 1000;
     }
 
     let idleTimer = null;
@@ -213,7 +211,7 @@
      * Set Durasi Idle Baru secara instan
      */
     window.setIdleTimeoutMinutes = function(minutes) {
-        localStorage.setItem('repalogic_idle_timeout_minutes', minutes);
+        serverIdleMinutes = parseInt(minutes, 10) || 0;
         resetIdleTimer();
     };
 

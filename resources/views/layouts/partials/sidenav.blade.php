@@ -82,37 +82,44 @@
                         @php
                             $featureKey = 'menu_group_' . str_replace('-', '_', $groupKey);
                             $isGroupVisible = empty($appFeatures) || !empty($appFeatures->$featureKey);
+                            $groupConfig = config("sidenav-template.$groupKey");
                         @endphp
-                        @if ($isGroupVisible && ($groupConfig = config("sidenav-template.$groupKey")))
-                            @include('layouts.partials.mainmenu._render', ['menuGroup' => $groupConfig])
+                        @if ($groupConfig)
+                            @include('layouts.partials.mainmenu._render', [
+                                'menuGroup' => $groupConfig,
+                                'featureKey' => $featureKey,
+                                'isGroupVisible' => $isGroupVisible,
+                            ])
                         @endif
                     @endforeach
 
-                    @if (empty($appFeatures) || !empty($appFeatures->menu_group_menu_item))
-                        <li class="side-nav-item">
-                            <a href="#" class="side-nav-link disabled">
-                                <span class="menu-icon"><i class="ti ti-ban"></i></span>
-                                <span class="menu-text" data-lang="disabled-menu">Disabled Menu</span>
-                            </a>
-                        </li>
-                    @endif
+                    @php
+                        $isMenuItemVisible = empty($appFeatures) || !empty($appFeatures->menu_group_menu_item);
+                    @endphp
+                    <li class="side-nav-item" data-feature="menu_group_menu_item" style="{{ $isMenuItemVisible ? '' : 'display: none !important;' }}">
+                        <a href="#" class="side-nav-link disabled">
+                            <span class="menu-icon"><i class="ti ti-ban"></i></span>
+                            <span class="menu-text" data-lang="disabled-menu">Disabled Menu</span>
+                        </a>
+                    </li>
                 @endif
             </ul>
         </div>
     </div>
 
-    @if (empty($appFeatures) || !empty($appFeatures->menu_special_menu))
-        <div class="sidenav-special-bottom">
-            <ul class="side-nav mb-0">
-                <li class="side-nav-item mb-0">
-                    <a href="{{ Route::has('template.documentation.changelog') ? route('template.documentation.changelog') : url('template/documentation/changelog') }}" class="side-nav-link special-menu">
-                        <span class="menu-icon"><i class="ti ti-star"></i></span>
-                        <span class="menu-text" data-lang="special-menu">Special Menu</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    @endif
+    @php
+        $isSpecialMenuVisible = empty($appFeatures) || !empty($appFeatures->menu_special_menu);
+    @endphp
+    <div class="sidenav-special-bottom" data-feature="menu_special_menu" style="{{ $isSpecialMenuVisible ? '' : 'display: none !important;' }}">
+        <ul class="side-nav mb-0">
+            <li class="side-nav-item mb-0">
+                <a href="{{ Route::has('template.documentation.changelog') ? route('template.documentation.changelog') : url('template/documentation/changelog') }}" class="side-nav-link special-menu">
+                    <span class="menu-icon"><i class="ti ti-star"></i></span>
+                    <span class="menu-text" data-lang="special-menu">Special Menu</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>
 <!-- Sidenav Menu End -->
 

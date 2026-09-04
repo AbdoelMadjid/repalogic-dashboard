@@ -3,9 +3,10 @@
     $messageItems = $messageData['items'];
     $totalCount = $messageData['total_count'];
     $unreadCount = $messageData['unread_count'];
+    $showMessageDropdown = empty($appFeatures) || !empty($appFeatures->topbar_messages);
 @endphp
 
-<div id="simple-messages-dropdown" class="topbar-item">
+<div id="simple-messages-dropdown" data-feature="topbar_messages" class="topbar-item" style="{{ $showMessageDropdown ? '' : 'display: none !important;' }}">
     <div class="dropdown" id="topbar-messages-dropdown-wrapper">
         <button class="topbar-link dropdown-toggle drop-arrow-none" data-bs-toggle="dropdown" type="button"
             id="topbar-messages-toggle-btn" data-bs-auto-close="outside" aria-haspopup="false" aria-expanded="false">
@@ -30,7 +31,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const pollMessagesUrl = "{{ route('admin.notifications.poll-messages') }}";
-    const pollIntervalMs = 20000;
+    const pollIntervalMs = {{ ((int) \App\Models\Admin\DukunganAplikasi\AppSetting::get('polling_interval', 20)) * 1000 }};
     const msgBadge = document.getElementById('topbar-messages-badge');
     const msgDropdownContent = document.getElementById('topbar-messages-dropdown-content');
     const msgToggleBtn = document.getElementById('topbar-messages-toggle-btn');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\DukunganAplikasi;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\DukunganAplikasi\FiturAplikasiRequest;
+use App\Models\Admin\DukunganAplikasi\AppSetting;
 use App\Models\Admin\DukunganAplikasi\FiturAplikasi;
 use App\Traits\HasNotification;
 use Illuminate\Http\Request;
@@ -40,17 +41,17 @@ class FiturAplikasiController extends Controller
 
         $groupedFeatures = $features->groupBy('kategori');
 
-        // Pengaturan Sistem Aplikasi
+        // Pengaturan Sistem Aplikasi (Persistent Database Settings)
         $appSettings = [
-            'idle_timeout_minutes' => Cache::get('app_setting_idle_timeout_minutes', 5),
-            'maintenance_mode' => (bool) Cache::get('app_setting_maintenance_mode', false),
-            'maintenance_message' => Cache::get('app_setting_maintenance_message', 'Sistem sedang dalam proses pemeliharaan berkala. Silakan coba beberapa saat lagi.'),
-            'rate_limit_attempts' => Cache::get('app_setting_rate_limit_attempts', 5),
-            'auto_user_approval' => (bool) Cache::get('app_setting_auto_user_approval', false),
-            'new_device_alert' => (bool) Cache::get('app_setting_new_device_alert', true),
-            'polling_interval' => Cache::get('app_setting_polling_interval', 20),
-            'sound_notification' => (bool) Cache::get('app_setting_sound_notification', true),
-            'toast_notification' => (bool) Cache::get('app_setting_toast_notification', true),
+            'idle_timeout_minutes' => (int) AppSetting::get('idle_timeout_minutes', 5),
+            'maintenance_mode' => (bool) AppSetting::get('maintenance_mode', false),
+            'maintenance_message' => AppSetting::get('maintenance_message', 'Sistem sedang dalam proses pemeliharaan berkala. Silakan coba beberapa saat lagi.'),
+            'rate_limit_attempts' => (int) AppSetting::get('rate_limit_attempts', 5),
+            'auto_user_approval' => (bool) AppSetting::get('auto_user_approval', false),
+            'new_device_alert' => (bool) AppSetting::get('new_device_alert', true),
+            'polling_interval' => (int) AppSetting::get('polling_interval', 20),
+            'sound_notification' => (bool) AppSetting::get('sound_notification', true),
+            'toast_notification' => (bool) AppSetting::get('toast_notification', true),
         ];
 
         return view('admin.dukunganaplikasi.fitur-aplikasi', compact(
@@ -306,6 +307,7 @@ class FiturAplikasiController extends Controller
 
             FiturAplikasi::clearCache();
             \App\Models\Admin\DukunganAplikasi\ProfilAplikasi::clearCache();
+            AppSetting::clearCache();
 
             return response()->json([
                 'success' => true,
@@ -339,7 +341,7 @@ class FiturAplikasiController extends Controller
         $key = $request->input('key');
         $value = $request->input('value');
 
-        Cache::forever('app_setting_' . $key, $value);
+        AppSetting::set($key, $value);
 
         return response()->json([
             'success' => true,
@@ -347,5 +349,57 @@ class FiturAplikasiController extends Controller
             'key' => $key,
             'value' => $value,
         ]);
+    }
+
+    /**
+     * Kembalikan seluruh pengaturan sistem dan visibilitas fitur ke setelan default seeder.
+     */
+    public function resetDefaults(Request $request)
+    {
+        if (!auth()->user()->can('update dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki akses untuk mereset pengaturan fitur.',
+            ], 403);
+        }
+
+        try {
+            // 1. Reset Application Settings from AppSettingSeeder default dictionary
+            $defaultSettings = [
+                'idle_timeout_minutes' => '5',
+                'maintenance_mode' => '0',
+                'maintenance_message' => 'Sistem sedang dalam proses pemeliharaan berkala. Silakan coba beberapa saat lagi.',
+                'rate_limit_attempts' => '5',
+                'auto_user_approval' => '0',
+                'new_device_alert' => '1',
+                'polling_interval' => '20',
+                'sound_notification' => '1',
+                'toast_notification' => '1',
+            ];
+
+            foreach ($defaultSettings as $key => $value) {
+                AppSetting::set($key, $value);
+            }
+
+            // 2. Run FiturAplikasiSeeder to restore default features and statuses
+            $seeder = new \Database\Seeders\FiturAplikasiSeeder();
+            $seeder->run();
+
+            // 3. Clear Caches
+            AppSetting::clearCache();
+            FiturAplikasi::clearCache();
+            Artisan::call('view:clear');
+            Artisan::call('cache:clear');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Seluruh Pusat Kontrol & Fitur Aplikasi berhasil dikembalikan ke pengaturan default pabrik (seeder)!',
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mereset pengaturan ke default: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }

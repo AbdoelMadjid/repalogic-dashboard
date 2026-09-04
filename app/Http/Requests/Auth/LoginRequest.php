@@ -138,7 +138,7 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        $maxAttempts = (int) Cache::get('app_setting_rate_limit_attempts', 5);
+        $maxAttempts = (int) \App\Models\Admin\DukunganAplikasi\AppSetting::get('rate_limit_attempts', 5);
 
         if (! RateLimiter::tooManyAttempts($this->throttleKey(), $maxAttempts)) {
             return;

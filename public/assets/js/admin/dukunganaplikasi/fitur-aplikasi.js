@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
         bulkAction: configRoutes.bulkAction || '/admin/dukunganaplikasi/fitur-aplikasi/bulk-action',
         updateSetting: configRoutes.updateSetting || '/admin/dukunganaplikasi/fitur-aplikasi/update-setting',
         clearCache: configRoutes.clearCache || '/admin/dukunganaplikasi/fitur-aplikasi/clear-cache',
+        resetDefaults: configRoutes.resetDefaults || '/admin/dukunganaplikasi/fitur-aplikasi/reset-defaults',
         store: configRoutes.store || '/admin/dukunganaplikasi/fitur-aplikasi',
         baseUrl: configRoutes.baseUrl || '/admin/dukunganaplikasi/fitur-aplikasi'
     };
@@ -30,9 +31,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnClearSearch = document.getElementById('btn-clear-search');
     const paginationUl = document.getElementById('table-pagination');
     const infoBar = document.getElementById('table-info-bar');
+
+    // Stat Elements
     const statTotal = document.getElementById('stat-total');
+    const statTotalBadge = document.getElementById('stat-total-badge');
     const statActive = document.getElementById('stat-active');
     const statInactive = document.getElementById('stat-inactive');
+    const statProgressBar = document.getElementById('stat-progress-bar');
+    const statPercentText = document.getElementById('stat-percent-text');
+    const tabFeaturesCountBadge = document.getElementById('tab-features-count-badge');
 
     // Bulk Action Elements
     const checkAllGlobal = document.getElementById('check-all-global');
@@ -57,6 +64,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnSubmitText = document.getElementById('btnSubmitText');
     const iconInput = document.getElementById('modal_icon');
     const iconPreview = document.getElementById('iconPreview');
+
+    // Tab Elements
+    const tabVisibilityBtn = document.getElementById('tab-visibility-btn');
+    const tabSettingsBtn = document.getElementById('tab-settings-btn');
 
     let currentPage = 1;
     let filteredRows = [];
@@ -252,12 +263,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // Recalculate Stats in UI
     function recalculateStats() {
         const switches = Array.from(document.querySelectorAll('.switch-fitur-toggle'));
+        const totalCount = switches.length;
         const activeCount = switches.filter(s => s.checked).length;
-        const inactiveCount = switches.length - activeCount;
+        const inactiveCount = totalCount - activeCount;
+        const percent = totalCount > 0 ? Math.round((activeCount / totalCount) * 100) : 0;
 
-        if (statTotal) statTotal.textContent = switches.length;
+        if (statTotal) statTotal.textContent = totalCount;
+        if (statTotalBadge) statTotalBadge.textContent = totalCount;
         if (statActive) statActive.textContent = activeCount;
         if (statInactive) statInactive.textContent = inactiveCount;
+        if (statProgressBar) {
+            statProgressBar.style.width = `${percent}%`;
+            statProgressBar.setAttribute('aria-valuenow', percent);
+        }
+        if (statPercentText) statPercentText.textContent = `${percent}%`;
+        if (tabFeaturesCountBadge) tabFeaturesCountBadge.textContent = `${totalCount} Fitur`;
     }
 
     // Event Listeners for Filters
@@ -268,6 +288,33 @@ document.addEventListener('DOMContentLoaded', function() {
         if (searchInput) searchInput.value = '';
         currentPage = 1;
         applyFilterAndPagination();
+    });
+
+    // Tab Switching Handlers & Persistence Across Reloads/Actions
+    const navTabs = document.querySelectorAll('#fiturNavTabs a[data-bs-toggle="tab"]');
+    const savedTab = window.location.hash || localStorage.getItem('active_fitur_tab');
+
+    if (savedTab) {
+        const tabTriggerEl = document.querySelector(`#fiturNavTabs a[href="${savedTab}"]`);
+        if (tabTriggerEl) {
+            const tabInstance = bootstrap.Tab.getOrCreateInstance(tabTriggerEl);
+            tabInstance.show();
+        }
+    }
+
+    navTabs.forEach(tabEl => {
+        tabEl.addEventListener('shown.bs.tab', function(e) {
+            const targetHash = e.target.getAttribute('href');
+            if (targetHash) {
+                localStorage.setItem('active_fitur_tab', targetHash);
+                if (window.location.hash !== targetHash) {
+                    history.replaceState(null, null, targetHash);
+                }
+            }
+            if (targetHash === '#tab-visibility') {
+                applyFilterAndPagination();
+            }
+        });
     });
 
     // Initial Table Render
@@ -394,7 +441,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         badgeStatus.textContent = isChecked ? 'Aktif' : 'Nonaktif';
                     }
                     recalculateStats();
-                    window.showSuccess(data.message || 'Status fitur berhasil diperbarui.', { reload: true });
+
+                    // Realtime DOM Toggle for Topbar & Sidebar features
+                    toggleFeatureElementInDOM(featureCode, isChecked);
+
+                    if (typeof window.showToast === 'function') {
+                        window.showToast(data.message || 'Status fitur berhasil diperbarui.', 'success');
+                    } else if (typeof window.showSuccess === 'function') {
+                        window.showSuccess(data.message || 'Status fitur berhasil diperbarui.', { reload: false });
+                    }
                 } else {
                     target.checked = !target.checked;
                     window.showError(data.message || 'Gagal mengubah status fitur.');
@@ -408,6 +463,57 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+
+    /**
+     * Realtime DOM Toggle helper for Topbar header items and Sidebar menu elements
+     */
+    function toggleFeatureElementInDOM(featureCode, isChecked) {
+        if (!featureCode) return;
+
+        // 1. Target all elements matching data-feature attribute
+        const directElements = document.querySelectorAll(`[data-feature="${featureCode}"]`);
+        if (directElements.length > 0) {
+            directElements.forEach(el => {
+                if (isChecked) {
+                    el.style.removeProperty('display');
+                    el.classList.remove('feature-hidden');
+                } else {
+                    el.style.setProperty('display', 'none', 'important');
+                    el.classList.add('feature-hidden');
+                }
+            });
+        }
+
+        // 2. Target elements by specific ID mappings (for Topbar & Special Sidebar elements)
+        const idMap = {
+            'topbar_search_box': '#search-box',
+            'topbar_megamenu_header': '#megamenu-header',
+            'topbar_megamenu_apps': '#megamenu-apps',
+            'topbar_theme_toggler': '#theme-toggler',
+            'topbar_apps_dropdown': '#apps-dropdown-rounded',
+            'topbar_messages': '#simple-messages-dropdown',
+            'topbar_notifications': '#notification-dropdown-alert',
+            'topbar_fullscreen': '#fullscreen-toggler',
+            'topbar_monochrome': '#monochrome-toggler',
+            'topbar_customizer': '#theme-settings-toggler',
+            'topbar_language': '#language-selector',
+            'menu_special_menu': '.sidenav-special-bottom'
+        };
+
+        if (idMap[featureCode]) {
+            const selector = idMap[featureCode];
+            const mappedElements = document.querySelectorAll(selector);
+            mappedElements.forEach(el => {
+                if (isChecked) {
+                    el.style.removeProperty('display');
+                    el.classList.remove('feature-hidden');
+                } else {
+                    el.style.setProperty('display', 'none', 'important');
+                    el.classList.add('feature-hidden');
+                }
+            });
+        }
+    }
 
     // EVENT DELEGATION: Bulk Action on Selected Rows (Aktifkan / Nonaktifkan / Hapus Terpilih)
     document.addEventListener('click', function(e) {
@@ -459,7 +565,42 @@ document.addEventListener('DOMContentLoaded', function() {
                     .then(data => {
                         btn.disabled = false;
                         if (data.success) {
-                            window.showSuccess(data.message, { reload: true });
+                            if (action === 'enable' || action === 'disable') {
+                                const isChecked = (action === 'enable');
+                                ids.forEach(id => {
+                                    const switchEl = document.querySelector(`.switch-fitur-toggle[data-id="${id}"]`);
+                                    if (switchEl) {
+                                        switchEl.checked = isChecked;
+                                        const featureCode = switchEl.getAttribute('data-code');
+                                        toggleFeatureElementInDOM(featureCode, isChecked ? 1 : 0);
+                                    }
+                                    const badgeStatus = document.getElementById(`badge_status_${id}`);
+                                    if (badgeStatus) {
+                                        badgeStatus.className = `status-indicator badge ${isChecked ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'} fs-11`;
+                                        badgeStatus.textContent = isChecked ? 'Aktif' : 'Nonaktif';
+                                    }
+                                });
+                            } else if (action === 'delete') {
+                                ids.forEach(id => {
+                                    const row = document.getElementById(`row_fitur_${id}`) || document.querySelector(`tr[data-id="${id}"]`);
+                                    if (row) {
+                                        const switchEl = row.querySelector('.switch-fitur-toggle');
+                                        if (switchEl) {
+                                            const featureCode = switchEl.getAttribute('data-code');
+                                            toggleFeatureElementInDOM(featureCode, 0);
+                                        }
+                                        row.remove();
+                                    }
+                                });
+                            }
+
+                            selectedIds.clear();
+                            applyFilterAndPagination();
+                            recalculateStats();
+                            updateSelectionUI();
+
+                            // Show notification while staying on the active tab without page reload
+                            window.showSuccess(data.message, { reload: false });
                         } else {
                             window.showError(data.message || 'Gagal memproses aksi massal.');
                         }
@@ -474,19 +615,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // WIDGET 2: IDLE TIMEOUT HANDLER
+    // WIDGET 1: IDLE TIMEOUT HANDLER
     const idleSelect = document.getElementById('widget_idle_timeout');
     const btnSaveIdle = document.getElementById('btn-save-idle-timeout');
     const btnTestLock = document.getElementById('btn-test-lock-screen');
     const badgeCurrentIdle = document.getElementById('badge-current-idle');
-
-    const storedMins = localStorage.getItem('repalogic_idle_timeout_minutes');
-    if (storedMins !== null && idleSelect) {
-        idleSelect.value = storedMins;
-        if (badgeCurrentIdle) {
-            badgeCurrentIdle.textContent = storedMins > 0 ? `Aktif: ${storedMins} Menit` : 'Nonaktif';
-        }
-    }
 
     if (btnSaveIdle && idleSelect) {
         btnSaveIdle.addEventListener('click', function() {
@@ -509,12 +642,10 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(res => res.json())
             .then(data => {
                 btnSaveIdle.disabled = false;
-                btnSaveIdle.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Durasi Idle';
+                btnSaveIdle.innerHTML = '<i class="ti ti-device-floppy me-1.5"></i> Simpan Durasi';
 
                 if (typeof window.setIdleTimeoutMinutes === 'function') {
                     window.setIdleTimeoutMinutes(mins);
-                } else {
-                    localStorage.setItem('repalogic_idle_timeout_minutes', mins);
                 }
 
                 if (badgeCurrentIdle) {
@@ -523,11 +654,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (typeof window.showToast === 'function') {
                     window.showToast(mins > 0 ? `Waktu idle auto-lock diset ke ${mins} menit.` : 'Auto-lock dinonaktifkan.', 'success');
+                } else if (typeof window.showSuccess === 'function') {
+                    window.showSuccess(mins > 0 ? `Waktu idle auto-lock diset ke ${mins} menit.` : 'Auto-lock dinonaktifkan.', { reload: false });
                 }
             })
             .catch(err => {
                 btnSaveIdle.disabled = false;
-                btnSaveIdle.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Durasi Idle';
+                btnSaveIdle.innerHTML = '<i class="ti ti-device-floppy me-1.5"></i> Simpan Durasi';
                 window.showError(err.message || 'Gagal menyimpan pengaturan waktu idle.');
             });
         });
@@ -543,7 +676,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // WIDGET 3: MAINTENANCE MODE HANDLER
+    // WIDGET 2: MAINTENANCE MODE HANDLER
     const switchMaintenance = document.getElementById('widget_maintenance_mode');
     const labelMaintenance = document.getElementById('maintenance-status-label');
     const inputMaintenanceMsg = document.getElementById('widget_maintenance_message');
@@ -574,18 +707,22 @@ document.addEventListener('DOMContentLoaded', function() {
             ])
             .then(() => {
                 btnSaveMaintenance.disabled = false;
-                btnSaveMaintenance.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Status Pemeliharaan';
-                window.showToast('Pengaturan mode pemeliharaan berhasil disimpan.', 'success');
+                btnSaveMaintenance.innerHTML = '<i class="ti ti-device-floppy me-1.5"></i> Simpan Mode Maintenance';
+                if (typeof window.showToast === 'function') {
+                    window.showToast('Pengaturan mode pemeliharaan berhasil disimpan.', 'success');
+                } else if (typeof window.showSuccess === 'function') {
+                    window.showSuccess('Pengaturan mode pemeliharaan berhasil disimpan.', { reload: false });
+                }
             })
             .catch(err => {
                 btnSaveMaintenance.disabled = false;
-                btnSaveMaintenance.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Status Pemeliharaan';
+                btnSaveMaintenance.innerHTML = '<i class="ti ti-device-floppy me-1.5"></i> Simpan Mode Maintenance';
                 window.showError(err.message || 'Gagal menyimpan status pemeliharaan.');
             });
         });
     }
 
-    // WIDGET 4: SECURITY POLICY HANDLER
+    // WIDGET 3: SECURITY POLICY HANDLER
     const selectRateLimit = document.getElementById('widget_rate_limit');
     const switchAutoApproval = document.getElementById('widget_auto_approval');
     const switchNewDevice = document.getElementById('widget_new_device');
@@ -615,18 +752,22 @@ document.addEventListener('DOMContentLoaded', function() {
             ])
             .then(() => {
                 btnSaveSecurity.disabled = false;
-                btnSaveSecurity.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Kebijakan Keamanan';
-                window.showToast('Kebijakan keamanan akun berhasil disimpan.', 'success');
+                btnSaveSecurity.innerHTML = '<i class="ti ti-device-floppy me-1.5"></i> Simpan Kebijakan Keamanan';
+                if (typeof window.showToast === 'function') {
+                    window.showToast('Kebijakan keamanan akun berhasil disimpan.', 'success');
+                } else if (typeof window.showSuccess === 'function') {
+                    window.showSuccess('Kebijakan keamanan akun berhasil disimpan.', { reload: false });
+                }
             })
             .catch(err => {
                 btnSaveSecurity.disabled = false;
-                btnSaveSecurity.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Kebijakan Keamanan';
+                btnSaveSecurity.innerHTML = '<i class="ti ti-device-floppy me-1.5"></i> Simpan Kebijakan Keamanan';
                 window.showError(err.message || 'Gagal menyimpan kebijakan keamanan.');
             });
         });
     }
 
-    // WIDGET 5: POLLING & NOTIFICATION HANDLER
+    // WIDGET 4: POLLING & NOTIFICATION HANDLER
     const selectPollingInterval = document.getElementById('widget_polling_interval');
     const switchSoundNotif = document.getElementById('widget_sound_notif');
     const switchToastNotif = document.getElementById('widget_toast_notif');
@@ -656,18 +797,22 @@ document.addEventListener('DOMContentLoaded', function() {
             ])
             .then(() => {
                 btnSavePolling.disabled = false;
-                btnSavePolling.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Konfigurasi Polling';
-                window.showToast('Konfigurasi sinkronisasi polling berhasil disimpan.', 'success');
+                btnSavePolling.innerHTML = '<i class="ti ti-device-floppy me-1.5"></i> Simpan Konfigurasi Polling';
+                if (typeof window.showToast === 'function') {
+                    window.showToast('Konfigurasi sinkronisasi polling berhasil disimpan.', 'success');
+                } else if (typeof window.showSuccess === 'function') {
+                    window.showSuccess('Konfigurasi sinkronisasi polling berhasil disimpan.', { reload: false });
+                }
             })
             .catch(err => {
                 btnSavePolling.disabled = false;
-                btnSavePolling.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Konfigurasi Polling';
+                btnSavePolling.innerHTML = '<i class="ti ti-device-floppy me-1.5"></i> Simpan Konfigurasi Polling';
                 window.showError(err.message || 'Gagal menyimpan konfigurasi polling.');
             });
         });
     }
 
-    // WIDGET 6: CLEAR SYSTEM CACHE HANDLER
+    // WIDGET 5: CLEAR SYSTEM CACHE HANDLER
     const btnClearCache = document.getElementById('btn-clear-all-cache');
     if (btnClearCache) {
         btnClearCache.addEventListener('click', function() {
@@ -690,7 +835,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     .then(res => res.json())
                     .then(data => {
                         btnClearCache.disabled = false;
-                        btnClearCache.innerHTML = '<i class="ti ti-trash me-1"></i> Bersihkan Semua Cache';
+                        btnClearCache.innerHTML = '<i class="ti ti-trash me-1.5"></i> Bersihkan Semua Cache Sistem';
                         if (data.success) {
                             window.showSuccess(data.message, { reload: false });
                         } else {
@@ -699,8 +844,60 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                     .catch(err => {
                         btnClearCache.disabled = false;
-                        btnClearCache.innerHTML = '<i class="ti ti-trash me-1"></i> Bersihkan Semua Cache';
+                        btnClearCache.innerHTML = '<i class="ti ti-trash me-1.5"></i> Bersihkan Semua Cache Sistem';
                         window.showError(err.message || 'Terjadi kesalahan saat membersihkan cache.');
+                    });
+                }
+            });
+        });
+    }
+
+    // RESET KE PENGATURAN DEFAULT (SEEDER) HANDLER
+    const btnResetDefault = document.getElementById('btn-reset-default');
+    if (btnResetDefault) {
+        btnResetDefault.addEventListener('click', function() {
+            window.showConfirm({
+                title: 'Kembalikan ke Pengaturan Default?',
+                text: 'Tindakan ini akan mengembalikan seluruh Pengaturan Sistem (Idle Timeout, Maintenance, Keamanan, Polling) serta status Visibilitas Fitur Topbar & Sidebar ke konfigurasi awal bawaan seeder.',
+                isDanger: true,
+                onConfirm: () => {
+                    btnResetDefault.disabled = true;
+                    btnResetDefault.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Mereset...';
+
+                    fetch(routes.resetDefaults, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': getCsrfToken(),
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(async res => {
+                        let data;
+                        try {
+                            data = await res.json();
+                        } catch (e) {
+                            data = { success: false, message: `Respon server tidak valid (${res.status} ${res.statusText})` };
+                        }
+                        if (!res.ok) {
+                            throw new Error(data.message || `Gagal mereset ke default (HTTP ${res.status}).`);
+                        }
+                        return data;
+                    })
+                    .then(data => {
+                        btnResetDefault.disabled = false;
+                        btnResetDefault.innerHTML = '<i class="ti ti-rotate-clockwise me-1 fs-14"></i><span class="fs-12">Kembalikan Default</span>';
+                        if (data.success) {
+                            window.showSuccess(data.message, { reload: true });
+                        } else {
+                            window.showError(data.message || 'Gagal mengembalikan ke pengaturan default.');
+                        }
+                    })
+                    .catch(err => {
+                        btnResetDefault.disabled = false;
+                        btnResetDefault.innerHTML = '<i class="ti ti-rotate-clockwise me-1 fs-14"></i><span class="fs-12">Kembalikan Default</span>';
+                        console.error('Error resetting defaults:', err);
+                        window.showError(err.message || 'Terjadi kesalahan saat mereset pengaturan.');
                     });
                 }
             });
@@ -775,4 +972,62 @@ document.addEventListener('DOMContentLoaded', function() {
             modal.show();
         }
     });
+
+    // Form Modal Submit via AJAX (Preserve Active Tab)
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (btnSubmitFitur) {
+                btnSubmitFitur.disabled = true;
+                btnSubmitFitur.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Menyimpan...';
+            }
+
+            const formData = new FormData(form);
+            const actionUrl = form.action;
+
+            fetch(actionUrl, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': getCsrfToken(),
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(async res => {
+                let data;
+                try {
+                    data = await res.json();
+                } catch (err) {
+                    data = { success: false, message: `Respon server tidak valid (${res.status} ${res.statusText})` };
+                }
+                if (!res.ok) {
+                    const errorMsg = data.errors ? Object.values(data.errors).flat().join('<br>') : (data.message || 'Gagal menyimpan fitur.');
+                    throw new Error(errorMsg);
+                }
+                return data;
+            })
+            .then(data => {
+                if (btnSubmitFitur) {
+                    btnSubmitFitur.disabled = false;
+                    btnSubmitFitur.innerHTML = '<i class="ti ti-device-floppy me-1"></i> <span id="btnSubmitText">Simpan Fitur</span>';
+                }
+                if (data.success) {
+                    if (modal) modal.hide();
+                    localStorage.setItem('active_fitur_tab', '#tab-visibility');
+                    history.replaceState(null, null, '#tab-visibility');
+                    window.showSuccess(data.message, { reload: true });
+                } else {
+                    window.showError(data.message || 'Gagal menyimpan fitur.');
+                }
+            })
+            .catch(err => {
+                if (btnSubmitFitur) {
+                    btnSubmitFitur.disabled = false;
+                    btnSubmitFitur.innerHTML = '<i class="ti ti-device-floppy me-1"></i> <span id="btnSubmitText">Simpan Fitur</span>';
+                }
+                window.showError(err.message || 'Terjadi kesalahan saat menyimpan data.');
+            });
+        });
+    }
 });

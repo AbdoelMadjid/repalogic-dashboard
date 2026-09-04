@@ -1,4 +1,7 @@
-<div id="megamenu-apps" class="topbar-item d-none d-md-flex">
+@php
+    $showMegamenuApps = empty($appFeatures) || !empty($appFeatures->topbar_megamenu_apps);
+@endphp
+<div id="megamenu-apps" data-feature="topbar_megamenu_apps" class="topbar-item d-none d-md-flex" style="{{ $showMegamenuApps ? '' : 'display: none !important;' }}">
     <div class="dropdown">
         <button class="topbar-link btn fw-medium btn-link dropdown-toggle drop-arrow-none px-2" data-bs-toggle="dropdown"
             type="button" aria-haspopup="false" aria-expanded="false">

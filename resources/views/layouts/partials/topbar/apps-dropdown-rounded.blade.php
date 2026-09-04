@@ -1,4 +1,7 @@
-<div id="apps-dropdown-rounded" class="topbar-item">
+@php
+    $showAppsDropdown = empty($appFeatures) || !empty($appFeatures->topbar_apps_dropdown);
+@endphp
+<div id="apps-dropdown-rounded" data-feature="topbar_apps_dropdown" class="topbar-item" style="{{ $showAppsDropdown ? '' : 'display: none !important;' }}">
     <div class="dropdown">
         <button class="topbar-link dropdown-toggle drop-arrow-none" data-bs-toggle="dropdown" type="button"
             data-bs-auto-close="outside" aria-haspopup="false" aria-expanded="false">

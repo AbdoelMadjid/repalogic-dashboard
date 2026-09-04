@@ -3,9 +3,10 @@
     $notifItems = $notifData['items'];
     $totalCount = $notifData['total_count'];
     $unreadCount = $notifData['unread_count'];
+    $showNotifications = empty($appFeatures) || !empty($appFeatures->topbar_notifications);
 @endphp
 
-<div id="notification-dropdown-alert" class="topbar-item">
+<div id="notification-dropdown-alert" data-feature="topbar_notifications" class="topbar-item" style="{{ $showNotifications ? '' : 'display: none !important;' }}">
     <div class="dropdown" id="topbar-notif-dropdown-wrapper">
         <button class="topbar-link dropdown-toggle drop-arrow-none" data-bs-toggle="dropdown" type="button"
             id="topbar-notif-toggle-btn" data-bs-auto-close="outside" aria-haspopup="false" aria-expanded="false">
@@ -30,7 +31,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const pollUrl = "{{ route('admin.notifications.poll') }}";
-    const pollIntervalMs = 20000; // Poll setiap 20 detik
+    const pollIntervalMs = {{ ((int) \App\Models\Admin\DukunganAplikasi\AppSetting::get('polling_interval', 20)) * 1000 }};
     const bellBadge = document.getElementById('topbar-notif-bell-badge');
     const dropdownContent = document.getElementById('topbar-notif-dropdown-content');
     const toggleBtn = document.getElementById('topbar-notif-toggle-btn');

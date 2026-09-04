@@ -4,146 +4,106 @@
 > **Lokasi File Dokumentasi:** `docs/arsitektur_dan_operasional_fitur_dan_pengaturan_aplikasi.md`  
 > **Route URL:** `/admin/dukunganaplikasi/fitur-aplikasi`  
 > **Controller:** [`App\Http\Controllers\Admin\DukunganAplikasi\FiturAplikasiController`](../app/Http/Controllers/Admin/DukunganAplikasi/FiturAplikasiController.php)  
+> **Model Database:** [`App\Models\Admin\DukunganAplikasi\FiturAplikasi`](../app/Models/Admin/DukunganAplikasi/FiturAplikasi.php) & [`App\Models\Admin\DukunganAplikasi\AppSetting`](../app/Models/Admin/DukunganAplikasi/AppSetting.php)  
 > **Aset Terpisah (Rule 15):** [`public/assets/css/admin/dukunganaplikasi/fitur-aplikasi.css`](../public/assets/css/admin/dukunganaplikasi/fitur-aplikasi.css) & [`public/assets/js/admin/dukunganaplikasi/fitur-aplikasi.js`](../public/assets/js/admin/dukunganaplikasi/fitur-aplikasi.js)  
-> **Terakhir Diperbarui:** 04 September 2026 09:22 WIB  
+> **Terakhir Diperbarui:** 04 September 2026 11:35 WIB  
 
 ---
 
 ## 📋 1. Pendahuluan & Ringkasan Modul
 
-Modul **Fitur Aplikasi & Pusat Pengaturan Sistem** pada REPALOGIC Dashboard dirancang sebagai **Hub Kontrol Terpadu** (*Control Center*) untuk mengelola visibilitas komponen antarmuka, pengaturan keamanan sesi, mode pemeliharaan operasional, sinkronisasi polling real-time, serta pemeliharaan cache server secara instan tanpa perlu memodifikasi kode sumber.
+Modul **Fitur Aplikasi & Pusat Pengaturan Sistem** pada REPALOGIC Dashboard dirancang sebagai **Hub Kontrol Terpadu** (*Control Center*) dengan antarmuka **Card with Tabs (`.card-tabs` & `.nav-bordered`)** terstandarisasi. Modul ini mengelola visibilitas komponen antarmuka, pengaturan keamanan sesi, mode pemeliharaan operasional, sinkronisasi polling real-time, serta pemeliharaan cache server secara instan tanpa perlu memodifikasi kode sumber.
 
-Halaman ini menggabungkan **6 Widget Kontrol Interaktif** pada bagian atas dan **Tabel Manajemen Visibilitas Fitur** pada bagian bawah.
-
+### Struktur Desain Tab Antarmuka:
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
-│                          HUB PUSAT PENGATURAN & FITUR APLIKASI                              │
-├──────────────────────────────┬──────────────────────────────┬───────────────────────────────┤
-│ 1. Visibilitas Fitur & Menu  │ 2. Waktu Idle & Auto Lock    │ 3. Status Sistem & Maint.     │
-├──────────────────────────────┼──────────────────────────────┼───────────────────────────────┤
-│ 4. Keamanan & Proteksi Akun  │ 5. Polling & Notifikasi Live │ 6. Cache & Optimasi Kinerja   │
-├──────────────────────────────┴──────────────────────────────┴───────────────────────────────┤
-│                   TABEL DAFTAR FITUR APLIKASI & MANAJEMEN VISIBILITAS                       │
-│    (Auto-Save Instant Toggle, Bulk Actions, Live Filter Kategori, Modal Tambah/Edit)        │
+│                       PUSAT KONTROL & FITUR APLIKASI  [Kembalikan Default]                  │
+├──────────────────────────────────────────────────────────────┬──────────────────────────────┤
+│  [⚙️ Pengaturan Sistem]                                       │  [🎛️ Visibilitas Fitur]      │
+├──────────────────────────────────────────────────────────────┴──────────────────────────────┤
+│  TAB 1: PENGATURAN SISTEM & KEBIJAKAN                                                       │
+│  ├── 1. Waktu Idle & Auto Lock Screen (Durasi sesi aktif & lock screen)                     │
+│  ├── 2. Mode Pemeliharaan Sistem (Maintenance bypass & custom message)                      │
+│  ├── 3. Kebijakan Keamanan Akun (Rate limiting & approval registrasi)                       │
+│  ├── 4. Sinkronisasi Polling & Notifikasi (Interval live update & sound/toast)              │
+│  └── 5. Cache & Optimasi Kinerja Server (Pembersihan multi-layer cache sistem)              │
+├─────────────────────────────────────────────────────────────────────────────────────────────┤
+│  TAB 2: VISIBILITAS FITUR & KOMPONEN UI                                                     │
+│  ├── Quick Metrics Banner & Progress Bar Rasio Fitur Aktif                                  │
+│  └── Tabel Manajemen Visibilitas Fitur (Realtime instant DOM toggle, filter, bulk actions)  │
 └─────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🛠️ 2. Arsitektur Panel Widget Pengaturan Aplikasi
+## 🛠️ 2. Arsitektur Panel Pengaturan & Penyimpanan Persisten
 
-### 2.1 Widget 1: Visibilitas Fitur & Komponen UI (Hub Kontrol)
-- **Fungsi:** Mengawasi proporsi fitur sistem yang aktif (*enabled*) dibandingkan total fitur terdaftar melalui *progress bar* real-time.
-- **Aksi Cepat:**
-  - Tombol **Buka Manajemen Fitur**: Melakukan *smooth scroll* langsung ke tabel visibilitas fitur di bagian bawah.
-  - Tombol **Tambah Fitur Baru**: Membuka modal pendaftaran komponen fitur/menu baru.
+### 2.1 Model & Tabel `app_settings` (Penyimpanan Konfigurasi Persisten)
+Seluruh parameter pengaturan sistem kini disimpan secara persisten di tabel database `app_settings` melalui model [`AppSetting`](../app/Models/Admin/DukunganAplikasi/AppSetting.php) dengan mekanisme *Dual-Layer Caching & Fallback Dictionary*:
+- **Model Methods:** `AppSetting::get($key, $default)` dan `AppSetting::set($key, $value)`.
+- **Cache Lifecycle:** Cache dibersihkan dan diperbarui secara otomatis setiap kali setting diubah (`AppSetting::clearCache()`).
+- **Daftar Kunci Parameter:**
+  - `idle_timeout_minutes`: Batas menit idle sebelum auto-lock screen (default: `5`).
+  - `maintenance_mode`: Status aktif mode pemeliharaan (default: `0`).
+  - `maintenance_message`: Teks pengumuman mode pemeliharaan.
+  - `rate_limit_attempts`: Batas maksimal percobaan login gagal (default: `5`).
+  - `auto_user_approval`: Status persetujuan otomatis registrasi akun baru (default: `0`).
+  - `new_device_alert`: Notifikasi deteksi login perangkat baru (default: `1`).
+  - `polling_interval`: Interval detik background polling notifikasi/chat (default: `20`).
+  - `sound_notification`: Sakelar audio chime notifikasi (default: `1`).
+  - `toast_notification`: Sakelar non-blocking toast pop-up (default: `1`).
 
-### 2.2 Widget 2: Pengaturan Waktu Idle & Auto Lock Screen
-- **Fungsi:** Mengatur batas waktu ketidakaktifan (*idle timeout*) pengguna sebelum modal **Lock Screen** muncul secara otomatis untuk mengunci layar demi keamanan data sensitif.
-- **Pilihan Durasi:** `1 Menit` (Mode Pengujian), `3 Menit`, `5 Menit` (Standar Rekomendasi), `10 Menit`, `15 Menit`, `30 Menit`, `60 Menit`, atau `0` (Nonaktifkan Auto-Lock).
-- **Mekanisme Penyimpanan:**
-  - Disimpan ke database cache server via endpoint `POST /admin/dukunganaplikasi/fitur-aplikasi/update-setting` (`key: 'idle_timeout_minutes'`).
-  - Disinkronkan langsung ke `localStorage.setItem('repalogic_idle_timeout_minutes', mins)` melalui helper global `window.setIdleTimeoutMinutes(mins)`.
-- **Fitur Uji Coba:** Tombol **Uji Kunci** memanggil fungsi `window.lockScreen()` seketika untuk menguji animasi dan verifikasi pembukaan kunci dengan kata sandi akun aktif.
-
-### 2.3 Widget 3: Status Sistem & Mode Pemeliharaan (Maintenance Mode)
-- **Fungsi:** Mengaktifkan mode pemeliharaan sistem berkala (*system maintenance*) dengan pesan pengumuman kustom yang dapat diatur secara dinamis.
-- **Mekanisme Akses & Bypass:**
-  - **Superadmin & Admin:** Tetap memiliki akses penuh ke seluruh rute admin dan dashboard untuk melakukan pemeliharaan (*bypass* otomatis).
-  - **Akun Non-Admin (Operator, User, Tamu):** Diblokir saat mencoba login atau dialihkan ke halaman responsif **503 Maintenance Page** jika mengakses halaman web.
-
-### 2.4 Widget 4: Keamanan Sesi & Proteksi Login
-- **Fungsi:** Mengatur batas maksimal percobaan login gagal sebelum akun dikenakan *rate limiting lockout* (`3x`, `5x`, atau `10x`).
-- **Fitur Tambahan:**
-  - Sakelar *Otomatis Setujui Pendaftaran Akun Baru*.
-  - Sakelar *Notifikasi Login dari Perangkat Baru*.
-
-### 2.5 Widget 5: Sinkronisasi Polling & Notifikasi Real-Time
-- **Fungsi:** Mengatur interval *background polling* untuk sinkronisasi pesan obrolan topbar dan notifikasi lonceng (`10 Detik`, `20 Detik`, `30 Detik`, `60 Detik`).
-- **Fitur Tambahan:**
-  - Sakelar *Audio Suara Notifikasi (Chime)*.
-  - Sakelar *Pop-up Toast Notifikasi Otomatis*.
-
-### 2.6 Widget 6: Manajemen Cache & Optimasi Kinerja Server
-- **Fungsi:** Mengosongkan seluruh lapisan cache sistem secara bersamaan dengan satu kali klik (terhubung juga dengan engine *Admin Customizer Optimize Clear Engine*).
-- **Proses Eksekusi Internal:**
-  ```php
-  Artisan::call('view:clear');    // Membersihkan compiled Blade views
-  Artisan::call('config:clear');  // Membersihkan cached configurations
-  Artisan::call('route:clear');   // Membersihkan route cache
-  Artisan::call('cache:clear');   // Membersihkan application cache store
-  FiturAplikasi::clearCache();    // Reset cached feature maps
-  ProfilAplikasi::clearCache();   // Reset cached profile settings
-  ```
+### 2.2 Rincian 5 Kartu Pengaturan Sistem (Tab 1)
+1. **Waktu Idle & Auto Lock Screen:**
+   - Menyimpan durasi waktu idle ke database dan menyinkronkan langsung ke `localStorage.setItem('repalogic_idle_timeout_minutes', mins)`.
+   - Terintegrasi dengan modal [`lock-screen-modal.blade.php`](../resources/views/layouts/partials/lock-screen-modal.blade.php) sehingga durasi efektif berlaku untuk seluruh level pengguna (Superadmin, Admin, Operator, User).
+   - Tombol **Uji Kunci** untuk pengujian modal lock screen seketika.
+2. **Mode Pemeliharaan Sistem (Maintenance Mode):**
+   - Mengaktifkan pengalihan halaman 503 dan penolakan login untuk akun non-admin, sementara Superadmin & Admin tetap memiliki hak bypass.
+3. **Kebijakan Keamanan Akun:**
+   - Mengatur batas login gagal, persetujuan pendaftaran user, dan proteksi perangkat baru.
+4. **Sinkronisasi Polling & Notifikasi Live:**
+   - Mengatur interval polling chat topbar, lonceng notifikasi, serta efek suara/toast.
+5. **Cache & Optimasi Kinerja Server:**
+   - Membersihkan seluruh layer cache aplikasi (Blade views, configuration, routes, application cache store) dengan satu klik.
 
 ---
 
-## 🔒 3. Alur Kerja & Operasional Mode Pemeliharaan (Maintenance Mode)
+## 🎛️ 3. Arsitektur Visibilitas Fitur & Sinkronisasi Real-Time (Tab 2)
 
-### 3.1 Diagram Alur Eksekusi (Flowchart)
+### 3.1 Realtime DOM Manipulation Engine
+Setiap komponen Topbar Header dan grup menu Sidebar telah dioptimasi dengan arsitektur visibilitas realtime:
+- **Atribut Identifier:** Setiap elemen antarmuka di Topbar ([`topbar.blade.php`](../resources/views/layouts/partials/topbar.blade.php)) dan Sidebar ([`sidenav.blade.php`](../resources/views/layouts/partials/sidenav.blade.php)) memiliki atribut `data-feature="kode_fitur"`.
+- **Instant JS Toggle Helper:**
+  Fungsi `toggleFeatureElementInDOM(featureCode, isChecked)` pada [`fitur-aplikasi.js`](../public/assets/js/admin/dukunganaplikasi/fitur-aplikasi.js) langsung memanipulasi visibilitas elemen DOM seketika saat sakelar tabel diubah via AJAX:
+  - Kotak Pencarian (`#search-box` / `topbar_search_box`)
+  - Mega Menu Header & Apps (`#megamenu-header`, `#megamenu-apps`)
+  - Theme Light/Dark Toggler (`#theme-toggler` / `topbar_theme_toggler`)
+  - Shortcut Apps Grid (`#apps-dropdown-rounded` / `topbar_apps_dropdown`)
+  - Pesan Obrolan Topbar (`#simple-messages-dropdown` / `topbar_messages`)
+  - Lonceng Notifikasi Alert (`#notification-dropdown-alert` / `topbar_notifications`)
+  - Mode Layar Penuh (`#fullscreen-toggler` / `topbar_fullscreen`)
+  - Mode Monokrom (`#monochrome-toggler` / `topbar_monochrome`)
+  - Panel Theme Settings Customizer (`#theme-settings-toggler` / `topbar_customizer`)
+  - Pemilih Bahasa i18n (`#language-selector` / `topbar_language`)
+  - Template Sidebar Menu Groups (`menu_group_main`, `menu_group_apps`, `menu_special_menu`, dll.)
 
-```mermaid
-flowchart TD
-    A["Admin Mengaktifkan Mode Pemeliharaan pada Widget"] --> B["Simpan ke Cache: app_setting_maintenance_mode = 1"]
-    B --> C{"Pengguna Mengakses Sistem"}
-    
-    C -->|Mencoba Login| D["LoginRequest::authenticate"]
-    D --> E{"Apakah Role Superadmin atau Admin?"}
-    E -->|Ya| F["Otentikasi Berhasil & Masuk Dashboard"]
-    E -->|Tidak| G["Tolak Login & Tampilkan Alert Error Maintenance"]
-    
-    C -->|Mengakses Halaman Web| H["Middleware CheckMaintenanceMode"]
-    H --> I{"Apakah Rute Login / Logout / Assets?"}
-    I -->|Ya| J["Izinkan Akses"]
-    I -->|Tidak| K{"Apakah User Login Superadmin/Admin?"}
-    K -->|Ya| L["Izinkan Akses Normal"]
-    K -->|Tidak| M{"Tipe Request?"}
-    M -->|Web Biasa| N["Tampilkan Halaman 503 Maintenance Mode"]
-    M -->|AJAX / API| O["Kembalikan JSON 503 Service Unavailable"]
-```
-
-### 3.2 Intersepsi Login (`app/Http/Requests/Auth/LoginRequest.php`)
-Ketika pengguna memasukkan email dan password di `/login`:
-1. Sistem memvalidasi kebenaran email dan password.
-2. Sistem mengecek status persetujuan akun (`isPending()`, `isRejected()`, `isInactive()`).
-3. Sistem memeriksa `app_setting_maintenance_mode`:
-   ```php
-   $isMaintenance = (bool) Cache::get('app_setting_maintenance_mode', false);
-   if ($isMaintenance && ! $user->hasRole('superadmin') && ! $user->hasRole('admin')) {
-       RateLimiter::hit($this->throttleKey());
-       $this->flashOnly(['email']);
-
-       $maintenanceMsg = Cache::get('app_setting_maintenance_message', 'Sistem sedang dalam proses pemeliharaan berkala.');
-
-       throw ValidationException::withMessages([
-           'maintenance' => $maintenanceMsg,
-       ]);
-   }
-   ```
-4. Jika bukan superadmin/admin, proses login dihentikan dan formulir login menampilkan alert peringatan berwarna merah ber-ikon kunci pemeliharaan.
-
-### 3.3 Middleware Pengecekan Global (`app/Http/Middleware/CheckMaintenanceMode.php`)
-Mencegah pengguna non-admin yang sedang aktif (*session already active*) atau pengunjung umum menjelajahi aplikasi:
-- Didaftarkan ke grup middleware `web` di `bootstrap/app.php`.
-- Mengizinkan rute `/login`, `/logout`, `/up`, `/assets/*`, dan `/storage/*` agar Administrator tetap dapat mengakses portal masuk kapan saja.
-- Menampilkan tampilan `resources/views/errors/503.blade.php` lengkap dengan pesan pengumuman kustom dan tombol *"Masuk Administrator"*.
+### 3.2 Persistensi Tab Aktif & Zero-Reload Bulk Actions
+- **Tab State Persistence:** Sistem secara otomatis menyimpan tab aktif (`#tab-settings` atau `#tab-visibility`) ke `localStorage.setItem('active_fitur_tab', targetHash)` dan URL hash browser (`history.replaceState`).
+- **Zero-Reload Bulk Action:** Aksi massal (**Aktifkan Terpilih**, **Nonaktifkan Terpilih**, dan **Hapus Terpilih**) mengeksekusi pembaruan status dan DOM secara realtime tanpa me-reload halaman, sehingga pengguna tetap berada di tab aktif tanpa lompatan fokus.
+- **Form Modal AJAX:** Penambahan dan pembaruan fitur via modal diproses via AJAX dengan tetap mengarahkan fokus ke `#tab-visibility`.
 
 ---
 
-## ⏱️ 4. Alur Kerja Waktu Idle & Layar Terkunci (Auto Lock Screen)
+## 🔄 4. Tombol "Kembalikan Default" (Factory Reset to Seeder)
 
-### 4.1 Sinkronisasi Durasi Timer
-1. Pengaturan waktu idle dibaca dengan urutan prioritas:
-   ```javascript
-   function getIdleTimeoutMs() {
-       const stored = localStorage.getItem('repalogic_idle_timeout_minutes');
-       const mins = (stored !== null && stored !== '') ? parseInt(stored) : serverIdleMinutes;
-       if (mins <= 0) return 0; // 0 = Dinonaktifkan
-       return mins * 60 * 1000;
-   }
-   ```
-2. Setiap kali pengguna melakukan aktivitas (`mousemove`, `mousedown`, `keydown`, `scroll`, `touchstart`, `click`), sistem me-reset timer ketidakaktifan dengan teknik *throttling* (1 detik).
-3. Jika waktu ketidakaktifan mencapai batas, fungsi `window.lockScreen()` otomatis memunculkan modal lock screen dengan efek *ultra-blur backdrop*.
+Untuk mempermudah pemulihan sistem ke setelan awal pabrik, disediakan tombol **Kembalikan Default** pada header kartu:
+- **Endpoint:** `POST /admin/dukunganaplikasi/fitur-aplikasi/reset-defaults` (`admin.dukunganaplikasi.fitur-aplikasi.reset-defaults`).
+- **Alur Eksekusi:**
+  1. Mereset seluruh nilai `app_settings` ke kamus default [`AppSettingSeeder`](../database/seeders/AppSettingSeeder.php).
+  2. Menjalankan [`FiturAplikasiSeeder`](../database/seeders/FiturAplikasiSeeder.php) untuk mengembalikan status visibilitas seluruh fitur bawaan.
+  3. Mengosongkan seluruh layer cache sistem (`AppSetting::clearCache()`, `FiturAplikasi::clearCache()`, `view:clear`, `cache:clear`).
+  4. Menampilkan notifikasi sukses SweetAlert2 dan menyegarkan data secara bersih.
 
 ---
 
@@ -151,13 +111,14 @@ Mencegah pengguna non-admin yang sedang aktif (*session already active*) atau pe
 
 | Method | URI Route | Nama Rute | Controller & Method | Keterangan |
 | :--- | :--- | :--- | :--- | :--- |
-| `GET` | `/admin/dukunganaplikasi/fitur-aplikasi` | `admin.dukunganaplikasi.fitur-aplikasi.index` | `FiturAplikasiController@index` | Menampilkan halaman hub kontrol & daftar fitur |
-| `POST` | `/admin/dukunganaplikasi/fitur-aplikasi` | `admin.dukunganaplikasi.fitur-aplikasi.store` | `FiturAplikasiController@store` | Menyimpan fitur aplikasi baru |
+| `GET` | `/admin/dukunganaplikasi/fitur-aplikasi` | `admin.dukunganaplikasi.fitur-aplikasi.index` | `FiturAplikasiController@index` | Menampilkan hub kontrol & visibilitas fitur |
+| `POST` | `/admin/dukunganaplikasi/fitur-aplikasi` | `admin.dukunganaplikasi.fitur-aplikasi.store` | `FiturAplikasiController@store` | Menyimpan fitur aplikasi baru (AJAX ready) |
 | `POST` | `/admin/dukunganaplikasi/fitur-aplikasi/toggle` | `admin.dukunganaplikasi.fitur-aplikasi.toggle` | `FiturAplikasiController@toggleFeature` | Toggle status visibilitas fitur instan via AJAX |
 | `POST` | `/admin/dukunganaplikasi/fitur-aplikasi/toggle-group` | `admin.dukunganaplikasi.fitur-aplikasi.toggle-group` | `FiturAplikasiController@toggleGroup` | Toggle masal seluruh fitur dalam satu kategori |
-| `POST` | `/admin/dukunganaplikasi/fitur-aplikasi/bulk-action` | `admin.dukunganaplikasi.fitur-aplikasi.bulk-action` | `FiturAplikasiController@bulkAction` | Aksi masal (aktifkan, nonaktifkan, hapus terpilih) |
-| `POST` | `/admin/dukunganaplikasi/fitur-aplikasi/clear-cache` | `admin.dukunganaplikasi.fitur-aplikasi.clear-cache` | `FiturAplikasiController@clearSystemCache` | Membersihkan seluruh cache server (Views, Config, Routes) |
-| `POST` | `/admin/dukunganaplikasi/fitur-aplikasi/update-setting` | `admin.dukunganaplikasi.fitur-aplikasi.update-setting` | `FiturAplikasiController@updateAppSetting` | Menyimpan konfigurasi widget setting aplikasi |
+| `POST` | `/admin/dukunganaplikasi/fitur-aplikasi/bulk-action` | `admin.dukunganaplikasi.fitur-aplikasi.bulk-action` | `FiturAplikasiController@bulkAction` | Aksi masal realtime (aktifkan, nonaktifkan, hapus) |
+| `POST` | `/admin/dukunganaplikasi/fitur-aplikasi/clear-cache` | `admin.dukunganaplikasi.fitur-aplikasi.clear-cache` | `FiturAplikasiController@clearSystemCache` | Membersihkan seluruh cache server |
+| `POST` | `/admin/dukunganaplikasi/fitur-aplikasi/reset-defaults` | `admin.dukunganaplikasi.fitur-aplikasi.reset-defaults` | `FiturAplikasiController@resetDefaults` | Kembalikan pengaturan sistem & fitur ke seeder default |
+| `POST` | `/admin/dukunganaplikasi/fitur-aplikasi/update-setting` | `admin.dukunganaplikasi.fitur-aplikasi.update-setting` | `FiturAplikasiController@updateAppSetting` | Menyimpan konfigurasi setting ke tabel `app_settings` |
 | `PUT` | `/admin/dukunganaplikasi/fitur-aplikasi/{id}` | `admin.dukunganaplikasi.fitur-aplikasi.update` | `FiturAplikasiController@update` | Memperbarui data detail fitur |
 | `DELETE` | `/admin/dukunganaplikasi/fitur-aplikasi/{id}` | `admin.dukunganaplikasi.fitur-aplikasi.destroy` | `FiturAplikasiController@destroy` | Menghapus fitur dari database |
 
@@ -170,7 +131,7 @@ repalogic-dashboard/
 ├── app/
 │   ├── Http/
 │   │   ├── Controllers/Admin/DukunganAplikasi/
-│   │   │   └── FiturAplikasiController.php         # Handler logika hub fitur, cache & settings
+│   │   │   └── FiturAplikasiController.php         # Handler hub fitur, reset defaults, cache & settings
 │   │   ├── Middleware/
 │   │   │   └── CheckMaintenanceMode.php           # Middleware pembatasan akses saat maintenance
 │   │   └── Requests/
@@ -179,26 +140,33 @@ repalogic-dashboard/
 │   │       └── Auth/
 │   │           └── LoginRequest.php               # Validasi otentikasi login & maintenance check
 │   └── Models/Admin/DukunganAplikasi/
-│       ├── FiturAplikasi.php                      # Model representasi tabel fitur_aplikasi
+│       ├── FiturAplikasi.php                      # Model tabel fitur_aplikasi dengan caching
+│       ├── AppSetting.php                         # Model tabel app_settings dengan caching & fallback
 │       └── FeatureSettingMap.php                  # Safe helper object untuk cached feature flags
-├── bootstrap/
-│   └── app.php                                    # Registrasi CheckMaintenanceMode ke web middleware
+├── database/
+│   ├── migrations/
+│   │   ├── 2026_08_02_000001_create_fitur_aplikasi_table.php
+│   │   └── 2026_09_04_000001_create_app_settings_table.php
+│   └── seeders/
+│       ├── FiturAplikasiSeeder.php                # Seeder bawaan visibilitas fitur aplikasi
+│       └── AppSettingSeeder.php                   # Seeder bawaan parameter pengaturan sistem
 ├── public/assets/
 │   ├── css/admin/dukunganaplikasi/
 │   │   └── fitur-aplikasi.css                     # External CSS modul fitur aplikasi (Rule 15)
 │   └── js/admin/dukunganaplikasi/
-│       └── fitur-aplikasi.js                      # External JS AJAX handler modul fitur aplikasi (Rule 15)
+│       └── fitur-aplikasi.js                      # External JS AJAX & realtime DOM toggle (Rule 15)
 ├── resources/views/
 │   ├── admin/dukunganaplikasi/
-│   │   ├── fitur-aplikasi.blade.php               # View utama panel widget & tabel visibilitas fitur
+│   │   ├── fitur-aplikasi.blade.php               # View Card with Tabs (Pengaturan Sistem & Visibilitas)
 │   │   └── partials/
 │   │       └── fitur_aplikasi_modal.blade.php     # Modal form tambah & edit fitur
-│   ├── auth/
-│   │   └── login.blade.php                        # View login dengan penanganan alert maintenance
-│   ├── errors/
-│   │   └── 503.blade.php                          # Halaman responsif 503 Mode Pemeliharaan
-│   └── layouts/partials/
-│       └── lock-screen-modal.blade.php            # Modal lock screen & dynamic idle timer engine
+│   ├── layouts/partials/
+│   │   ├── topbar.blade.php                       # Topbar header dengan realtime data-feature hooks
+│   │   ├── topbar/*.blade.php                     # Partial item topbar header
+│   │   ├── sidenav.blade.php                      # Sidebar navigation dengan realtime feature hooks
+│   │   └── lock-screen-modal.blade.php            # Modal lock screen & dynamic idle timer
+│   └── errors/
+│       └── 503.blade.php                          # Halaman responsif 503 Mode Pemeliharaan
 └── docs/
     └── arsitektur_dan_operasional_fitur_dan_pengaturan_aplikasi.md
 ```
@@ -207,21 +175,19 @@ repalogic-dashboard/
 
 ## 💡 7. Panduan Pengujian & Verifikasi Fitur
 
-### 7.1 Menguji Mode Pemeliharaan (Maintenance Mode)
+### 7.1 Menguji Kembalikan ke Pengaturan Default (Factory Reset)
 1. Buka rute `admin/dukunganaplikasi/fitur-aplikasi`.
-2. Pada **Widget 3 (Status Sistem & Maintenance)**, aktifkan sakelar dan klik **Simpan Status Pemeliharaan**.
-3. Buka peramban baru dalam mode *Incognito/Private Browser*:
-   - Coba masuk menggunakan akun ber-role `operator` atau `user`. Sistem akan menolak login dengan pesan *"Mode Pemeliharaan Aktif"*.
-   - Buka halaman utama atau URL lain (misal `/dashboard`). Sistem akan menampilkan halaman **503 Mode Pemeliharaan**.
-4. Coba masuk menggunakan akun ber-role `superadmin` atau `admin`. Akun berhasil masuk dan dapat mengakses seluruh dashboard secara normal.
+2. Klik tombol **Kembalikan Default** berwarna merah pada header kartu di samping judul modul.
+3. Konfirmasi popup SweetAlert2.
+4. Sistem akan mengeksekusi reset pada seluruh pengaturan sistem dan visibilitas fitur ke konfigurasi seeder awal, mengosongkan cache, dan menyegarkan tampilan dengan tetap berada di tab aktif saat ini.
 
-### 7.2 Menguji Waktu Idle (Auto Lock Screen)
-1. Pada **Widget 2 (Waktu Idle & Auto Lock)**, pilih `1 Menit (Mode Pengujian)` dan klik **Simpan Durasi Idle**.
-2. Biarkan layar tanpa gerakan mouse atau ketukan keyboard selama 1 menit. Layar akan terkunci otomatis dan memunculkan modal Lock Screen.
-3. Atau klik tombol **Uji Kunci** untuk memicu penguncian layar secara instan.
-4. Masukkan password akun Anda untuk membuka kembali kunci layar.
+### 7.2 Menguji Visibilitas Realtime Topbar Header
+1. Masuk ke **Tab 2 (Visibilitas Fitur & Komponen)**.
+2. Geser sakelar pada fitur kelompok Topbar (misal: *Pencarian*, *Theme Light/Dark Switcher*, *Lonceng Notifikasi*, dll.).
+3. Amati bagian atas layar: ikon/komponen Topbar akan langsung muncul atau menghilang seketika secara realtime tanpa perlu me-reload halaman.
 
-### 7.3 Menguji Pembersihan Cache Sistem
-1. Pada **Widget 6 (Cache & Optimasi Kinerja)**, klik tombol **Bersihkan Semua Cache**.
-2. Konfirmasi dialog SweetAlert2.
-3. Notifikasi sukses akan muncul setelah seluruh cache Blade, Routes, Config, dan Application Cache store berhasil dibersihkan.
+### 7.3 Menguji Persistensi Tab Aktif
+1. Pindah ke **Tab 2 (Visibilitas Fitur & Komponen)**.
+2. Pilih beberapa fitur melalui checkbox baris lalu klik **Nonaktifkan Terpilih**.
+3. Notifikasi sukses SweetAlert2 akan muncul dan halaman **tetap berada di Tab 2** tanpa kembali ke Tab 1.
+4. Lakukan reload manual pada browser (`F5`), sistem akan secara otomatis membuka kembali Tab 2 sesuai preferensi terakhir Anda.

@@ -56,7 +56,7 @@ class RegisteredUserController extends Controller
             'terms.accepted' => 'Anda wajib menyetujui syarat & ketentuan.',
         ]);
 
-        $autoApproval = (bool) \Illuminate\Support\Facades\Cache::get('app_setting_auto_user_approval', false);
+        $autoApproval = (bool) \App\Models\Admin\DukunganAplikasi\AppSetting::get('auto_user_approval', false);
         $userStatus = $autoApproval ? 'active' : 'pending';
 
         $user = User::create([

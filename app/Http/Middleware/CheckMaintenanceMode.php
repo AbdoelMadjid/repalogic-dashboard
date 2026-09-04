@@ -2,10 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Admin\DukunganAplikasi\AppSetting;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckMaintenanceMode
@@ -17,7 +17,7 @@ class CheckMaintenanceMode
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $isMaintenance = (bool) Cache::get('app_setting_maintenance_mode', false);
+        $isMaintenance = (bool) AppSetting::get('maintenance_mode', false);
 
         if (! $isMaintenance) {
             return $next($request);
@@ -36,7 +36,7 @@ class CheckMaintenanceMode
             }
         }
 
-        $message = Cache::get('app_setting_maintenance_message', 'Sistem sedang dalam proses pemeliharaan berkala. Silakan coba beberapa saat lagi.');
+        $message = AppSetting::get('maintenance_message', 'Sistem sedang dalam proses pemeliharaan berkala. Silakan coba beberapa saat lagi.');
 
         // Jika request AJAX atau API / JSON
         if ($request->ajax() || $request->wantsJson()) {

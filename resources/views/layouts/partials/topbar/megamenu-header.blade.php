@@ -1,4 +1,7 @@
-<div id="megamenu-header" class="topbar-item d-none d-md-flex">
+@php
+    $showMegamenuHeader = empty($appFeatures) || !empty($appFeatures->topbar_megamenu_header);
+@endphp
+<div id="megamenu-header" data-feature="topbar_megamenu_header" class="topbar-item d-none d-md-flex" style="{{ $showMegamenuHeader ? '' : 'display: none !important;' }}">
     <div class="dropdown">
         <button class="topbar-link btn fw-medium btn-link dropdown-toggle drop-arrow-none px-2" data-bs-toggle="dropdown"
             type="button" aria-haspopup="false" aria-expanded="false">
