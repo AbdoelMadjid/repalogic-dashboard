@@ -282,6 +282,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Accessor for user profile motto text color (default: #ffffff).
+     */
+    public function getMottoColorAttribute(): string
+    {
+        return $this->config?->motto_color ?: '#ffffff';
+    }
+
+    /**
      * Calculate user profile completion percentage (0 to 100).
      */
     public function getProfileCompletionPercentageAttribute(): int

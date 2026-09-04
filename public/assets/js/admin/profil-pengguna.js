@@ -52,6 +52,8 @@ function initProfilPengguna() {
     const coverPreviewOverlay = document.getElementById('cover-preview-overlay');
     const mainHeaderBanner = document.getElementById('main-header-banner');
     const mainHeaderOverlay = document.getElementById('main-header-overlay');
+    const mottoPreviewContainer = document.getElementById('motto-preview-container');
+    const mottoPreviewOverlay = document.getElementById('motto-preview-overlay');
 
     const coverColorInput = document.getElementById('cover-color-input');
     const coverColorVal = document.getElementById('cover-color-val');
@@ -103,7 +105,14 @@ function initProfilPengguna() {
             coverPreviewOverlay.style.webkitBackdropFilter = blurVal;
         }
 
-        // 3. Update Inputs and Labels
+        // 3. Update Motto Card Preview Overlay
+        if (mottoPreviewOverlay) {
+            mottoPreviewOverlay.style.background = gradientBg;
+            mottoPreviewOverlay.style.backdropFilter = blurVal;
+            mottoPreviewOverlay.style.webkitBackdropFilter = blurVal;
+        }
+
+        // 4. Update Inputs and Labels
         if (coverColorVal) coverColorVal.textContent = currentCoverColor;
         if (coverColorInput) coverColorInput.value = currentCoverColor;
         if (coverOpacityVal) coverOpacityVal.textContent = currentCoverOpacity + '%';
@@ -111,8 +120,8 @@ function initProfilPengguna() {
         if (coverBlurVal) coverBlurVal.textContent = currentCoverBlur + 'px';
         if (coverBlurRange) coverBlurRange.value = currentCoverBlur;
 
-        // 4. Update Swatch Active State
-        document.querySelectorAll('.btn-color-swatch').forEach(function(swatch) {
+        // 5. Update Swatch Active State
+        document.querySelectorAll('.btn-cover-color-swatch').forEach(function(swatch) {
             const swColor = swatch.getAttribute('data-color');
             if (swColor && swColor.toLowerCase() === currentCoverColor.toLowerCase()) {
                 swatch.classList.add('active');
@@ -136,6 +145,7 @@ function initProfilPengguna() {
         if (coverPosRange) coverPosRange.value = pos;
         if (coverPreview) coverPreview.style.objectPosition = 'center ' + posPercent;
         if (mainHeaderBanner) mainHeaderBanner.style.backgroundPosition = 'center ' + posPercent;
+        if (mottoPreviewContainer) mottoPreviewContainer.style.backgroundPosition = 'center ' + posPercent;
     }
 
     function updateCoverHeight(height) {
@@ -184,11 +194,11 @@ function initProfilPengguna() {
         });
     }
 
-    // Event Delegation for Swatches & Preset Buttons (Rule 2 Compliance)
+    // Event Delegation for Cover Swatches & Preset Buttons (Rule 2 Compliance)
     document.addEventListener('click', function(e) {
-        const swatch = e.target.closest('.btn-color-swatch');
-        if (swatch) {
-            const color = swatch.getAttribute('data-color');
+        const coverSwatch = e.target.closest('.btn-cover-color-swatch');
+        if (coverSwatch) {
+            const color = coverSwatch.getAttribute('data-color');
             if (color) {
                 currentCoverColor = color;
                 applyCoverStyling();
@@ -240,6 +250,7 @@ function initProfilPengguna() {
                 reader.onload = function(evt) {
                     if (coverPreview) coverPreview.src = evt.target.result;
                     if (mainHeaderBanner) mainHeaderBanner.style.backgroundImage = 'url("' + evt.target.result + '")';
+                    if (mottoPreviewContainer) mottoPreviewContainer.style.backgroundImage = 'url("' + evt.target.result + '")';
                 };
                 reader.readAsDataURL(file);
             }
@@ -251,15 +262,64 @@ function initProfilPengguna() {
     window.addEventListener('resize', syncCoverPreviewRatio);
 
     // =========================================================================
-    // 3. Real-time Motto Typing Preview
+    // 3. Real-time Motto Typing & Text Color Preview
     // =========================================================================
     const mottoInput = document.getElementById('motto_input');
     const mottoDisplay = document.getElementById('main-motto-display');
-    if (mottoInput && mottoDisplay) {
-        mottoInput.addEventListener('input', function() {
-            mottoDisplay.textContent = '"' + (this.value || 'Setiap hari adalah kesempatan baru untuk belajar dan berkarya.') + '"';
+    const mottoMiniPreviewText = document.getElementById('motto-mini-preview-text');
+    const mottoColorInput = document.getElementById('motto_color_input');
+    const mottoColorVal = document.getElementById('motto-color-val');
+
+    function applyMottoColor(color) {
+        if (!color) return;
+        const darkColors = ['#000000', '#111827', '#1f2937', '#0f172a', 'black'];
+        const isDark = darkColors.includes(color.toLowerCase());
+        
+        if (mottoDisplay) {
+            mottoDisplay.style.color = color;
+            mottoDisplay.style.textShadow = isDark ? '0 2px 8px rgba(255, 255, 255, 0.7)' : '0 2px 8px rgba(0, 0, 0, 0.75)';
+        }
+        if (mottoMiniPreviewText) {
+            mottoMiniPreviewText.style.color = color;
+            mottoMiniPreviewText.style.textShadow = isDark ? '0 1px 4px rgba(255, 255, 255, 0.8)' : '0 1px 4px rgba(0, 0, 0, 0.8)';
+        }
+        if (mottoColorInput) mottoColorInput.value = color;
+        if (mottoColorVal) mottoColorVal.textContent = color;
+
+        document.querySelectorAll('.btn-motto-color-swatch').forEach(function(swatch) {
+            const swColor = swatch.getAttribute('data-color');
+            if (swColor && swColor.toLowerCase() === color.toLowerCase()) {
+                swatch.classList.add('active');
+            } else {
+                swatch.classList.remove('active');
+            }
         });
     }
+
+    if (mottoInput) {
+        mottoInput.addEventListener('input', function() {
+            const text = '"' + (this.value || 'Setiap hari adalah kesempatan baru untuk belajar dan berkarya.') + '"';
+            if (mottoDisplay) mottoDisplay.textContent = text;
+            if (mottoMiniPreviewText) mottoMiniPreviewText.textContent = text;
+        });
+    }
+
+    if (mottoColorInput) {
+        mottoColorInput.addEventListener('input', function(e) {
+            applyMottoColor(e.target.value);
+        });
+    }
+
+    // Event delegation for Motto Color Swatches (Rule 2 Compliance)
+    document.addEventListener('click', function(e) {
+        const mottoSwatch = e.target.closest('.btn-motto-color-swatch');
+        if (mottoSwatch) {
+            const color = mottoSwatch.getAttribute('data-color');
+            if (color) {
+                applyMottoColor(color);
+            }
+        }
+    });
 
     // =========================================================================
     // 4. Toggle Show/Hide Password Eye Icons (Rule 2 Compliance: Event Delegation)

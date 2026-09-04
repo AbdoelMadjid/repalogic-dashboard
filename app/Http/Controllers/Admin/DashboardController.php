@@ -360,4 +360,26 @@ class DashboardController extends Controller
             return 'Selamat Malam';
         }
     }
+
+    /**
+     * Run php artisan optimize:clear and clear custom application caches.
+     */
+    public function optimizeClear()
+    {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+            \App\Models\Admin\DukunganAplikasi\FiturAplikasi::clearCache();
+            \App\Models\Admin\DukunganAplikasi\ProfilAplikasi::clearCache();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Perintah "php artisan optimize:clear" berhasil dijalankan! Seluruh cache sistem (Config, Views, Routes, Events, Compiled) telah dibersihkan.',
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menjalankan optimize:clear: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
 }

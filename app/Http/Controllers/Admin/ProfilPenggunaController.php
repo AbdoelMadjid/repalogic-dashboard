@@ -169,23 +169,26 @@ class ProfilPenggunaController extends Controller
     }
 
     /**
-     * Update user profile motto quote (user_configs table).
+     * Update user profile motto quote and text color (user_configs table).
      */
     public function updateMotto(Request $request)
     {
         $request->validate([
             'motto' => 'required|string|max:255',
+            'motto_color' => ['nullable', 'string', 'max:50', 'regex:/^(#[a-fA-F0-9]{3,8}|rgba?\([\d\s,\.]+\)|[a-zA-Z]+)$/'],
         ], [
             'motto.required' => 'Motto hidup tidak boleh kosong.',
             'motto.max' => 'Motto hidup maksimal 255 karakter.',
+            'motto_color.regex' => 'Format kode warna teks tidak valid.',
         ]);
 
         $user = auth()->user();
         $config = \App\Models\UserConfig::firstOrNew(['user_id' => $user->id]);
         $config->motto = $request->input('motto');
+        $config->motto_color = $request->input('motto_color', '#ffffff') ?: '#ffffff';
         $config->save();
 
-        $this->notifySuccess('Motto hidup berhasil diperbarui.', 'Berhasil!');
+        $this->notifySuccess('Motto hidup & warna teks berhasil diperbarui.', 'Berhasil!');
 
         return redirect()->route('admin.profil-pengguna.index');
     }

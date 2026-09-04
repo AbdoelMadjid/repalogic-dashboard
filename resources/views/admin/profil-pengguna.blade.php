@@ -29,7 +29,8 @@
                     style="height: {{ $user->cover_height }}px; background-image: url('{{ $user->cover_bg_url }}'); background-size: cover; background-position: center {{ $user->cover_position_y }}%; transition: height 0.2s ease, background-position 0.2s ease;">
                     <div id="main-header-overlay" class="p-4 card-img-overlay rounded-start-0 d-flex align-items-center justify-content-center"
                         style="background: linear-gradient(to top, {{ $rgbaCover }}, {{ $rgbaTop }}); backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }}; -webkit-backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }};">
-                        <h3 class="text-white mb-0 fst-italic text-center px-3" id="main-motto-display" style="text-shadow: 0 2px 8px rgba(0,0,0,0.65);">"{{ $user->motto }}"</h3>
+                        <h3 class="mb-0 fst-italic text-center px-3" id="main-motto-display"
+                            style="color: {{ $user->motto_color ?? '#ffffff' }}; text-shadow: {{ in_array(strtolower($user->motto_color ?? '#ffffff'), ['#000000', '#111827', '#1f2937', '#0f172a', 'black']) ? '0 2px 8px rgba(255,255,255,0.7)' : '0 2px 8px rgba(0,0,0,0.75)' }}; transition: color 0.2s ease, text-shadow 0.2s ease;">"{{ $user->motto }}"</h3>
                     </div>
                 </div>
 
@@ -215,6 +216,47 @@
                             <textarea name="motto" id="motto_input" rows="3" class="form-control" placeholder="Tuliskan motto hidup Anda..." maxlength="255" required>{{ old('motto', $user->motto) }}</textarea>
                             <span class="fs-12 text-muted d-block mt-1">Motto ini akan ditampilkan di atas banner foto sampul Anda.</span>
                         </div>
+
+                        <!-- Pratinjau Visual Motto (di atas Foto Sampul) -->
+                        <div class="mb-3">
+                            <label class="form-label fs-12 fw-bold text-dark mb-1 d-flex align-items-center gap-1">
+                                <i class="ti ti-eye text-primary fs-15"></i> Pratinjau Visual Motto:
+                            </label>
+                            <div id="motto-preview-container" class="position-relative overflow-hidden rounded border shadow-sm p-3 d-flex align-items-center justify-content-center text-center"
+                                style="min-height: 80px; background-image: url('{{ $user->cover_bg_url }}'); background-size: cover; background-position: center {{ $user->cover_position_y }}%;">
+                                <div id="motto-preview-overlay" class="position-absolute top-0 start-0 w-100 h-100"
+                                    style="background: linear-gradient(to top, {{ $rgbaCover }}, {{ $rgbaTop }}); backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }}; -webkit-backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }}; pointer-events: none;"></div>
+                                <div id="motto-mini-preview-text" class="position-relative z-1 fst-italic fw-medium px-2"
+                                    style="color: {{ old('motto_color', $user->motto_color) }}; font-size: 0.95rem; text-shadow: {{ in_array(strtolower(old('motto_color', $user->motto_color)), ['#000000', '#111827', '#1f2937', '#0f172a']) ? '0 1px 4px rgba(255, 255, 255, 0.8)' : '0 1px 4px rgba(0, 0, 0, 0.8)' }};">
+                                    "{{ old('motto', $user->motto ?? 'Setiap hari adalah kesempatan baru untuk belajar dan berkarya.') }}"
+                                </div>
+                            </div>
+                            <span class="fs-11 text-muted d-block mt-1">Pratinjau langsung warna teks motto di atas foto sampul profil Anda.</span>
+                        </div>
+
+                        <!-- Pilihan Warna Teks Motto -->
+                        <div class="mb-3 p-2 bg-light rounded border">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                <div class="d-flex align-items-center flex-wrap gap-2">
+                                    <label for="motto_color_input" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
+                                        <i class="ti ti-palette text-primary fs-15"></i> Warna Teks Motto:
+                                    </label>
+                                    <input type="color" class="form-control form-control-color border-0 p-0 rounded-circle cursor-pointer flex-shrink-0" id="motto_color_input" name="motto_color" value="{{ old('motto_color', $user->motto_color) }}" title="Pilih warna kustom" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px;">
+                                    <div class="d-flex flex-wrap align-items-center gap-1.5">
+                                        <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#ffffff' ? 'active' : '' }}" data-color="#ffffff" style="background-color: #ffffff; border: 2px solid #cbd5e1 !important;" title="Putih (#ffffff)"></span>
+                                        <span role="button" tabindex="0" class="btn-motto-color-swatch {{ in_array(strtolower(old('motto_color', $user->motto_color)), ['#000000', '#111827']) ? 'active' : '' }}" data-color="#111827" style="background-color: #111827;" title="Hitam (#111827)"></span>
+                                        <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#f59e0b' ? 'active' : '' }}" data-color="#f59e0b" style="background-color: #f59e0b;" title="Kuning Emas (#f59e0b)"></span>
+                                        <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#06b6d4' ? 'active' : '' }}" data-color="#06b6d4" style="background-color: #06b6d4;" title="Cyan (#06b6d4)"></span>
+                                        <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#10b981' ? 'active' : '' }}" data-color="#10b981" style="background-color: #10b981;" title="Hijau Neon (#10b981)"></span>
+                                        <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#f43f5e' ? 'active' : '' }}" data-color="#f43f5e" style="background-color: #f43f5e;" title="Merah Rose (#f43f5e)"></span>
+                                        <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#f97316' ? 'active' : '' }}" data-color="#f97316" style="background-color: #f97316;" title="Oranye (#f97316)"></span>
+                                        <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#8b5cf6' ? 'active' : '' }}" data-color="#8b5cf6" style="background-color: #8b5cf6;" title="Ungu (#8b5cf6)"></span>
+                                    </div>
+                                </div>
+                                <span id="motto-color-val" class="badge bg-primary-subtle text-primary font-monospace fs-11 fw-bold">{{ old('motto_color', $user->motto_color) }}</span>
+                            </div>
+                        </div>
+
                         <button type="submit" class="btn btn-primary btn-sm w-100 fw-semibold">
                             <i class="ti ti-device-floppy me-1"></i> Simpan Motto Hidup
                         </button>
@@ -582,12 +624,12 @@
                                     </label>
                                     <input type="color" class="form-control form-control-color border-0 p-0 rounded-circle cursor-pointer flex-shrink-0" id="cover-color-input" name="cover_color" value="{{ $user->cover_color }}" title="Pilih warna kustom" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px;">
                                     <div class="d-flex flex-wrap align-items-center gap-1.5">
-                                        <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#313a46' ? 'active' : '' }}" data-color="#313a46" style="background-color: #313a46;" title="Dark Slate (#313a46)"></span>
-                                        <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#000000' ? 'active' : '' }}" data-color="#000000" style="background-color: #000000;" title="Hitam (#000000)"></span>
-                                        <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#1e3a8a' ? 'active' : '' }}" data-color="#1e3a8a" style="background-color: #1e3a8a;" title="Navy (#1e3a8a)"></span>
-                                        <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#4338ca' ? 'active' : '' }}" data-color="#4338ca" style="background-color: #4338ca;" title="Indigo (#4338ca)"></span>
-                                        <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#065f46' ? 'active' : '' }}" data-color="#065f46" style="background-color: #065f46;" title="Emerald (#065f46)"></span>
-                                        <span role="button" tabindex="0" class="btn-color-swatch {{ $user->cover_color === '#701a75' ? 'active' : '' }}" data-color="#701a75" style="background-color: #701a75;" title="Fuchsia (#701a75)"></span>
+                                        <span role="button" tabindex="0" class="btn-cover-color-swatch {{ $user->cover_color === '#313a46' ? 'active' : '' }}" data-color="#313a46" style="background-color: #313a46;" title="Dark Slate (#313a46)"></span>
+                                        <span role="button" tabindex="0" class="btn-cover-color-swatch {{ $user->cover_color === '#000000' ? 'active' : '' }}" data-color="#000000" style="background-color: #000000;" title="Hitam (#000000)"></span>
+                                        <span role="button" tabindex="0" class="btn-cover-color-swatch {{ $user->cover_color === '#1e3a8a' ? 'active' : '' }}" data-color="#1e3a8a" style="background-color: #1e3a8a;" title="Navy (#1e3a8a)"></span>
+                                        <span role="button" tabindex="0" class="btn-cover-color-swatch {{ $user->cover_color === '#4338ca' ? 'active' : '' }}" data-color="#4338ca" style="background-color: #4338ca;" title="Indigo (#4338ca)"></span>
+                                        <span role="button" tabindex="0" class="btn-cover-color-swatch {{ $user->cover_color === '#065f46' ? 'active' : '' }}" data-color="#065f46" style="background-color: #065f46;" title="Emerald (#065f46)"></span>
+                                        <span role="button" tabindex="0" class="btn-cover-color-swatch {{ $user->cover_color === '#701a75' ? 'active' : '' }}" data-color="#701a75" style="background-color: #701a75;" title="Fuchsia (#701a75)"></span>
                                     </div>
                                 </div>
                                 <span id="cover-color-val" class="badge bg-primary-subtle text-primary font-monospace fs-11 fw-bold">{{ $user->cover_color }}</span>

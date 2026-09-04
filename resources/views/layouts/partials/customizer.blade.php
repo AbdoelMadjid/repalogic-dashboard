@@ -491,15 +491,16 @@
     </div>
 
     <div class="offcanvas-footer border-top p-3 text-center">
-        <div class="row justify-content-end">
+        <div class="row justify-content-end g-2">
             <div class="col-6">
-                <a href="https://wrapmarket.com/item/inspinia-multipurpose-admin-dashboard-template-WB0R5L90S?via=webapp"
-                    class="btn btn-success fw-semibold py-2 w-100" target="_blank"><i
-                        class="ti ti-basket me-2 fs-md"></i> <span data-lang="customizer-buy-now">Buy Now</span></a>
+                <button type="button" class="btn btn-warning fw-semibold py-2 w-100" id="btn-optimize-clear">
+                    <i class="ti ti-bolt me-1 fs-md"></i> <span data-lang="customizer-optimize-clear">Optimize Clear</span>
+                </button>
             </div>
             <div class="col-6">
-                <button type="button" class="btn btn-danger fw-semibold py-2 w-100" id="reset-layout"><i
-                        class="ti ti-refresh me-2 fs-md"></i> <span data-lang="customizer-reset">Reset</span></button>
+                <button type="button" class="btn btn-danger fw-semibold py-2 w-100" id="reset-layout">
+                    <i class="ti ti-refresh me-1 fs-md"></i> <span data-lang="customizer-reset">Reset</span>
+                </button>
             </div>
         </div>
     </div>

@@ -21,6 +21,7 @@ class UserConfig extends Model
         'cover_opacity',
         'cover_blur',
         'motto',
+        'motto_color',
         'theme_mode',
         'settings',
     ];

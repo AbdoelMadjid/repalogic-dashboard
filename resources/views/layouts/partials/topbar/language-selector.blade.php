@@ -1,10 +1,16 @@
+@php
+    $currentLang = request()->cookie('__THEME_LANG__', 'id');
+    $isEn = $currentLang === 'en';
+    $currentFlag = $isEn ? asset('assets/images/flags/us.svg') : asset('assets/images/flags/id.svg');
+    $currentCode = $isEn ? 'EN' : 'ID';
+@endphp
 <div id="language-selector" class="topbar-item">
     <div class="dropdown">
         <button class="topbar-link fw-bold" data-bs-toggle="dropdown" type="button" aria-haspopup="false"
             aria-expanded="false">
-            <img src="{{ asset('assets/images/flags/us.svg') }}" alt="user-image" class="rounded me-2" height="18"
+            <img src="{{ $currentFlag }}" alt="user-image" class="rounded me-2" height="18"
                 id="selected-language-image" />
-            <span id="selected-language-code">EN</span>
+            <span id="selected-language-code">{{ $currentCode }}</span>
         </button>
         <div class="dropdown-menu dropdown-menu-end">
             <a href="javascript:void(0);" class="dropdown-item" data-translator-lang="id"
@@ -24,3 +30,15 @@
     </div>
     <!-- end dropdown-->
 </div>
+<script>
+    (function() {
+        try {
+            var lang = sessionStorage.getItem('__THEME_LANG__') || '{{ $currentLang }}';
+            var isEn = lang === 'en';
+            var img = document.getElementById('selected-language-image');
+            var code = document.getElementById('selected-language-code');
+            if (img) img.src = isEn ? '{{ asset('assets/images/flags/us.svg') }}' : '{{ asset('assets/images/flags/id.svg') }}';
+            if (code) code.textContent = isEn ? 'EN' : 'ID';
+        } catch(e) {}
+    })();
+</script>

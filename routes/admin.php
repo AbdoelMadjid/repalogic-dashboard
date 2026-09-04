@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('index');
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('optimize-clear', [DashboardController::class, 'optimizeClear'])->name('optimize-clear');
 
     Route::get('notifications/poll', [NotificationController::class, 'poll'])->name('notifications.poll');
     Route::get('notifications/poll-messages', [NotificationController::class, 'pollMessages'])->name('notifications.poll-messages');

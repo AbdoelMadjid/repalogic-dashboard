@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v2.8.1`  
-> **Terakhir Diperbarui:** 01 September 2026 22:05 WIB  
+> **Versi Terbaru:** `v2.8.2`  
+> **Terakhir Diperbarui:** 04 September 2026 09:12 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v2.8.2`** | `2026-09-04 09:12 WIB` | Admin Customizer Optimize Clear Engine (`php artisan optimize:clear` AJAX) & Reset Layout Restoration, Topbar Language Switcher Anti-Flicker, User Profile Motto Text Color Customizer & Real-Time Live Visual Cover Background Preview Sync |
 | **`v2.8.1`** | `2026-09-01 22:05 WIB` | Modular Translation Dictionaries Architecture (6 Isolated Domains: Sidebar Template, Sidebar Menu, Topbar, Auth, Customizer, Frontpage), Parallel i18n Loader Engine (`Promise.all`), Tab-Based Translation Manager & Auto-Sync Model Hooks |
 | **`v2.8.0`** | `2026-09-01 21:30 WIB` | Comprehensive Technical Architecture Documentation Suite (Manajemen Menu, Pertemanan-Notifikasi-Chat Triad, Manajemen Pengguna 6-Pilar, Sistem Bilingual i18n) & Standardisasi GitHub-Relative Markdown Links |
 | **`v2.7.6`** | `2026-09-01 17:40 WIB` | Overhaul Tata Letak & Form Edit Langsung Profil Pengguna (Single-Page Profile Architecture), Restrukturisasi Tabel KTP 2-Kolom, Perapihan Card Penonaktifan Akun & Perbaikan Inisialisasi Script Cover Header |
