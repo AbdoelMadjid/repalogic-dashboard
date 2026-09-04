@@ -1,10 +1,11 @@
 # ⚙️ Dokumentasi Arsitektur & Operasional Fitur dan Pengaturan Aplikasi
 
-> **Status Modul:** Production-Ready (Enterprise Grade)  
+> **Status Modul:** Production-Ready (Enterprise Grade Modular Architecture)  
 > **Lokasi File Dokumentasi:** `docs/arsitektur_dan_operasional_fitur_dan_pengaturan_aplikasi.md`  
 > **Route URL:** `/admin/dukunganaplikasi/fitur-aplikasi`  
-> **Versi Rilis:** `v2.4.0`  
-> **Terakhir Diperbarui:** 31 Agustus 2026 19:10 WIB  
+> **Controller:** [`App\Http\Controllers\Admin\DukunganAplikasi\FiturAplikasiController`](../app/Http/Controllers/Admin/DukunganAplikasi/FiturAplikasiController.php)  
+> **Aset Terpisah (Rule 15):** [`public/assets/css/admin/dukunganaplikasi/fitur-aplikasi.css`](../public/assets/css/admin/dukunganaplikasi/fitur-aplikasi.css) & [`public/assets/js/admin/dukunganaplikasi/fitur-aplikasi.js`](../public/assets/js/admin/dukunganaplikasi/fitur-aplikasi.js)  
+> **Terakhir Diperbarui:** 04 September 2026 09:22 WIB  
 
 ---
 
@@ -64,7 +65,7 @@ Halaman ini menggabungkan **6 Widget Kontrol Interaktif** pada bagian atas dan *
   - Sakelar *Pop-up Toast Notifikasi Otomatis*.
 
 ### 2.6 Widget 6: Manajemen Cache & Optimasi Kinerja Server
-- **Fungsi:** Mengosongkan seluruh lapisan cache sistem secara bersamaan dengan satu kali klik.
+- **Fungsi:** Mengosongkan seluruh lapisan cache sistem secara bersamaan dengan satu kali klik (terhubung juga dengan engine *Admin Customizer Optimize Clear Engine*).
 - **Proses Eksekusi Internal:**
   ```php
   Artisan::call('view:clear');    // Membersihkan compiled Blade views
@@ -83,22 +84,22 @@ Halaman ini menggabungkan **6 Widget Kontrol Interaktif** pada bagian atas dan *
 
 ```mermaid
 flowchart TD
-    A[Admin Mengaktifkan Mode Pemeliharaan pada Widget] --> B[Simpan ke Cache: app_setting_maintenance_mode = 1]
-    B --> C{Pengguna Mengakses Sistem}
+    A["Admin Mengaktifkan Mode Pemeliharaan pada Widget"] --> B["Simpan ke Cache: app_setting_maintenance_mode = 1"]
+    B --> C{"Pengguna Mengakses Sistem"}
     
-    C -->|Mencoba Login| D[LoginRequest::authenticate]
-    D --> E{Apakah Role Superadmin atau Admin?}
-    E -->|Ya| F[Otentikasi Berhasil & Masuk Dashboard]
-    E -->|Tidak| G[Tolak Login & Tampilkan Alert Error Maintenance]
+    C -->|Mencoba Login| D["LoginRequest::authenticate"]
+    D --> E{"Apakah Role Superadmin atau Admin?"}
+    E -->|Ya| F["Otentikasi Berhasil & Masuk Dashboard"]
+    E -->|Tidak| G["Tolak Login & Tampilkan Alert Error Maintenance"]
     
-    C -->|Mengakses Halaman Web| H[Middleware CheckMaintenanceMode]
-    H --> I{Apakah Rute Login / Logout / Assets?}
-    I -->|Ya| J[Izinkan Akses]
-    I -->|Tidak| K{Apakah User Login Superadmin/Admin?}
-    K -->|Ya| L[Izinkan Akses Normal]
-    K -->|Tidak| M{Tipe Request?}
-    M -->|Web Biasa| N[Tampilkan Halaman 503 Maintenance Mode]
-    M -->|AJAX / API| O[Kembalikan JSON 503 Service Unavailable]
+    C -->|Mengakses Halaman Web| H["Middleware CheckMaintenanceMode"]
+    H --> I{"Apakah Rute Login / Logout / Assets?"}
+    I -->|Ya| J["Izinkan Akses"]
+    I -->|Tidak| K{"Apakah User Login Superadmin/Admin?"}
+    K -->|Ya| L["Izinkan Akses Normal"]
+    K -->|Tidak| M{"Tipe Request?"}
+    M -->|Web Biasa| N["Tampilkan Halaman 503 Maintenance Mode"]
+    M -->|AJAX / API| O["Kembalikan JSON 503 Service Unavailable"]
 ```
 
 ### 3.2 Intersepsi Login (`app/Http/Requests/Auth/LoginRequest.php`)
@@ -182,6 +183,11 @@ repalogic-dashboard/
 │       └── FeatureSettingMap.php                  # Safe helper object untuk cached feature flags
 ├── bootstrap/
 │   └── app.php                                    # Registrasi CheckMaintenanceMode ke web middleware
+├── public/assets/
+│   ├── css/admin/dukunganaplikasi/
+│   │   └── fitur-aplikasi.css                     # External CSS modul fitur aplikasi (Rule 15)
+│   └── js/admin/dukunganaplikasi/
+│       └── fitur-aplikasi.js                      # External JS AJAX handler modul fitur aplikasi (Rule 15)
 ├── resources/views/
 │   ├── admin/dukunganaplikasi/
 │   │   ├── fitur-aplikasi.blade.php               # View utama panel widget & tabel visibilitas fitur

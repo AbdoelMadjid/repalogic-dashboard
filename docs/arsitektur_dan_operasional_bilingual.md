@@ -4,9 +4,9 @@
 > **Lokasi File Dokumentasi:** `docs/arsitektur_dan_operasional_bilingual.md`  
 > **Route URL:** `/admin/dukunganaplikasi/translation`  
 > **Controller:** [`App\Http\Controllers\Admin\DukunganAplikasi\TranslationController`](../app/Http/Controllers/Admin/DukunganAplikasi/TranslationController.php)  
+> **Aset Terpisah (Rule 15):** [`public/assets/css/admin/dukunganaplikasi/translation.css`](../public/assets/css/admin/dukunganaplikasi/translation.css) & [`public/assets/js/admin/dukunganaplikasi/translation.js`](../public/assets/js/admin/dukunganaplikasi/translation.js)  
 > **Direktori Kamus Modular:** `public/assets/data/translations/id/` & `public/assets/data/translations/en/`  
-> **Versi Rilis:** `v2.8.1`  
-> **Terakhir Diperbarui:** 1 September 2026 22:05 WIB  
+> **Terakhir Diperbarui:** 04 September 2026 09:22 WIB  
 
 ---
 
@@ -14,7 +14,7 @@
 
 Modul **Sistem Bilingual (*Modular Internationalization & Translation Engine*)** pada REPALOGIC Dashboard dirancang menggunakan pendekatan **Domain-Driven Modular Translation Dictionaries** dua arah (Bahasa Indonesia `ID` dan Bahasa Inggris `EN`).
 
-Sistem ini memungkinkan alih bahasa antarmuka secara **100% dinamis dan instan tanpa reload halaman** (*zero page reload*) pada seluruh elemen navigasi sidebar, judul modul, header grup, dan label komponen dengan memanfaatkan pasangan **Atribut `data-lang`** dan **Kamus JSON Terjemahan Modular**.
+Sistem ini memungkinkan alih bahasa antarmuka secara **100% dinamis dan instan tanpa reload halaman** (*zero page reload*) pada seluruh elemen navigasi sidebar, judul modul, header grup, dan label komponen dengan memanfaatkan pasangan **Atribut `data-lang`**, **Kamus JSON Terjemahan Modular**, serta **Pre-Hydration Anti-Flicker**.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -23,8 +23,8 @@ Sistem ini memungkinkan alih bahasa antarmuka secara **100% dinamis dan instan t
 │ 1. 6 Domain Kamus Modular      │ 2. Parallel i18n Loader Engine │ 3. Auto-Sync Model Listener   │
 │ (id/ & en/ Isolated JSONs)     │ (Promise.all Parallel Loading) │ (Menu::saved -> sidebar_menu) │
 ├────────────────────────────────┼────────────────────────────────┼───────────────────────────────┤
-│ 4. Tab-Based Admin Manager     │ 5. Artisan CLI Code Scanner    │ 6. Safe Fallback & Auto-Merge │
-│ (Per-Domain GUI CRUD Manager)  │ (php artisan menu:lang-sync)   │ (Graceful Legacy Fallback)    │
+│ 4. Tab-Based Admin Manager     │ 5. Artisan CLI Code Scanner    │ 6. Anti-Flicker & Fallback    │
+│ (Per-Domain GUI CRUD Manager)  │ (php artisan menu:lang-sync)   │ (sessionStorage Pre-Hydration)│
 └────────────────────────────────┴────────────────────────────────┴───────────────────────────────┘
 ```
 
@@ -73,20 +73,20 @@ Saat pengguna berpindah bahasa pada dropdown Topbar, sistem mengeksekusi pemuata
 
 ```mermaid
 flowchart TD
-    A[Pengguna Klik Bendera Topbar: ID / EN] --> B[I18nManager.setLanguage]
-    B --> C[Promise.all: Request 6 Berkas JSON Modular Paralel]
+    A["Pengguna Klik Bendera Topbar: ID / EN"] --> B["I18nManager.setLanguage"]
+    B --> C["Promise.all: Request 6 Berkas JSON Modular Paralel"]
     
-    C --> D1[fetch id/sidebar_template.json]
-    C --> D2[fetch id/sidebar_menu.json]
-    C --> D3[fetch id/topbar.json]
-    C --> D4[fetch id/auth.json]
-    C --> D5[fetch id/customizer.json]
-    C --> D6[fetch id/frontpage.json]
+    C --> D1["fetch id/sidebar_template.json"]
+    C --> D2["fetch id/sidebar_menu.json"]
+    C --> D3["fetch id/topbar.json"]
+    C --> D4["fetch id/auth.json"]
+    C --> D5["fetch id/customizer.json"]
+    C --> D6["fetch id/frontpage.json"]
 
-    D1 & D2 & D3 & D4 & D5 & D6 --> E[Merge Hasil Menjadi Single In-Memory Dictionary]
-    E --> F[Query Seluruh [data-lang], [data-lang-placeholder], [data-lang-title]]
-    F --> G[Mutasi innerText & Atribut DOM Secara Instan < 5ms]
-    G --> H[Simpan Preferensi ke sessionStorage __THEME_LANG__]
+    D1 & D2 & D3 & D4 & D5 & D6 --> E["Merge Hasil Menjadi Single In-Memory Dictionary"]
+    E --> F["Query Seluruh [data-lang], [data-lang-placeholder], [data-lang-title]"]
+    F --> G["Mutasi innerText & Atribut DOM Secara Instan (< 5ms)"]
+    G --> H["Simpan Preferensi ke sessionStorage __THEME_LANG__"]
 ```
 
 ### Cuplikan Implementasi Loader di [`public/assets/js/app.js`](../public/assets/js/app.js):
@@ -156,7 +156,11 @@ public static function syncTranslationKey(Menu $menu): void
 
 ## 🖥️ 5. Antarmuka Pengguna Admin (Tab Navigation & Event Delegation)
 
-Halaman [`translation.blade.php`](../resources/views/admin/dukunganaplikasi/translation.blade.php) dilengkapi:
+Halaman [`translation.blade.php`](../resources/views/admin/dukunganaplikasi/translation.blade.php) didukung oleh aset terpisah:
+- **CSS:** [`public/assets/css/admin/dukunganaplikasi/translation.css`](../public/assets/css/admin/dukunganaplikasi/translation.css)
+- **JS:** [`public/assets/js/admin/dukunganaplikasi/translation.js`](../public/assets/js/admin/dukunganaplikasi/translation.js)
+
+Dilengkapi:
 1. **Modular Tab Pills Bar**: Filter instan antar domain modul (*Semua*, *Sidebar Menu*, *Sidebar Template*, *Topbar*, *Auth*, *Customizer*, *Landing Page*) tanpa reload halaman melalui URL History Sync.
 2. **Standard Thead Single-Line**: Mematuhi Rule 8 (`align-middle text-center text-nowrap`).
 3. **Form Modal Cerdas**: Dropdown `Modul / Domain Terjemahan` yang otomatis terisi sesuai Tab yang sedang aktif saat tombol *Tambah* ditekan.

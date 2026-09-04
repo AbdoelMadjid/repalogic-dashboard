@@ -1,10 +1,10 @@
 # 👥 Dokumentasi Arsitektur & Operasional Modul Manajemen Pengguna
 
-> **Status Modul:** Production-Ready (Enterprise Grade)  
+> **Status Modul:** Production-Ready (Enterprise Grade Modular Architecture)  
 > **Lokasi File Dokumentasi:** `docs/arsitektur_dan_operasional_manajemen_pengguna.md`  
 > **Prefix Route:** `/admin/manajemenpengguna/*`  
-> **Versi Rilis:** `v2.4.0`  
-> **Terakhir Diperbarui:** 1 September 2026 21:10 WIB  
+> **Aset Terpisah (Rule 15):** `public/assets/css/admin/manajemenpengguna/*.css` & `public/assets/js/admin/manajemenpengguna/*.js`  
+> **Terakhir Diperbarui:** 04 September 2026 09:22 WIB  
 
 ---
 
@@ -32,7 +32,7 @@ Modul ini terdiri dari **6 Sub-Modul Terintegrasi**:
 
 ## 🏛️ 2. Arsitektur Database & Skema Relasi Otorisasi (ERD)
 
-Sistem mengombinasikan tabel pengguna aplikasi (`users`, `user_details`, `user_logins`) dengan tabel standar ekosistem Spatie Permission (`roles`, `permissions`, `model_has_roles`, `role_has_permissions`, `model_has_permissions`).
+Sistem mengombinasikan tabel pengguna aplikasi (`users`, `user_details`, `user_configs`, `user_logins`) dengan tabel standar ekosistem Spatie Permission (`roles`, `permissions`, `model_has_roles`, `role_has_permissions`, `model_has_permissions`).
 
 ### 2.1 Skema Tabel Inti
 
@@ -40,6 +40,7 @@ Sistem mengombinasikan tabel pengguna aplikasi (`users`, `user_details`, `user_l
 | :--- | :--- |
 | `users` | Entitas akun pengguna, autentikasi password, status verifikasi (`pending`, `active`, `inactive`, `rejected`), poin login, dan status approval. |
 | `user_details` | Data profil pelengkap (NIK, pekerjaan, nomor telepon WhatsApp, domisili kabupaten/kota, foto KTP). |
+| `user_configs` | Konfigurasi visual profil (tinggi sampul banner, warna overlay, opacity, blur, warna teks motto). |
 | `user_logins` | Audit trail riwayat login, IP address, user-agent, sistem operasi, browser, koordinat latitude/longitude, dan reward poin login. |
 | `roles` | Tabel peran Spatie (`superadmin`, `admin`, `operator`, `user`, dll) dengan `guard_name = 'web'`. |
 | `permissions` | Tabel izin akses spesifik (format: `{action} {kelompok}/{modul}`). |
@@ -52,6 +53,7 @@ Sistem mengombinasikan tabel pengguna aplikasi (`users`, `user_details`, `user_l
 ```mermaid
 erDiagram
     users ||--o{ user_details : "memiliki profil detail"
+    users ||--o{ user_configs : "memiliki konfigurasi sampul"
     users ||--o{ user_logins : "mencatat riwayat login"
     users ||--o{ model_has_roles : "memiliki peran (roles)"
     roles ||--o{ model_has_roles : "diberikan ke pengguna"
@@ -72,17 +74,22 @@ erDiagram
         timestamp last_seen_at
     }
 
-    user_logins {
+    user_details {
         bigint id PK
         bigint user_id FK
-        string ip_address
-        string browser
-        string platform
-        string device_type
-        decimal latitude
-        decimal longitude
-        boolean points_awarded
-        timestamp login_at
+        string nik
+        string telepon
+        string alamat
+    }
+
+    user_configs {
+        bigint id PK
+        bigint user_id FK
+        int cover_height
+        string cover_overlay_color
+        int cover_overlay_opacity
+        int cover_blur
+        string motto_color
     }
 
     roles {
@@ -107,6 +114,7 @@ erDiagram
 ### 👑 3.1 Sub-Modul 1: Role (`RoleController`)
 - **Route URL:** `/admin/manajemenpengguna/role`
 - **Controller:** [`App\Http\Controllers\Admin\ManajemenPengguna\RoleController`](../app/Http/Controllers/Admin/ManajemenPengguna/RoleController.php)
+- **Aset Terpisah:** `public/assets/css/admin/manajemenpengguna/role.css` & `public/assets/js/admin/manajemenpengguna/role.js`
 - **Fungsi Utama:**
   1. Menampilkan daftar seluruh Role dengan penghitungan otomatis jumlah pengguna (`users_count`) dan jumlah hak akses terpasang (`permissions_count`).
   2. Pembuatan Role baru dan penugasan permissions awal secara serentak.
@@ -118,6 +126,7 @@ erDiagram
 ### 🔑 3.2 Sub-Modul 2: Permission (`PermissionController`)
 - **Route URL:** `/admin/manajemenpengguna/permission`
 - **Controller:** [`App\Http\Controllers\Admin\ManajemenPengguna\PermissionController`](../app/Http/Controllers/Admin/ManajemenPengguna/PermissionController.php)
+- **Aset Terpisah:** `public/assets/css/admin/manajemenpengguna/permission.css` & `public/assets/js/admin/manajemenpengguna/permission.js`
 - **Fungsi Utama:**
   1. **Pengelompokan Otomatis Berdasarkan Modul Target:** Sistem mengelompokkan permission berdasarkan target fitur (misal: `dukunganaplikasi/menu`, `manajemenpengguna/user`).
   2. **Dukungan Aksi CRUD Baku:** `create`, `read`, `update`, `delete` dengan lencana warna kontras standar.
@@ -128,6 +137,7 @@ erDiagram
 ### 🛡️ 3.3 Sub-Modul 3: Akses Role (`AksesRoleController`)
 - **Route URL:** `/admin/manajemenpengguna/akses-role`
 - **Controller:** [`App\Http\Controllers\Admin\ManajemenPengguna\AksesRoleController`](../app/Http/Controllers/Admin/ManajemenPengguna/AksesRoleController.php)
+- **Aset Terpisah:** `public/assets/css/admin/manajemenpengguna/akses-role.css` & `public/assets/js/admin/manajemenpengguna/akses-role.js`
 - **Fungsi Utama:**
   1. **Tabel Matriks Permission Berjenjang (*Matrix Table*):**
      - Kolom: `MODUL / FITUR`, `CREATE`, `READ`, `UPDATE`, `DELETE`, `SEMUA`.
@@ -141,6 +151,7 @@ erDiagram
 ### 👤 3.4 Sub-Modul 4: Akses User (`AksesUserController`)
 - **Route URL:** `/admin/manajemenpengguna/akses-user`
 - **Controller:** [`App\Http\Controllers\Admin\ManajemenPengguna\AksesUserController`](../app/Http/Controllers/Admin/ManajemenPengguna/AksesUserController.php)
+- **Aset Terpisah:** `public/assets/css/admin/manajemenpengguna/akses-user.css` & `public/assets/js/admin/manajemenpengguna/akses-user.js`
 - **Fungsi Utama:**
   1. **Penugasan Multi-Role & Izin Khusus (*Direct Permissions*):** Memberikan izin spesifik kepada pengguna tertentu di luar batas hak akses Role yang dimilikinya.
   2. **Penyaringan Otomatis (*Diff Redundancy Filtering*):**
@@ -163,20 +174,21 @@ erDiagram
 ### 🧑‍💼 3.5 Sub-Modul 5: Users (`UserController`)
 - **Route URL:** `/admin/manajemenpengguna/users`
 - **Controller:** [`App\Http\Controllers\Admin\ManajemenPengguna\UserController`](../app/Http/Controllers/Admin/ManajemenPengguna/UserController.php)
+- **Aset Terpisah:** `public/assets/css/admin/manajemenpengguna/users.css` & `public/assets/js/admin/manajemenpengguna/users.js`
 - **Fungsi & Alur Operasional:**
 
 ```mermaid
 flowchart TD
-    A[Admin Membuka Manajemen Users] --> B{Pilih Operasi}
+    A["Admin Membuka Manajemen Users"] --> B{"Pilih Operasi"}
 
-    B -->|1. Approval Pendaftaran| C[approve: Status jadi 'active', approved_by=admin_id]
-    B -->|2. Penolakan Pendaftaran| D[rejectRegistration: Alasan dicatat & Pesan Notifikasi Terkirim]
-    B -->|3. Reset Password| E[resetPassword: Password di-reset & clear request flag]
-    B -->|4. Nonaktifkan Akun| F[deactivate: Status jadi 'inactive', terminate user session]
-    B -->|5. Aktivasi Kembali| G[activate: Status kembali 'active']
-    B -->|6. Instant Toggle Switch| H[toggleStatus: AJAX on/off status akun]
-    B -->|7. Impersonasi Akun| I[switchAccount: Login sebagai User target dengan Session Fallback]
-    B -->|8. Penugasan Role Massal| J[bulkAssignRole: Update role ke banyak user sekaligus]
+    B -->|1. Approval Pendaftaran| C["approve: Status jadi 'active', approved_by=admin_id"]
+    B -->|2. Penolakan Pendaftaran| D["rejectRegistration: Alasan dicatat & Pesan Notifikasi Terkirim"]
+    B -->|3. Reset Password| E["resetPassword: Password di-reset & clear request flag"]
+    B -->|4. Nonaktifkan Akun| F["deactivate: Status jadi 'inactive', terminate user session"]
+    B -->|5. Aktivasi Kembali| G["activate: Status kembali 'active'"]
+    B -->|6. Instant Toggle Switch| H["toggleStatus: AJAX on/off status akun"]
+    B -->|7. Impersonasi Akun| I["switchAccount: Login sebagai User target dengan Session Fallback"]
+    B -->|8. Penugasan Role Massal| J["bulkAssignRole: Update role ke banyak user sekaligus"]
 ```
 
 #### Fitur Khusus:
@@ -188,6 +200,7 @@ flowchart TD
 ### 📊 3.6 Sub-Modul 6: Data Login (`DataLoginController`)
 - **Route URL:** `/admin/manajemenpengguna/data-login`
 - **Controller:** [`App\Http\Controllers\Admin\ManajemenPengguna\DataLoginController`](../app/Http/Controllers/Admin/ManajemenPengguna/DataLoginController.php)
+- **Aset Terpisah:** `public/assets/css/admin/manajemenpengguna/data-login.css` & `public/assets/js/admin/manajemenpengguna/data-login.js`
 - **Fungsi Utama:**
   1. **Tab 1 - Pengguna yang Login Hari Ini:** Menampilkan daftar unik pengguna yang aktif hari ini, status online real-time, waktu login pertama & terakhir, total sesi, serta reward poin harian.
   2. **Tab 2 - Riwayat Lengkap & Audit Trail:** Seluruh log autentikasi lengkap dengan filter:
@@ -245,6 +258,8 @@ flowchart TD
    Semua header tabel pada 6 sub-modul menerapkan `align-middle text-center text-nowrap`.
 4. **Aturan 9: Universal SweetAlert2 Helpers**  
    Aksi hapus, konfirmasi reset sandi, dan persetujuan akun terhubung ke helper global `window.showConfirm()`, `window.showSuccess()`, dan `window.showError()`.
+5. **Aturan 15: Pemisahan Aset Eksternal CSS & JS**  
+   Seluruh script dan style disimpan terpisah pada `public/assets/css/admin/manajemenpengguna/` dan `public/assets/js/admin/manajemenpengguna/`.
 
 ---
 

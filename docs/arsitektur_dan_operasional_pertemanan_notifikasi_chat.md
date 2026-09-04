@@ -1,13 +1,15 @@
 # 🤝 Dokumentasi Arsitektur & Operasional Fitur Pertemanan, Notifikasi & Chat
 
-> **Status Modul:** Production-Ready (Enterprise Grade)  
+> **Status Modul:** Production-Ready (Enterprise Grade Modular Architecture)  
 > **Lokasi File Dokumentasi:** `docs/arsitektur_dan_operasional_pertemanan_notifikasi_chat.md`  
 > **Route URL:**  
 > - Pertemanan & Likes: `/admin/friendships/*`  
 > - Notifikasi Topbar: `/admin/notifications/*`  
 > - Obrolan & Chat: `/admin/profil-pengguna/messages/*`  
-> **Versi Rilis:** `v2.4.0`  
-> **Terakhir Diperbarui:** 1 September 2026 21:05 WIB  
+> **Aset Terpisah (Rule 15):**  
+> - Dashboard Social Hub: [`public/assets/css/admin/dashboard.css`](../public/assets/css/admin/dashboard.css) & [`public/assets/js/admin/dashboard.js`](../public/assets/js/admin/dashboard.js)  
+> - Chat & Messages: [`public/assets/css/admin/profil-pengguna/messages.css`](../public/assets/css/admin/profil-pengguna/messages.css) & [`public/assets/js/admin/profil-pengguna/messages.js`](../public/assets/js/admin/profil-pengguna/messages.js)  
+> **Terakhir Diperbarui:** 04 September 2026 09:22 WIB  
 
 ---
 
@@ -27,7 +29,7 @@ Ketiga modul ini saling terhubung secara reaktif, di mana setiap aksi pertemanan
 │ 1. Engine Pertemanan & Like  │ 2. Pusat Notifikasi Topbar   │ 3. Direct Messaging & Chat    │
 │ - Ajakan Berteman (Pending)  │ - Lonceng Notifikasi Latar   │ - Obrolan 1-on-1 Real-Time    │
 │ - Penerimaan / Penolakan     │ - Filter & Deep Linking      │ - Quoted Reply & Reactions    │
-│ - Like Profil Pengguna       │ - Polling Otomatis (Bell)    │ - Topbar Messages Dropdown    │
+│ - Like Profil Pengguna       │ - Polling Otomatis (Bell)    │ - 3-Dots Dropdown & Voice Note│
 │ - Mutasi Kartu Dinamis       │ - Intersepsi Dashboard Live  │ - Unread Badge Counter        │
 └──────────────────────────────┴──────────────────────────────┴───────────────────────────────┘
 ```
@@ -69,7 +71,13 @@ Ekosistem ini ditopang oleh 4 tabel utama: `friendships`, `profile_likes`, `mess
 | `subject` | `VARCHAR(255)` | Subjek atau konteks pesan |
 | `body` | `TEXT` | Isi pesan obrolan |
 | `attachment_url` | `VARCHAR(255)` | Nullable, URL berkas lampiran |
+| `attachment_type`| `VARCHAR(50)`  | Nullable (`image`, `voice`, `file`) |
 | `is_read` | `BOOLEAN` | Default `false`, penanda pesan terbaca |
+| `is_pinned` | `BOOLEAN` | Default `false`, penanda disematkan |
+| `reactions` | `JSON` | Nullable, emoji array |
+| `is_forwarded` | `BOOLEAN` | Default `false` |
+| `deleted_for_sender` | `BOOLEAN` | Default `false` |
+| `deleted_for_receiver`| `BOOLEAN` | Default `false` |
 | `read_at` | `TIMESTAMP` | Nullable, waktu presisi pesan dibaca |
 
 ### 2.4 Diagram Relasi Entitas (Mermaid ERD)
@@ -107,6 +115,8 @@ erDiagram
         bigint parent_id FK
         text body
         boolean is_read
+        boolean is_pinned
+        json reactions
         timestamp created_at
     }
 ```
@@ -119,37 +129,30 @@ Hubungan ketiga modul saling melengkapi dan bereaksi terhadap perubahan status d
 
 ```mermaid
 flowchart TD
-    subgraph A [Modul Pertemanan]
-        U1[User A Klik 'Tambah Teman'] --> SendReq[POST admin/friendships/send/B]
-        SendReq --> DBFriend[Insert ke Tabel friendships status=pending]
+    subgraph A ["Modul Pertemanan"]
+        U1["User A Klik 'Tambah Teman'"] --> SendReq["POST admin/friendships/send/B"]
+        SendReq --> DBFriend["Insert ke Tabel friendships status=pending"]
     end
 
-    subgraph B [Modul Notifikasi Topbar]
-        DBFriend --> PollerNotif[Background Poller: GET admin/notifications/poll]
-        PollerNotif --> NotifBell[Muncul Badge Merah di Lonceng Topbar User B]
-        NotifBell --> ClickNotif[User B Klik Notifikasi Ajakan]
-        ClickNotif --> DeepLink[Deep Link ke Dashboard: filter=incoming]
+    subgraph B ["Modul Notifikasi Topbar"]
+        DBFriend --> PollerNotif["Background Poller: GET admin/notifications/poll"]
+        PollerNotif --> NotifBell["Muncul Badge Merah di Lonceng Topbar User B"]
+        NotifBell --> ClickNotif["User B Klik Notifikasi Ajakan"]
+        ClickNotif --> DeepLink["Deep Link ke Dashboard: filter=incoming"]
     end
 
-    subgraph C [Aksi Penerimaan & Transformasi Chat]
-        DeepLink --> AcceptBtn[User B Klik 'Terima Ajakan']
-        AcceptBtn --> UpdateAccepted[Update friendships status=accepted]
-        UpdateAccepted --> MutateBtn[Kartu Berubah: Tombol 'Chat' Biru Aktif]
-        MutateBtn --> ClickChat[Klik Tombol 'Chat']
-        ClickChat --> OpenChat[Buka Percakapan 1-on-1 di /admin/profil-pengguna/messages]
+    subgraph C ["Aksi Penerimaan & Transformasi Chat"]
+        DeepLink --> AcceptBtn["User B Klik 'Terima Ajakan'"]
+        AcceptBtn --> UpdateAccepted["Update friendships status=accepted"]
+        UpdateAccepted --> MutateBtn["Kartu Berubah: Tombol 'Chat' Biru Aktif"]
+        MutateBtn --> ClickChat["Klik Tombol 'Chat'"]
+        ClickChat --> OpenChat["Buka Percakapan 1-on-1 di /admin/profil-pengguna/messages"]
     end
 ```
 
 ### 3.1 Alur Notifikasi Ajakan Berteman Masuk
 1. Ketika **User A** mengirimkan ajakan berteman ke **User B**, data tersimpan di tabel `friendships` dengan `status = 'pending'`.
-2. Servis [`NotificationService::getNotifications()`](../app/Services/NotificationService.php) mendeteksi ajakan masuk untuk User B:
-   ```php
-   $incomingFriends = Friendship::with('sender')
-       ->where('receiver_id', $user->id)
-       ->where('status', 'pending')
-       ->latest()
-       ->get();
-   ```
+2. Servis [`NotificationService::getNotifications()`](../app/Services/NotificationService.php) mendeteksi ajakan masuk untuk User B.
 3. Poller topbar (`GET /admin/notifications/poll`) merender item notifikasi ber-badge `Ajakan Berteman` dengan tautan deep link:  
    `route('dashboard', ['contact_search' => $sender->name, 'filter' => 'incoming'])`.
 4. Jika User B sedang berada di halaman Dashboard, klik pada notifikasi akan **diintersepsi secara mulus** oleh JavaScript:
@@ -194,7 +197,12 @@ flowchart TD
 | `GET` | `/admin/profil-pengguna/messages` | `admin.profil-pengguna.messages.index` | Halaman chat utama dengan daftar kontak dan histori obrolan. |
 | `GET` | `/admin/profil-pengguna/messages/poll-contacts` | `admin.profil-pengguna.messages.poll-contacts` | Poller sidebar kontak chat untuk status online dan pesan terakhir. |
 | `GET` | `/admin/profil-pengguna/messages/conversation/{user}` | `admin.profil-pengguna.messages.conversation` | Mengambil pesan obrolan aktif secara real-time. |
-| `POST` | `/admin/profil-pengguna/messages/send` | `admin.profil-pengguna.messages.send` | Mengirimkan pesan teks, quoted reply, dan berkas lampiran. |
+| `POST` | `/admin/profil-pengguna/messages/send` | `admin.profil-pengguna.messages.send` | Mengirimkan pesan teks, quoted reply, voice note, dan lampiran. |
+| `POST` | `/admin/profil-pengguna/messages/{id}/toggle-pin` | `admin.profil-pengguna.messages.toggle-pin` | Menyematkan / melepas pin pesan obrolan. |
+| `POST` | `/admin/profil-pengguna/messages/{id}/toggle-reaction` | `admin.profil-pengguna.messages.toggle-reaction` | Toggle reaksi emoji pada pesan obrolan. |
+| `POST` | `/admin/profil-pengguna/messages/{id}/forward` | `admin.profil-pengguna.messages.forward` | Meneruskan pesan ke kontak lain. |
+| `DELETE` | `/admin/profil-pengguna/messages/{id}` | `admin.profil-pengguna.messages.destroy` | Menghapus pesan (unsend untuk semua orang atau hapus lokal). |
+| `DELETE` | `/admin/profil-pengguna/messages/conversation/{user}/clear` | `admin.profil-pengguna.messages.clear-conversation` | Membersihkan riwayat percakapan. |
 
 ---
 
@@ -220,13 +228,9 @@ Sistem menggunakan arsitektur polling multi-interval yang ringan dan efisien tan
 ├──────────────────────────┼─────────────────────────────┼────────────────────────────────┤
 │ Poller 4: Obrolan Aktif  │ GET admin/profil-pengguna/  │ Interval: 2.5 - 3.5 Detik      │
 │           (Halaman Chat) │ messages/conversation/{id}  │ Target: Bubble Chat Baru,      │
-│                          │                             │ Quoted Replies, Read Receipts  │
+│                          │                             │ Quoted Replies, In-Place Sync  │
 └──────────────────────────┴─────────────────────────────┴────────────────────────────────┘
 ```
-
-### 5.1 Optimasi Kinerja Polling
-- **Throttling & Visibility Detection:** Polling otomatis dijeda saat tab browser tidak aktif (`document.hidden = true`) untuk menghemat bandwidth dan beban server.
-- **Bulk Database Query:** `pollDashboard` menggunakan single query bulk map (`whereIn`, `pluck`, `groupBy`) sehingga eksekusi database tetap di bawah 15ms.
 
 ---
 
