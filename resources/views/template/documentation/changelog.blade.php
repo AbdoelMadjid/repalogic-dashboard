@@ -117,7 +117,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.8.2 -->
+                        <!-- Version 2.8.3 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -125,8 +125,40 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.8.2</h5>
+                                        <h5 class="fw-bold mb-0">v2.8.3</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.3</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-04 09:22 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Modern 3-Dots Action Dropdown Menu in Chat Bubble (Balas, Teruskan, Pin &amp; Hapus), Streamlined Message Timestamp Footer &amp; Inline Clean Reaction Results</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Menu Aksi Titik Tiga (3-Dots Dropdown) di Sudut Bubble Chat (<code>messages.blade.php</code> &amp; <code>messages.js</code>):</strong> Merapikan tata letak tombol aksi pesan dengan mengemas opsi <em>Balas</em>, <em>Teruskan</em>, <em>Pin / Lepas Pin</em>, dan <em>Hapus Pesan</em> ke dalam tombol titik tiga (<em>three-dots ellipsis menu</em>) pada sudut kiri atas untuk lawan bicara dan sudut kanan atas untuk pesan sendiri.</li>
+                                    <li><strong class="text-dark">Penataan Hasil Reaksi Emosi Bersih di Samping Tombol Reaksi:</strong> Hasil reaksi emoji kini ditampilkan sejajar langsung di samping tombol reaksi emoji tanpa badge/border (hanya emotikon dan angka). Pada pesan sendiri, hasil reaksi berada di sebelah kanan tombol reaksi. Pada pesan lawan bicara, hasil reaksi berada di sebelah kiri tombol reaksi.</li>
+                                    <li><strong class="text-dark">Penyederhanaan Baris Informasi Bawah Bubble Chat:</strong> Membersihkan deretan tombol aksi di bawah bubble pesan sehingga hanya menampilkan waktu pengiriman, lencana sematan (<em>pinned badge</em>), dan tombol reaksi emoji beserta hasil reaksinya secara elegan dan proporsional.</li>
+                                    <li><strong class="text-dark">Sinkronisasi Real-Time Reaksi Emoji &amp; Sematan Pin Lawan Bicara (<code>messages.js</code>):</strong> Menambahkan mekanisme <em>in-place selective DOM sync</em> pada polling berkala percakapan. Saat lawan bicara menambahkan/menghapus reaksi emoji atau menyematkan/melepas pin pesan, perubahan langsung ter-update secara otomatis di layar lawan bicara tanpa me-reset posisi scroll pengguna atau mengganggu pemutaran audio.</li>
+                                    <li><strong class="text-dark">Desain &amp; Transisi Dropdown Interaktif (<code>messages.css</code>):</strong> Menambahkan efek visual blur halus pada tombol titik tiga dengan opasitas adaptif saat hover, dropdown menu beranimasi lembut, serta pemisahan opsi aksi berbahaya (<em>Hapus</em>) dengan warna merah dan garis pemisah.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Messages &amp; Chat</span>
+                                    <span class="badge bg-light text-dark border fs-xs">3-Dots Dropdown Menu</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Inline Clean Reactions</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Emoji Placement Alignment</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Chat Bubble Refinement</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Optimistic UI Sync</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.8.2 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-check fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.8.2</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.2</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-04 09:12 WIB</span>

@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const pinnedTextPreview = document.getElementById('pinned-text-preview');
     const btnJumpToPinned = document.getElementById('btn-jump-to-pinned');
     const btnUnpinBanner = document.getElementById('btn-unpin-banner');
-    let currentPinnedMessageId = null;
+    let currentPinnedMessageId = config.initialPinnedMessageId || null;
 
     // Quick Reaction Elements
     const quickReactionPopover = document.getElementById('quick-reaction-popover');
@@ -91,9 +91,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const users = reactions[emoji];
             if (Array.isArray(users) && users.length > 0) {
                 const hasReacted = users.includes(currentUserId);
-                html += `<button type="button" class="btn btn-xs py-0.5 px-1.5 rounded-pill border ${hasReacted ? 'bg-primary-subtle text-primary border-primary' : 'bg-light text-dark border-secondary-subtle'} btn-reaction-pill fs-xxs d-inline-flex align-items-center gap-1" data-msg-id="${msgId}" data-emoji="${emoji}" title="${users.length} orang bereaksi ${emoji}">
-                    <span>${emoji}</span>
-                    <span class="fw-semibold">${users.length}</span>
+                html += `<button type="button" class="btn btn-link p-0 text-decoration-none btn-reaction-pill fs-11 d-inline-flex align-items-center gap-0.5 ${hasReacted ? 'text-primary fw-semibold' : 'text-muted'}" data-msg-id="${msgId}" data-emoji="${emoji}" title="${users.length} orang bereaksi ${emoji}" style="line-height: 1;">
+                    <span class="fs-12">${emoji}</span>
+                    <span class="fs-11 ${hasReacted ? 'fw-bold text-primary' : 'text-muted opacity-85'}">${users.length}</span>
                 </button>`;
             }
         });
@@ -697,8 +697,54 @@ document.addEventListener('DOMContentLoaded', function() {
                 const newLastMsg = newCount > 0 ? messages[newCount - 1] : null;
                 const newLastId = newLastMsg ? newLastMsg.id : null;
 
-                // Jika sedang polling dan tidak ada perubahan total/id pesan terakhir, abaikan re-render DOM
+                // Jika sedang polling dan tidak ada perubahan total/id pesan terakhir, lakukan sinkronisasi in-place (reaksi emoji & sematan pin) secara presisi tanpa re-render keseluruhan DOM
                 if (isPolling && newCount === lastMessageCount && newLastId === lastMessageId) {
+                    let polledPinnedMsg = null;
+                    messages.forEach(function(msg) {
+                        if (msg.is_pinned) {
+                            polledPinnedMsg = msg;
+                        }
+                        const msgEl = document.getElementById(`chat-msg-${msg.id}`);
+                        if (msgEl) {
+                            // 1. Sinkronisasi Reaksi Emoji Real-Time
+                            const reactionsContainer = document.getElementById(`chat-reactions-${msg.id}`);
+                            if (reactionsContainer) {
+                                const newReactionsHtml = renderReactionsHtml(msg.id, msg.reactions, msg.is_sender);
+                                if (reactionsContainer.innerHTML.trim() !== newReactionsHtml.trim()) {
+                                    reactionsContainer.innerHTML = newReactionsHtml;
+                                }
+                            }
+
+                            // 2. Sinkronisasi Status Pin Real-Time (Tombol Dropdown & Badge Indikator)
+                            const isPinned = msg.is_pinned === true;
+                            const btnPin = msgEl.querySelector('.btn-pin-msg');
+                            if (btnPin) {
+                                const currentPinnedState = btnPin.getAttribute('data-is-pinned') === '1';
+                                if (currentPinnedState !== isPinned) {
+                                    btnPin.setAttribute('data-is-pinned', isPinned ? '1' : '0');
+                                    btnPin.innerHTML = `<i class="ti ${isPinned ? 'ti-pinned-off text-warning' : 'ti-pin text-warning'} fs-14"></i> ${isPinned ? 'Lepas Pin' : 'Pin'}`;
+                                }
+                            }
+
+                            const pinIndicator = msgEl.querySelector('.pinned-indicator');
+                            if (isPinned && !pinIndicator) {
+                                const statusTimeEl = msgEl.querySelector('.chat-status-time');
+                                if (statusTimeEl && statusTimeEl.parentElement) {
+                                    const badgeHtml = '<span class="badge bg-success-subtle text-success border border-success-subtle fs-xxs py-0.5 px-1 pinned-indicator" title="Pesan Disematkan"><i class="ti ti-pin-filled me-0.5"></i> Sematan</span>';
+                                    if (msg.is_sender) {
+                                        statusTimeEl.insertAdjacentHTML('beforebegin', badgeHtml);
+                                    } else {
+                                        statusTimeEl.insertAdjacentHTML('afterend', badgeHtml);
+                                    }
+                                }
+                            } else if (!isPinned && pinIndicator) {
+                                pinIndicator.remove();
+                            }
+                        }
+                    });
+
+                    // 3. Sinkronisasi Banner Pesan Tersemat di Bagian Atas
+                    updatePinnedBanner(polledPinnedMsg);
                     return;
                 }
 
@@ -726,8 +772,36 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (!isSender) {
                             html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0 chat-avatar-opponent" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
                         }
-                        html += `<div style="max-width: 75%;">
-                            <div class="chat-message py-2 px-3 ${isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border'} rounded shadow-sm text-start position-relative">`;
+                        html += `<div style="max-width: 75%; min-width: 140px;">
+                            <div class="chat-message py-2 px-3 ${isSender ? 'pe-4 bg-primary-subtle text-dark' : 'ps-4 bg-light text-dark border'} rounded shadow-sm text-start position-relative">
+                                <div class="dropdown position-absolute top-0 ${isSender ? 'end-0 me-1' : 'start-0 ms-1'} mt-1 chat-msg-dropdown">
+                                    <button class="btn btn-sm btn-link p-0 text-decoration-none dropdown-toggle-no-caret d-flex align-items-center justify-content-center chat-msg-more-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Opsi Pesan">
+                                        <i class="ti ti-dots-vertical fs-14"></i>
+                                    </button>
+                                    <ul class="dropdown-menu ${isSender ? 'dropdown-menu-end' : 'dropdown-menu-start'} shadow-sm fs-12 py-1 border-0" style="z-index: 1050; min-width: 140px;">
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 btn-reply-msg" href="javascript:void(0);" data-msg-id="${msg.id}" data-sender-name="${escapeHtml(senderName)}" data-msg-body="${escapeHtml(replyText)}">
+                                                <i class="ti ti-corner-up-left text-primary fs-14"></i> Balas
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 btn-forward-msg" href="javascript:void(0);" data-msg-id="${msg.id}">
+                                                <i class="ti ti-arrow-forward-up text-info fs-14"></i> Teruskan
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 btn-pin-msg" href="javascript:void(0);" data-msg-id="${msg.id}" data-is-pinned="${isPinned ? '1' : '0'}">
+                                                <i class="ti ${isPinned ? 'ti-pinned-off text-warning' : 'ti-pin text-warning'} fs-14"></i> ${isPinned ? 'Lepas Pin' : 'Pin'}
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider my-1"></li>
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 text-danger btn-delete-msg" href="javascript:void(0);" data-msg-id="${msg.id}" data-is-sender="${isSender ? '1' : '0'}">
+                                                <i class="ti ti-trash fs-14"></i> Hapus
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>`;
                         
                         if (isForwarded) {
                             html += `<div class="fs-11 text-muted fst-italic mb-1 d-flex align-items-center gap-1">
@@ -762,30 +836,35 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                         html += `</div>
 
-                        <!-- REACTIONS CONTAINER -->
-                        <div class="chat-reactions-container d-flex flex-wrap gap-1 mt-1 ${isSender ? 'justify-content-end' : 'justify-content-start'}" id="chat-reactions-${msg.id}">
-                            ${renderReactionsHtml(msg.id, reactions, isSender)}
-                        </div>
-
-                        <!-- ACTION ROW -->
-                        <div class="d-flex align-items-center gap-2 text-muted fs-xs mt-1 ${isSender ? 'justify-content-end' : 'justify-content-start'}">
-                            <span class="chat-status-time"><i class="ti ti-clock me-0.5"></i> ${msg.time_formatted}</span>
-                            ${isPinned ? '<span class="badge bg-success-subtle text-success border border-success-subtle fs-xxs py-0.5 px-1 pinned-indicator" title="Pesan Disematkan"><i class="ti ti-pin-filled me-0.5"></i> Sematan</span>' : ''}
-                            <button type="button" class="btn btn-link p-0 text-muted btn-react-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" title="Beri Reaksi Emoji">
-                                <i class="ti ti-mood-smile"></i>
-                            </button>
-                            <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" data-sender-name="${escapeHtml(senderName)}" data-msg-body="${escapeHtml(replyText)}" title="Balas Pesan Ini">
-                                <i class="ti ti-corner-up-left"></i> Balas
-                            </button>
-                            <button type="button" class="btn btn-link p-0 text-muted btn-forward-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" title="Teruskan Pesan">
-                                <i class="ti ti-arrow-forward-up"></i> Teruskan
-                            </button>
-                            <button type="button" class="btn btn-link p-0 text-muted btn-pin-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" data-is-pinned="${isPinned ? '1' : '0'}" title="${isPinned ? 'Lepas Sematan' : 'Sematkan Pesan'}">
-                                <i class="ti ${isPinned ? 'ti-pinned-off text-warning' : 'ti-pin'}"></i> ${isPinned ? 'Lepas Pin' : 'Pin'}
-                            </button>
-                            <button type="button" class="btn btn-link p-0 text-danger btn-delete-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover ms-1" data-msg-id="${msg.id}" data-is-sender="${isSender ? '1' : '0'}" title="${isSender ? 'Hapus / Tarik untuk Semua Orang' : 'Hapus untuk Saya'}">
-                                <i class="ti ti-trash"></i> Hapus
-                            </button>
+                        <!-- ACTION ROW & REACTIONS -->
+                        <div class="d-flex align-items-center justify-content-between gap-2 text-muted fs-xs mt-1 w-100 px-0.5">
+                            ${isSender ? `
+                                <div class="d-flex align-items-center gap-1.5">
+                                    <button type="button" class="btn btn-link p-0 text-muted btn-react-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" title="Beri Reaksi Emoji">
+                                        <i class="ti ti-mood-smile"></i>
+                                    </button>
+                                    <div class="chat-reactions-container d-inline-flex align-items-center gap-1.5" id="chat-reactions-${msg.id}">
+                                        ${renderReactionsHtml(msg.id, reactions, isSender)}
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-1.5 ms-auto">
+                                    ${isPinned ? '<span class="badge bg-success-subtle text-success border border-success-subtle fs-xxs py-0.5 px-1 pinned-indicator" title="Pesan Disematkan"><i class="ti ti-pin-filled me-0.5"></i> Sematan</span>' : ''}
+                                    <span class="chat-status-time"><i class="ti ti-clock me-0.5"></i> ${msg.time_formatted}</span>
+                                </div>
+                            ` : `
+                                <div class="d-flex align-items-center gap-1.5 me-auto">
+                                    <span class="chat-status-time"><i class="ti ti-clock me-0.5"></i> ${msg.time_formatted}</span>
+                                    ${isPinned ? '<span class="badge bg-success-subtle text-success border border-success-subtle fs-xxs py-0.5 px-1 pinned-indicator" title="Pesan Disematkan"><i class="ti ti-pin-filled me-0.5"></i> Sematan</span>' : ''}
+                                </div>
+                                <div class="d-flex align-items-center gap-1.5 ms-auto">
+                                    <div class="chat-reactions-container d-inline-flex align-items-center gap-1.5" id="chat-reactions-${msg.id}">
+                                        ${renderReactionsHtml(msg.id, reactions, isSender)}
+                                    </div>
+                                    <button type="button" class="btn btn-link p-0 text-muted btn-react-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover" data-msg-id="${msg.id}" title="Beri Reaksi Emoji">
+                                        <i class="ti ti-mood-smile"></i>
+                                    </button>
+                                </div>
+                            `}
                         </div>
                     </div>`;
                     if (isSender) {
@@ -932,9 +1011,31 @@ document.addEventListener('DOMContentLoaded', function() {
                             statusTimeEl.innerHTML = `<i class="ti ti-check text-primary me-0.5" title="Terkirim"></i> ${data.message.time_formatted || timeFormatted}`;
                         }
 
+                        const dropdownEl = tempEl.querySelector('.chat-msg-dropdown');
+                        if (dropdownEl) dropdownEl.classList.remove('d-none');
+
+                        const btnReact = tempEl.querySelector('.btn-react-msg');
+                        if (btnReact) {
+                            btnReact.setAttribute('data-msg-id', data.message.id);
+                            btnReact.classList.remove('d-none');
+                        }
+
                         const btnReply = tempEl.querySelector('.btn-reply-msg');
                         if (btnReply) {
                             btnReply.setAttribute('data-msg-id', data.message.id);
+                            btnReply.classList.remove('d-none');
+                        }
+
+                        const btnForward = tempEl.querySelector('.btn-forward-msg');
+                        if (btnForward) {
+                            btnForward.setAttribute('data-msg-id', data.message.id);
+                            btnForward.classList.remove('d-none');
+                        }
+
+                        const btnPin = tempEl.querySelector('.btn-pin-msg');
+                        if (btnPin) {
+                            btnPin.setAttribute('data-msg-id', data.message.id);
+                            btnPin.classList.remove('d-none');
                         }
 
                         const btnDelete = tempEl.querySelector('.btn-delete-msg');
@@ -1004,8 +1105,36 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!isSender) {
             html += `<img src="${avatar}" class="rounded-circle object-fit-cover shadow-sm flex-shrink-0 chat-avatar-opponent" style="width: 36px; height: 36px; object-fit: cover; object-position: top;" alt="Avatar" />`;
         }
-        html += `<div style="max-width: 75%;">
-            <div class="chat-message py-2 px-3 ${isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border'} rounded shadow-sm text-start position-relative">`;
+        html += `<div style="max-width: 75%; min-width: 140px;">
+            <div class="chat-message py-2 px-3 ${isSender ? 'pe-4 bg-primary-subtle text-dark' : 'ps-4 bg-light text-dark border'} rounded shadow-sm text-start position-relative">
+                <div class="dropdown position-absolute top-0 ${isSender ? 'end-0 me-1' : 'start-0 ms-1'} mt-1 chat-msg-dropdown ${isPending ? 'd-none' : ''}">
+                    <button class="btn btn-sm btn-link p-0 text-decoration-none dropdown-toggle-no-caret d-flex align-items-center justify-content-center chat-msg-more-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Opsi Pesan">
+                        <i class="ti ti-dots-vertical fs-14"></i>
+                    </button>
+                    <ul class="dropdown-menu ${isSender ? 'dropdown-menu-end' : 'dropdown-menu-start'} shadow-sm fs-12 py-1 border-0" style="z-index: 1050; min-width: 140px;">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 btn-reply-msg" href="javascript:void(0);" data-msg-id="${msg.id}" data-sender-name="${escapeHtml(senderName)}" data-msg-body="${escapeHtml(replyText)}">
+                                <i class="ti ti-corner-up-left text-primary fs-14"></i> Balas
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 btn-forward-msg" href="javascript:void(0);" data-msg-id="${msg.id}">
+                                <i class="ti ti-arrow-forward-up text-info fs-14"></i> Teruskan
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 btn-pin-msg" href="javascript:void(0);" data-msg-id="${msg.id}" data-is-pinned="${isPinned ? '1' : '0'}">
+                                <i class="ti ${isPinned ? 'ti-pinned-off text-warning' : 'ti-pin text-warning'} fs-14"></i> ${isPinned ? 'Lepas Pin' : 'Pin'}
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider my-1"></li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 text-danger btn-delete-msg" href="javascript:void(0);" data-msg-id="${msg.id}" data-is-sender="${isSender ? '1' : '0'}">
+                                <i class="ti ti-trash fs-14"></i> Hapus
+                            </a>
+                        </li>
+                    </ul>
+                </div>`;
         
         if (isForwarded) {
             html += `<div class="fs-11 text-muted fst-italic mb-1 d-flex align-items-center gap-1">
@@ -1031,30 +1160,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
         html += `</div>
 
-        <!-- REACTIONS CONTAINER -->
-        <div class="chat-reactions-container d-flex flex-wrap gap-1 mt-1 ${isSender ? 'justify-content-end' : 'justify-content-start'}" id="chat-reactions-${msg.id}">
-            ${renderReactionsHtml(msg.id, reactions, isSender)}
-        </div>
-
-        <!-- ACTION ROW -->
-        <div class="d-flex align-items-center gap-2 text-muted fs-xs mt-1 ${isSender ? 'justify-content-end' : 'justify-content-start'}">
-            <span class="chat-status-time">${timeIndicator}</span>
-            ${isPinned ? '<span class="badge bg-success-subtle text-success border border-success-subtle fs-xxs py-0.5 px-1 pinned-indicator" title="Pesan Disematkan"><i class="ti ti-pin-filled me-0.5"></i> Sematan</span>' : ''}
-            <button type="button" class="btn btn-link p-0 text-muted btn-react-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover ${isPending ? 'd-none' : ''}" data-msg-id="${msg.id}" title="Beri Reaksi Emoji">
-                <i class="ti ti-mood-smile"></i>
-            </button>
-            <button type="button" class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover ${isPending ? 'd-none' : ''}" data-msg-id="${msg.id}" data-sender-name="${escapeHtml(senderName)}" data-msg-body="${escapeHtml(replyText)}" title="Balas Pesan Ini">
-                <i class="ti ti-corner-up-left"></i> Balas
-            </button>
-            <button type="button" class="btn btn-link p-0 text-muted btn-forward-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover ${isPending ? 'd-none' : ''}" data-msg-id="${msg.id}" title="Teruskan Pesan">
-                <i class="ti ti-arrow-forward-up"></i> Teruskan
-            </button>
-            <button type="button" class="btn btn-link p-0 text-muted btn-pin-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover ${isPending ? 'd-none' : ''}" data-msg-id="${msg.id}" data-is-pinned="${isPinned ? '1' : '0'}" title="${isPinned ? 'Lepas Sematan' : 'Sematkan Pesan'}">
-                <i class="ti ${isPinned ? 'ti-pinned-off text-warning' : 'ti-pin'}"></i> ${isPinned ? 'Lepas Pin' : 'Pin'}
-            </button>
-            <button type="button" class="btn btn-link p-0 text-danger btn-delete-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover ms-1 ${isPending ? 'd-none' : ''}" data-msg-id="${msg.id}" data-is-sender="${isSender ? '1' : '0'}" title="${isSender ? 'Hapus / Tarik untuk Semua Orang' : 'Hapus untuk Saya'}">
-                <i class="ti ti-trash"></i> Hapus
-            </button>
+        <!-- ACTION ROW & REACTIONS -->
+        <div class="d-flex align-items-center justify-content-between gap-2 text-muted fs-xs mt-1 w-100 px-0.5">
+            ${isSender ? `
+                <div class="d-flex align-items-center gap-1.5">
+                    <button type="button" class="btn btn-link p-0 text-muted btn-react-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover ${isPending ? 'd-none' : ''}" data-msg-id="${msg.id}" title="Beri Reaksi Emoji">
+                        <i class="ti ti-mood-smile"></i>
+                    </button>
+                    <div class="chat-reactions-container d-inline-flex align-items-center gap-1.5" id="chat-reactions-${msg.id}">
+                        ${renderReactionsHtml(msg.id, reactions, isSender)}
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-1.5 ms-auto">
+                    ${isPinned ? '<span class="badge bg-success-subtle text-success border border-success-subtle fs-xxs py-0.5 px-1 pinned-indicator" title="Pesan Disematkan"><i class="ti ti-pin-filled me-0.5"></i> Sematan</span>' : ''}
+                    <span class="chat-status-time">${timeIndicator}</span>
+                </div>
+            ` : `
+                <div class="d-flex align-items-center gap-1.5 me-auto">
+                    <span class="chat-status-time">${timeIndicator}</span>
+                    ${isPinned ? '<span class="badge bg-success-subtle text-success border border-success-subtle fs-xxs py-0.5 px-1 pinned-indicator" title="Pesan Disematkan"><i class="ti ti-pin-filled me-0.5"></i> Sematan</span>' : ''}
+                </div>
+                <div class="d-flex align-items-center gap-1.5 ms-auto">
+                    <div class="chat-reactions-container d-inline-flex align-items-center gap-1.5" id="chat-reactions-${msg.id}">
+                        ${renderReactionsHtml(msg.id, reactions, isSender)}
+                    </div>
+                    <button type="button" class="btn btn-link p-0 text-muted btn-react-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover ${isPending ? 'd-none' : ''}" data-msg-id="${msg.id}" title="Beri Reaksi Emoji">
+                        <i class="ti ti-mood-smile"></i>
+                    </button>
+                </div>
+            `}
         </div>
     </div>`;
         if (isSender) {
@@ -2106,26 +2240,32 @@ document.addEventListener('DOMContentLoaded', function() {
         if (reactionsContainer) {
             let currentPill = reactionsContainer.querySelector(`.btn-reaction-pill[data-emoji="${emoji}"]`);
             if (currentPill) {
-                const countSpan = currentPill.querySelector('.fw-semibold');
+                const countSpan = currentPill.querySelector('span:last-child');
                 let currentCount = countSpan ? parseInt(countSpan.textContent.trim() || '0', 10) : 0;
-                const hasReacted = currentPill.classList.contains('bg-primary-subtle');
+                const hasReacted = currentPill.classList.contains('text-primary');
                 if (hasReacted) {
                     currentCount = Math.max(0, currentCount - 1);
                     if (currentCount === 0) {
                         currentPill.remove();
                     } else {
-                        if (countSpan) countSpan.textContent = currentCount;
-                        currentPill.className = 'btn btn-xs py-0.5 px-1.5 rounded-pill border bg-light text-dark border-secondary-subtle btn-reaction-pill fs-xxs d-inline-flex align-items-center gap-1';
+                        if (countSpan) {
+                            countSpan.textContent = currentCount;
+                            countSpan.className = 'fs-11 text-muted opacity-85';
+                        }
+                        currentPill.className = 'btn btn-link p-0 text-decoration-none btn-reaction-pill fs-11 d-inline-flex align-items-center gap-0.5 text-muted';
                     }
                 } else {
                     currentCount++;
-                    if (countSpan) countSpan.textContent = currentCount;
-                    currentPill.className = 'btn btn-xs py-0.5 px-1.5 rounded-pill border bg-primary-subtle text-primary border-primary btn-reaction-pill fs-xxs d-inline-flex align-items-center gap-1';
+                    if (countSpan) {
+                        countSpan.textContent = currentCount;
+                        countSpan.className = 'fs-11 fw-bold text-primary';
+                    }
+                    currentPill.className = 'btn btn-link p-0 text-decoration-none btn-reaction-pill fs-11 d-inline-flex align-items-center gap-0.5 text-primary fw-semibold';
                 }
             } else {
-                const newPillHtml = `<button type="button" class="btn btn-xs py-0.5 px-1.5 rounded-pill border bg-primary-subtle text-primary border-primary btn-reaction-pill fs-xxs d-inline-flex align-items-center gap-1" data-msg-id="${msgId}" data-emoji="${emoji}" title="1 orang bereaksi ${emoji}">
-                    <span>${emoji}</span>
-                    <span class="fw-semibold">1</span>
+                const newPillHtml = `<button type="button" class="btn btn-link p-0 text-decoration-none btn-reaction-pill fs-11 d-inline-flex align-items-center gap-0.5 text-primary fw-semibold" data-msg-id="${msgId}" data-emoji="${emoji}" title="1 orang bereaksi ${emoji}" style="line-height: 1;">
+                    <span class="fs-12">${emoji}</span>
+                    <span class="fs-11 fw-bold text-primary">1</span>
                 </button>`;
                 reactionsContainer.insertAdjacentHTML('beforeend', newPillHtml);
             }
@@ -2406,6 +2546,39 @@ document.addEventListener('DOMContentLoaded', function() {
                             const statusTimeEl = tempEl.querySelector('.chat-status-time');
                             if (statusTimeEl) {
                                 statusTimeEl.innerHTML = `<i class="ti ti-check text-primary me-0.5" title="Terkirim"></i> ${data.message.time_formatted || timeFormatted}`;
+                            }
+
+                            const dropdownEl = tempEl.querySelector('.chat-msg-dropdown');
+                            if (dropdownEl) dropdownEl.classList.remove('d-none');
+
+                            const btnReact = tempEl.querySelector('.btn-react-msg');
+                            if (btnReact) {
+                                btnReact.setAttribute('data-msg-id', data.message.id);
+                                btnReact.classList.remove('d-none');
+                            }
+
+                            const btnReply = tempEl.querySelector('.btn-reply-msg');
+                            if (btnReply) {
+                                btnReply.setAttribute('data-msg-id', data.message.id);
+                                btnReply.classList.remove('d-none');
+                            }
+
+                            const btnForward = tempEl.querySelector('.btn-forward-msg');
+                            if (btnForward) {
+                                btnForward.setAttribute('data-msg-id', data.message.id);
+                                btnForward.classList.remove('d-none');
+                            }
+
+                            const btnPin = tempEl.querySelector('.btn-pin-msg');
+                            if (btnPin) {
+                                btnPin.setAttribute('data-msg-id', data.message.id);
+                                btnPin.classList.remove('d-none');
+                            }
+
+                            const btnDelete = tempEl.querySelector('.btn-delete-msg');
+                            if (btnDelete) {
+                                btnDelete.setAttribute('data-msg-id', data.message.id);
+                                btnDelete.classList.remove('d-none');
                             }
                         }
                         pollSidebarContacts();

@@ -213,16 +213,19 @@
                 </div>
             </div>
 
+            @php
+                $pinnedMessage = $activeUser && $messages->isNotEmpty() ? $messages->firstWhere('is_pinned', true) : null;
+            @endphp
             <!-- PINNED MESSAGE FLOATING BANNER -->
             <div id="pinned-message-banner"
-                class="alert border-0 rounded-0 mb-0 py-2 px-3 d-flex align-items-center justify-content-between d-none"
+                class="alert border-0 rounded-0 mb-0 py-2 px-3 d-flex align-items-center justify-content-between {{ $pinnedMessage ? '' : 'd-none' }}"
                 style="background-color: #f0fdf4; color: #166534; border-bottom: 1px solid #bbf7d0 !important;">
                 <div class="d-flex align-items-center gap-2 overflow-hidden me-2 flex-grow-1" id="btn-jump-to-pinned"
                     role="button" title="Klik untuk melompat ke pesan yang disematkan" style="cursor: pointer;">
                     <i class="ti ti-pin-filled fs-16 flex-shrink-0 text-success"></i>
                     <div class="text-truncate fs-12">
                         <strong class="fw-semibold text-success">Pesan Disematkan:</strong> <span id="pinned-text-preview"
-                            class="text-dark">...</span>
+                            class="text-dark">{{ $pinnedMessage ? Str::limit($pinnedMessage->body ?: ($pinnedMessage->attachment_name ?: 'Pesan Suara / Berkas'), 60) : '...' }}</span>
                     </div>
                 </div>
                 <button type="button" class="btn btn-sm btn-link text-success p-0 text-decoration-none flex-shrink-0"
@@ -254,9 +257,46 @@
                                     style="width: 36px; height: 36px; object-fit: cover; object-position: top;"
                                     alt="Avatar" />
                             @endif
-                            <div style="max-width: 75%;">
+                            <div style="max-width: 75%; min-width: 140px;">
                                 <div
-                                    class="chat-message py-2 px-3 {{ $isSender ? 'bg-primary-subtle text-dark' : 'bg-light text-dark border' }} rounded shadow-sm text-start position-relative">
+                                    class="chat-message py-2 px-3 {{ $isSender ? 'pe-4 bg-primary-subtle text-dark' : 'ps-4 bg-light text-dark border' }} rounded shadow-sm text-start position-relative">
+                                    
+                                    <!-- 3-DOTS ACTION DROPDOWN (KIRI UNTUK LAWAN, KANAN UNTUK SENDIRI) -->
+                                    <div class="dropdown position-absolute top-0 {{ $isSender ? 'end-0 me-1' : 'start-0 ms-1' }} mt-1 chat-msg-dropdown">
+                                        <button class="btn btn-sm btn-link p-0 text-decoration-none dropdown-toggle-no-caret d-flex align-items-center justify-content-center chat-msg-more-btn"
+                                            type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Opsi Pesan">
+                                            <i class="ti ti-dots-vertical fs-14"></i>
+                                        </button>
+                                        <ul class="dropdown-menu {{ $isSender ? 'dropdown-menu-end' : 'dropdown-menu-start' }} shadow-sm fs-12 py-1 border-0" style="z-index: 1050; min-width: 140px;">
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 btn-reply-msg" href="javascript:void(0);"
+                                                    data-msg-id="{{ $msg->id }}" data-sender-name="{{ $senderName }}"
+                                                    data-msg-body="{{ e($msg->body ?: ($msg->attachment_name ?: 'Lampiran berkas')) }}">
+                                                    <i class="ti ti-corner-up-left text-primary fs-14"></i> Balas
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 btn-forward-msg" href="javascript:void(0);"
+                                                    data-msg-id="{{ $msg->id }}">
+                                                    <i class="ti ti-arrow-forward-up text-info fs-14"></i> Teruskan
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 btn-pin-msg" href="javascript:void(0);"
+                                                    data-msg-id="{{ $msg->id }}" data-is-pinned="{{ $isPinned ? '1' : '0' }}">
+                                                    <i class="ti {{ $isPinned ? 'ti-pinned-off text-warning' : 'ti-pin text-warning' }} fs-14"></i> {{ $isPinned ? 'Lepas Pin' : 'Pin' }}
+                                                </a>
+                                            </li>
+                                            <li><hr class="dropdown-divider my-1"></li>
+                                            <li>
+                                                <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 text-danger btn-delete-msg" href="javascript:void(0);"
+                                                    data-msg-id="{{ $msg->id }}" data-is-sender="{{ $isSender ? '1' : '0' }}">
+                                                    <i class="ti ti-trash fs-14"></i> Hapus
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
                                     @if ($isForwarded)
                                         <div class="fs-11 text-muted fst-italic mb-1 d-flex align-items-center gap-1">
                                             <i class="ti ti-arrow-forward-up fs-12 text-primary"></i> Diteruskan
@@ -380,64 +420,76 @@
                                     @endif
                                 </div>
 
-                                <!-- REACTIONS CONTAINER -->
-                                <div class="chat-reactions-container d-flex flex-wrap gap-1 mt-1 {{ $isSender ? 'justify-content-end' : 'justify-content-start' }}"
-                                    id="chat-reactions-{{ $msg->id }}">
-                                    @foreach ($reactions as $emoji => $users)
-                                        @if (!empty($users))
-                                            @php $hasReacted = in_array(auth()->id(), $users); @endphp
-                                            <button type="button"
-                                                class="btn btn-xs py-0.5 px-1.5 rounded-pill border {{ $hasReacted ? 'bg-primary-subtle text-primary border-primary' : 'bg-light text-dark border-secondary-subtle' }} btn-reaction-pill fs-xxs d-inline-flex align-items-center gap-1"
-                                                data-msg-id="{{ $msg->id }}" data-emoji="{{ $emoji }}"
-                                                title="{{ count($users) }} orang bereaksi {{ $emoji }}">
-                                                <span>{{ $emoji }}</span>
-                                                <span class="fw-semibold">{{ count($users) }}</span>
-                                            </button>
-                                        @endif
-                                    @endforeach
-                                </div>
-
-                                <!-- MESSAGE ACTION BUTTONS -->
+                                <!-- MESSAGE ACTION BUTTONS & REACTIONS -->
                                 <div
-                                    class="d-flex align-items-center gap-2 text-muted fs-xs mt-1 {{ $isSender ? 'justify-content-end' : 'justify-content-start' }}">
-                                    <span class="chat-status-time"><i class="ti ti-clock me-0.5"></i>
-                                        {{ $msg->created_at ? $msg->created_at->format('H:i') : '' }}</span>
-                                    @if ($isPinned)
-                                        <span
-                                            class="badge bg-success-subtle text-success border border-success-subtle fs-xxs py-0.5 px-1 pinned-indicator"
-                                            title="Pesan Disematkan"><i class="ti ti-pin-filled me-0.5"></i>
-                                            Sematan</span>
+                                    class="d-flex align-items-center justify-content-between gap-2 text-muted fs-xs mt-1 w-100 px-0.5">
+                                    @if ($isSender)
+                                        <div class="d-flex align-items-center gap-1.5">
+                                            <button type="button"
+                                                class="btn btn-link p-0 text-muted btn-react-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover"
+                                                data-msg-id="{{ $msg->id }}" title="Beri Reaksi Emoji">
+                                                <i class="ti ti-mood-smile"></i>
+                                            </button>
+                                            <div class="chat-reactions-container d-inline-flex align-items-center gap-1.5"
+                                                id="chat-reactions-{{ $msg->id }}">
+                                                @foreach ($reactions as $emoji => $users)
+                                                    @if (!empty($users))
+                                                        @php $hasReacted = in_array(auth()->id(), $users); @endphp
+                                                        <button type="button"
+                                                            class="btn btn-link p-0 text-decoration-none btn-reaction-pill fs-11 d-inline-flex align-items-center gap-0.5 {{ $hasReacted ? 'text-primary fw-semibold' : 'text-muted' }}"
+                                                            data-msg-id="{{ $msg->id }}" data-emoji="{{ $emoji }}"
+                                                            title="{{ count($users) }} orang bereaksi {{ $emoji }}" style="line-height: 1;">
+                                                            <span class="fs-12">{{ $emoji }}</span>
+                                                            <span class="fs-11 {{ $hasReacted ? 'fw-bold text-primary' : 'text-muted opacity-85' }}">{{ count($users) }}</span>
+                                                        </button>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-1.5 ms-auto">
+                                            @if ($isPinned)
+                                                <span
+                                                    class="badge bg-success-subtle text-success border border-success-subtle fs-xxs py-0.5 px-1 pinned-indicator"
+                                                    title="Pesan Disematkan"><i class="ti ti-pin-filled me-0.5"></i>
+                                                    Sematan</span>
+                                            @endif
+                                            <span class="chat-status-time"><i class="ti ti-clock me-0.5"></i>
+                                                {{ $msg->created_at ? $msg->created_at->format('H:i') : '' }}</span>
+                                        </div>
+                                    @else
+                                        <div class="d-flex align-items-center gap-1.5 me-auto">
+                                            <span class="chat-status-time"><i class="ti ti-clock me-0.5"></i>
+                                                {{ $msg->created_at ? $msg->created_at->format('H:i') : '' }}</span>
+                                            @if ($isPinned)
+                                                <span
+                                                    class="badge bg-success-subtle text-success border border-success-subtle fs-xxs py-0.5 px-1 pinned-indicator"
+                                                    title="Pesan Disematkan"><i class="ti ti-pin-filled me-0.5"></i>
+                                                    Sematan</span>
+                                            @endif
+                                        </div>
+                                        <div class="d-flex align-items-center gap-1.5 ms-auto">
+                                            <div class="chat-reactions-container d-inline-flex align-items-center gap-1.5"
+                                                id="chat-reactions-{{ $msg->id }}">
+                                                @foreach ($reactions as $emoji => $users)
+                                                    @if (!empty($users))
+                                                        @php $hasReacted = in_array(auth()->id(), $users); @endphp
+                                                        <button type="button"
+                                                            class="btn btn-link p-0 text-decoration-none btn-reaction-pill fs-11 d-inline-flex align-items-center gap-0.5 {{ $hasReacted ? 'text-primary fw-semibold' : 'text-muted' }}"
+                                                            data-msg-id="{{ $msg->id }}" data-emoji="{{ $emoji }}"
+                                                            title="{{ count($users) }} orang bereaksi {{ $emoji }}" style="line-height: 1;">
+                                                            <span class="fs-12">{{ $emoji }}</span>
+                                                            <span class="fs-11 {{ $hasReacted ? 'fw-bold text-primary' : 'text-muted opacity-85' }}">{{ count($users) }}</span>
+                                                        </button>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                            <button type="button"
+                                                class="btn btn-link p-0 text-muted btn-react-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover"
+                                                data-msg-id="{{ $msg->id }}" title="Beri Reaksi Emoji">
+                                                <i class="ti ti-mood-smile"></i>
+                                            </button>
+                                        </div>
                                     @endif
-                                    <button type="button"
-                                        class="btn btn-link p-0 text-muted btn-react-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover"
-                                        data-msg-id="{{ $msg->id }}" title="Beri Reaksi Emoji">
-                                        <i class="ti ti-mood-smile"></i>
-                                    </button>
-                                    <button type="button"
-                                        class="btn btn-link p-0 text-muted btn-reply-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover"
-                                        data-msg-id="{{ $msg->id }}" data-sender-name="{{ $senderName }}"
-                                        data-msg-body="{{ e($msg->body ?: ($msg->attachment_name ?: 'Lampiran berkas')) }}"
-                                        title="Balas Pesan Ini">
-                                        <i class="ti ti-corner-up-left"></i> Balas
-                                    </button>
-                                    <button type="button"
-                                        class="btn btn-link p-0 text-muted btn-forward-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover"
-                                        data-msg-id="{{ $msg->id }}" title="Teruskan Pesan">
-                                        <i class="ti ti-arrow-forward-up"></i> Teruskan
-                                    </button>
-                                    <button type="button"
-                                        class="btn btn-link p-0 text-muted btn-pin-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover"
-                                        data-msg-id="{{ $msg->id }}" data-is-pinned="{{ $isPinned ? '1' : '0' }}"
-                                        title="{{ $isPinned ? 'Lepas Sematan' : 'Sematkan Pesan' }}">
-                                        <i class="ti {{ $isPinned ? 'ti-pinned-off text-warning' : 'ti-pin' }}"></i>
-                                        {{ $isPinned ? 'Lepas Pin' : 'Pin' }}
-                                    </button>
-                                    <button type="button"
-                                        class="btn btn-link p-0 text-danger btn-delete-msg text-decoration-none fs-xs d-inline-flex align-items-center gap-0.5 opacity-75 opacity-100-hover ms-1"
-                                        data-msg-id="{{ $msg->id }}" data-is-sender="{{ $isSender ? '1' : '0' }}"
-                                        title="{{ $isSender ? 'Hapus / Tarik untuk Semua Orang' : 'Hapus untuk Saya' }}">
-                                        <i class="ti ti-trash"></i> Hapus
-                                    </button>
                                 </div>
                             </div>
                             @if ($isSender)
@@ -828,7 +880,8 @@
             defaultAvatar: "{{ asset('assets/images/users/default-avatar.svg') }}",
             defaultCover: "{{ asset('assets/images/profile-bg.jpg') }}",
             initialMessageCount: {{ $messages->count() }},
-            initialLastMessageId: {{ $messages->isNotEmpty() ? $messages->last()->id : 'null' }}
+            initialLastMessageId: {{ $messages->isNotEmpty() ? $messages->last()->id : 'null' }},
+            initialPinnedMessageId: {{ $pinnedMessage ? $pinnedMessage->id : 'null' }}
         };
     </script>
     <script src="{{ asset('assets/js/admin/profil-pengguna/messages.js') }}"></script>

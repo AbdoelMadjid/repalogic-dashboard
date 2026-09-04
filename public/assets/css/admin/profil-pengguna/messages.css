@@ -103,12 +103,15 @@ mark.search-match.bg-danger {
     background-color: #f1f5f9;
 }
 .btn-reaction-pill {
-    transition: all 0.15s ease;
+    transition: transform 0.15s ease, opacity 0.15s ease;
     cursor: pointer;
     user-select: none;
+    line-height: 1;
+    text-decoration: none !important;
 }
 .btn-reaction-pill:hover {
-    transform: scale(1.1);
+    transform: scale(1.18);
+    opacity: 1 !important;
 }
 
 /* User Detail Modal Cover Banner */
@@ -121,5 +124,56 @@ mark.search-match.bg-danger {
 
 .user-detail-cover-overlay {
     background: linear-gradient(180deg, rgba(15, 23, 42, 0.7) 0%, rgba(15, 23, 42, 0.25) 50%, rgba(15, 23, 42, 0.8) 100%);
+}
+
+/* Chat Message 3-Dots Dropdown */
+.chat-msg-dropdown {
+    opacity: 0.6;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 10;
+}
+.chat-message:hover .chat-msg-dropdown,
+.chat-msg-dropdown.show,
+.chat-msg-dropdown:focus-within {
+    opacity: 1;
+}
+.chat-msg-more-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    color: #64748b !important;
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(2px);
+    transition: all 0.15s ease;
+    border: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.chat-msg-more-btn:hover,
+.chat-msg-more-btn:focus,
+.chat-msg-dropdown.show .chat-msg-more-btn {
+    background-color: #ffffff;
+    color: #0f172a !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+.chat-msg-dropdown .dropdown-menu {
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+    animation: popoverFadeIn 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.chat-msg-dropdown .dropdown-item {
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    margin: 1px 4px;
+    width: calc(100% - 8px);
+    transition: all 0.12s ease;
+}
+.chat-msg-dropdown .dropdown-item:hover {
+    background-color: #f1f5f9;
+}
+.chat-msg-dropdown .dropdown-item.text-danger:hover {
+    background-color: #fee2e2;
+    color: #dc2626 !important;
 }
 
