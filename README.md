@@ -153,6 +153,30 @@ php artisan pail
 
 ---
 
+## 📐 Standar Arsitektur & Pedoman Pengembangan (Project Rules & Architecture Guidelines)
+
+Seluruh pengembang dan AI Coding Assistant (Antigravity Agent) yang berkontribusi pada repositori ini **wajib mematuhi 15 Aturan Baku Arsitektur** (`.agents/AGENTS.md`):
+
+| No | Aturan / Standar | Ringkasan Pedoman & Implementasi |
+| :---: | :--- | :--- |
+| **Rule 1** | **Layout Vertikal & Penempatan Script** | Layout `resources/views/layouts/vertical.blade.php` hanya merender `@yield('content')`. Seluruh tag `<script>` halaman **WAJIB** berada di dalam `@section('content')` sebelum `@endsection`. Dilarang menggunakan `@section('script')`. |
+| **Rule 2** | **Event Delegation untuk Tombol & Modal** | Aksi tombol tabel/modal wajib menggunakan *Event Delegation* (`document.addEventListener('click', function(e) { const btn = e.target.closest('.btn-action'); ... })`) agar konsisten bekerja saat live search, filter, dan pagination. |
+| **Rule 3** | **Standar Autoloading PSR-4** | Penamaan class di `app/` (Controllers, Requests, Models) mematuhi standar PSR-4 sehingga tidak memerlukan `composer dump-autoload` berlebih kecuali saat pemindahan folder/namespace. |
+| **Rule 4** | **Tata Letak Modal Bebas Scroll Internal** | Modal bervolume besar (seperti Matriks Permission) wajib menggunakan ukuran dialog luas (`modal-xl` / `modal-lg`) dan mengalir mengikuti scrollbar peramban utama tanpa container sempit `overflow-y: auto`. |
+| **Rule 5** | **Standar Spatie Permission Matrix Table** | Form penugasan izin hak akses wajib disajikan dalam format tabel matriks: Kolom `MODUL / FITUR`, `CREATE`, `READ`, `UPDATE`, `DELETE`, `LAINNYA`, `SEMUA`, dengan checkbox kontras tinggi (`border: 2px solid #475569 !important`). |
+| **Rule 6** | **Serialisasi JSON Aman untuk Grouped Collection** | Saat mengirim koleksi Eloquent hasil `->groupBy(...)` ke Blade `@json()`, **WAJIB** merantai `->values()` (contoh: `@json($collection->values())`) agar JavaScript membaca data sebagai Array murni, bukan Object non-sekuensial. |
+| **Rule 7** | **Larangan Dataset `data-target` Non-Numerik** | Dilarang menggunakan atribut `data-target="..."` untuk penanda aksi JavaScript karena bertabrakan dengan fungsi `initCounter()` bawaan template yang mengubah teks elemen menjadi `NaN`. Gunakan `data-module`, `data-role`, dsb. |
+| **Rule 8** | **Format Header Tabel Single-Line & Rata Tengah** | Seluruh `<thead>`, `<tr>`, dan `<th>` pada DataTables dan tabel modal wajib menerapkan class `align-middle text-center text-nowrap` agar teks header tidak terpotong atau turun baris secara tidak rapi. |
+| **Rule 9** | **Universal SweetAlert2 Notification Standard** | Dilarang menggunakan `alert()` / `confirm()` bawaan browser. Gunakan atribut `<form data-confirm="...">` atau helper global SweetAlert2: `window.showSuccess()`, `window.showError()`, `window.showWarning()`, `window.showConfirm()`, dan `window.showToast()`. |
+| **Rule 10** | **Hirarki Direktori Modul & Flat View Naming** | Struktur folder harus seragam antar Controller, Request, Model, dan View: `admin/{kelompok}/{modul}.blade.php`. Dilarang membuat subfolder dengan `index.blade.php`. Komponen partial diletakkan di `admin/{kelompok}/partials/`. |
+| **Rule 11** | **Kewajiban Update Changelog & Release History** | Setiap penambahan atau perubahan fitur wajib memperbarui `APP_VERSION`, menambahkan linimasa waktu WIB di `resources/views/template/documentation/changelog.blade.php`, dan mencatatnya pada `docs/riwayat_release_dan_tag.md`. |
+| **Rule 12** | **Warna Card Header & Styling Widget** | Card Header pengaturan utama wajib menggunakan `class="card-header bg-primary text-white py-3"` dengan judul putih. Card Header data/konten netral menggunakan `class="card-header bg-white py-3"`. Dilarang menggunakan `bg-light`. |
+| **Rule 13** | **Standardisasi View Seksi Tema Website Dinamis** | Seluruh view seksi di `resources/views/website/{folder}/{file}.blade.php` wajib menggunakan pembungkus baku netral `<section class="section-custom" id="{target_id}">` tanpa hardcode background warna/gambar di Blade. |
+| **Rule 14** | **Standar Jarak Ikon dan Label (Icon Spacing)** | Seluruh ikon (`<i>`, `<svg>`) yang berdampingan dengan label teks, tombol, badge, atau header tabel **WAJIB** memiliki jarak visual eksplisit (contoh: `me-1.5`, `me-2`, atau container `gap-2`). Dilarang menempel tanpa spasi. |
+| **Rule 15** | **Pemisahan Aset Eksternal CSS & JS** | Seluruh kode CSS dan logika JS untuk modul admin wajib dipisahkan ke dalam berkas eksternal di `public/assets/css/admin/{kelompok}/{modul}.css` dan `public/assets/js/admin/{kelompok}/{modul}.js`. Dilarang menulis blok inline besar di Blade. |
+
+---
+
 ## 🗺️ Roadmap / Rencana Pengembangan (Run Down Pengembangan)
 
 Berikut adalah linimasa pencapaian dan rencana pengembangan arsitektur proyek Repalogic Dashboard:
