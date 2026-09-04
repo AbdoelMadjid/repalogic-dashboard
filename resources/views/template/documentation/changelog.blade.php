@@ -117,7 +117,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.8.4 -->
+                        <!-- Version 2.8.5 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -125,8 +125,38 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.8.4</h5>
+                                        <h5 class="fw-bold mb-0">v2.8.5</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.5</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-04 12:35 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Idle Lock Screen Seamless Re-Authentication, Zero-419 CSRF Graceful Handler, Universal Logout Session Invalidation &amp; Custom 419 Error Template</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Penanganan Otentikasi Ulang Layar Terkunci (<code>LockScreenController.php</code> &amp; <code>lock-screen-modal.blade.php</code>):</strong> Memungkinkan pengguna yang ditinggalkan <em>idle</em> melebihi masa sesi untuk tetap dapat membuka kunci layar menggunakan password akunnya tanpa terblokir pesan <em>"kesalahan jaringan"</em>. Sistem memvalidasi password dan meregenerasi sesi otentikasi serta token CSRF baru secara mulus di latar belakang.</li>
+                                    <li><strong class="text-dark">Pengecualian CSRF &amp; Graceful TokenMismatchException (<code>bootstrap/app.php</code>):</strong> Mendaftarkan rute <code>lock-screen/unlock</code> dan <code>logout</code> dalam pengecualian validasi CSRF serta menambahkan interceptor <code>TokenMismatchException</code> terpusat. Request AJAX mengembalikan respon JSON terstruktur (status 419/401) dan request web otomatis dialihkan ke halaman login tanpa menampilkan layar putih <em>419 Page Expired</em>.</li>
+                                    <li><strong class="text-dark">Penyempurnaan Rute &amp; Aksi Logout (<code>routes/auth.php</code>):</strong> Mendukung metode <code>GET</code> dan <code>POST</code> pada rute <code>/logout</code> serta memastikan klik tombol <em>Keluar / Ganti Akun</em> pada modal lock screen mengeksekusi logout dan pembersihan sesi dengan sempurna.</li>
+                                    <li><strong class="text-dark">Halaman Kesalahan Branded 419 (<code>resources/views/errors/419.blade.php</code>):</strong> Menyediakan template halaman khusus <em>419 Page Expired</em> bertema Repalogic Dashboard dengan tombol navigasi cepat <em>Masuk Kembali</em> dan <em>Muat Ulang Halaman</em>.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-light text-dark border fs-xs">Idle Lock Screen</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Session Re-Auth</span>
+                                    <span class="badge bg-light text-dark border fs-xs">CSRF Protection</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Zero 419 Error</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Custom 419 Page</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.8.4 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xs text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.8.4</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.4</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-04 11:35 WIB</span>

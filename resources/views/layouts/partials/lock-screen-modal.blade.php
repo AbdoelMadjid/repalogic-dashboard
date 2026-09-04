@@ -77,9 +77,9 @@
                 <div class="text-center pt-2 border-top mt-3">
                     <p class="text-muted fs-12 mb-0">
                         Bukan akun Anda?
-                        <a href="javascript:void(0);" class="text-danger fw-semibold text-decoration-underline ms-1"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <i class="ti ti-logout-2 me-0.5 align-middle"></i> Keluar / Ganti Akun
+                        <a href="{{ route('logout') }}" class="text-danger fw-semibold text-decoration-underline ms-1"
+                            onclick="event.preventDefault(); window.location.href = '{{ route('logout') }}';">
+                            <i class="ti ti-logout-2 me-1 align-middle"></i> Keluar / Ganti Akun
                         </a>
                     </p>
                 </div>
@@ -134,6 +134,7 @@
 
     // Durasi Idle: Konfigurasi Terpusat dari Server Database
     let serverIdleMinutes = {{ (int) $serverIdleMinutes }};
+    const userEmail = @json(auth()->user()->email);
     const STORAGE_KEY_LOCKED = 'repalogic_screen_locked';
 
     function getIdleTimeoutMs() {
@@ -300,21 +301,44 @@
             btnUnlockSpinner.classList.remove('d-none');
             if (errorAlert) errorAlert.classList.add('d-none');
 
+            const currentCsrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || "{{ csrf_token() }}";
+
             fetch("{{ route('lock-screen.unlock') }}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                    'X-CSRF-TOKEN': currentCsrf,
+                    'X-Requested-With': 'XMLHttpRequest',
                     'Accept': 'application/json'
                 },
-                body: JSON.stringify({ password: password })
+                body: JSON.stringify({
+                    password: password,
+                    email: userEmail
+                })
             })
             .then(async function(response) {
-                const data = await response.json();
-                if (response.ok && data.success) {
+                let data = null;
+                try {
+                    data = await response.json();
+                } catch (parseError) {
+                    data = null;
+                }
+
+                if (response.ok && data && data.success) {
+                    // Update CSRF token jika dikembalikan oleh server
+                    if (data.csrf_token) {
+                        const metaCsrf = document.querySelector('meta[name="csrf-token"]');
+                        if (metaCsrf) {
+                            metaCsrf.setAttribute('content', data.csrf_token);
+                        }
+                        document.querySelectorAll('input[name="_token"]').forEach(function(input) {
+                            input.value = data.csrf_token;
+                        });
+                    }
+
                     window.unlockScreen();
 
-                    // Tampilkan notifikasi toast jika Toastr/SweetAlert tersedia
+                    // Tampilkan notifikasi toast
                     if (typeof Swal !== 'undefined') {
                         const Toast = Swal.mixin({
                             toast: true,
@@ -328,8 +352,17 @@
                             title: 'Sesi Aktif Kembali'
                         });
                     }
+                } else if (response.status === 401 || (data && data.session_expired)) {
+                    const msg = (data && data.message) ? data.message : 'Sesi Anda telah kedaluwarsa. Mengalihkan ke halaman login...';
+                    if (errorAlert && errorMessage) {
+                        errorMessage.textContent = msg;
+                        errorAlert.classList.remove('d-none');
+                    }
+                    setTimeout(function() {
+                        window.location.href = (data && data.redirect) ? data.redirect : "{{ route('login') }}";
+                    }, 1500);
                 } else {
-                    const msg = data.message || 'Password yang Anda masukkan salah.';
+                    const msg = (data && data.message) ? data.message : 'Password yang Anda masukkan salah. Silakan periksa kembali.';
                     if (errorAlert && errorMessage) {
                         errorMessage.textContent = msg;
                         errorAlert.classList.remove('d-none');
@@ -351,7 +384,7 @@
             .catch(function(err) {
                 console.error('Lock screen unlock error:', err);
                 if (errorAlert && errorMessage) {
-                    errorMessage.textContent = 'Terjadi kesalahan jaringan. Silakan coba lagi.';
+                    errorMessage.textContent = 'Gagal menghubungi server. Silakan periksa koneksi atau coba lagi.';
                     errorAlert.classList.remove('d-none');
                 }
             })

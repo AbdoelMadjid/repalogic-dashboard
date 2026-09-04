@@ -60,10 +60,13 @@ Route::middleware('auth')->group(function () {
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
-
-    Route::post('lock-screen/unlock', [LockScreenController::class, 'unlock'])
-        ->name('lock-screen.unlock');
-
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-        ->name('logout');
 });
+
+// Lock screen unlock: accessible when authenticated or to re-authenticate after idle session timeout
+Route::post('lock-screen/unlock', [LockScreenController::class, 'unlock'])
+    ->middleware('throttle:10,1')
+    ->name('lock-screen.unlock');
+
+// Logout: supports both GET and POST, and handles expired sessions cleanly
+Route::match(['get', 'post'], 'logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->name('logout');

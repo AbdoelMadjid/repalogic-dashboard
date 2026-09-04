@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v2.8.4`  
-> **Terakhir Diperbarui:** 04 September 2026 11:35 WIB  
+> **Versi Terbaru:** `v2.8.5`  
+> **Terakhir Diperbarui:** 04 September 2026 12:35 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v2.8.5`** | `2026-09-04 12:35 WIB` | Idle Lock Screen Seamless Re-Authentication, Zero-419 CSRF Graceful Handler, Universal Logout Session Invalidation & Custom 419 Error Template |
 | **`v2.8.4`** | `2026-09-04 11:35 WIB` | Card with Tabs System Control Center, Persistent Database Settings (`app_settings`), Topbar Realtime Instant DOM Toggle, Zero-Reload Bulk Actions, Active Tab Persistence & Factory Reset to Seeder |
 | **`v2.8.3`** | `2026-09-04 09:22 WIB` | Modern 3-Dots Action Dropdown Menu in Chat Bubble (Balas, Teruskan, Pin & Hapus), Streamlined Message Timestamp Footer, Inline Clean Reactions Beside Reaction Buttons & Real-Time In-Place Polling Sync |
 | **`v2.8.2`** | `2026-09-04 09:12 WIB` | Admin Customizer Optimize Clear Engine (`php artisan optimize:clear` AJAX) & Reset Layout Restoration, Topbar Language Switcher Anti-Flicker, User Profile Motto Text Color Customizer & Real-Time Live Visual Cover Background Preview Sync |
