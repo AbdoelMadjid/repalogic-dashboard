@@ -120,12 +120,13 @@ repalogic-dashboard/
 ```
 
 ### 4. Direktori Dokumentasi Teknis Lengkap (`docs/`)
+- 🏆 [**Ulasan & Evaluasi Menyeluruh Arsitektur Aplikasi**](docs/ulasan_dan_evaluasi_arsitektur_aplikasi.md) — Evaluasi teknis, kematangan arsitektur, kesiapan operasional enterprise, scorecard penilaian kualitas, dan analisis keunggulan sistem.
 - 🏷️ [**Riwayat Lengkap Release & Git Tag**](docs/riwayat_release_dan_tag.md) — Pelacakan versi rilis dan catatan pembaruan komprehensif.
 - 💬 [**Arsitektur & Operasional Fitur Chat / Messages**](docs/arsitektur_dan_operasional_fitur_chat_messages.md) — Skema database pesan, 3-dots action menu, voice note engine, inline reactions, quoted reply, dan in-place selective sync.
 - 🤝 [**Arsitektur & Operasional Pertemanan, Notifikasi & Chat**](docs/arsitektur_dan_operasional_pertemanan_notifikasi_chat.md) — Alur integrasi triad sosial, ajakan berteman, profile likes, lonceng topbar, dan quad-polling engine.
 - 🌐 [**Arsitektur & Operasional Sistem Bilingual (i18n)**](docs/arsitektur_dan_operasional_bilingual.md) — Arsitektur 6 domain kamus modular, parallel loader `Promise.allSettled`, dan auto-sync model listener.
 - 👥 [**Arsitektur & Operasional Manajemen Pengguna**](docs/arsitektur_dan_operasional_manajemen_pengguna.md) — Panduan 6 sub-modul otorisasi Spatie Permission Matrix, users lifecycle, dan audit trail data login.
-- ⚙️ [**Arsitektur & Operasional Fitur dan Pengaturan Aplikasi**](docs/arsitektur_dan_operasional_fitur_dan_pengaturan_aplikasi.md) — Hub pengaturan 6 widget, mode pemeliharaan 503, waktu idle dinamis, dan pembersih cache.
+- ⚙️ [**Arsitektur & Operasional Fitur dan Pengaturan Aplikasi**](docs/arsitektur_dan_operasional_fitur_dan_pengaturan_aplikasi.md) — Hub kontrol Card with Tabs, pengaturan persisten `app_settings`, mode pemeliharaan 503, waktu idle dinamis, realtime DOM toggle, dan factory reset to seeder.
 - 🧭 [**Arsitektur & Operasional Modul Manajemen Menu**](docs/arsitektur_dan_operasional_manajemen_menu.md) — Struktur hierarki menu 3 level, drag & drop SortableJS, cascading status toggle, dan SidebarComposer.
 - 🔐 [**Arsitektur & Operasional Autentikasi Pengguna**](docs/arsitektur_dan_operasional_authentication_user.md) — Registrasi mandiri, persetujuan admin, penonaktifan mandiri, aktivasi kembali, dan proteksi sesi.
 - 🎨 [**Arsitektur Engine Dinamisasi Tema & Seksi Website**](docs/arsitektur_dinamisasi_tema_website.md) — Panduan arsitektur *Loose Coupling*, *Crop Simulator*, paralaks 3D, dan variasi background dinamis.
