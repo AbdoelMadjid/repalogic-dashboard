@@ -68,7 +68,7 @@
                                             </div>
                                             <div class="d-flex align-items-center gap-2">
                                                 <span class="badge bg-white text-primary border border-primary-subtle px-3 py-2 fs-12 fw-semibold">
-                                                    <i class="ti ti-shield-check text-success me-1.5"></i> 5 Konfigurasi Terintegrasi
+                                                    <i class="ti ti-shield-check text-success me-1.5"></i> 6 Konfigurasi Terintegrasi
                                                 </span>
                                             </div>
                                         </div>
@@ -270,6 +270,39 @@
                                             <div class="pt-2 border-top">
                                                 <button type="button" class="btn btn-sm btn-primary w-100 fw-semibold" id="btn-clear-all-cache">
                                                     <i class="ti ti-trash me-1.5"></i> Bersihkan Semua Cache Sistem
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- WIDGET 6: SINKRONISASI & PEMBERSIHAN MEDIA STORAGE -->
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="card h-100 shadow-sm border-0 rounded-3 setting-card">
+                                        <div class="card-header bg-primary text-white py-3 d-flex align-items-center justify-content-between">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <i class="ti ti-photo-search fs-20"></i>
+                                                <h6 class="card-title text-white mb-0 fw-bold">Sinkronisasi Media Storage</h6>
+                                            </div>
+                                            <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Storage Cleaner</span>
+                                        </div>
+                                        <div class="card-body p-3.5 d-flex flex-column justify-content-between">
+                                            <div>
+                                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                                    <span class="fs-12 fw-semibold text-dark">Status Sinkronisasi:</span>
+                                                    <span class="badge bg-info-subtle text-info fs-11 fw-bold" id="badge-sync-status">Siap Dipindai</span>
+                                                </div>
+                                                <div class="d-flex flex-wrap gap-1.5 mb-2.5">
+                                                    <span class="badge bg-light text-dark border"><i class="ti ti-folder me-1 text-primary"></i> public/storage</span>
+                                                    <span class="badge bg-light text-dark border"><i class="ti ti-database me-1 text-success"></i> Auto DB Match</span>
+                                                </div>
+                                                <p class="text-muted fs-12 mb-3">
+                                                    Pindai berkas gambar di penyimpanan (storage) yang tidak terhubung lagi dengan rekaman database (orphan files) untuk menghemat ruang disk server.
+                                                </p>
+                                            </div>
+                                            <div class="pt-2 border-top">
+                                                <button type="button" class="btn btn-sm btn-primary w-100 fw-semibold" id="btn-open-sync-modal">
+                                                    <i class="ti ti-refresh me-1.5"></i> Pindai & Sinkronkan Gambar
                                                 </button>
                                             </div>
                                         </div>
@@ -604,6 +637,9 @@
     <!-- MODAL FORM PARTIAL -->
     @include('admin.dukunganaplikasi.partials.fitur_aplikasi_modal')
 
+    <!-- MODAL STORAGE IMAGE SYNC PARTIAL -->
+    @include('admin.dukunganaplikasi.partials.storage_image_sync_modal')
+
     {{-- Config & Route Bridge for Module JS (Rule 15 Compliance) --}}
     <script>
         window.FiturAplikasiConfig = {
@@ -612,6 +648,8 @@
                 bulkAction: "{{ route('admin.dukunganaplikasi.fitur-aplikasi.bulk-action') }}",
                 updateSetting: "{{ route('admin.dukunganaplikasi.fitur-aplikasi.update-setting') }}",
                 clearCache: "{{ route('admin.dukunganaplikasi.fitur-aplikasi.clear-cache') }}",
+                scanImages: "{{ route('admin.dukunganaplikasi.fitur-aplikasi.scan-images') }}",
+                deleteImages: "{{ route('admin.dukunganaplikasi.fitur-aplikasi.delete-images') }}",
                 resetDefaults: "{{ route('admin.dukunganaplikasi.fitur-aplikasi.reset-defaults') }}",
                 store: "{{ route('admin.dukunganaplikasi.fitur-aplikasi.store') }}",
                 baseUrl: "{{ url('admin/dukunganaplikasi/fitur-aplikasi') }}"

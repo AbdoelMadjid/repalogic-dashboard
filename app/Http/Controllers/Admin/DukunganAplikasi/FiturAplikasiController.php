@@ -10,6 +10,7 @@ use App\Traits\HasNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class FiturAplikasiController extends Controller
 {
@@ -401,5 +402,291 @@ class FiturAplikasiController extends Controller
                 'message' => 'Gagal mereset pengaturan ke default: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+    /**
+     * Memindai seluruh berkas gambar di penyimpanan (storage) dan membandingkannya dengan database.
+     */
+    public function scanStorageImages(Request $request)
+    {
+        if (!auth()->user()->can('update dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki akses untuk memindai berkas penyimpanan.',
+            ], 403);
+        }
+
+        try {
+            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico', 'avif'];
+            $allStorageFiles = Storage::disk('public')->allFiles();
+
+            $dbReferences = $this->getDatabaseReferencedMedia();
+
+            $totalStorageImages = 0;
+            $totalStorageBytes = 0;
+            $validImagesCount = 0;
+            $orphanedFiles = [];
+            $orphanedBytes = 0;
+            $folderCounts = [];
+
+            foreach ($allStorageFiles as $file) {
+                // Ignore .gitignore and hidden files
+                if (basename($file) === '.gitignore' || str_starts_with(basename($file), '.')) {
+                    continue;
+                }
+
+                $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                if (!in_array($ext, $allowedExtensions)) {
+                    continue;
+                }
+
+                $totalStorageImages++;
+                $fileSize = Storage::disk('public')->size($file);
+                $totalStorageBytes += $fileSize;
+
+                $normalizedFile = str_replace('\\', '/', $file);
+                $normalizedFile = trim($normalizedFile, '/');
+                $filenameOnly = basename($normalizedFile);
+
+                // Check if file is referenced in database
+                $isReferenced = isset($dbReferences[$normalizedFile]) || isset($dbReferences[$filenameOnly]);
+
+                $folderName = dirname($normalizedFile);
+                if ($folderName === '.' || empty($folderName)) {
+                    $folderName = 'root';
+                }
+
+                if ($isReferenced) {
+                    $validImagesCount++;
+                } else {
+                    $orphanedBytes += $fileSize;
+                    $lastModified = Storage::disk('public')->lastModified($file);
+
+                    if (!isset($folderCounts[$folderName])) {
+                        $folderCounts[$folderName] = 0;
+                    }
+                    $folderCounts[$folderName]++;
+
+                    $orphanedFiles[] = [
+                        'path' => $normalizedFile,
+                        'filename' => $filenameOnly,
+                        'folder' => $folderName,
+                        'extension' => strtoupper($ext),
+                        'size_bytes' => $fileSize,
+                        'size_formatted' => $this->formatBytes($fileSize),
+                        'last_modified' => $lastModified,
+                        'url' => asset('storage/' . $normalizedFile),
+                        'relative_url' => '/storage/' . $normalizedFile,
+                        'storage_location' => 'storage/app/public/' . $normalizedFile,
+                    ];
+                }
+            }
+
+            // Sort orphaned files by last modified descending
+            usort($orphanedFiles, function ($a, $b) {
+                return $b['last_modified'] <=> $a['last_modified'];
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pemindaian berkas media penyimpanan berhasil diselesaikan.',
+                'summary' => [
+                    'total_storage_images' => $totalStorageImages,
+                    'total_storage_size' => $this->formatBytes($totalStorageBytes),
+                    'total_valid_images' => $validImagesCount,
+                    'total_orphaned_images' => count($orphanedFiles),
+                    'orphaned_size_bytes' => $orphanedBytes,
+                    'orphaned_size_formatted' => $this->formatBytes($orphanedBytes),
+                    'folders' => $folderCounts,
+                    'scanned_at' => now()->translatedFormat('d F Y, H:i:s') . ' WIB',
+                ],
+                'orphaned_files' => $orphanedFiles,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memindai berkas media: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Menghapus gambar-gambar orphan (tidak terhubung dengan database) dari storage.
+     */
+    public function deleteStorageImages(Request $request)
+    {
+        if (!auth()->user()->can('delete dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki izin untuk menghapus berkas penyimpanan.',
+            ], 403);
+        }
+
+        $request->validate([
+            'paths' => 'nullable|array',
+            'paths.*' => 'string',
+            'delete_all' => 'nullable|boolean',
+        ]);
+
+        try {
+            $dbReferences = $this->getDatabaseReferencedMedia();
+            $deleteAll = (bool) $request->input('delete_all', false);
+            $requestedPaths = $request->input('paths', []);
+
+            $deletedCount = 0;
+            $freedBytes = 0;
+            $failedFiles = [];
+
+            if ($deleteAll) {
+                // Get all orphaned files again directly from storage to prevent deleting active files
+                $allStorageFiles = Storage::disk('public')->allFiles();
+                $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico', 'avif'];
+
+                foreach ($allStorageFiles as $file) {
+                    if (basename($file) === '.gitignore' || str_starts_with(basename($file), '.')) {
+                        continue;
+                    }
+
+                    $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                    if (!in_array($ext, $allowedExtensions)) {
+                        continue;
+                    }
+
+                    $normalizedFile = str_replace('\\', '/', $file);
+                    $normalizedFile = trim($normalizedFile, '/');
+                    $filenameOnly = basename($normalizedFile);
+
+                    // Skip active/valid database files!
+                    if (isset($dbReferences[$normalizedFile]) || isset($dbReferences[$filenameOnly])) {
+                        continue;
+                    }
+
+                    if (Storage::disk('public')->exists($file)) {
+                        $fileSize = Storage::disk('public')->size($file);
+                        if (Storage::disk('public')->delete($file)) {
+                            $deletedCount++;
+                            $freedBytes += $fileSize;
+                        } else {
+                            $failedFiles[] = $file;
+                        }
+                    }
+                }
+            } else {
+                if (empty($requestedPaths)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Tidak ada berkas yang dipilih untuk dihapus.',
+                    ], 422);
+                }
+
+                foreach ($requestedPaths as $rawPath) {
+                    $normalizedFile = str_replace('\\', '/', $rawPath);
+                    $normalizedFile = trim($normalizedFile, '/');
+                    $filenameOnly = basename($normalizedFile);
+
+                    // Safety Guard: never delete active files in DB!
+                    if (isset($dbReferences[$normalizedFile]) || isset($dbReferences[$filenameOnly])) {
+                        continue;
+                    }
+
+                    if (Storage::disk('public')->exists($normalizedFile)) {
+                        $fileSize = Storage::disk('public')->size($normalizedFile);
+                        if (Storage::disk('public')->delete($normalizedFile)) {
+                            $deletedCount++;
+                            $freedBytes += $fileSize;
+                        } else {
+                            $failedFiles[] = $normalizedFile;
+                        }
+                    }
+                }
+            }
+
+            $freedFormatted = $this->formatBytes($freedBytes);
+
+            return response()->json([
+                'success' => true,
+                'message' => "Berhasil menghapus {$deletedCount} gambar tidak terpakai ({$freedFormatted} ruang disk dibebaskan).",
+                'deleted_count' => $deletedCount,
+                'freed_bytes' => $freedBytes,
+                'freed_formatted' => $freedFormatted,
+                'failed_files' => $failedFiles,
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat menghapus berkas media: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Format bytes to human readable format.
+     */
+    private function formatBytes(int $bytes, int $precision = 2): string
+    {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        $bytes = max($bytes, 0);
+        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = min($pow, count($units) - 1);
+        $bytes /= pow(1024, $pow);
+
+        return round($bytes, $precision) . ' ' . $units[$pow];
+    }
+
+    /**
+     * Mengumpulkan semua referensi berkas aktif dari database untuk proteksi dan sinkronisasi.
+     */
+    private function getDatabaseReferencedMedia(): array
+    {
+        $dbPaths = collect();
+
+        // 1. User avatar
+        if (class_exists(\App\Models\User::class)) {
+            $dbPaths = $dbPaths->merge(\App\Models\User::whereNotNull('avatar')->where('avatar', '!=', '')->pluck('avatar'));
+        }
+
+        // 2. UserDetail foto_ktp
+        if (class_exists(\App\Models\UserDetail::class)) {
+            $dbPaths = $dbPaths->merge(\App\Models\UserDetail::whereNotNull('foto_ktp')->where('foto_ktp', '!=', '')->pluck('foto_ktp'));
+        }
+
+        // 3. UserConfig cover_image
+        if (class_exists(\App\Models\UserConfig::class)) {
+            $dbPaths = $dbPaths->merge(\App\Models\UserConfig::whereNotNull('cover_image')->where('cover_image', '!=', '')->pluck('cover_image'));
+        }
+
+        // 4. ProfilAplikasi logo_lg, logo_sm, favicon
+        if (class_exists(\App\Models\Admin\DukunganAplikasi\ProfilAplikasi::class)) {
+            $profil = \App\Models\Admin\DukunganAplikasi\ProfilAplikasi::first();
+            if ($profil) {
+                if (!empty($profil->logo_lg)) $dbPaths->push($profil->logo_lg);
+                if (!empty($profil->logo_sm)) $dbPaths->push($profil->logo_sm);
+                if (!empty($profil->favicon)) $dbPaths->push($profil->favicon);
+            }
+        }
+
+        // 5. WebsiteSection bg_image
+        if (class_exists(\App\Models\Admin\DukunganAplikasi\WebsiteSection::class)) {
+            $dbPaths = $dbPaths->merge(\App\Models\Admin\DukunganAplikasi\WebsiteSection::whereNotNull('bg_image')->where('bg_image', '!=', '')->pluck('bg_image'));
+        }
+
+        // 6. Message attachment
+        if (class_exists(\App\Models\Message::class)) {
+            $dbPaths = $dbPaths->merge(\App\Models\Message::whereNotNull('attachment_url')->where('attachment_url', '!=', '')->pluck('attachment_url'));
+        }
+
+        // Normalize all db paths
+        $normalizedPaths = [];
+        foreach ($dbPaths->filter()->unique() as $rawPath) {
+            $clean = str_replace(['\\', '/storage/', 'storage/', 'public/'], ['/', '', '', ''], $rawPath);
+            $clean = trim($clean, '/');
+            if (!empty($clean)) {
+                $normalizedPaths[$clean] = true;
+                // Also add basename for matching
+                $normalizedPaths[basename($clean)] = true;
+            }
+        }
+
+        return $normalizedPaths;
     }
 }

@@ -115,9 +115,8 @@
                     </h5>
                     <span class="badge bg-primary-subtle text-primary font-monospace">Full History</span>
                 </div>
-                <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.8.5 -->
+                        <!-- Version 2.8.6 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -125,8 +124,32 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.8.5</h5>
+                                        <h5 class="fw-bold mb-0">v2.8.6</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.6</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-04 14:15 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Storage Media Synchronization &amp; Orphan Cleaner Engine, High-Resolution Image Lightbox Simulator &amp; Single / Bulk Orphan Media Purging in Fitur Aplikasi</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Pusat Sinkronisasi Media Storage (<code>FiturAplikasiController.php</code> &amp; <code>routes/admin.php</code>):</strong> Menghadirkan engine pemindaian media penyimpanan server (<code>public</code> disk) terhadap seluruh entitas database terkait (<code>users</code>, <code>user_details</code>, <code>user_configs</code>, <code>profil_aplikasi</code>, <code>website_sections</code>, <code>messages</code>). Mengkategorikan media secara presisi menjadi berkas aktif (valid) dan berkas tidak terpakai (orphan).</li>
+                                    <li><strong class="text-dark">Widget Kartu ke-6 Pengaturan Sistem (<code>fitur-aplikasi.blade.php</code>):</strong> Menambahkan kartu pengaturan sistem ke-6 <em>Sinkronisasi Media Storage</em> dengan indikator status dinamis, badge folder, serta tombol pemicu pemindaian modal terintegrasi.</li>
+                                    <li><strong class="text-dark">Modal Interaktif Sinkronisasi &amp; Pembersih (<code>storage_image_sync_modal.blade.php</code>):</strong> Menyediakan 4 KPI ringkasan (Total Gambar Storage, Valid di Database, Gambar Sampah Orphan, dan Estimasi Ruang Hemat), filter folder dinamis, pencarian instan, dan tabel data orphan dengan thumbnail responsif.</li>
+                                    <li><strong class="text-dark">Pratinjau Resolusi Tinggi / Lightbox Simulator (<code>storage_image_sync_modal.blade.php</code>):</strong> Memungkinkan administrator melihat pratinjau gambar resolusi asli lengkap dengan informasi detail lokasi storage, nama berkas, ukuran, direktori, dan tanggal modifikasi sebelum memutuskan untuk menghapus.</li>
+                                    <li><strong class="text-dark">Eksekusi Pembersihan Multi-Mode (<code>fitur-aplikasi.js</code> &amp; <code>fitur-aplikasi.css</code>):</strong> Mendukung penghapusan satuan, penghapusan massal melalui kotak centang (bulk action), dan penghapusan seluruh gambar orphan dengan konfirmasi universal SweetAlert2 serta pembaruan statistik tanpa reload halaman.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.8.5 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-git-commit fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.8.5</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.5</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-04 13:48 WIB</span>

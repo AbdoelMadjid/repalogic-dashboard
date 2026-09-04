@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
         bulkAction: configRoutes.bulkAction || '/admin/dukunganaplikasi/fitur-aplikasi/bulk-action',
         updateSetting: configRoutes.updateSetting || '/admin/dukunganaplikasi/fitur-aplikasi/update-setting',
         clearCache: configRoutes.clearCache || '/admin/dukunganaplikasi/fitur-aplikasi/clear-cache',
+        scanImages: configRoutes.scanImages || '/admin/dukunganaplikasi/fitur-aplikasi/scan-images',
+        deleteImages: configRoutes.deleteImages || '/admin/dukunganaplikasi/fitur-aplikasi/delete-images',
         resetDefaults: configRoutes.resetDefaults || '/admin/dukunganaplikasi/fitur-aplikasi/reset-defaults',
         store: configRoutes.store || '/admin/dukunganaplikasi/fitur-aplikasi',
         baseUrl: configRoutes.baseUrl || '/admin/dukunganaplikasi/fitur-aplikasi'
@@ -1030,4 +1032,648 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+
+    // =========================================================================
+    // WIDGET 6: SINKRONISASI & PEMBERSIHAN MEDIA STORAGE HANDLER
+    // =========================================================================
+    const btnOpenSyncModal = document.getElementById('btn-open-sync-modal');
+    const syncModalEl = document.getElementById('storageSyncModal');
+    const syncModal = syncModalEl ? new bootstrap.Modal(syncModalEl) : null;
+    const previewModalEl = document.getElementById('storageImagePreviewModal');
+    const previewModal = previewModalEl ? new bootstrap.Modal(previewModalEl) : null;
+
+    const syncLoadingState = document.getElementById('sync-loading-state');
+    const syncMainContainer = document.getElementById('sync-main-container');
+    const syncEmptyState = document.getElementById('sync-empty-state');
+    const syncTableSection = document.getElementById('sync-table-section');
+
+    const kpiTotalStorage = document.getElementById('kpi-total-storage');
+    const kpiTotalSize = document.getElementById('kpi-total-size');
+    const kpiValidDb = document.getElementById('kpi-valid-db');
+    const kpiOrphanCount = document.getElementById('kpi-orphan-count');
+    const kpiOrphanSize = document.getElementById('kpi-orphan-size');
+    const badgeSyncStatus = document.getElementById('badge-sync-status');
+
+    const orphanFolderSelect = document.getElementById('orphan-folder-select');
+    const orphanSearchInput = document.getElementById('orphan-search-input');
+    const btnClearOrphanSearch = document.getElementById('btn-clear-orphan-search');
+    const btnReScan = document.getElementById('btn-re-scan');
+    const btnReScanEmpty = document.getElementById('btn-re-scan-empty');
+    const btnDeleteAllOrphans = document.getElementById('btn-delete-all-orphans');
+    const btnDeleteSelectedOrphans = document.getElementById('btn-delete-selected-orphans');
+
+    const checkAllOrphans = document.getElementById('check-all-orphans');
+    const checkAllOrphansLabel = document.getElementById('check-all-orphans-label');
+    const checkAllOrphanPage = document.getElementById('check-all-orphan-page');
+    const orphanSelectedBadge = document.getElementById('orphan-selected-badge');
+    const orphanSelectedCountSpan = document.getElementById('orphan-selected-count');
+    const btnOrphanDeselectAll = document.getElementById('btn-orphan-deselect-all');
+
+    const orphanTbody = document.getElementById('orphan-tbody');
+    const orphanTableInfo = document.getElementById('orphan-table-info');
+    const orphanPagination = document.getElementById('orphan-pagination');
+
+    let allOrphanFiles = [];
+    let filteredOrphanFiles = [];
+    const selectedOrphanPaths = new Set();
+    let currentOrphanPage = 1;
+    const orphanPageSize = 10;
+
+    /**
+     * Memindai media storage via AJAX
+     */
+    function triggerStorageScan(showModal = true) {
+        if (showModal && syncModal) {
+            syncModal.show();
+        }
+
+        if (syncLoadingState) syncLoadingState.classList.remove('d-none');
+        if (syncMainContainer) syncMainContainer.classList.add('d-none');
+
+        if (btnOpenSyncModal) {
+            btnOpenSyncModal.disabled = true;
+            btnOpenSyncModal.innerHTML = '<span class="spinner-border spinner-border-sm me-1.5"></span> Memindai Media...';
+        }
+
+        fetch(routes.scanImages, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': getCsrfToken(),
+                'Accept': 'application/json'
+            }
+        })
+        .then(async res => {
+            let data;
+            try {
+                data = await res.json();
+            } catch (e) {
+                data = { success: false, message: `Respon server tidak valid (${res.status} ${res.statusText})` };
+            }
+            if (!res.ok) {
+                throw new Error(data.message || `Gagal memindai media (HTTP ${res.status}).`);
+            }
+            return data;
+        })
+        .then(data => {
+            if (btnOpenSyncModal) {
+                btnOpenSyncModal.disabled = false;
+                btnOpenSyncModal.innerHTML = '<i class="ti ti-refresh me-1.5"></i> Pindai &amp; Sinkronkan Gambar';
+            }
+            if (syncLoadingState) syncLoadingState.classList.add('d-none');
+            if (syncMainContainer) syncMainContainer.classList.remove('d-none');
+
+            if (data.success) {
+                const summary = data.summary || {};
+                allOrphanFiles = data.orphaned_files || [];
+                selectedOrphanPaths.clear();
+                currentOrphanPage = 1;
+
+                // Update KPIs
+                if (kpiTotalStorage) kpiTotalStorage.textContent = summary.total_storage_images || 0;
+                if (kpiTotalSize) kpiTotalSize.textContent = summary.total_storage_size || '0 B';
+                if (kpiValidDb) kpiValidDb.textContent = summary.total_valid_images || 0;
+                if (kpiOrphanCount) kpiOrphanCount.textContent = summary.total_orphaned_images || 0;
+                if (kpiOrphanSize) kpiOrphanSize.textContent = summary.orphaned_size_formatted || '0 B';
+
+                // Update Card Status in Tab
+                if (badgeSyncStatus) {
+                    if (summary.total_orphaned_images > 0) {
+                        badgeSyncStatus.className = 'badge bg-danger-subtle text-danger fs-11 fw-bold';
+                        badgeSyncStatus.innerHTML = `<i class="ti ti-alert-circle me-1"></i> ${summary.total_orphaned_images} Gambar Sampah`;
+                    } else {
+                        badgeSyncStatus.className = 'badge bg-success-subtle text-success fs-11 fw-bold';
+                        badgeSyncStatus.innerHTML = '<i class="ti ti-check me-1"></i> Terorganisir &amp; Sinkron';
+                    }
+                }
+
+                // Populate Folder Filter Dropdown
+                if (orphanFolderSelect) {
+                    const currentVal = orphanFolderSelect.value;
+                    orphanFolderSelect.innerHTML = '<option value="all">-- Semua Folder (' + allOrphanFiles.length + ') --</option>';
+                    const folders = summary.folders || {};
+                    Object.keys(folders).sort().forEach(folder => {
+                        const opt = document.createElement('option');
+                        opt.value = folder;
+                        opt.textContent = `${folder} (${folders[folder]} gambar)`;
+                        orphanFolderSelect.appendChild(opt);
+                    });
+                    if (folders[currentVal]) {
+                        orphanFolderSelect.value = currentVal;
+                    }
+                }
+
+                // Toggle Empty State vs Table
+                if (allOrphanFiles.length === 0) {
+                    if (syncEmptyState) syncEmptyState.classList.remove('d-none');
+                    if (syncTableSection) syncTableSection.classList.add('d-none');
+                } else {
+                    if (syncEmptyState) syncEmptyState.classList.add('d-none');
+                    if (syncTableSection) syncTableSection.classList.remove('d-none');
+                    applyOrphanFilterAndPagination();
+                }
+            } else {
+                window.showError(data.message || 'Gagal memindai media storage.');
+            }
+        })
+        .catch(err => {
+            if (btnOpenSyncModal) {
+                btnOpenSyncModal.disabled = false;
+                btnOpenSyncModal.innerHTML = '<i class="ti ti-refresh me-1.5"></i> Pindai &amp; Sinkronkan Gambar';
+            }
+            if (syncLoadingState) syncLoadingState.classList.add('d-none');
+            if (syncMainContainer) syncMainContainer.classList.remove('d-none');
+            console.error('Error scanning storage media:', err);
+            window.showError(err.message || 'Terjadi kesalahan saat memindai penyimpanan media.');
+        });
+    }
+
+    /**
+     * Filter and render orphan files in table
+     */
+    function applyOrphanFilterAndPagination() {
+        if (!orphanTbody) return;
+
+        const selectedFolder = orphanFolderSelect ? orphanFolderSelect.value : 'all';
+        const searchTerm = orphanSearchInput ? orphanSearchInput.value.toLowerCase().trim() : '';
+
+        filteredOrphanFiles = allOrphanFiles.filter(item => {
+            const matchFolder = (selectedFolder === 'all' || item.folder === selectedFolder);
+            const matchSearch = (!searchTerm ||
+                item.filename.toLowerCase().includes(searchTerm) ||
+                item.path.toLowerCase().includes(searchTerm) ||
+                item.folder.toLowerCase().includes(searchTerm)
+            );
+            return matchFolder && matchSearch;
+        });
+
+        const totalFiltered = filteredOrphanFiles.length;
+        const totalPages = Math.ceil(totalFiltered / orphanPageSize) || 1;
+        if (currentOrphanPage > totalPages) currentOrphanPage = 1;
+
+        const startIndex = (currentOrphanPage - 1) * orphanPageSize;
+        const endIndex = Math.min(startIndex + orphanPageSize, totalFiltered);
+        const pageItems = filteredOrphanFiles.slice(startIndex, endIndex);
+
+        // Render Table Rows
+        orphanTbody.innerHTML = '';
+        if (pageItems.length === 0) {
+            orphanTbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-4"><i class="ti ti-info-circle me-1.5"></i> Tidak ada gambar yang sesuai dengan filter pencarian.</td></tr>`;
+        } else {
+            pageItems.forEach((item, index) => {
+                const globalNo = startIndex + index + 1;
+                const tr = document.createElement('tr');
+                tr.className = 'orphan-row';
+                tr.setAttribute('data-path', item.path);
+                if (selectedOrphanPaths.has(item.path)) {
+                    tr.classList.add('table-active');
+                }
+
+                // Folder badge color styling
+                let folderBadgeClass = 'bg-secondary-subtle text-secondary';
+                if (item.folder === 'avatars') folderBadgeClass = 'bg-primary-subtle text-primary border-primary-subtle';
+                else if (item.folder === 'covers') folderBadgeClass = 'bg-info-subtle text-info border-info-subtle';
+                else if (item.folder === 'chat_attachments') folderBadgeClass = 'bg-purple-subtle text-purple border-purple-subtle';
+                else if (item.folder === 'sections') folderBadgeClass = 'bg-success-subtle text-success border-success-subtle';
+                else if (item.folder === 'ktp') folderBadgeClass = 'bg-warning-subtle text-warning border-warning-subtle';
+
+                const isChecked = selectedOrphanPaths.has(item.path);
+                const directImgUrl = `${window.location.origin}/storage/${item.path}`;
+
+                tr.innerHTML = `
+                    <td class="text-center orphan-check-cell cursor-pointer">
+                        <input type="checkbox" class="form-check-input high-contrast-checkbox check-orphan-item" value="${item.path}" ${isChecked ? 'checked' : ''}>
+                    </td>
+                    <td class="text-center fw-semibold text-muted">${globalNo}</td>
+                    <td class="text-center">
+                        <div class="orphan-thumb-container mx-auto btn-preview-media" data-item='${JSON.stringify(item)}' title="Klik untuk Pratinjau Resolusi Penuh">
+                            <img src="${directImgUrl}" class="orphan-thumb-img" alt="${item.filename}" loading="lazy" onerror="if(!this.dataset.fallback){this.dataset.fallback='1'; this.src='${item.url}';}else{this.onerror=null; this.parentElement.innerHTML='<i class=\\'ti ti-photo-off text-muted fs-20\\'></i>';}">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex flex-column">
+                            <span class="fw-bold text-dark fs-13 mb-1 text-break">${item.filename}</span>
+                            <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                                <code class="bg-light text-muted border px-1.5 py-0.5 rounded fs-11 font-monospace text-break">${item.storage_location}</code>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <span class="badge ${folderBadgeClass} border fs-11 px-2 py-1 font-monospace">
+                            <i class="ti ti-folder me-1"></i>${item.folder}
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <span class="badge bg-light text-dark border fs-12">${item.size_formatted}</span>
+                    </td>
+                    <td class="text-center">
+                        <span class="text-muted fs-12 text-nowrap"><i class="ti ti-calendar me-1"></i>${item.last_modified_formatted}</span>
+                    </td>
+                    <td class="text-center text-nowrap">
+                        <button type="button" class="btn btn-xs btn-outline-info me-1 btn-preview-media" data-item='${JSON.stringify(item)}' title="Pratinjau Gambar">
+                            <i class="ti ti-eye"></i>
+                        </button>
+                        <button type="button" class="btn btn-xs btn-outline-danger btn-delete-single-orphan" data-path="${item.path}" data-name="${item.filename}" title="Hapus Berkas Ini">
+                            <i class="ti ti-trash"></i>
+                        </button>
+                    </td>
+                `;
+                orphanTbody.appendChild(tr);
+            });
+        }
+
+        // Update Info Bar
+        if (orphanTableInfo) {
+            orphanTableInfo.innerHTML = `Menampilkan <strong>${totalFiltered === 0 ? 0 : startIndex + 1} - ${endIndex}</strong> dari <strong>${totalFiltered}</strong> gambar sampah`;
+        }
+
+        // Update Check All Label
+        if (checkAllOrphansLabel) {
+            checkAllOrphansLabel.textContent = `Pilih Semua (${totalFiltered} gambar)`;
+        }
+
+        renderOrphanPagination(totalPages);
+        updateOrphanSelectionUI();
+    }
+
+    /**
+     * Render Orphan Table Pagination
+     */
+    function renderOrphanPagination(totalPages) {
+        if (!orphanPagination) return;
+        orphanPagination.innerHTML = '';
+        if (totalPages <= 1) return;
+
+        // Previous
+        const prevLi = document.createElement('li');
+        prevLi.className = `page-item ${currentOrphanPage === 1 ? 'disabled' : ''}`;
+        prevLi.innerHTML = `<a class="page-link" href="javascript:void(0)" aria-label="Previous"><i class="ti ti-chevron-left"></i></a>`;
+        prevLi.addEventListener('click', () => {
+            if (currentOrphanPage > 1) {
+                currentOrphanPage--;
+                applyOrphanFilterAndPagination();
+            }
+        });
+        orphanPagination.appendChild(prevLi);
+
+        // Page Numbers
+        for (let p = 1; p <= totalPages; p++) {
+            if (totalPages > 7 && Math.abs(p - currentOrphanPage) > 2 && p !== 1 && p !== totalPages) {
+                if (p === 2 || p === totalPages - 1) {
+                    const dotsLi = document.createElement('li');
+                    dotsLi.className = 'page-item disabled';
+                    dotsLi.innerHTML = `<span class="page-link">...</span>`;
+                    orphanPagination.appendChild(dotsLi);
+                }
+                continue;
+            }
+
+            const pageLi = document.createElement('li');
+            pageLi.className = `page-item ${p === currentOrphanPage ? 'active' : ''}`;
+            pageLi.innerHTML = `<a class="page-link" href="javascript:void(0)">${p}</a>`;
+            pageLi.addEventListener('click', () => {
+                currentOrphanPage = p;
+                applyOrphanFilterAndPagination();
+            });
+            orphanPagination.appendChild(pageLi);
+        }
+
+        // Next
+        const nextLi = document.createElement('li');
+        nextLi.className = `page-item ${currentOrphanPage === totalPages ? 'disabled' : ''}`;
+        nextLi.innerHTML = `<a class="page-link" href="javascript:void(0)" aria-label="Next"><i class="ti ti-chevron-right"></i></a>`;
+        nextLi.addEventListener('click', () => {
+            if (currentOrphanPage < totalPages) {
+                currentOrphanPage++;
+                applyOrphanFilterAndPagination();
+            }
+        });
+        orphanPagination.appendChild(nextLi);
+    }
+
+    /**
+     * Update selection state UI for Orphan items
+     */
+    function updateOrphanSelectionUI() {
+        const count = selectedOrphanPaths.size;
+        if (orphanSelectedCountSpan) orphanSelectedCountSpan.textContent = count;
+
+        const hasSelection = count > 0;
+        if (orphanSelectedBadge) orphanSelectedBadge.style.display = hasSelection ? 'inline-block' : 'none';
+        if (btnOrphanDeselectAll) btnOrphanDeselectAll.style.display = hasSelection ? 'inline-block' : 'none';
+        if (btnDeleteSelectedOrphans) btnDeleteSelectedOrphans.disabled = !hasSelection;
+
+        // Sync table row check states
+        const allRowCheckboxes = document.querySelectorAll('.check-orphan-item');
+        allRowCheckboxes.forEach(cb => {
+            const row = cb.closest('tr');
+            const isChecked = selectedOrphanPaths.has(cb.value);
+            cb.checked = isChecked;
+            if (row) {
+                if (isChecked) {
+                    row.classList.add('table-active');
+                } else {
+                    row.classList.remove('table-active');
+                }
+            }
+        });
+
+        // Filtered items selection status
+        const filteredPaths = filteredOrphanFiles.map(item => item.path);
+        const filteredSelectedCount = filteredPaths.filter(p => selectedOrphanPaths.has(p)).length;
+
+        if (checkAllOrphans) {
+            if (filteredPaths.length > 0) {
+                checkAllOrphans.checked = (filteredSelectedCount === filteredPaths.length);
+                checkAllOrphans.indeterminate = (filteredSelectedCount > 0 && filteredSelectedCount < filteredPaths.length);
+            } else {
+                checkAllOrphans.checked = false;
+                checkAllOrphans.indeterminate = false;
+            }
+        }
+
+        // Visible Page items selection status
+        if (checkAllOrphanPage) {
+            const pageRows = Array.from(document.querySelectorAll('.orphan-row'));
+            const pagePaths = pageRows.map(row => row.getAttribute('data-path')).filter(Boolean);
+            const pageSelectedCount = pagePaths.filter(p => selectedOrphanPaths.has(p)).length;
+
+            if (pagePaths.length > 0) {
+                checkAllOrphanPage.checked = (pageSelectedCount === pagePaths.length);
+                checkAllOrphanPage.indeterminate = (pageSelectedCount > 0 && pageSelectedCount < pagePaths.length);
+            } else {
+                checkAllOrphanPage.checked = false;
+                checkAllOrphanPage.indeterminate = false;
+            }
+        }
+    }
+
+    /**
+     * Tampilkan Lightbox Pratinjau Gambar
+     */
+    function showImagePreview(item) {
+        if (!item || !previewModal) return;
+
+        const imgEl = document.getElementById('storage-preview-img');
+        const filenameBadge = document.getElementById('preview-filename-badge');
+        const fileNameEl = document.getElementById('preview-file-name');
+        const fileFolderEl = document.getElementById('preview-file-folder');
+        const storagePathEl = document.getElementById('preview-storage-path');
+        const fileSizeEl = document.getElementById('preview-file-size');
+        const fileExtEl = document.getElementById('preview-file-ext');
+        const fileDateEl = document.getElementById('preview-file-date');
+        const openExternalLink = document.getElementById('preview-open-external');
+
+        const directImgUrl = `${window.location.origin}/storage/${item.path}`;
+
+        if (imgEl) {
+            imgEl.removeAttribute('data-fallback');
+            imgEl.src = directImgUrl;
+            imgEl.onerror = function() {
+                if (!this.dataset.fallback && item.url && this.src !== item.url) {
+                    this.dataset.fallback = '1';
+                    this.src = item.url;
+                }
+            };
+        }
+        if (filenameBadge) filenameBadge.textContent = item.filename;
+        if (fileNameEl) fileNameEl.textContent = item.filename;
+        if (fileFolderEl) fileFolderEl.textContent = item.folder;
+        if (storagePathEl) storagePathEl.textContent = item.storage_location;
+        if (fileSizeEl) fileSizeEl.textContent = item.size_formatted;
+        if (fileExtEl) fileExtEl.textContent = item.extension;
+        if (fileDateEl) fileDateEl.textContent = item.last_modified_formatted;
+        if (openExternalLink) openExternalLink.href = directImgUrl;
+
+        previewModal.show();
+    }
+
+    /**
+     * Eksekusi penghapusan gambar orphan via AJAX (Satuan, Terpilih, atau Semua)
+     */
+    function executeDeleteOrphans({ paths = [], deleteAll = false }) {
+        const count = deleteAll ? allOrphanFiles.length : paths.length;
+        if (count === 0) {
+            window.showWarning('Tidak ada berkas yang dipilih untuk dihapus.');
+            return;
+        }
+
+        const confirmTitle = deleteAll ? 'Hapus Seluruh Gambar Sampah?' : 'Hapus Gambar Terpilih?';
+        const confirmText = deleteAll
+            ? `Apakah Anda yakin ingin menghapus SELURUH (${count}) gambar sampah dari penyimpanan server? Tindakan ini permanen dan tidak dapat dibatalkan.`
+            : `Apakah Anda yakin ingin menghapus ${count} gambar terpilih dari penyimpanan server? Tindakan ini permanen.`;
+
+        window.showConfirm({
+            title: confirmTitle,
+            text: confirmText,
+            isDanger: true,
+            onConfirm: () => {
+                if (btnDeleteAllOrphans) btnDeleteAllOrphans.disabled = true;
+                if (btnDeleteSelectedOrphans) btnDeleteSelectedOrphans.disabled = true;
+
+                fetch(routes.deleteImages, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': getCsrfToken(),
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        paths: paths,
+                        delete_all: deleteAll ? 1 : 0
+                    })
+                })
+                .then(async res => {
+                    let data;
+                    try {
+                        data = await res.json();
+                    } catch (e) {
+                        data = { success: false, message: `Respon server tidak valid (${res.status} ${res.statusText})` };
+                    }
+                    if (!res.ok) {
+                        throw new Error(data.message || `Gagal menghapus media (HTTP ${res.status}).`);
+                    }
+                    return data;
+                })
+                .then(data => {
+                    if (btnDeleteAllOrphans) btnDeleteAllOrphans.disabled = false;
+                    if (btnDeleteSelectedOrphans) btnDeleteSelectedOrphans.disabled = false;
+
+                    if (data.success) {
+                        window.showSuccess(data.message, { reload: false });
+                        // Re-scan storage seamlessly to reflect fresh state
+                        triggerStorageScan(false);
+                    } else {
+                        window.showError(data.message || 'Gagal menghapus berkas media.');
+                    }
+                })
+                .catch(err => {
+                    if (btnDeleteAllOrphans) btnDeleteAllOrphans.disabled = false;
+                    if (btnDeleteSelectedOrphans) btnDeleteSelectedOrphans.disabled = false;
+                    console.error('Error deleting storage media:', err);
+                    window.showError(err.message || 'Terjadi kesalahan saat menghapus media.');
+                });
+            }
+        });
+    }
+
+    // Event Listeners for Storage Sync Controls
+    if (btnOpenSyncModal) {
+        btnOpenSyncModal.addEventListener('click', function() {
+            triggerStorageScan(true);
+        });
+    }
+
+    if (btnReScan) {
+        btnReScan.addEventListener('click', function() {
+            triggerStorageScan(false);
+        });
+    }
+
+    if (btnReScanEmpty) {
+        btnReScanEmpty.addEventListener('click', function() {
+            triggerStorageScan(false);
+        });
+    }
+
+    if (orphanFolderSelect) {
+        orphanFolderSelect.addEventListener('change', function() {
+            currentOrphanPage = 1;
+            applyOrphanFilterAndPagination();
+        });
+    }
+
+    if (orphanSearchInput) {
+        orphanSearchInput.addEventListener('input', function() {
+            currentOrphanPage = 1;
+            applyOrphanFilterAndPagination();
+        });
+    }
+
+    if (btnClearOrphanSearch) {
+        btnClearOrphanSearch.addEventListener('click', function() {
+            if (orphanSearchInput) orphanSearchInput.value = '';
+            currentOrphanPage = 1;
+            applyOrphanFilterAndPagination();
+        });
+    }
+
+    if (btnDeleteAllOrphans) {
+        btnDeleteAllOrphans.addEventListener('click', function() {
+            executeDeleteOrphans({ deleteAll: true });
+        });
+    }
+
+    if (btnDeleteSelectedOrphans) {
+        btnDeleteSelectedOrphans.addEventListener('click', function() {
+            const paths = Array.from(selectedOrphanPaths);
+            executeDeleteOrphans({ paths: paths, deleteAll: false });
+        });
+    }
+
+    if (btnOrphanDeselectAll) {
+        btnOrphanDeselectAll.addEventListener('click', function() {
+            selectedOrphanPaths.clear();
+            updateOrphanSelectionUI();
+        });
+    }
+
+    // EVENT DELEGATION: Orphan Checkboxes & Table Actions
+    document.addEventListener('change', function(e) {
+        const target = e.target;
+
+        // 1. Single Orphan Checkbox
+        if (target && target.classList.contains('check-orphan-item')) {
+            const pathVal = target.value;
+            if (target.checked) {
+                selectedOrphanPaths.add(pathVal);
+            } else {
+                selectedOrphanPaths.delete(pathVal);
+            }
+            updateOrphanSelectionUI();
+        }
+
+        // 2. Check All Page Items
+        if (target && target.id === 'check-all-orphan-page') {
+            const isChecked = target.checked;
+            const pageRows = document.querySelectorAll('.orphan-row');
+            pageRows.forEach(row => {
+                const cb = row.querySelector('.check-orphan-item');
+                if (cb) {
+                    if (isChecked) {
+                        selectedOrphanPaths.add(cb.value);
+                    } else {
+                        selectedOrphanPaths.delete(cb.value);
+                    }
+                }
+            });
+            updateOrphanSelectionUI();
+        }
+
+        // 3. Check All Filtered Items
+        if (target && target.id === 'check-all-orphans') {
+            const isChecked = target.checked;
+            filteredOrphanFiles.forEach(item => {
+                if (isChecked) {
+                    selectedOrphanPaths.add(item.path);
+                } else {
+                    selectedOrphanPaths.delete(item.path);
+                }
+            });
+            updateOrphanSelectionUI();
+        }
+    });
+
+    // Event Delegation: Cell Click Checkbox, Preview Button, Delete Single Button
+    document.addEventListener('click', function(e) {
+        // Toggle checkbox on cell click
+        const checkCell = e.target.closest('.orphan-check-cell');
+        if (checkCell && e.target.tagName !== 'INPUT') {
+            const cb = checkCell.querySelector('.check-orphan-item');
+            if (cb) {
+                cb.checked = !cb.checked;
+                if (cb.checked) {
+                    selectedOrphanPaths.add(cb.value);
+                } else {
+                    selectedOrphanPaths.delete(cb.value);
+                }
+                updateOrphanSelectionUI();
+            }
+            return;
+        }
+
+        // Preview Media Modal Trigger
+        const btnPreview = e.target.closest('.btn-preview-media');
+        if (btnPreview) {
+            const rawData = btnPreview.getAttribute('data-item');
+            if (rawData) {
+                try {
+                    const item = JSON.parse(rawData);
+                    showImagePreview(item);
+                } catch (err) {
+                    console.error('Error parsing media preview data:', err);
+                }
+            }
+            return;
+        }
+
+        // Delete Single Orphan Trigger
+        const btnDeleteSingle = e.target.closest('.btn-delete-single-orphan');
+        if (btnDeleteSingle) {
+            const path = btnDeleteSingle.getAttribute('data-path');
+            const name = btnDeleteSingle.getAttribute('data-name') || path;
+            if (path) {
+                window.showConfirm({
+                    title: 'Hapus Berkas Gambar?',
+                    text: `Apakah Anda yakin ingin menghapus berkas "${name}" dari storage server? Tindakan ini permanen.`,
+                    isDanger: true,
+                    onConfirm: () => {
+                        executeDeleteOrphans({ paths: [path], deleteAll: false });
+                    }
+                });
+            }
+            return;
+        }
+    });
 });
+
