@@ -10,7 +10,6 @@
 <div align="center">
   
 [![GitHub WidgetBox](https://github-widgetbox.vercel.app/api/profile?username=abdoelmadjid&data=followers,repositories,stars,commits&theme=viridescent)](https://github.com/abdoelmadjid)
-<!-- <h3 align ="center"> <strong> Let`s Code.Build & FUN </strong> </h3>  -->
 
 ![](https://komarev.com/ghpvc/?username=abdoelmadjid&color=brightgreen&style=for-the-badge)
 [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/abdoelmadjid/)
@@ -22,14 +21,6 @@
 </div>
 
 <br/>
-<!--
-<img src="https://cdn.jsdelivr.net/gh/ViratiAkiraNandhanReddy/pixel-art-readme-gifs@v1.0.0/gifs/hrzn/365cfaf1-c31d-468b-b276-8c39756b5951.gif" width="100%" alt="pixel-art-readme-gifs">
-
-<img src="https://user-images.githubusercontent.com/74038190/212747919-84b68444-0d81-46db-a338-7ec50e9dd4cd.gif" alt="pixel-art-readme-gifs">
-<img src="https://user-images.githubusercontent.com/74038190/212747903-e9bdf048-2dc8-41f9-b973-0e72ff07bfba.gif" width="75%">
--->
-
-
 
 <table align="center" width="100%" height="100%" >
    <tr>
@@ -40,46 +31,171 @@
 
 ## About Repalogic Dashboard
 
-**Repalogic Dashboard** adalah aplikasi sistem manajemen admin & dashboard modern berbasis **Laravel 13** dan **Inspinia Admin Template**. Dashboard ini dirancang untuk memberikan solusi manajemen pengguna yang komprehensif, fleksibel, serta berkinerja tinggi untuk kebutuhan aplikasi skala kecil hingga enterprise.
-
-### Fitur Utama:
-- ⚙️ **Hub Pengaturan Fitur & Mode Pemeliharaan (Maintenance Mode)**: Panel 6 widget interaktif untuk manajemen visibilitas fitur sistem, waktu idle auto lock screen, proteksi mode pemeliharaan global dengan bypass superadmin/admin, kebijakan keamanan login, polling real-time, dan pembersih seluruh cache server.
-- 💬 **Fitur Chat & Direct Messaging Interaktif**: Komunikasi dua arah real-time, *Quoted Reply*, *Emoji Picker*, upload lampiran foto & dokumen hingga 10 MB, *Image Lightbox Modal*, dan *Real-Time Avatar Synchronization*.
-- 🎨 **Engine Dinamisasi Tema & Seksi Website**: Pengaturan tema publik dinamis dengan *Crop Simulator*, *Background Attachment Paralaks 3D*, *Deteksi Orientasi Gambar*, dan arsitektur *Loose Coupling* baku.
-- 🔐 **Manajemen Pengguna & Hak Akses (Spatie Permission Matrix)**: Pengaturan Role, Permission, Akses User, dan Akses Role dengan tampilan matrix table yang intuitif.
-- 🪪 **Pratinjau Foto KTP Profil Pengguna**: Baris berkas fisik KTP pada detail profil dengan modal preview ukuran penuh, buka di tab baru, dan unduh berkas.
-- ⚡ **Yajra DataTables Integration**: Pengolahan data server-side tabel yang cepat dan interaktif.
-- 🌐 **Engine Internasionalisasi Dua Bahasa (Bilingual ID & EN)**: Dukungan multi-bahasa terintegrasi.
-- 🎨 **Inspinia Modern UI & Icon Explorers**: Antarmuka responsif dengan penjelajah ikon Tabler & Lucide secara lengkap.
-- 🧩 **Engine Navigasi Dinamis & Breadcrumb Auto-Scroll**: Navigasi 3 level dinamis dengan pemusatan otomatis menu aktif.
-- 🛠️ **Dukungan Aplikasi & Backup Database**: Halaman profil aplikasi, fitur sistem, dan utilitas backup database terintegrasi.
-
-### 📚 Dokumentasi Arsitektur Teknis & Riwayat Rilis:
-- 🏷️ [**Riwayat Lengkap Release & Git Tag**](docs/riwayat_release_dan_tag.md) — Daftar versi rilis, git tag, dan ringkasan pembaruan fitur per versi.
-- 👥 [**Arsitektur & Operasional Modul Manajemen Pengguna**](docs/arsitektur_dan_operasional_manajemen_pengguna.md) — Panduan lengkap 6 pilar manajemen pengguna: Role, Permission, Akses Role matrix table, Akses User direct permissions, Users lifecycle (approval, impersonation, deactivation, bulk assign), dan Data Login audit trail.
-- 🌐 [**Arsitektur & Operasional Sistem Bilingual (i18n)**](docs/arsitektur_dan_operasional_bilingual.md) — Panduan lengkap sistem multi-bahasa dua arah (ID/EN), kamus `id.json` & `en.json`, alih bahasa instan tanpa reload via atribut `data-lang`, integrasi model listener `Menu::saved`, dan artisan scanner CLI `menu:lang-sync`.
-- ⚙️ [**Arsitektur & Operasional Fitur dan Pengaturan Aplikasi**](docs/arsitektur_dan_operasional_fitur_dan_pengaturan_aplikasi.md) — Panduan lengkap hub panel kontrol 6 widget, manajemen visibilitas fitur, mekanisme intersepsi login & middleware `CheckMaintenanceMode`, waktu idle dinamis, dan pembersihan cache.
-- 🧭 [**Arsitektur & Operasional Modul Manajemen Menu**](docs/arsitektur_dan_operasional_manajemen_menu.md) — Panduan lengkap struktur hierarki menu 3 level, drag & drop reordering SortableJS, cascading status toggle, sinkronisasi otomatis Spatie permission CRUD, auto-sync kamus bilingual multi-bahasa, dan dynamic sidebar ViewComposer.
-- 🤝 [**Arsitektur & Operasional Pertemanan, Notifikasi & Chat**](docs/arsitektur_dan_operasional_pertemanan_notifikasi_chat.md) — Panduan lengkap triad interaktif ekosistem sosial, ajakan berteman, profile likes, integrasi lonceng notifikasi real-time, intersepsi deep link dashboard, mutasi kartu chat 1-on-1, dan quad-polling engine.
-- 💬 [**Pola & Operasional Fitur Chat / Messages Engine**](docs/arsitektur_dan_operasional_fitur_chat_messages.md) — Panduan lengkap arsitektur percakapan *1-on-1*, skema database *conversation ID*, *Quoted Reply*, *Emoji Picker*, *Attachment Upload & Lightbox*, dan *Real-Time Avatar Sync Engine*.
-- 🔐 [**Arsitektur & Operasional Autentikasi Pengguna**](docs/arsitektur_dan_operasional_authentication_user.md) — Panduan lengkap alur pendaftaran mandiri, *User Approval Workflow*, proteksi login *Zero-Trust*, *Universal Notification Hub*, penonaktifan mandiri (*Danger Zone*), pengajuan aktivasi kembali, dan Spatie Role otomatis.
-- 📄 [**Arsitektur Engine Dinamisasi Tema & Seksi Website**](docs/arsitektur_dinamisasi_tema_website.md) — Panduan resmi arsitektur *Loose Coupling*, *Crop Simulator*, *Efek Paralaks 3D*, *Metadata Orientasi Gambar*, dan *Pemisahan Modal Modular*.
+**Repalogic Dashboard** adalah aplikasi sistem manajemen admin, kontrol hak akses, komunikasi internal, dan web portal modern berbasis **Laravel 13** dan **Inspinia Admin Template**. Dashboard ini dirancang menggunakan arsitektur modular (*Domain-Driven Modular Architecture*) untuk memberikan solusi enterprise yang komprehensif, fleksibel, terisolasi, serta berkinerja tinggi.
 
 ---
 
-## Langkah-langkah Git Clone & Instalasi
+## 🌟 Fitur Utama (Core Features)
+
+1. 💬 **Engine Percakapan & Chat Interaktif (*Messages Hub*)**:
+   - Komunikasi dua arah real-time (*1-on-1 Direct Chat*) dengan ID deterministik.
+   - **Menu Aksi Titik Tiga (*3-Dots Dropdown*)** di sudut bubble chat (*Balas, Teruskan, Pin, Hapus*).
+   - **Perekam & Pemutar Pesan Suara (*Voice Note Audio Engine*)** dengan visualizer gelombang audio dan timer real-time.
+   - **Hasil Reaksi Emoji Bersih Sejajar (*Inline Clean Reactions*)** di samping tombol reaksi emoji dengan sinkronisasi *in-place selective sync*.
+   - **Kutipan Balasan Pesan (*Quoted Reply*)**, **Penerusan Pesan (*Forwarding*)**, dan **Penyematan Pesan (*Pinned Messages*)**.
+   - **Pencarian Riwayat Obrolan (*In-Chat Search & Highlighting*)** dengan counter navigasi panah atas/bawah.
+   - **Penghapusan Ganda (*Dual-Mode Deletion*)**: *Tarik untuk Semua Orang (Unsend)* vs *Hapus untuk Saya Sendiri*, serta *Pembersihan Histori Obrolan (Clear History)*.
+   - Unggah lampiran foto & dokumen hingga 10 MB lengkap dengan *Live Preview Bar* dan *Lightbox Modal*.
+
+2. 🤝 **Triad Ekosistem Sosial (Pertemanan, Like Profil & Notifikasi Lonceng)**:
+   - Jaringan pertemanan internal (*Kirim Ajakan, Terima, Tolak, Batal, dan Hapus Pertemanan/Unfriend*).
+   - Sistem apresiasi profil (*Profile Likes Engine*) dengan sinkronisasi angka real-time.
+   - Integrasi lonceng notifikasi topbar reaktif dengan *deep linking* langsung ke kartu pengguna pada Dashboard.
+   - Transformasi kartu kontak otomatis menjadi tombol obrolan aktif (*💬 Chat*) setelah berteman.
+
+3. 🌐 **Sistem Bilingual Modular 2-Arah (*Modular i18n Engine*)**:
+   - Kamus terjemahan modular terisolasi pada **6 Domain**: `sidebar_template`, `sidebar_menu`, `topbar`, `auth`, `customizer`, dan `frontpage`.
+   - Paralel loader engine (`Promise.allSettled`) dengan pergantian bahasa instan *zero page reload* (< 5ms).
+   - Manajemen terjemahan berbasis Nav Tab per domain dengan auto-sync model hook `Menu::saved` dan CLI code scanner `php artisan menu:lang-sync`.
+   - *Pre-Hydration Anti-Flicker* pada topbar language switcher.
+
+4. 🔐 **Manajemen Pengguna & Otorisasi Spatie Permission Matrix**:
+   - 6 Sub-Modul terpadu: *Role, Permission, Akses Role, Akses User, Users Lifecycle, dan Data Login*.
+   - **Tabel Matriks Hak Akses Berjenjang (*Matrix Table*)**: Pengelompokan izin `create`, `read`, `update`, `delete` berbasis Menu Utama & Sub-Menu dengan *Master Select All* dan *Row Toggle*.
+   - **Siklus Hidup Akun (*Zero-Trust Lifecycle*)**: Alur registrasi mandiri, persetujuan admin (*approval*), penolakan beralasan, penonaktifan mandiri (*Danger Zone*), permohonan aktivasi kembali, dan invalidasi sesi instan.
+   - **Impersonasi Akun (*Switch Account*)**: Administrator dapat masuk sebagai pengguna target dengan *floating banner switch-back*.
+   - **Audit Trail Data Login**: Pelacakan IP, perangkat, platform, browser, perolehan reward poin, dan peta geolokasi OpenStreetMap.
+
+5. 👤 **Kustomisasi Profil Pengguna & Banner Sampul WYSIWYG**:
+   - Penataan profil dalam arsitektur satu halaman (*Single-Page Profile*).
+   - Pengaturan interaktif foto sampul: slider tinggi proporsional, color picker & preset swatches warna overlay, slider transparansi ($0\% - 100\%$), efek blur ($0\text{px} - 20\text{px}$), dan kustomisasi warna teks motto hidup.
+   - Penyimpanan data pelengkap: NIK, nomor telepon WhatsApp interaktif, alamat domisili, dan pratinjau foto KTP ukuran penuh.
+
+6. ⚙️ **Hub Pengaturan Fitur, Mode Pemeliharaan & Kinerja Server**:
+   - Panel kontrol 6 widget interaktif untuk pengawasan proporsi fitur aktif, durasi waktu idle auto lock screen, dan interval polling live.
+   - **Mode Pemeliharaan (*Maintenance Mode*)**: Penguncian sistem global dengan halaman responsif 503 kustom dan bypass otomatis superadmin/admin.
+   - **Admin Customizer Optimize Clear Engine**: Pembersihan serentak seluruh cache view Blade, routes, configs, database cache store, dan reset tema layout melalui AJAX.
+
+7. 🎨 **Engine Dinamisasi Tema & Seksi Website**:
+   - Pemisahan tampilan publik murni (*Loose Coupling*) antara konten Blade dengan properti layout database.
+   - Dukungan variasi background (*Light, Dark, Primary, Dynamic Custom Image*), orientasi otomatis, dan efek paralaks 3D.
+
+8. 🧭 **Manajemen Menu & Navigasi Hierarki 3-Level**:
+   - Pengurutan interaktif *SortableJS Drag & Drop* multi-handle (Kategori, Menu Utama, Sub-Menu L2/L3).
+   - Sakelar on/off berjenjang (*Cascading Status Toggle*) dan rendering otomatis via `SidebarComposer`.
+
+---
+
+## 📚 Skema dan Operasional Sistem
+
+### 1. Skema Arsitektur & Teknologi (Tech Stack)
+- **Backend Framework**: Laravel 13 (PHP 8.3+)
+- **Authentication & Security**: Laravel Session Guard, Rate Limiting Lockout, Zero-Trust Session Invalidation
+- **Authorization Engine**: Spatie Laravel-Permission (`spatie/laravel-permission`)
+- **Data Tables Engine**: Yajra Laravel DataTables (`yajra/laravel-datatables-oracle`)
+- **Frontend Stack**: Bootstrap 5, Vite, Vanilla JS & CSS terpisah (Rule 15), Inspinia Assets, SweetAlert2, Tabler Icons, Lucide Icons
+- **Real-Time Polling Engine**: Quad-Polling Lightweight Background Poller (Dashboard, Lonceng Notifikasi, Topbar Pesan, Chat Aktif)
+
+### 2. Standar Pemisahan Aset Eksternal (Rule 15 Architecture)
+Seluruh style CSS kustom dan logika interaksi JavaScript dipisahkan ke dalam direktori terdedikasi di `public/assets/`:
+```text
+public/assets/
+├── css/admin/{kelompok}/{modul}.css
+└── js/admin/{kelompok}/{modul}.js
+```
+
+### 3. Struktur Hirarki Modul Backend
+```text
+repalogic-dashboard/
+├── app/
+│   ├── Http/Controllers/Admin/{Kelompok}/{Modul}Controller.php
+│   ├── Http/Requests/Admin/{Kelompok}/{Modul}Request.php
+│   ├── Models/Admin/{Kelompok}/{Modul}.php
+│   └── ViewComposers/SidebarComposer.php
+├── resources/views/
+│   ├── admin/{kelompok}/{modul}.blade.php
+│   └── admin/{kelompok}/partials/{sub_komponen}.blade.php
+└── docs/
+    └── [Berkas Dokumentasi Teknis Lengkap]
+```
+
+### 4. Direktori Dokumentasi Teknis Lengkap (`docs/`)
+- 🏷️ [**Riwayat Lengkap Release & Git Tag**](docs/riwayat_release_dan_tag.md) — Pelacakan versi rilis dan catatan pembaruan komprehensif.
+- 💬 [**Arsitektur & Operasional Fitur Chat / Messages**](docs/arsitektur_dan_operasional_fitur_chat_messages.md) — Skema database pesan, 3-dots action menu, voice note engine, inline reactions, quoted reply, dan in-place selective sync.
+- 🤝 [**Arsitektur & Operasional Pertemanan, Notifikasi & Chat**](docs/arsitektur_dan_operasional_pertemanan_notifikasi_chat.md) — Alur integrasi triad sosial, ajakan berteman, profile likes, lonceng topbar, dan quad-polling engine.
+- 🌐 [**Arsitektur & Operasional Sistem Bilingual (i18n)**](docs/arsitektur_dan_operasional_bilingual.md) — Arsitektur 6 domain kamus modular, parallel loader `Promise.allSettled`, dan auto-sync model listener.
+- 👥 [**Arsitektur & Operasional Manajemen Pengguna**](docs/arsitektur_dan_operasional_manajemen_pengguna.md) — Panduan 6 sub-modul otorisasi Spatie Permission Matrix, users lifecycle, dan audit trail data login.
+- ⚙️ [**Arsitektur & Operasional Fitur dan Pengaturan Aplikasi**](docs/arsitektur_dan_operasional_fitur_dan_pengaturan_aplikasi.md) — Hub pengaturan 6 widget, mode pemeliharaan 503, waktu idle dinamis, dan pembersih cache.
+- 🧭 [**Arsitektur & Operasional Modul Manajemen Menu**](docs/arsitektur_dan_operasional_manajemen_menu.md) — Struktur hierarki menu 3 level, drag & drop SortableJS, cascading status toggle, dan SidebarComposer.
+- 🔐 [**Arsitektur & Operasional Autentikasi Pengguna**](docs/arsitektur_dan_operasional_authentication_user.md) — Registrasi mandiri, persetujuan admin, penonaktifan mandiri, aktivasi kembali, dan proteksi sesi.
+- 🎨 [**Arsitektur Engine Dinamisasi Tema & Seksi Website**](docs/arsitektur_dinamisasi_tema_website.md) — Panduan arsitektur *Loose Coupling*, *Crop Simulator*, paralaks 3D, dan variasi background dinamis.
+
+### 5. Perintah Operasional Penting (Artisan CLI)
+```bash
+# Membersihkan seluruh cache sistem (Blade, Config, Route, Application Store)
+php artisan optimize:clear
+
+# Sinkronisasi & pemindaian otomatis key terjemahan menu ke kamus JSON modular
+php artisan menu:lang-sync
+
+# Reset cache otorisasi Spatie Permission
+php artisan permission:cache-reset
+
+# Menjalankan database seeder
+php artisan db:seed
+
+# Menjalankan worker antrean latar belakang
+php artisan queue:listen
+
+# Streaming log error dan query secara real-time
+php artisan pail
+```
+
+---
+
+## 🗺️ Roadmap / Rencana Pengembangan (Run Down Pengembangan)
+
+Berikut adalah linimasa pencapaian dan rencana pengembangan arsitektur proyek Repalogic Dashboard:
+
+- [x] **Fase 1: Inisialisasi Fondasi & Integrasi Layout UI Inspinia**
+  - Setup Laravel 13, integrasi tema Inspinia, dan standardisasi Blade Vertical Layout (`layouts.vertical`).
+  - Implementasi breadcrumb dinamis dan penjelajah ikon lengkap (Tabler & Lucide Icons).
+- [x] **Fase 2: Navigasi Hierarki Dinamis & Engine Bilingual Modular**
+  - Struktur menu 3-level dengan SortableJS Drag & Drop reordering dan cascading status toggle.
+  - Arsitektur kamus terjemahan modular pada 6 domain terisolasi dengan Parallel Loader Engine (`Promise.allSettled`).
+- [x] **Fase 3: Otorisasi Spatie Permission Matrix & Manajemen Pengguna Enterprise**
+  - Sub-modul Role, Permission, Akses Role Matrix Table, Akses User Direct Permissions, Users Lifecycle, dan Data Login Audit Trail.
+  - Alur persetujuan pendaftaran akun (*Approval Workflow*), impersonasi pengguna (*Switch Account*), dan invalidasi sesi instan.
+- [x] **Fase 4: Hub Pengaturan Sistem, Mode Pemeliharaan & Kustomisasi Profil WYSIWYG**
+  - Pusat pengaturan 6 widget, auto lock screen dengan idle timer dinamis, dan middleware proteksi 503 Maintenance Mode.
+  - Editor interaktif sampul profil (slider tinggi, overlay swatches, opacity, blur, warna motto, dan WhatsApp field).
+  - Dinamisasi tema & seksi landing page publik (*Loose Coupling*, paralaks 3D, crop simulator).
+- [x] **Fase 5: Triad Sosial & Komunikasi Real-Time (Pertemanan, Notifikasi & Chat Messages)**
+  - Jaringan pertemanan internal, tombol suka profil (*Profile Likes*), dan sinkronisasi lonceng notifikasi reaktif.
+  - Engine chat percakapan *1-on-1*, menu aksi 3-titik (*3-Dots Dropdown*), reaksi emoji sejajar (*inline clean reactions*), perekam pesan suara (*Voice Note*), kutipan balasan (*Reply*), penyematan (*Pin*), penerusan (*Forward*), pencarian teks dalam chat, dan penghapusan ganda (*Dual-Mode Deletion*).
+- [x] **Fase 6: Standarisasi Pemisahan Aset (Rule 15) & Optimasi Anti-Flicker**
+  - Pemisahan 100% kode JavaScript dan CSS ke direktori eksternal `public/assets/` di seluruh modul admin.
+  - Optimasi transisi layout tanpa kedipan (*Anti-Flicker Pre-Hydration*) dan Admin Customizer Optimize Clear Engine via AJAX.
+- [ ] **Fase 7: RESTful API Integration, Web Push Notifications & Multi-Tenancy** *(Rencana Mendatang)*
+  - Penyediaan API Endpoints terautentikasi (Sanctum / Passport) untuk integrasi aplikasi mobile & pihak ketiga.
+  - Integrasi Web Push Notification API untuk notifikasi desktop instan di luar browser.
+  - Dukungan multi-tenant arsitektur database terisolasi untuk penyedia SaaS multi-organisasi.
+
+---
+
+## 🚀 Langkah-langkah Git Clone & Instalasi
 
 Ikuti langkah-langkah di bawah ini untuk memasang dan menjalankan proyek **Repalogic Dashboard** di lingkungan lokal Anda:
 
 ### 1. Prasyarat Sistem
-- **PHP**: `>= 8.3`
+- **PHP**: `>= 8.3` (Disarankan ekstensi `pdo_mysql`, `mbstring`, `openssl`, `fileinfo`, `gd`/`imagick` aktif)
 - **Composer**: `>= 2.x`
 - **Node.js & NPM**: `>= 18.x` / `>= 20.x`
 - **Database**: MySQL / MariaDB (Rekomendasi: Laragon / XAMPP)
 - **Git**
 
 ### 2. Clone Repository
-Buka terminal / command line, lalu jalankan perintah:
+Buka terminal / PowerShell, lalu jalankan perintah:
 ```bash
 git clone https://github.com/AbdoelMadjid/repalogic-dashboard.git
 cd repalogic-dashboard
@@ -93,10 +209,10 @@ composer install
 ### 4. Konfigurasi Environment (`.env`)
 Salin file `.env.example` menjadi `.env`:
 ```bash
+# Linux / macOS / Git Bash
 cp .env.example .env
-```
-*Catatan untuk Windows (CMD/PowerShell):*
-```powershell
+
+# Windows PowerShell
 copy .env.example .env
 ```
 
@@ -116,13 +232,13 @@ php artisan key:generate
 ```
 
 ### 6. Migrasi & Seeder Database
-Jalankan migrasi tabel beserta seeder bawaan (data role, permission, & user awal):
+Jalankan migrasi tabel beserta seeder bawaan (data role, permission, menu bawaan, & user akun awal):
 ```bash
 php artisan migrate --seed
 ```
 
-### 7. Buat Symbolic Link Storage (PENTING untuk Foto Avatar & Logo)
-Jalankan perintah penyambungan direktori storage publik agar gambar foto avatar pengguna, logo aplikasi, dan berkas KTP terhubung secara publik:
+### 7. Buat Symbolic Link Storage (PENTING untuk Foto Avatar, Sampul, & Lampiran Chat)
+Jalankan perintah penyambungan direktori storage publik:
 ```bash
 php artisan storage:link
 ```
@@ -134,110 +250,21 @@ npm run build
 ```
 
 ### 9. Menjalankan Server Lokal
-Anda dapat menjalankan server pengembangan menggunakan perintah Artisan atau script Concurrently:
+Anda dapat menjalankan server pengembangan menggunakan:
 
 *Menggunakan Artisan Serve:*
 ```bash
 php artisan serve
 ```
-Akses aplikasi di browser pada alamat: `http://127.0.0.1:8000`
+Akses aplikasi di browser pada alamat: **`http://127.0.0.1:8000`**
 
-*Menggunakan Script Development Lengkap (Server, Queue worker, Pail log, Vite):*
+*Atau Menggunakan Script Development Lengkap (Server, Queue Worker, Pail, & Vite):*
 ```bash
 composer run dev
 ```
 
 ---
 
-## Roadmap / Rencana Pengembangan (Round Down Pengembangan)
+## 📄 License
 
-Berikut adalah tahapan rencana dan arah pengembangan proyek Repalogic Dashboard:
-
-- [x] **Fase 1: Inisialisasi & Integrasi Layout UI Template**
-  - Setup Laravel 13 & integrasi Inspinia Admin Dashboard UI.
-  - Setup komponen dasar Blade Vertical Layout & dynamic breadcrumb engine.
-- [x] **Fase 2: Navigasi Dinamis & Engine Multi-Bahasa**
-  - Implementasi navigasi 3-level dengan auto-scroll active menu centering.
-  - Implementasi bilingual engine (Bahasa Indonesia & Bahasa Inggris).
-  - Integrasi Icon Explorers (Tabler & Lucide Icons).
-- [x] **Fase 3: Manajemen Pengguna & Spatie Permission Matrix**
-  - Halaman Manajemen User, Role, & Permission.
-  - Tampilan Permission Matrix Table (Create, Read, Update, Delete, Lainnya, Semua).
-  - Pengaturan Akses Role & Akses User secara presisi.
-- [x] **Fase 4: Dukungan Aplikasi, Profil, Dinamisasi Tema & Backup Database**
-  - Modul Profil Pengguna, Profil Aplikasi, & Konfigurasi Sampul Header Interaktif.
-  - Engine Dinamisasi Tema & Seksi Website Terpusat (Crop Simulator, Paralaks 3D, Deteksi Orientasi & Partial Modular).
-  - Halaman fitur aplikasi & integrasi backup database.
-- [ ] **Fase 5: Pengayaan Modul E-Commerce & Log Sistem** *(Sedang Berjalan)*
-  - Penyempurnaan modul E-Commerce (Products, Orders, Customers, Refunds, Inventory).
-  - Dashboard analitik & grafik penjualan real-time.
-- [ ] **Fase 6: RESTful API Integration & Multi-tenant Support** *(Rencana Mendatang)*
-  - Penyediaan API endpoints untuk mobile & aplikasi pihak ketiga.
-  - Sistem pengawasan keamanan & audit trail log operasional.
-
----
-
-## Skema dan Operasional
-
-### 1. Skema Arsitektur & Teknologi
-- **Framework**: Laravel 13 (PHP 8.3+)
-- **Authentication & Authorization**: Spatie Laravel-Permission (`spatie/laravel-permission`)
-- **Data Table Engine**: Yajra Laravel DataTables (`yajra/laravel-datatables-oracle`)
-- **Frontend Stack**: Vite, Bootstrap, Inspinia Assets, jQuery, SweetAlert2, Lucide Icons, Tabler Icons.
-- **Pola Arsitektur**: Model-View-Controller (MVC) dengan Vertical Layout Blade (`layouts.vertical`).
-- **Spatie Permission Matrix**: Penataan permission dikelompokkan berdasarkan Menu Utama & Sub-Menu untuk pengelolaan hak akses yang transparan.
-
-Aplikasi siap diakses melalui peramban di: **`http://127.0.0.1:8000`** atau host lokal virtual host Laragon Anda.
-
----
-
-## 🏛️ Struktur Hirarki Modul & Arsitektur Direktori
-
-Proyek ini menerapkan standar hirarki arsitektur seragam berbasis kelompok modul:
-
-### 1. Struktur Folder Backend (Admin)
-- **Controllers**: `app/Http/Controllers/Admin/{Kelompok}/{Modul}Controller.php`
-- **Form Requests**: `app/Http/Requests/Admin/{Kelompok}/{Modul}Request.php`
-- **Models**: `app/Models/Admin/{Kelompok}/{Modul}.php`
-- **Blade Views**: `resources/views/admin/{kelompok}/{modul}.blade.php`
-- **Modular Partials**: `resources/views/admin/{kelompok}/partials/{sub_komponen}.blade.php`
-
-### 2. Kelompok Modul Utama
-- **Manajemen Pengguna (`/admin/manajemenpengguna/*`)**:
-  - `users`: Manajemen akun pengguna, avatar, approval status, dan aktivasi/penonaktifan.
-  - `roles`: Manajemen Spatie Role & Spatie Permission Matrix table.
-  - `permissions`: Manajemen izin akses CRUD per modul.
-  - `akses-user` & `akses-role`: Penetapan akses individual & role.
-- **Dukungan Aplikasi (`/admin/dukunganaplikasi/*`)**:
-  - `profil-aplikasi`: Pengaturan identitas, logo, favicon, dan kontak sistem.
-  - `fitur-aplikasi`: Manajemen dinamis komponen topbar, menu template sidebar, dan fitur sistem.
-  - `backup-db`: Manajemen pencadangan database SQL otomatis.
-  - `translation`: Manajemen internasionalisasi dua bahasa (ID & EN).
-- **Website Dinamis (`/admin/website/*`)**:
-  - `themes`: Pengaturan tema landing page & seksi website dinamis (*Crop Simulator*, paralaks 3D).
-- **Template Modul Dokumentasi & Changelog (`/template/documentation/*`)**:
-  - `changelog`: Timeline riwayat rilis sinkron dengan Git commit.
-  - `features`: Katalog fitur dan status aplikasi.
-- **Template & Fitur E-Commerce (`/template/*`)**:
-  - Modul pendukung UI untuk produk, pemesanan, stok, laporan, dan pelanggan.
-
-### 3. Perintah Operasional Penting
-```bash
-# Clear Cache Aplikasi & Konfigurasi
-php artisan optimize:clear
-
-# Menjalankan Seeder Ulang
-php artisan db:seed
-
-# Menjalankan Queue Worker untuk Tugas Latar Belakang
-php artisan queue:listen
-
-# Pail Log Streaming (Monitoring Log Real-Time)
-php artisan pail
-```
-
----
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Proyek **Repalogic Dashboard** dilisensikan di bawah lisensi terbuka [MIT license](https://opensource.org/licenses/MIT).
