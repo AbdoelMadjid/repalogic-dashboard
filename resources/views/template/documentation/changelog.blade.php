@@ -129,9 +129,9 @@
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.5</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-04 12:35 WIB</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-04 13:48 WIB</span>
                                 </div>
-                                <h6 class="fw-semibold text-dark mb-2">Idle Lock Screen Seamless Re-Authentication, Zero-419 CSRF Graceful Handler, Universal Logout Session Invalidation &amp; Custom 419 Error Template</h6>
+                                <h6 class="fw-semibold text-dark mb-2">Idle Lock Screen Seamless Re-Authentication, Global Dynamic CSRF Token Sync, Zero-419 Graceful Handler, Universal Logout Session Invalidation &amp; Custom 419 Error Template</h6>
                                 <ul class="text-muted fs-14 mb-3 ps-3">
                                     <li><strong class="text-dark">Penanganan Otentikasi Ulang Layar Terkunci (<code>LockScreenController.php</code> &amp; <code>lock-screen-modal.blade.php</code>):</strong> Memungkinkan pengguna yang ditinggalkan <em>idle</em> melebihi masa sesi untuk tetap dapat membuka kunci layar menggunakan password akunnya tanpa terblokir pesan <em>"kesalahan jaringan"</em>. Sistem memvalidasi password dan meregenerasi sesi otentikasi serta token CSRF baru secara mulus di latar belakang.</li>
                                     <li><strong class="text-dark">Pengecualian CSRF &amp; Graceful TokenMismatchException (<code>bootstrap/app.php</code>):</strong> Mendaftarkan rute <code>lock-screen/unlock</code> dan <code>logout</code> dalam pengecualian validasi CSRF serta menambahkan interceptor <code>TokenMismatchException</code> terpusat. Request AJAX mengembalikan respon JSON terstruktur (status 419/401) dan request web otomatis dialihkan ke halaman login tanpa menampilkan layar putih <em>419 Page Expired</em>.</li>
