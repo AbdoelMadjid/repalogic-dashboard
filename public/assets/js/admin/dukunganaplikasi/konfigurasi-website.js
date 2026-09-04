@@ -8,7 +8,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const config = window.KonfigurasiWebsiteConfig || {};
     const routes = config.routes || {};
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    function getCsrfToken() {
+        if (typeof window.getCsrfToken === 'function') {
+            return window.getCsrfToken();
+        }
+        return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || window.csrfToken || '';
+    }
 
     let currentPreviewSectionId = null;
 
@@ -38,7 +43,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken,
+                        'X-CSRF-TOKEN': getCsrfToken(),
+                        'X-Requested-With': 'XMLHttpRequest',
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
@@ -403,7 +409,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
+                    'X-CSRF-TOKEN': getCsrfToken(),
+                    'X-Requested-With': 'XMLHttpRequest',
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify({ 

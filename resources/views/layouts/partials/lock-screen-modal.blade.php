@@ -325,15 +325,16 @@
                 }
 
                 if (response.ok && data && data.success) {
-                    // Update CSRF token jika dikembalikan oleh server
+                    // Update CSRF token di seluruh DOM dan framework state
                     if (data.csrf_token) {
-                        const metaCsrf = document.querySelector('meta[name="csrf-token"]');
-                        if (metaCsrf) {
-                            metaCsrf.setAttribute('content', data.csrf_token);
+                        if (typeof window.setCsrfToken === 'function') {
+                            window.setCsrfToken(data.csrf_token);
+                        } else {
+                            const metaCsrf = document.querySelector('meta[name="csrf-token"]');
+                            if (metaCsrf) metaCsrf.setAttribute('content', data.csrf_token);
+                            document.querySelectorAll('input[name="_token"]').forEach(function(input) { input.value = data.csrf_token; });
+                            window.csrfToken = data.csrf_token;
                         }
-                        document.querySelectorAll('input[name="_token"]').forEach(function(input) {
-                            input.value = data.csrf_token;
-                        });
                     }
 
                     window.unlockScreen();

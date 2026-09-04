@@ -197,7 +197,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // 4. Jaringan Pertemanan & Interaksi Like Profil (Rule 2 & Rule 9 Standard)
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    function getCsrfToken() {
+        if (typeof window.getCsrfToken === 'function') {
+            return window.getCsrfToken();
+        }
+        return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || window.csrfToken || '';
+    }
     const routes = config.routes || {};
 
     // Helper untuk request AJAX JSON dengan CSRF
@@ -207,12 +212,33 @@ document.addEventListener('DOMContentLoaded', function () {
                 method: method,
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
+                    'X-CSRF-TOKEN': getCsrfToken(),
+                    'X-Requested-With': 'XMLHttpRequest',
                     'Accept': 'application/json'
                 },
                 body: method !== 'GET' ? JSON.stringify(bodyData) : null
             });
-            return await response.json();
+
+            let data = null;
+            try {
+                data = await response.json();
+            } catch (err) {
+                data = null;
+            }
+
+            if (!response.ok) {
+                if (response.status === 419 || response.status === 401 || (data && data.session_expired)) {
+                    if (window.showWarning) {
+                        window.showWarning('Sesi Anda telah kedaluwarsa. Mengalihkan ke halaman login...');
+                    }
+                    setTimeout(function() {
+                        window.location.href = (data && data.redirect) ? data.redirect : '/login';
+                    }, 1500);
+                }
+                return data || { success: false, message: 'Terjadi kesalahan pada server.' };
+            }
+
+            return data || { success: true };
         } catch (error) {
             console.error('AJAX Error:', error);
             return { success: false, message: 'Terjadi kesalahan pada jaringan server.' };

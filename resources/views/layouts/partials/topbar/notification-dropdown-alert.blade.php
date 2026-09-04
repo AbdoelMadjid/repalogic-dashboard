@@ -122,12 +122,16 @@ document.addEventListener('DOMContentLoaded', function() {
         // Jika notifikasi memiliki ID database (awalan db-)
         const cleanId = notifId.replace(/^db-/, '');
         if (cleanId && notifId.startsWith('db-')) {
+            const currentToken = typeof window.getCsrfToken === 'function' 
+                ? window.getCsrfToken() 
+                : (document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}');
+
             // Tandai sebagai dibaca di backend via AJAX
             fetch('/admin/notifications/' + cleanId + '/read', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
+                    'X-CSRF-TOKEN': currentToken,
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             }).then(function() {

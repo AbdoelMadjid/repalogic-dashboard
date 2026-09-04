@@ -140,11 +140,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 2. Tandai sebagai dibaca di database via AJAX
         if (msgId) {
+            const currentToken = typeof window.getCsrfToken === 'function' 
+                ? window.getCsrfToken() 
+                : (document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}');
+
             fetch('/admin/notifications/' + encodeURIComponent(msgId) + '/read', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
+                    'X-CSRF-TOKEN': currentToken,
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             }).then(function() {

@@ -136,6 +136,21 @@
 <title>{{ $pageTitle }} | {{ $appName }}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<script>
+    window.getCsrfToken = function() {
+        return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || window.csrfToken || '';
+    };
+    window.setCsrfToken = function(token) {
+        if (!token) return;
+        window.csrfToken = token;
+        const meta = document.querySelector('meta[name="csrf-token"]');
+        if (meta) meta.setAttribute('content', token);
+        document.querySelectorAll('input[name="_token"]').forEach(function(el) { el.value = token; });
+        if (window.axios) window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token;
+        if (window.jQuery) window.jQuery.ajaxSetup({ headers: { 'X-CSRF-TOKEN': token } });
+        window.dispatchEvent(new CustomEvent('csrf-token-updated', { detail: { token: token } }));
+    };
+</script>
 <meta name="description"
     content="{{ $appProfil->meta_description ?? 'REPALOGIC Dashboard Management System' }}" />
 <meta name="keywords"

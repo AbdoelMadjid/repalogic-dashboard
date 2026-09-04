@@ -57,12 +57,13 @@ class LockScreenController extends Controller
         // Login atau segarkan sesi pengguna & token
         Auth::login($user);
         $request->session()->regenerate();
+        $request->session()->regenerateToken();
         $request->session()->put('last_activity', time());
 
         return response()->json([
             'success' => true,
             'message' => 'Layar berhasil dibuka kembali.',
-            'csrf_token' => csrf_token(),
+            'csrf_token' => $request->session()->token(),
             'user' => [
                 'name' => $user->name,
                 'email' => $user->email,
