@@ -17,9 +17,9 @@
                 <div class="card-header card-tabs d-flex flex-wrap align-items-center justify-content-between gap-2">
                     <div class="d-flex align-items-center gap-2">
                         <h4 class="card-title mb-0">Pusat Kontrol & Fitur Aplikasi</h4>
-                        <button type="button" class="btn btn-xs btn-outline-danger d-inline-flex align-items-center px-2 py-1" id="btn-reset-default" title="Kembalikan semua pengaturan sistem dan visibilitas fitur ke setelan bawaan sistem (Seeder)">
-                            <i class="ti ti-rotate-clockwise me-1 fs-14"></i>
-                            <span class="fs-12">Kembalikan Default</span>
+                        <button type="button" class="btn btn-sm btn-outline-danger py-0 px-1.5 d-inline-flex align-items-center fs-12" id="btn-reset-default" title="Kembalikan semua pengaturan sistem dan visibilitas fitur ke setelan bawaan sistem (Seeder)">
+                            <i class="ti ti-rotate-clockwise me-1 fs-12"></i>
+                            <span>Kembalikan Default</span>
                         </button>
                     </div>
                     <ul class="nav nav-tabs card-header-tabs nav-bordered" id="fiturNavTabs" role="tablist">
