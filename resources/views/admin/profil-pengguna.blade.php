@@ -236,24 +236,22 @@
 
                         <!-- Pilihan Warna Teks Motto -->
                         <div class="mb-3 p-2 bg-light rounded border">
-                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                                <div class="d-flex align-items-center flex-wrap gap-2">
-                                    <label for="motto_color_input" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
-                                        <i class="ti ti-palette text-primary fs-15"></i> Warna Teks Motto:
-                                    </label>
-                                    <input type="color" class="form-control form-control-color border-0 p-0 rounded-circle cursor-pointer flex-shrink-0" id="motto_color_input" name="motto_color" value="{{ old('motto_color', $user->motto_color) }}" title="Pilih warna kustom" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px;">
-                                    <div class="d-flex flex-wrap align-items-center gap-1.5">
-                                        <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#ffffff' ? 'active' : '' }}" data-color="#ffffff" style="background-color: #ffffff; border: 2px solid #cbd5e1 !important;" title="Putih (#ffffff)"></span>
-                                        <span role="button" tabindex="0" class="btn-motto-color-swatch {{ in_array(strtolower(old('motto_color', $user->motto_color)), ['#000000', '#111827']) ? 'active' : '' }}" data-color="#111827" style="background-color: #111827;" title="Hitam (#111827)"></span>
-                                        <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#f59e0b' ? 'active' : '' }}" data-color="#f59e0b" style="background-color: #f59e0b;" title="Kuning Emas (#f59e0b)"></span>
-                                        <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#06b6d4' ? 'active' : '' }}" data-color="#06b6d4" style="background-color: #06b6d4;" title="Cyan (#06b6d4)"></span>
-                                        <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#10b981' ? 'active' : '' }}" data-color="#10b981" style="background-color: #10b981;" title="Hijau Neon (#10b981)"></span>
-                                        <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#f43f5e' ? 'active' : '' }}" data-color="#f43f5e" style="background-color: #f43f5e;" title="Merah Rose (#f43f5e)"></span>
-                                        <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#f97316' ? 'active' : '' }}" data-color="#f97316" style="background-color: #f97316;" title="Oranye (#f97316)"></span>
-                                        <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#8b5cf6' ? 'active' : '' }}" data-color="#8b5cf6" style="background-color: #8b5cf6;" title="Ungu (#8b5cf6)"></span>
-                                    </div>
-                                </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label for="motto_color_input" class="form-label fs-12 fw-bold text-dark mb-0 d-flex align-items-center gap-1">
+                                    <i class="ti ti-palette text-primary fs-15"></i> Warna Teks Motto:
+                                </label>
                                 <span id="motto-color-val" class="badge bg-primary-subtle text-primary font-monospace fs-11 fw-bold">{{ old('motto_color', $user->motto_color) }}</span>
+                            </div>
+                            <div class="d-flex align-items-center flex-wrap gap-1.5 mt-2">
+                                <input type="color" class="form-control form-control-color border-0 p-0 rounded-circle cursor-pointer flex-shrink-0" id="motto_color_input" name="motto_color" value="{{ old('motto_color', $user->motto_color) }}" title="Pilih warna kustom" style="width: 28px; height: 28px; min-width: 28px; min-height: 28px;">
+                                <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#ffffff' ? 'active' : '' }}" data-color="#ffffff" style="background-color: #ffffff; border: 2px solid #cbd5e1 !important;" title="Putih (#ffffff)"></span>
+                                <span role="button" tabindex="0" class="btn-motto-color-swatch {{ in_array(strtolower(old('motto_color', $user->motto_color)), ['#000000', '#111827']) ? 'active' : '' }}" data-color="#111827" style="background-color: #111827;" title="Hitam (#111827)"></span>
+                                <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#f59e0b' ? 'active' : '' }}" data-color="#f59e0b" style="background-color: #f59e0b;" title="Kuning Emas (#f59e0b)"></span>
+                                <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#06b6d4' ? 'active' : '' }}" data-color="#06b6d4" style="background-color: #06b6d4;" title="Cyan (#06b6d4)"></span>
+                                <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#10b981' ? 'active' : '' }}" data-color="#10b981" style="background-color: #10b981;" title="Hijau Neon (#10b981)"></span>
+                                <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#f43f5e' ? 'active' : '' }}" data-color="#f43f5e" style="background-color: #f43f5e;" title="Merah Rose (#f43f5e)"></span>
+                                <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#f97316' ? 'active' : '' }}" data-color="#f97316" style="background-color: #f97316;" title="Oranye (#f97316)"></span>
+                                <span role="button" tabindex="0" class="btn-motto-color-swatch {{ strtolower(old('motto_color', $user->motto_color)) === '#8b5cf6' ? 'active' : '' }}" data-color="#8b5cf6" style="background-color: #8b5cf6;" title="Ungu (#8b5cf6)"></span>
                             </div>
                         </div>
 

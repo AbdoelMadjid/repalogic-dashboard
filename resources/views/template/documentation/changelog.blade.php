@@ -129,7 +129,7 @@
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.7</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-05 10:55 WIB</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-05 11:10 WIB</span>
                                 </div>
                                 <h6 class="fw-semibold text-dark mb-2">Chat Message Edit Engine (Batas Waktu 10 Menit &amp; Penanda Edited), Interactive Edit Preview Bar, Real-Time Polling Sync &amp; In-Place DOM Mutation</h6>
                                 <ul class="text-muted fs-14 mb-3 ps-3">
@@ -139,6 +139,7 @@
                                     <li><strong class="text-dark">Penanda Teks Edited Transparan (<code>messages.blade.php</code> &amp; <code>messages.js</code>):</strong> Menampilkan indikator halus <code>(diedit)</code> di sebelah penanda waktu pesan baik saat render awal Blade maupun sinkronisasi real-time via background polling.</li>
                                     <li><strong class="text-dark">Sinkronisasi Polling In-Place &amp; Optimistic Update (<code>messages.js</code>):</strong> Memperbarui balon teks pesan, data atribut reply/edit, dan cuplikan pesan terakhir pada kontak sidebar seketika (0ms delay) tanpa merusak posisi scroll percakapan.</li>
                                     <li><strong class="text-dark">Penyempurnaan Antarmuka Fitur Aplikasi &amp; Tata Letak Linimasa (<code>fitur-aplikasi.blade.php</code> &amp; <code>changelog.blade.php</code>):</strong> Mengalibrasi ukuran tombol <em>Kembalikan Default</em> dengan ukuran ringkas (compact <code>btn-sm py-0 px-1.5 fs-12</code>) agar penanda aktif tab menempel rapi pada garis bawah header serta merapikan struktur kontainer <code>card-body p-4</code> pada halaman linimasa changelog.</li>
+                                    <li><strong class="text-dark">Pusat Akses Pintas Modul Dashboard &amp; Penataan Pemilih Warna Motto (<code>dashboard.blade.php</code> &amp; <code>profil-pengguna.blade.php</code>):</strong> Menghadirkan Card with Tabs Quick Access Hub berisi 12 pintasan sub-menu Manajemen Pengguna dan Dukungan Aplikasi khusus role Administrator (Superadmin &amp; Admin) serta merestrukturisasi layout pemilih warna teks motto menjadi 2 baris proporsional.</li>
                                 </ul>
                             </div>
                         </div>

@@ -243,7 +243,7 @@
         <!-- 4. PUSAT AKSI TERTUNDA & PINTASAN CEPAT (ADMIN) -->
         <div class="row g-3 mb-4">
             <!-- Pusat Aksi Tertunda (Pending Approvals & Deactivations) -->
-            <div class="col-xl-7">
+            <div class="col-xl-6">
                 <div class="card shadow-sm border-0 h-100 mb-0">
                     <div class="card-header bg-primary text-white py-3 d-flex justify-content-between align-items-center">
                         <h5 class="card-title text-white mb-0 fw-bold">
@@ -370,70 +370,148 @@
                 </div>
             </div>
 
-            <!-- Pusat Pintasan Cepat Admin -->
-            <div class="col-xl-5">
+            <!-- Pusat Pintasan Cepat Admin (Manajemen Pengguna & Dukungan Aplikasi) -->
+            <div class="col-xl-6">
                 <div class="card shadow-sm border-0 h-100 mb-0">
                     <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0 fw-bold">
-                            <i class="ti ti-bolt text-warning me-1.5"></i>Pusat Akses Pintas Admin
+                            <i class="ti ti-bolt text-warning me-1.5"></i>Pusat Akses Pintas Modul
                         </h5>
-                        <span class="badge bg-light text-dark border fs-xs">Shortcuts</span>
+                        <span class="badge bg-primary-subtle text-primary font-monospace">12 Modul Utama</span>
                     </div>
-                    <div class="card-body p-3">
-                        <div class="row g-2">
-                            <div class="col-6">
-                                <a href="{{ route('admin.manajemenpengguna.users.index') }}" class="quick-action-tile">
-                                    <div class="quick-action-icon bg-primary-subtle text-primary">
-                                        <i class="ti ti-users"></i>
-                                    </div>
-                                    <span class="fw-semibold fs-13 text-center">Manajemen User</span>
-                                    <span class="fs-xxs text-muted mt-0.5">Kelola data akun</span>
+                    <div class="card-body p-0">
+                        <ul class="nav nav-tabs nav-bordered px-3 pt-2 bg-light-subtle" role="tablist">
+                            <li class="nav-item">
+                                <a href="#tab-shortcut-users" data-bs-toggle="tab" aria-expanded="true" class="nav-link active py-2 fs-13">
+                                    <i class="ti ti-users me-1.5 text-primary"></i>Manajemen Pengguna <span class="badge bg-primary-subtle text-primary ms-1">6</span>
                                 </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#tab-shortcut-app" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2 fs-13">
+                                    <i class="ti ti-settings-cog me-1.5 text-info"></i>Dukungan Aplikasi <span class="badge bg-info-subtle text-info ms-1">6</span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content p-3">
+                            <!-- Tab 1: Manajemen Pengguna (6 Menu) -->
+                            <div class="tab-pane show active" id="tab-shortcut-users">
+                                <div class="row g-2">
+                                    <div class="col-6 col-sm-4">
+                                        <a href="{{ route('admin.manajemenpengguna.users.index') }}" class="quick-action-tile">
+                                            <div class="quick-action-icon bg-primary-subtle text-primary">
+                                                <i class="ti ti-users"></i>
+                                            </div>
+                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Data Pengguna</span>
+                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Kelola akun user</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-sm-4">
+                                        <a href="{{ route('admin.manajemenpengguna.data-login.index') }}" class="quick-action-tile">
+                                            <div class="quick-action-icon bg-success-subtle text-success">
+                                                <i class="ti ti-history"></i>
+                                            </div>
+                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Data Login</span>
+                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Log aktivitas harian</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-sm-4">
+                                        <a href="{{ route('admin.manajemenpengguna.role.index') }}" class="quick-action-tile">
+                                            <div class="quick-action-icon bg-info-subtle text-info">
+                                                <i class="ti ti-shield-lock"></i>
+                                            </div>
+                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Role Pengguna</span>
+                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Peran &amp; hirarki</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-sm-4">
+                                        <a href="{{ route('admin.manajemenpengguna.permission.index') }}" class="quick-action-tile">
+                                            <div class="quick-action-icon bg-warning-subtle text-warning">
+                                                <i class="ti ti-key"></i>
+                                            </div>
+                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Permission</span>
+                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Master hak izin</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-sm-4">
+                                        <a href="{{ route('admin.manajemenpengguna.akses-role.index') }}" class="quick-action-tile">
+                                            <div class="quick-action-icon bg-purple-subtle text-purple">
+                                                <i class="ti ti-lock-access"></i>
+                                            </div>
+                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Akses Role</span>
+                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Matriks izin peran</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-6 col-sm-4">
+                                        <a href="{{ route('admin.manajemenpengguna.akses-user.index') }}" class="quick-action-tile">
+                                            <div class="quick-action-icon bg-danger-subtle text-danger">
+                                                <i class="ti ti-user-shield"></i>
+                                            </div>
+                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Akses User</span>
+                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Izin langsung user</span>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-6">
-                                <a href="{{ route('admin.manajemenpengguna.role.index') }}" class="quick-action-tile">
-                                    <div class="quick-action-icon bg-info-subtle text-info">
-                                        <i class="ti ti-shield-lock"></i>
+
+                            <!-- Tab 2: Dukungan Aplikasi (6 Menu) -->
+                            <div class="tab-pane" id="tab-shortcut-app">
+                                <div class="row g-2">
+                                    <div class="col-6 col-sm-4">
+                                        <a href="{{ route('admin.dukunganaplikasi.profil-aplikasi.index') }}" class="quick-action-tile">
+                                            <div class="quick-action-icon bg-primary-subtle text-primary">
+                                                <i class="ti ti-id"></i>
+                                            </div>
+                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Profil Aplikasi</span>
+                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Identitas &amp; meta</span>
+                                        </a>
                                     </div>
-                                    <span class="fw-semibold fs-13 text-center">Spatie Roles</span>
-                                    <span class="fs-xxs text-muted mt-0.5">Matrix Hak Akses</span>
-                                </a>
-                            </div>
-                            <div class="col-6">
-                                <a href="{{ route('admin.dukunganaplikasi.fitur-aplikasi.index') }}" class="quick-action-tile">
-                                    <div class="quick-action-icon bg-danger-subtle text-danger">
-                                        <i class="ti ti-settings-cog"></i>
+                                    <div class="col-6 col-sm-4">
+                                        <a href="{{ route('admin.dukunganaplikasi.fitur-aplikasi.index') }}" class="quick-action-tile">
+                                            <div class="quick-action-icon bg-danger-subtle text-danger">
+                                                <i class="ti ti-settings-cog"></i>
+                                            </div>
+                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Fitur Aplikasi</span>
+                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Pusat kontrol sistem</span>
+                                        </a>
                                     </div>
-                                    <span class="fw-semibold fs-13 text-center">Pengaturan Fitur</span>
-                                    <span class="fs-xxs text-muted mt-0.5">Maintenance &amp; Hub</span>
-                                </a>
-                            </div>
-                            <div class="col-6">
-                                <a href="{{ route('admin.dukunganaplikasi.backup-db.index') }}" class="quick-action-tile">
-                                    <div class="quick-action-icon bg-warning-subtle text-warning">
-                                        <i class="ti ti-database"></i>
+                                    <div class="col-6 col-sm-4">
+                                        <a href="{{ route('admin.dukunganaplikasi.menu.index') }}" class="quick-action-tile">
+                                            <div class="quick-action-icon bg-info-subtle text-info">
+                                                <i class="ti ti-layout-sidebar"></i>
+                                            </div>
+                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Manajemen Menu</span>
+                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Navigasi sidebar</span>
+                                        </a>
                                     </div>
-                                    <span class="fw-semibold fs-13 text-center">Backup Database</span>
-                                    <span class="fs-xxs text-muted mt-0.5">Cadangkan data SQL</span>
-                                </a>
-                            </div>
-                            <div class="col-6">
-                                <a href="{{ route('admin.manajemenpengguna.data-login.index') }}" class="quick-action-tile">
-                                    <div class="quick-action-icon bg-success-subtle text-success">
-                                        <i class="ti ti-chart-bar"></i>
+                                    <div class="col-6 col-sm-4">
+                                        <a href="{{ route('admin.dukunganaplikasi.translation.index') }}" class="quick-action-tile">
+                                            <div class="quick-action-icon bg-success-subtle text-success">
+                                                <i class="ti ti-language"></i>
+                                            </div>
+                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Kamus Bahasa</span>
+                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Bilingual i18n</span>
+                                        </a>
                                     </div>
-                                    <span class="fw-semibold fs-13 text-center">Log Aktivitas</span>
-                                    <span class="fs-xxs text-muted mt-0.5">Data Login Harian</span>
-                                </a>
-                            </div>
-                            <div class="col-6">
-                                <a href="{{ route('template.documentation.changelog') }}" class="quick-action-tile">
-                                    <div class="quick-action-icon bg-secondary-subtle text-secondary">
-                                        <i class="ti ti-git-branch"></i>
+                                    <div class="col-6 col-sm-4">
+                                        <a href="{{ route('admin.dukunganaplikasi.backup-db.index') }}" class="quick-action-tile">
+                                            <div class="quick-action-icon bg-warning-subtle text-warning">
+                                                <i class="ti ti-database"></i>
+                                            </div>
+                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Backup Database</span>
+                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Cadangan SQL server</span>
+                                        </a>
                                     </div>
-                                    <span class="fw-semibold fs-13 text-center">Riwayat Rilis</span>
-                                    <span class="fs-xxs text-muted mt-0.5">Changelog v{{ config('app.version', '2.6.0') }}</span>
-                                </a>
+                                    <div class="col-6 col-sm-4">
+                                        <a href="{{ route('admin.dukunganaplikasi.konfigurasi-website.index') }}" class="quick-action-tile">
+                                            <div class="quick-action-icon bg-purple-subtle text-purple">
+                                                <i class="ti ti-world-www"></i>
+                                            </div>
+                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Konfigurasi Web</span>
+                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Tema &amp; landing page</span>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
