@@ -79,12 +79,9 @@ class TranslationController extends Controller
     /**
      * Display a listing of modular translation dictionaries with Tab navigation.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $activeModule = $request->query('module', 'all');
-        if ($activeModule !== 'all' && !array_key_exists($activeModule, $this->modules)) {
-            $activeModule = 'all';
-        }
+        $activeModule = 'all';
 
         // 1. Auto-sync missing database menu keys to sidebar_menu.json
         $dbMenus = Menu::with('parent')->get();
@@ -188,7 +185,7 @@ class TranslationController extends Controller
 
         $this->notifySuccess("Key terjemahan \"{$key}\" berhasil ditambahkan pada modul " . $this->modules[$module]['name'] . ".");
 
-        return redirect()->route('admin.dukunganaplikasi.translation.index', ['module' => $module]);
+        return redirect()->route('admin.dukunganaplikasi.translation.index');
     }
 
     /**
@@ -226,7 +223,7 @@ class TranslationController extends Controller
 
         $this->notifySuccess("Key terjemahan \"{$newKey}\" berhasil diperbarui pada modul " . $this->modules[$module]['name'] . ".");
 
-        return redirect()->route('admin.dukunganaplikasi.translation.index', ['module' => $module]);
+        return redirect()->route('admin.dukunganaplikasi.translation.index');
     }
 
     /**
@@ -262,7 +259,7 @@ class TranslationController extends Controller
 
         $this->notifySuccess("Key terjemahan \"{$translationKey}\" berhasil dihapus.");
 
-        return redirect()->route('admin.dukunganaplikasi.translation.index', $module ? ['module' => $module] : []);
+        return redirect()->route('admin.dukunganaplikasi.translation.index');
     }
 
     /**

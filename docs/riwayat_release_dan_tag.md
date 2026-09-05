@@ -3,7 +3,7 @@
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
 > **Versi Terbaru:** `v2.8.7`  
-> **Terakhir Diperbarui:** 05 September 2026 11:10 WIB  
+> **Terakhir Diperbarui:** 05 September 2026 11:21 WIB  
 
 ---
 
@@ -13,7 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
-| **`v2.8.7`** | `2026-09-05 11:10 WIB` | Chat Message Edit Engine (Batas 10 Menit & Penanda Edited), Interactive Edit Preview Bar, Real-Time In-Place Polling Sync, Dashboard Quick Access Hub (12 Sub-Menu), Fitur Aplikasi Compact Reset Button & Motto Color 2-Row Alignment |
+| **`v2.8.7`** | `2026-09-05 11:21 WIB` | Chat Message Edit Engine (Batas 10 Menit & Penanda Edited), Interactive Edit Preview Bar, Real-Time In-Place Polling Sync, Dashboard Quick Access Hub (12 Sub-Menu), Fitur Aplikasi Compact Reset Button, Motto Color 2-Row Alignment, Translation Clean URL (Tanpa `?module=`) & Equal-Height Active Nav Pills |
 | **`v2.8.6`** | `2026-09-04 14:15 WIB` | Storage Media Synchronization & Orphan Cleaner Engine, High-Resolution Image Lightbox Simulator & Single / Bulk Orphan Media Purging in Fitur Aplikasi |
 | **`v2.8.5`** | `2026-09-04 13:48 WIB` | Idle Lock Screen Seamless Re-Authentication, Global Dynamic CSRF Token Sync, Zero-419 Graceful Handler, Universal Logout Session Invalidation & Custom 419 Error Template |
 | **`v2.8.4`** | `2026-09-04 11:35 WIB` | Card with Tabs System Control Center, Persistent Database Settings (`app_settings`), Topbar Realtime Instant DOM Toggle, Zero-Reload Bulk Actions, Active Tab Persistence & Factory Reset to Seeder |

@@ -129,9 +129,9 @@
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.7</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-05 11:10 WIB</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-05 11:21 WIB</span>
                                 </div>
-                                <h6 class="fw-semibold text-dark mb-2">Chat Message Edit Engine (Batas Waktu 10 Menit &amp; Penanda Edited), Interactive Edit Preview Bar, Real-Time Polling Sync &amp; In-Place DOM Mutation</h6>
+                                <h6 class="fw-semibold text-dark mb-2">Chat Message Edit Engine, Dashboard Quick Access Hub, Fitur Aplikasi Button Alignment &amp; Clean Modular Translation Navigation</h6>
                                 <ul class="text-muted fs-14 mb-3 ps-3">
                                     <li><strong class="text-dark">Fasilitas Edit Pesan Chat (<code>MessageController.php</code> &amp; <code>routes/admin.php</code>):</strong> Menyediakan endpoint <code>PUT /admin/profil-pengguna/messages/{id}</code> untuk memperbarui teks pesan obrolan yang dikirim oleh pengguna aktif dengan validasi ketat batas waktu maksimal 10 menit (<code>$message->created_at->addMinutes(10)->isFuture()</code>).</li>
                                     <li><strong class="text-dark">Skema Database &amp; Model (<code>2026_09_05_000001_add_edited_columns_to_messages_table.php</code> &amp; <code>Message.php</code>):</strong> Menambahkan kolom <code>is_edited</code> (boolean) dan <code>edited_at</code> (timestamp) pada tabel <code>messages</code> serta method helper <code>isEditableBy($userId)</code>.</li>
@@ -140,6 +140,7 @@
                                     <li><strong class="text-dark">Sinkronisasi Polling In-Place &amp; Optimistic Update (<code>messages.js</code>):</strong> Memperbarui balon teks pesan, data atribut reply/edit, dan cuplikan pesan terakhir pada kontak sidebar seketika (0ms delay) tanpa merusak posisi scroll percakapan.</li>
                                     <li><strong class="text-dark">Penyempurnaan Antarmuka Fitur Aplikasi &amp; Tata Letak Linimasa (<code>fitur-aplikasi.blade.php</code> &amp; <code>changelog.blade.php</code>):</strong> Mengalibrasi ukuran tombol <em>Kembalikan Default</em> dengan ukuran ringkas (compact <code>btn-sm py-0 px-1.5 fs-12</code>) agar penanda aktif tab menempel rapi pada garis bawah header serta merapikan struktur kontainer <code>card-body p-4</code> pada halaman linimasa changelog.</li>
                                     <li><strong class="text-dark">Pusat Akses Pintas Modul Dashboard &amp; Penataan Pemilih Warna Motto (<code>dashboard.blade.php</code> &amp; <code>profil-pengguna.blade.php</code>):</strong> Menghadirkan Card with Tabs Quick Access Hub berisi 12 pintasan sub-menu Manajemen Pengguna dan Dukungan Aplikasi khusus role Administrator (Superadmin &amp; Admin) serta merestrukturisasi layout pemilih warna teks motto menjadi 2 baris proporsional.</li>
+                                    <li><strong class="text-dark">Pembersihan URL &amp; Kalibrasi Nav Pills Modul Translation (<code>TranslationController.php</code>, <code>translation.js</code> &amp; <code>translation.css</code>):</strong> Menghilangkan parameter query <code>?module=</code> pada URL route <code>admin/dukunganaplikasi/translation</code> serta mengalibrasi tinggi seluruh tab filter (Flex stretch 100% height) agar blok aktif tab terisi penuh ke bawah secara seragam baik untuk teks 1 baris maupun 2 baris dengan warna tema primer yang kontras dan jelas.</li>
                                 </ul>
                             </div>
                         </div>

@@ -116,15 +116,6 @@ document.addEventListener('DOMContentLoaded', function() {
             tabLinks.forEach(t => t.classList.remove('active'));
             this.classList.add('active');
 
-            // Update URL query param without reload
-            const url = new URL(window.location);
-            if (tabMod === 'all') {
-                url.searchParams.delete('module');
-            } else {
-                url.searchParams.set('module', tabMod);
-            }
-            window.history.replaceState({}, '', url);
-
             updateTableDisplay();
         });
     });
