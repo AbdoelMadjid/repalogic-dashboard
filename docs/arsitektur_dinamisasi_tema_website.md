@@ -134,7 +134,8 @@ repalogic-dashboard/
 │   │   └── partials/                           <-- File Partial Modal Modular
 │   │       ├── konfigurasi_website_modal_form.blade.php
 │   │       ├── konfigurasi_website_modal_petunjuk.blade.php
-│   │       └── konfigurasi_website_modal_tampilgambar.blade.php
+│   │       ├── konfigurasi_website_modal_tampilgambar.blade.php
+│   │       └── konfigurasi_website_modal_script_editor.blade.php  <-- GUI Code Editor Modal
 │   ├── website/                                <-- Sub-Directory Tema Blade
 │   │   ├── default/                            <-- Seksi Tema Default
 │   │   └── partials/
@@ -145,9 +146,10 @@ repalogic-dashboard/
 ```
 
 ### Pemisahan File Partial Modal:
-1. **`konfigurasi_website_modal_form.blade.php`**: Mengelola Modal Tambah/Edit Tema dan Modal Tambah/Edit Seksi Halaman. Dibuat bersih dan ringkas tanpa kontrol slider berlebih.
+1. **`konfigurasi_website_modal_form.blade.php`**: Mengelola Modal Tambah/Edit Tema dan Modal Tambah/Edit Seksi Halaman.
 2. **`konfigurasi_website_modal_petunjuk.blade.php`**: Mengelola Modal Panduan Standarisasi Seksi Tema untuk panduan developer.
 3. **`konfigurasi_website_modal_tampilgambar.blade.php`**: Mengelola Modal Pratinjau Gambar Background Interaktif, Simulator Tinggi Seksi, Orientasi, dan Pengaturan Efek.
+4. **`konfigurasi_website_modal_script_editor.blade.php`**: Mengelola Modal GUI Code Editor Script Blade langsung dari browser lengkap dengan Ace Code Editor, Snippet Inserter, Fullscreen Mode, Word Wrap, Dark/Light Theme switcher, shortcut `Ctrl + S`, dan auto backup + `view:clear`.
 
 ---
 

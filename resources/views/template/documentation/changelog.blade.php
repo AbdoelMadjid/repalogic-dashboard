@@ -117,7 +117,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.8.7 -->
+                        <!-- Version 2.8.8 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -125,8 +125,32 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.8.7</h5>
+                                        <h5 class="fw-bold mb-0">v2.8.8</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.8</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-05 11:32 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">GUI Blade Script Live Code Editor &amp; Snippet Injection Suite for Website Themes &amp; Sections Management</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">GUI Blade Script Editor Modal (<code>konfigurasi_website_modal_script_editor.blade.php</code> &amp; <code>konfigurasi-website.blade.php</code>):</strong> Menghadirkan tombol aksi langsung <em>"Script"</em> dan trigger berkas pada tabel konfigurasi website untuk membuka antarmuka editor script Blade berbasis GUI modal interaktif (<code>modal-xl</code>) tanpa harus mengedit file mentah langsung di server atau IDE.</li>
+                                    <li><strong class="text-dark">Ace Code Editor Engine &amp; Fallback Resiliensi (<code>konfigurasi-website.js</code> &amp; <code>konfigurasi-website.css</code>):</strong> Terintegrasi dengan Ace Editor bersintaks PHP/HTML/Blade lengkap dengan penyorotan kode warna, nomor baris, word wrap toggle, switch mode tema gelap (Monokai) &amp; terang (Chrome), live cursor position (Baris/Kolom), ukuran berkas real-time, dan pintasan keyboard <code>Ctrl + S</code> &amp; <code>Ctrl + F</code>. Dilengkapi pula dengan fallback textarea bersistem tab indentasi.</li>
+                                    <li><strong class="text-dark">Katalog Snippet &amp; Template Seksi Cepat (<code>konfigurasi-website.js</code>):</strong> Menyediakan dropdown penyisipan komponen siap pakai: Wrapper Seksi Dinamis Standar (Rule 13), Grid Container &amp; Row Bootstrap, Header Judul &amp; Subtitle Seksi, 3-Card Grid Fitur/Layanan, Tombol CTA Utama, serta Tag Blade Dinamis (<code>__('...')</code>, <code>&#64;if</code>, <code>&#64;foreach</code>).</li>
+                                    <li><strong class="text-dark">Mode Layar Penuh &amp; Sinkronisasi Responsif:</strong> Memungkinkan transisi instan ke mode <em>Fullscreen</em> untuk pengalaman coding maksimal di browser dengan tata letak elastis 100vh.</li>
+                                    <li><strong class="text-dark">Penyimpanan Aman &amp; Otomatisasi Cache (<code>KonfigurasiWebsiteController.php</code> &amp; <code>routes/admin.php</code>):</strong> Menyediakan endpoint <code>GET /get-section-script/{id}</code> dan <code>POST /save-section-script/{id}</code> dengan sanitasi path traversal, pencadangan otomatis (auto backup) berkas sebelum ditimpa ke direktori <code>storage/app/blade_backups/</code>, serta pembersihan cache Blade otomatis (<code>view:clear</code>) saat disimpan.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.8.7 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xs text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.8.7</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.7</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-05 11:21 WIB</span>

@@ -22,3 +22,74 @@
     background-color: #ffffff !important;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
 }
+
+/* ==========================================================================
+   GUI Script Blade Editor Styling
+   ========================================================================== */
+.editor-loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.85);
+    z-index: 10;
+    backdrop-filter: blur(2px);
+    transition: opacity 0.2s ease;
+}
+
+.editor-loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+    display: none !important;
+}
+
+#blade-script-ace-editor {
+    border-radius: 0;
+    font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', Consolas, Monaco, monospace;
+}
+
+/* Fullscreen Mode for Editor Modal */
+#modal-editor-script-blade.is-fullscreen .modal-dialog {
+    max-width: 100vw !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+}
+
+#modal-editor-script-blade.is-fullscreen .modal-content {
+    height: 100vh !important;
+    border-radius: 0 !important;
+    display: flex;
+    flex-direction: column;
+}
+
+#modal-editor-script-blade.is-fullscreen .modal-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#modal-editor-script-blade.is-fullscreen #blade-editor-card-container {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#modal-editor-script-blade.is-fullscreen #blade-editor-card-container > .position-relative {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#modal-editor-script-blade.is-fullscreen #blade-script-ace-editor,
+#modal-editor-script-blade.is-fullscreen #blade-script-raw-editor {
+    height: 100% !important;
+    flex: 1 1 auto;
+    min-height: calc(100vh - 230px) !important;
+}
+
+.btn-xs {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.75rem;
+    border-radius: 0.25rem;
+}
+

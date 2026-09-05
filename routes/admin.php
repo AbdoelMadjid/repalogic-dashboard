@@ -108,6 +108,8 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
         Route::post('konfigurasi-website/toggle-active-section/{id}', [KonfigurasiWebsiteController::class, 'toggleActiveSection'])->name('konfigurasi-website.toggle-active-section');
         Route::post('konfigurasi-website/update-section-position/{id}', [KonfigurasiWebsiteController::class, 'updateSectionPosition'])->name('konfigurasi-website.update-section-position');
         Route::post('konfigurasi-website/reorder-sections', [KonfigurasiWebsiteController::class, 'reorderSections'])->name('konfigurasi-website.reorder-sections');
+        Route::get('konfigurasi-website/get-section-script/{id}', [KonfigurasiWebsiteController::class, 'getSectionScript'])->name('konfigurasi-website.get-section-script');
+        Route::post('konfigurasi-website/save-section-script/{id}', [KonfigurasiWebsiteController::class, 'saveSectionScript'])->name('konfigurasi-website.save-section-script');
     });
 
     Route::prefix('manajemenpengguna')->name('manajemenpengguna.')->group(function () {

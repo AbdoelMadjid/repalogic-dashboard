@@ -9,6 +9,8 @@ use App\Models\Admin\DukunganAplikasi\WebsiteTheme;
 use App\Traits\HasMenuPermission;
 use App\Traits\HasNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class KonfigurasiWebsiteController extends Controller
@@ -349,6 +351,99 @@ class KonfigurasiWebsiteController extends Controller
             'pos_y'         => $posY,
             'bg_size'       => $bgSize,
             'bg_attachment' => $bgAttachment,
+        ]);
+    }
+
+    /**
+     * Get Blade script content for a website section.
+     */
+    public function getSectionScript($id)
+    {
+        $section = WebsiteSection::with('theme')->findOrFail($id);
+        $themeFolder = $section->theme->folder ?? 'default';
+        $fileName = $section->section_file;
+        if (!Str::endsWith($fileName, '.blade.php')) {
+            $fileName .= '.blade.php';
+        }
+
+        // Clean directory path
+        $themeFolder = basename(str_replace(['..', '\\'], '', $themeFolder));
+        $fileName = basename(str_replace(['..', '\\'], '', $fileName));
+
+        $relativeFilePath = "views/website/{$themeFolder}/{$fileName}";
+        $fullPath = resource_path($relativeFilePath);
+
+        $fileExists = File::exists($fullPath);
+        $content = $fileExists ? File::get($fullPath) : '';
+        $lastModified = $fileExists ? date('d M Y H:i:s', File::lastModified($fullPath)) : null;
+        $fileSize = $fileExists ? File::size($fullPath) : 0;
+
+        return response()->json([
+            'status'        => 'success',
+            'section_id'    => $section->id,
+            'section_name'  => $section->section_name,
+            'theme_name'    => $section->theme->name ?? 'Default',
+            'theme_folder'  => $themeFolder,
+            'file_name'     => $fileName,
+            'relative_path' => "resources/{$relativeFilePath}",
+            'content'       => $content,
+            'file_exists'   => $fileExists,
+            'last_modified' => $lastModified,
+            'file_size'     => $fileSize,
+        ]);
+    }
+
+    /**
+     * Save Blade script content for a website section via GUI.
+     */
+    public function saveSectionScript(Request $request, $id)
+    {
+        $section = WebsiteSection::with('theme')->findOrFail($id);
+        $themeFolder = $section->theme->folder ?? 'default';
+        $fileName = $section->section_file;
+        if (!Str::endsWith($fileName, '.blade.php')) {
+            $fileName .= '.blade.php';
+        }
+
+        // Sanitize to prevent path traversal
+        $themeFolder = basename(str_replace(['..', '\\'], '', $themeFolder));
+        $fileName = basename(str_replace(['..', '\\'], '', $fileName));
+
+        $dirPath = resource_path("views/website/{$themeFolder}");
+        $fullPath = "{$dirPath}/{$fileName}";
+
+        if (!File::isDirectory($dirPath)) {
+            File::makeDirectory($dirPath, 0755, true);
+        }
+
+        $content = $request->input('content', '');
+
+        // Backup existing file before saving
+        try {
+            if (File::exists($fullPath)) {
+                $backupDir = storage_path("app/blade_backups/{$themeFolder}");
+                if (!File::isDirectory($backupDir)) {
+                    File::makeDirectory($backupDir, 0755, true);
+                }
+                $backupFile = "{$backupDir}/" . pathinfo($fileName, PATHINFO_FILENAME) . '_' . date('Ymd_His') . '.blade.php';
+                File::copy($fullPath, $backupFile);
+            }
+        } catch (\Throwable $e) {
+            // Non-critical backup logging
+        }
+
+        File::put($fullPath, $content);
+
+        // Clear view cache so updates reflect immediately
+        try {
+            Artisan::call('view:clear');
+        } catch (\Throwable $e) {}
+
+        return response()->json([
+            'status'        => 'success',
+            'message'       => "Script Blade untuk seksi \"{$section->section_name}\" berhasil disimpan!",
+            'last_modified' => date('d M Y H:i:s'),
+            'file_size'     => strlen($content),
         ]);
     }
 

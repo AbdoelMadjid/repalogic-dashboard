@@ -496,5 +496,487 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }
+
+        // ==========================================================================
+        // 9. Modal GUI Script Blade Editor
+        // ==========================================================================
+        const btnEditorScriptBlade = e.target.closest('.btn-editor-script-blade');
+        if (btnEditorScriptBlade) {
+            const sectionId = btnEditorScriptBlade.getAttribute('data-section-id');
+            const sectionName = btnEditorScriptBlade.getAttribute('data-section-name') || '';
+            const sectionFile = btnEditorScriptBlade.getAttribute('data-section-file') || '';
+            const themeFolder = btnEditorScriptBlade.getAttribute('data-theme-folder') || 'default';
+
+            openBladeScriptEditor(sectionId, sectionName, sectionFile, themeFolder);
+        }
+
+        // 10. Snippet Inserter in Script Editor
+        const btnSnippet = e.target.closest('.btn-insert-snippet');
+        if (btnSnippet) {
+            const snippetKey = btnSnippet.getAttribute('data-snippet');
+            insertBladeSnippet(snippetKey);
+        }
+
+        // 11. Toggle Fullscreen Mode
+        const btnFullscreen = e.target.closest('#btn-editor-fullscreen');
+        if (btnFullscreen) {
+            toggleEditorFullscreen();
+        }
+
+        // 12. Toggle Word Wrap
+        const btnToggleWrap = e.target.closest('#btn-toggle-wrap');
+        if (btnToggleWrap) {
+            toggleEditorWordWrap(btnToggleWrap);
+        }
+
+        // 13. Toggle Theme (Dark / Light)
+        const btnToggleTheme = e.target.closest('#btn-toggle-theme');
+        if (btnToggleTheme) {
+            toggleEditorTheme(btnToggleTheme);
+        }
+
+        // 14. Copy Code
+        const btnCopyScript = e.target.closest('#btn-copy-script-code');
+        if (btnCopyScript) {
+            copyBladeScriptCode(btnCopyScript);
+        }
+
+        // 15. Reset Code
+        const btnResetScript = e.target.closest('#btn-reset-script-code');
+        if (btnResetScript) {
+            resetBladeScriptCode();
+        }
+
+        // 16. Save Blade Script Button
+        const btnSaveScript = e.target.closest('#btn-save-blade-script');
+        if (btnSaveScript) {
+            saveBladeScript();
+        }
     });
+
+    // ==========================================================================
+    // Script Blade Editor Logic & Helper Functions
+    // ==========================================================================
+    let currentScriptSectionId = null;
+    let originalScriptContent = '';
+    let aceEditor = null;
+    let isEditorDarkMode = true;
+    let isEditorWordWrap = true;
+
+    function initAceEditorIfNeeded() {
+        const aceContainer = document.getElementById('blade-script-ace-editor');
+        const rawTextarea = document.getElementById('blade-script-raw-editor');
+
+        if (!aceContainer) return;
+
+        if (typeof ace !== 'undefined') {
+            if (!aceEditor) {
+                aceEditor = ace.edit('blade-script-ace-editor');
+                aceEditor.setTheme('ace/theme/monokai');
+                aceEditor.session.setMode('ace/mode/php');
+                aceEditor.setShowPrintMargin(false);
+                aceEditor.setFontSize(14);
+                aceEditor.session.setUseWrapMode(true);
+                aceEditor.session.setTabSize(4);
+                aceEditor.session.setUseSoftTabs(true);
+
+                // Cursor position change listener
+                aceEditor.selection.on('changeCursor', function() {
+                    const pos = aceEditor.getCursorPosition();
+                    updateCursorDisplay(pos.row + 1, pos.column + 1);
+                });
+
+                // Content change listener
+                aceEditor.on('change', function() {
+                    checkDirtyStatus();
+                    updateLinesCount();
+                });
+
+                // Keyboard command for Ctrl+S / Cmd+S
+                aceEditor.commands.addCommand({
+                    name: 'saveBladeScript',
+                    bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
+                    exec: function() {
+                        saveBladeScript();
+                    }
+                });
+            }
+            if (rawTextarea) rawTextarea.classList.add('d-none');
+            aceContainer.classList.remove('d-none');
+        } else {
+            // Fallback to Raw Textarea
+            if (rawTextarea) {
+                rawTextarea.classList.remove('d-none');
+                aceContainer.classList.add('d-none');
+
+                rawTextarea.addEventListener('input', function() {
+                    checkDirtyStatus();
+                    updateLinesCount();
+                });
+
+                rawTextarea.addEventListener('keyup', function() {
+                    const text = rawTextarea.value.substr(0, rawTextarea.selectionStart);
+                    const lines = text.split('\n');
+                    updateCursorDisplay(lines.length, lines[lines.length - 1].length + 1);
+                });
+
+                // Tab key handler for textarea
+                rawTextarea.addEventListener('keydown', function(e) {
+                    if (e.key === 'Tab') {
+                        e.preventDefault();
+                        const start = this.selectionStart;
+                        const end = this.selectionEnd;
+                        this.value = this.value.substring(0, start) + '    ' + this.value.substring(end);
+                        this.selectionStart = this.selectionEnd = start + 4;
+                        this.dispatchEvent(new Event('input'));
+                    }
+                    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+                        e.preventDefault();
+                        saveBladeScript();
+                    }
+                });
+            }
+        }
+    }
+
+    function getScriptEditorContent() {
+        if (aceEditor) {
+            return aceEditor.getValue();
+        }
+        const rawTextarea = document.getElementById('blade-script-raw-editor');
+        return rawTextarea ? rawTextarea.value : '';
+    }
+
+    function setScriptEditorContent(content) {
+        initAceEditorIfNeeded();
+        if (aceEditor) {
+            aceEditor.setValue(content, -1);
+            aceEditor.clearSelection();
+            aceEditor.focus();
+        }
+        const rawTextarea = document.getElementById('blade-script-raw-editor');
+        if (rawTextarea) {
+            rawTextarea.value = content;
+        }
+        updateLinesCount();
+    }
+
+    function updateCursorDisplay(row, col) {
+        const el = document.getElementById('editor-cursor-pos');
+        if (el) el.textContent = `Baris ${row}, Kolom ${col}`;
+    }
+
+    function updateLinesCount() {
+        const content = getScriptEditorContent();
+        const lines = content.split('\n').length;
+        const bytes = new Blob([content]).size;
+        const kb = (bytes / 1024).toFixed(2);
+
+        const linesEl = document.getElementById('editor-total-lines');
+        const sizeEl = document.getElementById('editor-file-size');
+        if (linesEl) linesEl.textContent = `${lines} Baris`;
+        if (sizeEl) sizeEl.textContent = `${kb} KB (${bytes} bytes)`;
+    }
+
+    function checkDirtyStatus() {
+        const currentContent = getScriptEditorContent();
+        const indicator = document.getElementById('editor-dirty-indicator');
+        if (!indicator) return;
+
+        if (currentContent !== originalScriptContent) {
+            indicator.className = 'badge bg-warning text-dark font-monospace';
+            indicator.innerHTML = '<i class="ti ti-alert-triangle me-1.5"></i> Ada Perubahan Belum Disimpan';
+        } else {
+            indicator.className = 'badge bg-secondary font-monospace';
+            indicator.innerHTML = '<i class="ti ti-check me-1.5"></i> Tidak Ada Perubahan';
+        }
+    }
+
+    function openBladeScriptEditor(sectionId, sectionName, sectionFile, themeFolder) {
+        currentScriptSectionId = sectionId;
+
+        const titleEl = document.getElementById('modal-script-section-name');
+        const pathEl = document.getElementById('modal-script-file-path');
+        const modEl = document.getElementById('modal-script-modified-time');
+        const statusBadge = document.getElementById('modal-script-status-badge');
+        const loadingOverlay = document.getElementById('editor-loading-overlay');
+
+        if (titleEl) titleEl.textContent = sectionName;
+        if (pathEl) pathEl.textContent = `resources/views/website/${themeFolder}/${sectionFile}`;
+        if (modEl) modEl.innerHTML = '<i class="ti ti-clock me-1.5"></i> Memeriksa...';
+        if (statusBadge) {
+            statusBadge.className = 'badge bg-info text-white font-monospace py-1 px-2.5';
+            statusBadge.innerHTML = '<i class="ti ti-loader-2 ti-spin me-1.5"></i> Memuat File...';
+        }
+        if (loadingOverlay) loadingOverlay.classList.remove('hidden');
+
+        // Show Bootstrap Modal
+        const modalEl = document.getElementById('modal-editor-script-blade');
+        if (modalEl) {
+            const bsModal = new bootstrap.Modal(modalEl);
+            bsModal.show();
+        }
+
+        // Initialize Ace Editor
+        initAceEditorIfNeeded();
+
+        // Fetch Script Content from Server
+        const getUrl = `${routes.getSectionScript || '/admin/dukunganaplikasi/konfigurasi-website/get-section-script'}/${sectionId}`;
+        fetch(getUrl, {
+            method: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': getCsrfToken(),
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (loadingOverlay) loadingOverlay.classList.add('hidden');
+
+            if (data.status === 'success') {
+                originalScriptContent = data.content || '';
+                setScriptEditorContent(originalScriptContent);
+
+                if (pathEl) pathEl.textContent = data.relative_path || `resources/views/website/${themeFolder}/${sectionFile}`;
+                if (modEl) modEl.innerHTML = `<i class="ti ti-clock me-1.5"></i> Terakhir Diubah: ${data.last_modified || 'Baru'}`;
+
+                if (statusBadge) {
+                    if (data.file_exists) {
+                        statusBadge.className = 'badge bg-success bg-opacity-75 text-white font-monospace py-1 px-2.5';
+                        statusBadge.innerHTML = '<i class="ti ti-circle-check me-1.5"></i> File Siap Diedit';
+                    } else {
+                        statusBadge.className = 'badge bg-warning bg-opacity-75 text-dark font-monospace py-1 px-2.5';
+                        statusBadge.innerHTML = '<i class="ti ti-sparkles me-1.5"></i> File Baru (Akan Dibuat Otomatis)';
+                    }
+                }
+
+                checkDirtyStatus();
+            } else {
+                if (typeof window.showError === 'function') {
+                    window.showError(data.message || 'Gagal memuat script blade.');
+                }
+            }
+        })
+        .catch(err => {
+            if (loadingOverlay) loadingOverlay.classList.add('hidden');
+            console.error('Error loading script:', err);
+            if (typeof window.showError === 'function') {
+                window.showError('Terjadi kesalahan saat memuat isi script.');
+            }
+        });
+    }
+
+    function saveBladeScript() {
+        if (!currentScriptSectionId) return;
+
+        const btnSave = document.getElementById('btn-save-blade-script');
+        const content = getScriptEditorContent();
+        const originalHtml = btnSave ? btnSave.innerHTML : '';
+
+        if (btnSave) {
+            btnSave.disabled = true;
+            btnSave.innerHTML = '<i class="ti ti-spin ti-spinner me-1.5"></i> Menyimpan Script...';
+        }
+
+        const saveUrl = `${routes.saveSectionScript || '/admin/dukunganaplikasi/konfigurasi-website/save-section-script'}/${currentScriptSectionId}`;
+        fetch(saveUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': getCsrfToken(),
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ content: content })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (btnSave) {
+                btnSave.disabled = false;
+                btnSave.innerHTML = originalHtml;
+            }
+
+            if (data.status === 'success') {
+                originalScriptContent = content;
+                checkDirtyStatus();
+
+                const modEl = document.getElementById('modal-script-modified-time');
+                if (modEl && data.last_modified) {
+                    modEl.innerHTML = `<i class="ti ti-clock me-1"></i> Terakhir Diubah: ${data.last_modified}`;
+                }
+
+                const statusBadge = document.getElementById('modal-script-status-badge');
+                if (statusBadge) {
+                    statusBadge.className = 'badge bg-success bg-opacity-75 text-white font-monospace py-1 px-2';
+                    statusBadge.innerHTML = '<i class="ti ti-circle-check me-1"></i> File Siap Diedit';
+                }
+
+                if (typeof window.showSuccess === 'function') {
+                    window.showSuccess(data.message || 'Script Blade berhasil disimpan!');
+                } else if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil Disimpan!',
+                        text: data.message,
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                }
+            } else {
+                if (typeof window.showError === 'function') {
+                    window.showError(data.message || 'Gagal menyimpan script blade.');
+                }
+            }
+        })
+        .catch(err => {
+            if (btnSave) {
+                btnSave.disabled = false;
+                btnSave.innerHTML = originalHtml;
+            }
+            console.error('Error saving script:', err);
+            if (typeof window.showError === 'function') {
+                window.showError('Terjadi kesalahan jaringan saat menyimpan script.');
+            }
+        });
+    }
+
+    function toggleEditorFullscreen() {
+        const modalEl = document.getElementById('modal-editor-script-blade');
+        const btn = document.getElementById('btn-editor-fullscreen');
+        if (!modalEl || !btn) return;
+
+        modalEl.classList.toggle('is-fullscreen');
+        const isFull = modalEl.classList.contains('is-fullscreen');
+
+        if (isFull) {
+            btn.innerHTML = '<i class="ti ti-minimize fs-15 me-1"></i> <span class="fs-12 d-none d-sm-inline">Kecilkan</span>';
+        } else {
+            btn.innerHTML = '<i class="ti ti-maximize fs-15 me-1"></i> <span class="fs-12 d-none d-sm-inline">Layar Penuh</span>';
+        }
+
+        if (aceEditor) {
+            setTimeout(() => aceEditor.resize(), 150);
+        }
+    }
+
+    function toggleEditorWordWrap(btn) {
+        isEditorWordWrap = !isEditorWordWrap;
+        if (aceEditor) {
+            aceEditor.session.setUseWrapMode(isEditorWordWrap);
+        }
+        if (btn) {
+            if (isEditorWordWrap) {
+                btn.classList.add('btn-secondary');
+                btn.classList.remove('btn-outline-secondary');
+            } else {
+                btn.classList.add('btn-outline-secondary');
+                btn.classList.remove('btn-secondary');
+            }
+        }
+    }
+
+    function toggleEditorTheme(btn) {
+        isEditorDarkMode = !isEditorDarkMode;
+        const icon = document.getElementById('icon-editor-theme');
+        const label = document.getElementById('label-editor-theme');
+
+        if (aceEditor) {
+            aceEditor.setTheme(isEditorDarkMode ? 'ace/theme/monokai' : 'ace/theme/chrome');
+        }
+
+        if (icon && label) {
+            if (isEditorDarkMode) {
+                icon.className = 'ti ti-moon me-1';
+                label.textContent = 'Dark Mode';
+            } else {
+                icon.className = 'ti ti-sun me-1 text-warning';
+                label.textContent = 'Light Mode';
+            }
+        }
+    }
+
+    function copyBladeScriptCode(btn) {
+        const content = getScriptEditorContent();
+        if (!content) {
+            if (typeof window.showWarning === 'function') {
+                window.showWarning('Script masih kosong.');
+            }
+            return;
+        }
+
+        navigator.clipboard.writeText(content).then(() => {
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="ti ti-check me-1"></i> <span class="fs-12">Tersalin!</span>';
+            btn.classList.remove('btn-outline-info');
+            btn.classList.add('btn-success');
+            setTimeout(() => {
+                btn.innerHTML = originalHtml;
+                btn.classList.remove('btn-success');
+                btn.classList.add('btn-outline-info');
+            }, 2000);
+        }).catch(() => {
+            if (typeof window.showWarning === 'function') {
+                window.showWarning('Gunakan Ctrl+C untuk menyalin.');
+            }
+        });
+    }
+
+    function resetBladeScriptCode() {
+        if (typeof window.showConfirm === 'function') {
+            window.showConfirm({
+                title: 'Reset Perubahan Script?',
+                text: 'Semua perubahan yang belum disimpan akan dikembalikan ke versi terakhir dari server.',
+                isDanger: true,
+                onConfirm: () => {
+                    setScriptEditorContent(originalScriptContent);
+                    checkDirtyStatus();
+                    if (typeof window.showToast === 'function') {
+                        window.showToast('Script berhasil dikembalikan ke kondisi awal.');
+                    }
+                }
+            });
+        } else {
+            if (confirm('Apakah Anda yakin ingin membatalkan semua perubahan script?')) {
+                setScriptEditorContent(originalScriptContent);
+                checkDirtyStatus();
+            }
+        }
+    }
+
+    function insertBladeSnippet(key) {
+        const snippets = {
+            section_wrapper: `<section class="section-custom" id="nama-seksi">\n    <div class="container">\n        <div class="row align-items-center">\n            <div class="col-lg-6">\n                <h2 class="fw-bold mb-3">Judul Seksi Halaman</h2>\n                <p class="text-muted mb-4">Deskripsi singkat penjelasan fitur atau layanan di seksi ini.</p>\n                <a href="#kontak" class="btn btn-primary px-4 py-2 fw-semibold">\n                    <i class="ti ti-arrow-right me-1"></i> Pelajari Lebih Lanjut\n                </a>\n            </div>\n            <div class="col-lg-6 text-center">\n                <img src="{{ asset('assets/images/placeholder.png') }}" class="img-fluid rounded-3 shadow-sm" alt="Ilustrasi Seksi">\n            </div>\n        </div>\n    </div>\n</section>\n`,
+            container_row: `<div class="container py-4">\n    <div class="row g-4">\n        <div class="col-md-6">\n            <!-- Konten Kolom Kiri -->\n        </div>\n        <div class="col-md-6">\n            <!-- Konten Kolom Kanan -->\n        </div>\n    </div>\n</div>\n`,
+            section_header: `<div class="row justify-content-center text-center mb-5">\n    <div class="col-lg-8">\n        <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-1.5 mb-2 rounded-pill fs-12">SUBTITLE SEKSI</span>\n        <h2 class="fw-bold text-dark display-6 mb-3">Judul Utama Seksi Halaman</h2>\n        <p class="text-muted fs-15 mb-0">Penjelasan singkat dan menarik mengenai konten yang disajikan pada bagian ini.</p>\n    </div>\n</div>\n`,
+            card_grid: `<div class="row g-4">\n    <div class="col-md-4">\n        <div class="card border-0 shadow-sm h-100 p-4">\n            <div class="avatar-md bg-primary text-white rounded-3 d-flex align-items-center justify-content-center mb-3">\n                <i class="ti ti-bolt fs-24"></i>\n            </div>\n            <h5 class="fw-bold text-dark mb-2">Fitur Unggulan 1</h5>\n            <p class="text-muted fs-14 mb-0">Deskripsi keunggulan dan kemudahan yang didapatkan oleh pengguna.</p>\n        </div>\n    </div>\n    <div class="col-md-4">\n        <div class="card border-0 shadow-sm h-100 p-4">\n            <div class="avatar-md bg-info text-white rounded-3 d-flex align-items-center justify-content-center mb-3">\n                <i class="ti ti-shield-check fs-24"></i>\n            </div>\n            <h5 class="fw-bold text-dark mb-2">Fitur Unggulan 2</h5>\n            <p class="text-muted fs-14 mb-0">Keamanan terjamin dengan enkripsi modern dan perlindungan menyeluruh.</p>\n        </div>\n    </div>\n    <div class="col-md-4">\n        <div class="card border-0 shadow-sm h-100 p-4">\n            <div class="avatar-md bg-success text-white rounded-3 d-flex align-items-center justify-content-center mb-3">\n                <i class="ti ti-heart-handshake fs-24"></i>\n            </div>\n            <h5 class="fw-bold text-dark mb-2">Fitur Unggulan 3</h5>\n            <p class="text-muted fs-14 mb-0">Layanan bantuan dan integrasi cepat siap mendampingi kebutuhan Anda.</p>\n        </div>\n    </div>\n</div>\n`,
+            cta_button: `<a href="{{ url('/register') }}" class="btn btn-primary btn-lg fw-semibold px-4 py-2.5 shadow-sm">\n    <i class="ti ti-rocket me-1.5"></i> Mulai Sekarang Gratis\n</a>\n`,
+            blade_lang: `{{ __('website.title') }}`,
+            blade_if: `@if (isset($items) && count($items) > 0)\n    <!-- Tampilkan jika ada data -->\n@else\n    <!-- Tampilkan jika kosong -->\n@endif\n`,
+            blade_foreach: `@foreach ($items as $item)\n    <div class="col-md-4 mb-3">\n        <h6>{{ $item->title }}</h6>\n    </div>\n@endforeach\n`
+        };
+
+        const snippetCode = snippets[key];
+        if (!snippetCode) return;
+
+        if (aceEditor) {
+            aceEditor.insert(snippetCode);
+            aceEditor.focus();
+        } else {
+            const rawTextarea = document.getElementById('blade-script-raw-editor');
+            if (rawTextarea) {
+                const start = rawTextarea.selectionStart;
+                const end = rawTextarea.selectionEnd;
+                rawTextarea.value = rawTextarea.value.substring(0, start) + snippetCode + rawTextarea.value.substring(end);
+                rawTextarea.selectionStart = rawTextarea.selectionEnd = start + snippetCode.length;
+                rawTextarea.focus();
+                rawTextarea.dispatchEvent(new Event('input'));
+            }
+        }
+
+        if (typeof window.showToast === 'function') {
+            window.showToast('Snippet berhasil disisipkan ke editor.');
+        }
+    }
 });
+
