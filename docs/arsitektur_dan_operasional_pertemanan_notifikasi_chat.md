@@ -201,6 +201,7 @@ flowchart TD
 | `POST` | `/admin/profil-pengguna/messages/{id}/toggle-pin` | `admin.profil-pengguna.messages.toggle-pin` | Menyematkan / melepas pin pesan obrolan. |
 | `POST` | `/admin/profil-pengguna/messages/{id}/toggle-reaction` | `admin.profil-pengguna.messages.toggle-reaction` | Toggle reaksi emoji pada pesan obrolan. |
 | `POST` | `/admin/profil-pengguna/messages/{id}/forward` | `admin.profil-pengguna.messages.forward` | Meneruskan pesan ke kontak lain. |
+| `PUT` | `/admin/profil-pengguna/messages/{id}` | `admin.profil-pengguna.messages.update` | Mengedit pesan teks yang telah dikirim (batas 10 menit sejak dikirim, dengan label diedit). |
 | `DELETE` | `/admin/profil-pengguna/messages/{id}` | `admin.profil-pengguna.messages.destroy` | Menghapus pesan (unsend untuk semua orang atau hapus lokal). |
 | `DELETE` | `/admin/profil-pengguna/messages/conversation/{user}/clear` | `admin.profil-pengguna.messages.clear-conversation` | Membersihkan riwayat percakapan. |
 

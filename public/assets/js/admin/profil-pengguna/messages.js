@@ -380,6 +380,10 @@ document.addEventListener('DOMContentLoaded', function() {
         lastMessageId = null;
         userHasScrolledUp = false;
 
+        cancelReplyState();
+        cancelEditState();
+        cancelAttachmentState();
+
         // Update Header seketika (Instant 0ms Feedback)
         if (activeReceiverInput) activeReceiverInput.value = userId;
         if (activeChatName) activeChatName.textContent = userName;
@@ -631,6 +635,82 @@ document.addEventListener('DOMContentLoaded', function() {
         if (replyContainer) replyContainer.classList.add('d-none');
     }
 
+    // ==========================================
+    // FITUR EDIT PESAN (BATAS 10 MENIT)
+    // ==========================================
+    document.addEventListener('click', function(e) {
+        const btnEdit = e.target.closest('.btn-edit-msg');
+        if (!btnEdit) return;
+        e.preventDefault();
+
+        const msgId = btnEdit.getAttribute('data-msg-id');
+        const msgBody = btnEdit.getAttribute('data-msg-body') || '';
+        const createdAt = parseInt(btnEdit.getAttribute('data-created-at') || '0', 10);
+
+        if (!msgId || String(msgId).startsWith('temp_')) return;
+
+        // Validasi batas waktu 10 menit di sisi UI
+        if (createdAt > 0) {
+            const nowSeconds = Math.floor(Date.now() / 1000);
+            const elapsedMinutes = (nowSeconds - createdAt) / 60;
+            if (elapsedMinutes > 10) {
+                if (typeof window.showWarning === 'function') {
+                    window.showWarning('Pesan tidak dapat diedit karena telah melewati batas waktu 10 menit.', 'Batas Waktu Habis');
+                }
+                return;
+            }
+        }
+
+        // Buka mode edit
+        cancelReplyState();
+        cancelAttachmentState();
+
+        const editContainer = document.getElementById('edit-preview-container');
+        const editBody = document.getElementById('edit-preview-body');
+        const editMessageInput = document.getElementById('edit-message-id');
+        const submitBtn = document.getElementById('btn-send-message');
+
+        if (editMessageInput) editMessageInput.value = msgId;
+        if (editBody) editBody.textContent = msgBody;
+        if (editContainer) editContainer.classList.remove('d-none');
+        if (submitBtn) submitBtn.innerHTML = 'Simpan <i class="ti ti-check ms-1 fs-14"></i>';
+
+        if (chatInput) {
+            chatInput.value = msgBody;
+            chatInput.focus();
+            chatInput.setSelectionRange(msgBody.length, msgBody.length);
+        }
+    });
+
+    const btnCancelEdit = document.getElementById('btn-cancel-edit');
+    if (btnCancelEdit) {
+        btnCancelEdit.addEventListener('click', function(e) {
+            e.preventDefault();
+            cancelEditState();
+        });
+    }
+
+    function cancelEditState() {
+        const editContainer = document.getElementById('edit-preview-container');
+        const editMessageInput = document.getElementById('edit-message-id');
+        const submitBtn = document.getElementById('btn-send-message');
+
+        if (editMessageInput) editMessageInput.value = '';
+        if (editContainer) editContainer.classList.add('d-none');
+        if (submitBtn) submitBtn.innerHTML = 'Kirim <i class="ti ti-send ms-1 fs-14"></i>';
+    }
+
+    // Batalkan mode edit saat tombol ESC ditekan
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const editMessageInput = document.getElementById('edit-message-id');
+            if (editMessageInput && editMessageInput.value) {
+                cancelEditState();
+                if (chatInput) chatInput.value = '';
+            }
+        }
+    });
+
     // Load Percakapan via AJAX
     function loadConversation(userId, isPolling = false) {
         if (!userId) return;
@@ -706,6 +786,22 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                         const msgEl = document.getElementById(`chat-msg-${msg.id}`);
                         if (msgEl) {
+                            // 0. Sinkronisasi Teks Pesan & Indikator Edited Real-Time
+                            const bodyEl = msgEl.querySelector('.message-body-text');
+                            if (bodyEl && msg.body) {
+                                const currentRaw = bodyEl.getAttribute('data-raw-body');
+                                if (currentRaw !== msg.body && bodyEl.textContent.trim() !== msg.body.trim()) {
+                                    bodyEl.innerHTML = escapeHtml(msg.body).replace(/\n/g, '<br>');
+                                    bodyEl.removeAttribute('data-raw-body');
+                                }
+                            }
+                            if (msg.is_edited) {
+                                const statusTimeEl = msgEl.querySelector('.chat-status-time');
+                                if (statusTimeEl && !statusTimeEl.querySelector('.edited-indicator')) {
+                                    statusTimeEl.insertAdjacentHTML('beforeend', `<span class="edited-indicator ms-1 fs-10 text-muted fst-italic" title="Diedit pada ${msg.edited_at_formatted || ''}">(diedit)</span>`);
+                                }
+                            }
+
                             // 1. Sinkronisasi Reaksi Emoji Real-Time
                             const reactionsContainer = document.getElementById(`chat-reactions-${msg.id}`);
                             if (reactionsContainer) {
@@ -784,6 +880,13 @@ document.addEventListener('DOMContentLoaded', function() {
                                                 <i class="ti ti-corner-up-left text-primary fs-14"></i> Balas
                                             </a>
                                         </li>
+                                        ${(isSender && msg.body) ? `
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 btn-edit-msg" href="javascript:void(0);" data-msg-id="${msg.id}" data-msg-body="${escapeHtml(msg.body)}" data-created-at="${msg.created_at_timestamp || 0}">
+                                                <i class="ti ti-edit text-success fs-14"></i> Edit
+                                            </a>
+                                        </li>
+                                        ` : ''}
                                         <li>
                                             <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 btn-forward-msg" href="javascript:void(0);" data-msg-id="${msg.id}">
                                                 <i class="ti ti-arrow-forward-up text-info fs-14"></i> Teruskan
@@ -849,11 +952,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </div>
                                 <div class="d-flex align-items-center gap-1.5 ms-auto">
                                     ${isPinned ? '<span class="badge bg-success-subtle text-success border border-success-subtle fs-xxs py-0.5 px-1 pinned-indicator" title="Pesan Disematkan"><i class="ti ti-pin-filled me-0.5"></i> Sematan</span>' : ''}
-                                    <span class="chat-status-time"><i class="ti ti-clock me-0.5"></i> ${msg.time_formatted}</span>
+                                    <span class="chat-status-time"><i class="ti ti-clock me-0.5"></i> ${msg.time_formatted}${msg.is_edited ? `<span class="edited-indicator ms-1 fs-10 text-muted fst-italic" title="Diedit pada ${msg.edited_at_formatted || ''}">(diedit)</span>` : ''}</span>
                                 </div>
                             ` : `
                                 <div class="d-flex align-items-center gap-1.5 me-auto">
-                                    <span class="chat-status-time"><i class="ti ti-clock me-0.5"></i> ${msg.time_formatted}</span>
+                                    <span class="chat-status-time"><i class="ti ti-clock me-0.5"></i> ${msg.time_formatted}${msg.is_edited ? `<span class="edited-indicator ms-1 fs-10 text-muted fst-italic" title="Diedit pada ${msg.edited_at_formatted || ''}">(diedit)</span>` : ''}</span>
                                     ${isPinned ? '<span class="badge bg-success-subtle text-success border border-success-subtle fs-xxs py-0.5 px-1 pinned-indicator" title="Pesan Disematkan"><i class="ti ti-pin-filled me-0.5"></i> Sematan</span>' : ''}
                                 </div>
                                 <div class="d-flex align-items-center gap-1.5 ms-auto">
@@ -930,6 +1033,82 @@ document.addEventListener('DOMContentLoaded', function() {
             const parentId = (replyParentInput && replyParentInput.value.trim() !== '') ? parseInt(replyParentInput.value.trim(), 10) : null;
             const replyNameEl = document.getElementById('reply-preview-name');
             const replyBodyEl = document.getElementById('reply-preview-body');
+
+            const editMessageInput = document.getElementById('edit-message-id');
+            const editMsgId = editMessageInput ? editMessageInput.value.trim() : '';
+
+            // JIKA DALAM MODE EDIT PESAN
+            if (editMsgId) {
+                if (!messageText) {
+                    if (typeof window.showWarning === 'function') {
+                        window.showWarning('Pesan teks tidak boleh kosong.', 'Peringatan');
+                    }
+                    return;
+                }
+
+                const submitBtn = document.getElementById('btn-send-message');
+                if (submitBtn) submitBtn.disabled = true;
+
+                fetch(`/admin/profil-pengguna/messages/${editMsgId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'X-CSRF-TOKEN': getCsrfToken(),
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ body: messageText })
+                })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (submitBtn) submitBtn.disabled = false;
+                    if (data && data.success) {
+                        const updatedData = data.data || {};
+                        const msgEl = document.getElementById(`chat-msg-${editMsgId}`);
+                        if (msgEl) {
+                            const bodyEl = msgEl.querySelector('.message-body-text');
+                            if (bodyEl) {
+                                bodyEl.innerHTML = escapeHtml(updatedData.body || messageText).replace(/\n/g, '<br>');
+                                bodyEl.removeAttribute('data-raw-body');
+                            }
+                            const btnReply = msgEl.querySelector('.btn-reply-msg');
+                            if (btnReply) {
+                                btnReply.setAttribute('data-msg-body', updatedData.body || messageText);
+                            }
+                            const btnEdit = msgEl.querySelector('.btn-edit-msg');
+                            if (btnEdit) {
+                                btnEdit.setAttribute('data-msg-body', updatedData.body || messageText);
+                            }
+                            const statusTimeEl = msgEl.querySelector('.chat-status-time');
+                            if (statusTimeEl && !statusTimeEl.querySelector('.edited-indicator')) {
+                                statusTimeEl.insertAdjacentHTML('beforeend', `<span class="edited-indicator ms-1 fs-10 text-muted fst-italic" title="Diedit pada ${updatedData.edited_at || ''}">(diedit)</span>`);
+                            }
+                        }
+
+                        cancelEditState();
+                        if (chatInput) chatInput.value = '';
+
+                        if (typeof window.showToast === 'function') {
+                            window.showToast(data.message || 'Pesan berhasil diperbarui.', 'success');
+                        }
+
+                        // Update ringkasan percakapan sidebar
+                        promoteContactToRecent(activeUserId, updatedData.body || messageText, 'Baru saja');
+                    } else {
+                        if (typeof window.showError === 'function') {
+                            window.showError(data && data.message ? data.message : 'Gagal memperbarui pesan.');
+                        }
+                    }
+                })
+                .catch(function(err) {
+                    if (submitBtn) submitBtn.disabled = false;
+                    if (typeof window.showError === 'function') {
+                        window.showError('Terjadi kesalahan saat memperbarui pesan.');
+                    }
+                });
+
+                return;
+            }
 
             if ((!messageText && !selectedChatFile) || !receiverId) return;
 
@@ -1044,6 +1223,12 @@ document.addEventListener('DOMContentLoaded', function() {
                             btnDelete.classList.remove('d-none');
                         }
 
+                        const btnEdit = tempEl.querySelector('.btn-edit-msg');
+                        if (btnEdit) {
+                            btnEdit.setAttribute('data-msg-id', data.message.id);
+                            btnEdit.classList.remove('d-none');
+                        }
+
                         if (data.message.attachment_url) {
                             const previewLink = tempEl.querySelector('.btn-preview-img-modal');
                             if (previewLink) {
@@ -1117,6 +1302,13 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <i class="ti ti-corner-up-left text-primary fs-14"></i> Balas
                             </a>
                         </li>
+                        ${(isSender && msg.body) ? `
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 btn-edit-msg" href="javascript:void(0);" data-msg-id="${msg.id}" data-msg-body="${escapeHtml(msg.body)}" data-created-at="${msg.created_at_timestamp || Math.floor(Date.now() / 1000)}">
+                                <i class="ti ti-edit text-success fs-14"></i> Edit
+                            </a>
+                        </li>
+                        ` : ''}
                         <li>
                             <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 btn-forward-msg" href="javascript:void(0);" data-msg-id="${msg.id}">
                                 <i class="ti ti-arrow-forward-up text-info fs-14"></i> Teruskan

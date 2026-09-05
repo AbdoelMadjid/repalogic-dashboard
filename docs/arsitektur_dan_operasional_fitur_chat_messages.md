@@ -135,6 +135,7 @@ Seluruh endpoint chat dikendalikan oleh [`MessageController.php`](../app/Http/Co
 | `POST` | `/admin/profil-pengguna/messages/{id}/toggle-pin` | `admin.profil-pengguna.messages.toggle-pin` | Menyematkan atau melepas sematan (*pin/unpin*) pada pesan obrolan. |
 | `POST` | `/admin/profil-pengguna/messages/{id}/toggle-reaction` | `admin.profil-pengguna.messages.toggle-reaction` | Menambahkan atau membatalkan reaksi emoji pengguna pada suatu pesan. |
 | `POST` | `/admin/profil-pengguna/messages/{id}/forward` | `admin.profil-pengguna.messages.forward` | Meneruskan pesan obrolan ke pengguna lain. |
+| `PUT` | `/admin/profil-pengguna/messages/{id}` | `admin.profil-pengguna.messages.update` | Mengedit pesan teks yang telah dikirim (maksimal 10 menit sejak dikirim, dengan penanda edited). |
 | `DELETE` | `/admin/profil-pengguna/messages/{id}` | `admin.profil-pengguna.messages.destroy` | Menghapus pesan (unsend untuk semua orang jika pengirim, atau hapus lokal jika penerima). |
 | `DELETE` | `/admin/profil-pengguna/messages/conversation/{user}/clear` | `admin.profil-pengguna.messages.clear-conversation` | Membersihkan seluruh histori percakapan dari sisi pengguna aktif. |
 

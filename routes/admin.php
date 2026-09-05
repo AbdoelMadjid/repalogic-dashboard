@@ -56,6 +56,7 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
         Route::post('messages/{id}/toggle-pin', [MessageController::class, 'togglePin'])->whereNumber('id')->name('messages.toggle-pin');
         Route::post('messages/{id}/toggle-reaction', [MessageController::class, 'toggleReaction'])->whereNumber('id')->name('messages.toggle-reaction');
         Route::post('messages/{id}/forward', [MessageController::class, 'forward'])->whereNumber('id')->name('messages.forward');
+        Route::put('messages/{id}', [MessageController::class, 'update'])->whereNumber('id')->name('messages.update');
         Route::delete('messages/conversation/{user}/clear', [MessageController::class, 'clearConversation'])->name('messages.clear-conversation');
         Route::delete('messages/{id}', [MessageController::class, 'destroy'])->whereNumber('id')->name('messages.destroy');
     });

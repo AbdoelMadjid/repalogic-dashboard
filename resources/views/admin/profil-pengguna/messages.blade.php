@@ -275,6 +275,15 @@
                                                     <i class="ti ti-corner-up-left text-primary fs-14"></i> Balas
                                                 </a>
                                             </li>
+                                            @if ($isSender && !empty($msg->body))
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 btn-edit-msg" href="javascript:void(0);"
+                                                        data-msg-id="{{ $msg->id }}" data-msg-body="{{ e($msg->body) }}"
+                                                        data-created-at="{{ $msg->created_at ? $msg->created_at->timestamp : 0 }}">
+                                                        <i class="ti ti-edit text-success fs-14"></i> Edit
+                                                    </a>
+                                                </li>
+                                            @endif
                                             <li>
                                                 <a class="dropdown-item d-flex align-items-center gap-2 py-1.5 btn-forward-msg" href="javascript:void(0);"
                                                     data-msg-id="{{ $msg->id }}">
@@ -454,12 +463,12 @@
                                                     Sematan</span>
                                             @endif
                                             <span class="chat-status-time"><i class="ti ti-clock me-0.5"></i>
-                                                {{ $msg->created_at ? $msg->created_at->format('H:i') : '' }}</span>
+                                                {{ $msg->created_at ? $msg->created_at->format('H:i') : '' }}@if ($msg->is_edited)<span class="edited-indicator ms-1 fs-10 text-muted fst-italic" title="Diedit pada {{ $msg->edited_at ? $msg->edited_at->format('H:i') : '' }}">(diedit)</span>@endif</span>
                                         </div>
                                     @else
                                         <div class="d-flex align-items-center gap-1.5 me-auto">
                                             <span class="chat-status-time"><i class="ti ti-clock me-0.5"></i>
-                                                {{ $msg->created_at ? $msg->created_at->format('H:i') : '' }}</span>
+                                                {{ $msg->created_at ? $msg->created_at->format('H:i') : '' }}@if ($msg->is_edited)<span class="edited-indicator ms-1 fs-10 text-muted fst-italic" title="Diedit pada {{ $msg->edited_at ? $msg->edited_at->format('H:i') : '' }}">(diedit)</span>@endif</span>
                                             @if ($isPinned)
                                                 <span
                                                     class="badge bg-success-subtle text-success border border-success-subtle fs-xxs py-0.5 px-1 pinned-indicator"
@@ -612,6 +621,21 @@
                 <form id="form-send-chat" action="javascript:void(0);" enctype="multipart/form-data">
                     <input type="hidden" id="active-receiver-id" value="{{ $activeUser ? $activeUser->id : '' }}">
                     <input type="hidden" id="reply-parent-id" name="parent_id" value="">
+                    <input type="hidden" id="edit-message-id" value="">
+
+                    <!-- PREVIEW BOX EDIT PESAN (MAKSIMAL 10 MENIT) -->
+                    <div id="edit-preview-container"
+                        class="d-none bg-white p-2.5 mb-2 rounded border-start border-3 border-warning shadow-sm position-relative">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fs-12 fw-bold text-warning d-flex align-items-center gap-1">
+                                <i class="ti ti-edit fs-14"></i> Mengedit Pesan
+                                <span class="badge bg-warning-subtle text-warning border border-warning-subtle fs-xxs ms-1" id="edit-timer-badge"><i class="ti ti-clock me-0.5"></i> Batas 10 Menit</span>
+                            </span>
+                            <button type="button" class="btn-close fs-10" id="btn-cancel-edit"
+                                aria-label="Batal Edit"></button>
+                        </div>
+                        <div class="fs-12 text-muted text-truncate ps-1" id="edit-preview-body"></div>
+                    </div>
 
                     <!-- PREVIEW BOX BALASAN PESAN -->
                     <div id="reply-preview-container"

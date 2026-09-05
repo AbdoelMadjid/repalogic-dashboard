@@ -177,3 +177,26 @@ mark.search-match.bg-danger {
     color: #dc2626 !important;
 }
 
+/* Edit Preview Container & Edited Indicator */
+#edit-preview-container {
+    animation: slideDownFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideDownFade {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.edited-indicator {
+    font-size: 10px;
+    opacity: 0.75;
+    user-select: none;
+}
+
+

@@ -32,6 +32,8 @@ class Message extends Model
         'is_pinned',
         'reactions',
         'is_forwarded',
+        'is_edited',
+        'edited_at',
     ];
 
     protected $casts = [
@@ -42,7 +44,29 @@ class Message extends Model
         'is_pinned' => 'boolean',
         'reactions' => 'array',
         'is_forwarded' => 'boolean',
+        'is_edited' => 'boolean',
+        'edited_at' => 'datetime',
     ];
+
+    /**
+     * Check whether a message can be edited by a given user ID (only sender, within 10 minutes).
+     */
+    public function isEditableBy(int $userId): bool
+    {
+        if ($this->sender_id !== $userId) {
+            return false;
+        }
+
+        if ($this->deleted_for_sender) {
+            return false;
+        }
+
+        if (!$this->created_at) {
+            return false;
+        }
+
+        return $this->created_at->addMinutes(10)->isFuture();
+    }
 
     /**
      * Toggle reaction emoji for a specific user ID.

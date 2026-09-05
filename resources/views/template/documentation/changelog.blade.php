@@ -116,7 +116,7 @@
                     <span class="badge bg-primary-subtle text-primary font-monospace">Full History</span>
                 </div>
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.8.6 -->
+                        <!-- Version 2.8.7 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -124,8 +124,32 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.8.6</h5>
+                                        <h5 class="fw-bold mb-0">v2.8.7</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.7</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-05 10:45 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Chat Message Edit Engine (Batas Waktu 10 Menit &amp; Penanda Edited), Interactive Edit Preview Bar, Real-Time Polling Sync &amp; In-Place DOM Mutation</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Fasilitas Edit Pesan Chat (<code>MessageController.php</code> &amp; <code>routes/admin.php</code>):</strong> Menyediakan endpoint <code>PUT /admin/profil-pengguna/messages/{id}</code> untuk memperbarui teks pesan obrolan yang dikirim oleh pengguna aktif dengan validasi ketat batas waktu maksimal 10 menit (<code>$message->created_at->addMinutes(10)->isFuture()</code>).</li>
+                                    <li><strong class="text-dark">Skema Database &amp; Model (<code>2026_09_05_000001_add_edited_columns_to_messages_table.php</code> &amp; <code>Message.php</code>):</strong> Menambahkan kolom <code>is_edited</code> (boolean) dan <code>edited_at</code> (timestamp) pada tabel <code>messages</code> serta method helper <code>isEditableBy($userId)</code>.</li>
+                                    <li><strong class="text-dark">Interactive Edit Preview Bar (<code>messages.blade.php</code> &amp; <code>messages.css</code>):</strong> Menghadirkan banner mode edit <code>#edit-preview-container</code> di atas bar input pesan lengkap dengan badge batas 10 menit, tombol pembatalan cepat (X), dan dukungan tombol keyboard <code>Escape</code>.</li>
+                                    <li><strong class="text-dark">Penanda Teks Edited Transparan (<code>messages.blade.php</code> &amp; <code>messages.js</code>):</strong> Menampilkan indikator halus <code>(diedit)</code> di sebelah penanda waktu pesan baik saat render awal Blade maupun sinkronisasi real-time via background polling.</li>
+                                    <li><strong class="text-dark">Sinkronisasi Polling In-Place &amp; Optimistic Update (<code>messages.js</code>):</strong> Memperbarui balon teks pesan, data atribut reply/edit, dan cuplikan pesan terakhir pada kontak sidebar seketika (0ms delay) tanpa merusak posisi scroll percakapan.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.8.6 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xs text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.8.6</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.6</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-04 14:15 WIB</span>

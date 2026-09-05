@@ -198,6 +198,10 @@ class MessageController extends Controller
                     'is_pinned' => (bool) $msg->is_pinned,
                     'reactions' => $msg->reactions ?: [],
                     'is_forwarded' => (bool) $msg->is_forwarded,
+                    'is_edited' => (bool) $msg->is_edited,
+                    'edited_at_formatted' => $msg->edited_at ? $msg->edited_at->format('H:i') : null,
+                    'can_edit' => $msg->isEditableBy($currentUser->id),
+                    'created_at_timestamp' => $msg->created_at ? $msg->created_at->timestamp : null,
                     'parent' => $msg->parent ? [
                         'id' => $msg->parent->id,
                         'sender_name' => $msg->parent->sender ? ($msg->parent->sender_id === $currentUser->id ? 'Anda' : $msg->parent->sender->name) : 'Pesan',
@@ -338,6 +342,10 @@ class MessageController extends Controller
                 'is_pinned' => false,
                 'reactions' => [],
                 'is_forwarded' => false,
+                'is_edited' => false,
+                'edited_at_formatted' => null,
+                'can_edit' => true,
+                'created_at_timestamp' => $msg->created_at ? $msg->created_at->timestamp : now()->timestamp,
                 'parent' => $parentMessage ? [
                     'id' => $parentMessage->id,
                     'sender_name' => $parentMessage->sender ? ($parentMessage->sender_id === $currentUser->id ? 'Anda' : $parentMessage->sender->name) : 'Pesan',
@@ -484,6 +492,63 @@ class MessageController extends Controller
             return round($bytes / 1024, 1) . ' KB';
         }
         return $bytes . ' B';
+    }
+
+    /**
+     * Update (edit) an existing sent message within 10 minutes.
+     */
+    public function update(Request $request, $id): JsonResponse
+    {
+        $validated = $request->validate([
+            'body' => ['required', 'string', 'max:2000'],
+        ], [
+            'body.required' => 'Pesan teks tidak boleh kosong.',
+            'body.max' => 'Panjang pesan maksimal 2000 karakter.',
+        ]);
+
+        $currentUser = Auth::user();
+        $message = Message::findOrFail((int) $id);
+
+        // 1. Validasi kepemilikan pesan (hanya pengirim yang boleh mengedit)
+        if ($message->sender_id !== $currentUser->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda hanya dapat mengedit pesan yang Anda kirim sendiri.',
+            ], 403);
+        }
+
+        // 2. Validasi batas waktu 10 menit
+        if (!$message->isEditableBy($currentUser->id)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pesan tidak dapat diedit karena telah melewati batas waktu 10 menit.',
+            ], 422);
+        }
+
+        $newBody = trim($validated['body']);
+        if ($newBody === '') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pesan teks tidak boleh kosong.',
+            ], 422);
+        }
+
+        $message->body = $newBody;
+        $message->is_edited = true;
+        $message->edited_at = now();
+        $message->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pesan berhasil diperbarui.',
+            'data' => [
+                'id' => $message->id,
+                'body' => $message->body,
+                'is_edited' => true,
+                'edited_at' => $message->edited_at->format('H:i'),
+                'time_formatted' => $message->created_at ? $message->created_at->format('H:i') : '',
+            ],
+        ]);
     }
 
     /**
