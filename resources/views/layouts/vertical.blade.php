@@ -2,9 +2,13 @@
 
 @php
     $htmlAttributeSection = trim($__env->yieldContent('html_attribute'));
-    $htmlAttributes = str_contains($htmlAttributeSection, 'class=')
-        ? $htmlAttributeSection
-        : trim('class="sidebar-with-line" ' . $htmlAttributeSection);
+    $htmlAttributes = $htmlAttributeSection;
+    if (!str_contains($htmlAttributes, 'class=')) {
+        $htmlAttributes = trim('class="sidebar-with-line" ' . $htmlAttributes);
+    }
+    if (!str_contains($htmlAttributes, 'data-menu-color=')) {
+        $htmlAttributes = trim('data-menu-color="gradient" ' . $htmlAttributes);
+    }
 @endphp
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" {!! $htmlAttributes !!}>
 

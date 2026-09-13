@@ -1,7 +1,7 @@
 (()=>{
     var e = document.documentElement,
         i = sessionStorage.getItem("__THEME_CONFIG__");
-    const t = "ltr", a = "default", d = "light", r = "fluid", s = "fixed", o = "default", n = !0, u = "light", b = "dark";
+    const t = "ltr", a = "default", d = "light", r = "fluid", s = "fixed", o = "default", n = !0, u = "light", b = "gradient";
     
     function l() {
         return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -17,7 +17,8 @@
         "sidenav-size": o,
         "sidenav-user": n,
         "topbar-color": u,
-        "sidenav-color": b
+        "sidenav-color": b,
+        "_v": 2
     };
 
     window.initialDefaultConfig = structuredClone(baseDefault);
@@ -32,8 +33,23 @@
         "sidenav-user": e.hasAttribute("data-sidenav-user") ? e.getAttribute("data-sidenav-user") !== "false" : n,
         position: e.getAttribute("data-layout-position") || s,
         width: e.getAttribute("data-layout-width") || r,
-        dir: e.getAttribute("dir") || t
+        dir: e.getAttribute("dir") || t,
+        "_v": 2
     };
+
+    if (i) {
+        try {
+            var parsed = JSON.parse(i);
+            if (!parsed._v) {
+                if (parsed["sidenav-color"] === "dark") {
+                    parsed["sidenav-color"] = "gradient";
+                }
+                parsed._v = 2;
+                i = JSON.stringify(parsed);
+                sessionStorage.setItem("__THEME_CONFIG__", i);
+            }
+        } catch (err) {}
+    }
 
     i = i ? JSON.parse(i) : c;
     window.config = i;

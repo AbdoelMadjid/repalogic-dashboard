@@ -32,10 +32,17 @@ class App{init(){try{this.initComponents(),this.initPreloader(),this.initPortlet
             'sidenav-size': 'default',
             'sidenav-user': true,
             'topbar-color': 'light',
-            'sidenav-color': 'dark'
+            'sidenav-color': 'gradient',
+            '_v': 2
         };
         this.defaultConfig = JSON.parse(JSON.stringify(baseDefault));
         this.config = JSON.parse(JSON.stringify(window.config || baseDefault));
+        if (!this.config._v) {
+            if (this.config['sidenav-color'] === 'dark') {
+                this.config['sidenav-color'] = 'gradient';
+            }
+            this.config._v = 2;
+        }
         this.setSwitchFromConfig();
     }
 
@@ -134,7 +141,8 @@ class App{init(){try{this.initComponents(),this.initPreloader(),this.initPortlet
             'sidenav-size': 'default',
             'sidenav-user': true,
             'topbar-color': 'light',
-            'sidenav-color': 'dark'
+            'sidenav-color': 'gradient',
+            '_v': 2
         };
 
         try {

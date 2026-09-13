@@ -117,7 +117,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.8.8 -->
+                        <!-- Version 2.8.9 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -125,8 +125,29 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.8.8</h5>
+                                        <h5 class="fw-bold mb-0">v2.8.9</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.9</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-13 17:53 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Default Sidenav Color Gradient &amp; Dynamic Session Storage Auto-Migration Architecture</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Sidenav Color Default Gradient (<code>head-css.blade.php</code>, <code>config.js</code>, <code>app.js</code> &amp; <code>vertical.blade.php</code>):</strong> Mengubah konfigurasi bawaan <code>sidenav-color</code> sistem dari <code>dark</code> menjadi <code>gradient</code> secara menyeluruh baik pada inisialisasi awal Blade markup tag <code>&lt;html data-menu-color="gradient"&gt;</code> maupun engine JavaScript customizer.</li>
+                                    <li><strong class="text-dark">Session Storage Auto-Migration Engine:</strong> Menambahkan mekanisme verifikasi versi (<code>_v: 2</code>) pada <code>sessionStorage</code> (<code>__THEME_CONFIG__</code>) sehingga pengguna yang memiliki riwayat session lama dengan warna <code>dark</code> secara cerdas dan otomatis dimigrasikan ke <code>gradient</code> tanpa perlu melakukan reset customizer secara manual.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.8.8 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xs text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.8.8</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.8</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-05 11:32 WIB</span>

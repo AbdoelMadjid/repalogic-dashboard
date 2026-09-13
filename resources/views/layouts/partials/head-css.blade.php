@@ -14,7 +14,8 @@
         "sidenav-size": "default",
         "sidenav-user": true,
         "topbar-color": "light",
-        "sidenav-color": "dark",
+        "sidenav-color": "gradient",
+        "_v": 2,
     }
 
     window.initialDefaultConfig = structuredClone(defaultConfig)
@@ -37,10 +38,25 @@
         "sidenav-color": html.getAttribute("data-menu-color") || defaultConfig["sidenav-color"],
         "sidenav-size": html.getAttribute("data-sidenav-size") || defaultConfig["sidenav-size"],
         "sidenav-user": html.hasAttribute("data-sidenav-user") ? (html.getAttribute("data-sidenav-user") !== "false") : defaultConfig["sidenav-user"],
+        "_v": 2
     }
 
     // Load from session if exists
-    let config = savedConfig ? JSON.parse(savedConfig) : htmlConfig
+    let config = htmlConfig;
+    if (savedConfig) {
+        try {
+            config = JSON.parse(savedConfig);
+            if (!config._v) {
+                if (config["sidenav-color"] === "dark") {
+                    config["sidenav-color"] = "gradient";
+                }
+                config._v = 2;
+                sessionStorage.setItem(storageKey, JSON.stringify(config));
+            }
+        } catch (e) {
+            config = htmlConfig;
+        }
+    }
     window.config = config
 
     // Apply layout attributes immediately
