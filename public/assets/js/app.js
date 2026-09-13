@@ -367,12 +367,10 @@ class App{init(){try{this.initComponents(),this.initPreloader(),this.initPortlet
     _adjustLayout() {
         const width = window.innerWidth;
         const size = this.config['sidenav-size'];
-        if (width <= 767.98) {
+        if (width <= 991.98) {
             this.changeSidenavSize('offcanvas', false);
-        } else if (width <= 1140 && !['offcanvas'].includes(size)) {
-            this.changeSidenavSize('condensed', false);
         } else {
-            this.changeSidenavSize(size);
+            this.changeSidenavSize(size === 'condensed' ? 'default' : size);
         }
     }
 

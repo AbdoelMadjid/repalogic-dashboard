@@ -25,7 +25,7 @@
             </div>
 
             <!-- Sidebar Menu Toggle Button -->
-            <button class="sidenav-toggle-button btn btn-default btn-icon">
+            <button class="sidenav-toggle-button btn btn-default btn-icon d-flex d-lg-none">
                 <i class="ti ti-menu-4"></i>
             </button>
 

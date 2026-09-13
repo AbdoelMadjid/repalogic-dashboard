@@ -122,3 +122,11 @@
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
     ```
 
+## 16. Card Header Action Buttons & Mobile Responsive Icon-Only Standard
+- **Right Alignment**: Action buttons inside `<div class="card-header">` MUST always be aligned to the far right edge of the card header (`d-flex justify-content-between align-items-start` with the button container having `ms-auto flex-shrink-0 text-nowrap`).
+- **Mobile Responsive Icon-Only**:
+  - On mobile/small screens (`< md`), the text inside card header buttons MUST be hidden using `<span class="d-none d-md-inline">Button Text</span>` so that only the icon remains visible.
+  - The icon margin MUST adapt responsively: `class="ti ti-... me-0 me-md-1.5"`.
+  - All action buttons MUST have a hover description via the HTML `title="Button Text"` attribute so that hovering over the button shows its description.
+
+

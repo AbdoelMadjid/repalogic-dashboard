@@ -117,7 +117,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.8.9 -->
+                        <!-- Version 2.9.0 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -125,8 +125,30 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.8.9</h5>
+                                        <h5 class="fw-bold mb-0">v2.9.0</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.0</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-13 21:40 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Topbar Sidenav Mobile Optimization &amp; Standardized Card Header Action Buttons (Rule 16)</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Topbar Sidenav Mobile-Only Toggle Button (<code>topbar.blade.php</code>, <code>head-css.blade.php</code>, <code>config.js</code> &amp; <code>app.js</code>):</strong> Menyembunyikan tombol hamburger toggle sidenav pada resolusi desktop (<code>d-flex d-lg-none</code>) dan menonaktifkan mode otomatis <em>condensed</em> agar sidebar desktop selalu terbuka penuh secara default. Tombol menu tetap aktif dan fungsional khusus pada layar mobile/tablet untuk membuka drawer offcanvas.</li>
+                                    <li><strong class="text-dark">Standardized Card Header Action Buttons Layout (<code>menu.blade.php</code> &amp; Rule 16):</strong> Menata ulang card header modul Manajemen Menu menjadi tata letak 2-kolom top-aligned (<code>d-flex justify-content-between align-items-start</code>). Judul header berada di baris atas dengan 3 baris deskripsi petunjuk drag &amp; drop di bawahnya, sementara tombol aksi (Petunjuk Bilingual &amp; Tambah Menu Baru) diposisikan rata kanan penuh (<code>ms-auto flex-shrink-0 text-nowrap</code>).</li>
+                                    <li><strong class="text-dark">Mobile Responsive Icon-Only Action Buttons:</strong> Pada resolusi layar mobile / HP (&lt; md), teks pada tombol aksi card header disembunyikan secara responsif (<code>&lt;span class="d-none d-md-inline"&gt;</code>) menyisakan ikon yang presisi dengan deskripsi keterangan aksi muncul saat tombol disentuh/di-<em>hover</em> via atribut HTML <code>title</code>.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.8.9 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xs text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.8.9</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.8.9</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-13 17:53 WIB</span>

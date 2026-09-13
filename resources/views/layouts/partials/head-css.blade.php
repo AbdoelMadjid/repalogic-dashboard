@@ -71,10 +71,8 @@
     if (config["sidenav-size"]) {
         let size = config["sidenav-size"]
 
-        if (window.innerWidth <= 767) {
+        if (window.innerWidth <= 991) {
             size = "offcanvas"
-        } else if (window.innerWidth <= 1140 && !["offcanvas"].includes(size)) {
-            size = "condensed"
         }
 
         html.setAttribute("data-sidenav-size", size)

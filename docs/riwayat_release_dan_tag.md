@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v2.8.9`  
-> **Terakhir Diperbarui:** 13 September 2026 17:53 WIB  
+> **Versi Terbaru:** `v2.9.0`  
+> **Terakhir Diperbarui:** 13 September 2026 21:40 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v2.9.0`** | `2026-09-13 21:40 WIB` | Topbar Sidenav Mobile-Only Toggle Button (`d-flex d-lg-none`), Default Expanded Sidebar on Desktop, Standardized Card Header Action Buttons (2-Column Layout, Far-Right Alignment & Responsive Mobile Icon-Only with Hover Title - Rule 16) |
 | **`v2.8.9`** | `2026-09-13 17:53 WIB` | Default Sidenav Color Gradient (`<html data-menu-color="gradient">`, `head-css.blade.php`, `config.js`, `app.js`) & Dynamic Session Storage Auto-Migration Engine (`_v: 2`) |
 | **`v2.8.8`** | `2026-09-05 11:32 WIB` | GUI Blade Script Live Code Editor Modal (Ace Editor PHP/HTML/Blade Syntax, Monokai Dark / Chrome Light Theme, Fullscreen Mode, Word Wrap, Backup Otomatis & Auto View Cache Clear), Quick Snippets Injection Suite & File Trigger Action in Konfigurasi Website |
 | **`v2.8.7`** | `2026-09-05 11:21 WIB` | Chat Message Edit Engine (Batas 10 Menit & Penanda Edited), Interactive Edit Preview Bar, Real-Time In-Place Polling Sync, Dashboard Quick Access Hub (12 Sub-Menu), Fitur Aplikasi Compact Reset Button, Motto Color 2-Row Alignment, Translation Clean URL (Tanpa `?module=`) & Equal-Height Active Nav Pills |

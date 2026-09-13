@@ -8,22 +8,22 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-start gap-3">
                         <div>
                             <h4 class="card-title mb-1">Daftar Menu Aplikasi (Live Search & Reordering 3 Level)</h4>
-                            <p class="text-muted fs-12 mb-0">
-                                🟡 <i class="ti ti-grip-vertical text-warning"></i> Drag <strong>Kategori</strong> (seluruh isi di bawahnya ikut).  
-                                🔵 <i class="ti ti-menu-2 text-primary"></i> Drag <strong>Menu Utama</strong> (sub-menu di bawahnya ikut).  
-                                ⚪ <i class="ti ti-dots-vertical text-secondary"></i> Drag <strong>Sub-Menu</strong> (hanya dalam menu utamanya).
-                            </p>
+                            <div class="text-muted fs-12 mt-1">
+                                <div>🟡 <i class="ti ti-grip-vertical text-warning me-1"></i> Drag <strong>Kategori</strong> (seluruh isi di bawahnya ikut).</div>
+                                <div>🔵 <i class="ti ti-menu-2 text-primary me-1"></i> Drag <strong>Menu Utama</strong> (sub-menu di bawahnya ikut).</div>
+                                <div>⚪ <i class="ti ti-dots-vertical text-secondary me-1"></i> Drag <strong>Sub-Menu</strong> (hanya dalam menu utamanya).</div>
+                            </div>
                         </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#bilingualGuideModal">
-                                <i class="ti ti-help-circle me-1"></i> Petunjuk Bilingual
+                        <div class="d-flex align-items-center gap-2 text-nowrap flex-shrink-0 ms-auto">
+                            <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#bilingualGuideModal" title="Petunjuk Bilingual">
+                                <i class="ti ti-help-circle me-0 me-md-1.5"></i><span class="d-none d-md-inline">Petunjuk Bilingual</span>
                             </button>
                             @can('create dukunganaplikasi/menu')
-                                <button type="button" class="btn btn-primary btn-sm btn-menu-action" data-action="create">
-                                    <i class="ti ti-plus me-1"></i> Tambah Menu Baru
+                                <button type="button" class="btn btn-primary btn-sm btn-menu-action" data-action="create" title="Tambah Menu Baru">
+                                    <i class="ti ti-plus me-0 me-md-1.5"></i><span class="d-none d-md-inline">Tambah Menu Baru</span>
                                 </button>
                             @endcan
                         </div>

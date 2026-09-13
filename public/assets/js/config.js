@@ -64,7 +64,9 @@
 
     if (i["sidenav-size"]) {
         let size = i["sidenav-size"];
-        window.innerWidth <= 767 ? size = "offcanvas" : window.innerWidth <= 1140 && !["offcanvas"].includes(size) && (size = "condensed");
+        if (window.innerWidth <= 991) {
+            size = "offcanvas";
+        }
         e.setAttribute("data-sidenav-size", size);
     }
     
