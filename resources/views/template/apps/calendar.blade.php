@@ -139,10 +139,6 @@
         <!-- end modal dialog-->
     </div>
     <!-- end modal-->
-    </div>
-    <!-- container -->
-
-    <!-- Footer Start -->
 @endsection
 
 @section('scripts')

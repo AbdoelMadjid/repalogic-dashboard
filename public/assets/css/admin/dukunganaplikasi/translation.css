@@ -3,59 +3,94 @@
  * Path: public/assets/css/admin/dukunganaplikasi/translation.css
  */
 
-.table-responsive {
-    min-height: 280px;
+.outlook-box {
+    height: calc(100vh - var(--theme-topbar-height, 70px) - 118px);
+    overflow: hidden;
+    margin-bottom: 0;
 }
 
-#translationTabs {
-    display: flex;
-    align-items: stretch;
-}
-
-#translationTabs .nav-item {
-    display: flex;
-    align-items: stretch;
-    flex: 1 1 0;
-}
-
-.translation-tab-filter {
-    color: #495057;
+/* Left Sidebar Menu Styling */
+.outlook-left-menu .list-custom .list-group-item {
+    border: none;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.84rem;
     font-weight: 500;
-    transition: all 0.2s ease-in-out;
+    color: #495057;
     border-radius: 6px;
-    cursor: pointer;
-    border: 1px solid transparent;
-    width: 100%;
-    height: 100%;
-    display: inline-flex;
+    margin-bottom: 2px;
+    display: flex;
     align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 4px;
-    text-align: center;
-    padding: 0.5rem 0.6rem;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none;
 }
 
-.translation-tab-filter:hover {
-    background-color: rgba(var(--theme-primary-rgb, 26, 179, 148), 0.1);
+.outlook-left-menu .list-custom .list-group-item:hover {
+    background-color: rgba(var(--theme-primary-rgb, 26, 179, 148), 0.08);
     color: var(--theme-primary, #1ab394);
 }
 
-.translation-tab-filter.active {
+.outlook-left-menu .list-custom .list-group-item.active {
     background-color: var(--theme-primary, #1ab394) !important;
     color: #ffffff !important;
-    border-color: var(--theme-primary, #1ab394) !important;
+    font-weight: 600;
     box-shadow: 0 2px 6px rgba(var(--theme-primary-rgb, 26, 179, 148), 0.35);
 }
 
-.translation-tab-filter.active i {
+.outlook-left-menu .list-custom .list-group-item.active i {
     color: #ffffff !important;
+    opacity: 1 !important;
 }
 
-.translation-tab-filter.active .badge {
+.outlook-left-menu .list-custom .list-group-item.active .badge {
     background-color: rgba(255, 255, 255, 0.25) !important;
     color: #ffffff !important;
     border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Internal Scroll Containers with Custom Thin Scrollbar */
+#translation-sidebar-scroll-container,
+#translation-table-scroll-container {
+    min-height: 0;
+    flex: 1 1 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+#translation-table-scroll-container .table-responsive {
+    overflow-x: auto;
+}
+
+#translation-sidebar-scroll-container::-webkit-scrollbar,
+#translation-table-scroll-container::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+#translation-sidebar-scroll-container::-webkit-scrollbar-thumb,
+#translation-table-scroll-container::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+#translation-sidebar-scroll-container::-webkit-scrollbar-thumb:hover,
+#translation-table-scroll-container::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.35);
+}
+
+#translation-sidebar-scroll-container::-webkit-scrollbar-track,
+#translation-table-scroll-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Sticky Table Header */
+#translation-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #f8f9fa;
+    box-shadow: inset 0 -1px 0 #dee2e6, inset 0 1px 0 #dee2e6;
 }
 
 .translation-row:hover {
@@ -64,4 +99,16 @@
 
 .translation-row code {
     letter-spacing: 0.3px;
+    word-break: break-all;
+}
+
+#empty-state-row {
+    background-color: transparent !important;
+}
+
+@media (max-width: 991.98px) {
+    .outlook-box {
+        height: calc(100vh - var(--theme-topbar-height, 70px) - 110px);
+        margin-bottom: 0;
+    }
 }

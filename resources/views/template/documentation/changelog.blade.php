@@ -117,7 +117,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.9.0 -->
+                        <!-- Version 2.9.1 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -125,8 +125,30 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.9.0</h5>
+                                        <h5 class="fw-bold mb-0">v2.9.1</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.1</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-14 23:20 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Translation Management Overhaul (File Manager Outlook-Box Split-Panel Layout &amp; Zero Browser Scroll)</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">File Manager Outlook-Box Split-Panel Layout (<code>translation.blade.php</code>, <code>translation.css</code>, <code>translation.js</code>):</strong> Menata ulang arsitektur tampilan modul Manajemen Terjemahan Bahasa (i18n) mengadopsi layout split-panel Outlook-box bawaan template File Manager. Tab domain terjemahan (Semua Domain, Sidebar Menu, Sidebar Template, Topbar, Auth, Customizer, Frontpage) dipindahkan ke sidebar vertikal kiri, sementara daftar data tabel tampil secara dinamis dan instan di panel sebelah kanan.</li>
+                                    <li><strong class="text-dark">Zero Browser Scroll &amp; Dedicated Internal Table Scroll Container:</strong> Mengunci tinggi viewport <code>.outlook-box</code> secara presisi tanpa memicu scrollbar pada jendela browser utama. Area isi tabel dan sidebar navigasi menggunakan kontainer scroll internal dengan <em>custom thin scrollbar</em> serta header kolom tabel yang terkunci (<em>sticky-top</em>).</li>
+                                    <li><strong class="text-dark">Streamlined Header &amp; Action Controls (Rule 16):</strong> Tombol <strong>"Petunjuk Lengkap"</strong> diposisikan secara terintegrasi pada bagian atas sidebar kiri untuk membuka modal panduan bilingual, sementara tombol <strong>"Tambah Key Terjemahan"</strong> berada di baris kontrol kanan dengan dukungan responsivitas ikon pada layar mobile.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.9.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-sm text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.9.0</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.0</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-13 21:40 WIB</span>

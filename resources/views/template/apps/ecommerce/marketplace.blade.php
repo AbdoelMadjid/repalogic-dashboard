@@ -4,7 +4,8 @@
     @include('layouts.partials.page-title')
 
 
-    <div class="container-xxl">
+
+    
         <div class="row pt-3">
             <!-- For Men -->
             <div class="col-md-4">
@@ -601,7 +602,4 @@
                 </div>
             </div>
         </div>
-        <!-- end row-->
-    </div>
-    <!-- container-xxl -->
-@endsection
+        <!-- end row-->@endsection

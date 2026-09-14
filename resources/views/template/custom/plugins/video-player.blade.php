@@ -9,7 +9,8 @@
 
 
 
-    <div class="container-xxl">
+
+    
         <div class="row">
             <!-- Basic MP4 -->
             <div class="col-12 col-xl-6">
@@ -86,8 +87,6 @@
             </div>
         </div>
         <!-- end row-->
-    </div>
-    <!-- container -->
 @endsection
 
 @section('scripts')

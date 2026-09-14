@@ -534,8 +534,4 @@
             </a>
         </li>
     </ul>
-    </div>
-    <!-- container -->
-
-    <!-- Footer Start -->
 @endsection

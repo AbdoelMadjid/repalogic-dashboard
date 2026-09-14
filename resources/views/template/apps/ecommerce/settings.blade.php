@@ -576,10 +576,6 @@
             <!-- /.card -->
         </div>
     </div>
-    </div>
-    <!-- container -->
-
-    <!-- Footer Start -->
 @endsection
 
 @section('scripts')

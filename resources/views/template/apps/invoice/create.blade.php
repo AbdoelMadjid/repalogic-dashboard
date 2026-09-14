@@ -213,10 +213,6 @@
         <!-- end col-10-->
     </div>
     <!-- end row-->
-    </div>
-    <!-- container -->
-
-    <!-- Footer Start -->
 @endsection
 
 @section('scripts')

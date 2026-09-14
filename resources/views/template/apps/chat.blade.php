@@ -51,7 +51,7 @@
                         </a>
 
                         <a href="#!" data-chat-id="chat2"
-                            class="list-group-item list-group-item-action d-flex gap-2 justify-content-between active">
+                            class="list-group-item list-group-item-action d-flex gap-2 justify-content-between">
                             <span class="d-flex justify-content-start align-items-center gap-2 overflow-hidden">
                                 <span class="avatar avatar-sm flex-shrink-0">
                                     <img src="{{ asset('assets/images/users/user-5.jpg') }}" alt="avatar-5"
@@ -276,7 +276,7 @@
 
                 <div class="flex-grow-1">
                     <h5 class="mb-1 lh-base fs-lg">
-                        <a data-chat-username href="#!" class="link-reset">Noah Smith</a>
+                        <a data-chat-username href="#!" class="link-reset">Ava Thompson</a>
                     </h5>
                     <p class="mb-0 lh-sm text-muted d-flex align-items-center gap-1" style="padding-top: 1px">
                         <i class="ti ti-circle-filled text-success"></i>
@@ -328,7 +328,7 @@
             <div id="chat-container" data-chat class="card-body pt-0 pb-3 chat-content-bar" data-simplebar>
                 <!-- Message 1 -->
                 <div class="d-flex align-items-start gap-2 my-3 chat-item">
-                    <img src="{{ asset('assets/images/users/user-5.jpg') }}" class="avatar-md rounded-circle"
+                    <img src="{{ asset('assets/images/users/user-4.jpg') }}" class="avatar-md rounded-circle"
                         alt="User" />
                     <div>
                         <div class="chat-message py-2 px-3 bg-warning-subtle rounded">Hey! Are you available for a quick
@@ -356,7 +356,7 @@
 
                 <!-- Message 3 -->
                 <div class="d-flex align-items-start gap-2 my-3 chat-item">
-                    <img src="{{ asset('assets/images/users/user-5.jpg') }}" class="avatar-md rounded-circle"
+                    <img src="{{ asset('assets/images/users/user-4.jpg') }}" class="avatar-md rounded-circle"
                         alt="User" />
                     <div>
                         <div class="chat-message py-2 px-3 bg-warning-subtle rounded">Perfect. Let me know when you're
@@ -383,7 +383,7 @@
 
                 <!-- Message 5 -->
                 <div class="d-flex align-items-start gap-2 my-3 chat-item">
-                    <img src="{{ asset('assets/images/users/user-5.jpg') }}" class="avatar-md rounded-circle"
+                    <img src="{{ asset('assets/images/users/user-4.jpg') }}" class="avatar-md rounded-circle"
                         alt="User" />
                     <div>
                         <div class="chat-message py-2 px-3 bg-warning-subtle rounded">Thanks for your time earlier!</div>
@@ -410,7 +410,7 @@
 
                 <!-- Message 7 -->
                 <div class="d-flex align-items-start gap-2 my-3 chat-item">
-                    <img src="{{ asset('assets/images/users/user-5.jpg') }}" class="avatar-md rounded-circle"
+                    <img src="{{ asset('assets/images/users/user-4.jpg') }}" class="avatar-md rounded-circle"
                         alt="User" />
                     <div>
                         <div class="chat-message py-2 px-3 bg-warning-subtle rounded">I’ll send over the updated files by
@@ -438,7 +438,7 @@
 
                 <!-- Message 9 -->
                 <div class="d-flex align-items-start gap-2 my-3 chat-item">
-                    <img src="{{ asset('assets/images/users/user-5.jpg') }}" class="avatar-md rounded-circle"
+                    <img src="{{ asset('assets/images/users/user-4.jpg') }}" class="avatar-md rounded-circle"
                         alt="User" />
                     <div>
                         <div class="chat-message py-2 px-3 bg-warning-subtle rounded">Just sent them via Drive. Let me know
@@ -466,7 +466,7 @@
 
                 <!-- Message 11 -->
                 <div class="d-flex align-items-start gap-2 my-3 chat-item">
-                    <img src="{{ asset('assets/images/users/user-5.jpg') }}" class="avatar-md rounded-circle"
+                    <img src="{{ asset('assets/images/users/user-4.jpg') }}" class="avatar-md rounded-circle"
                         alt="User" />
                     <div>
                         <div class="chat-message py-2 px-3 bg-warning-subtle rounded">Awesome 😊 Looking forward to your
@@ -494,7 +494,7 @@
 
                 <!-- Message 13 -->
                 <div class="d-flex align-items-start gap-2 my-3 chat-item">
-                    <img src="{{ asset('assets/images/users/user-5.jpg') }}" class="avatar-md rounded-circle"
+                    <img src="{{ asset('assets/images/users/user-4.jpg') }}" class="avatar-md rounded-circle"
                         alt="User" />
                     <div>
                         <div class="chat-message py-2 px-3 bg-warning-subtle rounded">No rush, enjoy your lunch! 😄</div>
@@ -540,12 +540,11 @@
         <!-- end card-->
     </div>
     <!-- end row-->
-    </div>
-    <!-- container -->
-
-    <!-- Footer Start -->
 @endsection
 
 @section('scripts')
+    <script>
+        window.assetUrl = "{{ asset('') }}";
+    </script>
     <script src="{{ asset('assets/js/pages/apps-chat.js') }}"></script>
 @endsection

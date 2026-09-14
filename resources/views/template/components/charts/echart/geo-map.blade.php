@@ -81,8 +81,6 @@
         </div>
         <!-- end col -->
     </div>
-    </div>
-    <!-- container -->
 @endsection
 
 @section('scripts')

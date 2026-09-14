@@ -11,7 +11,8 @@
     @include('layouts.partials.page-title')
 
 
-    <div class="container-xxl">
+
+    
         <div class="row">
             <div class="col-12">
                 <h5 class="mb-1 fs-lg">Authorized Apps</h5>
@@ -520,11 +521,4 @@
                 </nav>
             </div>
         </div>
-        <!-- end row-->
-    </div>
-    <!-- container -->
-    </div>
-    <!-- end container-fluid-->
-
-    <!-- Footer Start -->
-@endsection
+        <!-- end row-->@endsection

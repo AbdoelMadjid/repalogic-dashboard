@@ -618,8 +618,4 @@
         <!-- end card-->
     </div>
     <!-- end row-->
-    </div>
-    <!-- container -->
-
-    <!-- Footer Start -->
 @endsection

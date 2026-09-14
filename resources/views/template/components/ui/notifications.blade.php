@@ -11,7 +11,8 @@
     @include('layouts.partials.page-title')
 
 
-    <div class="container-xxl">
+
+    
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -351,10 +352,6 @@
             <!-- end col-->
         </div>
         <!-- end row-->
-    </div>
-    <!-- container -->
-    </div>
-    <!-- container-fluid -->
 @endsection
 
 @section('scripts')

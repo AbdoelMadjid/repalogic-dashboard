@@ -569,8 +569,6 @@
         <!--end col-->
     </div>
     <!-- end row-->
-    </div>
-    <!-- container -->
 
     <!-- Right Sidebar -->
     <div class="asidebar-button d-xl-none d-flex">
@@ -768,7 +766,9 @@
             <!--end card-body-->
         </div>
         <!-- end offcanvas-body-->
-    @endsection
+    </div>
+    <!-- end asidebar-->
+@endsection
 
     @section('scripts')
         <script src="{{ asset('assets/plugins/apexcharts/apexcharts.min.js') }}"></script>

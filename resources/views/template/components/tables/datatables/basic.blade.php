@@ -1145,8 +1145,6 @@
             <!-- end card-->
         </div>
     </div>
-    </div>
-    <!-- container -->
 @endsection
 
 @section('scripts')

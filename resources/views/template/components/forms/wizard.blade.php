@@ -11,7 +11,8 @@
     @include('layouts.partials.page-title')
 
 
-    <div class="container-xxl">
+
+    
         <div class="row justify-content-center">
             <div class="col-12">
                 <div class="card">
@@ -1116,12 +1117,7 @@
             </div>
             <!-- en col-->
         </div>
-        <!-- end row -->
-    </div>
-    <!-- container -->
-    </div>
-    <!-- end container-fluid-->
-@endsection
+        <!-- end row -->@endsection
 
 @section('scripts')
     <script src="{{ asset('assets/js/pages/form-wizard.js') }}"></script>

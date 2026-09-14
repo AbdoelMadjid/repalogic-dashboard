@@ -1151,10 +1151,6 @@
             </div>
         </div>
     </div>
-    </div>
-    <!-- container -->
-
-    <!-- Footer Start -->
 @endsection
 
 @section('scripts')

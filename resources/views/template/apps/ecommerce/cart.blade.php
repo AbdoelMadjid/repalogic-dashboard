@@ -212,8 +212,4 @@
             </div>
         </div>
     </div>
-    </div>
-    <!-- container -->
-
-    <!-- Footer Start -->
 @endsection

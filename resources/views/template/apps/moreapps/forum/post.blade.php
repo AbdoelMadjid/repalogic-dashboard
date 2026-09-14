@@ -343,8 +343,4 @@
             <!-- end row-->
         </div>
     </div>
-    </div>
-    <!-- container -->
-
-    <!-- Footer Start -->
 @endsection

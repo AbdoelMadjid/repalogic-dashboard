@@ -11,7 +11,8 @@
     @include('layouts.partials.page-title')
 
 
-    <div class="container-xxl">
+
+    
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -133,11 +134,4 @@
             </div>
             <!-- end col-->
         </div>
-        <!-- end row-->
-    </div>
-    <!-- end container -->
-    </div>
-    <!-- container -->
-
-    <!-- Footer Start -->
-@endsection
+        <!-- end row-->@endsection

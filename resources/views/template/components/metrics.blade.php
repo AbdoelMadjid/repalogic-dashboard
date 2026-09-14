@@ -467,8 +467,6 @@
         <!-- end col-->
     </div>
     <!-- end row-->
-    </div>
-    <!-- container -->
 @endsection
 
 @section('scripts')

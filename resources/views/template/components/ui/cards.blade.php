@@ -115,4 +115,9 @@
                 <div class="card-body">
                     <blockquote class="card-bodyquote mb-0">
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                    @endsection
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection

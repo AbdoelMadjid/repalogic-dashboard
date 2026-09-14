@@ -9,7 +9,8 @@
 
 
 
-    <div class="container">
+
+    
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -313,10 +314,7 @@
             </div>
             <!-- end col-->
         </div>
-        <!-- end row-->
-    </div>
-    <!-- end container-->
-@endsection
+        <!-- end row-->@endsection
 
 @section('scripts')
     <script src="{{ asset('assets/js/pages/plugins-animation.js') }}"></script>

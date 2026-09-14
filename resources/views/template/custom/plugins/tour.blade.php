@@ -9,7 +9,8 @@
 
 
 
-    <div class="container-xxl">
+
+    
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -179,10 +180,7 @@
             </div>
             <!-- end card -->
         </div>
-        <!-- end col -->
-    </div>
-    <!-- end Container -->
-@endsection
+        <!-- end col -->@endsection
 
 @section('scripts')
     <script src="{{ asset('assets/plugins/tourguidejs/tour.js') }}"></script>

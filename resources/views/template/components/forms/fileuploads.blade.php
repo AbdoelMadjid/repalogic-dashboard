@@ -10,7 +10,8 @@
     @include('layouts.partials.page-title')
 
 
-    <div class="container-xxl">
+
+    
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -151,12 +152,7 @@
             </div>
             <!-- end col -->
         </div>
-        <!-- end row -->
-    </div>
-    <!-- container -->
-    </div>
-    <!-- end container-fluid-->
-@endsection
+        <!-- end row -->@endsection
 
 @section('scripts')
     <script src="{{ asset('assets/plugins/dropzone/dropzone-min.js') }}"></script>

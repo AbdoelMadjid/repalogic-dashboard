@@ -1073,8 +1073,4 @@
         <!-- end col-xxl-10 -->
     </div>
     <!-- end row -->
-    </div>
-    <!-- container -->
-
-    <!-- Footer Start -->
 @endsection

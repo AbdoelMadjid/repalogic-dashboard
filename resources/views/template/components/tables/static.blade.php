@@ -11,7 +11,8 @@
     @include('layouts.partials.page-title')
 
 
-    <div class="container">
+
+    
         <div class="row justify-content-center">
             <div class="col-12">
                 <div class="card">
@@ -2023,9 +2024,4 @@
             </div>
             <!-- end col-->
         </div>
-        <!-- end row-->
-    </div>
-    <!-- container -->
-    </div>
-    <!-- end container-fluid-->
-@endsection
+        <!-- end row-->@endsection

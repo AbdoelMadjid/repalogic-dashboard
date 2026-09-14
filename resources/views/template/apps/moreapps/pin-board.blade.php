@@ -146,8 +146,4 @@
         </div>
     </div>
     <!-- end modal-->
-    </div>
-    <!-- container -->
-
-    <!-- Footer Start -->
 @endsection
