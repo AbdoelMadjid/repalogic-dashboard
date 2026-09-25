@@ -117,7 +117,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.9.2 -->
+                        <!-- Version 2.9.3 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -125,8 +125,38 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.9.2</h5>
+                                        <h5 class="fw-bold mb-0">v2.9.3</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.3</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-25 21:32 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Interactive Avatar Cropper Suite, Master Uncropped Photo Memory, Deterministic Randomized User Cover Backgrounds &amp; Indonesian UserFactory Seeder</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Interactive Avatar Cropper Suite (Cropper.js 1.6.2):</strong> Mengintegrasikan library Cropper.js lokal di <code>public/assets/plugins/cropperjs/</code> dengan modal pemotong foto interaktif (Zoom In/Out via tombol dan scroll mouse, pergeseran 4 arah / Pan, Putar 90°, Balik Horizontal, Reset skala, serta Live Circular &amp; Square Preview). Menghasilkan avatar persegi murni 1:1 (400x400 px) yang 100% presisi dan tajam di seluruh elemen aplikasi.</li>
+                                    <li><strong class="text-dark">Penyimpanan Master Foto Asli &amp; Re-Cropping Tanpa Batas ("Edit Posisi"):</strong> Mengimplementasikan arsitektur penyimpanan 2-file terpisah yang aman dan bersih: file master foto utuh (misal foto <em>full-body</em>) disimpan di <code>avatars/originals/</code> dan hasil potong disimpan di <code>avatars/</code>. Ketika user menekan tombol <strong>"Edit Posisi"</strong>, sistem membuka kembali master foto asli utuh lengkap dengan posisi crop sebelumnya sehingga posisi foto dapat disesuaikan ulang kapan pun tanpa kehilangan kualitas asli.</li>
+                                    <li><strong class="text-dark">Foto Sampul Default Acak / Random Deterministic:</strong> Menambahkan method <code>getDefaultCoverUrl()</code> pada model <code>User</code> dengan koleksi 10 stok foto pemandangan (<code>assets/images/stock/small-1.jpg</code> s.d. <code>small-10.jpg</code>). Setiap pengguna baru otomatis mendapatkan foto sampul bawaan yang bervariasi dan konsisten berbasis modulo ID / identifier tanpa membebani penyimpanan database, namun tetap dapat diganti kustom sewaktu-waktu oleh user.</li>
+                                    <li><strong class="text-dark">Nama Indonesia &amp; Email Serasi di UserFactory:</strong> Mengonfigurasi <code>UserFactory</code> menggunakan lokal <code>fake('id_ID')</code> untuk menghasilkan nama-nama Indonesia yang realistis dengan email slugged yang serasi dan dijamin unik untuk keperluan migrasi ratusan user dummy.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark border fs-xs">Interactive Avatar Cropper</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Cropper.js 1.6.2</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Master Photo Memory</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Random Cover Generator</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Indonesian UserFactory</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.9.2 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-sm text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.9.2</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.2</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-25 14:45 WIB</span>

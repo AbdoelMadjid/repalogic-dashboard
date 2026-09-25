@@ -7,21 +7,210 @@ function initProfilPengguna() {
     'use strict';
 
     // =========================================================================
-    // 1. Live Image Preview for Avatar & Foto KTP Upload
+    // 1. Interactive Cropper.js for Avatar Upload (2-File Architecture: 1:1 Cropped Avatar + Original Master)
     // =========================================================================
     const modalAvatarInput = document.getElementById('modal-avatar-input');
+    const modalAvatarOriginalInput = document.getElementById('modal-avatar-original-input');
+    const modalAvatarCropData = document.getElementById('modal-avatar-crop-data');
     const modalAvatarPreview = document.getElementById('modal-avatar-preview');
+    const cropModalEl = document.getElementById('modal-crop-avatar');
+    const cropSourceImage = document.getElementById('crop-source-image');
+    const btnApplyCrop = document.getElementById('btn-apply-crop');
 
-    if (modalAvatarInput && modalAvatarPreview) {
+    let cropperInstance = null;
+    let cropScaleX = 1;
+    let cropScaleY = 1;
+    let selectedRawFile = null;
+    let currentMasterDataUrl = null;
+    let savedCropData = window.ProfilPenggunaConfig?.avatarCropData || null;
+
+    if (modalAvatarInput && cropModalEl && cropSourceImage) {
+        const cropModal = bootstrap.Modal.getOrCreateInstance(cropModalEl);
+
+        // Handle new file selection from device
         modalAvatarInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    modalAvatarPreview.src = evt.target.result;
-                };
-                reader.readAsDataURL(file);
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                if (window.showError) {
+                    window.showError('Berkas yang dipilih harus berupa file gambar (JPG, PNG, WEBP, SVG).', 'Format Tidak Didukung');
+                }
+                modalAvatarInput.value = '';
+                return;
             }
+
+            selectedRawFile = file;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                currentMasterDataUrl = evt.target.result;
+                savedCropData = null; // Reset crop data for brand new photo
+                cropSourceImage.src = currentMasterDataUrl;
+                cropModal.show();
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Handle re-crop / adjust position on current photo
+        const btnReCropCurrent = document.getElementById('btn-re-crop-current');
+        if (btnReCropCurrent) {
+            btnReCropCurrent.addEventListener('click', function() {
+                const sourceToUse = currentMasterDataUrl ||
+                                    window.ProfilPenggunaConfig?.avatarOriginalUrl ||
+                                    (modalAvatarPreview && modalAvatarPreview.src && !modalAvatarPreview.src.includes('default-avatar.svg') ? modalAvatarPreview.src : null);
+
+                if (sourceToUse && !sourceToUse.includes('default-avatar.svg')) {
+                    cropSourceImage.src = sourceToUse;
+                    cropModal.show();
+                } else {
+                    modalAvatarInput.click();
+                }
+            });
+        }
+
+        cropModalEl.addEventListener('shown.bs.modal', function() {
+            if (cropperInstance) {
+                cropperInstance.destroy();
+            }
+
+            cropScaleX = 1;
+            cropScaleY = 1;
+
+            if (typeof Cropper !== 'undefined') {
+                cropperInstance = new Cropper(cropSourceImage, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    dragMode: 'move',
+                    autoCropArea: 0.9,
+                    restore: false,
+                    guides: true,
+                    center: true,
+                    highlight: false,
+                    cropBoxMovable: true,
+                    cropBoxResizable: true,
+                    toggleDragModeOnDblclick: false,
+                    preview: '.avatar-crop-preview, .avatar-crop-preview-square',
+                    ready: function() {
+                        // Jika ada data koordinat crop sebelumnya, terapkan kembali
+                        if (savedCropData && typeof savedCropData === 'object' && savedCropData.width) {
+                            try {
+                                cropperInstance.setData(savedCropData);
+                            } catch (e) {
+                                console.warn('Could not restore crop data', e);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        cropModalEl.addEventListener('hidden.bs.modal', function() {
+            if (cropperInstance) {
+                cropperInstance.destroy();
+                cropperInstance = null;
+            }
+        });
+
+        // Toolbar Buttons Integration
+        document.getElementById('btn-crop-zoom-in')?.addEventListener('click', function() {
+            cropperInstance?.zoom(0.1);
+        });
+        document.getElementById('btn-crop-zoom-out')?.addEventListener('click', function() {
+            cropperInstance?.zoom(-0.1);
+        });
+        document.getElementById('btn-crop-move-left')?.addEventListener('click', function() {
+            cropperInstance?.move(-15, 0);
+        });
+        document.getElementById('btn-crop-move-right')?.addEventListener('click', function() {
+            cropperInstance?.move(15, 0);
+        });
+        document.getElementById('btn-crop-move-up')?.addEventListener('click', function() {
+            cropperInstance?.move(0, -15);
+        });
+        document.getElementById('btn-crop-move-down')?.addEventListener('click', function() {
+            cropperInstance?.move(0, 15);
+        });
+        document.getElementById('btn-crop-rotate-left')?.addEventListener('click', function() {
+            cropperInstance?.rotate(-90);
+        });
+        document.getElementById('btn-crop-rotate-right')?.addEventListener('click', function() {
+            cropperInstance?.rotate(90);
+        });
+        document.getElementById('btn-crop-flip-x')?.addEventListener('click', function() {
+            cropScaleX = -cropScaleX;
+            cropperInstance?.scaleX(cropScaleX);
+        });
+        document.getElementById('btn-crop-reset')?.addEventListener('click', function() {
+            cropperInstance?.reset();
+            cropScaleX = 1;
+            cropScaleY = 1;
+        });
+
+        // Apply Cropped Image (Pixel-Perfect 400x400 Cropped Avatar + Master Photo Retention)
+        btnApplyCrop?.addEventListener('click', function() {
+            if (!cropperInstance) return;
+
+            // 1. Dapatkan koordinat & skala crop saat ini
+            const cropData = cropperInstance.getData(true);
+            savedCropData = cropData;
+
+            if (modalAvatarCropData) {
+                modalAvatarCropData.value = JSON.stringify(cropData);
+            }
+
+            // 2. Export hasil potongan 1:1 persegi beresolusi 400x400 px
+            const croppedCanvas = cropperInstance.getCroppedCanvas({
+                width: 400,
+                height: 400,
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: 'high',
+            });
+
+            if (!croppedCanvas) return;
+
+            croppedCanvas.toBlob(function(croppedBlob) {
+                if (!croppedBlob) return;
+
+                // A. Set file hasil crop murni ke input 'avatar'
+                try {
+                    const croppedFile = new File([croppedBlob], 'avatar-cropped.jpg', { type: 'image/jpeg' });
+                    const dt = new DataTransfer();
+                    dt.items.add(croppedFile);
+                    modalAvatarInput.files = dt.files;
+                } catch (err) {
+                    console.warn('DataTransfer cropped avatar error', err);
+                }
+
+                // B. Jika user memilih file baru dari disk, kirimkan juga master foto utuh
+                if (selectedRawFile && modalAvatarOriginalInput) {
+                    try {
+                        const origDt = new DataTransfer();
+                        origDt.items.add(selectedRawFile);
+                        modalAvatarOriginalInput.files = origDt.files;
+                    } catch (err) {
+                        console.warn('DataTransfer master original error', err);
+                    }
+                }
+
+                // C. Update pratinjau avatar di halaman profil (100% presisi dan tajam)
+                const croppedDataUrl = croppedCanvas.toDataURL('image/jpeg', 0.92);
+                if (modalAvatarPreview) {
+                    modalAvatarPreview.src = croppedDataUrl;
+                }
+
+                const mainHeaderAvatar = document.querySelector('.card-body img.rounded-circle.img-thumbnail');
+                if (mainHeaderAvatar) {
+                    mainHeaderAvatar.src = croppedDataUrl;
+                }
+
+                // D. Tutup Modal & Beri Notifikasi
+                cropModal.hide();
+
+                if (window.showToast) {
+                    window.showToast('Foto avatar berhasil dipotong presisi! Klik "Simpan Perubahan Profil" untuk menyimpan.', 'success', 4000);
+                }
+            }, 'image/jpeg', 0.92);
         });
     }
 

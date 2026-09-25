@@ -1,8 +1,7 @@
 @extends('layouts.vertical')
 
-@section('title', 'Profil Pengguna')
-
 @section('content')
+    <link href="{{ asset('assets/plugins/cropperjs/cropper.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/admin/profil-pengguna.css') }}" rel="stylesheet" type="text/css" />
 
     <!-- Header Page Title -->
@@ -41,7 +40,7 @@
                             <div style="width: 90px; height: 90px; flex-shrink: 0;">
                                 <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}"
                                     class="rounded-circle img-thumbnail shadow-sm"
-                                    style="width: 90px; height: 90px; min-width: 90px; min-height: 90px; object-fit: cover; object-position: top; aspect-ratio: 1 / 1;" />
+                                    style="width: 90px; height: 90px; min-width: 90px; min-height: 90px; object-fit: cover; object-position: center; aspect-ratio: 1 / 1;" />
                             </div>
                             <div>
                                 <h4 class="text-nowrap fw-bold mb-1">{{ $user->name }}</h4>
@@ -155,13 +154,18 @@
                             <div class="d-inline-block position-relative mb-2">
                                 <img src="{{ $user->avatar_url }}" id="modal-avatar-preview" alt="avatar"
                                     class="rounded-circle img-thumbnail shadow-sm"
-                                    style="width: 90px; height: 90px; min-width: 90px; min-height: 90px; object-fit: cover; object-position: top; aspect-ratio: 1 / 1;" />
+                                    style="width: 90px; height: 90px; min-width: 90px; min-height: 90px; object-fit: cover; object-position: center; aspect-ratio: 1 / 1;" />
                             </div>
-                            <div>
-                                <label for="modal-avatar-input" class="btn btn-sm btn-outline-primary fw-semibold cursor-pointer mb-0">
-                                    <i class="ti ti-camera me-1"></i> Pilih Foto Avatar
+                            <div class="d-flex justify-content-center align-items-center gap-1.5 flex-wrap">
+                                <label for="modal-avatar-input" class="btn btn-sm btn-outline-primary fw-semibold cursor-pointer mb-0" title="Unggah file foto baru dari komputer / perangkat">
+                                    <i class="ti ti-camera me-1"></i> Pilih Foto Baru
                                 </label>
+                                <button type="button" class="btn btn-sm btn-outline-secondary fw-semibold mb-0" id="btn-re-crop-current" title="Sesuaikan, perbesar, atau geser posisi foto yang sedang aktif">
+                                    <i class="ti ti-crop me-1"></i> Edit Posisi
+                                </button>
                                 <input type="file" name="avatar" id="modal-avatar-input" class="d-none" accept="image/*">
+                                <input type="file" name="avatar_original" id="modal-avatar-original-input" class="d-none" accept="image/*">
+                                <input type="hidden" name="avatar_crop_data" id="modal-avatar-crop-data" value="">
                             </div>
                             <span class="fs-12 text-muted d-block mt-1">Format: JPG, PNG, WEBP, SVG (Maks 2MB)</span>
                         </div>
@@ -807,6 +811,117 @@
         </div>
     @endif
 
+    <!-- MODAL SESUAIKAN & POTONG FOTO AVATAR (CROPPER.JS) -->
+    <div class="modal fade" id="modal-crop-avatar" tabindex="-1" aria-labelledby="modalCropAvatarLabel" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered cropper-modal-dialog">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white py-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="ti ti-crop fs-20"></i>
+                        <h5 class="modal-title text-white mb-0" id="modalCropAvatarLabel">Sesuaikan & Potong Foto Avatar</h5>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3 p-md-4 bg-light">
+                    <div class="row g-3 align-items-center">
+                        <!-- Area Pemotong Foto -->
+                        <div class="col-lg-8">
+                            <div class="cropper-container-box rounded border position-relative overflow-hidden mb-2">
+                                <img id="crop-source-image" src="" alt="Source Image for Cropping">
+                            </div>
+
+                            <!-- Toolbar Kontrol Cropper -->
+                            <div class="p-2 bg-white rounded border d-flex flex-wrap align-items-center justify-content-between gap-1 shadow-sm">
+                                <!-- Grup Zoom -->
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Zoom Controls">
+                                    <button type="button" class="btn btn-outline-secondary" id="btn-crop-zoom-in" title="Perbesar (Zoom In)">
+                                        <i class="ti ti-zoom-in"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" id="btn-crop-zoom-out" title="Perkecil (Zoom Out)">
+                                        <i class="ti ti-zoom-out"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Grup Geser (Pan / Move) -->
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Move Controls">
+                                    <button type="button" class="btn btn-outline-secondary" id="btn-crop-move-left" title="Geser ke Kiri">
+                                        <i class="ti ti-arrow-left"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" id="btn-crop-move-right" title="Geser ke Kanan">
+                                        <i class="ti ti-arrow-right"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" id="btn-crop-move-up" title="Geser ke Atas">
+                                        <i class="ti ti-arrow-up"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" id="btn-crop-move-down" title="Geser ke Bawah">
+                                        <i class="ti ti-arrow-down"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Grup Putar & Balik -->
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Rotate Controls">
+                                    <button type="button" class="btn btn-outline-secondary" id="btn-crop-rotate-left" title="Putar 90° ke Kiri">
+                                        <i class="ti ti-rotate-2"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" id="btn-crop-rotate-right" title="Putar 90° ke Kanan">
+                                        <i class="ti ti-rotate-clockwise-2"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" id="btn-crop-flip-x" title="Balik Horizontal">
+                                        <i class="ti ti-flip-horizontal"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Reset Button -->
+                                <button type="button" class="btn btn-sm btn-outline-danger" id="btn-crop-reset" title="Reset Posisi & Skala">
+                                    <i class="ti ti-refresh me-1"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Panel Preview & Petunjuk -->
+                        <div class="col-lg-4 text-center">
+                            <div class="bg-white p-3 rounded border shadow-sm h-100 d-flex flex-column justify-content-between">
+                                <div>
+                                    <h6 class="fw-bold text-dark mb-3 fs-13 text-uppercase tracking-wider">
+                                        <i class="ti ti-eye me-1 text-primary"></i> Live Preview Avatar
+                                    </h6>
+                                    <!-- Circular Preview -->
+                                    <div class="avatar-crop-preview mx-auto mb-2"></div>
+                                    <span class="fs-12 text-muted fw-medium d-block mb-3">Tampilan Lingkaran Profil</span>
+
+                                    <!-- Square Preview -->
+                                    <div class="avatar-crop-preview-square mx-auto mb-1"></div>
+                                    <span class="fs-11 text-muted d-block">Tampilan Kartu / Kontak</span>
+                                </div>
+
+                                <div class="alert alert-info py-2 px-2.5 fs-11 text-start mb-0 mt-3 border-0 bg-info-subtle text-info-emphasis">
+                                    <i class="ti ti-info-circle me-1"></i> <strong>Tips:</strong> Anda juga dapat menggeser (*drag*) dan melakukan *scroll mouse* langsung di atas gambar untuk memposisikan foto secara bebas.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light py-2.5 px-3 d-flex justify-content-between">
+                    <button type="button" class="btn btn-sm btn-secondary px-3" data-bs-dismiss="modal">
+                        <i class="ti ti-x me-1"></i> Batal
+                    </button>
+                    <button type="button" class="btn btn-sm btn-primary px-4 fw-semibold" id="btn-apply-crop">
+                        <i class="ti ti-check me-1.5"></i> Potong & Terapkan Foto
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- Page JS (Rule 1 Compliance: Place scripts inside @section('content') before @endsection) --}}
+    <script>
+        window.ProfilPenggunaConfig = {
+            userId: {{ $user->id }},
+            avatarOriginalUrl: @json($user->avatar_original_url),
+            avatarCropData: @json($user->avatar_crop_data),
+            avatarCurrentUrl: @json($user->avatar_url),
+        };
+    </script>
+    <script src="{{ asset('assets/plugins/cropperjs/cropper.min.js') }}"></script>
     <script src="{{ asset('assets/js/admin/profil-pengguna.js') }}"></script>
 @endsection

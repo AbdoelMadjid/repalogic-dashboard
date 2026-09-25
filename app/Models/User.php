@@ -197,6 +197,52 @@ class User extends Authenticatable
     }
 
     /**
+     * Get avatar visual offset position (e.g. "50% 20%") derived from crop data.
+     */
+    public function getAvatarPositionAttribute(): string
+    {
+        $cropData = $this->config?->settings['avatar_crop_data'] ?? null;
+        if (!empty($cropData) && isset($cropData['posX']) && isset($cropData['posY'])) {
+            return "{$cropData['posX']}% {$cropData['posY']}%";
+        }
+
+        return 'center top';
+    }
+
+    /**
+     * Get uncropped master avatar URL (for re-cropping from full photo), or fallback to avatar URL.
+     */
+    public function getAvatarOriginalUrlAttribute(): ?string
+    {
+        $origPath = $this->config?->settings['avatar_original'] ?? null;
+        if (!empty($origPath)) {
+            if (filter_var($origPath, FILTER_VALIDATE_URL)) {
+                return $origPath;
+            }
+            $path = ltrim($origPath, '/');
+            if (\Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+                return asset('storage/' . $path);
+            }
+            if (file_exists(public_path('storage/' . $path))) {
+                return asset('storage/' . $path);
+            }
+            if (file_exists(public_path($path))) {
+                return asset($path);
+            }
+        }
+
+        return !empty($this->avatar) ? $this->avatar_url : null;
+    }
+
+    /**
+     * Get avatar cropping configuration coordinates & scale data.
+     */
+    public function getAvatarCropDataAttribute(): ?array
+    {
+        return $this->config?->settings['avatar_crop_data'] ?? null;
+    }
+
+    /**
      * Get primary role name capitalized.
      */
     public function getRoleNameAttribute(): string
@@ -222,6 +268,33 @@ class User extends Authenticatable
     }
 
     /**
+     * Get default cover photo URL from stock assets (deterministic random per identifier or fallback).
+     */
+    public static function getDefaultCoverUrl(int|string|null $identifier = null): string
+    {
+        $stockImages = [
+            'assets/images/stock/small-1.jpg',
+            'assets/images/stock/small-2.jpg',
+            'assets/images/stock/small-3.jpg',
+            'assets/images/stock/small-4.jpg',
+            'assets/images/stock/small-5.jpg',
+            'assets/images/stock/small-6.jpg',
+            'assets/images/stock/small-7.jpg',
+            'assets/images/stock/small-8.jpg',
+            'assets/images/stock/small-9.jpg',
+            'assets/images/stock/small-10.jpg',
+        ];
+
+        if ($identifier !== null && $identifier !== '') {
+            $num = is_numeric($identifier) ? (int) $identifier : crc32((string) $identifier);
+            $index = abs($num) % count($stockImages);
+            return asset($stockImages[$index]);
+        }
+
+        return asset('assets/images/profile-bg.jpg');
+    }
+
+    /**
      * Accessor for user cover background banner URL.
      */
     public function getCoverBgUrlAttribute(): string
@@ -230,7 +303,7 @@ class User extends Authenticatable
             return $this->config->cover_bg_url;
         }
 
-        return asset('assets/images/profile-bg.jpg');
+        return self::getDefaultCoverUrl($this->id ?? $this->email);
     }
 
     /**

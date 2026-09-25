@@ -69,6 +69,6 @@ class UserConfig extends Model
             }
         }
 
-        return asset('assets/images/profile-bg.jpg');
+        return User::getDefaultCoverUrl($this->user_id ?? $this->id);
     }
 }

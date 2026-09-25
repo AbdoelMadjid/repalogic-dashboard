@@ -30,7 +30,9 @@ class ProfilPenggunaRequest extends FormRequest
                 'max:255',
                 Rule::unique('users', 'email')->ignore(auth()->id()),
             ],
-            'avatar' => 'nullable|image|mimes:jpeg,jpg,png,gif,svg,webp|max:2048',
+            'avatar' => 'nullable|image|mimes:jpeg,jpg,png,gif,svg,webp|max:5120',
+            'avatar_original' => 'nullable|image|mimes:jpeg,jpg,png,gif,svg,webp|max:10240',
+            'avatar_crop_data' => 'nullable|string|max:1000',
             'password' => 'nullable|string|min:8|confirmed',
         ];
     }

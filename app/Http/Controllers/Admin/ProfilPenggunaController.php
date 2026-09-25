@@ -37,7 +37,7 @@ class ProfilPenggunaController extends Controller
             $user->password = Hash::make($request->input('password'));
         }
 
-        // Handle Avatar File Upload
+        // Handle Cropped Avatar File Upload (True 1:1 Pixel-Perfect Square Avatar)
         if ($request->hasFile('avatar')) {
             if (!empty($user->avatar) && Storage::disk('public')->exists($user->avatar)) {
                 Storage::disk('public')->delete($user->avatar);
@@ -48,6 +48,35 @@ class ProfilPenggunaController extends Controller
         }
 
         $user->save();
+
+        // Handle Master Original Photo & Crop Coordinates in UserConfig Settings
+        $config = \App\Models\UserConfig::firstOrNew(['user_id' => $user->id]);
+        $settings = $config->settings ?? [];
+        $settingsUpdated = false;
+
+        if ($request->hasFile('avatar_original')) {
+            $oldOriginal = $settings['avatar_original'] ?? null;
+            if (!empty($oldOriginal) && Storage::disk('public')->exists($oldOriginal)) {
+                Storage::disk('public')->delete($oldOriginal);
+            }
+
+            $origPath = $request->file('avatar_original')->store('avatars/originals', 'public');
+            $settings['avatar_original'] = $origPath;
+            $settingsUpdated = true;
+        }
+
+        if ($request->filled('avatar_crop_data')) {
+            $cropData = json_decode($request->input('avatar_crop_data'), true);
+            if (is_array($cropData)) {
+                $settings['avatar_crop_data'] = $cropData;
+                $settingsUpdated = true;
+            }
+        }
+
+        if ($settingsUpdated) {
+            $config->settings = $settings;
+            $config->save();
+        }
 
         $this->notifySuccess('Profil utama Anda berhasil diperbarui.', 'Berhasil!');
 

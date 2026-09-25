@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v2.9.2`  
-> **Terakhir Diperbarui:** 25 September 2026 14:45 WIB  
+> **Versi Terbaru:** `v2.9.3`  
+> **Terakhir Diperbarui:** 25 September 2026 21:32 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v2.9.3`** | `2026-09-25 21:32 WIB` | Interactive Avatar Cropper Suite (Cropper.js 1.6.2, Zoom, 4-Way Pan, Rotate 90°, Flip, Live Circular Preview, 1:1 Pixel-Perfect 400x400 Cropped Avatar, Master Uncropped Photo Memory for Seamless Re-Cropping / Edit Posisi), Deterministic Randomized Default Cover Photos Engine (`User::getDefaultCoverUrl`, 10 Stock Covers) & Indonesian Names/Matching Emails in `UserFactory` (`fake('id_ID')`) |
 | **`v2.9.2`** | `2026-09-25 14:45 WIB` | Responsive Page Title & Breadcrumb 2-Row Mobile Layout (`page-title.blade.php`, `flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-1 gap-sm-2` & `text-start text-sm-end`) |
 | **`v2.9.1`** | `2026-09-14 23:20 WIB` | Translation Management Overhaul (File Manager Outlook-Box Split-Panel Layout, Dynamic Vertical Domain Tabs, Dedicated Internal Table Scroll Container, Sticky Table Header & Zero Browser Scroll) |
 | **`v2.9.0`** | `2026-09-13 21:40 WIB` | Topbar Sidenav Mobile-Only Toggle Button (`d-flex d-lg-none`), Default Expanded Sidebar on Desktop, Standardized Card Header Action Buttons (2-Column Layout, Far-Right Alignment & Responsive Mobile Icon-Only with Hover Title - Rule 16) |

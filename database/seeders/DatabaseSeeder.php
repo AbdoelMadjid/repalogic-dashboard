@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
         $user3->assignRole('operator');
 
         // 3. Seed 10 Dummy Users dengan Role 'user' via Factory
-        User::factory()->count(10)->create();
+        User::factory()->count(100)->create();
 
         // 4. Seed Menus & Permissions
         $this->call(MainMenuSeeder::class);
