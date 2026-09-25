@@ -117,7 +117,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.9.4 -->
+                        <!-- Version 2.9.5 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -125,8 +125,34 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.9.4</h5>
+                                        <h5 class="fw-bold mb-0">v2.9.5</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.5</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-26 00:15 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Restorasi Font Tabler Icons pada Tema Website Default: Perbaikan Aset Font Lengkap (WOFF2, WOFF, TTF)</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Restorasi Aset Font Tabler Icons:</strong> Menyediakan dan menempatkan berkas font resmi Tabler Icons (<code>tabler-icons.woff2</code>, <code>tabler-icons.woff</code>, <code>tabler-icons.ttf</code>) ke dalam direktori <code>public/assets_default/css/fonts/</code> dan <code>public/assets_default/fonts/</code>.</li>
+                                    <li><strong class="text-dark">Penyelesaian Kendala Icon Hilang / Tidak Tampil:</strong> Memperbaiki kegagalan resolusi path relatif dari <code>vendors.min.css</code> sehingga seluruh icon berbasis kelas <code>ti ti-*</code> pada seluruh seksi dan komponen tema landing page default (Hero, Services, Features, Plans, Reviews, Blog, Contact, Header, Footer, Back-to-Top) tampil sempurna.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark border fs-xs">Font Assets</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Tabler Icons</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Landing Page Fix</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.9.4 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xs text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.9.4</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.4</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-25 23:45 WIB</span>
