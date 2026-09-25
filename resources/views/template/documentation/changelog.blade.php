@@ -117,7 +117,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.9.3 -->
+                        <!-- Version 2.9.4 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -125,8 +125,40 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.9.3</h5>
+                                        <h5 class="fw-bold mb-0">v2.9.4</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.4</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-25 23:45 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Dynamic Multi-Theme Engine &amp; Seksi Website: Integrasi Tema Unify Education Portal, Template Auth Login Dinamis &amp; Pemisahan Aset Publik Mandiri</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Pemisahan Aset Publik Mandiri (Isolasi Total):</strong> Memisahkan seluruh referensi gambar, CSS, dan JavaScript landing page publik ke dalam direktori terisolasi <code>public/assets_default/</code> (tema landing Inspinia) dan <code>public/asset_education/</code> (tema Unify Education) sehingga independen dari aset dashboard internal.</li>
+                                    <li><strong class="text-dark">Arsitektur Modular Tema Education:</strong> Mengonversi 14 halaman HTML Unify Education menjadi Blade views modular di <code>resources/views/website/education/</code> yang mewarisi master layout <code>index.blade.php</code> dengan partials <code>_css.blade.php</code>, <code>_header.blade.php</code>, <code>_footer.blade.php</code>, dan <code>_js.blade.php</code>.</li>
+                                    <li><strong class="text-dark">Integrasi Tema &amp; Seksi di Database &amp; Seeder:</strong> Mendaftarkan entitas tema <em>Unify Education Portal</em> dan 13 seksi/halaman resmi di <code>WebsiteThemeSeeder</code>, memungkinkan administrator mengelola urutan, status visibilitas, dan mengedit script Blade langsung via antarmuka GUI di <code>/admin/dukunganaplikasi/konfigurasi-website</code>.</li>
+                                    <li><strong class="text-dark">Halaman Login Dinamis (<code>page-signin-1.blade.php</code>):</strong> Mengintegrasikan template login Unify Education dengan seluruh siklus hidup autentikasi Laravel (CSRF protection, inline error handling, session flash status, rate limiting throttle, aktivasi akun, dan capture koordinat geolokasi). <code>AuthenticatedSessionController::create()</code> otomatis me-render login sesuai tema yang aktif.</li>
+                                    <li><strong class="text-dark">Standarisasi Menu Autentikasi Header:</strong> Menyesuaikan seluruh tombol autentikasi pada topbar, navigation bar, jump-to dropdown, dan mega menu tema Education agar konsisten mengikuti status login pengguna (<code>@auth</code> menuju Dashboard, <code>@guest</code> menuju Sign in / Register).</li>
+                                    <li><strong class="text-dark">Dynamic Multipage Route Handler:</strong> Menambahkan handler route dinamis di <code>routes/web.php</code> untuk mendukung rendering instan seluruh sub-halaman multipage tema aktif.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark border fs-xs">Multi-Theme Engine</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Unify Education Portal</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Dynamic Auth Login</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Modular Blade Architecture</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Isolated Public Assets</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.9.3 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-sm text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.9.3</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.3</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-25 21:32 WIB</span>

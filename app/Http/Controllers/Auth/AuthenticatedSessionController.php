@@ -16,6 +16,17 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
+        if (class_exists(\App\Models\Admin\DukunganAplikasi\WebsiteTheme::class)) {
+            try {
+                $activeTheme = \App\Models\Admin\DukunganAplikasi\WebsiteTheme::getActiveTheme();
+                if ($activeTheme && view()->exists("website.{$activeTheme->folder}.page-signin-1")) {
+                    return view("website.{$activeTheme->folder}.page-signin-1");
+                }
+            } catch (\Exception $e) {
+                // Fallback to default auth.login
+            }
+        }
+
         return view('auth.login');
     }
 

@@ -133,6 +133,188 @@ class WebsiteThemeSeeder extends Seeder
             );
         }
 
+        // ==========================================
+        // 2. TEMA EDUCATION (UNIFY EDUCATION PORTAL)
+        // ==========================================
+        $eduTheme = WebsiteTheme::updateOrCreate(
+            ['slug' => 'education'],
+            [
+                'name' => 'Unify Education Portal',
+                'folder' => 'education',
+                'description' => 'Tema portal website kampus & institusi pendidikan multipage berbasis Unify.',
+                'is_active' => false,
+            ]
+        );
+
+        $eduSections = [
+            [
+                'section_name' => 'Home Utama (Carousel & Intro)',
+                'section_key' => 'home',
+                'section_file' => 'home-page-1.blade.php',
+                'nav_title' => 'Home',
+                'target_id' => 'home',
+                'show_in_nav' => true,
+                'is_active' => true,
+                'orders' => 1,
+                'bg_type' => 'default',
+                'bg_color_class' => null,
+            ],
+            [
+                'section_name' => 'Programs & Akademik (Programs)',
+                'section_key' => 'programs',
+                'section_file' => 'page-programs-1.blade.php',
+                'nav_title' => 'Programs',
+                'target_id' => 'programs',
+                'show_in_nav' => true,
+                'is_active' => true,
+                'orders' => 2,
+                'bg_type' => 'default',
+                'bg_color_class' => null,
+            ],
+            [
+                'section_name' => 'Calon Mahasiswa (Future Students)',
+                'section_key' => 'future-students',
+                'section_file' => 'page-future-students-1.blade.php',
+                'nav_title' => 'Future Students',
+                'target_id' => 'future-students',
+                'show_in_nav' => true,
+                'is_active' => true,
+                'orders' => 3,
+                'bg_type' => 'default',
+                'bg_color_class' => null,
+            ],
+            [
+                'section_name' => 'Mahasiswa Aktif (Current Students)',
+                'section_key' => 'current-students',
+                'section_file' => 'page-current-students-1.blade.php',
+                'nav_title' => 'Current Students',
+                'target_id' => 'current-students',
+                'show_in_nav' => true,
+                'is_active' => true,
+                'orders' => 4,
+                'bg_type' => 'default',
+                'bg_color_class' => null,
+            ],
+            [
+                'section_name' => 'Dosen & Staf (Faculty & Staff)',
+                'section_key' => 'faculty-staff',
+                'section_file' => 'page-faculty-and-staff-1.blade.php',
+                'nav_title' => 'Faculty & Staff',
+                'target_id' => 'faculty-staff',
+                'show_in_nav' => true,
+                'is_active' => true,
+                'orders' => 5,
+                'bg_type' => 'default',
+                'bg_color_class' => null,
+            ],
+            [
+                'section_name' => 'Agenda & Kegiatan Kampus (Events)',
+                'section_key' => 'events',
+                'section_file' => 'page-events-1.blade.php',
+                'nav_title' => 'Events',
+                'target_id' => 'events',
+                'show_in_nav' => true,
+                'is_active' => true,
+                'orders' => 6,
+                'bg_type' => 'default',
+                'bg_color_class' => null,
+            ],
+            [
+                'section_name' => 'Ikatan Alumni Kampus (Alumni)',
+                'section_key' => 'alumni',
+                'section_file' => 'page-alumni-1.blade.php',
+                'nav_title' => 'Alumni',
+                'target_id' => 'alumni',
+                'show_in_nav' => true,
+                'is_active' => true,
+                'orders' => 7,
+                'bg_type' => 'default',
+                'bg_color_class' => null,
+            ],
+            [
+                'section_name' => 'Kehidupan Kampus (Campus Life)',
+                'section_key' => 'campus-life',
+                'section_file' => 'page-campus-life-1.blade.php',
+                'nav_title' => 'Campus Life',
+                'target_id' => 'campus-life',
+                'show_in_nav' => true,
+                'is_active' => true,
+                'orders' => 8,
+                'bg_type' => 'default',
+                'bg_color_class' => null,
+            ],
+            [
+                'section_name' => 'Riset & Penelitian (Research)',
+                'section_key' => 'research',
+                'section_file' => 'page-research-1.blade.php',
+                'nav_title' => 'Research',
+                'target_id' => 'research',
+                'show_in_nav' => true,
+                'is_active' => true,
+                'orders' => 9,
+                'bg_type' => 'default',
+                'bg_color_class' => null,
+            ],
+            [
+                'section_name' => 'Pendaftaran Online (Apply Now)',
+                'section_key' => 'apply',
+                'section_file' => 'page-apply-1.blade.php',
+                'nav_title' => 'Apply',
+                'target_id' => 'apply',
+                'show_in_nav' => true,
+                'is_active' => true,
+                'orders' => 10,
+                'bg_type' => 'default',
+                'bg_color_class' => null,
+            ],
+            [
+                'section_name' => 'Bantuan & FAQ (Help)',
+                'section_key' => 'help',
+                'section_file' => 'page-help-1.blade.php',
+                'nav_title' => 'Help',
+                'target_id' => 'help',
+                'show_in_nav' => true,
+                'is_active' => true,
+                'orders' => 11,
+                'bg_type' => 'default',
+                'bg_color_class' => null,
+            ],
+            [
+                'section_name' => 'Kontak & Informasi (Contacts)',
+                'section_key' => 'contacts',
+                'section_file' => 'page-contacts-1.blade.php',
+                'nav_title' => 'Contacts',
+                'target_id' => 'contacts',
+                'show_in_nav' => true,
+                'is_active' => true,
+                'orders' => 12,
+                'bg_type' => 'default',
+                'bg_color_class' => null,
+            ],
+            [
+                'section_name' => 'Portal Autentikasi (Sign In)',
+                'section_key' => 'signin',
+                'section_file' => 'page-signin-1.blade.php',
+                'nav_title' => 'Sign In',
+                'target_id' => 'signin',
+                'show_in_nav' => false,
+                'is_active' => true,
+                'orders' => 13,
+                'bg_type' => 'default',
+                'bg_color_class' => null,
+            ],
+        ];
+
+        foreach ($eduSections as $sec) {
+            WebsiteSection::updateOrCreate(
+                [
+                    'website_theme_id' => $eduTheme->id,
+                    'section_key' => $sec['section_key'],
+                ],
+                $sec
+            );
+        }
+
         WebsiteTheme::clearCache();
     }
 }

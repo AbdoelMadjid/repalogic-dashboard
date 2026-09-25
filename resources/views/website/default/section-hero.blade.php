@@ -1,7 +1,7 @@
 <section class="section-custom" id="hero">
     <!-- Background Pattern -->
     <div class="position-absolute top-0 start-50 translate-middle-x mt-5">
-        <img src="{{ asset('assets/images/bg-pattern.png') }}" alt="" />
+        <img src="{{ asset('assets_default/images/bg-pattern.png') }}" alt="" />
     </div>
 
     <div class="container pt-5 position-relative">
@@ -14,23 +14,23 @@
                 <!-- Avatar Group -->
                 <div class="avatar-group avatar-group-sm justify-content-center mt-2">
                     <div class="avatar">
-                        <img src="{{ asset('assets/images/users/user-7.jpg') }}" alt="Ava Lee"
+                        <img src="{{ asset('assets_default/images/users/user-7.jpg') }}" alt="Ava Lee"
                             class="avatar-sm rounded-circle" />
                     </div>
                     <div class="avatar">
-                        <img src="{{ asset('assets/images/users/user-8.jpg') }}" alt="Ethan King"
+                        <img src="{{ asset('assets_default/images/users/user-8.jpg') }}" alt="Ethan King"
                             class="avatar-sm rounded-circle" />
                     </div>
                     <div class="avatar">
-                        <img src="{{ asset('assets/images/users/user-9.jpg') }}" alt="Lucas White"
+                        <img src="{{ asset('assets_default/images/users/user-9.jpg') }}" alt="Lucas White"
                             class="avatar-sm rounded-circle" />
                     </div>
                     <div class="avatar">
-                        <img src="{{ asset('assets/images/users/user-1.jpg') }}" alt="Lucas White"
+                        <img src="{{ asset('assets_default/images/users/user-1.jpg') }}" alt="Lucas White"
                             class="avatar-sm rounded-circle" />
                     </div>
                     <div class="avatar">
-                        <img src="{{ asset('assets/images/users/user-2.jpg') }}" alt="Lucas White"
+                        <img src="{{ asset('assets_default/images/users/user-2.jpg') }}" alt="Lucas White"
                             class="avatar-sm rounded-circle" />
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                     </figure>
 
                     <!-- Hero Main Image -->
-                    <img src="{{ asset('assets/images/dashboard-1.png') }}"
+                    <img src="{{ asset('assets_default/images/dashboard-1.png') }}"
                         class="rounded-top-4 shadow-lg img-fluid mt-5" alt="saas-img" />
                 </div>
             </div>

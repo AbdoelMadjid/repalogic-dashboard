@@ -17,14 +17,14 @@
                         </div>
 
                         <!-- Card image -->
-                        <img class="card-img-top rounded-top-3" src="{{ asset('assets/images/blog/blog-4.jpg') }}"
+                        <img class="card-img-top rounded-top-3" src="{{ asset('assets_default/images/blog/blog-4.jpg') }}"
                             alt="Tech Innovations" />
 
                         <!-- Card Body -->
                         <div class="card-body">
                             <!-- Title -->
                             <h6 class="card-title fs-lg lh-base mb-2">
-                                <a href="{{ asset('article.html') }}" class="link-reset">The Future of Artificial
+                                <a href="#!" class="link-reset">The Future of Artificial
                                     Intelligence</a>
                             </h6>
                             <p class="mb-3 text-muted">Discover how AI is transforming industries and what the future
@@ -42,7 +42,7 @@
                         <div class="card-footer bg-transparent d-flex justify-content-between border-0">
                             <div class="d-flex justify-content-start align-items-center gap-2">
                                 <div class="avatar avatar-xs">
-                                    <img src="{{ asset('assets/images/users/user-4.jpg') }}" alt="avatar-4"
+                                    <img src="{{ asset('assets_default/images/users/user-4.jpg') }}" alt="avatar-4"
                                         class="img-fluid rounded-circle" />
                                 </div>
                                 <div>
@@ -51,7 +51,7 @@
                                     </h5>
                                 </div>
                             </div>
-                            <a class="link-primary fw-semibold" href="{{ asset('article.html') }}">Read more <i
+                            <a class="link-primary fw-semibold" href="#!">Read more <i
                                     class="ti ti-arrow-right"></i></a>
                         </div>
                     </article>
@@ -65,14 +65,14 @@
                         </div>
 
                         <!-- Card image -->
-                        <img class="card-img-top rounded-top-3" src="{{ asset('assets/images/blog/blog-5.jpg') }}"
+                        <img class="card-img-top rounded-top-3" src="{{ asset('assets_default/images/blog/blog-5.jpg') }}"
                             alt="Data Science Trends" />
 
                         <!-- Card Body -->
                         <div class="card-body">
                             <!-- Title -->
                             <h6 class="card-title fs-lg lh-base mb-2">
-                                <a href="{{ asset('article.html') }}" class="link-reset">Top Data Science Trends in
+                                <a href="#!" class="link-reset">Top Data Science Trends in
                                     2025</a>
                             </h6>
                             <p class="mb-3 text-muted">Get ahead in the data science field with the latest trends,
@@ -90,7 +90,7 @@
                         <div class="card-footer bg-transparent d-flex justify-content-between border-0">
                             <div class="d-flex justify-content-start align-items-center gap-2">
                                 <div class="avatar avatar-xs">
-                                    <img src="{{ asset('assets/images/users/user-1.jpg') }}" alt="avatar-1"
+                                    <img src="{{ asset('assets_default/images/users/user-1.jpg') }}" alt="avatar-1"
                                         class="img-fluid rounded-circle" />
                                 </div>
                                 <div>
@@ -99,7 +99,7 @@
                                     </h5>
                                 </div>
                             </div>
-                            <a class="link-primary fw-semibold" href="{{ asset('article.html') }}">Read more <i
+                            <a class="link-primary fw-semibold" href="#!">Read more <i
                                     class="ti ti-arrow-right"></i></a>
                         </div>
                     </article>
@@ -112,14 +112,14 @@
                         <div class="badge text-bg-dark badge-label position-absolute top-0 start-0 m-3">Business</div>
 
                         <!-- Card image -->
-                        <img class="card-img-top rounded-top-3" src="{{ asset('assets/images/blog/blog-3.jpg') }}"
+                        <img class="card-img-top rounded-top-3" src="{{ asset('assets_default/images/blog/blog-3.jpg') }}"
                             alt="Entrepreneur Tips" />
 
                         <!-- Card Body -->
                         <div class="card-body">
                             <!-- Title -->
                             <h6 class="card-title fs-lg lh-base mb-2">
-                                <a href="{{ asset('article.html') }}" class="link-reset">5 Key Tips for New
+                                <a href="#!" class="link-reset">5 Key Tips for New
                                     Entrepreneurs</a>
                             </h6>
                             <p class="mb-3 text-muted">Start your entrepreneurial journey with these 5 essential tips
@@ -137,7 +137,7 @@
                         <div class="card-footer bg-transparent d-flex justify-content-between border-0">
                             <div class="d-flex justify-content-start align-items-center gap-2">
                                 <div class="avatar avatar-xs">
-                                    <img src="{{ asset('assets/images/users/user-7.jpg') }}" alt="avatar-7"
+                                    <img src="{{ asset('assets_default/images/users/user-7.jpg') }}" alt="avatar-7"
                                         class="img-fluid rounded-circle" />
                                 </div>
                                 <div>
@@ -146,7 +146,7 @@
                                     </h5>
                                 </div>
                             </div>
-                            <a class="link-primary fw-semibold" href="{{ asset('article.html') }}">Read more <i
+                            <a class="link-primary fw-semibold" href="#!">Read more <i
                                     class="ti ti-arrow-right"></i></a>
                         </div>
                     </article>

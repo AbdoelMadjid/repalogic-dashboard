@@ -1,7 +1,7 @@
 <section class="section-custom" id="reviews">
     <!-- background pattern -->
     <div class="position-absolute top-0 start-50 translate-middle-x mt-5 opacity-50">
-        <img src="{{ asset('assets/images/bg-pattern.png') }}" alt="" />
+        <img src="{{ asset('assets_default/images/bg-pattern.png') }}" alt="" />
     </div>
 
     <div class="container position-relative">
@@ -19,7 +19,7 @@
                 <div class="card border-light rounded-4 p-3 card-h-100">
                     <div class="card-body pb-0 text-center">
                         <div class="avatar avatar-xl mx-auto mb-3">
-                            <img src="{{ asset('assets/images/users/user-1.jpg') }}" alt="Emily Carter"
+                            <img src="{{ asset('assets_default/images/users/user-1.jpg') }}" alt="Emily Carter"
                                 class="img-fluid rounded-circle" />
                         </div>
                         <span class="text-warning fs-lg mb-3 d-block">
@@ -40,7 +40,7 @@
                 <div class="card border-light rounded-4 p-3 card-h-100">
                     <div class="card-body pb-0 text-center">
                         <div class="avatar avatar-xl mx-auto mb-3">
-                            <img src="{{ asset('assets/images/users/user-2.jpg') }}" alt="Michael Zhang"
+                            <img src="{{ asset('assets_default/images/users/user-2.jpg') }}" alt="Michael Zhang"
                                 class="img-fluid rounded-circle" />
                         </div>
                         <span class="text-warning fs-lg mb-3 d-block">
@@ -61,7 +61,7 @@
                 <div class="card border-light rounded-4 p-3 card-h-100">
                     <div class="card-body pb-0 text-center">
                         <div class="avatar avatar-xl mx-auto mb-3">
-                            <img src="{{ asset('assets/images/users/user-3.jpg') }}" alt="Sara Lopez"
+                            <img src="{{ asset('assets_default/images/users/user-3.jpg') }}" alt="Sara Lopez"
                                 class="img-fluid rounded-circle" />
                         </div>
                         <span class="text-warning fs-lg mb-3 d-block">
@@ -82,7 +82,7 @@
                 <div class="card border-light rounded-4 p-3 card-h-100">
                     <div class="card-body pb-0 text-center">
                         <div class="avatar avatar-xl mx-auto mb-3">
-                            <img src="{{ asset('assets/images/users/user-4.jpg') }}" alt="James Whitman"
+                            <img src="{{ asset('assets_default/images/users/user-4.jpg') }}" alt="James Whitman"
                                 class="img-fluid rounded-circle" />
                         </div>
                         <span class="text-warning fs-lg mb-3 d-block">
@@ -103,7 +103,7 @@
                 <div class="card border-light rounded-4 p-3 card-h-100">
                     <div class="card-body pb-0 text-center">
                         <div class="avatar avatar-xl mx-auto mb-3">
-                            <img src="{{ asset('assets/images/users/user-5.jpg') }}" alt="Aisha Khan"
+                            <img src="{{ asset('assets_default/images/users/user-5.jpg') }}" alt="Aisha Khan"
                                 class="img-fluid rounded-circle" />
                         </div>
                         <span class="text-warning fs-lg mb-3 d-block">
@@ -127,37 +127,37 @@
                 <div class="d-flex justify-content-center align-items-center flex-wrap gap-5 mt-4">
                     <div>
                         <a href="#!" class="d-block">
-                            <img src="{{ asset('assets/images/clients/01.svg') }}" alt="logo" height="42" />
+                            <img src="{{ asset('assets_default/images/clients/01.svg') }}" alt="logo" height="42" />
                         </a>
                     </div>
                     <div>
                         <a href="#!" class="d-block">
-                            <img src="{{ asset('assets/images/clients/02.svg') }}" alt="logo" height="42" />
+                            <img src="{{ asset('assets_default/images/clients/02.svg') }}" alt="logo" height="42" />
                         </a>
                     </div>
                     <div>
                         <a href="#!" class="d-block">
-                            <img src="{{ asset('assets/images/clients/03.svg') }}" alt="logo" height="42" />
+                            <img src="{{ asset('assets_default/images/clients/03.svg') }}" alt="logo" height="42" />
                         </a>
                     </div>
                     <div>
                         <a href="#!" class="d-block">
-                            <img src="{{ asset('assets/images/clients/04.svg') }}" alt="logo" height="42" />
+                            <img src="{{ asset('assets_default/images/clients/04.svg') }}" alt="logo" height="42" />
                         </a>
                     </div>
                     <div>
                         <a href="#!" class="d-block">
-                            <img src="{{ asset('assets/images/clients/05.svg') }}" alt="logo" height="42" />
+                            <img src="{{ asset('assets_default/images/clients/05.svg') }}" alt="logo" height="42" />
                         </a>
                     </div>
                     <div>
                         <a href="#!" class="d-block">
-                            <img src="{{ asset('assets/images/clients/06.svg') }}" alt="logo" height="42" />
+                            <img src="{{ asset('assets_default/images/clients/06.svg') }}" alt="logo" height="42" />
                         </a>
                     </div>
                     <div>
                         <a href="#!" class="d-block">
-                            <img src="{{ asset('assets/images/clients/07.svg') }}" alt="logo" height="42" />
+                            <img src="{{ asset('assets_default/images/clients/07.svg') }}" alt="logo" height="42" />
                         </a>
                     </div>
                 </div>

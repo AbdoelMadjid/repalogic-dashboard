@@ -137,10 +137,14 @@ repalogic-dashboard/
 │   │       ├── konfigurasi_website_modal_tampilgambar.blade.php
 │   │       └── konfigurasi_website_modal_script_editor.blade.php  <-- GUI Code Editor Modal
 │   ├── website/                                <-- Sub-Directory Tema Blade
-│   │   ├── default/                            <-- Seksi Tema Default
-│   │   └── partials/
-│   │       └── _css.blade.php                  <-- Styling Global & Backdrop Filter Blur
-│   └── welcome.blade.php                       <-- Landing Page Renderer Engine
+│   │   ├── default/                            <-- Seksi Tema Default Inspinia (Landing Page)
+│   │   │   ├── partials/
+│   │   │   └── index.blade.php
+│   │   ├── education/                          <-- Seksi Tema Unify Education (Portal Kampus)
+│   │   │   ├── partials/
+│   │   │   ├── home-page-1.blade.php
+│   │   │   └── index.blade.php
+│   └── welcome.blade.php                       <-- Dynamic Theme Renderer Engine
 └── docs/
     └── arsitektur_dinamisasi_tema_website.md   <-- [File Ini]
 ```
