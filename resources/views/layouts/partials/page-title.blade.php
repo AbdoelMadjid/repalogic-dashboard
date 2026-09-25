@@ -252,12 +252,12 @@
     }
 @endphp
 
-<div class="page-title-head d-flex align-items-center">
+<div class="page-title-head d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-1 gap-sm-2">
     <div class="flex-grow-1">
         <h4 class="page-main-title m-0" style="text-transform: none !important;"
             @if (!empty($activeDataLang)) data-lang="{{ $activeDataLang }}" @endif>{{ $pageMainTitle }}</h4>
     </div>
-    <div class="text-end">
+    <div class="text-start text-sm-end">
         <ol class="breadcrumb m-0 py-0" style="text-transform: none !important;">
             @foreach ($breadcrumbItems as $item)
                 @php

@@ -117,7 +117,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.9.1 -->
+                        <!-- Version 2.9.2 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -125,8 +125,28 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.9.1</h5>
+                                        <h5 class="fw-bold mb-0">v2.9.2</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.2</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-25 14:45 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Responsive Page Title &amp; Breadcrumb 2-Row Mobile Optimization (<code>page-title.blade.php</code>)</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Responsive 2-Row Mobile Title &amp; Breadcrumb Layout:</strong> Menata ulang kontainer judul halaman dan breadcrumb (<code>page-title.blade.php</code>) menggunakan utilitas flex responsif (<code>flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-1 gap-sm-2</code>). Pada mode tampilan mobile/layar kecil (&lt; sm), judul dan breadcrumb otomatis tersusun vertikal menjadi 2 baris (Judul di baris pertama, Breadcrumb di baris kedua) dengan perataan teks rata kiri (<code>text-start</code>), sementara pada layar desktop/tablet tetap rapi sejajar 1 baris (<code>text-sm-end</code>).</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.9.1 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-sm text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.9.1</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.1</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-14 23:20 WIB</span>
