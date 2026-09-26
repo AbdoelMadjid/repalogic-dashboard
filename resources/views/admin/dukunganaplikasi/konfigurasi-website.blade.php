@@ -88,26 +88,27 @@
                                             </div>
 
                                             <div class="pt-3 border-top d-flex align-items-center justify-content-between gap-2">
-                                                <span class="fs-12 text-muted">
-                                                    <i class="ti ti-layers-subtract me-1"></i> {{ $th->sections->count() }} {{ $th->isMultipage() ? 'Halaman' : 'Seksi' }}
+                                                <span class="fs-12 text-muted text-nowrap">
+                                                    <i class="ti ti-layers-subtract me-1"></i><strong>{{ $th->sections->count() }}</strong> {{ $th->isMultipage() ? 'Halaman' : 'Seksi' }}
                                                 </span>
-                                                <div class="d-flex align-items-center gap-1">
+                                                <div class="d-flex align-items-center gap-1.5 flex-nowrap">
                                                     @if (!$th->is_active)
                                                         <form action="{{ route('admin.dukunganaplikasi.konfigurasi-website.activate-theme', $th->id) }}" method="POST" class="d-inline">
                                                             @csrf
-                                                            <button type="submit" class="btn btn-sm btn-success px-2 py-1 fs-12 fw-semibold" title="Aktifkan Tema Ini">
+                                                            <button type="submit" class="btn btn-sm btn-success text-nowrap px-2.5 py-1 fs-12 fw-semibold" title="Aktifkan Tema Ini Sebagai Tampilan Website Utama">
                                                                 <i class="ti ti-circle-check me-1"></i> Aktifkan
                                                             </button>
                                                         </form>
                                                     @endif
-                                                    <a href="{{ route('admin.dukunganaplikasi.konfigurasi-website.switch-theme', $th->id) }}" class="btn btn-sm {{ $th->id == ($activeTheme->id ?? 0) ? 'btn-primary' : 'btn-outline-primary' }} px-2 py-1 fs-12 fw-semibold">
-                                                        <i class="ti ti-settings me-1"></i> {{ $th->isMultipage() ? 'Kelola Halaman' : 'Kelola Seksi' }}
+                                                    <a href="{{ route('admin.dukunganaplikasi.konfigurasi-website.switch-theme', $th->id) }}" class="btn btn-sm {{ $th->id == ($activeTheme->id ?? 0) ? 'btn-primary' : 'btn-outline-primary' }} text-nowrap px-2.5 py-1 fs-12 fw-semibold" title="Kelola susunan & berkas {{ $th->isMultipage() ? 'halaman' : 'seksi' }} tema ini">
+                                                        <i class="ti ti-settings me-1"></i> Kelola
                                                     </a>
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary px-2 py-1 fs-12 btn-edit-tema" 
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary text-nowrap px-2 py-1 fs-12 btn-edit-tema" 
                                                         data-theme-id="{{ $th->id }}"
                                                         data-theme-name="{{ $th->name }}"
                                                         data-theme-folder="{{ $th->folder }}"
-                                                        data-theme-description="{{ $th->description }}">
+                                                        data-theme-description="{{ $th->description }}"
+                                                        title="Edit Identitas Tema">
                                                         <i class="ti ti-edit"></i>
                                                     </button>
                                                 </div>
