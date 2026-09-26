@@ -100,6 +100,7 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
         Route::delete('backup-db/destroy/{filename}', [BackupDbController::class, 'destroy'])->name('backup-db.destroy');
 
         Route::get('konfigurasi-website', [KonfigurasiWebsiteController::class, 'index'])->name('konfigurasi-website.index');
+        Route::get('konfigurasi-website/switch-theme/{id}', [KonfigurasiWebsiteController::class, 'switchTheme'])->name('konfigurasi-website.switch-theme');
         Route::post('konfigurasi-website/store-theme', [KonfigurasiWebsiteController::class, 'storeTheme'])->name('konfigurasi-website.store-theme');
         Route::post('konfigurasi-website/activate-theme/{id}', [KonfigurasiWebsiteController::class, 'activateTheme'])->name('konfigurasi-website.activate-theme');
         Route::post('konfigurasi-website/store-section', [KonfigurasiWebsiteController::class, 'storeSection'])->name('konfigurasi-website.store-section');

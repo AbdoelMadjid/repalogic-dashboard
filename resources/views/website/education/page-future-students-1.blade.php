@@ -57,9 +57,9 @@
 
             <div class="g-mb-35">
               <h3 class="mb-3">Undergraduate Studies</h3>
-              <p class="g-font-size-15">With <a class="g-font-weight-500" href="page-programs-1.html">over 80 programs</a> and a thriving community, Unify provides a <a class="g-font-weight-500" href="page-programs-1.html">fantastic learning environment</a> for students coming straight from high school or transferring from other post-secondary instititions.</p>
+              <p class="g-font-size-15">With <a class="g-font-weight-500" href="{{ route('education.programs') }}">over 80 programs</a> and a thriving community, Unify provides a <a class="g-font-weight-500" href="{{ route('education.programs') }}">fantastic learning environment</a> for students coming straight from high school or transferring from other post-secondary instititions.</p>
             </div>
-            <a class="btn u-shadow-v39 g-color-white g-color-white--hover g-bg-main g-bg-primary--hover g-font-size-default g-rounded-30 g-px-35 g-py-8" href="page-apply-1.html">Start Your Application</a>
+            <a class="btn u-shadow-v39 g-color-white g-color-white--hover g-bg-main g-bg-primary--hover g-font-size-default g-rounded-30 g-px-35 g-py-8" href="{{ route('education.apply') }}">Start Your Application</a>
           </article>
           <!-- End Studies -->
 
@@ -71,9 +71,9 @@
 
             <div class="g-mb-35">
               <h3 class="mb-3">Graduate Studies</h3>
-              <p class="g-font-size-15">Unify's Faculty of Graduate Studies is home to over 3500 students studying in <a class="g-font-weight-500" href="page-programs-1.html">over 160 graduate programs</a>, with a reputation for quality and innovation that's respected around the globe.</p>
+              <p class="g-font-size-15">Unify's Faculty of Graduate Studies is home to over 3500 students studying in <a class="g-font-weight-500" href="{{ route('education.programs') }}">over 160 graduate programs</a>, with a reputation for quality and innovation that's respected around the globe.</p>
             </div>
-            <a class="btn u-shadow-v39 g-color-white g-color-white--hover g-bg-main g-bg-primary--hover g-font-size-default g-rounded-30 g-px-35 g-py-8" href="page-apply-1.html">Start Your Application</a>
+            <a class="btn u-shadow-v39 g-color-white g-color-white--hover g-bg-main g-bg-primary--hover g-font-size-default g-rounded-30 g-px-35 g-py-8" href="{{ route('education.apply') }}">Start Your Application</a>
           </article>
           <!-- End Studies -->
 
@@ -87,7 +87,7 @@
               <h3 class="mb-3">Continuing Studies</h3>
               <p class="g-font-size-15">Take the next step on your journey with <a class="g-font-weight-500" href="#">continuing studies</a> and professional-development programs at Unify. Learn skills that will benefit your current job, or head down an entirely new career path.</p>
             </div>
-            <a class="btn u-shadow-v39 g-color-white g-color-white--hover g-bg-main g-bg-primary--hover g-font-size-default g-rounded-30 g-px-35 g-py-8" href="page-apply-1.html">Start Your Application</a>
+            <a class="btn u-shadow-v39 g-color-white g-color-white--hover g-bg-main g-bg-primary--hover g-font-size-default g-rounded-30 g-px-35 g-py-8" href="{{ route('education.apply') }}">Start Your Application</a>
           </article>
           <!-- End Studies -->
         </div>
@@ -382,7 +382,7 @@
           </div>
           <!-- End Heading -->
 
-          <a class="btn u-shadow-v33 g-color-white g-bg-primary g-bg-main--hover g-rounded-30 g-px-35 g-py-13" href="page-apply-1.html">Apply Now</a>
+          <a class="btn u-shadow-v33 g-color-white g-bg-primary g-bg-main--hover g-rounded-30 g-px-35 g-py-13" href="{{ route('education.apply') }}">Apply Now</a>
 
           <!-- SVG Shape -->
           <svg class="d-inline-block g-width-35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -408,7 +408,7 @@
           </svg>
           <!-- End SVG Shape -->
 
-          <a class="btn u-shadow-v32 g-color-primary g-color-white--hover g-bg-white g-bg-main--hover g-rounded-30 g-px-35 g-py-13" href="page-contacts-1.html">Contact Us</a>
+          <a class="btn u-shadow-v32 g-color-primary g-color-white--hover g-bg-white g-bg-main--hover g-rounded-30 g-px-35 g-py-13" href="{{ route('education.contacts') }}">Contact Us</a>
         </div>
 
         <!-- SVG Background Shape -->

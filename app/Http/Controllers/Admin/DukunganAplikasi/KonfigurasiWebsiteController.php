@@ -22,9 +22,18 @@ class KonfigurasiWebsiteController extends Controller
      */
     public function index(Request $request)
     {
+        // If theme_id is passed in query string, store in session and redirect to clean URL
+        if ($request->has('theme_id')) {
+            $queryThemeId = $request->query('theme_id');
+            if ($queryThemeId) {
+                session(['admin_selected_website_theme_id' => $queryThemeId]);
+            }
+            return redirect()->route('admin.dukunganaplikasi.konfigurasi-website.index');
+        }
+
         $themes = WebsiteTheme::with('sections')->get();
         
-        $selectedThemeId = $request->query('theme_id');
+        $selectedThemeId = session('admin_selected_website_theme_id');
         if ($selectedThemeId) {
             $activeTheme = WebsiteTheme::with('sections')->find($selectedThemeId);
         } else {
@@ -36,6 +45,17 @@ class KonfigurasiWebsiteController extends Controller
         }
 
         return view('admin.dukunganaplikasi.konfigurasi-website', compact('themes', 'activeTheme'));
+    }
+
+    /**
+     * Switch view/manage theme cleanly via session.
+     */
+    public function switchTheme($id)
+    {
+        $theme = WebsiteTheme::findOrFail($id);
+        session(['admin_selected_website_theme_id' => $theme->id]);
+
+        return redirect()->route('admin.dukunganaplikasi.konfigurasi-website.index');
     }
 
     /**
@@ -73,8 +93,9 @@ class KonfigurasiWebsiteController extends Controller
         }
 
         WebsiteTheme::clearCache();
+        session(['admin_selected_website_theme_id' => $theme->id]);
 
-        return redirect()->route('admin.dukunganaplikasi.konfigurasi-website.index', ['theme_id' => $theme->id]);
+        return redirect()->route('admin.dukunganaplikasi.konfigurasi-website.index');
     }
 
     /**
@@ -88,10 +109,11 @@ class KonfigurasiWebsiteController extends Controller
         $theme->update(['is_active' => true]);
 
         WebsiteTheme::clearCache();
+        session(['admin_selected_website_theme_id' => $theme->id]);
 
         $this->notifySuccess("Tema \"{$theme->name}\" berhasil diaktifkan untuk Tampilan Website Utama!");
 
-        return redirect()->route('admin.dukunganaplikasi.konfigurasi-website.index', ['theme_id' => $theme->id]);
+        return redirect()->route('admin.dukunganaplikasi.konfigurasi-website.index');
     }
 
     /**
@@ -171,10 +193,11 @@ class KonfigurasiWebsiteController extends Controller
         ]);
 
         WebsiteTheme::clearCache();
+        session(['admin_selected_website_theme_id' => $themeId]);
 
         $this->notifySuccess("Seksi halaman \"{$sectionName}\" berhasil ditambahkan.");
 
-        return redirect()->route('admin.dukunganaplikasi.konfigurasi-website.index', ['theme_id' => $themeId]);
+        return redirect()->route('admin.dukunganaplikasi.konfigurasi-website.index');
     }
 
     /**
@@ -253,10 +276,11 @@ class KonfigurasiWebsiteController extends Controller
         ]);
 
         WebsiteTheme::clearCache();
+        session(['admin_selected_website_theme_id' => $section->website_theme_id]);
 
         $this->notifySuccess("Seksi halaman \"{$section->section_name}\" berhasil diperbarui.");
 
-        return redirect()->route('admin.dukunganaplikasi.konfigurasi-website.index', ['theme_id' => $section->website_theme_id]);
+        return redirect()->route('admin.dukunganaplikasi.konfigurasi-website.index');
     }
 
     /**
@@ -271,10 +295,11 @@ class KonfigurasiWebsiteController extends Controller
         $section->delete();
 
         WebsiteTheme::clearCache();
+        session(['admin_selected_website_theme_id' => $themeId]);
 
         $this->notifySuccess("Seksi halaman \"{$name}\" berhasil dihapus.");
 
-        return redirect()->route('admin.dukunganaplikasi.konfigurasi-website.index', ['theme_id' => $themeId]);
+        return redirect()->route('admin.dukunganaplikasi.konfigurasi-website.index');
     }
 
     /**

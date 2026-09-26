@@ -61,7 +61,18 @@
                                         <div class="card-body p-3.5 d-flex flex-column justify-content-between">
                                             <div>
                                                 <div class="d-flex justify-content-between align-items-start mb-2">
-                                                    <h6 class="fw-bold text-dark mb-0 fs-15">{{ $th->name }}</h6>
+                                                    <div>
+                                                        <h6 class="fw-bold text-dark mb-1 fs-15">{{ $th->name }}</h6>
+                                                        @if ($th->isMultipage())
+                                                            <span class="badge bg-info-subtle text-info border border-info border-opacity-25 px-2 py-0.5 fs-10 fw-semibold">
+                                                                <i class="ti ti-layout-grid me-1"></i> Multi-Page Portal
+                                                            </span>
+                                                        @else
+                                                            <span class="badge bg-primary-subtle text-primary border border-primary border-opacity-25 px-2 py-0.5 fs-10 fw-semibold">
+                                                                <i class="ti ti-layout-navbar me-1"></i> One-Page Landing
+                                                            </span>
+                                                        @endif
+                                                    </div>
                                                     @if ($th->is_active)
                                                         <span class="badge bg-success text-white px-2 py-1 fs-11">Aktif</span>
                                                     @else
@@ -78,7 +89,7 @@
 
                                             <div class="pt-3 border-top d-flex align-items-center justify-content-between gap-2">
                                                 <span class="fs-12 text-muted">
-                                                    <i class="ti ti-layers-subtract me-1"></i> {{ $th->sections->count() }} Seksi
+                                                    <i class="ti ti-layers-subtract me-1"></i> {{ $th->sections->count() }} {{ $th->isMultipage() ? 'Halaman' : 'Seksi' }}
                                                 </span>
                                                 <div class="d-flex align-items-center gap-1">
                                                     @if (!$th->is_active)
@@ -89,8 +100,8 @@
                                                             </button>
                                                         </form>
                                                     @endif
-                                                    <a href="{{ route('admin.dukunganaplikasi.konfigurasi-website.index', ['theme_id' => $th->id]) }}" class="btn btn-sm {{ $th->id == ($activeTheme->id ?? 0) ? 'btn-primary' : 'btn-outline-primary' }} px-2 py-1 fs-12 fw-semibold">
-                                                        <i class="ti ti-settings me-1"></i> Kelola Seksi
+                                                    <a href="{{ route('admin.dukunganaplikasi.konfigurasi-website.switch-theme', $th->id) }}" class="btn btn-sm {{ $th->id == ($activeTheme->id ?? 0) ? 'btn-primary' : 'btn-outline-primary' }} px-2 py-1 fs-12 fw-semibold">
+                                                        <i class="ti ti-settings me-1"></i> {{ $th->isMultipage() ? 'Kelola Halaman' : 'Kelola Seksi' }}
                                                     </a>
                                                     <button type="button" class="btn btn-sm btn-outline-secondary px-2 py-1 fs-12 btn-edit-tema" 
                                                         data-theme-id="{{ $th->id }}"
@@ -116,32 +127,50 @@
 
             <!-- 2. Widget Pengaturan Seksi Halaman & Navigation Menu -->
             @if ($activeTheme)
+                @php
+                    $isMulti = $activeTheme->isMultipage();
+                @endphp
                 <div class="col-12">
                     <div class="card shadow-sm border-0">
                         <div class="card-header bg-white py-3 d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center gap-2">
-                                <i class="ti ti-list-check fs-20 text-primary"></i>
+                                <i class="{{ $isMulti ? 'ti ti-layout-grid' : 'ti ti-list-check' }} fs-20 text-primary"></i>
                                 <h5 class="card-title text-dark mb-0 fw-bold">
-                                    Kelola Seksi Halaman &amp; Menu Navigasi (Tema: <span class="text-primary">{{ $activeTheme->name }}</span>)
+                                    {{ $isMulti ? 'Kelola Halaman Website & Menu Navigasi' : 'Kelola Seksi Landing Page & Menu Navigasi' }} 
+                                    (Tema: <span class="text-primary">{{ $activeTheme->name }}</span>
+                                    @if ($isMulti)
+                                        <span class="badge bg-info-subtle text-info fs-11 ms-1">Multi-Page Portal</span>
+                                    @else
+                                        <span class="badge bg-primary-subtle text-primary fs-11 ms-1">One-Page Landing</span>
+                                    @endif
+                                    )
                                 </h5>
                             </div>
                             <div class="d-flex align-items-center gap-2">
-                                <button type="button" class="btn btn-outline-info btn-sm fw-semibold px-3 btn-panduan-seksi">
-                                    <i class="ti ti-book me-1"></i> Panduan Standarisasi Seksi
-                                </button>
+                                @if (!$isMulti)
+                                    <button type="button" class="btn btn-outline-info btn-sm fw-semibold px-3 btn-panduan-seksi">
+                                        <i class="ti ti-book me-1"></i> Panduan Standarisasi Seksi
+                                    </button>
+                                @endif
                                 <button type="button" class="btn btn-primary btn-sm fw-semibold px-3 btn-tambah-seksi">
-                                    <i class="ti ti-plus me-1"></i> Tambah Seksi Halaman
+                                    <i class="ti ti-plus me-1"></i> {{ $isMulti ? 'Tambah Halaman Baru' : 'Tambah Seksi Halaman' }}
                                 </button>
                             </div>
                         </div>
                         <div class="alert alert-info border-0 rounded-0 mb-0 py-2 px-3 d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center gap-2 fs-13">
                                 <i class="ti ti-info-circle fs-16 text-info"></i>
-                                <span><strong>Standarisasi Seksi:</strong> Gunakan tag murni <code>&lt;section class="section-custom" id="..."&gt;</code> di file Blade. Latar belakang &amp; kontras teks dikelola dinamis via sistem.</span>
+                                @if ($isMulti)
+                                    <span><strong>Arsitektur Multi-Page Portal:</strong> Setiap baris mewakili <strong>Halaman Mandiri (Standalone Page)</strong> dengan rute URL masing-masing. Gunakan tombol <strong>"Buka Halaman"</strong> untuk preview langsung atau <strong>"Script"</strong> untuk menyunting berkas Blade.</span>
+                                @else
+                                    <span><strong>Standarisasi Seksi:</strong> Gunakan tag murni <code>&lt;section class="section-custom" id="..."&gt;</code> di file Blade. Latar belakang &amp; kontras teks dikelola dinamis via sistem.</span>
+                                @endif
                             </div>
-                            <button type="button" class="btn btn-link btn-sm text-info p-0 fw-semibold text-decoration-none btn-panduan-seksi">
-                                Lihat Panduan Complete <i class="ti ti-arrow-right"></i>
-                            </button>
+                            @if (!$isMulti)
+                                <button type="button" class="btn btn-link btn-sm text-info p-0 fw-semibold text-decoration-none btn-panduan-seksi">
+                                    Lihat Panduan Complete <i class="ti ti-arrow-right"></i>
+                                </button>
+                            @endif
                         </div>
                         <div class="card-body p-0">
                             <form action="{{ route('admin.dukunganaplikasi.konfigurasi-website.reorder-sections') }}" method="POST" id="form-reorder-sections">
@@ -151,162 +180,175 @@
                                         <thead class="table-light align-middle text-center text-nowrap">
                                             <tr class="align-middle text-center text-nowrap">
                                                 <th class="text-center align-middle text-nowrap" style="width: 80px;"><i class="ti ti-arrows-sort me-1"></i> Urutan</th>
-                                                <th class="text-start align-middle text-nowrap">Nama Seksi Halaman</th>
+                                                <th class="text-start align-middle text-nowrap">{{ $isMulti ? 'Nama Halaman / Modul' : 'Nama Seksi Halaman' }}</th>
                                                 <th class="text-start align-middle text-nowrap">File Blade Template</th>
-                                                <th class="text-start align-middle text-nowrap">Anchor Target (#id)</th>
+                                                <th class="text-start align-middle text-nowrap">{{ $isMulti ? 'Route / URL Akses' : 'Anchor Target (#id)' }}</th>
                                                 <th class="text-center align-middle text-nowrap">Menu Navbar</th>
-                                                 <th class="text-center align-middle text-nowrap">Status Seksi</th>
-                                                 <th class="text-center align-middle text-nowrap">Gaya Latar (Background)</th>
-                                                 <th class="text-center align-middle text-nowrap" style="width: 160px;">Aksi</th>
-                                             </tr>
-                                         </thead>
-                                         <tbody id="sortable-sections-list">
-                                             @forelse ($activeTheme->sections as $sec)
-                                                 <tr class="section-row" data-id="{{ $sec->id }}">
-                                                     <td class="text-center align-middle">
-                                                         <div class="d-flex align-items-center justify-content-center gap-1.5">
-                                                             <span class="drag-handle-section text-muted cursor-grab p-1" title="Drag & drop untuk mengubah urutan seksi">
-                                                                 <i class="ti ti-menu-2 fs-18"></i>
-                                                             </span>
-                                                             <span class="badge bg-light text-dark fw-bold font-monospace border px-2 py-1 order-badge fs-12">
-                                                                 {{ $sec->orders }}
-                                                             </span>
-                                                             <input type="hidden" name="orders[{{ $sec->id }}]" value="{{ $sec->orders }}" class="order-input">
-                                                         </div>
-                                                     </td>
-                                                     <td class="align-middle fw-semibold text-dark">
-                                                         {{ $sec->section_name }}
-                                                         @if ($sec->nav_title)
-                                                             <span class="fs-12 text-muted d-block fw-normal">(Navbar: "{{ $sec->nav_title }}")</span>
-                                                         @endif
-                                                     </td>
-                                                     <td class="align-middle">
-                                                         <div class="d-flex align-items-center gap-2">
-                                                             <code class="font-monospace text-primary fs-12 bg-light px-2 py-1 rounded border">website/{{ $activeTheme->folder }}/{{ $sec->section_file }}</code>
-                                                             <button type="button" class="btn btn-xs btn-outline-primary px-1.5 py-0.5 btn-editor-script-blade"
-                                                                 data-section-id="{{ $sec->id }}"
-                                                                 data-section-name="{{ $sec->section_name }}"
-                                                                 data-section-file="{{ $sec->section_file }}"
-                                                                 data-theme-folder="{{ $activeTheme->folder }}"
-                                                                 title="Lihat & Edit Script Blade Ini">
-                                                                 <i class="ti ti-code fs-13"></i>
-                                                             </button>
-                                                         </div>
-                                                     </td>
-                                                     <td class="align-middle font-monospace text-muted fs-12">
-                                                         #{{ $sec->target_id ?: $sec->section_key }}
-                                                     </td>
-                                                     <td class="text-center align-middle">
-                                                         @if ($sec->show_in_nav)
-                                                             <span class="badge bg-info-subtle text-info px-2 py-1"><i class="ti ti-eye me-1"></i> Tampil</span>
-                                                         @else
-                                                             <span class="badge bg-secondary-subtle text-muted px-2 py-1"><i class="ti ti-eye-off me-1"></i> Sembunyi</span>
-                                                         @endif
-                                                     </td>
-                                                     <td class="text-center align-middle">
-                                                         <form action="{{ route('admin.dukunganaplikasi.konfigurasi-website.toggle-active-section', $sec->id) }}" method="POST" class="d-inline">
-                                                             @csrf
-                                                             <button type="submit" class="btn btn-sm border-0 bg-transparent p-0" title="Klik untuk Ubah Status">
-                                                                 @if ($sec->is_active)
-                                                                     <span class="badge bg-success-subtle text-success px-2 py-1.5 fs-12"><i class="ti ti-check me-1"></i> Aktif</span>
-                                                                 @else
-                                                                     <span class="badge bg-danger-subtle text-danger px-2 py-1.5 fs-12"><i class="ti ti-x me-1"></i> Non-Aktif</span>
-                                                                 @endif
-                                                             </button>
-                                                         </form>
-                                                     </td>
-                                                     <td class="text-center align-middle">
-                                                         @php
-                                                             $bgBadges = [
-                                                                 'default'   => ['bg-secondary-subtle text-secondary', 'section-custom'],
-                                                                 'light'     => ['bg-light text-dark border', 'light soft'],
-                                                                 'secondary' => ['bg-secondary text-white', 'body-secondary'],
-                                                                 'dark'      => ['bg-dark text-white', 'bg-dark'],
-                                                                 'primary'   => ['bg-primary text-white', 'bg-primary'],
-                                                                 'image'     => ['bg-info text-white', 'background-image'],
-                                                             ];
-                                                             $bgTypeKey = $sec->bg_type ?? 'default';
-                                                             $badgeInfo = $bgBadges[$bgTypeKey] ?? $bgBadges['default'];
-                                                         @endphp
-                                                         <span class="badge {{ $badgeInfo[0] }} px-2 py-1 font-monospace fs-11">
-                                                             {{ $badgeInfo[1] }}
-                                                         </span>
-                                                         @if ($bgTypeKey === 'image' && $sec->bg_image)
-                                                             <div class="mt-1 d-flex align-items-center justify-content-center gap-1 flex-wrap">
-                                                                 <div class="border rounded p-0.5 bg-white shadow-sm overflow-hidden cursor-pointer btn-preview-full-img" 
-                                                                     style="width: 48px; height: 28px;" 
-                                                                     title="Klik untuk pratinjau & atur posisi"
-                                                                     data-section-id="{{ $sec->id }}"
-                                                                     data-img-url="{{ asset('storage/' . $sec->bg_image) }}"
-                                                                     data-section-name="{{ $sec->section_name }}"
-                                                                     data-pos-y="{{ $sec->bg_position_y ?? 50 }}"
-                                                                     data-bg-size="{{ $sec->bg_size ?? 'cover' }}"
-                                                                     data-bg-attachment="{{ $sec->bg_attachment ?? 'scroll' }}"
-                                                                     data-img-w="{{ $sec->bg_image_width }}"
-                                                                     data-img-h="{{ $sec->bg_image_height }}"
-                                                                     data-img-orient="{{ $sec->bg_image_orientation }}">
-                                                                     <img src="{{ asset('storage/' . $sec->bg_image) }}" alt="Thumbnail Background" class="w-100 h-100 rounded-1" style="object-fit: cover; object-position: center {{ $sec->bg_position_y ?? 50 }}%;">
-                                                                 </div>
-                                                                 <span class="badge bg-primary-subtle text-primary fs-11 font-monospace py-1" title="Posisi Vertikal Gambar">Y: {{ $sec->bg_position_y ?? 50 }}%</span>
-                                                                 @if ($sec->bg_attachment === 'fixed')
-                                                                     <span class="badge bg-warning-subtle text-warning fs-10 font-monospace py-0.5 px-1" title="Efek Paralaks Fixed">✨ Paralaks</span>
-                                                                 @endif
-                                                             </div>
-                                                             @if ($sec->bg_image_orientation)
-                                                                 <span class="fs-10 font-monospace text-muted d-block mt-0.5">
-                                                                     {{ $sec->bg_image_orientation === 'portrait' ? '📱 Portrait' : ($sec->bg_image_orientation === 'landscape' ? '🖼️ Landscape' : '⏹️ Square') }}
-                                                                     @if ($sec->bg_image_width && $sec->bg_image_height)
-                                                                         ({{ $sec->bg_image_width }}x{{ $sec->bg_image_height }}px)
-                                                                     @endif
-                                                                 </span>
-                                                             @endif
-                                                         @endif
-                                                     </td>
-                                                     <td class="text-center align-middle">
-                                                         <div class="d-flex align-items-center justify-content-center gap-1">
-                                                             <button type="button" class="btn btn-sm btn-outline-primary px-2 py-1 btn-editor-script-blade"
-                                                                 data-section-id="{{ $sec->id }}"
-                                                                 data-section-name="{{ $sec->section_name }}"
-                                                                 data-section-file="{{ $sec->section_file }}"
-                                                                 data-theme-folder="{{ $activeTheme->folder }}"
-                                                                 title="Lihat & Edit Script Blade (GUI)">
-                                                                 <i class="ti ti-code me-1"></i> Script
-                                                             </button>
-                                                             <button type="button" class="btn btn-sm btn-outline-warning px-2 py-1 btn-edit-seksi"
-                                                                 data-section-id="{{ $sec->id }}"
-                                                                 data-section-name="{{ $sec->section_name }}"
-                                                                 data-section-file="{{ $sec->section_file }}"
-                                                                 data-nav-title="{{ $sec->nav_title }}"
-                                                                 data-target-id="{{ $sec->target_id }}"
-                                                                 data-orders="{{ $sec->orders }}"
-                                                                 data-bg-type="{{ $sec->bg_type ?? 'default' }}"
-                                                                 data-bg-image="{{ $sec->bg_image ? asset('storage/' . $sec->bg_image) : '' }}"
-                                                                 data-bg-position-y="{{ $sec->bg_position_y ?? 50 }}"
-                                                                 data-is-active="{{ $sec->is_active ? 1 : 0 }}"
-                                                                 data-show-in-nav="{{ $sec->show_in_nav ? 1 : 0 }}"
-                                                                 title="Edit Properti Seksi">
-                                                                 <i class="ti ti-edit"></i>
-                                                             </button>
-                                                             <form action="{{ route('admin.dukunganaplikasi.konfigurasi-website.destroy-section', $sec->id) }}" method="POST" class="d-inline" data-confirm="Apakah Anda yakin ingin menghapus seksi halaman &quot;{{ $sec->section_name }}&quot;?">
-                                                                 @csrf
-                                                                 @method('DELETE')
-                                                                 <button type="submit" class="btn btn-sm btn-outline-danger px-2 py-1" title="Hapus Seksi">
-                                                                     <i class="ti ti-trash"></i>
-                                                                 </button>
-                                                             </form>
-                                                         </div>
-                                                     </td>
-                                                 </tr>
-                                             @empty
-                                                 <tr>
-                                                     <td colspan="8" class="text-center py-4 text-muted">
-                                                         Belum ada seksi halaman yang terdaftar untuk tema ini. Klik <strong>"Tambah Seksi Halaman"</strong> di atas.
-                                                     </td>
-                                                 </tr>
-                                             @endforelse
-                                         </tbody>
-                                     </table>
-                                 </div>
+                                                <th class="text-center align-middle text-nowrap">Status {{ $isMulti ? 'Halaman' : 'Seksi' }}</th>
+                                                <th class="text-center align-middle text-nowrap">{{ $isMulti ? 'Tipe Halaman' : 'Gaya Latar (Background)' }}</th>
+                                                <th class="text-center align-middle text-nowrap" style="width: 130px;">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="sortable-sections-list">
+                                            @forelse ($activeTheme->sections as $sec)
+                                                @php
+                                                    $pageUrl = $sec->section_key === 'home' ? url('/') : url('/' . ($sec->target_id ?: $sec->section_key));
+                                                @endphp
+                                                <tr class="section-row" data-id="{{ $sec->id }}">
+                                                    <td class="text-center align-middle">
+                                                        <div class="d-flex align-items-center justify-content-center gap-1.5">
+                                                            <span class="drag-handle-section text-muted cursor-grab p-1" title="Drag & drop untuk mengubah urutan">
+                                                                <i class="ti ti-menu-2 fs-18"></i>
+                                                            </span>
+                                                            <span class="badge bg-light text-dark fw-bold font-monospace border px-2 py-1 order-badge fs-12">
+                                                                {{ $sec->orders }}
+                                                            </span>
+                                                            <input type="hidden" name="orders[{{ $sec->id }}]" value="{{ $sec->orders }}" class="order-input">
+                                                        </div>
+                                                    </td>
+                                                    <td class="align-middle fw-semibold text-dark">
+                                                        {{ $sec->section_name }}
+                                                        @if ($sec->nav_title)
+                                                            <span class="fs-12 text-muted d-block fw-normal">(Navbar: "{{ $sec->nav_title }}")</span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="align-middle">
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <code class="font-monospace text-primary fs-12 bg-light px-2 py-1 rounded border">website/{{ $activeTheme->folder }}/{{ $sec->section_file }}</code>
+                                                            <button type="button" class="btn btn-xs btn-outline-primary px-1.5 py-0.5 btn-editor-script-blade"
+                                                                data-section-id="{{ $sec->id }}"
+                                                                data-section-name="{{ $sec->section_name }}"
+                                                                data-section-file="{{ $sec->section_file }}"
+                                                                data-theme-folder="{{ $activeTheme->folder }}"
+                                                                title="Lihat & Edit Script Blade Ini">
+                                                                <i class="ti ti-code fs-13"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                    <td class="align-middle font-monospace text-muted fs-12">
+                                                        @if ($isMulti)
+                                                            <a href="{{ $pageUrl }}" target="_blank" class="text-decoration-none fw-semibold text-primary d-inline-flex align-items-center gap-1">
+                                                                <code>{{ $sec->section_key === 'home' ? '/' : '/' . ($sec->target_id ?: $sec->section_key) }}</code>
+                                                                <i class="ti ti-external-link fs-12"></i>
+                                                            </a>
+                                                        @else
+                                                            #{{ $sec->target_id ?: $sec->section_key }}
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center align-middle">
+                                                        @if ($sec->show_in_nav)
+                                                            <span class="badge bg-info-subtle text-info px-2 py-1"><i class="ti ti-eye me-1"></i> Tampil</span>
+                                                        @else
+                                                            <span class="badge bg-secondary-subtle text-muted px-2 py-1"><i class="ti ti-eye-off me-1"></i> Sembunyi</span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center align-middle">
+                                                        <form action="{{ route('admin.dukunganaplikasi.konfigurasi-website.toggle-active-section', $sec->id) }}" method="POST" class="d-inline">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-sm border-0 bg-transparent p-0" title="Klik untuk Ubah Status">
+                                                                @if ($sec->is_active)
+                                                                    <span class="badge bg-success-subtle text-success px-2 py-1.5 fs-12"><i class="ti ti-check me-1"></i> Aktif</span>
+                                                                @else
+                                                                    <span class="badge bg-danger-subtle text-danger px-2 py-1.5 fs-12"><i class="ti ti-x me-1"></i> Non-Aktif</span>
+                                                                @endif
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                    <td class="text-center align-middle">
+                                                        @if ($isMulti)
+                                                            <span class="badge bg-secondary-subtle text-dark border px-2 py-1 fs-11">
+                                                                <i class="ti ti-file-code me-1 text-primary"></i> Standalone View
+                                                            </span>
+                                                        @else
+                                                            @php
+                                                                $bgBadges = [
+                                                                    'default'   => ['bg-secondary-subtle text-secondary', 'section-custom'],
+                                                                    'light'     => ['bg-light text-dark border', 'light soft'],
+                                                                    'secondary' => ['bg-secondary text-white', 'body-secondary'],
+                                                                    'dark'      => ['bg-dark text-white', 'bg-dark'],
+                                                                    'primary'   => ['bg-primary text-white', 'bg-primary'],
+                                                                    'image'     => ['bg-info text-white', 'background-image'],
+                                                                ];
+                                                                $bgTypeKey = $sec->bg_type ?? 'default';
+                                                                $badgeInfo = $bgBadges[$bgTypeKey] ?? $bgBadges['default'];
+                                                            @endphp
+                                                            <span class="badge {{ $badgeInfo[0] }} px-2 py-1 font-monospace fs-11">
+                                                                {{ $badgeInfo[1] }}
+                                                            </span>
+                                                            @if ($bgTypeKey === 'image' && $sec->bg_image)
+                                                                <div class="mt-1 d-flex align-items-center justify-content-center gap-1 flex-wrap">
+                                                                    <div class="border rounded p-0.5 bg-white shadow-sm overflow-hidden cursor-pointer btn-preview-full-img" 
+                                                                        style="width: 48px; height: 28px;" 
+                                                                        title="Klik untuk pratinjau & atur posisi"
+                                                                        data-section-id="{{ $sec->id }}"
+                                                                        data-img-url="{{ asset('storage/' . $sec->bg_image) }}"
+                                                                        data-section-name="{{ $sec->section_name }}"
+                                                                        data-pos-y="{{ $sec->bg_position_y ?? 50 }}"
+                                                                        data-bg-size="{{ $sec->bg_size ?? 'cover' }}"
+                                                                        data-bg-attachment="{{ $sec->bg_attachment ?? 'scroll' }}"
+                                                                        data-img-w="{{ $sec->bg_image_width }}"
+                                                                        data-img-h="{{ $sec->bg_image_height }}"
+                                                                        data-img-orient="{{ $sec->bg_image_orientation }}">
+                                                                        <img src="{{ asset('storage/' . $sec->bg_image) }}" alt="Thumbnail Background" class="w-100 h-100 rounded-1" style="object-fit: cover; object-position: center {{ $sec->bg_position_y ?? 50 }}%;">
+                                                                    </div>
+                                                                    <span class="badge bg-primary-subtle text-primary fs-11 font-monospace py-1" title="Posisi Vertikal Gambar">Y: {{ $sec->bg_position_y ?? 50 }}%</span>
+                                                                    @if ($sec->bg_attachment === 'fixed')
+                                                                        <span class="badge bg-warning-subtle text-warning fs-10 font-monospace py-0.5 px-1" title="Efek Paralaks Fixed">✨ Paralaks</span>
+                                                                    @endif
+                                                                </div>
+                                                                @if ($sec->bg_image_orientation)
+                                                                    <span class="fs-10 font-monospace text-muted d-block mt-0.5">
+                                                                        {{ $sec->bg_image_orientation === 'portrait' ? '📱 Portrait' : ($sec->bg_image_orientation === 'landscape' ? '🖼️ Landscape' : '⏹️ Square') }}
+                                                                        @if ($sec->bg_image_width && $sec->bg_image_height)
+                                                                            ({{ $sec->bg_image_width }}x{{ $sec->bg_image_height }}px)
+                                                                        @endif
+                                                                    </span>
+                                                                @endif
+                                                            @endif
+                                                        @endif
+                                                    </td>
+                                                    <td class="text-center align-middle">
+                                                        <div class="d-flex align-items-center justify-content-center gap-1">
+                                                            @if ($isMulti)
+                                                                <a href="{{ $pageUrl }}" target="_blank" class="btn btn-sm btn-outline-info px-2 py-1 fs-12 fw-semibold" title="Buka Pratinjau Halaman Ini di Tab Baru">
+                                                                    <i class="ti ti-external-link me-1"></i> Buka
+                                                                </a>
+                                                            @endif
+                                                            <button type="button" class="btn btn-sm btn-outline-warning px-2 py-1 btn-edit-seksi"
+                                                                data-section-id="{{ $sec->id }}"
+                                                                data-section-name="{{ $sec->section_name }}"
+                                                                data-section-file="{{ $sec->section_file }}"
+                                                                data-nav-title="{{ $sec->nav_title }}"
+                                                                data-target-id="{{ $sec->target_id }}"
+                                                                data-orders="{{ $sec->orders }}"
+                                                                data-bg-type="{{ $sec->bg_type ?? 'default' }}"
+                                                                data-bg-image="{{ $sec->bg_image ? asset('storage/' . $sec->bg_image) : '' }}"
+                                                                data-bg-position-y="{{ $sec->bg_position_y ?? 50 }}"
+                                                                data-is-active="{{ $sec->is_active ? 1 : 0 }}"
+                                                                data-show-in-nav="{{ $sec->show_in_nav ? 1 : 0 }}"
+                                                                title="Edit Properti">
+                                                                <i class="ti ti-edit"></i>
+                                                            </button>
+                                                            <form action="{{ route('admin.dukunganaplikasi.konfigurasi-website.destroy-section', $sec->id) }}" method="POST" class="d-inline" data-confirm="Apakah Anda yakin ingin menghapus {{ $isMulti ? 'halaman' : 'seksi halaman' }} &quot;{{ $sec->section_name }}&quot;?">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-sm btn-outline-danger px-2 py-1" title="Hapus">
+                                                                    <i class="ti ti-trash"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="8" class="text-center py-4 text-muted">
+                                                        Belum ada {{ $isMulti ? 'halaman' : 'seksi halaman' }} yang terdaftar untuk tema ini. Klik <strong>"{{ $isMulti ? 'Tambah Halaman Baru' : 'Tambah Seksi Halaman' }}"</strong> di atas.
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
                                  @if ($activeTheme->sections->isNotEmpty())
                                      <div class="card-footer bg-light p-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
                                          <span class="fs-13 text-muted d-flex align-items-center gap-1">

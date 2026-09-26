@@ -6,7 +6,7 @@
       <div class="container g-py-5">
         <ul class="list-inline d-flex align-items-center g-mb-0">
           <li class="list-inline-item d-none d-lg-inline-block">
-            <a class="u-link-v5 g-brd-around g-brd-white-opacity-0_2 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 g-rounded-20 text-uppercase g-px-20 g-py-10" href="page-apply-1.blade.php">Apply for Fall intake</a>
+            <a class="u-link-v5 g-brd-around g-brd-white-opacity-0_2 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 g-rounded-20 text-uppercase g-px-20 g-py-10" href="{{ route('education.apply') }}">Apply for Fall intake</a>
           </li>
 
           <!-- Language -->
@@ -98,23 +98,19 @@
             <ul id="jump-to-dropdown" class="list-unstyled u-shadow-v39 g-brd-around g-brd-4 g-brd-white g-bg-secondary g-pos-abs g-left-0 g-z-index-99 g-mt-13"
                 aria-labelledby="jump-to-dropdown-invoker">
               <li class="dropdown-item g-brd-bottom g-brd-2 g-brd-white g-px-0 g-py-2">
-                @if (Route::has('register'))
-                  <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="{{ route('register') }}">Apply / Register</a>
-                @else
-                  <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="page-apply-1.blade.php">Apply Now</a>
-                @endif
+                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="{{ route('education.apply') }}">Apply Now</a>
               </li>
               <li class="dropdown-item g-brd-bottom g-brd-2 g-brd-white g-px-0 g-py-2">
-                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="page-campus-life-1.blade.php">Campus Life</a>
+                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="{{ route('education.campus-life') }}">Campus Life</a>
               </li>
               <li class="dropdown-item g-brd-bottom g-brd-2 g-brd-white g-px-0 g-py-2">
-                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="page-research-1.blade.php">Research</a>
+                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="{{ route('education.research') }}">Research</a>
               </li>
               <li class="dropdown-item g-brd-bottom g-brd-2 g-brd-white g-px-0 g-py-2">
-                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="page-help-1.blade.php">Help</a>
+                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="{{ route('education.help') }}">Help</a>
               </li>
               <li class="dropdown-item g-brd-bottom g-brd-2 g-brd-white g-px-0 g-py-2">
-                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="page-contacts-1.blade.php">Contacts</a>
+                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="{{ route('education.contacts') }}">Contacts</a>
               </li>
               <li class="dropdown-item g-px-0 g-py-2">
                 @if (Route::has('login'))
@@ -133,16 +129,16 @@
 
           <!-- Links -->
           <li class="list-inline-item d-none d-lg-inline-block">
-            <a class="u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-px-10 g-py-15" href="page-campus-life-1.blade.php">Campus Life</a>
+            <a class="u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-px-10 g-py-15" href="{{ route('education.campus-life') }}">Campus Life</a>
           </li>
           <li class="list-inline-item d-none d-lg-inline-block">
-            <a class="u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-px-10 g-py-15" href="page-research-1.blade.php">Research</a>
+            <a class="u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-px-10 g-py-15" href="{{ route('education.research') }}">Research</a>
           </li>
           <li class="list-inline-item d-none d-lg-inline-block">
-            <a class="u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-px-10 g-py-15" href="page-help-1.blade.php">Help</a>
+            <a class="u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-px-10 g-py-15" href="{{ route('education.help') }}">Help</a>
           </li>
           <li class="list-inline-item d-none d-lg-inline-block">
-            <a class="u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-px-10 g-py-15" href="page-contacts-1.blade.php">Contacts</a>
+            <a class="u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-px-10 g-py-15" href="{{ route('education.contacts') }}">Contacts</a>
           </li>
           <li class="list-inline-item d-none d-lg-inline-block">
             @if (Route::has('login'))
@@ -228,19 +224,19 @@
                     <!-- Links -->
                     <ul class="list-unstyled g-pr-30 mb-0">
                       <li class="py-2">
-                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="page-programs-1.blade.php">
+                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.programs') }}">
                           Programs
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
                       <li class="py-2">
-                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="page-future-students-1.blade.php">
+                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.future-students') }}">
                           Future Students
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
                       <li class="py-2">
-                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="page-current-students-1.blade.php">
+                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.current-students') }}">
                           Current Students
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
@@ -253,19 +249,19 @@
                     <!-- Links -->
                     <ul class="list-unstyled g-pr-30 mb-0">
                       <li class="py-2">
-                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="page-faculty-and-staff-1.blade.php">
+                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.faculty-and-staff') }}">
                           Faculty &amp; Staff
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
                       <li class="py-2">
-                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="page-events-1.blade.php">
+                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.events') }}">
                           Events
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
                       <li class="py-2">
-                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="page-alumni-1.blade.php">
+                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.alumni') }}">
                           Alumni
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
@@ -278,19 +274,19 @@
                     <!-- Links -->
                     <ul class="list-unstyled g-pr-30 mb-0">
                       <li class="py-2">
-                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="page-campus-life-1.blade.php">
+                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.campus-life') }}">
                           Campus Life
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
                       <li class="py-2">
-                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="page-research-1.blade.php">
+                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.research') }}">
                           Research
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
                       <li class="py-2">
-                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="page-apply-1.blade.php">
+                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.apply') }}">
                           Apply
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
@@ -303,13 +299,13 @@
                     <!-- Links -->
                     <ul class="list-unstyled g-pr-30 mb-0">
                       <li class="py-2">
-                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="page-contacts-1.blade.php">
+                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.contacts') }}">
                           Contacts
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
                       <li class="py-2">
-                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="page-help-1.blade.php">
+                        <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.help') }}">
                           Help
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
@@ -350,32 +346,32 @@
             <!-- End Pages - Mega Menu -->
 
             <li class="nav-item">
-              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="page-programs-1.blade.php">
+              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="{{ route('education.programs') }}">
                 Programs
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="page-future-students-1.blade.php">
+              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="{{ route('education.future-students') }}">
                 Future Students
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="page-current-students-1.blade.php">
+              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="{{ route('education.current-students') }}">
                 Current Students
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="page-faculty-and-staff-1.blade.php">
+              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="{{ route('education.faculty-and-staff') }}">
                 Faculty &amp; Staff
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="page-events-1.blade.php">
+              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="{{ route('education.events') }}">
                 Events
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-pl-15--lg g-pr-0--lg g-py-10 g-py-30--lg" href="page-alumni-1.blade.php">
+              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-pl-15--lg g-pr-0--lg g-py-10 g-py-30--lg" href="{{ route('education.alumni') }}">
                 Alumni
               </a>
             </li>

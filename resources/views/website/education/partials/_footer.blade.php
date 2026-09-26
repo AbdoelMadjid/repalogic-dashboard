@@ -5,10 +5,10 @@
       <div class="col-6 col-md-3 g-mb-20">
         <!-- Footer Links -->
         <ul class="list-unstyled">
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="page-future-students-1.blade.php">Future Students</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="page-current-students-1.blade.php">Current Students</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="page-alumni-1.blade.php">Alumni</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="page-faculty-and-staff-1.blade.php">Faculty &amp; Staff</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.future-students') }}">Future Students</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.current-students') }}">Current Students</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.alumni') }}">Alumni</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.faculty-and-staff') }}">Faculty &amp; Staff</a></li>
           <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="#">Donors</a></li>
         </ul>
         <!-- End Footer Links -->
@@ -17,11 +17,11 @@
       <div class="col-6 col-md-3 g-mb-20">
         <!-- Footer Links -->
         <ul class="list-unstyled">
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="page-events-1.blade.php">News &amp; Media</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="page-research-1.blade.php">Research &amp; Innovation</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="page-programs-1.blade.php">Academics</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="page-programs-1.blade.php">Programs of Study</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="page-campus-life-1.blade.php">University Life</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.events') }}">News &amp; Media</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.research') }}">Research &amp; Innovation</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.programs') }}">Academics</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.programs') }}">Programs of Study</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.campus-life') }}">University Life</a></li>
         </ul>
         <!-- End Footer Links -->
       </div>
@@ -29,9 +29,9 @@
       <div class="col-6 col-md-3 g-mb-20">
         <!-- Footer Links -->
         <ul class="list-unstyled">
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="page-contacts-1.blade.php">Contacts</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="page-apply-1.blade.php">Careers</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="page-help-1.blade.php">Accessibility</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.contacts') }}">Contacts</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.apply') }}">Careers</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.help') }}">Accessibility</a></li>
           <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="#">Privacy</a></li>
           <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="#">Site Feedback</a></li>
         </ul>

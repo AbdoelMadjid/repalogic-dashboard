@@ -20,6 +20,9 @@ class WebsiteThemeSeeder extends Seeder
                 'folder' => 'default',
                 'description' => 'Tema tampilan landing page bawaan template Inspinia Bootstrap 5.',
                 'is_active' => true,
+                'settings' => [
+                    'type' => 'onepage',
+                ],
             ]
         );
 
@@ -143,6 +146,9 @@ class WebsiteThemeSeeder extends Seeder
                 'folder' => 'education',
                 'description' => 'Tema portal website kampus & institusi pendidikan multipage berbasis Unify.',
                 'is_active' => false,
+                'settings' => [
+                    'type' => 'multipage',
+                ],
             ]
         );
 

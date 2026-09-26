@@ -20,16 +20,5 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';
 require __DIR__.'/template.php';
+require __DIR__.'/education.php';
 
-// Dynamic route handler for website multipage pages (e.g. page-programs-1.blade.php)
-Route::get('/{page}', function ($page) {
-    $activeTheme = \App\Models\Admin\DukunganAplikasi\WebsiteTheme::getActiveTheme();
-    $folder = $activeTheme->folder ?? 'education';
-    $cleanPage = str_replace('.blade.php', '', $page);
-
-    if (view()->exists("website.{$folder}.{$cleanPage}")) {
-        return view("website.{$folder}.{$cleanPage}");
-    }
-
-    abort(404);
-})->where('page', '^[a-zA-Z0-9\-_]+(\.blade\.php)?$');

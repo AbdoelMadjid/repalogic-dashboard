@@ -51,7 +51,7 @@
                   <i class="g-font-size-16 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                 </a>
 
-                <a class="btn btn-block d-flex u-shadow-v32 g-brd-2 g-brd-main g-brd-primary--hover g-color-main g-color-white--hover g-bg-transparent g-bg-primary--hover g-font-size-16 text-left g-rounded-30 g-px-30 g-py-10 ml-2 g-mt-0" href="page-contacts-1.html">
+                <a class="btn btn-block d-flex u-shadow-v32 g-brd-2 g-brd-main g-brd-primary--hover g-color-main g-color-white--hover g-bg-transparent g-bg-primary--hover g-font-size-16 text-left g-rounded-30 g-px-30 g-py-10 ml-2 g-mt-0" href="{{ route('education.contacts') }}">
                   Ask a Question
                   <i class="g-font-size-16 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                 </a>

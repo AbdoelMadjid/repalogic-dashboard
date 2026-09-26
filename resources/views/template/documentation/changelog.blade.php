@@ -117,7 +117,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.9.5 -->
+                        <!-- Version 2.9.6 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -125,8 +125,37 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.9.5</h5>
+                                        <h5 class="fw-bold mb-0">v2.9.6</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.6</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-26 21:50 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Standardisasi Route Helper Laravel Portal Education, Dedicated EducationController, Arsitektur Tema Multi-Page vs One-Page &amp; Manajemen Konfigurasi Website Dinamis</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Standardisasi Route Helper Laravel:</strong> Mengganti seluruh link statis mentah (<code>page-*.blade.php</code> dan <code>page-*.html</code>) pada seluruh view tema Education (Header, Footer, Programs, Campus Life, Research, Events, Alumni, Faculty &amp; Staff, Future &amp; Current Students, Apply, Contacts, Help) dengan helper resmi <code>route('education.*')</code>.</li>
+                                    <li><strong class="text-dark">Dedicated EducationController:</strong> Membuat controller mandiri <code>app/Http/Controllers/Website/EducationController.php</code> untuk merender view setiap halaman portal secara bersih dan terstruktur.</li>
+                                    <li><strong class="text-dark">Pemisahan Konfigurasi Multi-Page vs One-Page:</strong> Menyesuaikan modul admin Konfigurasi Website agar membedakan arsitektur tema Multi-Page (Education Portal) dengan One-Page Landing (Default). Menampilkan indikator URL akses rute bersih, tombol langsung Buka Halaman, serta menyederhanakan opsi seksi khusus halaman mandiri.</li>
+                                    <li><strong class="text-dark">Smart Fallback &amp; Auto-Redirect:</strong> Menyediakan penanganan redirect otomatis cerdas pada <code>routes/web.php</code> untuk meredirect URL legacy berformat <code>*.blade.php</code> atau <code>*.html</code> ke rute canonical bersih.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark border fs-xs">Education Theme</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Route Helper</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Multi-Page Architecture</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Konfigurasi Website</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.9.5 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xs text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.9.5</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.5</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-26 00:15 WIB</span>

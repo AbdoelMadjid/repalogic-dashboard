@@ -433,7 +433,7 @@
           </div>
           <!-- End Heading -->
 
-          <a class="btn u-shadow-v33 g-color-white g-bg-primary g-bg-main--hover g-rounded-30 g-px-35 g-py-13" href="page-apply-1.html">Apply Now</a>
+          <a class="btn u-shadow-v33 g-color-white g-bg-primary g-bg-main--hover g-rounded-30 g-px-35 g-py-13" href="{{ route('education.apply') }}">Apply Now</a>
 
           <!-- SVG Shape -->
           <svg class="d-inline-block g-width-35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -459,7 +459,7 @@
           </svg>
           <!-- End SVG Shape -->
 
-          <a class="btn u-shadow-v32 g-color-primary g-color-white--hover g-bg-white g-bg-main--hover g-rounded-30 g-px-35 g-py-13" href="page-contacts-1.html">Contact Us</a>
+          <a class="btn u-shadow-v32 g-color-primary g-color-white--hover g-bg-white g-bg-main--hover g-rounded-30 g-px-35 g-py-13" href="{{ route('education.contacts') }}">Contact Us</a>
         </div>
 
         <!-- SVG Background Shape -->

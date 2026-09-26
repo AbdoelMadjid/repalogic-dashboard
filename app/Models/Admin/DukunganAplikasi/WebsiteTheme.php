@@ -28,6 +28,22 @@ class WebsiteTheme extends Model
     ];
 
     /**
+     * Memeriksa apakah tema bertipe Multi-Page Portal.
+     */
+    public function isMultipage(): bool
+    {
+        return $this->folder === 'education' || (($this->settings['type'] ?? '') === 'multipage');
+    }
+
+    /**
+     * Memeriksa apakah tema bertipe One-Page Landing.
+     */
+    public function isOnePage(): bool
+    {
+        return !$this->isMultipage();
+    }
+
+    /**
      * Relasi ke seksi-seksi halaman pada tema ini.
      */
     public function sections()

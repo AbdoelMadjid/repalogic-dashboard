@@ -135,7 +135,7 @@
                     <h3 class="h5 g-color-blue g-color-main--hover g-font-primary mb-1">Future Students</h3>
                     <p class="g-font-size-16 mb-0">Unify's unique personality rests on the bedrock values of academic excellence.</p>
                   </div>
-                  <a class="u-link-v2" href="page-future-students-1.html"></a>
+                  <a class="u-link-v2" href="{{ route('education.future-students') }}"></a>
                 </div>
               </li>
               <!-- End Links -->
@@ -152,7 +152,7 @@
                     <h3 class="h5 g-color-purple g-color-main--hover g-font-primary mb-1">Academic Programs</h3>
                     <p class="g-font-size-16 mb-0">An Unify education fosters personal growth and a commitment to the world beyond oneself.</p>
                   </div>
-                  <a class="u-link-v2" href="page-programs-1.html"></a>
+                  <a class="u-link-v2" href="{{ route('education.programs') }}"></a>
                 </div>
               </li>
               <!-- End Links -->
@@ -169,7 +169,7 @@
                     <h3 class="h5 g-color-teal g-color-main--hover g-font-primary mb-1">Key Dates</h3>
                     <p class="g-font-size-16 mb-0">There is no better way to understand Unify University than by spending time on campus.</p>
                   </div>
-                  <a class="u-link-v2" href="page-events-1.html"></a>
+                  <a class="u-link-v2" href="{{ route('education.events') }}"></a>
                 </div>
               </li>
               <!-- End Links -->
@@ -186,7 +186,7 @@
                     <h3 class="h5 g-color-brown g-color-main--hover g-font-primary mb-1">Campus Tours</h3>
                     <p class="g-font-size-16 mb-0">Take a tour, learn about admission and financial aid, speak with current students.</p>
                   </div>
-                  <a class="u-link-v2" href="page-campus-life-1.html"></a>
+                  <a class="u-link-v2" href="{{ route('education.campus-life') }}"></a>
                 </div>
               </li>
               <!-- End Links -->
@@ -667,7 +667,7 @@
           <!-- End More Events List -->
 
           <div class="text-center">
-            <a class="btn u-shadow-v33 g-color-white g-color-white--hover g-bg-primary g-bg-main--hover g-rounded-30 g-px-25 g-py-10" href="page-events-1.html">View all Events</a>
+            <a class="btn u-shadow-v33 g-color-white g-color-white--hover g-bg-primary g-bg-main--hover g-rounded-30 g-px-25 g-py-10" href="{{ route('education.events') }}">View all Events</a>
           </div>
         </div>
       </div>
@@ -718,7 +718,7 @@
                     <img class="img-fluid g-brd-around g-brd-2 g-brd-primary-opacity-0_1 rounded-circle" src="{{ asset('asset_education/img-temp') }}/100x100/img3.jpg" alt="Image Description">
                   </div>
                 </div>
-                <a class="u-link-v2" href="page-blog-single-item-1.html"></a>
+                <a class="u-link-v2" href="{{ route('education.blog-detail') }}"></a>
               </article>
             </div>
             <!-- End News -->
@@ -733,7 +733,7 @@
                     <img class="img-fluid g-brd-around g-brd-2 g-brd-primary-opacity-0_1 rounded-circle" src="{{ asset('asset_education/img-temp') }}/100x100/img2.jpg" alt="Image Description">
                   </div>
                 </div>
-                <a class="btn btn-block g-color-primary g-color-white--hover g-bg-primary-opacity-0_1 g-bg-primary--hover g-rounded-20 g-py-10" href="page-blog-single-item-1.html">Read more</a>
+                <a class="btn btn-block g-color-primary g-color-white--hover g-bg-primary-opacity-0_1 g-bg-primary--hover g-rounded-20 g-py-10" href="{{ route('education.blog-detail') }}">Read more</a>
               </article>
             </div>
             <!-- End News -->
@@ -748,7 +748,7 @@
                     <img class="img-fluid g-brd-around g-brd-2 g-brd-primary-opacity-0_1 rounded-circle" src="{{ asset('asset_education/img-temp') }}/100x100/img5.jpg" alt="Image Description">
                   </div>
                 </div>
-                <a class="u-link-v2" href="page-blog-single-item-1.html"></a>
+                <a class="u-link-v2" href="{{ route('education.blog-detail') }}"></a>
               </article>
             </div>
             <!-- End News -->
@@ -763,7 +763,7 @@
                     <img class="img-fluid g-brd-around g-brd-2 g-brd-primary-opacity-0_1 rounded-circle" src="{{ asset('asset_education/img-temp') }}/100x100/img3.jpg" alt="Image Description">
                   </div>
                 </div>
-                <a class="btn btn-block g-color-primary g-color-white--hover g-bg-primary-opacity-0_1 g-bg-primary--hover g-rounded-20 g-py-10" href="page-blog-single-item-1.html">Read more</a>
+                <a class="btn btn-block g-color-primary g-color-white--hover g-bg-primary-opacity-0_1 g-bg-primary--hover g-rounded-20 g-py-10" href="{{ route('education.blog-detail') }}">Read more</a>
               </article>
             </div>
             <!-- End News -->
@@ -778,7 +778,7 @@
                     <img class="img-fluid g-brd-around g-brd-2 g-brd-primary-opacity-0_1 rounded-circle" src="{{ asset('asset_education/img-temp') }}/100x100/img4.jpg" alt="Image Description">
                   </div>
                 </div>
-                <a class="u-link-v2" href="page-blog-single-item-1.html"></a>
+                <a class="u-link-v2" href="{{ route('education.blog-detail') }}"></a>
               </article>
             </div>
             <!-- End News -->
@@ -798,7 +798,7 @@
           </div>
           <!-- End Heading -->
 
-          <a class="btn u-shadow-v33 g-color-white g-bg-primary g-bg-main--hover g-rounded-30 g-px-35 g-py-13" href="page-apply-1.html">Apply Now</a>
+          <a class="btn u-shadow-v33 g-color-white g-bg-primary g-bg-main--hover g-rounded-30 g-px-35 g-py-13" href="{{ route('education.apply') }}">Apply Now</a>
 
           <!-- SVG Shape -->
           <svg class="d-inline-block g-width-35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -824,7 +824,7 @@
           </svg>
           <!-- End SVG Shape -->
 
-          <a class="btn u-shadow-v32 g-color-primary g-color-white--hover g-bg-white g-bg-main--hover g-rounded-30 g-px-35 g-py-13" href="page-contacts-1.html">Contact Us</a>
+          <a class="btn u-shadow-v32 g-color-primary g-color-white--hover g-bg-white g-bg-main--hover g-rounded-30 g-px-35 g-py-13" href="{{ route('education.contacts') }}">Contact Us</a>
         </div>
 
         <!-- SVG Background Shape -->
