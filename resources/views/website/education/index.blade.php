@@ -5,6 +5,17 @@
     <!-- Title -->
     <title>@yield('title', ($appProfil->app_name ?? 'REPALOGIC') . ' - Education Portal')</title>
 
+    <script>
+        (function() {
+            try {
+                const savedLang = sessionStorage.getItem("__THEME_LANG__");
+                if (savedLang) {
+                    document.cookie = `__THEME_LANG__=${savedLang};path=/;max-age=31536000;SameSite=Lax`;
+                }
+            } catch (e) {}
+        })();
+    </script>
+
     @include('website.education.partials._css')
     @yield('styles')
 </head>

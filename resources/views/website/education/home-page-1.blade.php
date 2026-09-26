@@ -1,6 +1,6 @@
 @extends('website.education.index')
 
-@section('title', 'Multipage - Education Home Page | Unify - Responsive Website Template')
+@section('title', 'Home - Education')
 
 @section('content')
 <!-- Carousel Slider -->

@@ -1,6 +1,6 @@
 @extends('website.education.index')
 
-@section('title', 'Multipage - Education Future Students Page | Unify - Responsive Website Template')
+@section('title', 'Future Students - Education')
 
 @section('content')
 <!-- Promo Block -->

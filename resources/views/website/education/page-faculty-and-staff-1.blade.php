@@ -1,6 +1,6 @@
 @extends('website.education.index')
 
-@section('title', 'Multipage - Education Faculty &amp; Staff Page | Unify - Responsive Website Template')
+@section('title', 'Faculty & Staff - Education')
 
 @section('content')
 <!-- Promo Block -->

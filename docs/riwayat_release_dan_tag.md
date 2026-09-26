@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v2.9.6`  
-> **Terakhir Diperbarui:** 26 September 2026 21:50 WIB  
+> **Versi Terbaru:** `v2.9.7`  
+> **Terakhir Diperbarui:** 26 September 2026 23:25 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v2.9.7`** | `2026-09-26 23:25 WIB` | Penyempurnaan Meta Title Bersih & Integrasi Sistem Bilingual (i18n) Tema Education Portal (Format Judul Bersih `[Halaman] - Education`, Dynamic Language Switcher ID/EN `_header.blade.php`, Modular Translation Dictionaries `frontpage.json`, Dedicated `education-i18n.js` Engine & Anti-Flicker Pre-Hydration) |
 | **`v2.9.6`** | `2026-09-26 21:50 WIB` | Standardisasi Route Helper Laravel Portal Education, Dedicated EducationController, Arsitektur Tema Multi-Page vs One-Page & Manajemen Konfigurasi Website Dinamis (Pembersihan URL `page-*.blade.php`, Canonical Named Routes `education.*`, Direct Route Access & Smart Redirect Handler) |
 | **`v2.9.5`** | `2026-09-26 00:15 WIB` | Default Website Landing Theme Font Assets Restoration: Penyalinan dan perbaikan font Tabler Icons (`tabler-icons.woff2`, `tabler-icons.woff`, `tabler-icons.ttf`) ke direktori `public/assets_default/css/fonts/` dan `public/assets_default/fonts/` untuk memastikan seluruh icon pada landing page default tampil sempurna |
 | **`v2.9.4`** | `2026-09-25 23:45 WIB` | Dynamic Multi-Theme Engine & Website Sections: Integrasi Tema Unify Education Portal (13 Seksi & Halaman Multipage Modular Blade), Dynamic Auth Login (`page-signin-1.blade.php`), Standardisasi Auth Menu Header (`@auth`/`@guest`), Pemisahan Aset Publik Terisolasi (`assets_default` & `asset_education`) & Dynamic Multipage Route Handler di `routes/web.php` |

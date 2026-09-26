@@ -27,6 +27,9 @@
 <!-- JS Customization -->
 <script src="{{ asset('asset_education/js') }}/custom.js"></script>
 
+<!-- JS Bilingual i18n Translation Engine -->
+<script src="{{ asset('assets/js/website/education-i18n.js') }}"></script>
+
 <!-- JS Plugins Init. -->
 <script>
   $(document).on('ready', function () {

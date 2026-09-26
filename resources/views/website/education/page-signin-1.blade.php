@@ -1,6 +1,6 @@
 @extends('website.education.index')
 
-@section('title', 'Masuk ke Akun | ' . ($appProfil->app_name ?? 'REPALOGIC Dashboard'))
+@section('title', 'Sign In - Education')
 
 @section('content')
 <!-- Signin Form -->

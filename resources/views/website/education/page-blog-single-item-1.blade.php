@@ -1,6 +1,6 @@
 @extends('website.education.index')
 
-@section('title', '404 - Page Not Found | Education')
+@section('title', '404 Not Found - Education')
 
 @section('content')
 <section class="g-min-height-60vh g-flex-centered g-py-100">

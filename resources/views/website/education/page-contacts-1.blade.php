@@ -1,6 +1,6 @@
 @extends('website.education.index')
 
-@section('title', 'Multipage - Education Contacts Page | Unify - Responsive Website Template')
+@section('title', 'Contacts - Education')
 
 @section('content')
 <!-- Contacts -->

@@ -5,11 +5,11 @@
       <div class="col-6 col-md-3 g-mb-20">
         <!-- Footer Links -->
         <ul class="list-unstyled">
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.future-students') }}">Future Students</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.current-students') }}">Current Students</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.alumni') }}">Alumni</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.faculty-and-staff') }}">Faculty &amp; Staff</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="#">Donors</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.future-students') }}" data-lang="education-future-students">Future Students</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.current-students') }}" data-lang="education-current-students">Current Students</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.alumni') }}" data-lang="education-alumni">Alumni</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.faculty-and-staff') }}" data-lang="education-faculty-and-staff">Faculty &amp; Staff</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="#" data-lang="education-donors">Donors</a></li>
         </ul>
         <!-- End Footer Links -->
       </div>
@@ -17,11 +17,11 @@
       <div class="col-6 col-md-3 g-mb-20">
         <!-- Footer Links -->
         <ul class="list-unstyled">
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.events') }}">News &amp; Media</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.research') }}">Research &amp; Innovation</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.programs') }}">Academics</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.programs') }}">Programs of Study</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.campus-life') }}">University Life</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.events') }}" data-lang="education-news-media">News &amp; Media</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.research') }}" data-lang="education-research-innovation">Research &amp; Innovation</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.programs') }}" data-lang="education-academics">Academics</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.programs') }}" data-lang="education-programs-study">Programs of Study</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.campus-life') }}" data-lang="education-university-life">University Life</a></li>
         </ul>
         <!-- End Footer Links -->
       </div>
@@ -29,11 +29,11 @@
       <div class="col-6 col-md-3 g-mb-20">
         <!-- Footer Links -->
         <ul class="list-unstyled">
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.contacts') }}">Contacts</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.apply') }}">Careers</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.help') }}">Accessibility</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="#">Privacy</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="#">Site Feedback</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.contacts') }}" data-lang="education-contacts">Contacts</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.apply') }}" data-lang="education-careers">Careers</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="{{ route('education.help') }}" data-lang="education-accessibility">Accessibility</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="#" data-lang="education-privacy">Privacy</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="#" data-lang="education-site-feedback">Site Feedback</a></li>
         </ul>
         <!-- End Footer Links -->
       </div>
@@ -44,8 +44,8 @@
           <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="#">Downtown Ontario Campus</a></li>
           <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="#">Mississauga Campus</a></li>
           <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="#">Scarborough Campus</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="#">Campus Maps</a></li>
-          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="#">Campus Safety</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="#" data-lang="education-campus-maps">Campus Maps</a></li>
+          <li class="g-py-5"><a class="u-link-v5 g-color-footer-links g-color-primary--hover g-font-size-16" href="#" data-lang="education-campus-safety">Campus Safety</a></li>
         </ul>
         <!-- End Footer Links -->
       </div>

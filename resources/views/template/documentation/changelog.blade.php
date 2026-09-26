@@ -31,8 +31,7 @@
         </div>
 
         <!-- Release Procedure Guide Card (Khusus Superadmin & Admin) -->
-        @if (auth()->check() &&
-                auth()->user()->hasAnyRole(['superadmin', 'admin']))
+        @if (auth()->check() && auth()->user()->hasAnyRole(['superadmin', 'admin']))
             <div class="col-12 mb-4">
                 <div class="card border border-info-subtle shadow-sm">
                     <div class="card-header bg-info-subtle py-3 d-flex justify-content-between align-items-center">
@@ -117,7 +116,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.9.6 -->
+                        <!-- Version 2.9.7 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -125,8 +124,37 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.9.6</h5>
+                                        <h5 class="fw-bold mb-0">v2.9.7</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.7</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-26 23:25 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Penyempurnaan Meta Title Bersih &amp; Integrasi Sistem Bilingual (i18n) Tema Education Portal</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Penyederhanaan &amp; Standardisasi Meta Title:</strong> Memperbarui seluruh meta title pada 14 halaman tema Education dari format panjang template (<code>Multipage - Education [Halaman] | Unify...</code>) menjadi format bersih dan elegan (<code>[Judul Halaman] - Education</code>).</li>
+                                    <li><strong class="text-dark">Integrasi Dynamic Bilingual Language Selector:</strong> Menggantikan pemilih bahasa statis pada header tema Education dengan sistem switcher bahasa interaktif (Indonesia 🇮🇩 dan English 🇺🇸) yang terhubung langsung dengan preferensi sesi sistem (<code>__THEME_LANG__</code>).</li>
+                                    <li><strong class="text-dark">Kamus Terjemahan Modular Frontpage (ID &amp; EN):</strong> Mendaftarkan seluruh entitas terjemahan navigasi, header, link footer, form pencarian, dan tombol aksi ke dalam <code>id/frontpage.json</code> dan <code>en/frontpage.json</code> yang dapat dikelola melalui Admin Translation Manager.</li>
+                                    <li><strong class="text-dark">Dedicated Education i18n Engine &amp; Anti-Flicker:</strong> Menyediakan engine <code>education-i18n.js</code> dengan dukungan <em>zero-reload instant translation</em> (&lt; 5ms) dan pre-hydration anti-flicker pada <code>index.blade.php</code>.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark border fs-xs">Meta Title Fix</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Bilingual i18n</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Education Theme</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Language Selector</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.9.6 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xs text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.9.6</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.6</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-26 21:50 WIB</span>

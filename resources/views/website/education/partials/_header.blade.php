@@ -1,3 +1,11 @@
+@php
+    $currentLang = request()->cookie('__THEME_LANG__', 'id');
+    $isEn = $currentLang === 'en';
+    $currentFlag = $isEn ? asset('assets/images/flags/us.svg') : asset('assets/images/flags/id.svg');
+    $currentLabel = $isEn ? 'English' : 'Indonesia';
+    $currentCode = $isEn ? 'EN' : 'ID';
+@endphp
+
 <!-- Header -->
 <header id="js-header" class="u-header">
   <div class="u-header__section">
@@ -6,12 +14,12 @@
       <div class="container g-py-5">
         <ul class="list-inline d-flex align-items-center g-mb-0">
           <li class="list-inline-item d-none d-lg-inline-block">
-            <a class="u-link-v5 g-brd-around g-brd-white-opacity-0_2 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 g-rounded-20 text-uppercase g-px-20 g-py-10" href="{{ route('education.apply') }}">Apply for Fall intake</a>
+            <a class="u-link-v5 g-brd-around g-brd-white-opacity-0_2 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 g-rounded-20 text-uppercase g-px-20 g-py-10" href="{{ route('education.apply') }}" data-lang="education-apply-fall">Apply for Fall intake</a>
           </li>
 
           <!-- Language -->
-          <li class="list-inline-item g-pos-rel ml-lg-auto">
-            <a id="language-dropdown-invoker" class="d-none d-sm-flex align-items-center u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-pl-0 g-pl-10--lg g-pr-10 g-py-15" href="#"
+          <li class="list-inline-item g-pos-rel ml-lg-auto" id="education-language-selector">
+            <a id="language-dropdown-invoker" class="d-none d-sm-flex align-items-center u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-pl-0 g-pl-10--lg g-pr-10 g-py-15" href="javascript:void(0);"
                aria-controls="language-dropdown"
                aria-haspopup="true"
                aria-expanded="false"
@@ -22,57 +30,23 @@
                data-dropdown-hide-on-scroll="true"
                data-dropdown-animation-in="fadeIn"
                data-dropdown-animation-out="fadeOut">
-              <svg xmlns="http://www.w3.org/2000/svg" height="11" width="27" viewBox="0 0 640 480">
-                <defs>
-                  <clipPath id="a">
-                    <path fill-opacity=".67" d="M-85.333 0h682.67v512h-682.67z"/>
-                  </clipPath>
-                </defs>
-                <g clip-path="url(#a)" transform="translate(80) scale(.94)">
-                  <g stroke-width="1pt">
-                    <path fill="#006" d="M-256 0H768.02v512.01H-256z"/>
-                    <path d="M-256 0v57.244l909.535 454.768H768.02V454.77L-141.515 0H-256zM768.02 0v57.243L-141.515 512.01H-256v-57.243L653.535 0H768.02z" fill="#fff"/>
-                    <path d="M170.675 0v512.01h170.67V0h-170.67zM-256 170.67v170.67H768.02V170.67H-256z" fill="#fff"/>
-                    <path d="M-256 204.804v102.402H768.02V204.804H-256zM204.81 0v512.01h102.4V0h-102.4zM-256 512.01L85.34 341.34h76.324l-341.34 170.67H-256zM-256 0L85.34 170.67H9.016L-256 38.164V0zm606.356 170.67L691.696 0h76.324L426.68 170.67h-76.324zM768.02 512.01L426.68 341.34h76.324L768.02 473.848v38.162z" fill="#c00"/>
-                  </g>
-                </g>
-              </svg>
-              English
+              <img id="edu-selected-lang-img" src="{{ $currentFlag }}" alt="{{ $currentLabel }}" class="rounded mr-2" style="width: 20px; height: 14px; object-fit: cover;" />
+              <span id="edu-selected-lang-code">{{ $currentLabel }}</span>
               <i class="g-ml-3 fa fa-angle-down"></i>
             </a>
 
             <ul id="language-dropdown" class="list-unstyled u-shadow-v39 g-brd-around g-brd-4 g-brd-white g-bg-secondary g-pos-abs g-left-0 g-z-index-99 g-mt-5"
                 aria-labelledby="language-dropdown-invoker">
               <li class="dropdown-item g-brd-bottom g-brd-2 g-brd-white g-px-0 g-py-2">
-                <a class="nav-link d-flex align-items-center g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="#">
-                  <svg class="mr-1 g-ml-minus-10" xmlns="http://www.w3.org/2000/svg" height="11" width="27" viewBox="0 0 640 480">
-                    <defs>
-                      <clipPath id="b">
-                        <path fill-opacity=".67" d="M-85.333 0h682.67v512h-682.67z"/>
-                      </clipPath>
-                    </defs>
-                    <g clip-path="url(#b)" transform="translate(80) scale(.94)">
-                      <g stroke-width="1pt">
-                        <path fill="#006" d="M-256 0H768.02v512.01H-256z"/>
-                        <path d="M-256 0v57.244l909.535 454.768H768.02V454.77L-141.515 0H-256zM768.02 0v57.243L-141.515 512.01H-256v-57.243L653.535 0H768.02z" fill="#fff"/>
-                        <path d="M170.675 0v512.01h170.67V0h-170.67zM-256 170.67v170.67H768.02V170.67H-256z" fill="#fff"/>
-                        <path d="M-256 204.804v102.402H768.02V204.804H-256zM204.81 0v512.01h102.4V0h-102.4zM-256 512.01L85.34 341.34h76.324l-341.34 170.67H-256zM-256 0L85.34 170.67H9.016L-256 38.164V0zm606.356 170.67L691.696 0h76.324L426.68 170.67h-76.324zM768.02 512.01L426.68 341.34h76.324L768.02 473.848v38.162z" fill="#c00"/>
-                      </g>
-                    </g>
-                  </svg>
-                  English
+                <a class="nav-link d-flex align-items-center g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="javascript:void(0);" data-translator-lang="id" title="Indonesia">
+                  <img src="{{ asset('assets/images/flags/id.svg') }}" alt="Indonesia" class="mr-2 rounded" style="width: 20px; height: 14px; object-fit: cover;" data-translator-image />
+                  <span data-lang="education-lang-indonesia">Indonesia</span>
                 </a>
               </li>
               <li class="dropdown-item g-px-0 g-py-2">
-                <a class="nav-link d-flex align-items-center g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="#">
-                  <svg class="mr-1 g-ml-minus-10" xmlns="http://www.w3.org/2000/svg" height="11" width="27" viewBox="0 0 640 480">
-                    <g fill-rule="evenodd" stroke-width="1pt">
-                      <path fill="#fff" d="M0 0h640v480H0z"/>
-                      <path fill="#0039a6" d="M0 160.003h640V480H0z"/>
-                      <path fill="#d52b1e" d="M0 319.997h640V480H0z"/>
-                    </g>
-                  </svg>
-                  Russian
+                <a class="nav-link d-flex align-items-center g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="javascript:void(0);" data-translator-lang="en" title="English">
+                  <img src="{{ asset('assets/images/flags/us.svg') }}" alt="English" class="mr-2 rounded" style="width: 20px; height: 14px; object-fit: cover;" data-translator-image />
+                  <span data-lang="education-lang-english">English</span>
                 </a>
               </li>
             </ul>
@@ -92,35 +66,48 @@
                data-dropdown-hide-on-scroll="true"
                data-dropdown-animation-in="fadeIn"
                data-dropdown-animation-out="fadeOut">
-              Jump To
+              <span data-lang="education-jump-to">Jump To</span>
               <i class="g-ml-3 fa fa-angle-down"></i>
             </a>
             <ul id="jump-to-dropdown" class="list-unstyled u-shadow-v39 g-brd-around g-brd-4 g-brd-white g-bg-secondary g-pos-abs g-left-0 g-z-index-99 g-mt-13"
                 aria-labelledby="jump-to-dropdown-invoker">
               <li class="dropdown-item g-brd-bottom g-brd-2 g-brd-white g-px-0 g-py-2">
-                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="{{ route('education.apply') }}">Apply Now</a>
+                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="{{ route('education.apply') }}" data-lang="education-apply-now">Apply Now</a>
               </li>
               <li class="dropdown-item g-brd-bottom g-brd-2 g-brd-white g-px-0 g-py-2">
-                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="{{ route('education.campus-life') }}">Campus Life</a>
+                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="{{ route('education.campus-life') }}" data-lang="education-campus-life">Campus Life</a>
               </li>
               <li class="dropdown-item g-brd-bottom g-brd-2 g-brd-white g-px-0 g-py-2">
-                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="{{ route('education.research') }}">Research</a>
+                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="{{ route('education.research') }}" data-lang="education-research">Research</a>
               </li>
               <li class="dropdown-item g-brd-bottom g-brd-2 g-brd-white g-px-0 g-py-2">
-                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="{{ route('education.help') }}">Help</a>
+                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="{{ route('education.help') }}" data-lang="education-help">Help</a>
               </li>
               <li class="dropdown-item g-brd-bottom g-brd-2 g-brd-white g-px-0 g-py-2">
-                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="{{ route('education.contacts') }}">Contacts</a>
+                <a class="nav-link g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="{{ route('education.contacts') }}" data-lang="education-contacts">Contacts</a>
+              </li>
+              <!-- Mobile Language Switches -->
+              <li class="dropdown-item g-brd-bottom g-brd-2 g-brd-white g-px-0 g-py-2">
+                <a class="nav-link d-flex align-items-center g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="javascript:void(0);" data-translator-lang="id">
+                  <img src="{{ asset('assets/images/flags/id.svg') }}" alt="Indonesia" class="mr-2 rounded" style="width: 18px; height: 12px; object-fit: cover;" />
+                  Bahasa Indonesia
+                </a>
+              </li>
+              <li class="dropdown-item g-brd-bottom g-brd-2 g-brd-white g-px-0 g-py-2">
+                <a class="nav-link d-flex align-items-center g-color-main g-color-primary--hover g-bg-secondary-dark-v2--hover g-font-size-default" href="javascript:void(0);" data-translator-lang="en">
+                  <img src="{{ asset('assets/images/flags/us.svg') }}" alt="English" class="mr-2 rounded" style="width: 18px; height: 12px; object-fit: cover;" />
+                  English
+                </a>
               </li>
               <li class="dropdown-item g-px-0 g-py-2">
                 @if (Route::has('login'))
                   @auth
-                    <a class="nav-link g-color-white g-bg-primary g-bg-primary-light-v1--hover g-font-size-default" href="{{ url('/dashboard') }}">Dashboard</a>
+                    <a class="nav-link g-color-white g-bg-primary g-bg-primary-light-v1--hover g-font-size-default" href="{{ url('/dashboard') }}" data-lang="education-dashboard">Dashboard</a>
                   @else
-                    <a class="nav-link g-color-white g-bg-primary g-bg-primary-light-v1--hover g-font-size-default" href="{{ route('login') }}">Sign in</a>
+                    <a class="nav-link g-color-white g-bg-primary g-bg-primary-light-v1--hover g-font-size-default" href="{{ route('login') }}" data-lang="education-sign-in">Sign in</a>
                   @endauth
                 @else
-                  <a class="nav-link g-color-white g-bg-primary g-bg-primary-light-v1--hover g-font-size-default" href="{{ route('login') }}">Sign in</a>
+                  <a class="nav-link g-color-white g-bg-primary g-bg-primary-light-v1--hover g-font-size-default" href="{{ route('login') }}" data-lang="education-sign-in">Sign in</a>
                 @endif
               </li>
             </ul>
@@ -129,25 +116,25 @@
 
           <!-- Links -->
           <li class="list-inline-item d-none d-lg-inline-block">
-            <a class="u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-px-10 g-py-15" href="{{ route('education.campus-life') }}">Campus Life</a>
+            <a class="u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-px-10 g-py-15" href="{{ route('education.campus-life') }}" data-lang="education-campus-life">Campus Life</a>
           </li>
           <li class="list-inline-item d-none d-lg-inline-block">
-            <a class="u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-px-10 g-py-15" href="{{ route('education.research') }}">Research</a>
+            <a class="u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-px-10 g-py-15" href="{{ route('education.research') }}" data-lang="education-research">Research</a>
           </li>
           <li class="list-inline-item d-none d-lg-inline-block">
-            <a class="u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-px-10 g-py-15" href="{{ route('education.help') }}">Help</a>
+            <a class="u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-px-10 g-py-15" href="{{ route('education.help') }}" data-lang="education-help">Help</a>
           </li>
           <li class="list-inline-item d-none d-lg-inline-block">
-            <a class="u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-px-10 g-py-15" href="{{ route('education.contacts') }}">Contacts</a>
+            <a class="u-link-v5 g-color-white-opacity-0_7 g-color-white--hover g-font-size-12 text-uppercase g-px-10 g-py-15" href="{{ route('education.contacts') }}" data-lang="education-contacts">Contacts</a>
           </li>
           <li class="list-inline-item d-none d-lg-inline-block">
             @if (Route::has('login'))
                 @auth
-                    <a class="u-link-v5 u-shadow-v19 g-color-white--hover g-bg-white g-bg-primary--hover g-font-size-12 text-uppercase g-rounded-20 g-px-18 g-py-8 g-ml-10" href="{{ url('/dashboard') }}">Dashboard</a>
+                    <a class="u-link-v5 u-shadow-v19 g-color-white--hover g-bg-white g-bg-primary--hover g-font-size-12 text-uppercase g-rounded-20 g-px-18 g-py-8 g-ml-10" href="{{ url('/dashboard') }}" data-lang="education-dashboard">Dashboard</a>
                 @else
-                    <a class="u-link-v5 u-shadow-v19 g-color-white--hover g-bg-white g-bg-primary--hover g-font-size-12 text-uppercase g-rounded-20 g-px-18 g-py-8 g-ml-10" href="{{ route('login') }}">Sign in</a>
+                    <a class="u-link-v5 u-shadow-v19 g-color-white--hover g-bg-white g-bg-primary--hover g-font-size-12 text-uppercase g-rounded-20 g-px-18 g-py-8 g-ml-10" href="{{ route('login') }}" data-lang="education-sign-in">Sign in</a>
                     @if (Route::has('register'))
-                        <a class="u-link-v5 u-shadow-v19 g-color-white g-bg-primary g-bg-primary-light-v1--hover g-font-size-12 text-uppercase g-rounded-20 g-px-18 g-py-8 g-ml-5" href="{{ route('register') }}">Register</a>
+                        <a class="u-link-v5 u-shadow-v19 g-color-white g-bg-primary g-bg-primary-light-v1--hover g-font-size-12 text-uppercase g-rounded-20 g-px-18 g-py-8 g-ml-5" href="{{ route('register') }}" data-lang="education-register">Register</a>
                     @endif
                 @endauth
             @endif
@@ -157,7 +144,7 @@
           <!-- Search -->
           <li class="list-inline-item g-ml-15--lg ml-auto">
             <form id="searchform-1" class="input-group u-shadow-v19 g-brd-primary--focus g-rounded-20">
-              <input class="form-control g-brd-none g-bg-white g-font-size-12 text-uppercase g-rounded-left-20 g-pl-20 g-py-9" type="text" placeholder="Search here ...">
+              <input class="form-control g-brd-none g-bg-white g-font-size-12 text-uppercase g-rounded-left-20 g-pl-20 g-py-9" type="text" placeholder="Search here ..." data-lang-placeholder="education-search-placeholder">
               <button class="btn input-group-addon d-flex align-items-center g-brd-none g-color-white g-bg-primary g-bg-primary-light-v1--hover g-font-size-13 g-rounded-right-20 g-transition-0_2" type="button">
                 <i class="fa fa-search"></i>
               </button>
@@ -211,13 +198,13 @@
               <a id="mega-menu-label-1" class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="#"
                  aria-haspopup="true"
                  aria-expanded="false">
-                Pages
+                <span data-lang="education-pages">Pages</span>
                 <i class="hs-icon hs-icon-arrow-bottom g-font-size-11 g-ml-7"></i>
               </a>
 
               <!-- Mega Menu -->
               <div class="w-100 hs-mega-menu u-shadow-v39 g-brd-around g-brd-7 g-brd-white g-bg-secondary g-text-transform-none g-pa-30 g-pa-50--lg g-my-20 g-my-0--lg" aria-labelledby="mega-menu-label-1">
-                <span class="d-block h1 g-brd-bottom g-brd-2 g-brd-main pb-2 mb-5">Pages</span>
+                <span class="d-block h1 g-brd-bottom g-brd-2 g-brd-main pb-2 mb-5" data-lang="education-pages">Pages</span>
 
                 <div class="row">
                   <div class="col-sm-6 col-lg-3">
@@ -225,19 +212,19 @@
                     <ul class="list-unstyled g-pr-30 mb-0">
                       <li class="py-2">
                         <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.programs') }}">
-                          Programs
+                          <span data-lang="education-programs">Programs</span>
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
                       <li class="py-2">
                         <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.future-students') }}">
-                          Future Students
+                          <span data-lang="education-future-students">Future Students</span>
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
                       <li class="py-2">
                         <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.current-students') }}">
-                          Current Students
+                          <span data-lang="education-current-students">Current Students</span>
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
@@ -250,19 +237,19 @@
                     <ul class="list-unstyled g-pr-30 mb-0">
                       <li class="py-2">
                         <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.faculty-and-staff') }}">
-                          Faculty &amp; Staff
+                          <span data-lang="education-faculty-and-staff">Faculty &amp; Staff</span>
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
                       <li class="py-2">
                         <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.events') }}">
-                          Events
+                          <span data-lang="education-events">Events</span>
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
                       <li class="py-2">
                         <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.alumni') }}">
-                          Alumni
+                          <span data-lang="education-alumni">Alumni</span>
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
@@ -275,19 +262,19 @@
                     <ul class="list-unstyled g-pr-30 mb-0">
                       <li class="py-2">
                         <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.campus-life') }}">
-                          Campus Life
+                          <span data-lang="education-campus-life">Campus Life</span>
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
                       <li class="py-2">
                         <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.research') }}">
-                          Research
+                          <span data-lang="education-research">Research</span>
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
                       <li class="py-2">
                         <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.apply') }}">
-                          Apply
+                          <span data-lang="education-apply-now">Apply</span>
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
@@ -300,13 +287,13 @@
                     <ul class="list-unstyled g-pr-30 mb-0">
                       <li class="py-2">
                         <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.contacts') }}">
-                          Contacts
+                          <span data-lang="education-contacts">Contacts</span>
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
                       <li class="py-2">
                         <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('education.help') }}">
-                          Help
+                          <span data-lang="education-help">Help</span>
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
@@ -314,25 +301,25 @@
                         @if (Route::has('login'))
                             @auth
                                 <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ url('/dashboard') }}">
-                                  Dashboard
+                                  <span data-lang="education-dashboard">Dashboard</span>
                                   <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">dashboard</i>
                                 </a>
                             @else
                                 <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('login') }}">
-                                  Sign in
+                                  <span data-lang="education-sign-in">Sign in</span>
                                   <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                                 </a>
                             @endauth
                         @else
                             <a class="d-flex g-color-main g-color-primary--hover g-text-underline--none--hover g-py-5" href="{{ route('login') }}">
-                              Sign in
+                              <span data-lang="education-sign-in">Sign in</span>
                               <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                             </a>
                         @endif
                       </li>
                       <li class="py-2">
                         <a class="d-flex g-brd-top g-brd-primary g-color-main g-color-primary--hover g-text-underline--none--hover g-pt-15 g-pb-5" href="{{ url('/') }}">
-                          Main Home
+                          <span data-lang="education-main-home">Main Home</span>
                           <i class="g-color-primary g-font-size-15 g-pos-rel g-top-5 ml-auto material-icons">arrow_forward</i>
                         </a>
                       </li>
@@ -346,32 +333,32 @@
             <!-- End Pages - Mega Menu -->
 
             <li class="nav-item">
-              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="{{ route('education.programs') }}">
+              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="{{ route('education.programs') }}" data-lang="education-programs">
                 Programs
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="{{ route('education.future-students') }}">
+              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="{{ route('education.future-students') }}" data-lang="education-future-students">
                 Future Students
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="{{ route('education.current-students') }}">
+              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="{{ route('education.current-students') }}" data-lang="education-current-students">
                 Current Students
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="{{ route('education.faculty-and-staff') }}">
+              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="{{ route('education.faculty-and-staff') }}" data-lang="education-faculty-and-staff">
                 Faculty &amp; Staff
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="{{ route('education.events') }}">
+              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-px-15--lg g-py-10 g-py-30--lg" href="{{ route('education.events') }}" data-lang="education-events">
                 Events
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-pl-15--lg g-pr-0--lg g-py-10 g-py-30--lg" href="{{ route('education.alumni') }}">
+              <a class="nav-link g-color-primary--hover g-font-size-15 g-font-size-17--xl g-pl-15--lg g-pr-0--lg g-py-10 g-py-30--lg" href="{{ route('education.alumni') }}" data-lang="education-alumni">
                 Alumni
               </a>
             </li>
