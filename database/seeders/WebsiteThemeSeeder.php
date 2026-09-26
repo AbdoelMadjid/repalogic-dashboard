@@ -203,10 +203,10 @@ class WebsiteThemeSeeder extends Seeder
             ],
             [
                 'section_name' => 'Dosen & Staf (Faculty & Staff)',
-                'section_key' => 'faculty-staff',
+                'section_key' => 'faculty-and-staff',
                 'section_file' => 'page-faculty-and-staff-1.blade.php',
                 'nav_title' => 'Faculty & Staff',
-                'target_id' => 'faculty-staff',
+                'target_id' => 'faculty-and-staff',
                 'show_in_nav' => true,
                 'is_active' => true,
                 'orders' => 5,

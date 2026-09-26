@@ -186,13 +186,35 @@
                                                 <th class="text-center align-middle text-nowrap">Menu Navbar</th>
                                                 <th class="text-center align-middle text-nowrap">Status {{ $isMulti ? 'Halaman' : 'Seksi' }}</th>
                                                 <th class="text-center align-middle text-nowrap">{{ $isMulti ? 'Tipe Halaman' : 'Gaya Latar (Background)' }}</th>
-                                                <th class="text-center align-middle text-nowrap" style="width: 130px;">Aksi</th>
+                                                <th class="text-center align-middle text-nowrap" style="width: 100px;">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody id="sortable-sections-list">
                                             @forelse ($activeTheme->sections as $sec)
                                                 @php
-                                                    $pageUrl = $sec->section_key === 'home' ? url('/') : url('/' . ($sec->target_id ?: $sec->section_key));
+                                                    if ($isMulti) {
+                                                        $slug = $sec->target_id ?: $sec->section_key;
+                                                        if ($slug === 'home' || $sec->section_key === 'home') {
+                                                            $routeName = $activeTheme->folder . '.home';
+                                                            $pageUrl = \Illuminate\Support\Facades\Route::has($routeName) ? route($routeName) : url('/' . $activeTheme->folder);
+                                                            $displayPath = '/' . $activeTheme->folder;
+                                                        } else {
+                                                            $routeName = $activeTheme->folder . '.' . $slug;
+                                                            if (\Illuminate\Support\Facades\Route::has($routeName)) {
+                                                                $pageUrl = route($routeName);
+                                                                $displayPath = '/' . $activeTheme->folder . '/' . $slug;
+                                                            } elseif (\Illuminate\Support\Facades\Route::has($activeTheme->folder . '.' . \Illuminate\Support\Str::slug($sec->section_name))) {
+                                                                $pageUrl = route($activeTheme->folder . '.' . \Illuminate\Support\Str::slug($sec->section_name));
+                                                                $displayPath = '/' . $activeTheme->folder . '/' . \Illuminate\Support\Str::slug($sec->section_name);
+                                                            } else {
+                                                                $pageUrl = url('/' . $activeTheme->folder . '/' . $slug);
+                                                                $displayPath = '/' . $activeTheme->folder . '/' . $slug;
+                                                            }
+                                                        }
+                                                    } else {
+                                                        $pageUrl = url('/#' . ($sec->target_id ?: $sec->section_key));
+                                                        $displayPath = '#' . ($sec->target_id ?: $sec->section_key);
+                                                    }
                                                 @endphp
                                                 <tr class="section-row" data-id="{{ $sec->id }}">
                                                     <td class="text-center align-middle">
@@ -225,14 +247,14 @@
                                                             </button>
                                                         </div>
                                                     </td>
-                                                    <td class="align-middle font-monospace text-muted fs-12">
+                                                    <td class="align-middle font-monospace fs-12">
                                                         @if ($isMulti)
-                                                            <a href="{{ $pageUrl }}" target="_blank" class="text-decoration-none fw-semibold text-primary d-inline-flex align-items-center gap-1">
-                                                                <code>{{ $sec->section_key === 'home' ? '/' : '/' . ($sec->target_id ?: $sec->section_key) }}</code>
-                                                                <i class="ti ti-external-link fs-12"></i>
+                                                            <a href="{{ $pageUrl }}" target="_blank" class="text-decoration-none fw-semibold text-primary d-inline-flex align-items-center gap-1" title="Buka Pratinjau {{ $displayPath }} di Tab Baru">
+                                                                <code class="bg-primary-subtle text-primary px-2 py-0.5 rounded border border-primary border-opacity-25">{{ $displayPath }}</code>
+                                                                <i class="ti ti-external-link fs-13 text-primary"></i>
                                                             </a>
                                                         @else
-                                                            #{{ $sec->target_id ?: $sec->section_key }}
+                                                            <span class="text-muted">#{{ $sec->target_id ?: $sec->section_key }}</span>
                                                         @endif
                                                     </td>
                                                     <td class="text-center align-middle">
@@ -309,11 +331,6 @@
                                                     </td>
                                                     <td class="text-center align-middle">
                                                         <div class="d-flex align-items-center justify-content-center gap-1">
-                                                            @if ($isMulti)
-                                                                <a href="{{ $pageUrl }}" target="_blank" class="btn btn-sm btn-outline-info px-2 py-1 fs-12 fw-semibold" title="Buka Pratinjau Halaman Ini di Tab Baru">
-                                                                    <i class="ti ti-external-link me-1"></i> Buka
-                                                                </a>
-                                                            @endif
                                                             <button type="button" class="btn btn-sm btn-outline-warning px-2 py-1 btn-edit-seksi"
                                                                 data-section-id="{{ $sec->id }}"
                                                                 data-section-name="{{ $sec->section_name }}"
