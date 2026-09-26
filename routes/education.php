@@ -22,6 +22,7 @@ Route::prefix('education')->name('education.')->group(function () {
     Route::get('/future-students', [EducationController::class, 'futureStudents'])->name('future-students');
     Route::get('/current-students', [EducationController::class, 'currentStudents'])->name('current-students');
     Route::get('/faculty-and-staff', [EducationController::class, 'facultyAndStaff'])->name('faculty-and-staff');
+    Route::get('/faculty-staff', [EducationController::class, 'facultyAndStaff'])->name('faculty-staff');
     Route::get('/events', [EducationController::class, 'events'])->name('events');
     Route::get('/alumni', [EducationController::class, 'alumni'])->name('alumni');
     Route::get('/campus-life', [EducationController::class, 'campusLife'])->name('campus-life');
@@ -37,6 +38,7 @@ Route::get('/programs', [EducationController::class, 'programs']);
 Route::get('/future-students', [EducationController::class, 'futureStudents']);
 Route::get('/current-students', [EducationController::class, 'currentStudents']);
 Route::get('/faculty-and-staff', [EducationController::class, 'facultyAndStaff']);
+Route::get('/faculty-staff', [EducationController::class, 'facultyAndStaff']);
 Route::get('/events', [EducationController::class, 'events']);
 Route::get('/alumni', [EducationController::class, 'alumni']);
 Route::get('/campus-life', [EducationController::class, 'campusLife']);
@@ -52,6 +54,7 @@ Route::get('/{page}', function ($page) {
         'page-future-students-1' => 'education.future-students',
         'page-current-students-1' => 'education.current-students',
         'page-faculty-and-staff-1' => 'education.faculty-and-staff',
+        'page-faculty-staff-1' => 'education.faculty-and-staff',
         'page-events-1' => 'education.events',
         'page-alumni-1' => 'education.alumni',
         'page-campus-life-1' => 'education.campus-life',
