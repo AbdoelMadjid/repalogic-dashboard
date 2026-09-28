@@ -6,7 +6,7 @@
     // Default config
     const defaultConfig = {
         "dir": "ltr",
-        "skin": "default",
+        "skin": "modern",
         "theme": "light",
         "width": "fluid",
         "position": "fixed",
@@ -15,7 +15,7 @@
         "sidenav-user": true,
         "topbar-color": "light",
         "sidenav-color": "gradient",
-        "_v": 2,
+        "_v": 3,
     }
 
     window.initialDefaultConfig = structuredClone(defaultConfig)
@@ -38,7 +38,7 @@
         "sidenav-color": html.getAttribute("data-menu-color") || defaultConfig["sidenav-color"],
         "sidenav-size": html.getAttribute("data-sidenav-size") || defaultConfig["sidenav-size"],
         "sidenav-user": html.hasAttribute("data-sidenav-user") ? (html.getAttribute("data-sidenav-user") !== "false") : defaultConfig["sidenav-user"],
-        "_v": 2
+        "_v": 3
     }
 
     // Load from session if exists
@@ -46,11 +46,14 @@
     if (savedConfig) {
         try {
             config = JSON.parse(savedConfig);
-            if (!config._v) {
+            if (!config._v || config._v < 3) {
                 if (config["sidenav-color"] === "dark") {
                     config["sidenav-color"] = "gradient";
                 }
-                config._v = 2;
+                if (!config.skin || config.skin === "default") {
+                    config.skin = "modern";
+                }
+                config._v = 3;
                 sessionStorage.setItem(storageKey, JSON.stringify(config));
             }
         } catch (e) {

@@ -116,7 +116,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.9.7 -->
+                        <!-- Version 2.9.8 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -124,8 +124,37 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.9.7</h5>
+                                        <h5 class="fw-bold mb-0">v2.9.8</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.8</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-28 15:23 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Default Modern Theme Skin Standard, Sidenav Alignment Fix &amp; Session Auto-Migration Engine (_v: 3)</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Default Skin Modern:</strong> Mengubah default skin aplikasi dari <code>default</code> ke <code>modern</code> secara menyeluruh pada <code>head-css.blade.php</code>, <code>config.js</code>, <code>app.js</code>, <code>horizontal.blade.php</code>, <code>vertical.blade.php</code>, serta <code>AppSettingSeeder.php</code>.</li>
+                                    <li><strong class="text-dark">Session Storage Auto-Migration (_v: 3):</strong> Meningkatkan versi konfigurasi sesi ke <code>_v: 3</code> untuk memigrasikan preferensi tema browser lama secara otomatis ke skin <code>modern</code> tanpa perlu clear session manual.</li>
+                                    <li><strong class="text-dark">Sidebar with Line Alignment Fix:</strong> Menyempurnakan perataan sub-menu dan level child menu pada skin <code>modern</code> &amp; <code>luxe</code> dengan class <code>sidebar-with-line</code> pada <code>custom-auth.css</code>, <code>app.css</code>, dan <code>app.min.css</code>.</li>
+                                    <li><strong class="text-dark">Standardisasi Include Blade:</strong> Menyelaraskan seluruh pemanggilan partial Blade pada tata letak utama (<code>vertical.blade.php</code>, <code>horizontal.blade.php</code>, <code>base.blade.php</code>, <code>app.blade.php</code>) menggunakan notasi titik resmi Laravel (<code>layouts.partials.*</code>).</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark border fs-xs">Theme Modern Skin</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Session Migration</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Sidebar Alignment</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Blade Includes</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.9.7 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xs text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.9.7</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.7</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-26 23:25 WIB</span>

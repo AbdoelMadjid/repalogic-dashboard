@@ -10,3 +10,4 @@
 /*# sourceMappingURL=app.min.css.map */
 
 .card-out-of-container{margin-top:calc((1.25rem + 1px) * -1)}
+html[data-skin=modern].sidebar-with-line:not([data-sidenav-size=condensed]) .side-nav .sub-menu,html[data-skin=luxe].sidebar-with-line:not([data-sidenav-size=condensed]) .side-nav .sub-menu{-webkit-padding-start:0 !important;padding-inline-start:0 !important}html[data-skin=modern].sidebar-with-line:not([data-sidenav-size=condensed]) .side-nav .sub-menu .sub-menu,html[data-skin=luxe].sidebar-with-line:not([data-sidenav-size=condensed]) .side-nav .sub-menu .sub-menu{-webkit-padding-start:15px !important;padding-inline-start:15px !important}

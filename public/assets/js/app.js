@@ -24,7 +24,7 @@ class App{init(){try{this.initComponents(),this.initPreloader(),this.initPortlet
     initConfig() {
         const baseDefault = window.initialDefaultConfig || window.defaultConfig || {
             'dir': 'ltr',
-            'skin': 'default',
+            'skin': 'modern',
             'theme': 'light',
             'width': 'fluid',
             'position': 'fixed',
@@ -33,15 +33,18 @@ class App{init(){try{this.initComponents(),this.initPreloader(),this.initPortlet
             'sidenav-user': true,
             'topbar-color': 'light',
             'sidenav-color': 'gradient',
-            '_v': 2
+            '_v': 3
         };
         this.defaultConfig = JSON.parse(JSON.stringify(baseDefault));
         this.config = JSON.parse(JSON.stringify(window.config || baseDefault));
-        if (!this.config._v) {
+        if (!this.config._v || this.config._v < 3) {
             if (this.config['sidenav-color'] === 'dark') {
                 this.config['sidenav-color'] = 'gradient';
             }
-            this.config._v = 2;
+            if (!this.config.skin || this.config.skin === 'default') {
+                this.config.skin = 'modern';
+            }
+            this.config._v = 3;
         }
         this.setSwitchFromConfig();
     }
@@ -133,7 +136,7 @@ class App{init(){try{this.initComponents(),this.initPreloader(),this.initPortlet
     resetTheme() {
         const defaults = window.initialDefaultConfig || {
             'dir': 'ltr',
-            'skin': 'default',
+            'skin': 'modern',
             'theme': 'light',
             'width': 'fluid',
             'position': 'fixed',
@@ -142,7 +145,7 @@ class App{init(){try{this.initComponents(),this.initPreloader(),this.initPortlet
             'sidenav-user': true,
             'topbar-color': 'light',
             'sidenav-color': 'gradient',
-            '_v': 2
+            '_v': 3
         };
 
         try {

@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v2.9.7`  
-> **Terakhir Diperbarui:** 26 September 2026 23:25 WIB  
+> **Versi Terbaru:** `v2.9.8`  
+> **Terakhir Diperbarui:** 28 September 2026 15:23 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v2.9.8`** | `2026-09-28 15:23 WIB` | Default Modern Theme Skin Standard, Sidenav Alignment Fix & Session Auto-Migration Engine (`_v: 3`, Default skin `modern` di `head-css.blade.php`, `config.js`, `app.js`, `horizontal.blade.php`, `vertical.blade.php`, `AppSettingSeeder.php`, Sub-menu padding-inline fix pada `sidebar-with-line`, Standardisasi dot notation include Blade `layouts.partials.*`) |
 | **`v2.9.7`** | `2026-09-26 23:25 WIB` | Penyempurnaan Meta Title Bersih & Integrasi Sistem Bilingual (i18n) Tema Education Portal (Format Judul Bersih `[Halaman] - Education`, Dynamic Language Switcher ID/EN `_header.blade.php`, Modular Translation Dictionaries `frontpage.json`, Dedicated `education-i18n.js` Engine & Anti-Flicker Pre-Hydration) |
 | **`v2.9.6`** | `2026-09-26 21:50 WIB` | Standardisasi Route Helper Laravel Portal Education, Dedicated EducationController, Arsitektur Tema Multi-Page vs One-Page & Manajemen Konfigurasi Website Dinamis (Pembersihan URL `page-*.blade.php`, Canonical Named Routes `education.*`, Direct Route Access & Smart Redirect Handler) |
 | **`v2.9.5`** | `2026-09-26 00:15 WIB` | Default Website Landing Theme Font Assets Restoration: Penyalinan dan perbaikan font Tabler Icons (`tabler-icons.woff2`, `tabler-icons.woff`, `tabler-icons.ttf`) ke direktori `public/assets_default/css/fonts/` dan `public/assets_default/fonts/` untuk memastikan seluruh icon pada landing page default tampil sempurna |

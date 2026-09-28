@@ -1,7 +1,7 @@
 (()=>{
     var e = document.documentElement,
         i = sessionStorage.getItem("__THEME_CONFIG__");
-    const t = "ltr", a = "default", d = "light", r = "fluid", s = "fixed", o = "default", n = !0, u = "light", b = "gradient";
+    const t = "ltr", a = "modern", d = "light", r = "fluid", s = "fixed", o = "default", n = !0, u = "light", b = "gradient";
     
     function l() {
         return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -18,7 +18,7 @@
         "sidenav-user": n,
         "topbar-color": u,
         "sidenav-color": b,
-        "_v": 2
+        "_v": 3
     };
 
     window.initialDefaultConfig = structuredClone(baseDefault);
@@ -34,17 +34,20 @@
         position: e.getAttribute("data-layout-position") || s,
         width: e.getAttribute("data-layout-width") || r,
         dir: e.getAttribute("dir") || t,
-        "_v": 2
+        "_v": 3
     };
 
     if (i) {
         try {
             var parsed = JSON.parse(i);
-            if (!parsed._v) {
+            if (!parsed._v || parsed._v < 3) {
                 if (parsed["sidenav-color"] === "dark") {
                     parsed["sidenav-color"] = "gradient";
                 }
-                parsed._v = 2;
+                if (!parsed.skin || parsed.skin === "default") {
+                    parsed.skin = "modern";
+                }
+                parsed._v = 3;
                 i = JSON.stringify(parsed);
                 sessionStorage.setItem("__THEME_CONFIG__", i);
             }

@@ -13,7 +13,7 @@ class AppSettingSeeder extends Seeder
     public function run(): void
     {
         $defaultSettings = [
-            'idle_timeout_minutes' => '5',
+            'idle_timeout_minutes' => '15',
             'maintenance_mode' => '0',
             'maintenance_message' => 'Sistem sedang dalam proses pemeliharaan berkala. Silakan coba beberapa saat lagi.',
             'rate_limit_attempts' => '5',

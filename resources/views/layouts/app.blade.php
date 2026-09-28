@@ -34,7 +34,7 @@
             {{ $slot }}
         </main>
     </div>
-    @include('layouts.partials/back-to-top')
+    @include('layouts.partials.back-to-top')
 </body>
 
 </html>
