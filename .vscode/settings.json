@@ -1,0 +1,12 @@
+{
+    "laravel-extra-intellisense.disable-policy-check": true,
+    "laravel.lint.policies": false,
+    "laravel.policies.enabled": false,
+    "blade.lint.policies": false,
+    "emmet.includeLanguages": {
+        "blade": "html"
+    },
+    "files.associations": {
+        "*.blade.php": "blade"
+    }
+}
