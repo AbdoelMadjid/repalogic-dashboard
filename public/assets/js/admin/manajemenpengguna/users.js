@@ -291,18 +291,48 @@ document.addEventListener('DOMContentLoaded', function() {
         const configData = (user && user.config) ? user.config : null;
 
         const nikInput = document.getElementById('form_detail_nik');
-        const phoneInput = document.getElementById('form_detail_phone_number');
-        const birthPlaceInput = document.getElementById('form_detail_birth_place');
-        const birthDateInput = document.getElementById('form_detail_birth_date');
-        const genderInput = document.getElementById('form_detail_gender');
-        const addressInput = document.getElementById('form_detail_address');
+        const phoneInput = document.getElementById('form_detail_telepon');
+        const nameKtpInput = document.getElementById('form_detail_nama_ktp');
+        const birthPlaceInput = document.getElementById('form_detail_tempat_lahir');
+        const birthDateInput = document.getElementById('form_detail_tanggal_lahir');
+        const genderInput = document.getElementById('form_detail_jenis_kelamin');
+        const goldarInput = document.getElementById('form_detail_golongan_darah');
+        const agamaInput = document.getElementById('form_detail_agama');
+        const nikahInput = document.getElementById('form_detail_status_perkawinan');
+        const kerjaInput = document.getElementById('form_detail_pekerjaan');
+        const wargaInput = document.getElementById('form_detail_kewarganegaraan');
+        const alamatInput = document.getElementById('form_detail_alamat_jalan');
+        const rtInput = document.getElementById('form_detail_rt');
+        const rwInput = document.getElementById('form_detail_rw');
+        const blokInput = document.getElementById('form_detail_blok');
+        const desaInput = document.getElementById('form_detail_desa_kelurahan');
+        const kecInput = document.getElementById('form_detail_kecamatan');
+        const kabInput = document.getElementById('form_detail_kabupaten_kota');
+        const provInput = document.getElementById('form_detail_provinsi');
+        const posInput = document.getElementById('form_detail_kode_pos');
+        const fotoKtpInput = document.getElementById('form_detail_foto_ktp');
 
         if (nikInput) nikInput.value = detail ? (detail.nik || '') : '';
-        if (phoneInput) phoneInput.value = detail ? (detail.phone_number || '') : '';
-        if (birthPlaceInput) birthPlaceInput.value = detail ? (detail.birth_place || '') : '';
-        if (birthDateInput) birthDateInput.value = detail ? (detail.birth_date || '') : '';
-        if (genderInput) genderInput.value = detail ? (detail.gender || '') : '';
-        if (addressInput) addressInput.value = detail ? (detail.address || '') : '';
+        if (phoneInput) phoneInput.value = detail ? (detail.telepon || '') : '';
+        if (nameKtpInput) nameKtpInput.value = detail ? (detail.nama_ktp || '') : '';
+        if (birthPlaceInput) birthPlaceInput.value = detail ? (detail.tempat_lahir || '') : '';
+        if (birthDateInput) birthDateInput.value = detail && detail.tanggal_lahir ? String(detail.tanggal_lahir).substring(0, 10) : '';
+        if (genderInput) genderInput.value = detail ? (detail.jenis_kelamin || '') : '';
+        if (goldarInput) goldarInput.value = detail ? (detail.golongan_darah || '') : '';
+        if (agamaInput) agamaInput.value = detail ? (detail.agama || '') : '';
+        if (nikahInput) nikahInput.value = detail ? (detail.status_perkawinan || '') : '';
+        if (kerjaInput) kerjaInput.value = detail ? (detail.pekerjaan || '') : '';
+        if (wargaInput) wargaInput.value = detail ? (detail.kewarganegaraan || 'WNI') : 'WNI';
+        if (alamatInput) alamatInput.value = detail ? (detail.alamat_jalan || '') : '';
+        if (rtInput) rtInput.value = detail ? (detail.rt || '') : '';
+        if (rwInput) rwInput.value = detail ? (detail.rw || '') : '';
+        if (blokInput) blokInput.value = detail ? (detail.blok || '') : '';
+        if (desaInput) desaInput.value = detail ? (detail.desa_kelurahan || '') : '';
+        if (kecInput) kecInput.value = detail ? (detail.kecamatan || '') : '';
+        if (kabInput) kabInput.value = detail ? (detail.kabupaten_kota || '') : '';
+        if (provInput) provInput.value = detail ? (detail.provinsi || '') : '';
+        if (posInput) posInput.value = detail ? (detail.kode_pos || '') : '';
+        if (fotoKtpInput) fotoKtpInput.value = '';
 
         const detailEmptyAlert = document.getElementById('detail_empty_alert');
         const hasDetail = detail && (detail.nik || detail.telepon || detail.nama_ktp || detail.alamat_jalan || detail.foto_ktp);
@@ -632,7 +662,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         userForm.reset();
         if (methodSpoofingContainer) methodSpoofingContainer.innerHTML = '';
-        formInputs.forEach(input => input.disabled = false);
+        userForm.querySelectorAll('input, select, textarea').forEach(input => input.disabled = false);
         if (btnSubmitForm) btnSubmitForm.classList.remove('d-none');
         document.querySelectorAll('.user-role-checkbox').forEach(cb => cb.checked = false);
         if (removeAvatarInput) removeAvatarInput.value = '0';
@@ -671,7 +701,7 @@ document.addEventListener('DOMContentLoaded', function() {
             userForm.action = '#';
             if (btnSubmitForm) btnSubmitForm.classList.add('d-none');
             populateForm(user, true);
-            formInputs.forEach(input => input.disabled = true);
+            userForm.querySelectorAll('input, select, textarea').forEach(input => input.disabled = true);
         }
 
         userModal.show();

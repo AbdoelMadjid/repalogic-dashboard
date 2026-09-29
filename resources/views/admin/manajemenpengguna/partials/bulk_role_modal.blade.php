@@ -19,17 +19,17 @@
                     <div class="mb-4">
                         <!-- Single User Profile View -->
                         <div id="singleUserRoleCard" class="p-3 bg-light-subtle rounded-3 border d-none">
-                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                                <div class="d-flex align-items-center gap-3">
-                                    <img src="" id="singleUserAvatar" alt="Avatar" class="rounded-circle border object-fit-cover shadow-sm" style="width: 44px; height: 44px;">
-                                    <div>
-                                        <h6 class="mb-0 fs-14 fw-bold text-dark" id="singleUserName">-</h6>
-                                        <span class="text-muted fs-12" id="singleUserEmail">-</span>
+                            <div class="d-flex flex-column flex-md-row align-items-center justify-content-between text-center text-md-start gap-3">
+                                <div class="d-flex flex-column flex-md-row align-items-center gap-2.5 gap-md-3">
+                                    <img src="" id="singleUserAvatar" alt="Avatar" class="rounded-circle border object-fit-cover shadow-sm flex-shrink-0" style="width: 52px; height: 52px;">
+                                    <div class="d-flex flex-column align-items-center align-items-md-start">
+                                        <h6 class="mb-0.5 fs-15 fw-bold text-dark text-center text-md-start" id="singleUserName">-</h6>
+                                        <span class="text-muted fs-12 text-center text-md-start" id="singleUserEmail">-</span>
                                     </div>
                                 </div>
-                                <div>
-                                    <span class="text-muted fs-11 d-block mb-1 fw-semibold text-md-end">Role Saat Ini:</span>
-                                    <div id="singleUserCurrentRoles" class="d-flex flex-wrap gap-1"></div>
+                                <div class="d-flex flex-column align-items-center align-items-md-end">
+                                    <span class="text-muted fs-11 d-block mb-1 fw-semibold text-center text-md-end">Role Saat Ini:</span>
+                                    <div id="singleUserCurrentRoles" class="d-flex flex-wrap justify-content-center justify-content-md-end gap-1"></div>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +112,7 @@
                         </div>
 
                         <div class="p-3 bg-light rounded-3 border">
-                            <div class="row g-3 px-2 py-1">
+                            <div class="row g-3">
                                 @forelse ($roles as $r)
                                     @php
                                         $badgeClass = match ($r->name) {
@@ -122,10 +122,10 @@
                                             default => 'bg-secondary-subtle text-secondary border-secondary-subtle'
                                         };
                                     @endphp
-                                    <div class="col-6 col-sm-4 col-md-3">
-                                        <div class="form-check d-flex align-items-center m-0">
-                                            <input class="form-check-input bulk-role-checkbox" type="checkbox" name="roles[]" value="{{ $r->name }}" id="bulk_role_{{ $r->id }}">
-                                            <label class="form-check-label user-select-none cursor-pointer ms-2" for="bulk_role_{{ $r->id }}">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <input class="form-check-input bulk-role-checkbox m-0 flex-shrink-0" type="checkbox" name="roles[]" value="{{ $r->name }}" id="bulk_role_{{ $r->id }}" style="cursor: pointer;">
+                                            <label class="form-check-label user-select-none cursor-pointer mb-0" for="bulk_role_{{ $r->id }}">
                                                 <span class="badge {{ $badgeClass }} border fs-12 text-capitalize">
                                                     <i class="ti ti-shield me-1"></i>{{ $r->name }}
                                                 </span>
@@ -133,14 +133,14 @@
                                         </div>
                                     </div>
                                 @empty
-                                    <div class="col-12 text-muted fs-12">Belum ada role sistem yang terdaftar.</div>
+                                    <div class="col-12 text-muted fs-12 text-center py-2">Belum ada role sistem yang terdaftar.</div>
                                 @endforelse
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="modal-footer bg-light py-2.5 px-4">
+                <div class="modal-footer bg-light py-2.5 px-4 d-flex flex-column-reverse flex-sm-row justify-content-end gap-2">
                     <button type="button" class="btn btn-sm btn-secondary px-3" data-bs-dismiss="modal">
                         <i class="ti ti-x me-1"></i> Batal
                     </button>

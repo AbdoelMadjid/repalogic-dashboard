@@ -8,10 +8,13 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <div>
-                            <h4 class="card-title mb-1">Manajemen Hak Akses Role (Role Access Matrix)</h4>
-                            <p class="text-muted fs-12 mb-0">
+                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2.5 gap-md-0">
+                        <div class="d-flex flex-column align-items-center align-items-md-start">
+                            <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center text-dark">
+                                <i class="ti ti-lock-access text-primary fs-22 fs-md-18 me-0 me-md-2 mb-1 mb-md-0"></i>
+                                <span>Manajemen Hak Akses Role (Role Access Matrix)</span>
+                            </h5>
+                            <p class="text-muted fs-12 mb-0 mt-1 mt-md-0.5 text-center text-md-start">
                                 Distribusi dan kelola matriks izin Spatie Permission ke tiap peran (Role) pengguna sistem.
                             </p>
                         </div>

@@ -116,7 +116,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.9.9 -->
+                        <!-- Version 3.0.0 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -124,8 +124,39 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.9.9</h5>
+                                        <h5 class="fw-bold mb-0">v3.0.0</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.0</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-29 12:38 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Mobile Responsive Experience Overhaul, Timezone Standardization (WIB), User Form Grid &amp; Project Rules 18-22</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Mobile Responsive Tab Navigation &amp; Sub-Toolbar Standardization (Rule 18):</strong> Menyempurnakan tab navigasi pada Data Login (<code>data_login.blade.php</code>) dengan format responsif icon-only + badge counter pada layar mobile (&lt; md), menyelaraskan sub-toolbar "Pengguna Aktif Hari Ini" dan tombol switcher tampilan (<em>Widget Kartu</em> &amp; <em>Tabel Baris</em>) agar sejajar dan bersisian secara horizontal.</li>
+                                    <li><strong class="text-dark">Centered Multi-Line Mobile Card Header &amp; Modal Action Buttons (Rule 19 &amp; 20):</strong> Merestrukturisasi header kartu filter dan modal footer (<code>modalDetailLogin</code>, <code>modalClearLogs</code>, dll) dengan susunan vertikal terpusat pada mode mobile dan full-width action buttons dengan tombol aksi utama di atas tombol batal.</li>
+                                    <li><strong class="text-dark">User Form &amp; Avatar Upload Multi-Row Sequence Optimization:</strong> Merapihkan tata letak modal form tambah/edit pengguna (<code>user_form.blade.php</code>) dengan layout 2-kolom desktop (Avatar di kiri, Akun di kanan pada Tab 1; KTP di kiri, Alamat di kanan pada Tab 2) yang auto-stack rapi di mobile, serta sekuens avatar upload vertikal terpusat (Judul &rarr; Foto Preview &rarr; Choose File &rarr; Keterangan &rarr; Hapus Foto).</li>
+                                    <li><strong class="text-dark">Application Timezone Standardization (<code>APP_TIMEZONE=Asia/Jakarta</code>):</strong> Menetapkan konfigurasi timezone aplikasi ke <code>Asia/Jakarta</code> (WIB) pada <code>config/app.php</code>, <code>.env</code>, dan <code>.env.example</code> agar pencatatan login pengguna (<code>user_logins</code>), filter riwayat login hari ini, dan penanda waktu aktivitas berjalan presisi secara real-time.</li>
+                                    <li><strong class="text-dark">Architectural Rules Expansion (<code>.agents/AGENTS.md</code> Rules 18-22):</strong> Mendokumentasikan aturan baku Mobile Tab Navigation (Rule 18), Centered Multi-Line Card Header (Rule 19), Mobile Full-Width Modal Buttons (Rule 20), Preservation of Module Functionality (Rule 21), dan Native Bootstrap Styling Standard (Rule 22).</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark border fs-xs">Mobile Responsive</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Timezone WIB</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Data Login</span>
+                                    <span class="badge bg-light text-dark border fs-xs">User Form Grid</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Rules 18-22</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.9.9 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xs text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.9.9</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.9</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-29 07:41 WIB</span>

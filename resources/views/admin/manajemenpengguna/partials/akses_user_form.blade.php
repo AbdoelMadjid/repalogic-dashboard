@@ -43,7 +43,7 @@
 <!-- SPECIAL DIRECT PERMISSIONS MATRIX -->
 <div class="row">
     <div class="col-12 mb-2">
-        <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-1.5 mb-2">
             <div>
                 <label class="form-label fw-semibold m-0">Penugasan Izin Khusus Langsung (Direct Spatie Permissions)</label>
                 <span class="badge bg-warning-subtle text-warning border border-warning-subtle fs-11 ms-1">Opsional / Override</span>
@@ -54,7 +54,7 @@
             </div>
         </div>
 
-        <div class="border rounded bg-white">
+        <div class="table-responsive border rounded bg-white permission-matrix-wrapper">
             <table class="table table-hover align-middle mb-0" id="permission-matrix-table">
                 <thead class="table-light align-middle text-center text-nowrap">
                     <tr class="text-uppercase fs-12 fw-bold text-muted border-bottom align-middle text-center text-nowrap">

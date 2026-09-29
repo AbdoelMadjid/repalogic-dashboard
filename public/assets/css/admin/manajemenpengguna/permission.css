@@ -3,6 +3,9 @@
  * Path: public/assets/css/admin/manajemenpengguna/permission.css
  */
 
-.table-responsive {
-    min-height: 280px;
+@media (max-width: 767.98px) {
+    .card-header .btn-modul-permission-trigger {
+        width: 100% !important;
+        margin-top: 0.5rem;
+    }
 }

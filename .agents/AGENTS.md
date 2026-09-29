@@ -147,6 +147,41 @@
   - If a page requires tab persistence across reloads or form submissions, store the tab selector in `localStorage` or `sessionStorage` (e.g. `localStorage.setItem('active_module_tab', target)`).
   - NEVER use `history.replaceState(null, null, '#tab-id')`, `history.pushState`, or `window.location.hash = '#tab-id'`.
   - The browser URL in the address bar MUST always remain completely clean (e.g. `/admin/dukunganaplikasi/fitur-aplikasi`, NOT `/admin/dukunganaplikasi/fitur-aplikasi#tab-settings`).
+## 18. Mobile Responsive Tab Navigation Standard (Icon & Count Only)
+- For all tab and pill navigation elements (`<ul class="nav nav-tabs ...">`, `<ul class="nav nav-pills ...">`):
+  - **Desktop (`≥ md`)**: Tabs display `Icon + Label Teks + Badge Angka (jika ada)`.
+  - **Mobile (`< md`)**: Label teks tab WAJIB disembunyikan menggunakan `<span class="d-none d-md-inline">Label Teks</span>`.
+  - Hanya **Icon** dan **Badge Angka** (misal: `<span class="badge bg-primary-subtle text-primary ms-1 font-monospace">6</span>`) yang tampil di mobile, menjaga tab tetap ringkas, sejajar, dan tidak pecah/meluap ke luar layar.
+  - Margin icon menyesuaikan secara responsif: `class="ti ti-... me-0 me-md-1.5"`.
+  - Tombol tab WAJIB memiliki atribut `title="Nama Tab (Jumlah)"` untuk aksesibilitas dan tooltip.
 
+## 19. Mobile Responsive Card Header Layout Standard (Centered Multi-Line Sequence)
+- SEMUA judul dan konten di dalam `<div class="card-header">` pada dashboard dan halaman modul WAJIB mendukung tata letak responsif bertingkat yang rapi:
+  - **Desktop (`≥ md`)**: Berjajar horizontal menyamping (`d-flex flex-column flex-md-row justify-content-between align-items-center text-md-start`).
+  - **Mobile (`< md`)**: Otomatis tersusun vertikal beberapa baris di posisi tengah (**Center / Multi-line**):
+    - Kontainer card-header: `class="card-header ... d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2.5 gap-md-0"`.
+    - Kontainer title: `<h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">`.
+    - **Urutan Elemen Hierarki di Mode Mobile/HP**:
+      1. **Icon**: Terpusat di atas judul (`class="ti ti-... me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"`).
+      2. **Judul**: Teks judul terpusat (`<span>Judul Card</span>`).
+      3. **Deskripsi**: Teks sub-judul/keterangan terpusat di bawah judul jika ada (`<p class="text-muted fs-12 mb-0 mt-1 mt-md-0.5 text-center text-md-start">...</p>`).
+      4. **Badge**: Badge status/counter terpusat jika ada (`<span class="badge ...">...</span>`).
+      5. **Tombol / Action / Search**: Tombol aksi atau form search otomatis melebar penuh (**Full Button/Width**) pada mode mobile melalui media query CSS responsif (`@media (max-width: 767.98px) { .card-header .btn { width: 100% !important; margin-top: 0.5rem; } }`), dan tetap berukuran normal (*auto-width*) di sisi kanan pada mode desktop. Jangan gunakan kelas `w-100` langsung pada tag HTML button agar tidak merusak tampilan desktop.
 
+## 20. Mobile Responsive Modal Action Buttons Standard (Full-Width Button)
+- SEMUA tombol aksi pada footer modal (`<div class="modal-footer">`) di seluruh modul dan dialog WAJIB mendukung tata letak responsif penuh:
+  - **Desktop (`≥ sm` / `≥ md`)**: Tombol aksi berjajar rapi secara horizontal di sebelah kanan (*auto-width*, `justify-content-end gap-2`).
+  - **Mobile (`< sm` / `< md`)**: Tombol aksi otomatis melebar penuh (**Full Button / 100% Width**) dan tersusun bertingkat vertikal:
+    - **Kontainer Footer Modal**: Menggunakan `class="modal-footer ... d-flex flex-column-reverse flex-sm-row justify-content-end gap-2"`.
+    - **Urutan Tombol di Mobile**: Tombol aksi utama (*Submit / Simpan / Terapkan / Konfirmasi*) berada di posisi **atas** (fokus aksi utama), sedangkan tombol sekunder (*Batal / Tutup*) berada di **bawahnya**.
+    - **Penerapan CSS Responsif**: Aturan full-width tombol WAJIB dikontrol melalui CSS media query (`@media (max-width: 767.98px) { .modal-footer .btn { width: 100% !important; margin: 0 !important; } }`). Jangan menyematkan class `w-100` langsung pada tag HTML `<button>` di view Blade agar tampilan desktop tidak rusak atau ikut melebar.
+
+## 21. Preservation of Module Functionality During Style Refactoring
+- Ketika diminta untuk mengubah/memperbaiki tampilan, layout, atau responsivitas mobile/desktop pada suatu modul:
+  - **DILARANG KERAS merusak atau mengubah fungsionalitas logika yang ada** (CRUD, submit form, AJAX save, data populating, validasi backend, dsb).
+  - Pastikan seluruh input form, atribut `name`, `id`, `value`, event listener, dan interaksi backend tetap berjalan 100% normal seperti sebelum refactoring style.
+
+## 22. Native Template & Bootstrap Styling Standard (Zero Redundant CSS)
+- Utamakan selalu penggunaan kelas bawaan **Bootstrap 5** (e.g. `row`, `col-*`, `g-3`, `gap-*`, `d-flex`, `card`, `form-control`, `mb-*`, `border`, `bg-*`) atau komponen template bawaan proyek.
+- **JANGAN SEKALI-KALI membuat custom CSS baru yang rumit** jika hal tersebut dapat diselesaikan secara rapi dan standar menggunakan utility class bawaan Bootstrap atau Inspinia/template proyek.
 

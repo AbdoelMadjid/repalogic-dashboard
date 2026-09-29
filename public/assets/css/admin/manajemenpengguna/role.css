@@ -3,6 +3,48 @@
  * Path: public/assets/css/admin/manajemenpengguna/role.css
  */
 
-.table-responsive {
-    min-height: 280px;
+.role-permission-checkbox,
+.check-row-all {
+    border: 2px solid #475569 !important;
+    width: 1.25em;
+    height: 1.25em;
+}
+
+/* Permission Matrix Table Horizontal Scroll on Mobile */
+.permission-matrix-wrapper {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+}
+
+.permission-matrix-wrapper table,
+#permission-matrix-table {
+    min-width: 720px;
+}
+
+@media (max-width: 767.98px) {
+    .permission-matrix-wrapper {
+        scrollbar-width: thin;
+        scrollbar-color: #94a3b8 #f1f5f9;
+    }
+
+    .permission-matrix-wrapper::-webkit-scrollbar {
+        height: 6px;
+        display: block !important;
+    }
+
+    .permission-matrix-wrapper::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 4px;
+    }
+
+    .permission-matrix-wrapper::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 4px;
+    }
+
+    .card-header .btn-role-action {
+        width: 100% !important;
+        margin-top: 0.5rem;
+    }
 }

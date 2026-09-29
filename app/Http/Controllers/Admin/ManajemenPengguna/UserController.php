@@ -122,6 +122,18 @@ class UserController extends Controller
             $user->syncRoles($validated['roles']);
         }
 
+        if ($request->has('details')) {
+            $detailData = $request->input('details', []);
+            if ($request->hasFile('details.foto_ktp')) {
+                $detail = $user->detail;
+                if ($detail && !empty($detail->foto_ktp) && Storage::disk('public')->exists($detail->foto_ktp)) {
+                    Storage::disk('public')->delete($detail->foto_ktp);
+                }
+                $detailData['foto_ktp'] = $request->file('details.foto_ktp')->store('ktp', 'public');
+            }
+            $user->detail()->updateOrCreate(['user_id' => $user->id], $detailData);
+        }
+
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $this->notifySuccess("Data pengguna \"{$user->name}\" berhasil diperbarui.");

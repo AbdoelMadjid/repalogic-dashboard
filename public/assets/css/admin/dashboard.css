@@ -410,6 +410,60 @@
     min-height: 31px;
 }
 
+/* 10. Responsive Dashboard Tabs & Card Headers (Mobile Optimized) */
+@media (max-width: 767.98px) {
+    .card-header {
+        padding: 0.85rem 1rem !important;
+    }
 
+    .card-header .card-title {
+        font-size: 0.95rem;
+        line-height: 1.35;
+    }
 
+    .card-header .card-title i {
+        display: block;
+        margin-bottom: 0.25rem;
+    }
 
+    .card-header .badge {
+        font-size: 0.725rem;
+        padding: 0.35rem 0.65rem;
+    }
+
+    .card-header .btn,
+    .card-header a.btn {
+        padding-top: 0.4rem;
+        padding-bottom: 0.4rem;
+        font-size: 0.8125rem;
+        width: 100% !important;
+        margin-top: 0.5rem;
+    }
+
+    .card-header .app-search {
+        width: 100% !important;
+        margin-top: 0.5rem;
+    }
+
+    .nav-tabs.nav-bordered .nav-item {
+        margin-bottom: -1px;
+    }
+
+    .nav-tabs.nav-bordered .nav-link {
+        padding: 0.45rem 0.75rem !important;
+        font-size: 0.8125rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.25rem;
+    }
+
+    .nav-tabs.nav-bordered .nav-link i {
+        font-size: 1.1rem;
+    }
+
+    .nav-tabs.nav-bordered .nav-link .badge {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.45rem;
+    }
+}

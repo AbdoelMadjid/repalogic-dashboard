@@ -8,15 +8,18 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <div>
-                            <h4 class="card-title mb-1">Data Permission System</h4>
-                            <p class="text-muted fs-12 mb-0">
+                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2.5 gap-md-0">
+                        <div class="d-flex flex-column align-items-center align-items-md-start">
+                            <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center text-dark">
+                                <i class="ti ti-key text-primary fs-22 fs-md-18 me-0 me-md-2 mb-1 mb-md-0"></i>
+                                <span>Data Permission System</span>
+                            </h5>
+                            <p class="text-muted fs-12 mb-0 mt-1 mt-md-0.5 text-center text-md-start">
                                 Draf pendaftaran tipe aksi izin (CRUD) per Modul / Fitur Aplikasi dan distribusinya ke Role.
                             </p>
                         </div>
                         @can('create manajemenpengguna/permission')
-                            <button type="button" class="btn btn-primary btn-sm btn-modul-permission-trigger" data-type="create">
+                            <button type="button" class="btn btn-primary btn-sm btn-modul-permission-trigger" data-type="create" title="Tambah Permission Baru">
                                 <i class="ti ti-plus me-1"></i> Tambah Permission Baru
                             </button>
                         @endcan

@@ -212,9 +212,10 @@
             <!-- Grafik Tren Login 7 Hari -->
             <div class="col-xl-8">
                 <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0 fw-bold">
-                            <i class="ti ti-chart-area-line text-primary me-1.5"></i>Tren Aktivitas Login &amp; Pendaftaran (7 Hari Terakhir)
+                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
+                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                            <i class="ti ti-chart-area-line text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                            <span>Tren Aktivitas Login &amp; Pendaftaran (7 Hari Terakhir)</span>
                         </h5>
                         <span class="badge bg-primary-subtle text-primary fs-xs font-monospace">Real-Time Sync</span>
                     </div>
@@ -227,9 +228,10 @@
             <!-- Grafik Donut Distribusi Role -->
             <div class="col-xl-4">
                 <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0 fw-bold">
-                            <i class="ti ti-chart-pie text-primary me-1.5"></i>Distribusi Peran Pengguna
+                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
+                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                            <i class="ti ti-chart-pie text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                            <span>Distribusi Peran Pengguna</span>
                         </h5>
                         <span class="badge bg-light text-dark border fs-xs">Spatie Roles</span>
                     </div>
@@ -245,9 +247,10 @@
             <!-- Pusat Aksi Tertunda (Pending Approvals & Deactivations) -->
             <div class="col-xl-6">
                 <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-primary text-white py-3 d-flex justify-content-between align-items-center">
-                        <h5 class="card-title text-white mb-0 fw-bold">
-                            <i class="ti ti-bell-ringing me-1.5"></i>Pusat Tindakan &amp; Permohonan Tertunda
+                    <div class="card-header bg-primary text-white py-3 d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
+                        <h5 class="card-title text-white mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                            <i class="ti ti-bell-ringing me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                            <span>Pusat Tindakan &amp; Permohonan Tertunda</span>
                         </h5>
                         <span class="badge bg-white text-primary fw-bold font-monospace">
                             {{ $userStats['pending'] + $userStats['pending_deactivations'] }} Menunggu
@@ -255,15 +258,19 @@
                     </div>
                     <div class="card-body p-0">
                         <ul class="nav nav-tabs nav-bordered px-3 pt-2 bg-light-subtle" role="tablist">
-                            <li class="nav-item">
-                                <a href="#tab-pending-approvals" data-bs-toggle="tab" aria-expanded="true" class="nav-link active py-2 fs-13">
-                                    <i class="ti ti-user-plus me-1.5"></i>Pendaftaran Baru ({{ $pendingApprovals->count() }})
-                                </a>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link active py-2 fs-13" id="tab-pending-approvals-btn" data-bs-toggle="tab" data-bs-target="#tab-pending-approvals" role="tab" aria-controls="tab-pending-approvals" aria-selected="true" title="Pendaftaran Baru ({{ $pendingApprovals->count() }})">
+                                    <i class="ti ti-user-plus me-0 me-md-1.5"></i>
+                                    <span class="d-none d-md-inline">Pendaftaran Baru</span>
+                                    <span class="badge bg-primary-subtle text-primary ms-1 font-monospace">{{ $pendingApprovals->count() }}</span>
+                                </button>
                             </li>
-                            <li class="nav-item">
-                                <a href="#tab-pending-deactivations" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2 fs-13">
-                                    <i class="ti ti-user-x me-1.5"></i>Permohonan Nonaktif ({{ $pendingDeactivations->count() }})
-                                </a>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link py-2 fs-13" id="tab-pending-deactivations-btn" data-bs-toggle="tab" data-bs-target="#tab-pending-deactivations" role="tab" aria-controls="tab-pending-deactivations" aria-selected="false" title="Permohonan Nonaktif ({{ $pendingDeactivations->count() }})">
+                                    <i class="ti ti-user-x me-0 me-md-1.5"></i>
+                                    <span class="d-none d-md-inline">Permohonan Nonaktif</span>
+                                    <span class="badge bg-danger-subtle text-danger ms-1 font-monospace">{{ $pendingDeactivations->count() }}</span>
+                                </button>
                             </li>
                         </ul>
 
@@ -373,23 +380,28 @@
             <!-- Pusat Pintasan Cepat Admin (Manajemen Pengguna & Dukungan Aplikasi) -->
             <div class="col-xl-6">
                 <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0 fw-bold">
-                            <i class="ti ti-bolt text-warning me-1.5"></i>Pusat Akses Pintas Modul
+                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
+                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                            <i class="ti ti-bolt text-warning me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                            <span>Pusat Akses Pintas Modul</span>
                         </h5>
                         <span class="badge bg-primary-subtle text-primary font-monospace">12 Modul Utama</span>
                     </div>
                     <div class="card-body p-0">
                         <ul class="nav nav-tabs nav-bordered px-3 pt-2 bg-light-subtle" role="tablist">
-                            <li class="nav-item">
-                                <a href="#tab-shortcut-users" data-bs-toggle="tab" aria-expanded="true" class="nav-link active py-2 fs-13">
-                                    <i class="ti ti-users me-1.5 text-primary"></i>Manajemen Pengguna <span class="badge bg-primary-subtle text-primary ms-1">6</span>
-                                </a>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link active py-2 fs-13" id="tab-shortcut-users-btn" data-bs-toggle="tab" data-bs-target="#tab-shortcut-users" role="tab" aria-controls="tab-shortcut-users" aria-selected="true" title="Manajemen Pengguna (6 Modul)">
+                                    <i class="ti ti-users me-0 me-md-1.5 text-primary"></i>
+                                    <span class="d-none d-md-inline">Manajemen Pengguna</span>
+                                    <span class="badge bg-primary-subtle text-primary ms-1 font-monospace">6</span>
+                                </button>
                             </li>
-                            <li class="nav-item">
-                                <a href="#tab-shortcut-app" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2 fs-13">
-                                    <i class="ti ti-settings-cog me-1.5 text-info"></i>Dukungan Aplikasi <span class="badge bg-info-subtle text-info ms-1">6</span>
-                                </a>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link py-2 fs-13" id="tab-shortcut-app-btn" data-bs-toggle="tab" data-bs-target="#tab-shortcut-app" role="tab" aria-controls="tab-shortcut-app" aria-selected="false" title="Dukungan Aplikasi (6 Modul)">
+                                    <i class="ti ti-settings-cog me-0 me-md-1.5 text-info"></i>
+                                    <span class="d-none d-md-inline">Dukungan Aplikasi</span>
+                                    <span class="badge bg-info-subtle text-info ms-1 font-monospace">6</span>
+                                </button>
                             </li>
                         </ul>
 
@@ -524,11 +536,12 @@
             <!-- Tabel Aktivitas Login Terkini -->
             <div class="col-xl-8">
                 <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0 fw-bold">
-                            <i class="ti ti-history text-primary me-1.5"></i>Riwayat Aktivitas Login Pengguna Terkini
+                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2.5 gap-md-0">
+                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                            <i class="ti ti-history text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                            <span>Riwayat Aktivitas Login Pengguna Terkini</span>
                         </h5>
-                        <a href="{{ route('admin.manajemenpengguna.data-login.index') }}" class="btn btn-xs btn-light border px-2.5 py-1 rounded">
+                        <a href="{{ route('admin.manajemenpengguna.data-login.index') }}" class="btn btn-xs btn-light border px-2.5 py-1.5 rounded" title="Lihat Semua Log">
                             Lihat Semua Log <i class="ti ti-arrow-right ms-1"></i>
                         </a>
                     </div>
@@ -588,11 +601,12 @@
             <!-- Pesan & Obrolan Terkini -->
             <div class="col-xl-4">
                 <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0 fw-bold">
-                            <i class="ti ti-messages text-primary me-1.5"></i>Pesan &amp; Obrolan Terkini
+                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2.5 gap-md-0">
+                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                            <i class="ti ti-messages text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                            <span>Pesan &amp; Obrolan Terkini</span>
                         </h5>
-                        <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="btn btn-xs btn-primary bg-primary text-white px-2.5 py-1 rounded">
+                        <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="btn btn-xs btn-primary bg-primary text-white px-2.5 py-1.5 rounded" title="Buka Chat Hub">
                             Buka Chat Hub
                         </a>
                     </div>
@@ -726,9 +740,10 @@
             <!-- Pusat Pintasan Pengguna -->
             <div class="col-xl-7">
                 <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0 fw-bold">
-                            <i class="ti ti-bolt text-warning me-1.5"></i>Pusat Akses Pintas Pengguna
+                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
+                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                            <i class="ti ti-bolt text-warning me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                            <span>Pusat Akses Pintas Pengguna</span>
                         </h5>
                         <span class="badge bg-light text-dark border fs-xs">Shortcuts</span>
                     </div>
@@ -778,9 +793,10 @@
             <!-- Kartu Status Profil & Akun -->
             <div class="col-xl-5">
                 <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0 fw-bold">
-                            <i class="ti ti-shield-check text-primary me-1.5"></i>Status Akun &amp; Keamanan
+                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
+                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                            <i class="ti ti-shield-check text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                            <span>Status Akun &amp; Keamanan</span>
                         </h5>
                         <span class="badge bg-success-subtle text-success">Aktif &amp; Terverifikasi</span>
                     </div>
@@ -817,9 +833,10 @@
             <!-- Riwayat Login Akun Sendiri -->
             <div class="col-xl-7">
                 <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0 fw-bold">
-                            <i class="ti ti-history text-primary me-1.5"></i>Riwayat Aktivitas Masuk Akun Saya
+                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
+                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                            <i class="ti ti-history text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                            <span>Riwayat Aktivitas Masuk Akun Saya</span>
                         </h5>
                         <span class="badge bg-light text-dark border fs-xs">Recent Logins</span>
                     </div>
@@ -863,11 +880,12 @@
             <!-- Percakapan Obrolan Terkini -->
             <div class="col-xl-5">
                 <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0 fw-bold">
-                            <i class="ti ti-messages text-primary me-1.5"></i>Obrolan &amp; Pesan Saya
+                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2.5 gap-md-0">
+                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                            <i class="ti ti-messages text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                            <span>Obrolan &amp; Pesan Saya</span>
                         </h5>
-                        <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="btn btn-xs btn-primary bg-primary text-white px-2.5 py-1 rounded">
+                        <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="btn btn-xs btn-primary bg-primary text-white px-2.5 py-1.5 rounded" title="Buka Chat">
                             Buka Chat
                         </a>
                     </div>
@@ -912,12 +930,13 @@
     <div class="row g-3 mb-4">
         <div class="col-12">
             <div class="card shadow-sm border-0 mb-0">
-                <div class="card-header bg-white py-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
-                    <div>
-                        <h5 class="card-title mb-0 fw-bold text-dark d-flex align-items-center">
-                            <i class="ti ti-users text-primary me-2 fs-18"></i>Direktori Pengguna &amp; Jaringan Pertemanan
+                <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-3">
+                    <div class="d-flex flex-column align-items-center align-items-md-start">
+                        <h5 class="card-title mb-0 fw-bold text-dark d-flex flex-column flex-md-row align-items-center">
+                            <i class="ti ti-users text-primary me-0 me-md-2 fs-22 fs-md-18 mb-1 mb-md-0"></i>
+                            <span>Direktori Pengguna &amp; Jaringan Pertemanan</span>
                         </h5>
-                        <p class="text-muted fs-12 mb-0 mt-0.5">Temukan rekan kerja, kirim ajakan berteman, berikan apresiasi suka pada profil, dan mulai berkomunikasi.</p>
+                        <p class="text-muted fs-12 mb-0 mt-1 mt-md-0.5 text-center text-md-start">Temukan rekan kerja, kirim ajakan berteman, berikan apresiasi suka pada profil, dan mulai berkomunikasi.</p>
                     </div>
 
                     <!-- Search Input -->

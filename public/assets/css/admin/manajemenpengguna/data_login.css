@@ -67,3 +67,21 @@
         width: 20%;
     }
 }
+
+/* Card Header & Modal Responsive Mobile (Rule 19 & 20) */
+@media (max-width: 767.98px) {
+    .card-header .btn-header-action {
+        width: 100% !important;
+        margin-top: 0.5rem;
+    }
+
+    .modal-footer {
+        gap: 0.5rem;
+    }
+
+    .modal-footer .btn {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+}
+

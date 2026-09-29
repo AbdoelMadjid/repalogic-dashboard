@@ -7,89 +7,89 @@
 
     <div class="container-fluid mt-2">
         <!-- 1. KARTU STATISTIK LOGIN & KEHADIRAN -->
-        <div class="row g-3 mb-3">
-            <div class="col-sm-6 col-xl-2-4 col-lg-4">
+        <div class="row g-2 g-sm-3 mb-3">
+            <div class="col-6 col-md-4 col-xl-2-4">
                 <div class="card border-0 shadow-sm rounded-3 h-100 mb-0">
-                    <div class="card-body p-3">
+                    <div class="card-body p-2.5 p-sm-3">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <span class="text-muted fs-12 fw-medium text-uppercase">Sedang Online</span>
-                                <h3 class="fw-bold my-1 text-success d-flex align-items-center gap-1.5">
+                                <span class="text-muted fs-11 fs-sm-12 fw-medium text-uppercase">Sedang Online</span>
+                                <h3 class="fw-bold my-1 text-success d-flex align-items-center gap-1.5 fs-18 fs-sm-22">
                                     <span class="badge-pulse-dot bg-success"></span>
                                     {{ number_format($stats['online_now'] ?? 0) }}
                                 </h3>
-                                <span class="fs-12 text-muted">Aktivitas real-time</span>
+                                <span class="fs-11 fs-sm-12 text-muted d-none d-sm-inline">Aktivitas real-time</span>
                             </div>
-                            <div class="avatar-md bg-success-subtle text-success rounded-3 d-flex align-items-center justify-content-center">
-                                <i class="ti ti-wifi fs-24"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-xl-2-4 col-lg-4">
-                <div class="card border-0 shadow-sm rounded-3 h-100 mb-0">
-                    <div class="card-body p-3">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <span class="text-muted fs-12 fw-medium text-uppercase">Login Hari Ini</span>
-                                <h3 class="fw-bold my-1 text-primary">{{ number_format($stats['total_today']) }}</h3>
-                                <span class="fs-12 text-muted">Total sesi masuk</span>
-                            </div>
-                            <div class="avatar-md bg-primary-subtle text-primary rounded-3 d-flex align-items-center justify-content-center">
-                                <i class="ti ti-login fs-24"></i>
+                            <div class="avatar-md bg-success-subtle text-success rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
+                                <i class="ti ti-wifi fs-20 fs-sm-24"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-sm-6 col-xl-2-4 col-lg-4">
+            <div class="col-6 col-md-4 col-xl-2-4">
                 <div class="card border-0 shadow-sm rounded-3 h-100 mb-0">
-                    <div class="card-body p-3">
+                    <div class="card-body p-2.5 p-sm-3">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <span class="text-muted fs-12 fw-medium text-uppercase">Pengguna Aktif Hari Ini</span>
-                                <h3 class="fw-bold my-1 text-teal">{{ number_format($stats['unique_users_today']) }}</h3>
-                                <span class="fs-12 text-muted">User unik terdeteksi</span>
+                                <span class="text-muted fs-11 fs-sm-12 fw-medium text-uppercase">Login Hari Ini</span>
+                                <h3 class="fw-bold my-1 text-primary fs-18 fs-sm-22">{{ number_format($stats['total_today']) }}</h3>
+                                <span class="fs-11 fs-sm-12 text-muted d-none d-sm-inline">Total sesi masuk</span>
                             </div>
-                            <div class="avatar-md bg-info-subtle text-info rounded-3 d-flex align-items-center justify-content-center">
-                                <i class="ti ti-users fs-24"></i>
+                            <div class="avatar-md bg-primary-subtle text-primary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
+                                <i class="ti ti-login fs-20 fs-sm-24"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-sm-6 col-xl-2-4 col-lg-6">
+            <div class="col-6 col-md-4 col-xl-2-4">
                 <div class="card border-0 shadow-sm rounded-3 h-100 mb-0">
-                    <div class="card-body p-3">
+                    <div class="card-body p-2.5 p-sm-3">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <span class="text-muted fs-12 fw-medium text-uppercase">Poin Diberikan Hari Ini</span>
-                                <h3 class="fw-bold my-1 text-warning">{{ number_format($stats['points_today']) }}</h3>
-                                <span class="fs-12 text-muted">Maksimal 1 poin/24 jam</span>
+                                <span class="text-muted fs-11 fs-sm-12 fw-medium text-uppercase">Pengguna Aktif</span>
+                                <h3 class="fw-bold my-1 text-teal fs-18 fs-sm-22">{{ number_format($stats['unique_users_today']) }}</h3>
+                                <span class="fs-11 fs-sm-12 text-muted d-none d-sm-inline">User unik terdeteksi</span>
                             </div>
-                            <div class="avatar-md bg-warning-subtle text-warning rounded-3 d-flex align-items-center justify-content-center">
-                                <i class="ti ti-award fs-24"></i>
+                            <div class="avatar-md bg-info-subtle text-info rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
+                                <i class="ti ti-users fs-20 fs-sm-24"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-sm-6 col-xl-2-4 col-lg-6">
+            <div class="col-6 col-md-6 col-xl-2-4">
                 <div class="card border-0 shadow-sm rounded-3 h-100 mb-0">
-                    <div class="card-body p-3">
+                    <div class="card-body p-2.5 p-sm-3">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <span class="text-muted fs-12 fw-medium text-uppercase">Total Riwayat Log</span>
-                                <h3 class="fw-bold my-1 text-secondary">{{ number_format($stats['total_all_time']) }}</h3>
-                                <span class="fs-12 text-muted">Semua sesi waktu</span>
+                                <span class="text-muted fs-11 fs-sm-12 fw-medium text-uppercase">Poin Hari Ini</span>
+                                <h3 class="fw-bold my-1 text-warning fs-18 fs-sm-22">{{ number_format($stats['points_today']) }}</h3>
+                                <span class="fs-11 fs-sm-12 text-muted d-none d-sm-inline">Maksimal 1 poin/24 jam</span>
                             </div>
-                            <div class="avatar-md bg-secondary-subtle text-secondary rounded-3 d-flex align-items-center justify-content-center">
-                                <i class="ti ti-history fs-24"></i>
+                            <div class="avatar-md bg-warning-subtle text-warning rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
+                                <i class="ti ti-award fs-20 fs-sm-24"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-xl-2-4">
+                <div class="card border-0 shadow-sm rounded-3 h-100 mb-0">
+                    <div class="card-body p-2.5 p-sm-3">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="text-muted fs-11 fs-sm-12 fw-medium text-uppercase">Total Riwayat Log</span>
+                                <h3 class="fw-bold my-1 text-secondary fs-18 fs-sm-22">{{ number_format($stats['total_all_time']) }}</h3>
+                                <span class="fs-11 fs-sm-12 text-muted d-none d-sm-inline">Semua sesi waktu</span>
+                            </div>
+                            <div class="avatar-md bg-secondary-subtle text-secondary rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
+                                <i class="ti ti-history fs-20 fs-sm-24"></i>
                             </div>
                         </div>
                     </div>
@@ -99,21 +99,21 @@
 
         <!-- 2. FILTER & PENCARIAN WIDGET -->
         <div class="card shadow-sm border-0 rounded-3 mb-3">
-            <div class="card-header bg-primary text-white py-3 d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="ti ti-filter fs-18"></i>
-                    <h5 class="card-title text-white mb-0">Filter & Parameter Pencarian</h5>
+            <div class="card-header bg-primary text-white py-3 d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2.5 gap-md-0">
+                <div class="d-flex flex-column flex-md-row align-items-center">
+                    <i class="ti ti-filter fs-20 fs-md-18 me-0 me-md-1.5 mb-1 mb-md-0"></i>
+                    <h5 class="card-title text-white mb-0 fw-bold">Filter &amp; Parameter Pencarian</h5>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <button type="button" class="btn btn-light btn-sm fw-semibold text-danger" id="btnOpenClearLogsModal">
-                        <i class="ti ti-trash me-1"></i> Bersihkan Log Lama
+                    <button type="button" class="btn btn-light btn-sm fw-semibold text-danger btn-header-action" id="btnOpenClearLogsModal" title="Bersihkan Log Lama">
+                        <i class="ti ti-trash me-1"></i> <span>Bersihkan Log Lama</span>
                     </button>
                 </div>
             </div>
             <div class="card-body bg-light-subtle py-3">
                 <form method="GET" action="{{ route('admin.manajemenpengguna.data-login.index') }}" id="filterForm">
                     <div class="row g-2 align-items-end">
-                        <div class="col-md-2">
+                        <div class="col-sm-6 col-md-2">
                             <label class="form-label fs-12 fw-semibold mb-1">Status Kehadiran:</label>
                             <select name="presence_status" class="form-select form-select-sm">
                                 <option value="all" {{ ($presenceStatus ?? 'all') === 'all' ? 'selected' : '' }}>Semua Status</option>
@@ -122,7 +122,7 @@
                             </select>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-sm-6 col-md-2">
                             <label class="form-label fs-12 fw-semibold mb-1">Periode Tanggal:</label>
                             <select name="period" id="filterPeriod" class="form-select form-select-sm">
                                 <option value="all" {{ $period === 'all' ? 'selected' : '' }}>Semua Waktu</option>
@@ -142,7 +142,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-sm-6 col-md-3">
                             <label class="form-label fs-12 fw-semibold mb-1">Filter Pengguna:</label>
                             <select name="user_id" class="form-select form-select-sm">
                                 <option value="">-- Semua Pengguna --</option>
@@ -154,17 +154,17 @@
                             </select>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-sm-6 col-md-2">
                             <label class="form-label fs-12 fw-semibold mb-1">Kata Kunci:</label>
                             <input type="text" name="search" class="form-control form-control-sm"
                                 placeholder="IP, browser, nama..." value="{{ $searchTerm ?? '' }}">
                         </div>
 
-                        <div class="col-md-12 d-flex justify-content-end gap-2 mt-2">
-                            <a href="{{ route('admin.manajemenpengguna.data-login.index') }}" class="btn btn-outline-secondary btn-sm px-3">
+                        <div class="col-md-12 d-flex flex-column flex-sm-row justify-content-end gap-2 mt-2">
+                            <a href="{{ route('admin.manajemenpengguna.data-login.index') }}" class="btn btn-outline-secondary btn-sm px-3 text-center">
                                 <i class="ti ti-refresh me-1"></i> Reset Filter
                             </a>
-                            <button type="submit" class="btn btn-primary btn-sm px-3">
+                            <button type="submit" class="btn btn-primary btn-sm px-3 text-center">
                                 <i class="ti ti-search me-1"></i> Terapkan Filter
                             </button>
                         </div>
@@ -176,19 +176,21 @@
         <!-- 3. TABEL DATA UTAMA DENGAN TAB NAVIGASI -->
         <div class="card shadow-sm border-0 rounded-3">
             <div class="card-header bg-white py-2 px-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-2">
-                <ul class="nav nav-pills card-header-pills" id="loginDataTabs" role="tablist">
+                <ul class="nav nav-tabs card-header-tabs nav-bordered mb-0" id="loginDataTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active fw-semibold py-1.5 px-3 fs-13" id="tab-today-users" data-bs-toggle="pill"
-                            data-bs-target="#content-today-users" type="button" role="tab" aria-selected="true">
-                            <i class="ti ti-user-check me-1"></i> Pengguna Login Hari Ini
-                            <span class="badge bg-success-subtle text-success ms-1 rounded-pill">{{ count($todayUsers) }}</span>
+                        <button class="nav-link active fw-semibold py-2 px-3 fs-13" id="tab-today-users" data-bs-toggle="tab"
+                            data-bs-target="#content-today-users" type="button" role="tab" aria-selected="true" title="Pengguna Login Hari Ini ({{ count($todayUsers) }})">
+                            <i class="ti ti-user-check me-0 me-md-1.5 text-success"></i>
+                            <span class="d-none d-md-inline">Pengguna Login Hari Ini</span>
+                            <span class="badge bg-success-subtle text-success ms-1 rounded-pill font-monospace">{{ count($todayUsers) }}</span>
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link fw-semibold py-1.5 px-3 fs-13" id="tab-all-history" data-bs-toggle="pill"
-                            data-bs-target="#content-all-history" type="button" role="tab" aria-selected="false">
-                            <i class="ti ti-history me-1"></i> Semua Riwayat Aktivitas Login
-                            <span class="badge bg-primary-subtle text-primary ms-1 rounded-pill">{{ $allLogins->total() }}</span>
+                        <button class="nav-link fw-semibold py-2 px-3 fs-13" id="tab-all-history" data-bs-toggle="tab"
+                            data-bs-target="#content-all-history" type="button" role="tab" aria-selected="false" title="Semua Riwayat Aktivitas Login ({{ $allLogins->total() }})">
+                            <i class="ti ti-history me-0 me-md-1.5 text-primary"></i>
+                            <span class="d-none d-md-inline">Semua Riwayat Aktivitas Login</span>
+                            <span class="badge bg-primary-subtle text-primary ms-1 rounded-pill font-monospace">{{ $allLogins->total() }}</span>
                         </button>
                     </li>
                 </ul>
@@ -198,26 +200,24 @@
                 <div class="tab-content" id="loginDataTabContent">
                     <!-- TAB 1: PENGGUNA LOGIN HARI INI -->
                     <div class="tab-pane fade show active" id="content-today-users" role="tabpanel" aria-labelledby="tab-today-users">
-                        <div class="p-3 bg-light-subtle border-bottom d-flex flex-wrap justify-content-between align-items-center gap-2">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-primary fs-12 px-2.5 py-1.5">
-                                    {{ count($todayUsers) }} Pengguna Aktif Hari Ini
+                        <div class="p-2.5 p-sm-3 bg-light-subtle border-bottom d-flex justify-content-between align-items-center gap-2">
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <span class="badge bg-primary fs-12 px-2.5 py-1.5 text-nowrap">
+                                    {{ count($todayUsers) }} Pengguna Aktif<span class="d-none d-sm-inline"> Hari Ini</span>
                                 </span>
                                 <span class="fs-13 text-muted d-none d-md-inline">
                                     ({{ \Carbon\Carbon::today()->translatedFormat('l, d F Y') }})
                                 </span>
                             </div>
 
-                            <!-- Tombol Switch Tampilan Grid vs Tabel -->
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="btn-group btn-group-sm" role="group" aria-label="Mode Tampilan">
-                                    <button type="button" class="btn btn-primary btn-sm fw-medium d-flex align-items-center gap-1" id="btnToggleGridToday" title="Tampilan Widget Kartu">
-                                        <i class="ti ti-layout-grid"></i> Widget Kartu
-                                    </button>
-                                    <button type="button" class="btn btn-outline-secondary btn-sm fw-medium d-flex align-items-center gap-1" id="btnToggleTableToday" title="Tampilan Tabel Baris">
-                                        <i class="ti ti-list"></i> Tabel Baris
-                                    </button>
-                                </div>
+                            <!-- Tombol Switch Tampilan Grid vs Tabel (Bersisian di Kanan) -->
+                            <div class="btn-group btn-group-sm flex-shrink-0" role="group" aria-label="Mode Tampilan">
+                                <button type="button" class="btn btn-primary btn-sm fw-medium d-flex align-items-center gap-1" id="btnToggleGridToday" title="Tampilan Widget Kartu">
+                                    <i class="ti ti-layout-grid"></i> <span class="d-none d-md-inline">Widget Kartu</span>
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm fw-medium d-flex align-items-center gap-1" id="btnToggleTableToday" title="Tampilan Tabel Baris">
+                                    <i class="ti ti-list"></i> <span class="d-none d-md-inline">Tabel Baris</span>
+                                </button>
                             </div>
                         </div>
 
@@ -631,8 +631,8 @@
 
                     <div id="modalDetailContent" class="d-none">
                         <!-- USER SUMMARY -->
-                        <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-3 mb-3 border">
-                            <div class="d-flex align-items-center gap-3">
+                        <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between p-3 bg-light rounded-3 mb-3 border text-center text-sm-start gap-2">
+                            <div class="d-flex flex-column flex-sm-row align-items-center gap-3">
                                 <div class="position-relative">
                                     <img id="detailUserAvatar" src="" alt="Avatar" class="rounded-circle avatar-md border"
                                         style="width: 54px; height: 54px; object-fit: cover;">
@@ -718,7 +718,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer bg-light py-2">
+                <div class="modal-footer bg-light py-2 d-flex flex-column-reverse flex-sm-row justify-content-end gap-2">
                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
@@ -753,7 +753,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="modal-footer bg-light py-2">
+                    <div class="modal-footer bg-light py-2 d-flex flex-column-reverse flex-sm-row justify-content-end gap-2">
                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-danger btn-sm">
                             <i class="ti ti-trash me-1"></i> Bersihkan Log

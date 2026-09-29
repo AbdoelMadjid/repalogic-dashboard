@@ -8,15 +8,18 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                        <div>
-                            <h4 class="card-title mb-1">Data Pengguna System (User Management)</h4>
-                            <p class="text-muted fs-12 mb-0">
+                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2.5 gap-md-0">
+                        <div class="d-flex flex-column align-items-center align-items-md-start">
+                            <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center text-dark">
+                                <i class="ti ti-users text-primary fs-22 fs-md-18 me-0 me-md-2 mb-1 mb-md-0"></i>
+                                <span>Data Pengguna System (User Management)</span>
+                            </h5>
+                            <p class="text-muted fs-12 mb-0 mt-1 mt-md-0.5 text-center text-md-start">
                                 Kelola akun pengguna aplikasi, status persetujuan registrasi, dan atribusi Peran (Role).
                             </p>
                         </div>
                         @can('create manajemenpengguna/users')
-                            <button type="button" class="btn btn-primary btn-sm btn-user-action" data-action="create">
+                            <button type="button" class="btn btn-primary btn-sm btn-user-action" data-action="create" title="Tambah Pengguna Baru">
                                 <i class="ti ti-plus me-1"></i> Tambah Pengguna Baru
                             </button>
                         @endcan
@@ -352,7 +355,7 @@
                     <div class="modal-body">
                         @include('admin.manajemenpengguna.partials.user_form')
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex flex-column-reverse flex-sm-row justify-content-end gap-2">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
                         <button type="submit" class="btn btn-primary" id="btnSubmitForm"><i class="ti ti-device-floppy me-1"></i> Simpan Pengguna</button>
                     </div>
@@ -381,7 +384,7 @@
                             <textarea name="reason" id="reject_reg_reason" rows="3" class="form-control" placeholder="Contoh: Identitas diri tidak sesuai dengan foto KTP..." required></textarea>
                         </div>
                     </div>
-                    <div class="modal-footer bg-light py-3">
+                    <div class="modal-footer bg-light py-3 d-flex flex-column-reverse flex-sm-row justify-content-end gap-2">
                         <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-danger px-4 fw-semibold"><i class="ti ti-send me-1"></i> Kirim Penolakan</button>
                     </div>
@@ -409,7 +412,7 @@
                             <span class="fs-12 text-muted mt-1 d-block">Alasan penolakan ini akan dikirimkan langsung ke Notifikasi/Pesan pengguna.</span>
                         </div>
                     </div>
-                    <div class="modal-footer bg-light py-3">
+                    <div class="modal-footer bg-light py-3 d-flex flex-column-reverse flex-sm-row justify-content-end gap-2">
                         <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-warning px-4 fw-semibold text-dark"><i class="ti ti-send me-1"></i> Kirim Penolakan & Notifikasi</button>
                     </div>

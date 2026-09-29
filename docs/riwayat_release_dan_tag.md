@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v2.9.9`  
-> **Terakhir Diperbarui:** 29 September 2026 07:41 WIB  
+> **Versi Terbaru:** `v3.0.0`  
+> **Terakhir Diperbarui:** 29 September 2026 12:38 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v3.0.0`** | `2026-09-29 12:38 WIB` | Mobile Responsive Experience Overhaul across User Management & Data Login (`admin/manajemenpengguna/data-login` & `admin/manajemenpengguna/users`), Application Timezone Standardization (`APP_TIMEZONE=Asia/Jakarta`), Avatar Upload Multi-Row Sequence & 2-Column Desktop Grid in User Form Modal, Centered Multi-Line Card Header & Full-Width Modal Buttons, Architectural Rules Expansion (`.agents/AGENTS.md` Rules 18-22) |
 | **`v2.9.9`** | `2026-09-29 07:41 WIB` | Storage Symlink 1-Click Auto-Repair Engine & Auto-Healing on Media Scan in Pengaturan Sistem (`admin/dukunganaplikasi/fitur-aplikasi`), Dynamic Maintenance Mode (`503.blade.php`) & Sesi Kedaluwarsa (`419.blade.php`) Copyright from Profil Aplikasi, Clean URL & Hashtag-Free Tab Navigation Standard (`.agents/AGENTS.md` Rule 17) |
 | **`v2.9.8`** | `2026-09-28 15:23 WIB` | Default Modern Theme Skin Standard, Sidenav Alignment Fix & Session Auto-Migration Engine (`_v: 3`, Default skin `modern` di `head-css.blade.php`, `config.js`, `app.js`, `horizontal.blade.php`, `vertical.blade.php`, `AppSettingSeeder.php`, Sub-menu padding-inline fix pada `sidebar-with-line`, Standardisasi dot notation include Blade `layouts.partials.*`) |
 | **`v2.9.7`** | `2026-09-26 23:25 WIB` | Penyempurnaan Meta Title Bersih & Integrasi Sistem Bilingual (i18n) Tema Education Portal (Format Judul Bersih `[Halaman] - Education`, Dynamic Language Switcher ID/EN `_header.blade.php`, Modular Translation Dictionaries `frontpage.json`, Dedicated `education-i18n.js` Engine & Anti-Flicker Pre-Hydration) |
