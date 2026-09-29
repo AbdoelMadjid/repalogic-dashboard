@@ -17,12 +17,12 @@
                                 <div>⚪ <i class="ti ti-dots-vertical text-secondary me-1"></i> Drag <strong>Sub-Menu</strong> (hanya dalam menu utamanya).</div>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center gap-2 text-nowrap flex-shrink-0 ms-auto">
-                            <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#bilingualGuideModal" title="Petunjuk Bilingual">
+                        <div class="card-header-actions d-flex align-items-center gap-2 text-nowrap flex-shrink-0 ms-auto">
+                            <button type="button" class="btn btn-outline-info btn-sm btn-menu-header-action" data-bs-toggle="modal" data-bs-target="#bilingualGuideModal" title="Petunjuk Bilingual">
                                 <i class="ti ti-help-circle me-0 me-md-1.5"></i><span class="d-none d-md-inline">Petunjuk Bilingual</span>
                             </button>
                             @can('create dukunganaplikasi/menu')
-                                <button type="button" class="btn btn-primary btn-sm btn-menu-action" data-action="create" title="Tambah Menu Baru">
+                                <button type="button" class="btn btn-primary btn-sm btn-menu-action btn-menu-header-action" data-action="create" title="Tambah Menu Baru">
                                     <i class="ti ti-plus me-0 me-md-1.5"></i><span class="d-none d-md-inline">Tambah Menu Baru</span>
                                 </button>
                             @endcan
@@ -82,7 +82,7 @@
 
                         <div class="table-responsive">
                             <!-- MAIN TABLE CONTAINING MULTIPLE TBODY CATEGORY BLOCKS -->
-                            <table class="table table-hover align-middle table-bordered mb-0 table-custom-datatable" id="main-menu-table">
+                            <table class="table table-hover align-middle table-bordered mb-0 table-custom-datatable text-nowrap" id="main-menu-table">
                                 <thead class="table-light align-middle text-center text-nowrap">
                                     <tr class="align-middle text-center text-nowrap">
                                         <th style="width: 60px;" class="text-center align-middle text-nowrap">Urutan</th>
@@ -308,10 +308,10 @@
 
                         <!-- FOOTER INFO & PAGINATION BAR (UNIVERSAL GLOBAL FORMAT) -->
                         <div class="row align-items-center mt-3">
-                            <div class="col-md-6 fs-13 text-muted" id="table-info-bar">
+                            <div class="col-md-6 fs-13 text-muted text-center text-md-start" id="table-info-bar">
                                 Total: <strong id="info-visible-count">{{ $totalMenuCount }}</strong> data
                             </div>
-                            <div class="col-md-6 d-flex justify-content-md-end mt-2 mt-md-0">
+                            <div class="col-md-6 d-flex justify-content-center justify-content-md-end mt-2 mt-md-0">
                                 <ul class="pagination pagination-sm m-0" id="table-pagination">
                                     <li class="page-item disabled" title="Halaman Awal">
                                         <a class="page-link" href="javascript:void(0);"><i class="ti ti-chevrons-left fs-14"></i></a>
@@ -350,7 +350,7 @@
                     <div class="modal-body">
                         @include('admin.dukunganaplikasi.partials.menu_form')
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer d-flex flex-column-reverse flex-sm-row justify-content-end gap-2">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
                         <button type="submit" class="btn btn-primary" id="btnSubmitForm"><i class="ti ti-device-floppy me-1"></i> Simpan Menu</button>
                     </div>

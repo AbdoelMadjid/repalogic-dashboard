@@ -36,3 +36,39 @@
 #table-selective-list tbody tr:hover {
     background-color: rgba(62, 96, 213, 0.04);
 }
+
+/* ==========================================================================
+   Mobile Responsive Media Queries (< md / 768px)
+   ========================================================================== */
+@media (max-width: 767.98px) {
+    /* Form Switch Section Centering: Switch on top, text below */
+    .option-db-statement-box .form-switch {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        padding-left: 0 !important;
+    }
+
+    .option-db-statement-box .form-switch .option-db-switch {
+        float: none !important;
+        margin: 0 auto 0.5rem auto !important;
+        display: block !important;
+    }
+
+    /* Form Footer Actions Full Button */
+    .backup-form-footer {
+        gap: 0.75rem !important;
+    }
+
+    .backup-form-footer .btn {
+        width: 100% !important;
+    }
+
+    /* History Card Header Spacing */
+    #history-card-header {
+        gap: 0.35rem !important;
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+    }
+}

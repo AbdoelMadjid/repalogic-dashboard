@@ -22,4 +22,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+
+    // Form Submit Loading State
+    const form = document.getElementById('form-profil-aplikasi');
+    const submitBtn = document.getElementById('btn-submit-profil');
+    if (form && submitBtn) {
+        form.addEventListener('submit', function() {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1.5" role="status" aria-hidden="true"></span> Menyimpan Profil...';
+        });
+    }
 });

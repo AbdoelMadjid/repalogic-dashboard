@@ -116,7 +116,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 3.0.0 -->
+                        <!-- Version 3.0.1 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -124,8 +124,46 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v3.0.0</h5>
+                                        <h5 class="fw-bold mb-0">v3.0.1</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.1</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-29 23:25 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Auth Submit Button Loading Engine, Dukungan Aplikasi Mobile Responsive Overhaul &amp; CSS Media Query Isolation</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Universal Auth Form Submit Loading State:</strong> Mengintegrasikan animasi loading spinner dinamis pada seluruh tombol submit halaman otentikasi (<em>Login, Register, Lupa Password, Reset Password, Verifikasi Email, Konfirmasi Password, dan Permintaan Aktivasi</em>) untuk mencegah multiple clicks saat proses pengiriman data berlangsung.</li>
+                                    <li><strong class="text-dark">Dukungan Aplikasi Mobile Responsive Overhaul:</strong>
+                                        <ul class="mb-0 ps-3">
+                                            <li><strong>Manajemen Menu:</strong> Header kartu terpusat dan tombol aksi melebar penuh (full-width) pada mode mobile, perataan pagination, dan preservasi scroll horizontal tabel.</li>
+                                            <li><strong>Profil Aplikasi:</strong> Penataan footer kartu 2-baris responsif dan perapihan 3 header kartu pratinjau gambar (Favicon, Logo Dark &amp; Light).</li>
+                                            <li><strong>Fitur Aplikasi:</strong> Quick Intro Banner 4-baris terpusat di mobile dengan badge full-width (tetap 100% sejajar horizontal di desktop), 6 widget pengaturan sistem dengan jarak rapat proporsional (0.35rem di mobile, 0.65rem di desktop), tab navigasi icon-only responsif (Rule 18), filter form dan tombol aksi massal tabel full-width di mobile.</li>
+                                            <li><strong>Backup Database:</strong> Toggle switch <em>DROP &amp; CREATE DATABASE</em> terpusat di baris atas mobile tanpa menabrak batas kartu (preservasi float desktop), footer form ekspor terpusat &amp; tombol full-width, serta header kartu riwayat backup terpusat.</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong class="text-dark">Dashboard Hero Greeting Avatar Optimization:</strong> Mengubah bentuk avatar profil hero greeting dari lingkaran (<code>rounded-circle</code>) menjadi kotak sudut melengkung halus (<code>rounded-3</code> / <code>border-radius: 0.85rem</code>) dengan ukuran proporsional (105px &times; 105px) yang membentang rapi dari baris judul sapaan hingga baris moto hidup.</li>
+                                    <li><strong class="text-dark">Strict CSS Media Query Isolation Standard:</strong> Mengisolasi seluruh aturan tata letak dan ukuran khusus mobile (<code>@media (max-width: 767.98px)</code>) pada file CSS masing-masing modul untuk menjamin tampilan desktop tetap 100% utuh tanpa regresi visual.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark border fs-xs">Auth Button Loading</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Dukungan Aplikasi</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Fitur Aplikasi</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Backup Database</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Dashboard Avatar</span>
+                                    <span class="badge bg-light text-dark border fs-xs">CSS Isolation</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 3.0.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xs text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v3.0.0</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.0</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-29 12:38 WIB</span>

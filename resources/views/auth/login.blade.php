@@ -225,7 +225,10 @@
                             </div>
 
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary fw-semibold py-2" id="btnSubmitLogin">Masuk ke Akun</button>
+                                <button type="submit" class="btn btn-primary fw-semibold py-2 d-inline-flex align-items-center justify-content-center" id="btnSubmitLogin">
+                                    <i class="ti ti-login me-1.5" id="btnSubmitLoginIcon"></i>
+                                    <span id="btnSubmitLoginText">Masuk ke Akun</span>
+                                </button>
                             </div>
                         </form>
 
@@ -429,6 +432,13 @@
                 } else if (!isPasswordValid) {
                     passwordInput.focus();
                 }
+                return false;
+            }
+
+            const btnSubmit = document.getElementById('btnSubmitLogin');
+            if (btnSubmit) {
+                btnSubmit.disabled = true;
+                btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm me-1.5" role="status" aria-hidden="true"></span> Memproses Masuk...';
             }
         });
 

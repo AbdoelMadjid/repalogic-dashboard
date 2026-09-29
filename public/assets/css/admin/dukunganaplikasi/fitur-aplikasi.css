@@ -11,6 +11,60 @@
     border: 1px solid #e2e8f0 !important;
 }
 
+.setting-card .card-header {
+    gap: 0.65rem !important;
+}
+
+.filter-length-select {
+    width: 120px;
+}
+
+@media (max-width: 767.98px) {
+    .setting-card .card-header {
+        gap: 0.35rem !important;
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+    }
+
+    .intro-banner-card .intro-banner-badge {
+        width: 100% !important;
+    }
+
+    .intro-banner-card .intro-banner-badge .badge {
+        width: 100% !important;
+    }
+
+    /* Tab 2: Table Card Header Mobile Full Width */
+    #table-card-header {
+        gap: 0.5rem !important;
+    }
+    #table-card-header .card-header-actions {
+        width: 100% !important;
+    }
+    #table-card-header .card-header-actions .btn {
+        width: 100% !important;
+        margin-top: 0.25rem;
+    }
+
+    /* Tab 2: Filter Controls Full Width on Mobile */
+    .filter-controls-row .form-select,
+    .filter-controls-row .input-group,
+    .filter-length-select {
+        width: 100% !important;
+    }
+
+    /* Tab 2: Bulk Action Toolbar Full Button on Mobile */
+    #bulk-action-bar {
+        text-align: center;
+    }
+    #bulk-action-bar .bulk-action-buttons {
+        width: 100% !important;
+    }
+    #bulk-action-bar .bulk-action-buttons .btn {
+        width: 100% !important;
+    }
+}
+
 .setting-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.06) !important;

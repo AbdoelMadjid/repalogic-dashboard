@@ -77,7 +77,7 @@
                     </p>
                 </div>
             </div>
-            <div class="modal-footer bg-light">
+            <div class="modal-footer bg-light d-flex flex-column-reverse flex-sm-row justify-content-end gap-2">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Saya Mengerti</button>
             </div>
         </div>

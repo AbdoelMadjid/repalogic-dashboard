@@ -77,8 +77,9 @@
                             </div>
 
                             <div class="d-grid mb-3">
-                                <button type="submit" class="btn btn-primary fw-semibold py-2" id="btnSubmitForgot">
-                                    <i class="ti ti-send me-1"></i> Ajukan Reset Password
+                                <button type="submit" class="btn btn-primary fw-semibold py-2 d-inline-flex align-items-center justify-content-center" id="btnSubmitForgot">
+                                    <i class="ti ti-send me-1.5" id="btnSubmitForgotIcon"></i>
+                                    <span id="btnSubmitForgotText">Ajukan Reset Password</span>
                                 </button>
                             </div>
                         </form>
@@ -187,6 +188,13 @@
             if (!isEmailValid) {
                 e.preventDefault();
                 emailInput.focus();
+                return false;
+            }
+
+            const btnSubmit = document.getElementById('btnSubmitForgot');
+            if (btnSubmit) {
+                btnSubmit.disabled = true;
+                btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm me-1.5" role="status" aria-hidden="true"></span> Mengirim Permintaan...';
             }
         });
 

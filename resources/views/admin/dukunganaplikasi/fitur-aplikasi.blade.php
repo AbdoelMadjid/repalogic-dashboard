@@ -4,7 +4,7 @@
 
 @section('content')
     <!-- Module Custom CSS (Rule 15 Compliance) -->
-    <link href="{{ asset('assets/css/admin/dukunganaplikasi/fitur-aplikasi.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/admin/dukunganaplikasi/fitur-aplikasi.css') }}?v={{ time() }}" rel="stylesheet" type="text/css" />
 
     <!-- Header Page Title -->
     @include('layouts.partials.page-title', ['title' => 'Fitur Aplikasi', 'subtitle' => 'Dukungan Aplikasi'])
@@ -18,24 +18,24 @@
                     <div class="d-flex align-items-center gap-2">
                         <h4 class="card-title mb-0">Pusat Kontrol & Fitur Aplikasi</h4>
                         <button type="button" class="btn btn-sm btn-outline-danger py-0 px-1.5 d-inline-flex align-items-center fs-12" id="btn-reset-default" title="Kembalikan semua pengaturan sistem dan visibilitas fitur ke setelan bawaan sistem (Seeder)">
-                            <i class="ti ti-rotate-clockwise me-1 fs-12"></i>
-                            <span>Kembalikan Default</span>
+                            <i class="ti ti-rotate-clockwise me-0 me-md-1 fs-12"></i>
+                            <span class="d-none d-md-inline">Kembalikan Default</span>
                         </button>
                     </div>
                     <ul class="nav nav-tabs card-header-tabs nav-bordered" id="fiturNavTabs" role="tablist">
                         <!-- TAB 1: PENGATURAN SISTEM (DEFAULT ACTIVE) -->
                         <li class="nav-item" role="presentation">
-                            <button type="button" class="nav-link active" id="tab-settings-btn" data-bs-toggle="tab" data-bs-target="#tab-settings" role="tab" aria-controls="tab-settings" aria-selected="true">
-                                <i class="ti ti-settings me-1.5 fs-18 align-middle"></i>
-                                <span>Pengaturan Sistem</span>
+                            <button type="button" class="nav-link active" id="tab-settings-btn" data-bs-toggle="tab" data-bs-target="#tab-settings" role="tab" aria-controls="tab-settings" aria-selected="true" title="Pengaturan Sistem">
+                                <i class="ti ti-settings me-0 me-md-1.5 fs-18 align-middle"></i>
+                                <span class="d-none d-md-inline">Pengaturan Sistem</span>
                             </button>
                         </li>
 
                         <!-- TAB 2: VISIBILITAS FITUR & KOMPONEN -->
                         <li class="nav-item" role="presentation">
-                            <button type="button" class="nav-link" id="tab-visibility-btn" data-bs-toggle="tab" data-bs-target="#tab-visibility" role="tab" aria-controls="tab-visibility" aria-selected="false">
-                                <i class="ti ti-adjustments-horizontal me-1.5 fs-18 align-middle"></i>
-                                <span>Visibilitas Fitur & Komponen</span>
+                            <button type="button" class="nav-link" id="tab-visibility-btn" data-bs-toggle="tab" data-bs-target="#tab-visibility" role="tab" aria-controls="tab-visibility" aria-selected="false" title="Visibilitas Fitur & Komponen">
+                                <i class="ti ti-adjustments-horizontal me-0 me-md-1.5 fs-18 align-middle"></i>
+                                <span class="d-none d-md-inline">Visibilitas Fitur & Komponen</span>
                             </button>
                         </li>
                     </ul>
@@ -53,9 +53,9 @@
                             <!-- Quick Intro Banner -->
                             <div class="row mb-3">
                                 <div class="col-12">
-                                    <div class="card bg-primary-subtle border-primary-subtle shadow-none rounded-3 mb-0">
-                                        <div class="card-body p-3 d-flex flex-wrap align-items-center justify-content-between gap-3">
-                                            <div class="d-flex align-items-center gap-3">
+                                    <div class="card bg-primary-subtle border-primary-subtle shadow-none rounded-3 mb-0 intro-banner-card">
+                                        <div class="card-body p-3 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 text-center text-md-start">
+                                            <div class="d-flex flex-column flex-md-row align-items-center gap-3">
                                                 <div class="avatar-sm bg-primary text-white rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
                                                     <i class="ti ti-settings-cog fs-22"></i>
                                                 </div>
@@ -66,8 +66,8 @@
                                                     </p>
                                                 </div>
                                             </div>
-                                            <div class="d-flex align-items-center gap-2">
-                                                <span class="badge bg-white text-primary border border-primary-subtle px-3 py-2 fs-12 fw-semibold">
+                                            <div class="intro-banner-badge flex-shrink-0">
+                                                <span class="badge bg-white text-primary border border-primary-subtle px-3 py-2 fs-12 fw-semibold d-inline-flex align-items-center justify-content-center">
                                                     <i class="ti ti-shield-check text-success me-1.5"></i> 6 Konfigurasi Terintegrasi
                                                 </span>
                                             </div>
@@ -82,12 +82,12 @@
                                 <!-- WIDGET 1: PENGATURAN WAKTU IDLE (AUTO LOCK SCREEN) -->
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="card h-100 shadow-sm border-0 rounded-3 setting-card">
-                                        <div class="card-header bg-primary text-white py-3 d-flex align-items-center justify-content-between">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="ti ti-clock-pause fs-20"></i>
-                                                <h6 class="card-title text-white mb-0 fw-bold">Waktu Idle & Auto Lock</h6>
+                                        <div class="card-header bg-primary text-white py-2.5 d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-start text-center text-md-start gap-1 gap-md-2">
+                                            <i class="ti ti-clock-pause fs-24 flex-shrink-0"></i>
+                                            <div class="d-flex flex-column align-items-center align-items-md-start">
+                                                <h6 class="card-title text-white mb-1 fw-bold">Waktu Idle & Auto Lock</h6>
+                                                <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Keamanan</span>
                                             </div>
-                                            <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Keamanan</span>
                                         </div>
                                         <div class="card-body p-3.5 d-flex flex-column justify-content-between">
                                             <div>
@@ -127,12 +127,12 @@
                                 <!-- WIDGET 2: MODE PEMELIHARAAN (MAINTENANCE MODE) -->
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="card h-100 shadow-sm border-0 rounded-3 setting-card">
-                                        <div class="card-header bg-primary text-white py-3 d-flex align-items-center justify-content-between">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="ti ti-tool fs-20"></i>
-                                                <h6 class="card-title text-white mb-0 fw-bold">Status Sistem & Maintenance</h6>
+                                        <div class="card-header bg-primary text-white py-2.5 d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-start text-center text-md-start gap-1 gap-md-2">
+                                            <i class="ti ti-tool fs-24 flex-shrink-0"></i>
+                                            <div class="d-flex flex-column align-items-center align-items-md-start">
+                                                <h6 class="card-title text-white mb-1 fw-bold">Status Sistem & Maintenance</h6>
+                                                <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Operasional</span>
                                             </div>
-                                            <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Operasional</span>
                                         </div>
                                         <div class="card-body p-3.5 d-flex flex-column justify-content-between">
                                             <div>
@@ -162,12 +162,12 @@
                                 <!-- WIDGET 3: KEAMANAN SESI & PROTEKSI LOGIN -->
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="card h-100 shadow-sm border-0 rounded-3 setting-card">
-                                        <div class="card-header bg-primary text-white py-3 d-flex align-items-center justify-content-between">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="ti ti-shield-lock fs-20"></i>
-                                                <h6 class="card-title text-white mb-0 fw-bold">Keamanan & Proteksi Akun</h6>
+                                        <div class="card-header bg-primary text-white py-2.5 d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-start text-center text-md-start gap-1 gap-md-2">
+                                            <i class="ti ti-shield-lock fs-24 flex-shrink-0"></i>
+                                            <div class="d-flex flex-column align-items-center align-items-md-start">
+                                                <h6 class="card-title text-white mb-1 fw-bold">Keamanan & Proteksi Akun</h6>
+                                                <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Proteksi</span>
                                             </div>
-                                            <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Proteksi</span>
                                         </div>
                                         <div class="card-body p-3.5 d-flex flex-column justify-content-between">
                                             <div>
@@ -200,12 +200,12 @@
                                 <!-- WIDGET 4: SINKRONISASI POLLING & NOTIFIKASI REAL-TIME -->
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="card h-100 shadow-sm border-0 rounded-3 setting-card">
-                                        <div class="card-header bg-primary text-white py-3 d-flex align-items-center justify-content-between">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="ti ti-refresh fs-20"></i>
-                                                <h6 class="card-title text-white mb-0 fw-bold">Sinkronisasi Polling & Notifikasi</h6>
+                                        <div class="card-header bg-primary text-white py-2.5 d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-start text-center text-md-start gap-1 gap-md-2">
+                                            <i class="ti ti-refresh fs-24 flex-shrink-0"></i>
+                                            <div class="d-flex flex-column align-items-center align-items-md-start">
+                                                <h6 class="card-title text-white mb-1 fw-bold">Sinkronisasi Polling & Notifikasi</h6>
+                                                <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Real-Time</span>
                                             </div>
-                                            <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Real-Time</span>
                                         </div>
                                         <div class="card-body p-3.5 d-flex flex-column justify-content-between">
                                             <div>
@@ -248,12 +248,12 @@
                                 <!-- WIDGET 5: MANAJEMEN CACHE & OPTIMASI KINERJA -->
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="card h-100 shadow-sm border-0 rounded-3 setting-card">
-                                        <div class="card-header bg-primary text-white py-3 d-flex align-items-center justify-content-between">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="ti ti-cpu fs-20"></i>
-                                                <h6 class="card-title text-white mb-0 fw-bold">Cache & Optimasi Kinerja</h6>
+                                        <div class="card-header bg-primary text-white py-2.5 d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-start text-center text-md-start gap-1 gap-md-2">
+                                            <i class="ti ti-cpu fs-24 flex-shrink-0"></i>
+                                            <div class="d-flex flex-column align-items-center align-items-md-start">
+                                                <h6 class="card-title text-white mb-1 fw-bold">Cache & Optimasi Kinerja</h6>
+                                                <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Server Engine</span>
                                             </div>
-                                            <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Server Engine</span>
                                         </div>
                                         <div class="card-body p-3.5 d-flex flex-column justify-content-between">
                                             <div>
@@ -279,12 +279,12 @@
                                 <!-- WIDGET 6: SINKRONISASI & PEMBERSIHAN MEDIA STORAGE -->
                                 <div class="col-12 col-md-6 col-xl-4">
                                     <div class="card h-100 shadow-sm border-0 rounded-3 setting-card">
-                                        <div class="card-header bg-primary text-white py-3 d-flex align-items-center justify-content-between">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="ti ti-photo-search fs-20"></i>
-                                                <h6 class="card-title text-white mb-0 fw-bold">Sinkronisasi Media Storage</h6>
+                                        <div class="card-header bg-primary text-white py-2.5 d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-start text-center text-md-start gap-1 gap-md-2">
+                                            <i class="ti ti-photo-search fs-24 flex-shrink-0"></i>
+                                            <div class="d-flex flex-column align-items-center align-items-md-start">
+                                                <h6 class="card-title text-white mb-1 fw-bold">Sinkronisasi Media Storage</h6>
+                                                <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Storage Cleaner</span>
                                             </div>
-                                            <span class="badge bg-white bg-opacity-25 text-white fs-11 font-monospace">Storage Cleaner</span>
                                         </div>
                                         <div class="card-body p-3.5 d-flex flex-column justify-content-between">
                                             <div>
@@ -390,16 +390,16 @@
                                 <div class="col-12">
                                     <div class="card shadow-sm border-0 rounded-3">
                                         <!-- CARD HEADER (Rule 12 Compliance: bg-primary text-white py-3) -->
-                                        <div class="card-header bg-primary text-white d-flex flex-wrap align-items-center justify-content-between gap-2 py-3">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="ti ti-adjustments-alt fs-22"></i>
+                                        <div class="card-header bg-primary text-white d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between text-center text-md-start gap-2 py-3" id="table-card-header">
+                                            <div class="d-flex flex-column flex-md-row align-items-center gap-2">
+                                                <i class="ti ti-adjustments-alt fs-22 flex-shrink-0"></i>
                                                 <div>
                                                     <h5 class="card-title text-white mb-0">Daftar Fitur Aplikasi & Manajemen Visibilitas</h5>
-                                                    <small class="text-white-50 fs-12">Kelola komponen topbar, menu template sidebar, dan fitur sistem secara dinamis.</small>
+                                                    <small class="text-white text-opacity-75 fs-12 d-block">Kelola komponen topbar, menu template sidebar, dan fitur sistem secara dinamis.</small>
                                                 </div>
                                             </div>
-                                            <div class="d-flex align-items-center gap-3">
-                                                <span class="text-white-70 fs-13 d-none d-sm-inline-flex align-items-center text-white text-opacity-75">
+                                            <div class="card-header-actions d-flex flex-column flex-md-row align-items-center gap-2 gap-md-3">
+                                                <span class="text-white text-opacity-75 fs-13 d-none d-md-inline-flex align-items-center">
                                                     <i class="ti ti-bolt text-warning me-1.5 fs-16"></i> Auto-Save Instant
                                                 </span>
                                                 @can('create dukunganaplikasi/fitur-aplikasi')
@@ -412,40 +412,44 @@
 
                                         <div class="card-body p-4">
                                             <!-- FILTER CONTROLS & SEARCH BAR -->
-                                            <div class="row align-items-center mb-3 g-2">
-                                                <div class="col-md-4 d-flex align-items-center">
-                                                    <label class="me-2 fs-13 text-muted mb-0 text-nowrap"><i class="ti ti-filter me-1.5"></i> Kelompok:</label>
-                                                    <select id="table-category-select" class="form-select form-select-sm">
-                                                        <option value="all">-- Semua Kelompok ({{ $totalFeatures }}) --</option>
-                                                        @foreach ($categories as $cat)
-                                                            @php
-                                                                $catLabel = match($cat) {
-                                                                    'topbar' => 'Topbar Header',
-                                                                    'menu_group' => 'Sidebar Menu Group',
-                                                                    'general' => 'Umum / General',
-                                                                    default => ucfirst($cat)
-                                                                };
-                                                                $catCount = $features->where('kategori', $cat)->count();
-                                                            @endphp
-                                                            <option value="{{ $cat }}">{{ $catLabel }} ({{ $catCount }})</option>
-                                                        @endforeach
-                                                    </select>
+                                            <div class="row align-items-center mb-3 g-2 filter-controls-row">
+                                                <div class="col-12 col-md-4">
+                                                    <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-1 gap-sm-2">
+                                                        <label class="fs-13 text-muted mb-0 text-nowrap"><i class="ti ti-filter me-1.5"></i> Kelompok:</label>
+                                                        <select id="table-category-select" class="form-select form-select-sm flex-grow-1">
+                                                            <option value="all">-- Semua Kelompok ({{ $totalFeatures }}) --</option>
+                                                            @foreach ($categories as $cat)
+                                                                @php
+                                                                    $catLabel = match($cat) {
+                                                                        'topbar' => 'Topbar Header',
+                                                                        'menu_group' => 'Sidebar Menu Group',
+                                                                        'general' => 'Umum / General',
+                                                                        default => ucfirst($cat)
+                                                                    };
+                                                                    $catCount = $features->where('kategori', $cat)->count();
+                                                                @endphp
+                                                                <option value="{{ $cat }}">{{ $catLabel }} ({{ $catCount }})</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
                                                 </div>
 
-                                                <div class="col-md-3 d-flex align-items-center">
-                                                    <label class="me-2 fs-13 text-muted mb-0">Tampilkan:</label>
-                                                    <select id="table-length-select" class="form-select form-select-sm" style="width: 120px;">
-                                                        <option value="10">10 baris</option>
-                                                        <option value="25" selected>25 baris</option>
-                                                        <option value="50">50 baris</option>
-                                                        <option value="all">Semua Baris</option>
-                                                    </select>
+                                                <div class="col-12 col-md-3">
+                                                    <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-1 gap-sm-2">
+                                                        <label class="fs-13 text-muted mb-0 text-nowrap">Tampilkan:</label>
+                                                        <select id="table-length-select" class="form-select form-select-sm filter-length-select flex-grow-1">
+                                                            <option value="10">10 baris</option>
+                                                            <option value="25" selected>25 baris</option>
+                                                            <option value="50">50 baris</option>
+                                                            <option value="all">Semua Baris</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
 
-                                                <div class="col-md-5 d-flex justify-content-md-end">
-                                                    <div class="d-flex align-items-center w-100 justify-content-md-end">
-                                                        <label class="me-2 fs-13 text-muted mb-0 text-nowrap">Cari Fitur:</label>
-                                                        <div class="input-group input-group-sm">
+                                                <div class="col-12 col-md-5">
+                                                    <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-1 gap-sm-2 justify-content-md-end">
+                                                        <label class="fs-13 text-muted mb-0 text-nowrap">Cari Fitur:</label>
+                                                        <div class="input-group input-group-sm flex-grow-1">
                                                             <input type="text" id="table-search-input" class="form-control" placeholder="Ketik kode, nama, atau deskripsi...">
                                                             <button class="btn btn-outline-secondary" type="button" id="btn-clear-search" title="Bersihkan Pencarian">
                                                                 <i class="ti ti-x"></i>
@@ -457,12 +461,12 @@
 
                                             <!-- BULK ACTION TOOLBAR (PILIHAN CENTANG CHECKBOX) -->
                                             @can('update dukunganaplikasi/fitur-aplikasi')
-                                                <div class="p-3 bg-light-subtle rounded-3 mb-3 border d-flex flex-wrap align-items-center justify-content-between gap-3" id="bulk-action-bar">
-                                                    <div class="d-flex align-items-center gap-2">
-                                                        <div class="form-check m-0">
+                                                <div class="p-3 bg-light-subtle rounded-3 mb-3 border d-flex flex-column flex-md-row align-items-center justify-content-between gap-3" id="bulk-action-bar">
+                                                    <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2">
+                                                        <div class="form-check m-0 d-flex align-items-center gap-2">
                                                             <input class="form-check-input high-contrast-checkbox" type="checkbox" id="check-all-global" title="Centang Semua Fitur pada Kategori/Filter Ini">
                                                             <label class="form-check-label fw-semibold fs-13 text-dark user-select-none cursor-pointer" for="check-all-global" id="check-all-label">
-                                                                Pilih Semua Fitur ({{ $totalFeatures }})
+                                                                Pilih Semua ({{ $totalFeatures }} fitur)
                                                             </label>
                                                         </div>
                                                         <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-12 px-2.5 py-1 ms-2" id="selected-badge" style="display: none;">
@@ -470,7 +474,7 @@
                                                         </span>
                                                     </div>
 
-                                                    <div class="d-flex flex-wrap align-items-center gap-2">
+                                                    <div class="bulk-action-buttons d-flex flex-column flex-sm-row align-items-center gap-2">
                                                         <!-- Tombol Aksi Massal untuk Item Terpilih -->
                                                         <button type="button" class="btn btn-sm btn-success btn-bulk-action" data-bulk="enable" id="btn-bulk-enable" disabled>
                                                             <i class="ti ti-eye me-1.5"></i> Aktifkan Terpilih

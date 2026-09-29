@@ -157,16 +157,15 @@
 
 ## 19. Mobile Responsive Card Header Layout Standard (Centered Multi-Line Sequence)
 - SEMUA judul dan konten di dalam `<div class="card-header">` pada dashboard dan halaman modul WAJIB mendukung tata letak responsif bertingkat yang rapi:
-  - **Desktop (`≥ md`)**: Berjajar horizontal menyamping (`d-flex flex-column flex-md-row justify-content-between align-items-center text-md-start`).
+  - **Desktop (`≥ md`)**: Berjajar horizontal menyamping (`d-flex flex-md-row align-items-center justify-content-md-start text-md-start gap-2` / `gap: 0.5rem - 0.65rem`). Icon berada di kiri dan **terpusat vertikal (*vertical center*)** terhadap blok teks (judul & sub-judul/badge), dengan jarak icon-ke-teks yang rapat dan proporsional.
   - **Mobile (`< md`)**: Otomatis tersusun vertikal beberapa baris di posisi tengah (**Center / Multi-line**):
-    - Kontainer card-header: `class="card-header ... d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2.5 gap-md-0"`.
-    - Kontainer title: `<h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">`.
+    - Kontainer card-header: `class="card-header ... d-flex flex-column flex-md-row align-items-center text-center text-md-start gap-1 gap-md-2"`.
+    - Jarak vertikal elemen di mode mobile WAJIB dikontrol rapat (`gap: 0.35rem !important` / ~5px) agar tidak ada baris kosong atau celah berlebih akibat CSS default template.
     - **Urutan Elemen Hierarki di Mode Mobile/HP**:
       1. **Icon**: Terpusat di atas judul (`class="ti ti-... me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"`).
-      2. **Judul**: Teks judul terpusat (`<span>Judul Card</span>`).
-      3. **Deskripsi**: Teks sub-judul/keterangan terpusat di bawah judul jika ada (`<p class="text-muted fs-12 mb-0 mt-1 mt-md-0.5 text-center text-md-start">...</p>`).
-      4. **Badge**: Badge status/counter terpusat jika ada (`<span class="badge ...">...</span>`).
-      5. **Tombol / Action / Search**: Tombol aksi atau form search otomatis melebar penuh (**Full Button/Width**) pada mode mobile melalui media query CSS responsif (`@media (max-width: 767.98px) { .card-header .btn { width: 100% !important; margin-top: 0.5rem; } }`), dan tetap berukuran normal (*auto-width*) di sisi kanan pada mode desktop. Jangan gunakan kelas `w-100` langsung pada tag HTML button agar tidak merusak tampilan desktop.
+      2. **Judul**: Teks judul terpusat (`<span>Judul Card</span>` atau `<h6 class="card-title ...">`).
+      3. **Deskripsi / Badge**: Teks sub-judul atau badge status/counter terpusat di bawah judul.
+      4. **Tombol / Action / Search**: Tombol aksi atau form search otomatis melebar penuh (**Full Button/Width**) pada mode mobile melalui media query CSS responsif (`@media (max-width: 767.98px) { .card-header .btn { width: 100% !important; margin-top: 0.5rem; } }`), dan tetap berukuran normal (*auto-width*) di sisi kanan pada mode desktop. Jangan gunakan kelas `w-100` langsung pada tag HTML button agar tidak merusak tampilan desktop.
 
 ## 20. Mobile Responsive Modal Action Buttons Standard (Full-Width Button)
 - SEMUA tombol aksi pada footer modal (`<div class="modal-footer">`) di seluruh modul dan dialog WAJIB mendukung tata letak responsif penuh:

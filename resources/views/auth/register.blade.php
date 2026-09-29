@@ -137,7 +137,10 @@
                             </div>
 
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary fw-semibold py-2" id="btnSubmitRegister">Daftar Akun Baru</button>
+                                <button type="submit" class="btn btn-primary fw-semibold py-2 d-inline-flex align-items-center justify-content-center" id="btnSubmitRegister">
+                                    <i class="ti ti-user-plus me-1.5" id="btnSubmitRegisterIcon"></i>
+                                    <span id="btnSubmitRegisterText">Daftar Akun Baru</span>
+                                </button>
                             </div>
                         </form>
 
@@ -392,6 +395,13 @@
                 } else if (!isTermsValid) {
                     termsCheckbox.focus();
                 }
+                return false;
+            }
+
+            const btnSubmit = document.getElementById('btnSubmitRegister');
+            if (btnSubmit) {
+                btnSubmit.disabled = true;
+                btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm me-1.5" role="status" aria-hidden="true"></span> Mendaftarkan Akun...';
             }
         });
 

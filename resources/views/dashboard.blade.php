@@ -1,7 +1,7 @@
 @extends('layouts.vertical')
 
 @section('content')
-    <link href="{{ asset('assets/css/admin/dashboard.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/admin/dashboard.css') }}?v={{ time() }}" rel="stylesheet" type="text/css" />
 
     <!-- 1. HERO GREETING & PROFILE OVERVIEW CARD WITH USER CUSTOM COVER PHOTO -->
     <div class="row mt-3 mb-4">
@@ -15,7 +15,7 @@
                                 <!-- 1. Avatar Pengguna -->
                                 <div class="hero-avatar-wrapper flex-shrink-0 text-center">
                                     <img src="{{ $user->avatar_url }}"
-                                        alt="{{ $user->name }}" class="rounded-circle hero-avatar-img shadow">
+                                        alt="{{ $user->name }}" class="rounded-3 hero-avatar-img shadow">
                                     <span class="hero-status-dot" title="Akun Aktif & Sedang Masuk"></span>
                                 </div>
 
@@ -48,7 +48,7 @@
                                     @endif
 
                                     <!-- 5, 6, 7, 8. Email, Role, Teman & Suka, Poin Login -->
-                                    <div class="d-flex flex-column flex-md-row flex-md-wrap align-items-center justify-content-center justify-content-md-start gap-2 gap-md-3 text-white-50 fs-13 mb-2">
+                                    <div class="d-flex flex-column flex-md-row flex-md-wrap align-items-center justify-content-center justify-content-md-start gap-2 gap-md-2.5 text-white-50 fs-13 mb-2">
                                         <!-- 5. Email -->
                                         <div class="d-flex align-items-center">
                                             <i class="ti ti-mail text-white-50 me-1.5"></i>

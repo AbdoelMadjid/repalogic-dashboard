@@ -22,25 +22,25 @@
                     </div>
 
                     <div class="card-body">
-                        <!-- Custom Nav Tabs -->
+                        <!-- Custom Nav Tabs (Rule 17 & 18 Compliance) -->
                         <ul class="nav nav-tabs nav-bordered mb-4" role="tablist">
-                            <li class="nav-item">
-                                <a href="#tab-logo" data-bs-toggle="tab" aria-expanded="true" class="nav-link active py-2">
-                                    <i class="ti ti-photo me-1 fs-18 align-middle"></i>
-                                    <span class="d-none d-md-inline-block">Logo & Icon</span>
-                                </a>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link active py-2" id="tab-logo-btn" data-bs-toggle="tab" data-bs-target="#tab-logo" role="tab" aria-controls="tab-logo" aria-selected="true" title="Logo & Icon">
+                                    <i class="ti ti-photo me-0 me-md-1.5 fs-18 align-middle"></i>
+                                    <span class="d-none d-md-inline">Logo & Icon</span>
+                                </button>
                             </li>
-                            <li class="nav-item">
-                                <a href="#tab-meta" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
-                                    <i class="ti ti-brand-meta me-1 fs-18 align-middle"></i>
-                                    <span class="d-none d-md-inline-block">Identitas & Meta SEO</span>
-                                </a>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link py-2" id="tab-meta-btn" data-bs-toggle="tab" data-bs-target="#tab-meta" role="tab" aria-controls="tab-meta" aria-selected="false" title="Identitas & Meta SEO">
+                                    <i class="ti ti-brand-meta me-0 me-md-1.5 fs-18 align-middle"></i>
+                                    <span class="d-none d-md-inline">Identitas & Meta SEO</span>
+                                </button>
                             </li>
-                            <li class="nav-item">
-                                <a href="#tab-footer" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
-                                    <i class="ti ti-layout-bottombar me-1 fs-18 align-middle"></i>
-                                    <span class="d-none d-md-inline-block">Footer & Developer</span>
-                                </a>
+                            <li class="nav-item" role="presentation">
+                                <button type="button" class="nav-link py-2" id="tab-footer-btn" data-bs-toggle="tab" data-bs-target="#tab-footer" role="tab" aria-controls="tab-footer" aria-selected="false" title="Footer & Developer">
+                                    <i class="ti ti-layout-bottombar me-0 me-md-1.5 fs-18 align-middle"></i>
+                                    <span class="d-none d-md-inline">Footer & Developer</span>
+                                </button>
                             </li>
                         </ul>
 
@@ -51,8 +51,8 @@
                                     <!-- Logo Besar (Side Nav LG) -->
                                     <div class="col-md-4">
                                         <div class="card border shadow-none h-100">
-                                            <div class="card-header bg-light py-2 fw-semibold">
-                                                <i class="ti ti-photo-heart me-1 text-primary"></i> Logo Besar (Side Nav Expanded)
+                                            <div class="card-header d-block bg-light py-2 fw-semibold text-center text-md-start">
+                                                <i class="ti ti-photo-heart fs-18 text-primary align-middle d-block d-md-inline-block me-0 me-md-1.5 mb-1 mb-md-0"></i><span>Logo Besar (Side Nav Expanded)</span>
                                             </div>
                                             <div class="card-body text-center d-flex flex-column align-items-center justify-content-between">
                                                 <div class="mb-3 p-3 border rounded bg-dark-subtle w-100 d-flex align-items-center justify-content-center" style="min-height: 120px;">
@@ -77,8 +77,8 @@
                                     <!-- Logo Kecil (Side Nav SM) -->
                                     <div class="col-md-4">
                                         <div class="card border shadow-none h-100">
-                                            <div class="card-header bg-light py-2 fw-semibold">
-                                                <i class="ti ti-square-asterisk me-1 text-primary"></i> Logo Kecil (Side Nav Collapsed)
+                                            <div class="card-header d-block bg-light py-2 fw-semibold text-center text-md-start">
+                                                <i class="ti ti-square-asterisk fs-18 text-primary align-middle d-block d-md-inline-block me-0 me-md-1.5 mb-1 mb-md-0"></i><span>Logo Kecil (Side Nav Collapsed)</span>
                                             </div>
                                             <div class="card-body text-center d-flex flex-column align-items-center justify-content-between">
                                                 <div class="mb-3 p-3 border rounded bg-dark-subtle w-100 d-flex align-items-center justify-content-center" style="min-height: 120px;">
@@ -103,8 +103,8 @@
                                     <!-- Favicon Browser -->
                                     <div class="col-md-4">
                                         <div class="card border shadow-none h-100">
-                                            <div class="card-header bg-light py-2 fw-semibold">
-                                                <i class="ti ti-world-upload me-1 text-primary"></i> Favicon Browser Tab
+                                            <div class="card-header d-block bg-light py-2 fw-semibold text-center text-md-start">
+                                                <i class="ti ti-world-upload fs-18 text-primary align-middle d-block d-md-inline-block me-0 me-md-1.5 mb-1 mb-md-0"></i><span>Favicon Browser Tab</span>
                                             </div>
                                             <div class="card-body text-center d-flex flex-column align-items-center justify-content-between">
                                                 <div class="mb-3 p-3 border rounded bg-light w-100 d-flex align-items-center justify-content-center" style="min-height: 120px;">
@@ -266,13 +266,13 @@
                         </div>
                     </div>
 
-                    <div class="card-footer bg-light d-flex align-items-center justify-content-between py-3">
-                        <span class="text-muted fs-12">
+                    <div class="card-footer bg-light d-flex flex-column flex-md-row align-items-center justify-content-between py-3 gap-2 text-center text-md-start">
+                        <span class="text-muted fs-12 mb-0">
                             <i class="ti ti-info-circle me-1"></i> Perubahan data profil akan langsung berdampak secara global di seluruh tampilan dashboard.
                         </span>
                         @can('update dukunganaplikasi/profil-aplikasi')
-                            <button type="submit" class="btn btn-primary px-4">
-                                <i class="ti ti-device-floppy me-1"></i> Simpan Profil Aplikasi
+                            <button type="submit" class="btn btn-primary px-4 btn-submit-profil" id="btn-submit-profil">
+                                <i class="ti ti-device-floppy me-1.5"></i> Simpan Profil Aplikasi
                             </button>
                         @endcan
                     </div>

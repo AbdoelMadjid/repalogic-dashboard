@@ -86,8 +86,9 @@
                             </div>
 
                             <div class="d-grid mb-3">
-                                <button type="submit" class="btn btn-primary fw-semibold py-2" id="btnSubmitActivation">
-                                    <i class="ti ti-user-check me-1"></i> Ajukan Aktivasi Akun
+                                <button type="submit" class="btn btn-primary fw-semibold py-2 d-inline-flex align-items-center justify-content-center" id="btnSubmitActivation">
+                                    <i class="ti ti-user-check me-1.5" id="btnSubmitActivationIcon"></i>
+                                    <span id="btnSubmitActivationText">Ajukan Aktivasi Akun</span>
                                 </button>
                             </div>
                         </form>
@@ -178,7 +179,7 @@
             }
 
             btnSubmit.disabled = true;
-            btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Mengirim Permohonan...';
+            btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm me-1.5" role="status" aria-hidden="true"></span> Mengirim Permohonan...';
         });
     });
     </script>

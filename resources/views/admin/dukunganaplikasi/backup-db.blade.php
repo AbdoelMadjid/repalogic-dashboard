@@ -3,7 +3,7 @@
 @section('title', 'Backup Database')
 
 @section('content')
-    <link href="{{ asset('assets/css/admin/dukunganaplikasi/backup-db.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/admin/dukunganaplikasi/backup-db.css') }}?v={{ time() }}" rel="stylesheet" type="text/css" />
 
     <!-- Header Page Title -->
     @include('layouts.partials.page-title', ['title' => 'Backup Database', 'subtitle' => 'Dukungan Aplikasi'])
@@ -63,11 +63,9 @@
                 @csrf
 
                 <div class="card shadow-sm border-0">
-                    <div class="card-header bg-primary text-white py-3 d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center gap-2">
-                            <i class="ti ti-database-export fs-22"></i>
-                            <h5 class="card-title text-white mb-0">Konfigurasi Backup Database</h5>
-                        </div>
+                    <div class="card-header bg-primary text-white py-3 d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-start text-center text-md-start gap-1 gap-md-2">
+                        <i class="ti ti-database-export fs-22 flex-shrink-0"></i>
+                        <h5 class="card-title text-white mb-0">Konfigurasi Backup Database</h5>
                     </div>
 
                     <div class="card-body">
@@ -135,9 +133,9 @@
                         </div>
 
                         <!-- Checkbox Opsi Tambahan DROP & CREATE DATABASE -->
-                        <div class="p-3 bg-light rounded border mb-4">
+                        <div class="p-3 bg-light rounded border mb-4 option-db-statement-box">
                             <div class="form-check form-switch mb-0">
-                                <input class="form-check-input" type="checkbox" name="include_create_db" id="include_create_db" value="1">
+                                <input class="form-check-input option-db-switch" type="checkbox" name="include_create_db" id="include_create_db" value="1" role="switch">
                                 <label class="form-check-label fw-bold text-dark fs-14" for="include_create_db">
                                     Sertakan Perintah DROP & CREATE DATABASE
                                 </label>
@@ -224,13 +222,13 @@
                         </div>
                     </div>
 
-                    <div class="card-footer bg-light py-3 d-flex align-items-center justify-content-between">
-                        <span class="text-muted fs-13 d-flex align-items-center gap-2">
-                            <i class="ti ti-shield-check text-success fs-18"></i>
+                    <div class="card-footer bg-light py-3 d-flex flex-column flex-md-row align-items-center justify-content-between text-center text-md-start gap-2 backup-form-footer">
+                        <span class="text-muted fs-13 d-flex flex-column flex-md-row align-items-center gap-1.5 gap-md-2">
+                            <i class="ti ti-shield-check text-success fs-18 flex-shrink-0"></i>
                             <span>Proses ekspor menggunakan perintah SQL standar yang kompatibel untuk restore di phpMyAdmin / MySQL CLI.</span>
                         </span>
                         @can('create dukunganaplikasi/backup-db')
-                            <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                            <button type="submit" class="btn btn-primary px-4 fw-semibold flex-shrink-0">
                                 <i class="ti ti-download me-1 fs-18"></i> Proses & Ekspor Backup
                             </button>
                         @endcan
@@ -242,12 +240,12 @@
         <!-- Riwayat Berkas Backup -->
         <div class="col-12">
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-white py-3 d-flex align-items-center justify-content-between border-bottom">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="ti ti-history text-primary fs-20"></i>
+                <div class="card-header bg-white py-3 d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-between text-center text-md-start gap-1 gap-md-2 border-bottom" id="history-card-header">
+                    <div class="d-flex flex-column flex-md-row align-items-center gap-1 gap-md-2">
+                        <i class="ti ti-history text-primary fs-22 fs-md-20 flex-shrink-0"></i>
                         <h5 class="card-title text-dark mb-0 fw-bold">Riwayat Berkas Backup Tersimpan</h5>
                     </div>
-                    <span class="badge bg-primary-subtle text-primary fs-12">{{ count($backupFiles) }} Berkas</span>
+                    <span class="badge bg-primary-subtle text-primary fs-12 font-monospace">{{ count($backupFiles) }} Berkas</span>
                 </div>
 
                 <div class="card-body p-0">
