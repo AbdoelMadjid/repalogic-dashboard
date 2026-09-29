@@ -89,7 +89,7 @@ Setiap komponen Topbar Header dan grup menu Sidebar telah dioptimasi dengan arsi
   - Template Sidebar Menu Groups (`menu_group_main`, `menu_group_apps`, `menu_special_menu`, dll.)
 
 ### 3.2 Persistensi Tab Aktif & Zero-Reload Bulk Actions
-- **Tab State Persistence:** Sistem secara otomatis menyimpan tab aktif (`#tab-settings` atau `#tab-visibility`) ke `localStorage.setItem('active_fitur_tab', targetHash)` dan URL hash browser (`history.replaceState`).
+- **Tab State Persistence (Clean URL):** Sistem secara otomatis menyimpan tab aktif (`#tab-settings` atau `#tab-visibility`) ke `localStorage.setItem('active_fitur_tab', target)` tanpa menambahkan hashtag pada address bar browser (Clean URL Standard - Rule 17).
 - **Zero-Reload Bulk Action:** Aksi massal (**Aktifkan Terpilih**, **Nonaktifkan Terpilih**, dan **Hapus Terpilih**) mengeksekusi pembaruan status dan DOM secara realtime tanpa me-reload halaman, sehingga pengguna tetap berada di tab aktif tanpa lompatan fokus.
 - **Form Modal AJAX:** Penambahan dan pembaruan fitur via modal diproses via AJAX dengan tetap mengarahkan fokus ke `#tab-visibility`.
 

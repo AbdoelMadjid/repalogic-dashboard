@@ -63,7 +63,7 @@
                             </div>
 
                             <div class="mt-4 pt-3 border-top text-muted fs-12">
-                                &copy; {{ date('Y') }} {{ config('app.name', 'REPALOGIC') }}. Hak Cipta Dilindungi.
+                                &copy; {{ $appProfil->created_year ?? date('Y') }} {{ !empty($appProfil?->app_name) ? $appProfil->app_name : config('app.name', 'REPALOGIC Dashboard') }}. Hak Cipta Dilindungi.
                             </div>
                         </div>
                     </div>

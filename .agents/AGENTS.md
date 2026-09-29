@@ -129,4 +129,24 @@
   - The icon margin MUST adapt responsively: `class="ti ti-... me-0 me-md-1.5"`.
   - All action buttons MUST have a hover description via the HTML `title="Button Text"` attribute so that hovering over the button shows its description.
 
+## 17. Clean URL & Hashtag-Free Tab Navigation Standard
+- **Forbidden Anchor Hash for Tabs**:
+  - NEVER use anchor tags with hash targets (`<a href="#tab-id" data-bs-toggle="tab">`) for tab switching.
+  - Using `href="#..."` appends unsightly hashtag fragments (`#tab-name`) to the browser address bar and history, cluttering the URL and triggering unwanted anchor jumps.
+- **Standard Button Tab Markup**:
+  - ALL tab and pill navigation elements (`<ul class="nav nav-tabs ...">`, `<ul class="nav nav-pills ...">`) across all pages and modals MUST use button elements with `data-bs-target`:
+    ```html
+    <li class="nav-item" role="presentation">
+        <button type="button" class="nav-link active" id="tab-id-btn" data-bs-toggle="tab" data-bs-target="#tab-id" role="tab" aria-controls="tab-id" aria-selected="true">
+            <i class="ti ti-... me-1.5"></i>
+            <span>Nama Tab</span>
+        </button>
+    </li>
+    ```
+- **Hashtag-Free Tab State Persistence**:
+  - If a page requires tab persistence across reloads or form submissions, store the tab selector in `localStorage` or `sessionStorage` (e.g. `localStorage.setItem('active_module_tab', target)`).
+  - NEVER use `history.replaceState(null, null, '#tab-id')`, `history.pushState`, or `window.location.hash = '#tab-id'`.
+  - The browser URL in the address bar MUST always remain completely clean (e.g. `/admin/dukunganaplikasi/fitur-aplikasi`, NOT `/admin/dukunganaplikasi/fitur-aplikasi#tab-settings`).
+
+
 

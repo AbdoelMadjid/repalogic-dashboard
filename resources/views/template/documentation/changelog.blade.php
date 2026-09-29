@@ -116,7 +116,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 2.9.8 -->
+                        <!-- Version 2.9.9 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -124,8 +124,38 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v2.9.8</h5>
+                                        <h5 class="fw-bold mb-0">v2.9.9</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.9</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-29 07:41 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Storage Symlink 1-Click Repair Engine, Dynamic Maintenance Mode Copyright &amp; Clean URL Tab Standard (Rule 17)</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Storage Symlink Auto-Repair &amp; 1-Click Reconnect:</strong> Menambahkan tombol dan backend engine <em>Perbaiki Symlink Storage</em> pada tab Pengaturan Sistem (Card Sinkronisasi Media Storage di <code>fitur-aplikasi.blade.php</code> &amp; <code>FiturAplikasiController.php</code>) untuk me-reset dan menyambungkan kembali koneksi symlink/junction <code>public/storage</code> secara dinamis ke direktori server saat ini tanpa perlu akses terminal/CMD.</li>
+                                    <li><strong class="text-dark">Auto-Healing Symlink on Media Scan:</strong> Memperbaiki otomatis koneksi symlink yang rusak atau hilang saat proses pemindaian berkas media storage (<code>scanStorageImages</code>) dijalankan.</li>
+                                    <li><strong class="text-dark">Dynamic Maintenance Mode &amp; 419 Copyright:</strong> Menyelaraskan teks hak cipta pada halaman Mode Pemeliharaan (<code>errors/503.blade.php</code>) dan Sesi Kedaluwarsa (<code>errors/419.blade.php</code>) agar dinamis mengikuti database Profil Aplikasi (<code>appProfil->app_name</code> &amp; <code>appProfil->created_year</code>).</li>
+                                    <li><strong class="text-dark">Clean URL &amp; Hashtag-Free Tab Navigation Standard (Rule 17):</strong> Menghapus seluruh hashtag URL (<code>#tab-settings</code>, <code>#tab-visibility</code>) pada tab navigasi dengan beralih ke tombol <code>data-bs-target</code> dan persistensi status via <code>localStorage</code>, didokumentasikan resmi di <code>.agents/AGENTS.md</code>.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark border fs-xs">Storage Symlink</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Auto-Repair</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Maintenance Mode</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Clean URL Tabs</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Rule 17</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 2.9.8 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-filled fs-xs text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v2.9.8</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v2.9.8</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-28 15:23 WIB</span>

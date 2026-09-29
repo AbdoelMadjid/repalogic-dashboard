@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
         clearCache: configRoutes.clearCache || '/admin/dukunganaplikasi/fitur-aplikasi/clear-cache',
         scanImages: configRoutes.scanImages || '/admin/dukunganaplikasi/fitur-aplikasi/scan-images',
         deleteImages: configRoutes.deleteImages || '/admin/dukunganaplikasi/fitur-aplikasi/delete-images',
+        fixStorageLink: configRoutes.fixStorageLink || '/admin/dukunganaplikasi/fitur-aplikasi/fix-storage-link',
         resetDefaults: configRoutes.resetDefaults || '/admin/dukunganaplikasi/fitur-aplikasi/reset-defaults',
         store: configRoutes.store || '/admin/dukunganaplikasi/fitur-aplikasi',
         baseUrl: configRoutes.baseUrl || '/admin/dukunganaplikasi/fitur-aplikasi'
@@ -292,12 +293,17 @@ document.addEventListener('DOMContentLoaded', function() {
         applyFilterAndPagination();
     });
 
-    // Tab Switching Handlers & Persistence Across Reloads/Actions
-    const navTabs = document.querySelectorAll('#fiturNavTabs a[data-bs-toggle="tab"]');
-    const savedTab = window.location.hash || localStorage.getItem('active_fitur_tab');
+    // Tab Switching Handlers & Clean State Persistence (No URL Hash)
+    const navTabs = document.querySelectorAll('#fiturNavTabs button[data-bs-toggle="tab"], #fiturNavTabs a[data-bs-toggle="tab"]');
+    const savedTab = localStorage.getItem('active_fitur_tab');
+
+    // Clean up any remaining URL hash if present
+    if (window.location.hash && (window.location.hash === '#tab-settings' || window.location.hash === '#tab-visibility')) {
+        history.replaceState(null, null, window.location.pathname + window.location.search);
+    }
 
     if (savedTab) {
-        const tabTriggerEl = document.querySelector(`#fiturNavTabs a[href="${savedTab}"]`);
+        const tabTriggerEl = document.querySelector(`#fiturNavTabs [data-bs-target="${savedTab}"], #fiturNavTabs [href="${savedTab}"]`);
         if (tabTriggerEl) {
             const tabInstance = bootstrap.Tab.getOrCreateInstance(tabTriggerEl);
             tabInstance.show();
@@ -306,14 +312,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     navTabs.forEach(tabEl => {
         tabEl.addEventListener('shown.bs.tab', function(e) {
-            const targetHash = e.target.getAttribute('href');
-            if (targetHash) {
-                localStorage.setItem('active_fitur_tab', targetHash);
-                if (window.location.hash !== targetHash) {
-                    history.replaceState(null, null, targetHash);
-                }
+            const target = e.target.getAttribute('data-bs-target') || e.target.getAttribute('href');
+            if (target) {
+                localStorage.setItem('active_fitur_tab', target);
             }
-            if (targetHash === '#tab-visibility') {
+            if (target === '#tab-visibility') {
                 applyFilterAndPagination();
             }
         });
@@ -1017,7 +1020,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.success) {
                     if (modal) modal.hide();
                     localStorage.setItem('active_fitur_tab', '#tab-visibility');
-                    history.replaceState(null, null, '#tab-visibility');
                     window.showSuccess(data.message, { reload: true });
                 } else {
                     window.showError(data.message || 'Gagal menyimpan fitur.');
@@ -1037,6 +1039,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // WIDGET 6: SINKRONISASI & PEMBERSIHAN MEDIA STORAGE HANDLER
     // =========================================================================
     const btnOpenSyncModal = document.getElementById('btn-open-sync-modal');
+    const btnFixStorageLink = document.getElementById('btn-fix-storage-link');
     const syncModalEl = document.getElementById('storageSyncModal');
     const syncModal = syncModalEl ? new bootstrap.Modal(syncModalEl) : null;
     const previewModalEl = document.getElementById('storageImagePreviewModal');
@@ -1524,6 +1527,66 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Perbaiki Symlink Storage 1-Click Action
+    function executeFixStorageLink() {
+        window.showConfirm({
+            title: 'Perbaiki Symlink Storage?',
+            text: 'Sistem akan mereset koneksi folder public/storage dan menghubungkannya kembali secara dinamis ke direktori proyek server saat ini.',
+            isDanger: false,
+            onConfirm: () => {
+                if (btnFixStorageLink) {
+                    btnFixStorageLink.disabled = true;
+                    btnFixStorageLink.innerHTML = '<span class="spinner-border spinner-border-sm me-1.5" role="status" aria-hidden="true"></span> Menghubungkan...';
+                }
+
+                fetch(routes.fixStorageLink, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': getCsrfToken(),
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(async res => {
+                    let data;
+                    try {
+                        data = await res.json();
+                    } catch (e) {
+                        data = { success: false, message: `Respon server tidak valid (${res.status} ${res.statusText})` };
+                    }
+                    if (!res.ok) {
+                        throw new Error(data.message || `Gagal memperbaiki symlink (HTTP ${res.status}).`);
+                    }
+                    return data;
+                })
+                .then(data => {
+                    if (btnFixStorageLink) {
+                        btnFixStorageLink.disabled = false;
+                        btnFixStorageLink.innerHTML = '<i class="ti ti-link me-1.5"></i> Perbaiki Symlink Storage';
+                    }
+
+                    if (data.success) {
+                        window.showSuccess(data.message, { reload: false });
+                    } else {
+                        window.showError(data.message || 'Gagal memperbaiki symlink storage.');
+                    }
+                })
+                .catch(err => {
+                    if (btnFixStorageLink) {
+                        btnFixStorageLink.disabled = false;
+                        btnFixStorageLink.innerHTML = '<i class="ti ti-link me-1.5"></i> Perbaiki Symlink Storage';
+                    }
+                    console.error('Error fixing storage symlink:', err);
+                    window.showError(err.message || 'Terjadi kesalahan saat memperbaiki symlink.');
+                });
+            }
+        });
+    }
+
+    if (btnFixStorageLink) {
+        btnFixStorageLink.addEventListener('click', executeFixStorageLink);
+    }
+
     if (btnReScan) {
         btnReScan.addEventListener('click', function() {
             triggerStorageScan(false);
@@ -1672,6 +1735,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             }
+            return;
+        }
+
+        // Perbaiki Symlink Storage Action (Rule 2 Event Delegation Compliance)
+        const btnFixLink = e.target.closest('#btn-fix-storage-link, .btn-fix-storage-link');
+        if (btnFixLink) {
+            e.preventDefault();
+            executeFixStorageLink();
             return;
         }
     });

@@ -24,19 +24,19 @@
                     </div>
                     <ul class="nav nav-tabs card-header-tabs nav-bordered" id="fiturNavTabs" role="tablist">
                         <!-- TAB 1: PENGATURAN SISTEM (DEFAULT ACTIVE) -->
-                        <li class="nav-item">
-                            <a href="#tab-settings" data-bs-toggle="tab" aria-expanded="true" class="nav-link active" id="tab-settings-btn">
+                        <li class="nav-item" role="presentation">
+                            <button type="button" class="nav-link active" id="tab-settings-btn" data-bs-toggle="tab" data-bs-target="#tab-settings" role="tab" aria-controls="tab-settings" aria-selected="true">
                                 <i class="ti ti-settings me-1.5 fs-18 align-middle"></i>
                                 <span>Pengaturan Sistem</span>
-                            </a>
+                            </button>
                         </li>
 
                         <!-- TAB 2: VISIBILITAS FITUR & KOMPONEN -->
-                        <li class="nav-item">
-                            <a href="#tab-visibility" data-bs-toggle="tab" aria-expanded="false" class="nav-link" id="tab-visibility-btn">
+                        <li class="nav-item" role="presentation">
+                            <button type="button" class="nav-link" id="tab-visibility-btn" data-bs-toggle="tab" data-bs-target="#tab-visibility" role="tab" aria-controls="tab-visibility" aria-selected="false">
                                 <i class="ti ti-adjustments-horizontal me-1.5 fs-18 align-middle"></i>
                                 <span>Visibilitas Fitur & Komponen</span>
-                            </a>
+                            </button>
                         </li>
                     </ul>
                 </div>
@@ -300,9 +300,12 @@
                                                     Pindai berkas gambar di penyimpanan (storage) yang tidak terhubung lagi dengan rekaman database (orphan files) untuk menghemat ruang disk server.
                                                 </p>
                                             </div>
-                                            <div class="pt-2 border-top">
+                                            <div class="pt-2 border-top d-flex flex-column gap-1.5">
                                                 <button type="button" class="btn btn-sm btn-primary w-100 fw-semibold" id="btn-open-sync-modal">
-                                                    <i class="ti ti-refresh me-1.5"></i> Pindai & Sinkronkan Gambar
+                                                    <i class="ti ti-refresh me-1.5"></i> Pindai &amp; Sinkronkan Gambar
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary w-100 fw-semibold btn-fix-storage-link" id="btn-fix-storage-link" title="Hubungkan ulang atau perbaiki symlink storage jika website dipindahkan ke server/lokasi lain">
+                                                    <i class="ti ti-link me-1.5"></i> Perbaiki Symlink Storage
                                                 </button>
                                             </div>
                                         </div>
@@ -650,6 +653,7 @@
                 clearCache: "{{ route('admin.dukunganaplikasi.fitur-aplikasi.clear-cache') }}",
                 scanImages: "{{ route('admin.dukunganaplikasi.fitur-aplikasi.scan-images') }}",
                 deleteImages: "{{ route('admin.dukunganaplikasi.fitur-aplikasi.delete-images') }}",
+                fixStorageLink: "{{ route('admin.dukunganaplikasi.fitur-aplikasi.fix-storage-link') }}",
                 resetDefaults: "{{ route('admin.dukunganaplikasi.fitur-aplikasi.reset-defaults') }}",
                 store: "{{ route('admin.dukunganaplikasi.fitur-aplikasi.store') }}",
                 baseUrl: "{{ url('admin/dukunganaplikasi/fitur-aplikasi') }}"
@@ -658,5 +662,5 @@
     </script>
 
     {{-- Page JS (Rule 1 & 15 Compliance: Placed inside @section('content') before @endsection) --}}
-    <script src="{{ asset('assets/js/admin/dukunganaplikasi/fitur-aplikasi.js') }}"></script>
+    <script src="{{ asset('assets/js/admin/dukunganaplikasi/fitur-aplikasi.js') }}?v={{ file_exists(public_path('assets/js/admin/dukunganaplikasi/fitur-aplikasi.js')) ? filemtime(public_path('assets/js/admin/dukunganaplikasi/fitur-aplikasi.js')) : time() }}"></script>
 @endsection

@@ -417,6 +417,14 @@ class FiturAplikasiController extends Controller
         }
 
         try {
+            // Auto-heal broken/missing storage symlink
+            $publicStorage = public_path('storage');
+            if (!file_exists($publicStorage) && !is_link($publicStorage)) {
+                try {
+                    Artisan::call('storage:link');
+                } catch (\Throwable $ignored) {}
+            }
+
             $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico', 'avif'];
             $allStorageFiles = Storage::disk('public')->allFiles();
 
@@ -615,6 +623,62 @@ class FiturAplikasiController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan saat menghapus berkas media: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Memeriksa dan memperbaiki / merefresh symlink storage (public/storage) secara otomatis.
+     */
+    public function fixStorageLink(Request $request)
+    {
+        if (!auth()->user()->can('update dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki akses untuk memperbaiki symlink storage.',
+            ], 403);
+        }
+
+        try {
+            $publicStorage = public_path('storage');
+
+            // 1. Jika symlink / junction / folder public/storage sudah ada, hapus terlebih dahulu
+            if (file_exists($publicStorage) || is_link($publicStorage) || is_dir($publicStorage)) {
+                if (PHP_OS_FAMILY === 'Windows') {
+                    @exec('cmd /c rmdir /s /q ' . escapeshellarg($publicStorage));
+                    if (file_exists($publicStorage) || is_link($publicStorage) || is_dir($publicStorage)) {
+                        @exec('cmd /c rmdir ' . escapeshellarg($publicStorage));
+                    }
+                    if (file_exists($publicStorage) || is_link($publicStorage)) {
+                        @unlink($publicStorage);
+                    }
+                } else {
+                    @unlink($publicStorage);
+                }
+            }
+
+            // 2. Buat symlink baru via Artisan
+            Artisan::call('storage:link');
+            $artisanOutput = Artisan::output();
+
+            // 3. Verifikasi ketersediaan link
+            $isValid = file_exists($publicStorage) || is_link($publicStorage);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Symlink media storage berhasil diperbaiki dan terhubung secara dinamis!',
+                'output' => trim($artisanOutput),
+                'details' => [
+                    'public_path' => $publicStorage,
+                    'target_path' => storage_path('app/public'),
+                    'is_valid' => $isValid,
+                    'os' => PHP_OS_FAMILY,
+                ],
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat memperbaiki symlink storage: ' . $e->getMessage(),
             ], 500);
         }
     }

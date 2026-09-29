@@ -84,6 +84,7 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
         Route::post('fitur-aplikasi/clear-cache', [FiturAplikasiController::class, 'clearSystemCache'])->name('fitur-aplikasi.clear-cache');
         Route::post('fitur-aplikasi/scan-images', [FiturAplikasiController::class, 'scanStorageImages'])->name('fitur-aplikasi.scan-images');
         Route::post('fitur-aplikasi/delete-images', [FiturAplikasiController::class, 'deleteStorageImages'])->name('fitur-aplikasi.delete-images');
+        Route::post('fitur-aplikasi/fix-storage-link', [FiturAplikasiController::class, 'fixStorageLink'])->name('fitur-aplikasi.fix-storage-link');
         Route::post('fitur-aplikasi/reset-defaults', [FiturAplikasiController::class, 'resetDefaults'])->name('fitur-aplikasi.reset-defaults');
         Route::post('fitur-aplikasi/update-setting', [FiturAplikasiController::class, 'updateAppSetting'])->name('fitur-aplikasi.update-setting');
         Route::match(['post', 'put', 'patch'], 'fitur-aplikasi/{id}', [FiturAplikasiController::class, 'update'])->whereNumber('id')->name('fitur-aplikasi.update');
