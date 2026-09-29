@@ -6,6 +6,41 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * App\Models\Admin\DukunganAplikasi\FiturAplikasi
+ *
+ * @property int $id
+ * @property string $kode_fitur
+ * @property string $nama_fitur
+ * @property string $kategori
+ * @property string|null $deskripsi
+ * @property string|null $icon
+ * @property bool $status
+ * @property int $urutan
+ * @property bool $is_system
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi query()
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi whereKodeFitur($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi whereNamaFitur($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi whereKategori($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi whereUrutan($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi whereIsSystem($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi orderBy($column, $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi select(...$columns)
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi distinct()
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi find($id, $columns = ['*'])
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi findOrFail($id, $columns = ['*'])
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi create(array $attributes = [])
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi whereIn($column, $values)
+ * @method static \Illuminate\Database\Eloquent\Builder|FiturAplikasi whereNotIn($column, $values)
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ * @mixin \Eloquent
+ */
 class FiturAplikasi extends Model
 {
     use HasFactory;

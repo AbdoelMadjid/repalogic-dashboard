@@ -6,22 +6,41 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\DukunganAplikasi\FiturAplikasiRequest;
 use App\Models\Admin\DukunganAplikasi\AppSetting;
 use App\Models\Admin\DukunganAplikasi\FiturAplikasi;
+use App\Models\Admin\DukunganAplikasi\ProfilAplikasi;
+use App\Models\Admin\DukunganAplikasi\WebsiteSection;
+use App\Models\Message;
+use App\Models\User;
+use App\Models\UserConfig;
+use App\Models\UserDetail;
 use App\Traits\HasNotification;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class FiturAplikasiController extends Controller
 {
     use HasNotification;
 
     /**
+     * Periksa otorisasi pengguna saat ini (Permission atau Superadmin).
+     */
+    private function authorizeUser(string $permission): bool
+    {
+        /** @var User|null $user */
+        $user = auth()->user();
+        return $user !== null && ($user->can($permission) || $user->hasRole('superadmin'));
+    }
+
+    /**
      * Tampilkan halaman manajemen dan visibilitas fitur aplikasi.
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        if (!auth()->user()->can('read dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+        if (!$this->authorizeUser('read dukunganaplikasi/fitur-aplikasi')) {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
@@ -69,7 +88,7 @@ class FiturAplikasiController extends Controller
     /**
      * Simpan fitur baru ke database.
      */
-    public function store(FiturAplikasiRequest $request)
+    public function store(FiturAplikasiRequest $request): JsonResponse|RedirectResponse
     {
         $data = $request->validated();
         $data['status'] = $request->has('status') ? (bool) $request->input('status') : true;
@@ -94,7 +113,7 @@ class FiturAplikasiController extends Controller
     /**
      * Perbarui data fitur aplikasi yang sudah ada.
      */
-    public function update(FiturAplikasiRequest $request, $id)
+    public function update(FiturAplikasiRequest $request, $id): JsonResponse|RedirectResponse
     {
         $feature = FiturAplikasi::findOrFail($id);
 
@@ -120,9 +139,9 @@ class FiturAplikasiController extends Controller
     /**
      * Hapus data fitur aplikasi dari database.
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse|RedirectResponse
     {
-        if (!auth()->user()->can('delete dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+        if (!$this->authorizeUser('delete dukunganaplikasi/fitur-aplikasi')) {
             abort(403, 'Anda tidak memiliki izin untuk menghapus fitur ini.');
         }
 
@@ -146,9 +165,9 @@ class FiturAplikasiController extends Controller
     /**
      * Toggle status per fitur via AJAX secara instan.
      */
-    public function toggleFeature(Request $request)
+    public function toggleFeature(Request $request): JsonResponse
     {
-        if (!auth()->user()->can('update dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+        if (!$this->authorizeUser('update dukunganaplikasi/fitur-aplikasi')) {
             return response()->json([
                 'success' => false,
                 'message' => 'Anda tidak memiliki akses untuk mengubah fitur ini.',
@@ -200,9 +219,9 @@ class FiturAplikasiController extends Controller
     /**
      * Toggle status masal per kelompok / kategori fitur.
      */
-    public function toggleGroup(Request $request)
+    public function toggleGroup(Request $request): JsonResponse
     {
-        if (!auth()->user()->can('update dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+        if (!$this->authorizeUser('update dukunganaplikasi/fitur-aplikasi')) {
             return response()->json([
                 'success' => false,
                 'message' => 'Anda tidak memiliki akses untuk mengubah fitur ini.',
@@ -234,7 +253,7 @@ class FiturAplikasiController extends Controller
     /**
      * Aksi massal (Aktifkan, Nonaktifkan, Hapus) untuk fitur yang dipilih via checkbox.
      */
-    public function bulkAction(Request $request)
+    public function bulkAction(Request $request): JsonResponse
     {
         $request->validate([
             'action' => 'required|in:enable,disable,delete',
@@ -246,7 +265,7 @@ class FiturAplikasiController extends Controller
         $ids = $request->input('ids');
 
         if ($action === 'delete') {
-            if (!auth()->user()->can('delete dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+            if (!$this->authorizeUser('delete dukunganaplikasi/fitur-aplikasi')) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Anda tidak memiliki izin untuk menghapus fitur ini.',
@@ -265,7 +284,7 @@ class FiturAplikasiController extends Controller
             ]);
         }
 
-        if (!auth()->user()->can('update dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+        if (!$this->authorizeUser('update dukunganaplikasi/fitur-aplikasi')) {
             return response()->json([
                 'success' => false,
                 'message' => 'Anda tidak memiliki akses untuk mengubah fitur ini.',
@@ -291,9 +310,9 @@ class FiturAplikasiController extends Controller
     /**
      * Bersihkan seluruh cache sistem (views, config, routes, app cache).
      */
-    public function clearSystemCache(Request $request)
+    public function clearSystemCache(Request $request): JsonResponse
     {
-        if (!auth()->user()->can('update dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+        if (!$this->authorizeUser('update dukunganaplikasi/fitur-aplikasi')) {
             return response()->json([
                 'success' => false,
                 'message' => 'Anda tidak memiliki akses untuk membersihkan cache sistem.',
@@ -307,7 +326,7 @@ class FiturAplikasiController extends Controller
             Artisan::call('route:clear');
 
             FiturAplikasi::clearCache();
-            \App\Models\Admin\DukunganAplikasi\ProfilAplikasi::clearCache();
+            ProfilAplikasi::clearCache();
             AppSetting::clearCache();
 
             return response()->json([
@@ -325,9 +344,9 @@ class FiturAplikasiController extends Controller
     /**
      * Simpan konfigurasi setting aplikasi via AJAX.
      */
-    public function updateAppSetting(Request $request)
+    public function updateAppSetting(Request $request): JsonResponse
     {
-        if (!auth()->user()->can('update dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+        if (!$this->authorizeUser('update dukunganaplikasi/fitur-aplikasi')) {
             return response()->json([
                 'success' => false,
                 'message' => 'Anda tidak memiliki akses untuk mengubah konfigurasi aplikasi.',
@@ -355,9 +374,9 @@ class FiturAplikasiController extends Controller
     /**
      * Kembalikan seluruh pengaturan sistem dan visibilitas fitur ke setelan default seeder.
      */
-    public function resetDefaults(Request $request)
+    public function resetDefaults(Request $request): JsonResponse
     {
-        if (!auth()->user()->can('update dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+        if (!$this->authorizeUser('update dukunganaplikasi/fitur-aplikasi')) {
             return response()->json([
                 'success' => false,
                 'message' => 'Anda tidak memiliki akses untuk mereset pengaturan fitur.',
@@ -407,9 +426,9 @@ class FiturAplikasiController extends Controller
     /**
      * Memindai seluruh berkas gambar di penyimpanan (storage) dan membandingkannya dengan database.
      */
-    public function scanStorageImages(Request $request)
+    public function scanStorageImages(Request $request): JsonResponse
     {
-        if (!auth()->user()->can('update dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+        if (!$this->authorizeUser('update dukunganaplikasi/fitur-aplikasi')) {
             return response()->json([
                 'success' => false,
                 'message' => 'Anda tidak memiliki akses untuk memindai berkas penyimpanan.',
@@ -521,9 +540,9 @@ class FiturAplikasiController extends Controller
     /**
      * Menghapus gambar-gambar orphan (tidak terhubung dengan database) dari storage.
      */
-    public function deleteStorageImages(Request $request)
+    public function deleteStorageImages(Request $request): JsonResponse
     {
-        if (!auth()->user()->can('delete dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+        if (!$this->authorizeUser('delete dukunganaplikasi/fitur-aplikasi')) {
             return response()->json([
                 'success' => false,
                 'message' => 'Anda tidak memiliki izin untuk menghapus berkas penyimpanan.',
@@ -630,9 +649,9 @@ class FiturAplikasiController extends Controller
     /**
      * Memeriksa dan memperbaiki / merefresh symlink storage (public/storage) secara otomatis.
      */
-    public function fixStorageLink(Request $request)
+    public function fixStorageLink(Request $request): JsonResponse
     {
-        if (!auth()->user()->can('update dukunganaplikasi/fitur-aplikasi') && !auth()->user()->hasRole('superadmin')) {
+        if (!$this->authorizeUser('update dukunganaplikasi/fitur-aplikasi')) {
             return response()->json([
                 'success' => false,
                 'message' => 'Anda tidak memiliki akses untuk memperbaiki symlink storage.',
@@ -705,23 +724,23 @@ class FiturAplikasiController extends Controller
         $dbPaths = collect();
 
         // 1. User avatar
-        if (class_exists(\App\Models\User::class)) {
-            $dbPaths = $dbPaths->merge(\App\Models\User::whereNotNull('avatar')->where('avatar', '!=', '')->pluck('avatar'));
+        if (class_exists(User::class)) {
+            $dbPaths = $dbPaths->merge(User::whereNotNull('avatar')->where('avatar', '!=', '')->pluck('avatar'));
         }
 
         // 2. UserDetail foto_ktp
-        if (class_exists(\App\Models\UserDetail::class)) {
-            $dbPaths = $dbPaths->merge(\App\Models\UserDetail::whereNotNull('foto_ktp')->where('foto_ktp', '!=', '')->pluck('foto_ktp'));
+        if (class_exists(UserDetail::class)) {
+            $dbPaths = $dbPaths->merge(UserDetail::whereNotNull('foto_ktp')->where('foto_ktp', '!=', '')->pluck('foto_ktp'));
         }
 
         // 3. UserConfig cover_image
-        if (class_exists(\App\Models\UserConfig::class)) {
-            $dbPaths = $dbPaths->merge(\App\Models\UserConfig::whereNotNull('cover_image')->where('cover_image', '!=', '')->pluck('cover_image'));
+        if (class_exists(UserConfig::class)) {
+            $dbPaths = $dbPaths->merge(UserConfig::whereNotNull('cover_image')->where('cover_image', '!=', '')->pluck('cover_image'));
         }
 
         // 4. ProfilAplikasi logo_lg, logo_sm, favicon
-        if (class_exists(\App\Models\Admin\DukunganAplikasi\ProfilAplikasi::class)) {
-            $profil = \App\Models\Admin\DukunganAplikasi\ProfilAplikasi::first();
+        if (class_exists(ProfilAplikasi::class)) {
+            $profil = ProfilAplikasi::first();
             if ($profil) {
                 if (!empty($profil->logo_lg)) $dbPaths->push($profil->logo_lg);
                 if (!empty($profil->logo_sm)) $dbPaths->push($profil->logo_sm);
@@ -730,13 +749,13 @@ class FiturAplikasiController extends Controller
         }
 
         // 5. WebsiteSection bg_image
-        if (class_exists(\App\Models\Admin\DukunganAplikasi\WebsiteSection::class)) {
-            $dbPaths = $dbPaths->merge(\App\Models\Admin\DukunganAplikasi\WebsiteSection::whereNotNull('bg_image')->where('bg_image', '!=', '')->pluck('bg_image'));
+        if (class_exists(WebsiteSection::class)) {
+            $dbPaths = $dbPaths->merge(WebsiteSection::whereNotNull('bg_image')->where('bg_image', '!=', '')->pluck('bg_image'));
         }
 
         // 6. Message attachment
-        if (class_exists(\App\Models\Message::class)) {
-            $dbPaths = $dbPaths->merge(\App\Models\Message::whereNotNull('attachment_url')->where('attachment_url', '!=', '')->pluck('attachment_url'));
+        if (class_exists(Message::class)) {
+            $dbPaths = $dbPaths->merge(Message::whereNotNull('attachment_url')->where('attachment_url', '!=', '')->pluck('attachment_url'));
         }
 
         // Normalize all db paths

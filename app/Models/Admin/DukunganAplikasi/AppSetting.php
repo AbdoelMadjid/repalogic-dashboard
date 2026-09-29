@@ -6,6 +6,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
+/**
+ * App\Models\Admin\DukunganAplikasi\AppSetting
+ *
+ * @property int $id
+ * @property string $key
+ * @property string|null $value
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|AppSetting newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AppSetting newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AppSetting query()
+ * @method static \Illuminate\Database\Eloquent\Builder|AppSetting whereKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AppSetting updateOrCreate(array $attributes, array $values = [])
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ * @mixin \Eloquent
+ */
 class AppSetting extends Model
 {
     use HasFactory;
