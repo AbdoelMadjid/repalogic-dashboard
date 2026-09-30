@@ -128,23 +128,23 @@
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.7</span>
                                     </div>
-                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-30 14:20 WIB</span>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-30 14:52 WIB</span>
                                 </div>
-                                <h6 class="fw-semibold text-dark mb-2">Integrasi Tab Riwayat Interaksi Pengguna &amp; Media Audit Trail Engine pada Direktori Pengguna Dashboard</h6>
+                                <h6 class="fw-semibold text-dark mb-2">Integrasi Hub Riwayat Interaksi Terpadu (Unified Activity History), Media Audit Trail Engine &amp; Direct Chat Action pada Direktori Dashboard</h6>
                                 <ul class="text-muted fs-14 mb-3 ps-3">
-                                    <li><strong class="text-dark">Pusat Tab Direktori Pengguna &amp; Jaringan Pertemanan (<code>dashboard.blade.php</code>):</strong> Penambahan 5 tab navigasi linimasa terstruktur (<code>Direktori Kontak</code>, <code>Riwayat Pertemanan</code>, <code>Riwayat Suka Profil</code>, <code>Riwayat Obrolan Chat</code>, dan <code>Riwayat Avatar &amp; Sampul</code>) dengan dukungan badge dinamis dan tata letak responsif seluler (Rule 17 &amp; Rule 18).</li>
-                                    <li><strong class="text-dark">Riwayat Pertemanan &amp; Suka Profil (<code>FriendshipController.php</code> &amp; <code>DashboardController.php</code>):</strong> Tabel riwayat linimasa ajakan berteman (pengirim, penerima, status hubungan, waktu permintaan &amp; pembaruan) serta log apresiasi suka profil antar-pengguna dengan filter pencarian instan.</li>
-                                    <li><strong class="text-dark">Riwayat Pesan Obrolan Chat (<code>dashboard.blade.php</code> &amp; <code>dashboard.js</code>):</strong> Tabel pencatatan kirim &amp; terima pesan obrolan pengguna dengan cuplikan pesan/lampiran, indikator centang baca, filter pencarian live, dan tombol direct shortcut ke chat hub.</li>
-                                    <li><strong class="text-dark">User Media History &amp; Audit Trail (<code>UserMediaHistory.php</code> &amp; Migration):</strong> Model dan tabel database <code>user_media_histories</code> untuk mencatat setiap riwayat pergantian foto profil avatar dan foto cover sampul (termasuk metadata posisi Y dan sumber perubahan) yang terpicu otomatis pada controller profil pengguna dan manajemen user.</li>
-                                    <li><strong class="text-dark">Modal Interaksi Detail Pengguna (<code>#modalUserActivityHistory</code>):</strong> Modal komprehensif untuk memeriksa riwayat interaksi per pengguna (banner cover header, status pertemanan, status apresiasi timbal balik, gelembung obrolan chat terbaru, dan linimasa preview visual foto profil/sampul).</li>
+                                    <li><strong class="text-dark">Tombol Filter Terpadu Semua Riwayat (<code>dashboard.blade.php</code> &amp; <code>dashboard.js</code>):</strong> Menyatukan seluruh linimasa riwayat (Pertemanan, Suka Profil, Pesan Obrolan Chat, serta Pergantian Avatar &amp; Sampul) ke dalam 1 tampilan terintegrasi yang dapat diakses dengan 1 klik melalui tombol <code>Semua Riwayat</code> di sebelah filter pertemanan dengan badge total dinamis dan perataan tinggi seragam.</li>
+                                    <li><strong class="text-dark">Sub-Filter Kategori &amp; Live Search Riwayat (<code>dashboard.blade.php</code>):</strong> Panel sub-filter interaktif untuk memilah riwayat berdasarkan kategori (Semua, Pertemanan, Suka, Chat, Media Profil) serta filter live search instan yang tersinkronisasi dengan input pencarian utama dashboard.</li>
+                                    <li><strong class="text-dark">Riwayat Khusus Pengguna Login (Scoped Audit Trail):</strong> Membatasi seluruh pencatatan riwayat pergantian avatar, cover sampul, obrolan chat, dan interaksi sosial agar hanya menampilkan log yang relevan dengan pengguna yang sedang login untuk menjaga privasi dan kebersihan data.</li>
+                                    <li><strong class="text-dark">User Media History &amp; Audit Trail Model (<code>UserMediaHistory.php</code> &amp; Migration):</strong> Model dan tabel database <code>user_media_histories</code> untuk mencatat metadata audit perubahan foto profil dan sampul (termasuk koordinat posisi Y dan sumber pemicu) secara otomatis pada profil pengguna dan manajemen user.</li>
+                                    <li><strong class="text-dark">Aksi Direct Chat Terfokus &amp; Visual Badge Bersih:</strong> Kolom aksi pada tabel riwayat secara cerdas hanya menampilkan tombol <code>Kirim Pesan Chat</code> untuk riwayat percakapan dengan shortcut langsung ke obrolan pengguna terkait, serta representasi icon badge modern untuk riwayat media dan sosial.</li>
                                 </ul>
                                 <div class="d-flex flex-wrap gap-2">
-                                    <span class="badge bg-light text-dark border fs-xs">Dashboard Interaction Tabs</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Unified Activity Hub</span>
                                     <span class="badge bg-light text-dark border fs-xs">Friendship History</span>
                                     <span class="badge bg-light text-dark border fs-xs">Likes History</span>
                                     <span class="badge bg-light text-dark border fs-xs">Chat History</span>
                                     <span class="badge bg-light text-dark border fs-xs">Media History Engine</span>
-                                    <span class="badge bg-light text-dark border fs-xs">User Activity Modal</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Direct Chat Action</span>
                                 </div>
                             </div>
                         </div>

@@ -427,24 +427,53 @@
     }
 }
 
-.friendship-filter-group .btn-friend-filter {
-    font-weight: 500;
+.friendship-filter-group .btn-friend-filter,
+#btn-filter-all-history {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 31px;
+    padding: 0.25rem 0.65rem;
     font-size: 0.8125rem;
-    padding: 0.35rem 0.75rem;
+    font-weight: 500;
+    line-height: 1.5;
+    vertical-align: middle;
+    box-sizing: border-box;
     transition: all 0.15s ease;
 }
 
+#btn-filter-all-history {
+    border-radius: 0.375rem;
+}
+
 @media (max-width: 575.98px) {
-    .friendship-filter-group .btn-friend-filter {
-        padding: 0.35rem 0.55rem;
+    .friendship-filter-group .btn-friend-filter,
+    #btn-filter-all-history {
+        padding: 0.25rem 0.55rem;
+        height: 31px;
     }
 }
 
-.friendship-filter-group .btn-friend-filter.active {
-    background-color: #3e60d5;
-    border-color: #3e60d5;
-    color: #ffffff;
+.friendship-filter-group .btn-friend-filter.active,
+#btn-filter-all-history.active {
+    background-color: #3e60d5 !important;
+    border-color: #3e60d5 !important;
+    color: #ffffff !important;
     box-shadow: 0 2px 6px rgba(62, 96, 213, 0.35);
+}
+
+.friendship-filter-group .btn-friend-filter.active .badge,
+#btn-filter-all-history.active .badge {
+    background-color: rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+}
+
+.friendship-filter-group .btn-friend-filter .badge,
+#btn-filter-all-history .badge {
+    font-size: 0.6875rem;
+    padding: 0.2rem 0.45rem;
+    line-height: 1;
+    font-weight: 600;
 }
 
 .contact-action-wrapper {
@@ -543,8 +572,36 @@
     color: #ffffff !important;
 }
 
-#directoryTabContent {
-    padding-top: 0.5rem;
+/* 12. Unified History View & Sub-filter Buttons */
+#dashboard-unified-history-container {
+    animation: fadeIn 0.25s ease-in-out;
 }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-history-subfilter {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-history-subfilter.active {
+    background-color: #475569 !important;
+    color: #ffffff !important;
+    border-color: #475569 !important;
+}
+
+.btn-history-subfilter.active .badge {
+    background-color: rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+}
+
+#table-unified-history tbody tr {
+    transition: background-color 0.15s ease;
+}
+
 
 

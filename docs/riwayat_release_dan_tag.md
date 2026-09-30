@@ -3,7 +3,7 @@
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
 > **Versi Terbaru:** `v3.0.7`  
-> **Terakhir Diperbarui:** 30 September 2026 14:20 WIB
+> **Terakhir Diperbarui:** 30 September 2026 14:52 WIB
 
 ---
 
@@ -24,8 +24,8 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
     <tr>
       <td align="center">1</td>
       <td align="center"><strong><code>v3.0.7</code></strong></td>
-      <td align="center"><code>2026-09-30 14:20 WIB</code></td>
-      <td>Integrasi Tab Riwayat Interaksi Pengguna &amp; Media Audit Trail Engine pada Direktori Dashboard (5 Tab Interaksi: Direktori Kontak, Riwayat Pertemanan, Suka Profil, Obrolan Chat, &amp; Riwayat Avatar/Sampul; Model &amp; Tabel <code>user_media_histories</code> untuk Audit Perubahan Foto Profil/Sampul; Filter Live Search pada Seluruh Tabel Linimasa &amp; Modal Detail Interaksi Per Pengguna <code>#modalUserActivityHistory</code>)</td>
+      <td align="center"><code>2026-09-30 14:52 WIB</code></td>
+      <td>Integrasi Hub Riwayat Interaksi Terpadu (Unified Activity History), Media Audit Trail Engine, Scoped User History &amp; Direct Chat Action pada Direktori Dashboard (Tombol <code>Semua Riwayat</code> 1-Klik Terintegrasi dengan Sub-filter Kategori &amp; Live Search; Scoping Khusus Pengguna Login; Model &amp; Tabel <code>user_media_histories</code> untuk Audit Perubahan Foto Profil/Sampul; Aksi Direct Chat Cerdas &amp; Penyelarasan Tinggi Tombol Toolbar Direktori)</td>
     </tr>
     <tr>
       <td align="center">2</td>

@@ -180,6 +180,9 @@ class DashboardController extends Controller
             ->take(50)
             ->get();
 
+        // 12. Build Unified Activity & Interaction Histories
+        $allActivityHistories = $this->buildUnifiedActivityHistories($user, $friendshipHistories, $profileLikeHistories, $chatHistories, $mediaHistories);
+
         return view('dashboard', compact(
             'user',
             'greeting',
@@ -211,7 +214,8 @@ class DashboardController extends Controller
             'friendshipHistories',
             'profileLikeHistories',
             'chatHistories',
-            'mediaHistories'
+            'mediaHistories',
+            'allActivityHistories'
         ));
     }
 
@@ -300,6 +304,9 @@ class DashboardController extends Controller
             ->take(50)
             ->get();
 
+        // 12. Build Unified Activity & Interaction Histories
+        $allActivityHistories = $this->buildUnifiedActivityHistories($user, $friendshipHistories, $profileLikeHistories, $chatHistories, $mediaHistories);
+
         return view('dashboard', compact(
             'user',
             'greeting',
@@ -321,8 +328,158 @@ class DashboardController extends Controller
             'friendshipHistories',
             'profileLikeHistories',
             'chatHistories',
-            'mediaHistories'
+            'mediaHistories',
+            'allActivityHistories'
         ));
+    }
+
+    /**
+     * Build unified activity and interaction histories collection for the dashboard.
+     */
+    protected function buildUnifiedActivityHistories(User $currentUser, $friendshipHistories, $profileLikeHistories, $chatHistories, $mediaHistories)
+    {
+        $activities = collect();
+
+        // 1. Friendship Histories
+        foreach ($friendshipHistories as $f) {
+            $isSender = $f->sender_id === $currentUser->id;
+            $partner = $isSender ? $f->receiver : $f->sender;
+            $status = $f->status;
+
+            $badgeClass = 'bg-secondary-subtle text-secondary';
+            $statusLabel = 'Pertemanan';
+            if ($status === 'accepted') {
+                $badgeClass = 'bg-success-subtle text-success';
+                $statusLabel = 'Berteman';
+            } elseif ($status === 'pending') {
+                $badgeClass = 'bg-warning-subtle text-warning';
+                $statusLabel = 'Menunggu Konfirmasi';
+            } elseif ($status === 'rejected') {
+                $badgeClass = 'bg-danger-subtle text-danger';
+                $statusLabel = 'Ajakan Ditolak';
+            }
+
+            $desc = $isSender
+                ? 'Mengirim ajakan berteman kepada ' . ($partner->name ?? 'Pengguna')
+                : ($partner->name ?? 'Pengguna') . ' mengirim ajakan berteman kepada Anda';
+
+            if ($status === 'accepted') {
+                $desc = 'Anda dan ' . ($partner->name ?? 'Pengguna') . ' telah terhubung sebagai teman';
+            } elseif ($status === 'rejected') {
+                $desc = 'Ajakan berteman dengan ' . ($partner->name ?? 'Pengguna') . ' telah ditolak';
+            }
+
+            $time = $f->updated_at ?? $f->created_at;
+
+            $activities->push((object) [
+                'id' => 'friendship_' . $f->id,
+                'category' => 'friendship',
+                'category_label' => 'Pertemanan',
+                'category_badge' => 'bg-success-subtle text-success',
+                'icon' => 'ti ti-user-check',
+                'title' => $statusLabel,
+                'status_badge' => $badgeClass,
+                'description' => $desc,
+                'user' => $partner ?: $currentUser,
+                'partner_name' => $partner->name ?? 'Pengguna',
+                'partner_id' => $partner->id ?? null,
+                'time' => $time,
+                'time_formatted' => $time ? $time->format('d M Y, H:i') . ' WIB' : '-',
+                'time_diff' => $time ? $time->diffForHumans() : '',
+                'search_text' => strtolower('pertemanan ' . ($partner->name ?? '') . ' ' . $desc . ' ' . $statusLabel),
+            ]);
+        }
+
+        // 2. Profile Like Histories
+        foreach ($profileLikeHistories as $l) {
+            $isSender = $l->user_id === $currentUser->id;
+            $partner = $isSender ? $l->targetUser : $l->user;
+
+            $desc = $isSender
+                ? 'Anda memberikan apresiasi suka pada profil ' . ($partner->name ?? 'Pengguna')
+                : ($partner->name ?? 'Pengguna') . ' menyukai profil Anda ❤️';
+
+            $time = $l->created_at;
+
+            $activities->push((object) [
+                'id' => 'like_' . $l->id,
+                'category' => 'like',
+                'category_label' => 'Suka Profil',
+                'category_badge' => 'bg-danger-subtle text-danger',
+                'icon' => 'ti ti-heart-filled',
+                'title' => $isSender ? 'Menyukai Profil' : 'Menerima Suka',
+                'status_badge' => 'bg-danger-subtle text-danger',
+                'description' => $desc,
+                'user' => $partner ?: $currentUser,
+                'partner_name' => $partner->name ?? 'Pengguna',
+                'partner_id' => $partner->id ?? null,
+                'time' => $time,
+                'time_formatted' => $time ? $time->format('d M Y, H:i') . ' WIB' : '-',
+                'time_diff' => $time ? $time->diffForHumans() : '',
+                'search_text' => strtolower('suka like profil ' . ($partner->name ?? '') . ' ' . $desc),
+            ]);
+        }
+
+        // 3. Chat Messages Histories
+        foreach ($chatHistories as $m) {
+            $isSender = $m->sender_id === $currentUser->id;
+            $partner = $isSender ? $m->receiver : $m->sender;
+
+            $msgText = $m->message ?: ($m->attachment_name ? '[Lampiran: ' . $m->attachment_name . ']' : '[Lampiran Berkas]');
+            $desc = $isSender
+                ? 'Mengirim pesan ke ' . ($partner->name ?? 'Pengguna') . ': "' . \Illuminate\Support\Str::limit($msgText, 50) . '"'
+                : 'Menerima pesan dari ' . ($partner->name ?? 'Pengguna') . ': "' . \Illuminate\Support\Str::limit($msgText, 50) . '"';
+
+            $time = $m->created_at;
+
+            $activities->push((object) [
+                'id' => 'chat_' . $m->id,
+                'category' => 'chat',
+                'category_label' => 'Obrolan Chat',
+                'category_badge' => 'bg-info-subtle text-info',
+                'icon' => 'ti ti-messages',
+                'title' => $isSender ? 'Pesan Terkirim' : 'Pesan Masuk',
+                'status_badge' => $m->is_read ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning',
+                'description' => $desc,
+                'user' => $partner ?: $currentUser,
+                'partner_name' => $partner->name ?? 'Pengguna',
+                'partner_id' => $partner->id ?? null,
+                'chat_user_id' => $partner->id ?? null,
+                'time' => $time,
+                'time_formatted' => $time ? $time->format('d M Y, H:i') . ' WIB' : '-',
+                'time_diff' => $time ? $time->diffForHumans() : '',
+                'search_text' => strtolower('chat pesan obrolan ' . ($partner->name ?? '') . ' ' . $desc . ' ' . $msgText),
+            ]);
+        }
+
+        // 4. Media Histories (Avatar & Cover)
+        foreach ($mediaHistories as $mh) {
+            $isAvatar = $mh->media_type === 'avatar';
+            $title = $isAvatar ? 'Ganti Foto Avatar' : 'Ganti Foto Sampul';
+            $desc = ($mh->description ?: $title) . ($mh->file_name ? ' (' . $mh->file_name . ')' : '');
+
+            $time = $mh->created_at;
+
+            $activities->push((object) [
+                'id' => 'media_' . $mh->id,
+                'category' => 'media',
+                'category_label' => 'Avatar & Sampul',
+                'category_badge' => $isAvatar ? 'bg-primary-subtle text-primary' : 'bg-purple-subtle text-purple',
+                'icon' => $isAvatar ? 'ti ti-user-circle' : 'ti ti-photo',
+                'title' => $title,
+                'status_badge' => $isAvatar ? 'bg-primary-subtle text-primary' : 'bg-purple-subtle text-purple',
+                'description' => $desc,
+                'user' => $currentUser,
+                'partner_name' => $currentUser->name,
+                'partner_id' => null,
+                'time' => $time,
+                'time_formatted' => $time ? $time->format('d M Y, H:i') . ' WIB' : '-',
+                'time_diff' => $time ? $time->diffForHumans() : '',
+                'search_text' => strtolower('media avatar sampul ' . $desc . ' ' . ($mh->file_name ?? '') . ' ' . $title),
+            ]);
+        }
+
+        return $activities->sortByDesc('time')->values();
     }
 
     /**
