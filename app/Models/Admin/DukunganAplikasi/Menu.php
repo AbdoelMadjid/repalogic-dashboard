@@ -167,10 +167,14 @@ class Menu extends Model
         static::saved(function (Menu $menu) {
             static::syncTranslationKey($menu);
         });
+
+        static::deleted(function (Menu $menu) {
+            static::syncAllTranslations();
+        });
     }
 
     /**
-     * Auto-sync menu data_lang translation key to modular sidebar_menu.json and root json files
+     * Auto-sync a single menu data_lang translation key & category to modular sidebar_menu.json and root json files
      */
     public static function syncTranslationKey(Menu $menu): void
     {
@@ -214,14 +218,27 @@ class Menu extends Model
             $modularUpdated = true;
         }
 
+        // 1. Sync Menu Name
         if (!isset($idModular[$dataLang]) || $idModular[$dataLang] !== $menu->name) {
             $idModular[$dataLang] = $menu->name;
             $modularUpdated = true;
         }
-
         if (!isset($enModular[$dataLang]) || empty($enModular[$dataLang])) {
             $enModular[$dataLang] = static::getEnglishDefault($menu->name);
             $modularUpdated = true;
+        }
+
+        // 2. Sync Category if present
+        if (!empty($menu->category)) {
+            $catKey = Str::slug($menu->category);
+            if (!isset($idModular[$catKey]) || $idModular[$catKey] !== $menu->category) {
+                $idModular[$catKey] = $menu->category;
+                $modularUpdated = true;
+            }
+            if (!isset($enModular[$catKey]) || empty($enModular[$catKey])) {
+                $enModular[$catKey] = static::getEnglishDefault($menu->category);
+                $modularUpdated = true;
+            }
         }
 
         if ($modularUpdated) {
@@ -252,10 +269,102 @@ class Menu extends Model
             $rootUpdated = true;
         }
 
+        if (!empty($menu->category)) {
+            $catKey = Str::slug($menu->category);
+            if (!isset($idRoot[$catKey]) || $idRoot[$catKey] !== $menu->category) {
+                $idRoot[$catKey] = $menu->category;
+                $rootUpdated = true;
+            }
+            if (!isset($enRoot[$catKey]) || empty($enRoot[$catKey])) {
+                $enRoot[$catKey] = static::getEnglishDefault($menu->category);
+                $rootUpdated = true;
+            }
+        }
+
         if ($rootUpdated) {
             $writeJson($idRootPath, $idRoot);
             $writeJson($enRootPath, $enRoot);
         }
+    }
+
+    /**
+     * Re-sync all menus and categories from database into JSON translation dictionaries.
+     * Called by Seeders and batch operations.
+     */
+    public static function syncAllTranslations(): void
+    {
+        $readJson = function (string $path): array {
+            if (!file_exists($path)) {
+                return [];
+            }
+            $content = @file_get_contents($path);
+            $data = json_decode($content, true);
+            return is_array($data) ? $data : [];
+        };
+
+        $writeJson = function (string $path, array $data): void {
+            ksort($data);
+            $dir = dirname($path);
+            if (!is_dir($dir)) {
+                @mkdir($dir, 0777, true);
+            }
+            $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            file_put_contents($path, $json);
+        };
+
+        $idModularPath = public_path('assets/data/translations/id/sidebar_menu.json');
+        $enModularPath = public_path('assets/data/translations/en/sidebar_menu.json');
+
+        $idModular = $readJson($idModularPath);
+        $enModular = $readJson($enModularPath);
+
+        // Core base keys that must always exist
+        $baseKeys = [
+            'admin' => ['id' => 'Admin', 'en' => 'Admin'],
+            'dashboard' => ['id' => 'Dashboard', 'en' => 'Dashboard'],
+            'dashboards' => ['id' => 'Dashboard', 'en' => 'Dashboard'],
+            'template' => ['id' => 'Templat', 'en' => 'Template'],
+        ];
+
+        foreach ($baseKeys as $bk => $bVal) {
+            if (!isset($idModular[$bk])) $idModular[$bk] = $bVal['id'];
+            if (!isset($enModular[$bk])) $enModular[$bk] = $bVal['en'];
+        }
+
+        $menus = static::all();
+        foreach ($menus as $m) {
+            $k = $m->data_lang ?: Str::slug($m->name);
+            if (!empty($k)) {
+                $idModular[$k] = $m->name;
+                $enModular[$k] = static::getEnglishDefault($m->name);
+            }
+
+            if (!empty($m->category)) {
+                $catKey = Str::slug($m->category);
+                $idModular[$catKey] = $m->category;
+                $enModular[$catKey] = static::getEnglishDefault($m->category);
+            }
+        }
+
+        $writeJson($idModularPath, $idModular);
+        $writeJson($enModularPath, $enModular);
+
+        // Also merge and save to master files
+        $idRootPath = public_path('assets/data/translations/id.json');
+        $enRootPath = public_path('assets/data/translations/en.json');
+
+        $idRoot = $readJson($idRootPath);
+        $enRoot = $readJson($enRootPath);
+
+        foreach ($idModular as $k => $v) {
+            $idRoot[$k] = $v;
+        }
+        foreach ($enModular as $k => $v) {
+            $enRoot[$k] = $v;
+        }
+
+        $writeJson($idRootPath, $idRoot);
+        $writeJson($enRootPath, $enRoot);
     }
 
     /**

@@ -8,8 +8,8 @@
     "dashboards": "Dashboard",
     "data-login": "Data Login",
     "data-login-pengguna": "Data Login Pengguna",
-    "data-permission": "Data Permission",
     "data-pengguna": "Data Pengguna",
+    "data-permission": "Data Permission",
     "data-role": "Data Role & Hak Akses",
     "dukungan-aplikasi": "Dukungan Aplikasi",
     "fitur-aplikasi": "Fitur Aplikasi",
@@ -26,5 +26,5 @@
     "role": "Role",
     "template": "Templat",
     "terjemahan-bahasa": "Terjemahan Bahasa",
-    "users": "Pengguna"
+    "users": "Users"
 }

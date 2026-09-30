@@ -44,6 +44,9 @@ class MainMenuSeeder extends Seeder
         // 5. Clear Menu Cache
         Cache::forget('menus');
         Cache::forget('urlMenu');
+
+        // 6. Auto-Sync All Menu & Category Translations to JSON Dictionaries
+        Menu::syncAllTranslations();
     }
 
     /**
