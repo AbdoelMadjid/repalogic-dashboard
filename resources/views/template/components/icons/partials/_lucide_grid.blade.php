@@ -201,9 +201,13 @@
             border-color: rgba(13, 110, 253, 0.45) !important;
             box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.12);
         }
+
+        #iconsSection {
+            scroll-margin-top: 80px;
+        }
     </style>
 
-                    <div class="card-body border-top border-dashed">
+                    <div class="card-body border-top border-dashed" id="iconsSection">
                         <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-3">
                             <div class="d-flex align-items-center gap-2 flex-wrap">
                                 <h4 class="mt-0 mb-0">Icons</h4>
@@ -3961,8 +3965,7 @@
             const copySnippetBtn = document.getElementById('copySnippetBtn');
             const clearSelectionBtn = document.getElementById('clearSelectionBtn');
             const snippetBoard = document.querySelector('.snippet-board');
-            const cardHeaderAnchor = snippetBoard ? snippetBoard.closest('.card')?.querySelector('.card-header') :
-                null;
+            const iconsSectionAnchor = document.getElementById('iconsSection') || (snippetBoard ? snippetBoard.closest('.card-body') : null);
             const searchInput = document.getElementById('iconSearch');
             const sizeInput = document.getElementById('iconSize');
             const colorInput = document.getElementById('iconColor');
@@ -4058,8 +4061,8 @@
                     const svgOrI = item.querySelector('svg') || item.querySelector('[data-lucide]');
                     setSnippet(iconName, svgOrI);
 
-                    if (cardHeaderAnchor) {
-                        cardHeaderAnchor.scrollIntoView({
+                    if (iconsSectionAnchor) {
+                        iconsSectionAnchor.scrollIntoView({
                             behavior: 'smooth',
                             block: 'start'
                         });
