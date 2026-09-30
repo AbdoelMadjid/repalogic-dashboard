@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const config = window.MessagesConfig || {};
     const currentUserId = config.currentUserId || null;
     let currentUserAvatar = config.currentUserAvatar || '';
-    const defaultAvatar = config.defaultAvatar || '/assets/images/users/default-avatar.svg';
+    const defaultAvatar = config.defaultAvatar || '/assets/images/users/user-default.jpg';
 
     function getCsrfToken() {
         return document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';

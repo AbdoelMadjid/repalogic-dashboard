@@ -23,9 +23,33 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(30, 41, 59, 0.78) 50%, rgba(15, 23, 42, 0.85) 100%);
-    backdrop-filter: blur(1.5px);
+    display: none !important;
     z-index: 1;
+    pointer-events: none;
+}
+
+.hero-overlay-layer,
+.contact-grid-overlay-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1;
+    transition: background 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+.hero-user-motto {
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.contact-cover-motto {
+    font-size: 0.72rem;
+    line-height: 1.35;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .dashboard-hero-card .card-body {
@@ -289,7 +313,7 @@
 }
 
 .contact-grid-cover-overlay {
-    background: linear-gradient(180deg, rgba(15, 23, 42, 0.6) 0%, rgba(15, 23, 42, 0.3) 40%, rgba(15, 23, 42, 0.85) 100%);
+    background: transparent;
 }
 
 .contact-cover-motto {
@@ -298,6 +322,16 @@
     line-height: 1.3;
     font-size: 0.725rem;
     letter-spacing: 0.01em;
+}
+
+.contact-grid-card .card-body {
+    position: relative;
+    z-index: 3;
+}
+
+.contact-grid-avatar-wrapper {
+    position: relative;
+    z-index: 4;
 }
 
 .contact-grid-avatar {
@@ -309,6 +343,8 @@
     object-position: top;
     background-color: #ffffff;
     transition: transform 0.2s ease;
+    position: relative;
+    z-index: 4;
 }
 
 .contact-grid-card:hover .contact-grid-avatar {

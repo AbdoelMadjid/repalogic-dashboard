@@ -232,7 +232,7 @@
                                                     <!-- Header Card: Avatar & Status Kehadiran -->
                                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                                         <div class="position-relative">
-                                                            <img src="{{ $item->user?->avatar_url ?? asset('assets/images/users/default-avatar.svg') }}"
+                                                            <img src="{{ $item->user?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}"
                                                                 alt="{{ $item->user?->name }}"
                                                                 class="rounded-circle object-fit-cover shadow-sm border border-2 {{ $item->is_online ? 'border-success' : 'border-light' }}"
                                                                 style="width: 50px; height: 50px; object-fit: cover; object-position: top; display: block;">
@@ -379,7 +379,7 @@
                                             <td>
                                                 <div class="d-flex align-items-center gap-2">
                                                     <div class="position-relative">
-                                                        <img src="{{ $item->user?->avatar_url ?? asset('assets/images/users/default-avatar.svg') }}"
+                                                        <img src="{{ $item->user?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}"
                                                             alt="{{ $item->user?->name }}" class="rounded-circle avatar-sm border flex-shrink-0"
                                                             style="width: 38px; height: 38px; object-fit: cover;">
                                                         @if ($item->is_online)
@@ -516,7 +516,7 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex align-items-center gap-2">
-                                                    <img src="{{ $login->user?->avatar_url ?? asset('assets/images/users/default-avatar.svg') }}"
+                                                    <img src="{{ $login->user?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}"
                                                         alt="{{ $login->user?->name }}" class="rounded-circle avatar-sm border flex-shrink-0"
                                                         style="width: 34px; height: 34px; object-fit: cover;">
                                                     <div>

@@ -131,7 +131,7 @@ class DataLoginController extends Controller
                 'id' => $login->id,
                 'user_name' => $user?->name ?? 'User Terhapus',
                 'user_email' => $user?->email ?? '-',
-                'user_avatar' => $user?->avatar_url ?? asset('assets/images/users/default-avatar.svg'),
+                'user_avatar' => $user?->avatar_url ?? asset('assets/images/users/user-default.jpg'),
                 'user_role' => $user?->role_name ?? 'User',
                 'is_online' => $user?->is_online ?? false,
                 'last_seen_human' => $user?->last_seen_human ?? '-',

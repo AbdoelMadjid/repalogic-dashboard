@@ -20,31 +20,43 @@
     <!-- TAB 1: AKUN & KREDENSIAL (EDITABLE) -->
     <div class="tab-pane fade show active" id="user-tab-account" role="tabpanel" aria-labelledby="user-tab-account-btn">
         <div class="row g-3">
-            <!-- AVATAR UPLOAD SECTION (LEFT SIDEBAR ON DESKTOP, CENTERED ON MOBILE) -->
+            <!-- AVATAR & COVER SECTION (LEFT SIDEBAR ON DESKTOP, CENTERED ON MOBILE) -->
             <div class="col-lg-4 col-md-5">
-                <div class="card border border-light-subtle bg-light-subtle h-100 mb-0">
-                    <div class="card-body p-3 text-center d-flex flex-column align-items-center justify-content-center">
-                        <!-- 1. Judul -->
-                        <label for="form_user_avatar" class="form-label fw-semibold text-dark fs-13 mb-2">
-                            <i class="ti ti-photo me-1 text-primary"></i> Foto Avatar Pengguna
-                        </label>
+                <div class="card border border-light-subtle bg-light-subtle h-100 mb-0 overflow-hidden shadow-sm">
+                    <!-- 1. Foto Sampul Background Header Pengguna -->
+                    <div id="form_user_cover_banner" class="w-100 position-relative border-bottom"
+                        style="height: 100px; background-image: url('{{ asset('assets/images/profile-bg.jpg') }}'); background-size: cover; background-position: center 50%;"
+                        title="Foto Sampul Background Header Pengguna">
+                        <span class="badge bg-dark bg-opacity-75 text-white position-absolute top-0 end-0 m-2 fs-10 px-2 py-0.5 rounded shadow-sm">
+                            <i class="ti ti-photo me-1"></i>Sampul Header
+                        </span>
+                    </div>
 
-                        <!-- 2. Photo Avatar Preview -->
+                    <div class="card-body p-3 text-center d-flex flex-column align-items-center justify-content-center pt-0" style="margin-top: -48px;">
+                        <!-- 2. Photo Avatar Preview Overlapping Cover -->
                         <div class="position-relative mb-2">
-                            <img id="form_avatar_preview" src="{{ asset('assets/images/users/default-avatar.svg') }}" alt="Avatar Preview" class="rounded-circle border object-fit-cover shadow-sm" style="width: 100px; height: 100px; object-fit: cover; object-position: top;">
+                            <img id="form_avatar_preview" src="{{ asset('assets/images/users/user-default.jpg') }}" alt="Avatar Preview" class="rounded-circle border border-3 border-white object-fit-cover shadow" style="width: 96px; height: 96px; object-fit: cover; object-position: top; background-color: #fff;">
                         </div>
 
-                        <!-- 3. Choose File Input -->
-                        <div class="w-100" style="max-width: 260px;">
+                        <!-- 3. Judul & Label -->
+                        <label for="form_user_avatar" class="form-label fw-semibold text-dark fs-13 mb-1 edit-only-container">
+                            <i class="ti ti-photo me-1 text-primary"></i> Ganti Foto Avatar
+                        </label>
+                        <span class="fs-13 fw-semibold text-dark mb-1 view-only-container d-none">
+                            <i class="ti ti-user me-1 text-primary"></i> Foto Profil Pengguna
+                        </span>
+
+                        <!-- 4. Choose File Input (Edit/Create only) -->
+                        <div class="w-100 edit-only-container" style="max-width: 260px;">
                             <input type="file" name="avatar" id="form_user_avatar" class="form-control form-control-sm user-input" accept="image/jpeg,image/png,image/webp,image/jpg">
                             <input type="hidden" name="remove_avatar" id="form_remove_avatar" value="0">
                         </div>
 
-                        <!-- 4. Keterangan Format -->
-                        <small class="text-muted fs-11 mt-2">Format: JPG, PNG, WEBP. Maksimal 2MB.</small>
+                        <!-- 5. Keterangan Format -->
+                        <small class="text-muted fs-11 mt-2 edit-only-container">Format: JPG, PNG, WEBP. Maksimal 2MB.</small>
 
-                        <!-- 5. Hapus Photo Button -->
-                        <button type="button" class="btn btn-link text-danger p-0 fs-12 text-decoration-none d-none user-input mt-1" id="btn_reset_avatar">
+                        <!-- 6. Hapus Photo Button -->
+                        <button type="button" class="btn btn-link text-danger p-0 fs-12 text-decoration-none d-none user-input mt-1 edit-only-container" id="btn_reset_avatar">
                             <i class="ti ti-trash me-0.5"></i> Hapus Foto
                         </button>
                     </div>
@@ -450,10 +462,10 @@
                     </div>
                     <div class="card-body p-3 text-center">
                         <div class="rounded border overflow-hidden position-relative shadow-sm" style="height: 150px; background-color: #f1f5f9;">
-                            <img id="view_config_cover_preview" src="{{ asset('assets/images/profile-bg.jpg') }}" alt="Cover Banner" class="w-100 h-100 object-fit-cover" style="object-position: center 0%;">
+                            <img id="view_config_cover_preview" src="{{ asset('assets/images/profile-bg.jpg') }}" alt="Cover Banner" class="w-100 h-100 object-fit-cover" style="object-position: center 50%;">
                         </div>
                         <small class="text-muted fs-11 d-block mt-2">
-                            Posisi Vertikal Banner: <strong id="view_config_cover_pos_text" class="text-dark">0%</strong>
+                            Posisi Vertikal Banner: <strong id="view_config_cover_pos_text" class="text-dark">50%</strong>
                         </small>
                     </div>
                 </div>

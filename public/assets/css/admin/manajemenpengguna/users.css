@@ -7,8 +7,9 @@
     min-height: 280px;
 }
 
-#view_config_cover_preview {
-    transition: object-position 0.2s ease-in-out;
+#view_config_cover_preview,
+#form_user_cover_banner {
+    transition: background-position 0.2s ease-in-out, object-position 0.2s ease-in-out;
 }
 
 /* ==========================================

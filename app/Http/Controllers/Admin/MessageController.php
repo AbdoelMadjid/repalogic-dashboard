@@ -210,7 +210,7 @@ class MessageController extends Controller
                     'time_formatted' => $msg->created_at ? $msg->created_at->format('H:i') : '',
                     'date_formatted' => $msg->created_at ? $msg->created_at->format('d M Y') : '',
                     'sender_name' => $msg->sender ? $msg->sender->name : 'Sistem',
-                    'sender_avatar' => $msg->sender ? $msg->sender->avatar_url : asset('assets/images/users/default-avatar.svg'),
+                    'sender_avatar' => $msg->sender ? $msg->sender->avatar_url : asset('assets/images/users/user-default.jpg'),
                 ];
             });
 

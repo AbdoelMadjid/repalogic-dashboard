@@ -25,6 +25,8 @@ class UserController extends Controller
         $users = User::with(['roles', 'approver', 'detail', 'config'])->latest()->get();
         foreach ($users as $user) {
             $user->role_names = $user->roles->pluck('name')->toArray();
+            $user->cover_bg_url = $user->cover_bg_url;
+            $user->cover_position_y = $user->cover_position_y;
         }
         $roles = Role::all();
 

@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const config = window.UsersConfig || {};
     const routes = config.routes || {};
-    const defaultAvatarUrl = config.defaultAvatarUrl || '/assets/images/users/default-avatar.svg';
+    const defaultAvatarUrl = config.defaultAvatarUrl || '/assets/images/users/user-default.jpg';
     const defaultCoverUrl = config.defaultCoverUrl || '/assets/images/profile-bg.jpg';
 
     // ==========================================
@@ -283,6 +283,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function resolveUserCoverUrl(user) {
+        if (!user) return defaultCoverUrl;
+        if (user.cover_bg_url) return user.cover_bg_url;
+        if (user.config && user.config.cover_bg_url) return user.config.cover_bg_url;
+        if (user.id) {
+            const stockIndex = (Math.abs(parseInt(user.id, 10)) % 10) + 1;
+            return `/assets/images/stock/small-${stockIndex}.jpg`;
+        }
+        return defaultCoverUrl;
+    }
+
     // ==========================================
     // DETAILS & CONFIG POPULATION
     // ==========================================
@@ -418,25 +429,43 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (mottoInput) mottoInput.value = configData ? (configData.motto || '') : '';
         if (bioInput) bioInput.value = configData ? (configData.bio || '') : '';
-        if (themeInput) themeInput.value = configData ? (configData.theme || 'light') : 'light';
+        if (themeInput) themeInput.value = configData ? (configData.theme_mode || configData.theme || 'light') : 'light';
 
         const viewMotto = document.getElementById('view_config_motto');
         const viewBio = document.getElementById('view_config_bio');
         const viewTheme = document.getElementById('view_config_theme');
         const viewCoverPreview = document.getElementById('view_config_cover_preview');
+        const viewCoverPosText = document.getElementById('view_config_cover_pos_text');
+        const coverBanner = document.getElementById('form_user_cover_banner');
 
-        if (viewMotto) viewMotto.textContent = configData && configData.motto ? `"${configData.motto}"` : '-';
+        const viewMottoBox = document.getElementById('view_config_motto_box');
+
+        const resolvedMotto = (user && user.motto) ? user.motto : (configData && configData.motto ? configData.motto : 'Setiap hari adalah kesempatan baru untuk belajar dan berkarya.');
+        if (viewMotto) viewMotto.textContent = `"${resolvedMotto}"`;
+        if (viewMottoBox) viewMottoBox.textContent = `"${resolvedMotto}"`;
         if (viewBio) viewBio.textContent = configData && configData.bio ? configData.bio : '-';
-        if (viewTheme) viewTheme.textContent = configData && configData.theme === 'dark' ? 'Mode Gelap (Dark Mode)' : 'Mode Terang (Light Mode)';
+        if (viewTheme) {
+            const currentTheme = configData ? (configData.theme_mode || configData.theme || 'light') : 'light';
+            viewTheme.textContent = currentTheme === 'dark' ? 'Mode Gelap (Dark Mode)' : 'Mode Terang (Light Mode)';
+        }
+
+        const effectiveCoverUrl = resolveUserCoverUrl(user);
+        const effectiveCoverPos = (user && user.cover_position_y !== undefined && user.cover_position_y !== null)
+            ? user.cover_position_y
+            : ((configData && configData.cover_position_y !== undefined) ? configData.cover_position_y : 50);
+
+        if (coverBanner) {
+            coverBanner.style.backgroundImage = `url('${effectiveCoverUrl}')`;
+            coverBanner.style.backgroundPosition = `center ${effectiveCoverPos}%`;
+        }
 
         if (viewCoverPreview) {
-            if (configData && configData.cover_photo) {
-                viewCoverPreview.src = `/storage/${configData.cover_photo}`;
-            } else {
-                viewCoverPreview.src = defaultCoverUrl;
-            }
-            const coverPos = configData && configData.cover_position ? configData.cover_position : 50;
-            viewCoverPreview.style.objectPosition = `center ${coverPos}%`;
+            viewCoverPreview.src = effectiveCoverUrl;
+            viewCoverPreview.style.objectPosition = `center ${effectiveCoverPos}%`;
+        }
+
+        if (viewCoverPosText) {
+            viewCoverPosText.textContent = `${effectiveCoverPos}%`;
         }
     }
 

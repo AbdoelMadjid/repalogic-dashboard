@@ -902,6 +902,22 @@ document.addEventListener('DOMContentLoaded', function () {
             .replace(/'/g, '&#039;');
     }
 
+    function hexToRgba(hexStr, opacityPercent) {
+        const hex = (hexStr || '#313a46').replace('#', '');
+        let fullHex = hex;
+        if (hex.length === 3) {
+            fullHex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+        }
+        const r = parseInt(fullHex.substring(0, 2), 16) || 49;
+        const g = parseInt(fullHex.substring(2, 4), 16) || 58;
+        const b = parseInt(fullHex.substring(4, 6), 16) || 70;
+        const alpha = (opacityPercent !== undefined ? opacityPercent : 60) / 100;
+        return {
+            cover: `rgba(${r}, ${g}, ${b}, ${alpha})`,
+            top: `rgba(${r}, ${g}, ${b}, ${Math.max(0, alpha - 0.25)})`
+        };
+    }
+
     let isPolling = false;
     let prevStats = null;
 
@@ -959,9 +975,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (currentUser) {
                 const heroCard = document.querySelector('.dashboard-hero-card');
-                if (heroCard && currentUser.cover_bg_url) {
-                    heroCard.style.backgroundImage = `url("${currentUser.cover_bg_url}")`;
+                if (heroCard) {
+                    if (currentUser.cover_bg_url) {
+                        heroCard.style.backgroundImage = `url("${currentUser.cover_bg_url}")`;
+                    }
                     heroCard.style.backgroundPosition = `center ${currentUser.cover_position_y || 50}%`;
+                    if (currentUser.cover_height) {
+                        heroCard.style.minHeight = `${currentUser.cover_height}px`;
+                    }
+                }
+                const heroOverlay = document.querySelector('#dashboard-hero-overlay');
+                if (heroOverlay && currentUser.cover_color) {
+                    const rgba = hexToRgba(currentUser.cover_color, currentUser.cover_opacity);
+                    const blurPx = parseInt(currentUser.cover_blur || 0);
+                    heroOverlay.style.background = `linear-gradient(135deg, ${rgba.cover}, ${rgba.top})`;
+                    heroOverlay.style.backdropFilter = blurPx > 0 ? `blur(${blurPx}px)` : 'none';
+                    heroOverlay.style.webkitBackdropFilter = blurPx > 0 ? `blur(${blurPx}px)` : 'none';
                 }
                 const heroAvatar = document.querySelector('.hero-avatar-img');
                 if (heroAvatar && currentUser.avatar_url && heroAvatar.src !== currentUser.avatar_url) {
@@ -1013,6 +1042,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (coverEl && cData.cover_bg_url) {
                     coverEl.style.backgroundImage = `url("${cData.cover_bg_url}")`;
                     coverEl.style.backgroundPosition = `center ${cData.cover_position_y || 50}%`;
+                }
+
+                // 1b. Update Overlay Ketebalan Warna & Efek Blur Cover
+                const overlayEl = card.querySelector('.contact-grid-overlay-layer');
+                if (overlayEl && cData.cover_color) {
+                    const rgba = hexToRgba(cData.cover_color, cData.cover_opacity);
+                    const blurPx = parseInt(cData.cover_blur || 0);
+                    overlayEl.style.background = `linear-gradient(180deg, ${rgba.cover} 0%, ${rgba.top} 100%)`;
+                    overlayEl.style.backdropFilter = blurPx > 0 ? `blur(${blurPx}px)` : 'none';
+                    overlayEl.style.webkitBackdropFilter = blurPx > 0 ? `blur(${blurPx}px)` : 'none';
                 }
 
                 // 2. Update Motto Hidup di Cover

@@ -424,7 +424,7 @@
     <!-- Bridge Config & Module JS (Rule 1 & 15 Compliance) -->
     <script>
         window.UsersConfig = {
-            defaultAvatarUrl: "{{ asset('assets/images/users/default-avatar.svg') }}",
+            defaultAvatarUrl: "{{ asset('assets/images/users/user-default.jpg') }}",
             defaultCoverUrl: "{{ asset('assets/images/profile-bg.jpg') }}",
             routes: {
                 store: "{{ route('admin.manajemenpengguna.users.store') }}",

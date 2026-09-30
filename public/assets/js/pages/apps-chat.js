@@ -3,7 +3,7 @@
  */
 
 function resolveAvatar(path) {
-    const defaultAvatar = (window.assetUrl ? window.assetUrl.replace(/\/$/, '') : '') + '/assets/images/users/default-avatar.svg';
+    const defaultAvatar = (window.assetUrl ? window.assetUrl.replace(/\/$/, '') : '') + '/assets/images/users/user-default.jpg';
     if (!path) return defaultAvatar;
     if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:')) {
         return path;
@@ -197,7 +197,7 @@ class Chat {
                     return div.innerHTML;
                 };
 
-                const defaultAvatar = (window.assetUrl ? window.assetUrl.replace(/\/$/, '') : '') + '/assets/images/users/default-avatar.svg';
+                const defaultAvatar = (window.assetUrl ? window.assetUrl.replace(/\/$/, '') : '') + '/assets/images/users/user-default.jpg';
 
                 contentEl.innerHTML = messages
                     .filter(m => m && typeof m === "object" && "text" in m)

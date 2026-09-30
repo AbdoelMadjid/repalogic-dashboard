@@ -21,53 +21,89 @@
     $blurPx = (int) ($user->cover_blur ?? 0);
 @endphp
 
-    <div class="row">
+    <!-- HERO PROFILE OVERVIEW CARD (MATCHING DASHBOARD HERO CARD) -->
+    <div class="row mt-1 mb-4">
         <div class="col-12">
-            <article class="card card-out-of-container border-top-0 shadow-sm mb-4">
-                <div id="main-header-banner" class="position-relative card-side-img overflow-hidden"
-                    style="height: {{ $user->cover_height }}px; background-image: url('{{ $user->cover_bg_url }}'); background-size: cover; background-position: center {{ $user->cover_position_y }}%; transition: height 0.2s ease, background-position 0.2s ease;">
-                    <div id="main-header-overlay" class="p-4 card-img-overlay rounded-start-0 d-flex align-items-center justify-content-center"
-                        style="background: linear-gradient(to top, {{ $rgbaCover }}, {{ $rgbaTop }}); backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }}; -webkit-backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }};">
-                        <h3 class="mb-0 fst-italic text-center px-3" id="main-motto-display"
-                            style="color: {{ $user->motto_color ?? '#ffffff' }}; text-shadow: {{ in_array(strtolower($user->motto_color ?? '#ffffff'), ['#000000', '#111827', '#1f2937', '#0f172a', 'black']) ? '0 2px 8px rgba(255,255,255,0.7)' : '0 2px 8px rgba(0,0,0,0.75)' }}; transition: color 0.2s ease, text-shadow 0.2s ease;">"{{ $user->motto }}"</h3>
-                    </div>
-                </div>
+            <div class="card dashboard-hero-card border-0 shadow-sm position-relative overflow-hidden" id="main-header-banner"
+                style="min-height: {{ $user->cover_height }}px; background-image: url('{{ $user->cover_bg_url }}'); background-position: center {{ $user->cover_position_y }}%;">
+                <!-- Dynamic Overlay Layer (Rule 15 - Live Color, Opacity & Blur Synchronization) -->
+                <div class="position-absolute top-0 start-0 end-0 bottom-0 hero-overlay-layer" id="main-header-overlay"
+                    style="background: linear-gradient(135deg, {{ $rgbaCover }}, {{ $rgbaTop }}); backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }}; -webkit-backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }}; pointer-events: none; z-index: 1;"></div>
+                <div class="card-body p-3.5 p-sm-4 p-lg-4.5 d-flex align-items-center position-relative" style="z-index: 2;">
+                    <div class="row align-items-center g-3 w-100 mx-0">
+                        <div class="col-md-8 px-0">
+                            <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start gap-3">
+                                <!-- 1. Avatar Pengguna -->
+                                <div class="hero-avatar-wrapper flex-shrink-0 text-center">
+                                    <img src="{{ $user->avatar_url }}"
+                                        alt="{{ $user->name }}" class="rounded-3 hero-avatar-img shadow">
+                                    <span class="hero-status-dot" title="Akun Aktif & Sedang Masuk"></span>
+                                </div>
 
-                <!-- Card Body -->
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                        <div class="d-flex justify-content-start align-items-center gap-3">
-                            <div style="width: 90px; height: 90px; flex-shrink: 0;">
-                                <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}"
-                                    class="rounded-circle img-thumbnail shadow-sm"
-                                    style="width: 90px; height: 90px; min-width: 90px; min-height: 90px; object-fit: cover; object-position: center; aspect-ratio: 1 / 1;" />
-                            </div>
-                            <div>
-                                <h4 class="text-nowrap fw-bold mb-1">{{ $user->name }}</h4>
-                                <p class="text-muted mb-1"><i class="ti ti-mail me-1"></i>{{ $user->email }}</p>
-                                <div class="d-flex align-items-center gap-2 flex-wrap mt-1">
-                                    <span class="badge bg-primary-subtle text-primary fw-medium px-2 py-1 fs-xs">{{ $user->role_name }}</span>
-                                    <span class="badge bg-info-subtle text-info fw-medium px-2 py-1 fs-xs" title="Total Teman Terhubung">
-                                        <i class="ti ti-friends me-1"></i> {{ number_format($user->friends_count ?? 0) }} Teman
-                                    </span>
-                                    <span class="badge bg-danger-subtle text-danger fw-medium px-2 py-1 fs-xs" title="Total Suka Profil yang Diterima">
-                                        <i class="ti ti-heart-filled me-1"></i> {{ number_format($user->profile_likes_count ?? 0) }} Suka
-                                    </span>
-                                    <span class="badge bg-warning-subtle text-warning fw-medium px-2 py-1 fs-xs" title="Total Poin Login yang Dikumpulkan">
-                                        <i class="ti ti-award me-1"></i> {{ number_format($user->login_count ?? 0) }} Poin Login
-                                    </span>
+                                <div class="text-center text-md-start w-100">
+                                    <h3 class="fw-bold text-white mb-1.5 fs-20 fs-md-22">
+                                        {{ $user->name }}
+                                    </h3>
+
+                                    <div class="d-flex flex-column flex-md-row flex-md-wrap align-items-center justify-content-center justify-content-md-start gap-2 gap-md-2.5 text-white-50 fs-13 mb-2">
+                                        <!-- Email -->
+                                        <div class="d-flex align-items-center">
+                                            <i class="ti ti-mail text-white-50 me-1.5"></i>
+                                            <span class="text-white fw-medium">{{ $user->email }}</span>
+                                        </div>
+
+                                        <span class="text-white-50 opacity-25 d-none d-md-inline">•</span>
+
+                                        <!-- Role -->
+                                        <div class="d-flex align-items-center">
+                                            <i class="ti ti-shield-check text-white-50 me-1.5"></i>
+                                            <span class="text-white fw-medium">{{ $user->role_name }}</span>
+                                        </div>
+
+                                        <span class="text-white-50 opacity-25 d-none d-md-inline">•</span>
+
+                                        <!-- Teman & Suka -->
+                                        <div class="d-flex align-items-center gap-2.5">
+                                            <div class="d-flex align-items-center" title="Total Teman Terhubung">
+                                                <i class="ti ti-friends text-info me-1.5"></i>
+                                                <span class="text-white fw-medium" id="header-profile-friends-count">{{ number_format($user->friends_count ?? 0) }} Teman</span>
+                                            </div>
+                                            <span class="text-white-50 opacity-25">•</span>
+                                            <div class="d-flex align-items-center" title="Total Suka Profil yang Diterima">
+                                                <i class="ti ti-heart-filled text-danger me-1.5" id="header-profile-likes-icon"></i>
+                                                <span class="text-white fw-medium" id="header-profile-likes-count">{{ number_format($user->profile_likes_count ?? 0) }} Suka</span>
+                                            </div>
+                                        </div>
+
+                                        <span class="text-white-50 opacity-25 d-none d-md-inline">•</span>
+
+                                        <!-- Poin Login -->
+                                        <div class="d-flex align-items-center" title="Total Poin Login yang Dikumpulkan">
+                                            <i class="ti ti-award text-warning me-1.5"></i>
+                                            <span class="text-white fw-medium" id="header-profile-login-points">{{ number_format($user->login_count ?? 0) }} Poin Login</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Motto Hidup -->
+                                    <p class="text-white-50 fst-italic fs-13 mb-0" id="main-motto-display"
+                                        style="color: {{ $user->motto_color ?? '#ffffff' }} !important; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">
+                                        "{{ $user->motto }}"
+                                    </p>
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex gap-2 align-items-center">
-                            <!-- Tombol Pesan / Chat -->
-                            <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="btn btn-outline-success fw-semibold" id="btn-user-messages" title="Fitur Pesan / Obrolan">
-                                <i class="ti ti-message me-1"></i> Pesan
-                            </a>
+
+                        <!-- Right Column: Action Buttons -->
+                        <div class="col-md-4 px-0 text-center text-md-end mt-3 mt-md-0">
+                            <div class="d-flex flex-wrap justify-content-center justify-content-md-end gap-2">
+                                <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="btn btn-sm btn-light fw-semibold shadow-sm" id="btn-user-messages" title="Fitur Pesan / Obrolan">
+                                    <i class="ti ti-message me-1 text-success"></i> Pesan Masuk
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </article>
+            </div>
         </div>
     </div>
 
@@ -216,7 +252,13 @@
                     <form action="{{ route('admin.profil-pengguna.update-motto') }}" method="POST" id="form-update-motto">
                         @csrf
                         <div class="mb-3">
-                            <label for="motto_input" class="form-label fs-13 fw-semibold text-dark mb-1">Motto / Kata-Kata Bijak:</label>
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label for="motto_input" class="form-label fs-13 fw-semibold text-dark mb-0">Motto / Kata-Kata Bijak:</label>
+                                <button type="button" class="btn btn-xs btn-outline-primary d-inline-flex align-items-center gap-1 rounded-pill px-2 py-0.5" id="btn-random-motto" title="Pilih motto acak yang inspiratif">
+                                    <i class="ti ti-dice fs-14"></i>
+                                    <span>Acak Motto</span>
+                                </button>
+                            </div>
                             <textarea name="motto" id="motto_input" rows="3" class="form-control" placeholder="Tuliskan motto hidup Anda..." maxlength="255" required>{{ old('motto', $user->motto) }}</textarea>
                             <span class="fs-12 text-muted d-block mt-1">Motto ini akan ditampilkan di atas banner foto sampul Anda.</span>
                         </div>
@@ -920,6 +962,9 @@
             avatarOriginalUrl: @json($user->avatar_original_url),
             avatarCropData: @json($user->avatar_crop_data),
             avatarCurrentUrl: @json($user->avatar_url),
+            routes: {
+                pollDashboard: "{{ route('admin.friendships.poll-dashboard') }}",
+            }
         };
     </script>
     <script src="{{ asset('assets/plugins/cropperjs/cropper.min.js') }}"></script>

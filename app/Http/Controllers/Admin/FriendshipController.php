@@ -88,6 +88,10 @@ class FriendshipController extends Controller
                 'avatar_url' => $u->avatar_url,
                 'cover_bg_url' => $u->cover_bg_url,
                 'cover_position_y' => $u->cover_position_y ?? 50,
+                'cover_height' => $u->cover_height ?? 320,
+                'cover_color' => $u->cover_color ?: '#313a46',
+                'cover_opacity' => $u->cover_opacity ?? 60,
+                'cover_blur' => $u->cover_blur ?? 0,
                 'motto' => $u->motto ?? '',
                 'pekerjaan' => $u->detail->pekerjaan ?? 'Belum diisi',
                 'telepon' => $u->detail->telepon ?? '',
@@ -111,12 +115,20 @@ class FriendshipController extends Controller
             'avatar_url' => $currentUser->avatar_url,
             'cover_bg_url' => $currentUser->cover_bg_url,
             'cover_position_y' => $currentUser->cover_position_y ?? 50,
+            'cover_height' => $currentUser->cover_height ?? 320,
+            'cover_color' => $currentUser->cover_color ?: '#313a46',
+            'cover_opacity' => $currentUser->cover_opacity ?? 60,
+            'cover_blur' => $currentUser->cover_blur ?? 0,
             'motto' => $currentUser->motto ?? '',
             'login_count' => $currentUser->login_count ?? 0,
         ];
 
         return response()->json([
             'success' => true,
+            'friendsCount' => $friendsCount,
+            'profileLikesCount' => $profileLikesCount,
+            'incomingCount' => $incomingCount,
+            'outgoingCount' => $outgoingCount,
             'current_user' => $currentUserData,
             'stats' => [
                 'friends_count' => $friendsCount,

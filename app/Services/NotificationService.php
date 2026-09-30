@@ -223,7 +223,7 @@ class NotificationService
                     $totalCountInGroup = $msgGroup->count();
 
                     $senderName = $latestMsg->sender ? $latestMsg->sender->name : ($latestMsg->subject ?: 'Pesan Masuk');
-                    $senderAvatar = $latestMsg->sender ? $latestMsg->sender->avatar_url : asset('assets/images/users/default-avatar.svg');
+                    $senderAvatar = $latestMsg->sender ? $latestMsg->sender->avatar_url : asset('assets/images/users/user-default.jpg');
                     $targetUrl = route('admin.profil-pengguna.messages.index', ['user_id' => $senderId]);
 
                     $badgeLabel = 'Pesan';

@@ -193,7 +193,7 @@ class User extends Authenticatable
             }
         }
 
-        return asset('assets/images/users/default-avatar.svg');
+        return asset('assets/images/users/user-default.jpg');
     }
 
     /**
@@ -311,7 +311,7 @@ class User extends Authenticatable
      */
     public function getCoverPositionYAttribute(): int
     {
-        return $this->config?->cover_position_y ?? 0;
+        return (int) ($this->config?->cover_position_y ?? 50);
     }
 
     /**
@@ -347,11 +347,43 @@ class User extends Authenticatable
     }
 
     /**
+     * Curated list of inspiring default life mottos.
+     */
+    public static array $defaultMottos = [
+        'Setiap hari adalah kesempatan baru untuk belajar dan berkarya.',
+        'Jadikan setiap langkah sebagai jejak kebaikan dan inspirasi.',
+        'Kerja keras mengalahkan bakat ketika bakat tidak bekerja keras.',
+        'Kesuksesan berawal dari keberanian untuk memulai hal kecil dengan konsisten.',
+        'Fokus pada proses, nikmati setiap pembelajaran dalam perjalanan hidup.',
+        'Disiplin adalah jembatan antara impian dan pencapaian nyata.',
+        'Berpikir positif, bertindak bijak, dan selalu bersyukur atas setiap proses.',
+        'Inovasi membedakan antara seorang pemimpin dan pengikut sejati.',
+        'Kebaikan kecil yang konsisten lebih berharga dari rencana besar tanpa aksi.',
+        'Bekerja dengan integritas, berkarya dengan dedikasi dan ketulusan hati.',
+        'Jangan takut gagal, takutlah jika kesempatan berlalu tanpa pernah mencoba.',
+        'Waktu terbaik untuk memulai langkah besar adalah hari ini.',
+        'Bekerja cerdas, bersikap rendah hati, dan terus melangkah maju.',
+        'Tantangan hari ini adalah kekuatan untuk meraih kesuksesan esok hari.',
+        'Jadilah agen perubahan positif di mana pun Anda berada.',
+        'Kunci kesuksesan sejati adalah mencintai apa yang sedang Anda kerjakan.',
+        'Selalu ada jalan terbuka bagi mereka yang memiliki tekad pantang menyerah.',
+        'Kesabaran dan ketekunan mampu meluluhkan segala rintangan besar.',
+        'Mimpi besar tidak akan pernah terwujud tanpa tindakan nyata dan konsisten.',
+        'Hidup adalah perjalanan belajar dan bertumbuh yang tidak pernah berhenti.'
+    ];
+
+    /**
      * Accessor for user profile motto quote.
      */
     public function getMottoAttribute(): string
     {
-        return $this->config?->motto ?: 'Setiap hari adalah kesempatan baru untuk belajar dan berkarya.';
+        if (!empty($this->config?->motto)) {
+            return $this->config->motto;
+        }
+
+        $mottos = self::$defaultMottos;
+        $index = abs(crc32((string) ($this->id ?? 1))) % count($mottos);
+        return $mottos[$index];
     }
 
     /**

@@ -3,12 +3,29 @@
 @section('content')
     <link href="{{ asset('assets/css/admin/dashboard.css') }}?v={{ time() }}" rel="stylesheet" type="text/css" />
 
+@php
+    $hex = ltrim($user->cover_color ?: '#313a46', '#');
+    if (strlen($hex) == 3) {
+        $hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2];
+    }
+    $r = hexdec(substr($hex, 0, 2));
+    $g = hexdec(substr($hex, 2, 2));
+    $b = hexdec(substr($hex, 4, 2));
+    $alpha = ($user->cover_opacity ?? 60) / 100;
+    $rgbaCover = "rgba({$r}, {$g}, {$b}, {$alpha})";
+    $rgbaTop = "rgba({$r}, {$g}, {$b}, " . max(0, $alpha - 0.25) . ")";
+    $blurPx = (int) ($user->cover_blur ?? 0);
+@endphp
+
     <!-- 1. HERO GREETING & PROFILE OVERVIEW CARD WITH USER CUSTOM COVER PHOTO -->
     <div class="row mt-3 mb-4">
         <div class="col-12">
-            <div class="card dashboard-hero-card border-0 shadow-sm"
+            <div class="card dashboard-hero-card border-0 shadow-sm position-relative overflow-hidden" id="dashboard-hero-banner"
                 style="min-height: {{ $user->cover_height }}px; background-image: url('{{ $user->cover_bg_url }}'); background-position: center {{ $user->cover_position_y }}%;">
-                <div class="card-body p-3.5 p-sm-4 p-lg-4.5 d-flex align-items-center">
+                <!-- Dynamic Overlay Layer (Color, Opacity & Blur Synchronization) -->
+                <div class="position-absolute top-0 start-0 end-0 bottom-0 hero-overlay-layer" id="dashboard-hero-overlay"
+                    style="background: linear-gradient(135deg, {{ $rgbaCover }}, {{ $rgbaTop }}); backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }}; -webkit-backdrop-filter: {{ $blurPx > 0 ? 'blur('.$blurPx.'px)' : 'none' }}; pointer-events: none; z-index: 1;"></div>
+                <div class="card-body p-3.5 p-sm-4 p-lg-4.5 d-flex align-items-center position-relative" style="z-index: 2;">
                     <div class="row align-items-center g-3 w-100 mx-0">
                         <div class="col-md-8 px-0">
                             <div class="d-flex flex-column flex-md-row align-items-center align-items-md-start gap-3">
@@ -73,7 +90,7 @@
                                             </div>
                                             <span class="text-white-50 opacity-25">•</span>
                                             <div class="d-flex align-items-center" title="Total Suka Profil yang Diterima">
-                                                <i class="ti ti-heart-filled text-danger me-1.5"></i>
+                                                <i class="ti ti-heart-filled text-danger me-1.5" id="hero-likes-icon"></i>
                                                 <span class="text-white fw-medium" id="hero-likes-count">{{ number_format($totalProfileLikesCount) }} Suka</span>
                                             </div>
                                         </div>
@@ -89,8 +106,16 @@
 
                                     <!-- 9. Moto Hidup -->
                                     @if (!empty($user->motto))
-                                        <div class="pt-2 d-flex align-items-center justify-content-center justify-content-md-start gap-1.5 fs-12 text-white-50 fst-italic">
-                                            <i class="ti ti-quote me-1"></i>"{{ $user->motto }}"
+                                        @php
+                                            $heroMottoColor = $user->motto_color ?: '#ffffff';
+                                            $isDarkHeroMotto = in_array(strtolower($heroMottoColor), ['#000000', '#111827', '#1f2937', '#0f172a', 'black']);
+                                            $heroMottoShadow = $isDarkHeroMotto ? '0 1px 6px rgba(255, 255, 255, 0.85)' : '0 1px 6px rgba(0, 0, 0, 0.85)';
+                                        @endphp
+                                        <div class="pt-2 d-flex align-items-center justify-content-center justify-content-md-start gap-1.5 fs-12 fst-italic hero-user-motto"
+                                            id="dashboard-hero-motto"
+                                            style="color: {{ $heroMottoColor }}; text-shadow: {{ $heroMottoShadow }};"
+                                            title="Motto Hidup: {{ $user->motto }}">
+                                            <i class="ti ti-quote me-1"></i><span id="dashboard-hero-motto-text">"{{ $user->motto }}"</span>
                                         </div>
                                     @endif
                                 </div>
@@ -562,7 +587,7 @@
                                         <tr>
                                             <td>
                                                 <div class="d-flex align-items-center gap-2">
-                                                    <img src="{{ $lLog->user?->avatar_url ?? asset('assets/images/users/default-avatar.svg') }}" alt="{{ $lLog->user->name ?? 'User' }}" class="dashboard-user-avatar">
+                                                    <img src="{{ $lLog->user?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $lLog->user->name ?? 'User' }}" class="dashboard-user-avatar">
                                                     <div>
                                                         <span class="fw-semibold text-dark d-block">{{ $lLog->user->name ?? 'User #' . $lLog->user_id }}</span>
                                                         <span class="text-muted fs-xxs">{{ $lLog->user->email ?? '-' }}</span>
@@ -619,7 +644,7 @@
                                 @endphp
                                 <a href="{{ route('admin.profil-pengguna.messages.index', ['user_id' => $partner->id ?? '']) }}" class="chat-preview-item">
                                     <div class="chat-avatar-wrapper">
-                                        <img src="{{ $partner?->avatar_url ?? asset('assets/images/users/default-avatar.svg') }}" alt="{{ $partner->name ?? 'User' }}" class="chat-preview-avatar">
+                                        <img src="{{ $partner?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $partner->name ?? 'User' }}" class="chat-preview-avatar">
                                     </div>
                                     <div class="chat-content-box">
                                         <div class="chat-preview-header">
@@ -898,7 +923,7 @@
                                 @endphp
                                 <a href="{{ route('admin.profil-pengguna.messages.index', ['user_id' => $partner->id ?? '']) }}" class="chat-preview-item">
                                     <div class="chat-avatar-wrapper">
-                                        <img src="{{ $partner?->avatar_url ?? asset('assets/images/users/default-avatar.svg') }}" alt="{{ $partner->name ?? 'User' }}" class="chat-preview-avatar">
+                                        <img src="{{ $partner?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $partner->name ?? 'User' }}" class="chat-preview-avatar">
                                     </div>
                                     <div class="chat-content-box">
                                         <div class="chat-preview-header">
@@ -981,6 +1006,18 @@
                                 $fModel = $cUser->friendship_model;
                                 $isLiked = $cUser->is_liked_by_me ?? false;
                                 $likesTotal = $cUser->profile_likes_count ?? 0;
+
+                                $cHex = ltrim($cUser->cover_color ?: '#313a46', '#');
+                                if (strlen($cHex) == 3) {
+                                    $cHex = $cHex[0].$cHex[0].$cHex[1].$cHex[1].$cHex[2].$cHex[2];
+                                }
+                                $cR = hexdec(substr($cHex, 0, 2));
+                                $cG = hexdec(substr($cHex, 2, 2));
+                                $cB = hexdec(substr($cHex, 4, 2));
+                                $cAlpha = ($cUser->cover_opacity ?? 60) / 100;
+                                $cRgbaCover = "rgba({$cR}, {$cG}, {$cB}, {$cAlpha})";
+                                $cRgbaTop = "rgba({$cR}, {$cG}, {$cB}, " . max(0, $cAlpha - 0.25) . ")";
+                                $cBlurPx = (int) ($cUser->cover_blur ?? 0);
                             @endphp
                             <div class="col-sm-6 col-lg-4 col-xl-3 dashboard-contact-col"
                                 data-search-name="{{ strtolower($cUser->name) }}"
@@ -996,7 +1033,11 @@
                                     <!-- Cover Banner Background -->
                                     <div class="position-relative contact-grid-cover overflow-hidden"
                                         style="height: 115px; background-image: url('{{ $cUser->cover_bg_url }}'); background-position: center {{ $cUser->cover_position_y }}%;">
-                                        <div class="position-absolute top-0 start-0 end-0 bottom-0 p-2 d-flex flex-column justify-content-between contact-grid-cover-overlay">
+                                        <!-- Dynamic User-Configured Overlay Layer (Color, Opacity & Blur) -->
+                                        <div class="position-absolute top-0 start-0 end-0 bottom-0 contact-grid-overlay-layer"
+                                            style="background: linear-gradient(180deg, {{ $cRgbaCover }} 0%, {{ $cRgbaTop }} 100%); backdrop-filter: {{ $cBlurPx > 0 ? 'blur('.$cBlurPx.'px)' : 'none' }}; -webkit-backdrop-filter: {{ $cBlurPx > 0 ? 'blur('.$cBlurPx.'px)' : 'none' }}; pointer-events: none; z-index: 1;"></div>
+                                        
+                                        <div class="position-absolute top-0 start-0 end-0 bottom-0 p-2 d-flex flex-column justify-content-between contact-grid-cover-overlay position-relative" style="z-index: 2; background: transparent;">
                                             <!-- Top Badges (Online + Like Action) -->
                                             <div class="d-flex justify-content-between align-items-start">
                                                 <span class="badge {{ $cUser->is_online ? 'bg-success text-white' : 'bg-dark bg-opacity-75 text-white-50' }} fs-xxs py-0.5 px-1.5 rounded-pill shadow-sm"
@@ -1023,9 +1064,14 @@
                                             </div>
 
                                             @if (!empty($cUser->motto))
+                                                @php
+                                                    $cMottoColor = $cUser->motto_color ?: '#ffffff';
+                                                    $isDarkCMotto = in_array(strtolower($cMottoColor), ['#000000', '#111827', '#1f2937', '#0f172a', 'black']);
+                                                    $cMottoShadow = $isDarkCMotto ? '0 1px 5px rgba(255, 255, 255, 0.85)' : '0 1px 5px rgba(0, 0, 0, 0.85)';
+                                                @endphp
                                                 <div class="text-center px-1 pb-3 mb-1">
-                                                    <p class="text-white mb-0 fst-italic contact-cover-motto"
-                                                        style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"
+                                                    <p class="mb-0 fst-italic contact-cover-motto"
+                                                        style="color: {{ $cMottoColor }}; text-shadow: {{ $cMottoShadow }}; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"
                                                         title="{{ $cUser->motto }}">
                                                         "{{ $cUser->motto }}"
                                                     </p>
@@ -1035,13 +1081,13 @@
                                     </div>
 
                                     <!-- Card Body -->
-                                    <div class="card-body p-3 text-center d-flex flex-column">
+                                    <div class="card-body p-3 text-center d-flex flex-column position-relative" style="z-index: 3;">
                                         <!-- Overlapping Avatar -->
-                                        <div class="position-relative d-inline-block mx-auto mb-2" style="margin-top: -42px;">
+                                        <div class="position-relative d-inline-block mx-auto mb-2 contact-grid-avatar-wrapper" style="margin-top: -42px; z-index: 4;">
                                             <img src="{{ $cUser->avatar_url }}" alt="{{ $cUser->name }}"
-                                                class="rounded-circle border border-3 border-white shadow-sm contact-grid-avatar">
+                                                class="rounded-circle border border-3 border-white shadow-sm contact-grid-avatar position-relative" style="z-index: 4;">
                                             <span class="position-absolute bottom-0 end-0 border border-2 border-white rounded-circle {{ $cUser->is_online ? 'bg-success' : 'bg-secondary opacity-50' }}"
-                                                style="width: 12px; height: 12px; transform: translate(10%, 10%);"></span>
+                                                style="width: 12px; height: 12px; transform: translate(10%, 10%); z-index: 5;"></span>
                                         </div>
 
                                         <h5 class="fw-bold text-dark fs-14 mb-0.5 text-truncate" title="{{ $cUser->name }}">

@@ -116,7 +116,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 3.0.5 -->
+                        <!-- Version 3.0.6 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -124,8 +124,40 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v3.0.5</h5>
+                                        <h5 class="fw-bold mb-0">v3.0.6</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.6</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-30 13:30 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Overhaul Desain Header Profil Pengguna, Curated Life Mottos Engine, Dynamic Cover Overlay Kontak Dashboard &amp; Standardisasi Default Avatar</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">User Profile Header &amp; Stats Redesign (<code>profil-pengguna.blade.php</code>):</strong> Pembaruan tata letak header banner profil pengguna dengan struktur 2-kolom responsif (avatar lingkaran tumpang-tindih rapi, indikator email/role/teman/suka/poin login terstruktur sejajar dengan pemisah titik elegan, dan perataan terpusat di mobile).</li>
+                                    <li><strong class="text-dark">Curated Life Mottos &amp; Acak Motto Engine (<code>User.php</code> &amp; <code>profil-pengguna.js</code>):</strong> Menambahkan daftar kurasi 20 motto hidup inspiratif (<code>User::$defaultMottos</code>) dengan fallback deterministik berbasis ID user, tombol interaktif <code>Acak Motto</code> pada modal edit motto profil pengguna, serta rendering warna teks dan shadow motto adaptif kontras.</li>
+                                    <li><strong class="text-dark">Dynamic Contact Cover Overlay &amp; Blur Sync (<code>dashboard.blade.php</code> &amp; <code>FriendshipController.php</code>):</strong> Sinkronisasi konfigurasi warna overlay, tingkat opasitas (gradient overlay), dan efek blur sampul pengguna pada kartu kontak dashboard (<code>contact-grid-overlay-layer</code>) serta transmisi statistik real-time (teman, suka, permohonan) pada endpoint polling.</li>
+                                    <li><strong class="text-dark">User Form Modal Header &amp; Avatar Enhancement (<code>user_form.blade.php</code> &amp; <code>users.js</code>):</strong> Tampilan cover banner pengguna pada sidebar modal akun/kredensial, resolusi posisi vertikal foto sampul, overlapping avatar preview, dan standarisasi tampilan theme mode.</li>
+                                    <li><strong class="text-dark">Standardized Default Avatar Asset:</strong> Migrasi seluruh referensi fallback avatar pengguna sistem dari <code>default-avatar.svg</code> ke foto profil resolusi tinggi <code>user-default.jpg</code> di seluruh controller, model, view, service, dan skrip chat.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark border fs-xs">Profile Redesign</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Life Mottos Engine</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Dashboard Contacts</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Cover Blur &amp; Overlay</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Avatar Standardization</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Realtime Stats</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 3.0.5 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-check fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v3.0.5</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.5</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-30 09:25 WIB</span>

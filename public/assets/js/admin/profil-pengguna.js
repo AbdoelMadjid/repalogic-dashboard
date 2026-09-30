@@ -56,11 +56,12 @@ function initProfilPengguna() {
         const btnReCropCurrent = document.getElementById('btn-re-crop-current');
         if (btnReCropCurrent) {
             btnReCropCurrent.addEventListener('click', function() {
+                const isDefaultAvatar = (src) => !src || src.includes('user-default.jpg') || src.includes('default-avatar.svg');
                 const sourceToUse = currentMasterDataUrl ||
                                     window.ProfilPenggunaConfig?.avatarOriginalUrl ||
-                                    (modalAvatarPreview && modalAvatarPreview.src && !modalAvatarPreview.src.includes('default-avatar.svg') ? modalAvatarPreview.src : null);
+                                    (modalAvatarPreview && modalAvatarPreview.src && !isDefaultAvatar(modalAvatarPreview.src) ? modalAvatarPreview.src : null);
 
-                if (sourceToUse && !sourceToUse.includes('default-avatar.svg')) {
+                if (sourceToUse && !isDefaultAvatar(sourceToUse)) {
                     cropSourceImage.src = sourceToUse;
                     cropModal.show();
                 } else {
@@ -275,9 +276,9 @@ function initProfilPengguna() {
 
     function applyCoverStyling() {
         const alpha = currentCoverOpacity / 100;
-        const rgbaBottom = hexToRgba(currentCoverColor, alpha);
-        const rgbaTop = hexToRgba(currentCoverColor, Math.max(0, alpha - 0.25));
-        const gradientBg = `linear-gradient(to top, ${rgbaBottom}, ${rgbaTop})`;
+        const rgbaStart = hexToRgba(currentCoverColor, alpha);
+        const rgbaEnd = hexToRgba(currentCoverColor, Math.max(0, alpha - 0.25));
+        const gradientBg = `linear-gradient(135deg, ${rgbaStart}, ${rgbaEnd})`;
         const blurVal = currentCoverBlur > 0 ? `blur(${currentCoverBlur}px)` : 'none';
 
         // 1. Update Main Header Banner Overlay
@@ -341,7 +342,9 @@ function initProfilPengguna() {
         const heightPx = height + 'px';
         if (coverHeightVal) coverHeightVal.textContent = heightPx;
         if (coverHeightRange) coverHeightRange.value = height;
-        if (mainHeaderBanner) mainHeaderBanner.style.height = heightPx;
+        if (mainHeaderBanner) {
+            mainHeaderBanner.style.minHeight = heightPx;
+        }
         syncCoverPreviewRatio();
     }
 
@@ -485,6 +488,30 @@ function initProfilPengguna() {
         });
     }
 
+    // Curated list of inspiring default mottos for quick randomization
+    const presetMottos = [
+        'Setiap hari adalah kesempatan baru untuk belajar dan berkarya.',
+        'Jadikan setiap langkah sebagai jejak kebaikan dan inspirasi.',
+        'Kerja keras mengalahkan bakat ketika bakat tidak bekerja keras.',
+        'Kesuksesan berawal dari keberanian untuk memulai hal kecil dengan konsisten.',
+        'Fokus pada proses, nikmati setiap pembelajaran dalam perjalanan hidup.',
+        'Disiplin adalah jembatan antara impian dan pencapaian nyata.',
+        'Berpikir positif, bertindak bijak, dan selalu bersyukur atas setiap proses.',
+        'Inovasi membedakan antara seorang pemimpin dan pengikut sejati.',
+        'Kebaikan kecil yang konsisten lebih berharga dari rencana besar tanpa aksi.',
+        'Bekerja dengan integritas, berkarya dengan dedikasi dan ketulusan hati.',
+        'Jangan takut gagal, takutlah jika kesempatan berlalu tanpa pernah mencoba.',
+        'Waktu terbaik untuk memulai langkah besar adalah hari ini.',
+        'Bekerja cerdas, bersikap rendah hati, dan terus melangkah maju.',
+        'Tantangan hari ini adalah kekuatan untuk meraih kesuksesan esok hari.',
+        'Jadilah agen perubahan positif di mana pun Anda berada.',
+        'Kunci kesuksesan sejati adalah mencintai apa yang sedang Anda kerjakan.',
+        'Selalu ada jalan terbuka bagi mereka yang memiliki tekad pantang menyerah.',
+        'Kesabaran dan ketekunan mampu meluluhkan segala rintangan besar.',
+        'Mimpi besar tidak akan pernah terwujud tanpa tindakan nyata dan konsisten.',
+        'Hidup adalah perjalanan belajar dan bertumbuh yang tidak pernah berhenti.'
+    ];
+
     if (mottoInput) {
         mottoInput.addEventListener('input', function() {
             const text = '"' + (this.value || 'Setiap hari adalah kesempatan baru untuk belajar dan berkarya.') + '"';
@@ -499,8 +526,31 @@ function initProfilPengguna() {
         });
     }
 
-    // Event delegation for Motto Color Swatches (Rule 2 Compliance)
+    // Event delegation for Motto Color Swatches & Random Motto Generator (Rule 2 Compliance)
     document.addEventListener('click', function(e) {
+        // Random Motto Generator button
+        const randomBtn = e.target.closest('#btn-random-motto');
+        if (randomBtn && mottoInput) {
+            const currentVal = mottoInput.value.trim();
+            const availableMottos = presetMottos.filter(m => m !== currentVal);
+            const randomMotto = availableMottos[Math.floor(Math.random() * availableMottos.length)] || presetMottos[0];
+            
+            mottoInput.value = randomMotto;
+            mottoInput.dispatchEvent(new Event('input', { bubbles: true }));
+            
+            // Subtle button animation feedback
+            const icon = randomBtn.querySelector('i');
+            if (icon) {
+                icon.style.transition = 'transform 0.35s ease';
+                icon.style.transform = 'rotate(180deg)';
+                setTimeout(() => { icon.style.transform = 'none'; }, 350);
+            }
+            if (typeof window.showToast === 'function') {
+                window.showToast('Motto inspiratif dipilih secara acak!', 'info', 1500);
+            }
+            return;
+        }
+
         const mottoSwatch = e.target.closest('.btn-motto-color-swatch');
         if (mottoSwatch) {
             const color = mottoSwatch.getAttribute('data-color');
@@ -553,6 +603,59 @@ function initProfilPengguna() {
             }
         });
     }
+
+    // =========================================================================
+    // 6. Realtime Polling for Profile Likes & Friends Count
+    // =========================================================================
+    function initRealtimeProfileStats() {
+        const pollUrl = window.ProfilPenggunaConfig?.routes?.pollDashboard;
+        if (!pollUrl) return;
+
+        let previousLikes = null;
+
+        function fetchProfileStats() {
+            fetch(pollUrl, {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (!data || !data.success) return;
+
+                // 1. Update Friends Count
+                const friendsCountEl = document.getElementById('header-profile-friends-count');
+                if (friendsCountEl && data.friendsCount !== undefined) {
+                    friendsCountEl.textContent = `${Number(data.friendsCount).toLocaleString('id-ID')} Teman`;
+                }
+
+                // 2. Update Likes Count & Heart Animation
+                const likesCountEl = document.getElementById('header-profile-likes-count');
+                const likesIconEl = document.getElementById('header-profile-likes-icon');
+                if (likesCountEl && data.profileLikesCount !== undefined) {
+                    const currentLikes = Number(data.profileLikesCount);
+                    likesCountEl.textContent = `${currentLikes.toLocaleString('id-ID')} Suka`;
+
+                    if (previousLikes !== null && currentLikes > previousLikes) {
+                        if (likesIconEl) {
+                            likesIconEl.classList.remove('heart-pulsing');
+                            void likesIconEl.offsetWidth; // Trigger reflow
+                            likesIconEl.classList.add('heart-pulsing');
+                        }
+                    }
+                    previousLikes = currentLikes;
+                }
+            })
+            .catch(() => {});
+        }
+
+        // Initial poll after 5s, then every 8s
+        setTimeout(fetchProfileStats, 5000);
+        setInterval(fetchProfileStats, 8000);
+    }
+
+    initRealtimeProfileStats();
 }
 
 if (document.readyState === 'loading') {

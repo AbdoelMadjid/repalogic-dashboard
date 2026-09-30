@@ -152,7 +152,7 @@
                 <div class="d-flex align-items-center gap-3 flex-grow-1 overflow-hidden">
                     <div class="flex-shrink-0 position-relative" id="active-chat-avatar-wrapper">
                         <img id="active-chat-avatar"
-                            src="{{ $activeUser ? $activeUser->avatar_url : asset('assets/images/users/default-avatar.svg') }}"
+                            src="{{ $activeUser ? $activeUser->avatar_url : asset('assets/images/users/user-default.jpg') }}"
                             alt="Avatar"
                             class="rounded-circle object-fit-cover shadow-sm {{ $activeUser ? '' : 'd-none' }}"
                             style="width: 42px; height: 42px; min-width: 42px; min-height: 42px; object-fit: cover; object-position: top; display: block;" />
@@ -243,7 +243,7 @@
                                 ? auth()->user()->avatar_url
                                 : ($msg->sender
                                     ? $msg->sender->avatar_url
-                                    : asset('assets/images/users/default-avatar.svg'));
+                                    : asset('assets/images/users/user-default.jpg'));
                             $senderName = $isSender ? 'Anda' : ($msg->sender ? $msg->sender->name : 'Pengguna');
                             $reactions = is_array($msg->reactions) ? $msg->reactions : [];
                             $isPinned = (bool) $msg->is_pinned;
@@ -767,7 +767,7 @@
                     <!-- AVATAR OVERLAPPING COVER BANNER -->
                     <div class="mb-3 position-relative d-inline-block" style="margin-top: -48px;">
                         <img id="modal-user-avatar"
-                            src="{{ $activeUser ? $activeUser->avatar_url : asset('assets/images/users/default-avatar.svg') }}"
+                            src="{{ $activeUser ? $activeUser->avatar_url : asset('assets/images/users/user-default.jpg') }}"
                             class="rounded-circle border border-3 border-white shadow"
                             style="width: 96px; height: 96px; min-width: 96px; min-height: 96px; object-fit: cover; object-position: top; background-color: #fff;"
                             alt="Avatar Pengguna">
@@ -901,7 +901,7 @@
         window.MessagesConfig = {
             currentUserId: {{ auth()->id() }},
             currentUserAvatar: "{{ auth()->user()->avatar_url }}",
-            defaultAvatar: "{{ asset('assets/images/users/default-avatar.svg') }}",
+            defaultAvatar: "{{ asset('assets/images/users/user-default.jpg') }}",
             defaultCover: "{{ asset('assets/images/profile-bg.jpg') }}",
             initialMessageCount: {{ $messages->count() }},
             initialLastMessageId: {{ $messages->isNotEmpty() ? $messages->last()->id : 'null' }},

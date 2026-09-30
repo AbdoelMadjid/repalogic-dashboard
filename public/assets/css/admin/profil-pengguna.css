@@ -3,8 +3,81 @@
  * Path: public/assets/css/admin/profil-pengguna.css
  */
 
+/* 1. Hero Card (Matching Dashboard Theme Standard) */
+.dashboard-hero-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15);
+}
+
+.dashboard-hero-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.65) 0%, rgba(15, 23, 42, 0.40) 50%, rgba(15, 23, 42, 0.70) 100%);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    z-index: 1;
+    pointer-events: none;
+}
+
+#main-header-banner::before {
+    display: none !important;
+}
+
+#main-header-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1;
+    transition: background 0.15s ease, backdrop-filter 0.15s ease, -webkit-backdrop-filter 0.15s ease;
+}
+
+.dashboard-hero-card .card-body {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-avatar-wrapper {
+    position: relative;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.hero-avatar-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: 0.85rem !important;
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.hero-status-dot {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #22c55e;
+    border: 2.5px solid #1e293b;
+}
+
 #main-header-banner {
-    transition: height 0.2s ease, background-position 0.2s ease;
+    transition: min-height 0.2s ease, background-position 0.2s ease;
 }
 
 #main-header-overlay,
@@ -120,6 +193,15 @@
     box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.08);
 }
 
+@keyframes heartBeat {
+    0% { transform: scale(1); }
+    14% { transform: scale(1.35); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.35); }
+    70% { transform: scale(1); }
+}
 
-
-
+.heart-pulsing {
+    display: inline-block;
+    animation: heartBeat 0.8s ease-in-out;
+}
