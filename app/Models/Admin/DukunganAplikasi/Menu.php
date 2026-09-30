@@ -206,12 +206,20 @@ class Menu extends Model
         $enModular = $readJson($enModularPath);
         $modularUpdated = false;
 
-        if (!isset($idModular[$dataLang])) {
+        // Check if old data_lang changed and clean up old key if needed
+        $oldDataLang = $menu->getOriginal('data_lang');
+        if (!empty($oldDataLang) && $oldDataLang !== $dataLang) {
+            unset($idModular[$oldDataLang]);
+            unset($enModular[$oldDataLang]);
+            $modularUpdated = true;
+        }
+
+        if (!isset($idModular[$dataLang]) || $idModular[$dataLang] !== $menu->name) {
             $idModular[$dataLang] = $menu->name;
             $modularUpdated = true;
         }
 
-        if (!isset($enModular[$dataLang])) {
+        if (!isset($enModular[$dataLang]) || empty($enModular[$dataLang])) {
             $enModular[$dataLang] = static::getEnglishDefault($menu->name);
             $modularUpdated = true;
         }
@@ -229,11 +237,17 @@ class Menu extends Model
         $enRoot = $readJson($enRootPath);
         $rootUpdated = false;
 
-        if (!isset($idRoot[$dataLang])) {
+        if (!empty($oldDataLang) && $oldDataLang !== $dataLang) {
+            unset($idRoot[$oldDataLang]);
+            unset($enRoot[$oldDataLang]);
+            $rootUpdated = true;
+        }
+
+        if (!isset($idRoot[$dataLang]) || $idRoot[$dataLang] !== $menu->name) {
             $idRoot[$dataLang] = $menu->name;
             $rootUpdated = true;
         }
-        if (!isset($enRoot[$dataLang])) {
+        if (!isset($enRoot[$dataLang]) || empty($enRoot[$dataLang])) {
             $enRoot[$dataLang] = static::getEnglishDefault($menu->name);
             $rootUpdated = true;
         }
@@ -245,7 +259,7 @@ class Menu extends Model
     }
 
     /**
-     * Helper mapping for default English translations.
+     * Helper mapping for default English translations with smart word-by-word fallback.
      */
     public static function getEnglishDefault(string $name): string
     {
@@ -258,16 +272,77 @@ class Menu extends Model
             'Fitur Aplikasi' => 'Application Features',
             'Terjemahan Bahasa' => 'Language Translation',
             'Backup DB' => 'Database Backup',
+            'Backup Database' => 'Database Backup',
             'Manajemen Pengguna' => 'User Management',
             'Dukungan Aplikasi' => 'Application Support',
+            'Data Pengguna' => 'User Data',
+            'Pengguna' => 'Users',
             'User' => 'User',
-            'Role' => 'Role',
-            'Permission' => 'Permission',
+            'Role' => 'Roles',
+            'Data Role' => 'Role Data',
+            'Data Role & Hak Akses' => 'Role & Permissions Data',
+            'Permission' => 'Permissions',
+            'Data Permission' => 'Permission Data',
             'Akses Role' => 'Role Access',
             'Akses User' => 'User Access',
+            'Data Login' => 'Data Login',
+            'Data Login Pengguna' => 'User Login Data',
+            'Manajemen Menu' => 'Menu Management',
             'Menu' => 'Menu',
+            'Master Data' => 'Master Data',
+            'DATA UTAMA' => 'MASTER DATA',
+            'Laporan' => 'Reports',
+            'Pengaturan' => 'Settings',
         ];
 
-        return $map[$name] ?? $name;
+        if (isset($map[$name])) {
+            return $map[$name];
+        }
+
+        // Smart word-by-word replacement fallback
+        $wordMap = [
+            'manajemen' => 'Management',
+            'pengaturan' => 'Settings',
+            'konfigurasi' => 'Configuration',
+            'laporan' => 'Report',
+            'daftar' => 'List',
+            'kelola' => 'Manage',
+            'tambah' => 'Add',
+            'edit' => 'Edit',
+            'hapus' => 'Delete',
+            'pengguna' => 'Users',
+            'akses' => 'Access',
+            'hak' => 'Rights',
+            'profil' => 'Profile',
+            'fitur' => 'Features',
+            'dukungan' => 'Support',
+            'aplikasi' => 'Application',
+            'terjemahan' => 'Translation',
+            'bahasa' => 'Language',
+            'data' => 'Data',
+            'pesan' => 'Messages',
+            'notifikasi' => 'Notifications',
+            'kategori' => 'Categories',
+            'transaksi' => 'Transactions',
+            'riwayat' => 'History',
+            'log' => 'Logs',
+            'aktivitas' => 'Activities',
+        ];
+
+        $words = preg_split('/\s+/', $name);
+        $translatedWords = [];
+        $hasTranslation = false;
+
+        foreach ($words as $w) {
+            $lower = strtolower($w);
+            if (isset($wordMap[$lower])) {
+                $translatedWords[] = $wordMap[$lower];
+                $hasTranslation = true;
+            } else {
+                $translatedWords[] = $w;
+            }
+        }
+
+        return $hasTranslation ? implode(' ', $translatedWords) : $name;
     }
 }
