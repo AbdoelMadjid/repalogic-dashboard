@@ -107,10 +107,7 @@
         </div>
     </div>
 
-    @php
-        $isSpecialMenuVisible = empty($appFeatures) || !empty($appFeatures->menu_special_menu);
-    @endphp
-    <div class="sidenav-special-bottom" data-feature="menu_special_menu" style="{{ $isSpecialMenuVisible ? '' : 'display: none !important;' }}">
+    <div class="sidenav-special-bottom">
         <ul class="side-nav mb-0">
             <li class="side-nav-item mb-0">
                 <a href="{{ Route::has('template.documentation.changelog') ? route('template.documentation.changelog') : url('template/documentation/changelog') }}" class="side-nav-link special-menu">

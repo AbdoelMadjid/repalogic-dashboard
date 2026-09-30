@@ -84,9 +84,10 @@ Setiap komponen Topbar Header dan grup menu Sidebar telah dioptimasi dengan arsi
   - Lonceng Notifikasi Alert (`#notification-dropdown-alert` / `topbar_notifications`)
   - Mode Layar Penuh (`#fullscreen-toggler` / `topbar_fullscreen`)
   - Mode Monokrom (`#monochrome-toggler` / `topbar_monochrome`)
-  - Panel Theme Settings Customizer (`#theme-settings-toggler` / `topbar_customizer`)
+  - Panel Theme Settings Customizer (`#theme-settings-toggler` / `topbar_customizer` - khusus role `superadmin` & `admin`)
   - Pemilih Bahasa i18n (`#language-selector` / `topbar_language`)
-  - Template Sidebar Menu Groups (`menu_group_main`, `menu_group_apps`, `menu_special_menu`, dll.)
+  - Template Sidebar Menu Groups (`menu_group_main`, `menu_group_apps`, dll.)
+  - *Catatan:* Menu Spesial (*Special Menu*) kini bersifat permanen/independen di luar database toggle dan dapat diakses oleh semua role pengguna.
 
 ### 3.2 Persistensi Tab Aktif & Zero-Reload Bulk Actions
 - **Tab State Persistence (Clean URL):** Sistem secara otomatis menyimpan tab aktif (`#tab-settings` atau `#tab-visibility`) ke `localStorage.setItem('active_fitur_tab', target)` tanpa menambahkan hashtag pada address bar browser (Clean URL Standard - Rule 17).

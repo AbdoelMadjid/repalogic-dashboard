@@ -35,7 +35,9 @@
 
         </div>
 
-        @include('layouts.partials.customizer')
+        @if (auth()->check() && auth()->user()->hasAnyRole(['superadmin', 'admin']))
+            @include('layouts.partials.customizer')
+        @endif
 
     </div>
 

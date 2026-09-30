@@ -116,7 +116,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 3.0.1 -->
+                        <!-- Version 3.0.2 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -124,8 +124,37 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v3.0.1</h5>
+                                        <h5 class="fw-bold mb-0">v3.0.2</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.2</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-30 07:45 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Pembersihan Database Fitur Special Menu &amp; Pembatasan Otorisasi Akses Admin Customizer</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Special Menu Standalone Sidenav (Bebas Database):</strong> Mengeluarkan menu spesial (<em>Special Menu</em>) dari daftar fitur database (<code>app_features</code> / <code>FiturAplikasiSeeder.php</code>). Menu Spesial kini bersifat permanen di bagian bawah sidebar tanpa kontrol sakelar visibilitas dan dapat diakses bebas oleh seluruh role pengguna.</li>
+                                    <li><strong class="text-dark">Role-Based Customizer Access Restriction:</strong> Membatasi akses tombol pemicu <em>Customizer / Theme Settings</em> pada Topbar Header (<code>theme-settings-offcanvas.blade.php</code>) serta panel offcanvas kustomisasi tema (<code>customizer.blade.php</code>, <code>vertical.blade.php</code>, <code>horizontal.blade.php</code>) khusus untuk role <code>superadmin</code> dan <code>admin</code>. Role pengguna lainnya tidak lagi dapat melihat maupun mengakses panel customizer.</li>
+                                    <li><strong class="text-dark">Pembersihan Selektor DOM Fitur:</strong> Menghapus pemetaan selektor <code>menu_special_menu</code> pada engine <code>fitur-aplikasi.js</code> dan memperbarui dokumentasi teknis arsitektur fitur.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark border fs-xs">Special Menu</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Customizer RBAC</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Fitur Aplikasi</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Topbar Header</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Sidebar Navigation</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 3.0.1 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-check fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v3.0.1</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.1</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-29 23:25 WIB</span>

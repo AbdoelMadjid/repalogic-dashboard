@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v3.0.1`  
-> **Terakhir Diperbarui:** 29 September 2026 23:25 WIB  
+> **Versi Terbaru:** `v3.0.2`  
+> **Terakhir Diperbarui:** 30 September 2026 07:45 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v3.0.2`** | `2026-09-30 07:45 WIB` | Pembersihan Database Fitur Special Menu (Dikeluarkan dari `app_features` dan `FiturAplikasiSeeder.php`, Tampil Permanen di Bagian Bawah Sidebar Serta Bebas Diakses Semua Role Pengguna), Pembatasan Otorisasi Akses Admin Customizer / Theme Settings di Topbar Header & Offcanvas Panel (Hanya Role `superadmin` & `admin` yang Dapat Melihat dan Mengakses), Pembersihan Selektor Realtime JS `menu_special_menu` di `fitur-aplikasi.js` |
 | **`v3.0.1`** | `2026-09-29 23:40 WIB` | Universal Auth Submit Button Loading Engine (Spinner pada Login, Register, Lupa Password, Reset, Verifikasi, dll), Dukungan Aplikasi Mobile Responsive Overhaul across Menu, Profil Aplikasi, Fitur Aplikasi (Quick Intro Banner 4-Baris Terpusat, 6 Widget Setting Gap Rapih, Tab Icon-Only, Filter & Bulk Actions Full-Width), Backup Database (DROP & CREATE DATABASE Switch Toggle Terpusat di Atas, Form Footer Ekspor Full-Width & Riwayat Header), Dashboard Hero Avatar Rounded Square (`rounded-3`, 105x105px) Matching Greeting-to-Motto Height, Strict CSS Media Query Isolation Standard (`@media (max-width: 767.98px)`) & Refinement Project Rule 19 |
 | **`v3.0.0`** | `2026-09-29 12:38 WIB` | Mobile Responsive Experience Overhaul across User Management & Data Login (`admin/manajemenpengguna/data-login` & `admin/manajemenpengguna/users`), Application Timezone Standardization (`APP_TIMEZONE=Asia/Jakarta`), Avatar Upload Multi-Row Sequence & 2-Column Desktop Grid in User Form Modal, Centered Multi-Line Card Header & Full-Width Modal Buttons, Architectural Rules Expansion (`.agents/AGENTS.md` Rules 18-22) |
 | **`v2.9.9`** | `2026-09-29 07:41 WIB` | Storage Symlink 1-Click Auto-Repair Engine & Auto-Healing on Media Scan in Pengaturan Sistem (`admin/dukunganaplikasi/fitur-aplikasi`), Dynamic Maintenance Mode (`503.blade.php`) & Sesi Kedaluwarsa (`419.blade.php`) Copyright from Profil Aplikasi, Clean URL & Hashtag-Free Tab Navigation Standard (`.agents/AGENTS.md` Rule 17) |

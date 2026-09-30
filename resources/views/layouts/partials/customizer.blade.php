@@ -1,3 +1,4 @@
+@if (auth()->check() && auth()->user()->hasAnyRole(['superadmin', 'admin']))
 <div class="offcanvas offcanvas-end overflow-hidden" tabindex="-1" id="theme-settings-offcanvas">
     <div class="d-flex justify-content-between text-bg-primary gap-2 p-3"
         style="background-image: url(assets/images/settings-bg.png)">
@@ -505,3 +506,4 @@
         </div>
     </div>
 </div>
+@endif

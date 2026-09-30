@@ -501,8 +501,7 @@ document.addEventListener('DOMContentLoaded', function() {
             'topbar_fullscreen': '#fullscreen-toggler',
             'topbar_monochrome': '#monochrome-toggler',
             'topbar_customizer': '#theme-settings-toggler',
-            'topbar_language': '#language-selector',
-            'menu_special_menu': '.sidenav-special-bottom'
+            'topbar_language': '#language-selector'
         };
 
         if (idMap[featureCode]) {

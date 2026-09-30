@@ -139,7 +139,7 @@ class FiturAplikasiSeeder extends Seeder
                 'deskripsi' => 'Kelompok menu dashboard template (Analytics, CRM, dll)',
                 'icon' => 'ti ti-home',
                 'status' => false,
-                'urutan' => 13,
+                'urutan' => 12,
                 'is_system' => true,
             ],
             [
@@ -149,7 +149,7 @@ class FiturAplikasiSeeder extends Seeder
                 'deskripsi' => 'Kelompok menu aplikasi template (Calendar, Chat, Email, dll)',
                 'icon' => 'ti ti-brand-hipchat',
                 'status' => false,
-                'urutan' => 14,
+                'urutan' => 13,
                 'is_system' => true,
             ],
             [
@@ -159,7 +159,7 @@ class FiturAplikasiSeeder extends Seeder
                 'deskripsi' => 'Kelompok menu halaman kustom template (Auth, Error, dll)',
                 'icon' => 'ti ti-file-description',
                 'status' => false,
-                'urutan' => 15,
+                'urutan' => 14,
                 'is_system' => true,
             ],
             [
@@ -169,7 +169,7 @@ class FiturAplikasiSeeder extends Seeder
                 'deskripsi' => 'Kelompok menu demo layout template (Horizontal, Detached, dll)',
                 'icon' => 'ti ti-layout-grid-add',
                 'status' => false,
-                'urutan' => 16,
+                'urutan' => 15,
                 'is_system' => true,
             ],
             [
@@ -179,7 +179,7 @@ class FiturAplikasiSeeder extends Seeder
                 'deskripsi' => 'Kelompok menu komponen UI template (Forms, Tables, Charts, dll)',
                 'icon' => 'ti ti-components',
                 'status' => false,
-                'urutan' => 17,
+                'urutan' => 16,
                 'is_system' => true,
             ],
             [
@@ -189,7 +189,7 @@ class FiturAplikasiSeeder extends Seeder
                 'deskripsi' => 'Kelompok menu dokumentasi bawaan template & changelog',
                 'icon' => 'ti ti-books',
                 'status' => false,
-                'urutan' => 18,
+                'urutan' => 17,
                 'is_system' => true,
             ],
             [
@@ -199,20 +199,13 @@ class FiturAplikasiSeeder extends Seeder
                 'deskripsi' => 'Kelompok menu bertingkat multi-level & item disabled',
                 'icon' => 'ti ti-list-details',
                 'status' => false,
-                'urutan' => 19,
-                'is_system' => true,
-            ],
-            [
-                'kode_fitur' => 'menu_special_menu',
-                'nama_fitur' => 'Menu Spesial (Special Menu)',
-                'kategori' => 'menu_group',
-                'deskripsi' => 'Tombol menu spesial ber-highlight di bagian bawah sidebar',
-                'icon' => 'ti ti-star',
-                'status' => true,
-                'urutan' => 20,
+                'urutan' => 18,
                 'is_system' => true,
             ],
         ];
+
+        // Ensure legacy special menu feature toggle is removed from database
+        FiturAplikasi::where('kode_fitur', 'menu_special_menu')->delete();
 
         foreach ($features as $feat) {
             FiturAplikasi::updateOrCreate(
