@@ -116,7 +116,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 3.0.3 -->
+                        <!-- Version 3.0.4 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -124,8 +124,37 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v3.0.3</h5>
+                                        <h5 class="fw-bold mb-0">v3.0.4</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.4</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-30 08:02 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Integrasi Langsung Full Icons Grid pada Halaman Komponen Tabler &amp; Lucide</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Full Tabler Icons Integration ([<code>tabler.blade.php</code>](file:///c:/laragon/finnally/repalogic-dashboard/resources/views/template/components/icons/tabler.blade.php)):</strong> Menampilkan seluruh 5.000+ ikon Tabler lengkap dengan toolbar pencarian real-time, slider ukuran ikon, pemilih warna (color picker), tombol reset, snippet code board interaktif, dan fitur click-to-copy langsung pada halaman utama Tabler tanpa menghapus seksi Overview, Usage, Colors, dan Sizes. Tombol navigasi eksternal "View All Icons" kini ditiadakan.</li>
+                                    <li><strong class="text-dark">Full Lucide Icons Integration ([<code>lucide.blade.php</code>](file:///c:/laragon/finnally/repalogic-dashboard/resources/views/template/components/icons/lucide.blade.php)):</strong> Menampilkan seluruh koleksi ikon SVG Lucide lengkap dengan kontrol toolbar dan generator snippet HTML langsung di halaman utama Lucide sambil mempertahankan seluruh seksi contoh (Usage, Colors, Fill Colors, Sizes).</li>
+                                    <li><strong class="text-dark">Modular Partial Architecture:</strong> Memisahkan dataset ikon besar ke dalam sub-partial modular (<code>_tabler_grid.blade.php</code> dan <code>_lucide_grid.blade.php</code>) serta mengoptimalkan rute alias <code>-full</code> agar mereferensikan halaman utama secara efisien tanpa duplikasi kode.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark border fs-xs">Tabler Icons</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Lucide Icons</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Full Icon Grid</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Live Search</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Icon Toolbar</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 3.0.3 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-check fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v3.0.3</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.3</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-30 07:54 WIB</span>

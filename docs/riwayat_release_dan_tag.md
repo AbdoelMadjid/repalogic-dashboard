@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v3.0.3`  
-> **Terakhir Diperbarui:** 30 September 2026 07:54 WIB  
+> **Versi Terbaru:** `v3.0.4`  
+> **Terakhir Diperbarui:** 30 September 2026 08:02 WIB  
 
 ---
 
@@ -13,6 +13,7 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
 
 | Tag / Versi | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waktu & Tanggal Rilis (WIB)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Deskripsi / Catatan Perubahan |
 | :--- | :---: | :--- |
+| **`v3.0.4`** | `2026-09-30 08:02 WIB` | Integrasi Langsung Full Icons Grid pada Halaman Komponen Tabler (`tabler.blade.php`) & Lucide (`lucide.blade.php`), Menampilkan Seluruh 5.000+ Ikon dengan Toolbar Pencarian Real-Time, Slider Ukuran, Color Picker, Reset, Snippet Board, dan Click-to-Copy Tanpa Menghapus Seksi Contoh (Usage, Colors, Sizes), Penghapusan Tombol "View All Icons" Eksternal & Modularisasi Sub-Partials |
 | **`v3.0.3`** | `2026-09-30 07:54 WIB` | Penyatuan Seluruh Kelompok Menu Sidebar Template Menjadi 1 Sakelar Kontrol Terpadu (`menu_group_template` pada `FiturAplikasiSeeder.php`, `sidenav.blade.php`, dan `fitur-aplikasi.blade.php`), Pembersihan Record Database Lama (`menu_group_main`, `menu_group_apps`, `menu_group_custom_pages`, `menu_group_layouts`, `menu_group_components`, `menu_group_documentation`, `menu_group_menu_item`) Menjadi 12 Fitur Terpadu |
 | **`v3.0.2`** | `2026-09-30 07:45 WIB` | Pembersihan Database Fitur Special Menu (Dikeluarkan dari `app_features` dan `FiturAplikasiSeeder.php`, Tampil Permanen di Bagian Bawah Sidebar Serta Bebas Diakses Semua Role Pengguna), Pembatasan Otorisasi Akses Admin Customizer / Theme Settings di Topbar Header & Offcanvas Panel (Hanya Role `superadmin` & `admin` yang Dapat Melihat dan Mengakses), Pembersihan Selektor Realtime JS `menu_special_menu` di `fitur-aplikasi.js` |
 | **`v3.0.1`** | `2026-09-29 23:40 WIB` | Universal Auth Submit Button Loading Engine (Spinner pada Login, Register, Lupa Password, Reset, Verifikasi, dll), Dukungan Aplikasi Mobile Responsive Overhaul across Menu, Profil Aplikasi, Fitur Aplikasi (Quick Intro Banner 4-Baris Terpusat, 6 Widget Setting Gap Rapih, Tab Icon-Only, Filter & Bulk Actions Full-Width), Backup Database (DROP & CREATE DATABASE Switch Toggle Terpusat di Atas, Form Footer Ekspor Full-Width & Riwayat Header), Dashboard Hero Avatar Rounded Square (`rounded-3`, 105x105px) Matching Greeting-to-Motto Height, Strict CSS Media Query Isolation Standard (`@media (max-width: 767.98px)`) & Refinement Project Rule 19 |
