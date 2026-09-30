@@ -1574,7 +1574,6 @@
                                     <th class="align-middle text-center text-nowrap">Jenis Media</th>
                                     <th class="align-middle text-center text-nowrap">Deskripsi &amp; Informasi Berkas</th>
                                     <th class="align-middle text-center text-nowrap">Waktu Pembaruan (WIB)</th>
-                                    <th class="align-middle text-center text-nowrap" style="width: 100px;">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1624,16 +1623,10 @@
                                             <div>{{ $mh->created_at ? $mh->created_at->format('d M Y H:i') . ' WIB' : '-' }}</div>
                                             <small class="text-muted opacity-75">{{ $mh->created_at ? $mh->created_at->diffForHumans() : '' }}</small>
                                         </td>
-                                        <td class="text-center">
-                                            <button type="button" class="btn btn-xs btn-outline-primary rounded-pill btn-view-user-history d-inline-flex align-items-center gap-1" data-user-id="{{ $mhUser?->id }}" title="Lihat Riwayat Interaksi">
-                                                <i class="ti ti-history"></i>
-                                                <span>Riwayat</span>
-                                            </button>
-                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="text-center py-4 text-muted">
+                                        <td colspan="5" class="text-center py-4 text-muted">
                                             <i class="ti ti-photo-off fs-28 text-muted d-block mb-1"></i>
                                             <span>Belum ada catatan riwayat pembaruan foto profil atau sampul Anda.</span>
                                         </td>
@@ -1642,14 +1635,11 @@
                             </tbody>
                         </table>
                     </div>
-                             </tbody>
-                         </table>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
- </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 
 <!-- MODAL DETAIL RIWAYAT INTERAKSI PENGGUNA (Rule 4 & Rule 20 Standard) -->
