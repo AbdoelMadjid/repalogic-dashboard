@@ -510,6 +510,10 @@
 }
 
 /* 11. Custom Nav-Pills and Activity History Directory Tabs */
+.custom-nav-pills {
+    margin-bottom: 1.5rem !important;
+}
+
 .custom-nav-pills .nav-link {
     font-size: 0.8125rem;
     font-weight: 500;
@@ -538,4 +542,9 @@
     background-color: rgba(255, 255, 255, 0.25) !important;
     color: #ffffff !important;
 }
+
+#directoryTabContent {
+    padding-top: 0.5rem;
+}
+
 

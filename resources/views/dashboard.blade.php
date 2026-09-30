@@ -973,7 +973,7 @@
 
                 <div class="card-body p-3.5">
                     <!-- Nav Tabs Navigasi Linimasa & Direktori (Rule 17, 18 & 19 Standard) -->
-                    <ul class="nav nav-pills custom-nav-pills p-1 bg-light rounded-3 mb-3.5 flex-nowrap overflow-x-auto" id="directoryTab" role="tablist">
+                    <ul class="nav nav-pills custom-nav-pills p-1 bg-light rounded-3 mb-4 flex-nowrap overflow-x-auto" id="directoryTab" role="tablist">
                         <li class="nav-item flex-shrink-0" role="presentation">
                             <button class="nav-link active d-flex align-items-center gap-1.5" id="tab-contacts-btn" data-bs-toggle="pill" data-bs-target="#tab-directory-contacts" type="button" role="tab" aria-controls="tab-directory-contacts" aria-selected="true" title="Direktori Kontak ({{ $contactUsers->count() }})">
                                 <i class="ti ti-users"></i>
@@ -1012,7 +1012,7 @@
                     </ul>
 
                     <!-- TAB CONTENT AREA -->
-                    <div class="tab-content" id="directoryTabContent">
+                    <div class="tab-content pt-2" id="directoryTabContent">
                         <!-- TAB 1: DIREKTORI KONTAK & GRID PENGGUNA -->
                         <div class="tab-pane fade show active" id="tab-directory-contacts" role="tabpanel" aria-labelledby="tab-contacts-btn">
                             <!-- Filter Kategori Pertemanan (Content Widget - Right Aligned & Responsive Mobile) -->
