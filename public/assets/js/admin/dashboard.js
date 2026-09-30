@@ -1194,7 +1194,314 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Jalankan Polling setiap 3.5 detik (Real-time update)
+    // 7. Modal Riwayat Interaksi Pengguna (Activity History Modal Engine)
+    const modalUserHistoryEl = document.getElementById('modalUserActivityHistory');
+    let modalUserHistoryInstance = null;
+
+    document.addEventListener('click', async function (e) {
+        const btnHistory = e.target.closest('.btn-view-user-history');
+        if (!btnHistory) return;
+
+        e.preventDefault();
+        const userId = btnHistory.getAttribute('data-user-id');
+        if (!userId) return;
+
+        if (!modalUserHistoryInstance && modalUserHistoryEl && typeof bootstrap !== 'undefined') {
+            modalUserHistoryInstance = bootstrap.Modal.getOrCreateInstance(modalUserHistoryEl);
+        }
+
+        // Reset to first tab (Pertemanan)
+        const firstModalTabBtn = document.getElementById('user-m-tab-friendship-btn');
+        if (firstModalTabBtn && typeof bootstrap !== 'undefined') {
+            const tabObj = bootstrap.Tab.getOrCreateInstance(firstModalTabBtn);
+            if (tabObj) tabObj.show();
+        }
+
+        // Tampilkan placeholder loading pada modal
+        const nameEl = document.getElementById('user-history-name');
+        const emailEl = document.getElementById('user-history-email');
+        const roleEl = document.getElementById('user-history-role');
+        const avatarEl = document.getElementById('user-history-avatar');
+        const coverBannerEl = document.getElementById('user-history-cover-banner');
+        const onlineBadge = document.getElementById('user-history-online-badge');
+        const mottoBox = document.getElementById('user-history-motto-box');
+        const mottoEl = document.getElementById('user-history-motto');
+        const fullChatBtn = document.getElementById('user-modal-btn-open-full-chat');
+        const actionChatBtn = document.getElementById('user-modal-action-chat-btn');
+
+        if (nameEl) nameEl.textContent = 'Memuat Data...';
+        if (emailEl) emailEl.textContent = 'Mengambil informasi pengguna...';
+        if (roleEl) roleEl.textContent = 'Memuat';
+        if (onlineBadge) onlineBadge.classList.add('d-none');
+        if (mottoBox) mottoBox.classList.add('d-none');
+        if (avatarEl) avatarEl.src = '/assets/images/users/user-default.jpg';
+        if (coverBannerEl) coverBannerEl.style.backgroundImage = 'none';
+
+        // Set spinner pada konten tab
+        const friendshipTimelineEl = document.getElementById('user-modal-friendship-timeline');
+        const friendshipStatusBox = document.getElementById('user-modal-friendship-status-box');
+        const friendshipStatusText = document.getElementById('user-modal-friendship-status-text');
+        const friendshipTimeText = document.getElementById('user-modal-friendship-time-text');
+        const myLikeStatusEl = document.getElementById('user-modal-my-like-status');
+        const targetLikeStatusEl = document.getElementById('user-modal-target-like-status');
+        const totalLikesCountEl = document.getElementById('user-modal-total-likes-count');
+        const chatListEl = document.getElementById('user-modal-chat-list');
+        const mediaListEl = document.getElementById('user-modal-media-list');
+
+        const spinnerHtml = `
+            <div class="text-center py-4 text-muted">
+                <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
+                <div class="fs-12">Memuat riwayat interaksi...</div>
+            </div>
+        `;
+
+        if (friendshipTimelineEl) friendshipTimelineEl.innerHTML = spinnerHtml;
+        if (chatListEl) chatListEl.innerHTML = spinnerHtml;
+        if (mediaListEl) mediaListEl.innerHTML = spinnerHtml;
+
+        if (modalUserHistoryInstance) {
+            modalUserHistoryInstance.show();
+        }
+
+        try {
+            const url = `${routes.userHistory}/${userId}`;
+            const res = await fetch(url, {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            if (!res.ok) {
+                if (window.showError) window.showError('Gagal memuat data riwayat pengguna.');
+                return;
+            }
+
+            const data = await res.json();
+            if (!data.success) {
+                if (window.showError) window.showError(data.message || 'Gagal memuat data.');
+                return;
+            }
+
+            const user = data.user || {};
+
+            // Header info
+            if (nameEl) nameEl.textContent = user.name || 'Pengguna';
+            if (emailEl) emailEl.textContent = user.email || '-';
+            if (roleEl) roleEl.textContent = (user.role_name || 'USER').toUpperCase();
+            if (avatarEl && user.avatar_url) avatarEl.src = user.avatar_url;
+            if (coverBannerEl && user.cover_bg_url) {
+                coverBannerEl.style.backgroundImage = `url("${user.cover_bg_url}")`;
+                coverBannerEl.style.backgroundPosition = `center ${user.cover_position_y || 50}%`;
+            }
+
+            if (onlineBadge) {
+                if (user.is_online) {
+                    onlineBadge.classList.remove('d-none');
+                } else {
+                    onlineBadge.classList.add('d-none');
+                }
+            }
+
+            if (mottoBox && mottoEl) {
+                if (user.motto) {
+                    mottoEl.textContent = `"${user.motto}"`;
+                    mottoBox.classList.remove('d-none');
+                } else {
+                    mottoBox.classList.add('d-none');
+                }
+            }
+
+            const chatTargetUrl = `${routes.messagesIndex}?user_id=${user.id}`;
+            if (fullChatBtn) fullChatBtn.href = chatTargetUrl;
+            if (actionChatBtn) actionChatBtn.href = chatTargetUrl;
+
+            // 1. Tab Pertemanan
+            const fStatus = data.friendship_status;
+            if (friendshipStatusText && friendshipTimeText) {
+                if (fStatus === 'self') {
+                    friendshipStatusText.innerHTML = '<span class="badge bg-primary px-2.5 py-1 rounded-pill"><i class="ti ti-user me-1"></i> Akun Anda Sendiri</span>';
+                    friendshipTimeText.textContent = 'Ini adalah profil akun Anda sendiri.';
+                } else if (fStatus === 'friends') {
+                    friendshipStatusText.innerHTML = '<span class="badge bg-success px-2.5 py-1 rounded-pill"><i class="ti ti-check me-1"></i> Sudah Berteman</span>';
+                    friendshipTimeText.textContent = `Anda dan ${user.name} saat ini terhubung sebagai teman.`;
+                } else if (fStatus === 'pending_sent') {
+                    friendshipStatusText.innerHTML = '<span class="badge bg-warning text-dark px-2.5 py-1 rounded-pill"><i class="ti ti-clock me-1"></i> Ajakan Terkirim</span>';
+                    friendshipTimeText.textContent = `Menunggu respon konfirmasi dari ${user.name}.`;
+                } else if (fStatus === 'pending_received') {
+                    friendshipStatusText.innerHTML = '<span class="badge bg-info text-white px-2.5 py-1 rounded-pill"><i class="ti ti-user-plus me-1"></i> Ajakan Masuk</span>';
+                    friendshipTimeText.textContent = `${user.name} telah mengirimkan ajakan berteman kepada Anda.`;
+                } else {
+                    friendshipStatusText.innerHTML = '<span class="badge bg-secondary px-2.5 py-1 rounded-pill"><i class="ti ti-user-x me-1"></i> Belum Berteman</span>';
+                    friendshipTimeText.textContent = `Belum ada ajakan pertemanan yang aktif dengan ${user.name}.`;
+                }
+            }
+
+            if (friendshipTimelineEl) {
+                const fLogs = data.friendship_history || [];
+                if (fLogs.length === 0) {
+                    friendshipTimelineEl.innerHTML = `
+                        <div class="text-center py-3 text-muted fs-12">
+                            <i class="ti ti-clock-off fs-20 d-block mb-1 opacity-50"></i>
+                            Belum ada riwayat transaksi pertemanan dengan ${user.name}.
+                        </div>
+                    `;
+                } else {
+                    let logsHtml = '';
+                    fLogs.forEach((item, idx) => {
+                        const sName = item.sender ? item.sender.name : 'User';
+                        const rName = item.receiver ? item.receiver.name : 'User';
+                        let badgeStatus = `<span class="badge bg-secondary-subtle text-secondary fs-xxs">${item.status}</span>`;
+                        if (item.status === 'accepted') {
+                            badgeStatus = '<span class="badge bg-success-subtle text-success fs-xxs"><i class="ti ti-check me-0.5"></i> Berteman</span>';
+                        } else if (item.status === 'pending') {
+                            badgeStatus = '<span class="badge bg-warning-subtle text-warning fs-xxs"><i class="ti ti-clock me-0.5"></i> Menunggu</span>';
+                        } else if (item.status === 'rejected') {
+                            badgeStatus = '<span class="badge bg-danger-subtle text-danger fs-xxs"><i class="ti ti-x me-0.5"></i> Ditolak</span>';
+                        }
+
+                        logsHtml += `
+                            <div class="list-group-item px-3 py-2.5 d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="bg-light rounded-circle p-1.5 text-primary border">
+                                        <i class="ti ti-arrows-left-right fs-14"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fs-12 fw-semibold text-dark">
+                                            <span>${escapeHtml(sName)}</span> <i class="ti ti-arrow-right fs-10 text-muted mx-0.5"></i> <span>${escapeHtml(rName)}</span>
+                                        </div>
+                                        <div class="fs-11 text-muted">${item.created_at_human || item.created_at}</div>
+                                    </div>
+                                </div>
+                                <div>${badgeStatus}</div>
+                            </div>
+                        `;
+                    });
+                    friendshipTimelineEl.innerHTML = logsHtml;
+                }
+            }
+
+            // 2. Tab Suka Profil
+            if (myLikeStatusEl) {
+                if (data.is_liked_by_me) {
+                    myLikeStatusEl.innerHTML = `<span class="text-danger fw-bold"><i class="ti ti-heart-filled me-1"></i> Menyukai Profil Ini</span>`;
+                } else {
+                    myLikeStatusEl.innerHTML = `<span class="text-muted"><i class="ti ti-heart-off me-1"></i> Belum Disukai</span>`;
+                }
+            }
+
+            if (targetLikeStatusEl) {
+                if (data.is_liked_target_me) {
+                    targetLikeStatusEl.innerHTML = `<span class="text-danger fw-bold"><i class="ti ti-heart-filled me-1"></i> Menyukai Profil Anda</span>`;
+                } else {
+                    targetLikeStatusEl.innerHTML = `<span class="text-muted"><i class="ti ti-heart-off me-1"></i> Belum Menyukai Anda</span>`;
+                }
+            }
+
+            if (totalLikesCountEl) {
+                totalLikesCountEl.textContent = data.total_likes_count || 0;
+            }
+
+            // 3. Tab Obrolan Chat
+            if (chatListEl) {
+                const cLogs = data.chat_history || [];
+                if (cLogs.length === 0) {
+                    chatListEl.innerHTML = `
+                        <div class="text-center py-4 text-muted">
+                            <i class="ti ti-message-off fs-24 d-block mb-1.5 opacity-50"></i>
+                            <div class="fs-12">Belum ada riwayat pesan obrolan dengan ${user.name}.</div>
+                        </div>
+                    `;
+                } else {
+                    let chatsHtml = '<div class="d-flex flex-column gap-2">';
+                    cLogs.forEach(cMsg => {
+                        const isFromMe = cMsg.sender_id === config.userId;
+                        chatsHtml += `
+                            <div class="d-flex flex-column ${isFromMe ? 'align-items-end' : 'align-items-start'}">
+                                <div class="p-2.5 rounded-3 fs-12 ${isFromMe ? 'bg-primary text-white' : 'bg-white border text-dark shadow-sm'}" style="max-width: 80%;">
+                                    ${cMsg.attachment_path ? '<div class="mb-1 opacity-75"><i class="ti ti-paperclip me-1"></i>[Lampiran Berkas]</div>' : ''}
+                                    <div style="word-break: break-word;">${escapeHtml(cMsg.message || '')}</div>
+                                </div>
+                                <div class="fs-10 text-muted mt-0.5 px-1 d-flex align-items-center gap-1">
+                                    <span>${cMsg.created_at_human || cMsg.created_at}</span>
+                                    ${isFromMe ? (cMsg.is_read ? '<i class="ti ti-checks text-success fs-12" title="Dibaca"></i>' : '<i class="ti ti-check text-muted fs-12" title="Terkirim"></i>') : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    chatsHtml += '</div>';
+                    chatListEl.innerHTML = chatsHtml;
+                    chatListEl.scrollTop = chatListEl.scrollHeight;
+                }
+            }
+
+            // 4. Tab Riwayat Media
+            if (mediaListEl) {
+                const mLogs = data.media_history || [];
+                if (mLogs.length === 0) {
+                    mediaListEl.innerHTML = `
+                        <div class="text-center py-4 text-muted">
+                            <i class="ti ti-photo-off fs-24 d-block mb-1.5 opacity-50"></i>
+                            <div class="fs-12">Belum ada riwayat perubahan foto profil atau foto sampul.</div>
+                        </div>
+                    `;
+                } else {
+                    let mediaHtml = '';
+                    mLogs.forEach(mItem => {
+                        const isAvatar = mItem.media_type === 'avatar';
+                        mediaHtml += `
+                            <div class="list-group-item px-3 py-2.5 d-flex align-items-center justify-content-between gap-2">
+                                <div class="d-flex align-items-center gap-2.5 min-w-0">
+                                    <img src="${mItem.url}" alt="Preview" class="${isAvatar ? 'rounded-circle' : 'rounded'} border shadow-sm flex-shrink-0" style="width: 44px; height: 44px; object-fit: cover;">
+                                    <div class="min-w-0">
+                                        <div class="d-flex align-items-center gap-1.5 mb-0.5">
+                                            <span class="badge ${isAvatar ? 'bg-primary-subtle text-primary' : 'bg-info-subtle text-info'} fs-xxs rounded-pill">
+                                                <i class="ti ${isAvatar ? 'ti-user' : 'ti-photo'} me-0.5"></i> ${isAvatar ? 'Avatar Profil' : 'Foto Sampul'}
+                                            </span>
+                                            <span class="fs-12 fw-semibold text-dark text-truncate">${escapeHtml(mItem.description || 'Pembaruan')}</span>
+                                        </div>
+                                        <div class="fs-11 text-muted">${mItem.created_at_human || mItem.created_at}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    mediaListEl.innerHTML = mediaHtml;
+                }
+            }
+
+        } catch (error) {
+            console.error('Error fetching user history:', error);
+            if (window.showError) window.showError('Terjadi kesalahan saat memuat riwayat pengguna.');
+        }
+    });
+
+    // 8. Live Filter Search untuk Tabel Riwayat Pertemanan, Suka, Chat & Media
+    function bindTableSearchFilter(inputId, rowSelector) {
+        const inputEl = document.getElementById(inputId);
+        if (!inputEl) return;
+
+        inputEl.addEventListener('input', function () {
+            const query = (this.value || '').toLowerCase().trim();
+            const rows = document.querySelectorAll(rowSelector);
+
+            rows.forEach(row => {
+                const searchText = (row.getAttribute('data-search-text') || row.innerText || '').toLowerCase();
+                if (!query || searchText.includes(query)) {
+                    row.classList.remove('d-none');
+                } else {
+                    row.classList.add('d-none');
+                }
+            });
+        });
+    }
+
+    bindTableSearchFilter('filter-friendship-history-search', '.friendship-history-row');
+    bindTableSearchFilter('filter-likes-history-search', '.likes-history-row');
+    bindTableSearchFilter('filter-chats-history-search', '.chats-history-row');
+    bindTableSearchFilter('filter-media-history-search', '.media-history-row');
+
+    // 9. Jalankan Polling setiap 3.5 detik (Real-time update)
     if (routes.pollDashboard) {
         setInterval(pollDashboardData, 3500);
         document.addEventListener('visibilitychange', function () {
@@ -1204,6 +1511,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+
 
 
 

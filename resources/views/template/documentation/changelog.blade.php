@@ -116,7 +116,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 3.0.6 -->
+                        <!-- Version 3.0.7 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -124,8 +124,41 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v3.0.6</h5>
+                                        <h5 class="fw-bold mb-0">v3.0.7</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.7</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-30 14:20 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Integrasi Tab Riwayat Interaksi Pengguna &amp; Media Audit Trail Engine pada Direktori Pengguna Dashboard</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Pusat Tab Direktori Pengguna &amp; Jaringan Pertemanan (<code>dashboard.blade.php</code>):</strong> Penambahan 5 tab navigasi linimasa terstruktur (<code>Direktori Kontak</code>, <code>Riwayat Pertemanan</code>, <code>Riwayat Suka Profil</code>, <code>Riwayat Obrolan Chat</code>, dan <code>Riwayat Avatar &amp; Sampul</code>) dengan dukungan badge dinamis dan tata letak responsif seluler (Rule 17 &amp; Rule 18).</li>
+                                    <li><strong class="text-dark">Riwayat Pertemanan &amp; Suka Profil (<code>FriendshipController.php</code> &amp; <code>DashboardController.php</code>):</strong> Tabel riwayat linimasa ajakan berteman (pengirim, penerima, status hubungan, waktu permintaan &amp; pembaruan) serta log apresiasi suka profil antar-pengguna dengan filter pencarian instan.</li>
+                                    <li><strong class="text-dark">Riwayat Pesan Obrolan Chat (<code>dashboard.blade.php</code> &amp; <code>dashboard.js</code>):</strong> Tabel pencatatan kirim &amp; terima pesan obrolan pengguna dengan cuplikan pesan/lampiran, indikator centang baca, filter pencarian live, dan tombol direct shortcut ke chat hub.</li>
+                                    <li><strong class="text-dark">User Media History &amp; Audit Trail (<code>UserMediaHistory.php</code> &amp; Migration):</strong> Model dan tabel database <code>user_media_histories</code> untuk mencatat setiap riwayat pergantian foto profil avatar dan foto cover sampul (termasuk metadata posisi Y dan sumber perubahan) yang terpicu otomatis pada controller profil pengguna dan manajemen user.</li>
+                                    <li><strong class="text-dark">Modal Interaksi Detail Pengguna (<code>#modalUserActivityHistory</code>):</strong> Modal komprehensif untuk memeriksa riwayat interaksi per pengguna (banner cover header, status pertemanan, status apresiasi timbal balik, gelembung obrolan chat terbaru, dan linimasa preview visual foto profil/sampul).</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark border fs-xs">Dashboard Interaction Tabs</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Friendship History</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Likes History</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Chat History</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Media History Engine</span>
+                                    <span class="badge bg-light text-dark border fs-xs">User Activity Modal</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 3.0.6 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-check fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v3.0.6</h5>
+                                        <span class="badge bg-secondary-subtle text-muted fs-xs">Previous Release</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.6</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-30 13:30 WIB</span>

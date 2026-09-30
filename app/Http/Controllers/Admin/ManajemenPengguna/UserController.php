@@ -60,6 +60,20 @@ class UserController extends Controller
             'approved_by' => ($validated['status'] ?? 'active') === 'active' ? auth()->id() : null,
         ]);
 
+        if ($avatarPath) {
+            \App\Models\UserMediaHistory::create([
+                'user_id' => $user->id,
+                'media_type' => 'avatar',
+                'file_path' => $avatarPath,
+                'file_name' => $request->file('avatar')->getClientOriginalName(),
+                'description' => 'Foto Avatar Pengguna Baru (Admin)',
+                'meta_data' => [
+                    'source' => 'admin_user_create',
+                    'created_by' => auth()->id(),
+                ],
+            ]);
+        }
+
         if (isset($validated['roles'])) {
             $user->syncRoles($validated['roles']);
         }
@@ -98,7 +112,20 @@ class UserController extends Controller
             if (!empty($user->avatar) && Storage::disk('public')->exists($user->avatar)) {
                 Storage::disk('public')->delete($user->avatar);
             }
-            $userData['avatar'] = $request->file('avatar')->store('avatars', 'public');
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+            $userData['avatar'] = $avatarPath;
+
+            \App\Models\UserMediaHistory::create([
+                'user_id' => $user->id,
+                'media_type' => 'avatar',
+                'file_path' => $avatarPath,
+                'file_name' => $request->file('avatar')->getClientOriginalName(),
+                'description' => 'Pembaruan Foto Avatar Pengguna (Admin)',
+                'meta_data' => [
+                    'source' => 'admin_user_update',
+                    'updated_by' => auth()->id(),
+                ],
+            ]);
         } elseif ($request->boolean('remove_avatar')) {
             if (!empty($user->avatar) && Storage::disk('public')->exists($user->avatar)) {
                 Storage::disk('public')->delete($user->avatar);

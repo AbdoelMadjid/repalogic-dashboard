@@ -64,6 +64,7 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
     // Fitur Pertemanan & Like Profil (admin/friendships)
     Route::prefix('friendships')->name('friendships.')->group(function () {
         Route::get('poll-dashboard', [FriendshipController::class, 'pollDashboard'])->name('poll-dashboard');
+        Route::get('user-history/{user}', [FriendshipController::class, 'getUserHistory'])->name('user-history');
         Route::post('toggle-like/{user}', [FriendshipController::class, 'toggleLike'])->name('toggle-like');
         Route::post('send/{user}', [FriendshipController::class, 'sendRequest'])->name('send');
         Route::post('accept/{id}', [FriendshipController::class, 'acceptRequest'])->whereNumber('id')->name('accept');

@@ -508,3 +508,34 @@
         padding: 0.2rem 0.45rem;
     }
 }
+
+/* 11. Custom Nav-Pills and Activity History Directory Tabs */
+.custom-nav-pills .nav-link {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #475569;
+    border-radius: 0.5rem;
+    padding: 0.45rem 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.custom-nav-pills .nav-link:hover {
+    color: #3e60d5;
+    background-color: rgba(62, 96, 213, 0.08);
+}
+
+.custom-nav-pills .nav-link.active {
+    background-color: #3e60d5 !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(62, 96, 213, 0.35);
+}
+
+.custom-nav-pills .nav-link.active i {
+    color: #ffffff !important;
+}
+
+.custom-nav-pills .nav-link.active .badge {
+    background-color: rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+}
+

@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Friendship;
+use App\Models\Message;
 use App\Models\ProfileLike;
 use App\Models\User;
+use App\Models\UserMediaHistory;
 use App\Traits\HasNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -423,5 +425,123 @@ class FriendshipController extends Controller
 
         $this->notifyInfo($message, 'Pertemanan Dihapus');
         return back();
+    }
+
+    /**
+     * Get detailed user interaction history (friendship, likes, messages, avatar & cover changes).
+     */
+    public function getUserHistory(Request $request, User $user): JsonResponse
+    {
+        $currentUser = Auth::user();
+        if (!$currentUser) {
+            return response()->json(['success' => false, 'message' => 'Unauthenticated'], 401);
+        }
+
+        $friendship = $currentUser->getFriendshipWith($user);
+        $friendshipModel = $friendship['friendship'];
+
+        $isLikedByMe = $user->isLikedBy($currentUser);
+        $isLikingMe = $currentUser->isLikedBy($user);
+
+        // All friendship logs involving this target user
+        $friendshipLogs = Friendship::with(['sender', 'receiver'])
+            ->where(function ($q) use ($user) {
+                $q->where('sender_id', $user->id)
+                    ->orWhere('receiver_id', $user->id);
+            })
+            ->latest('updated_at')
+            ->take(20)
+            ->get()
+            ->map(function ($f) use ($user) {
+                return [
+                    'id' => $f->id,
+                    'status' => $f->status,
+                    'is_sender' => $f->sender_id === $user->id,
+                    'sender_name' => $f->sender?->name ?? 'User',
+                    'receiver_name' => $f->receiver?->name ?? 'User',
+                    'created_at_human' => $f->created_at ? $f->created_at->diffForHumans() : '-',
+                    'created_at_formatted' => $f->created_at ? $f->created_at->format('d M Y H:i') . ' WIB' : '-',
+                    'updated_at_formatted' => $f->updated_at ? $f->updated_at->format('d M Y H:i') . ' WIB' : '-',
+                ];
+            });
+
+        // Messages exchanged between current user and target user
+        $messages = Message::where(function ($q) use ($currentUser, $user) {
+                $q->where('sender_id', $currentUser->id)->where('receiver_id', $user->id);
+            })
+            ->orWhere(function ($q) use ($currentUser, $user) {
+                $q->where('sender_id', $user->id)->where('receiver_id', $currentUser->id);
+            })
+            ->latest('created_at')
+            ->take(15)
+            ->get()
+            ->reverse()
+            ->values()
+            ->map(function ($m) use ($currentUser) {
+                return [
+                    'id' => $m->id,
+                    'is_me' => $m->sender_id === $currentUser->id,
+                    'message' => $m->message,
+                    'attachment_path' => $m->attachment_path,
+                    'attachment_name' => $m->attachment_name,
+                    'attachment_type' => $m->attachment_type,
+                    'is_read' => (bool) $m->is_read,
+                    'time_formatted' => $m->created_at ? $m->created_at->format('H:i') : '',
+                    'date_formatted' => $m->created_at ? $m->created_at->format('d M Y') : '',
+                ];
+            });
+
+        // Media changes (avatar and cover) of target user
+        $mediaHistories = UserMediaHistory::where('user_id', $user->id)
+            ->latest('created_at')
+            ->take(20)
+            ->get()
+            ->map(function ($mh) {
+                return [
+                    'id' => $mh->id,
+                    'media_type' => $mh->media_type,
+                    'url' => $mh->url,
+                    'file_name' => $mh->file_name,
+                    'description' => $mh->description,
+                    'meta' => $mh->meta_data,
+                    'time_formatted' => $mh->created_at ? $mh->created_at->format('d M Y H:i') . ' WIB' : '-',
+                    'time_human' => $mh->created_at ? $mh->created_at->diffForHumans() : '-',
+                ];
+            });
+
+        return response()->json([
+            'success' => true,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'avatar_url' => $user->avatar_url,
+                'cover_bg_url' => $user->cover_bg_url,
+                'cover_position_y' => $user->cover_position_y ?? 50,
+                'role_name' => $user->role_name,
+                'is_online' => (bool) $user->is_online,
+                'motto' => $user->motto,
+                'telepon' => $user->detail->telepon ?? '',
+                'pekerjaan' => $user->detail->pekerjaan ?? '',
+                'kabupaten_kota' => $user->detail->kabupaten_kota ?? '',
+                'friends_count' => $user->friends_count,
+                'profile_likes_count' => $user->profile_likes_count,
+                'login_count' => $user->login_count ?? 0,
+            ],
+            'friendship' => [
+                'status' => $friendship['status'],
+                'id' => $friendshipModel?->id,
+                'created_at_formatted' => $friendshipModel?->created_at ? $friendshipModel->created_at->format('d M Y H:i') . ' WIB' : null,
+                'updated_at_formatted' => $friendshipModel?->updated_at ? $friendshipModel->updated_at->format('d M Y H:i') . ' WIB' : null,
+            ],
+            'likes' => [
+                'is_liked_by_me' => $isLikedByMe,
+                'is_liking_me' => $isLikingMe,
+                'total_likes' => $user->profile_likes_count,
+            ],
+            'messages' => $messages,
+            'media_histories' => $mediaHistories,
+            'friendship_logs' => $friendshipLogs,
+        ]);
     }
 }

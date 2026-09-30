@@ -66,5 +66,8 @@ class DatabaseSeeder extends Seeder
 
         // 8. Seed Tema & Seksi Website Landing Page
         $this->call(WebsiteThemeSeeder::class);
+
+        // 9. Seed Riwayat Media Pengguna (Avatar & Sampul)
+        $this->call(UserMediaHistorySeeder::class);
     }
 }

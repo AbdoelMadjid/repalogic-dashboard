@@ -972,7 +972,50 @@
                 </div>
 
                 <div class="card-body p-3.5">
-                    <!-- Filter Kategori Pertemanan (Content Widget - Right Aligned & Responsive Mobile) -->
+                    <!-- Nav Tabs Navigasi Linimasa & Direktori (Rule 17, 18 & 19 Standard) -->
+                    <ul class="nav nav-pills custom-nav-pills p-1 bg-light rounded-3 mb-3.5 flex-nowrap overflow-x-auto" id="directoryTab" role="tablist">
+                        <li class="nav-item flex-shrink-0" role="presentation">
+                            <button class="nav-link active d-flex align-items-center gap-1.5" id="tab-contacts-btn" data-bs-toggle="pill" data-bs-target="#tab-directory-contacts" type="button" role="tab" aria-controls="tab-directory-contacts" aria-selected="true" title="Direktori Kontak ({{ $contactUsers->count() }})">
+                                <i class="ti ti-users"></i>
+                                <span class="d-none d-md-inline">Direktori Kontak</span>
+                                <span class="badge bg-primary text-white rounded-pill fs-xxs ms-1">{{ $contactUsers->count() }}</span>
+                            </button>
+                        </li>
+                        <li class="nav-item flex-shrink-0" role="presentation">
+                            <button class="nav-link d-flex align-items-center gap-1.5" id="tab-friendships-btn" data-bs-toggle="pill" data-bs-target="#tab-directory-friendships" type="button" role="tab" aria-controls="tab-directory-friendships" aria-selected="false" title="Riwayat Pertemanan ({{ $friendshipHistories->count() }})">
+                                <i class="ti ti-user-check"></i>
+                                <span class="d-none d-md-inline">Riwayat Pertemanan</span>
+                                <span class="badge bg-success text-white rounded-pill fs-xxs ms-1">{{ $friendshipHistories->count() }}</span>
+                            </button>
+                        </li>
+                        <li class="nav-item flex-shrink-0" role="presentation">
+                            <button class="nav-link d-flex align-items-center gap-1.5" id="tab-likes-btn" data-bs-toggle="pill" data-bs-target="#tab-directory-likes" type="button" role="tab" aria-controls="tab-directory-likes" aria-selected="false" title="Riwayat Suka Profil ({{ $profileLikeHistories->count() }})">
+                                <i class="ti ti-heart-filled text-danger"></i>
+                                <span class="d-none d-md-inline">Riwayat Suka</span>
+                                <span class="badge bg-danger text-white rounded-pill fs-xxs ms-1">{{ $profileLikeHistories->count() }}</span>
+                            </button>
+                        </li>
+                        <li class="nav-item flex-shrink-0" role="presentation">
+                            <button class="nav-link d-flex align-items-center gap-1.5" id="tab-chats-btn" data-bs-toggle="pill" data-bs-target="#tab-directory-chats" type="button" role="tab" aria-controls="tab-directory-chats" aria-selected="false" title="Riwayat Obrolan Chat ({{ $chatHistories->count() }})">
+                                <i class="ti ti-messages"></i>
+                                <span class="d-none d-md-inline">Riwayat Chat</span>
+                                <span class="badge bg-info text-white rounded-pill fs-xxs ms-1">{{ $chatHistories->count() }}</span>
+                            </button>
+                        </li>
+                        <li class="nav-item flex-shrink-0" role="presentation">
+                            <button class="nav-link d-flex align-items-center gap-1.5" id="tab-media-btn" data-bs-toggle="pill" data-bs-target="#tab-directory-media" type="button" role="tab" aria-controls="tab-directory-media" aria-selected="false" title="Riwayat Avatar & Sampul ({{ $mediaHistories->count() }})">
+                                <i class="ti ti-photo-edit"></i>
+                                <span class="d-none d-md-inline">Riwayat Avatar &amp; Sampul</span>
+                                <span class="badge bg-secondary text-white rounded-pill fs-xxs ms-1">{{ $mediaHistories->count() }}</span>
+                            </button>
+                        </li>
+                    </ul>
+
+                    <!-- TAB CONTENT AREA -->
+                    <div class="tab-content" id="directoryTabContent">
+                        <!-- TAB 1: DIREKTORI KONTAK & GRID PENGGUNA -->
+                        <div class="tab-pane fade show active" id="tab-directory-contacts" role="tabpanel" aria-labelledby="tab-contacts-btn">
+                            <!-- Filter Kategori Pertemanan (Content Widget - Right Aligned & Responsive Mobile) -->
                     <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3.5 pb-3 border-bottom">
                         <div class="btn-group btn-group-sm friendship-filter-group" role="group" aria-label="Filter Pertemanan">
                             <button type="button" class="btn btn-outline-primary active btn-friend-filter d-inline-flex align-items-center gap-1.5" data-filter="all" title="Semua Pengguna ({{ $contactUsers->count() }})">
@@ -1196,6 +1239,9 @@
                                                         class="btn btn-sm btn-light border text-muted px-2" title="Kirim Pesan Langsung">
                                                         <i class="ti ti-messages"></i>
                                                     </a>
+                                                    <button type="button" class="btn btn-sm btn-light border text-primary px-2 btn-view-user-history" data-user-id="{{ $cUser->id }}" title="Lihat Riwayat Interaksi">
+                                                        <i class="ti ti-history"></i>
+                                                    </button>
                                                 </div>
                                             @endif
                                         </div>
@@ -1226,34 +1272,534 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- ApexCharts Plugin & Data Bridge (Rule 1 & Rule 15 Standard) -->
-    <script src="{{ asset('assets/plugins/apexcharts/apexcharts.min.js') }}"></script>
-    <script>
-        window.DashboardConfig = {
-            userId: {{ auth()->id() }},
-            routes: {
-                pollDashboard: "{{ route('admin.friendships.poll-dashboard') }}",
-                toggleLike: "{{ url('admin/friendships/toggle-like') }}",
-                sendFriend: "{{ url('admin/friendships/send') }}",
-                acceptFriend: "{{ url('admin/friendships/accept') }}",
-                rejectFriend: "{{ url('admin/friendships/reject') }}",
-                cancelFriend: "{{ url('admin/friendships/cancel') }}",
-                unfriend: "{{ url('admin/friendships/unfriend') }}",
-                messagesIndex: "{{ route('admin.profil-pengguna.messages.index') }}",
-                profileIndex: "{{ route('admin.profil-pengguna.index') }}"
-            },
-            @if (auth()->user()->hasAnyRole(['superadmin', 'admin']))
-                chartDates: @json($chartDates ?? []),
-                chartLogins: @json($chartLogins ?? []),
-                chartRegistrations: @json($chartRegistrations ?? []),
-                roleLabels: @json($rolesDistribution->pluck('name')->map(fn($n) => strtoupper($n))->values() ?? []),
-                roleCounts: @json($rolesDistribution->pluck('users_count')->values() ?? [])
-            @endif
-        };
-    </script>
-    <script src="{{ asset('assets/js/admin/dashboard.js') }}"></script>
+                <!-- TAB 2: RIWAYAT PERTEMANAN -->
+                <div class="tab-pane fade" id="tab-directory-friendships" role="tabpanel" aria-labelledby="tab-friendships-btn">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-success-subtle text-success fs-12 px-2.5 py-1.5 rounded-pill fw-semibold">
+                                <i class="ti ti-user-check me-1"></i> Linimasa Interaksi Pertemanan
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="text" id="filter-friendship-history-search" class="form-control form-control-sm" placeholder="Cari pengirim / penerima..." style="max-width: 250px;">
+                        </div>
+                    </div>
+
+                    <div class="table-responsive rounded border">
+                        <table class="table table-hover align-middle mb-0" id="table-friendship-history">
+                            <thead class="table-light align-middle text-center text-nowrap">
+                                <tr>
+                                    <th class="align-middle text-center text-nowrap" style="width: 50px;">#</th>
+                                    <th class="align-middle text-center text-nowrap">Pengirim Ajakan</th>
+                                    <th class="align-middle text-center text-nowrap">Penerima Ajakan</th>
+                                    <th class="align-middle text-center text-nowrap">Status Hubungan</th>
+                                    <th class="align-middle text-center text-nowrap">Waktu Permintaan (WIB)</th>
+                                    <th class="align-middle text-center text-nowrap">Pembaruan Terakhir</th>
+                                    <th class="align-middle text-center text-nowrap" style="width: 100px;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($friendshipHistories as $idx => $fHistory)
+                                    @php
+                                        $sUser = $fHistory->sender;
+                                        $rUser = $fHistory->receiver;
+                                    @endphp
+                                    <tr class="friendship-history-row" data-search-text="{{ strtolower(($sUser->name ?? '') . ' ' . ($rUser->name ?? '')) }}">
+                                        <td class="text-center fw-medium text-muted">{{ $idx + 1 }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <img src="{{ $sUser?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $sUser?->name ?? 'User' }}" class="rounded-circle border" style="width: 34px; height: 34px; object-fit: cover;">
+                                                <div>
+                                                    <div class="fw-semibold text-dark fs-13">{{ $sUser?->name ?? 'User Terhapus' }}</div>
+                                                    <div class="text-muted fs-11">{{ $sUser?->email ?? '-' }}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <img src="{{ $rUser?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $rUser?->name ?? 'User' }}" class="rounded-circle border" style="width: 34px; height: 34px; object-fit: cover;">
+                                                <div>
+                                                    <div class="fw-semibold text-dark fs-13">{{ $rUser?->name ?? 'User Terhapus' }}</div>
+                                                    <div class="text-muted fs-11">{{ $rUser?->email ?? '-' }}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($fHistory->status === 'accepted')
+                                                <span class="badge bg-success-subtle text-success px-2.5 py-1 rounded-pill fw-semibold">
+                                                    <i class="ti ti-check me-1"></i> Berteman
+                                                </span>
+                                            @elseif ($fHistory->status === 'pending')
+                                                <span class="badge bg-warning-subtle text-warning px-2.5 py-1 rounded-pill fw-semibold">
+                                                    <i class="ti ti-clock me-1"></i> Menunggu Respon
+                                                </span>
+                                            @elseif ($fHistory->status === 'rejected')
+                                                <span class="badge bg-danger-subtle text-danger px-2.5 py-1 rounded-pill fw-semibold">
+                                                    <i class="ti ti-x me-1"></i> Ditolak
+                                                </span>
+                                            @else
+                                                <span class="badge bg-secondary-subtle text-secondary px-2.5 py-1 rounded-pill fw-semibold">
+                                                    {{ ucfirst($fHistory->status) }}
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td class="text-center text-nowrap fs-12 text-muted">
+                                            <div>{{ $fHistory->created_at ? $fHistory->created_at->format('d M Y H:i') . ' WIB' : '-' }}</div>
+                                            <small class="text-muted opacity-75">{{ $fHistory->created_at ? $fHistory->created_at->diffForHumans() : '' }}</small>
+                                        </td>
+                                        <td class="text-center text-nowrap fs-12 text-muted">
+                                            <div>{{ $fHistory->updated_at ? $fHistory->updated_at->format('d M Y H:i') . ' WIB' : '-' }}</div>
+                                            <small class="text-muted opacity-75">{{ $fHistory->updated_at ? $fHistory->updated_at->diffForHumans() : '' }}</small>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-xs btn-outline-primary rounded-pill btn-view-user-history d-inline-flex align-items-center gap-1" data-user-id="{{ $sUser?->id === auth()->id() ? $rUser?->id : $sUser?->id }}" title="Lihat Riwayat Lengkap">
+                                                <i class="ti ti-history"></i>
+                                                <span>Riwayat</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center py-4 text-muted">
+                                            <i class="ti ti-user-x fs-28 text-muted d-block mb-1"></i>
+                                            <span>Belum ada catatan riwayat pertemanan.</span>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 3: RIWAYAT SUKA PROFIL -->
+                <div class="tab-pane fade" id="tab-directory-likes" role="tabpanel" aria-labelledby="tab-likes-btn">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-danger-subtle text-danger fs-12 px-2.5 py-1.5 rounded-pill fw-semibold">
+                                <i class="ti ti-heart-filled me-1"></i> Log Apresiasi &amp; Suka Profil
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="text" id="filter-likes-history-search" class="form-control form-control-sm" placeholder="Cari nama pemberi/penerima suka..." style="max-width: 250px;">
+                        </div>
+                    </div>
+
+                    <div class="table-responsive rounded border">
+                        <table class="table table-hover align-middle mb-0" id="table-likes-history">
+                            <thead class="table-light align-middle text-center text-nowrap">
+                                <tr>
+                                    <th class="align-middle text-center text-nowrap" style="width: 50px;">#</th>
+                                    <th class="align-middle text-center text-nowrap">Pemberi Suka</th>
+                                    <th class="align-middle text-center text-nowrap">Target Profil yang Disukai</th>
+                                    <th class="align-middle text-center text-nowrap">Jenis Interaksi</th>
+                                    <th class="align-middle text-center text-nowrap">Waktu Diberikan (WIB)</th>
+                                    <th class="align-middle text-center text-nowrap" style="width: 100px;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($profileLikeHistories as $idx => $like)
+                                    @php
+                                        $lUser = $like->user;
+                                        $tUser = $like->targetUser;
+                                    @endphp
+                                    <tr class="likes-history-row" data-search-text="{{ strtolower(($lUser->name ?? '') . ' ' . ($tUser->name ?? '')) }}">
+                                        <td class="text-center fw-medium text-muted">{{ $idx + 1 }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <img src="{{ $lUser?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $lUser?->name ?? 'User' }}" class="rounded-circle border" style="width: 34px; height: 34px; object-fit: cover;">
+                                                <div>
+                                                    <div class="fw-semibold text-dark fs-13">{{ $lUser?->name ?? 'User' }}</div>
+                                                    <div class="text-muted fs-11">{{ $lUser?->role_name ?? 'User' }}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <img src="{{ $tUser?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $tUser?->name ?? 'User' }}" class="rounded-circle border" style="width: 34px; height: 34px; object-fit: cover;">
+                                                <div>
+                                                    <div class="fw-semibold text-dark fs-13">{{ $tUser?->name ?? 'User' }}</div>
+                                                    <div class="text-muted fs-11">{{ $tUser?->role_name ?? 'User' }}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge bg-danger-subtle text-danger px-2.5 py-1 rounded-pill fw-semibold d-inline-flex align-items-center gap-1">
+                                                <i class="ti ti-heart-filled"></i> Menyukai Profil
+                                            </span>
+                                        </td>
+                                        <td class="text-center text-nowrap fs-12 text-muted">
+                                            <div>{{ $like->created_at ? $like->created_at->format('d M Y H:i') . ' WIB' : '-' }}</div>
+                                            <small class="text-muted opacity-75">{{ $like->created_at ? $like->created_at->diffForHumans() : '' }}</small>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-xs btn-outline-danger rounded-pill btn-view-user-history d-inline-flex align-items-center gap-1" data-user-id="{{ $tUser?->id ?? $lUser?->id }}" title="Lihat Riwayat Interaksi">
+                                                <i class="ti ti-history"></i>
+                                                <span>Riwayat</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4 text-muted">
+                                            <i class="ti ti-heart-off fs-28 text-muted d-block mb-1"></i>
+                                            <span>Belum ada catatan aktivitas suka profil.</span>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 4: RIWAYAT PESAN CHAT -->
+                <div class="tab-pane fade" id="tab-directory-chats" role="tabpanel" aria-labelledby="tab-chats-btn">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-info-subtle text-info fs-12 px-2.5 py-1.5 rounded-pill fw-semibold">
+                                <i class="ti ti-messages me-1"></i> Log Aktivitas Kirim &amp; Terima Obrolan
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="text" id="filter-chats-history-search" class="form-control form-control-sm" placeholder="Cari nama / teks pesan..." style="max-width: 250px;">
+                        </div>
+                    </div>
+
+                    <div class="table-responsive rounded border">
+                        <table class="table table-hover align-middle mb-0" id="table-chats-history">
+                            <thead class="table-light align-middle text-center text-nowrap">
+                                <tr>
+                                    <th class="align-middle text-center text-nowrap" style="width: 50px;">#</th>
+                                    <th class="align-middle text-center text-nowrap">Pengirim Pesan</th>
+                                    <th class="align-middle text-center text-nowrap">Penerima Pesan</th>
+                                    <th class="align-middle text-center text-nowrap">Isi Pesan / Lampiran</th>
+                                    <th class="align-middle text-center text-nowrap">Status Baca</th>
+                                    <th class="align-middle text-center text-nowrap">Waktu Kirim (WIB)</th>
+                                    <th class="align-middle text-center text-nowrap" style="width: 120px;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($chatHistories as $idx => $msg)
+                                    @php
+                                        $sender = $msg->sender;
+                                        $receiver = $msg->receiver;
+                                    @endphp
+                                    <tr class="chats-history-row" data-search-text="{{ strtolower(($sender->name ?? '') . ' ' . ($receiver->name ?? '') . ' ' . $msg->message) }}">
+                                        <td class="text-center fw-medium text-muted">{{ $idx + 1 }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <img src="{{ $sender?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $sender?->name ?? 'User' }}" class="rounded-circle border" style="width: 34px; height: 34px; object-fit: cover;">
+                                                <div>
+                                                    <div class="fw-semibold text-dark fs-13">{{ $sender?->name ?? 'User' }}</div>
+                                                    <div class="text-muted fs-11">{{ $sender?->role_name ?? 'User' }}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <img src="{{ $receiver?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $receiver?->name ?? 'User' }}" class="rounded-circle border" style="width: 34px; height: 34px; object-fit: cover;">
+                                                <div>
+                                                    <div class="fw-semibold text-dark fs-13">{{ $receiver?->name ?? 'User' }}</div>
+                                                    <div class="text-muted fs-11">{{ $receiver?->role_name ?? 'User' }}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="text-truncate fs-13 text-dark" style="max-width: 280px;" title="{{ $msg->message }}">
+                                                @if ($msg->attachment_path)
+                                                    <span class="badge bg-light text-primary border me-1"><i class="ti ti-paperclip"></i> Lampiran</span>
+                                                @endif
+                                                {{ $msg->message ?: '[Lampiran Berkas]' }}
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($msg->is_read)
+                                                <span class="badge bg-success-subtle text-success px-2 py-0.5 rounded-pill fs-xxs fw-semibold">
+                                                    <i class="ti ti-checks me-0.5"></i> Dibaca
+                                                </span>
+                                            @else
+                                                <span class="badge bg-warning-subtle text-warning px-2 py-0.5 rounded-pill fs-xxs fw-semibold">
+                                                    <i class="ti ti-check me-0.5"></i> Terkirim
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td class="text-center text-nowrap fs-12 text-muted">
+                                            <div>{{ $msg->created_at ? $msg->created_at->format('d M Y H:i') . ' WIB' : '-' }}</div>
+                                            <small class="text-muted opacity-75">{{ $msg->created_at ? $msg->created_at->diffForHumans() : '' }}</small>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="d-flex align-items-center justify-content-center gap-1">
+                                                <a href="{{ route('admin.profil-pengguna.messages.index', ['user_id' => $sender?->id === auth()->id() ? $receiver?->id : $sender?->id]) }}" class="btn btn-xs btn-primary text-white rounded-pill d-inline-flex align-items-center gap-1" title="Buka Percakapan Chat">
+                                                    <i class="ti ti-messages"></i>
+                                                    <span>Chat</span>
+                                                </a>
+                                                <button type="button" class="btn btn-xs btn-light border text-muted rounded-pill btn-view-user-history" data-user-id="{{ $sender?->id === auth()->id() ? $receiver?->id : $sender?->id }}" title="Lihat Riwayat Interaksi">
+                                                    <i class="ti ti-history"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center py-4 text-muted">
+                                            <i class="ti ti-message-off fs-28 text-muted d-block mb-1"></i>
+                                            <span>Belum ada catatan riwayat pesan obrolan.</span>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 5: RIWAYAT AVATAR & SAMPUL -->
+                <div class="tab-pane fade" id="tab-directory-media" role="tabpanel" aria-labelledby="tab-media-btn">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-secondary-subtle text-secondary fs-12 px-2.5 py-1.5 rounded-pill fw-semibold">
+                                <i class="ti ti-photo-edit me-1"></i> Log Perubahan Foto Profil &amp; Foto Sampul
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <input type="text" id="filter-media-history-search" class="form-control form-control-sm" placeholder="Cari nama pengguna..." style="max-width: 250px;">
+                        </div>
+                    </div>
+
+                    <div class="table-responsive rounded border">
+                        <table class="table table-hover align-middle mb-0" id="table-media-history">
+                            <thead class="table-light align-middle text-center text-nowrap">
+                                <tr>
+                                    <th class="align-middle text-center text-nowrap" style="width: 50px;">#</th>
+                                    <th class="align-middle text-center text-nowrap">Pengguna</th>
+                                    <th class="align-middle text-center text-nowrap">Jenis Media</th>
+                                    <th class="align-middle text-center text-nowrap">Preview Visual</th>
+                                    <th class="align-middle text-center text-nowrap">Deskripsi Pembaruan</th>
+                                    <th class="align-middle text-center text-nowrap">Waktu Pembaruan (WIB)</th>
+                                    <th class="align-middle text-center text-nowrap" style="width: 100px;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($mediaHistories as $idx => $mh)
+                                    @php
+                                        $mhUser = $mh->user;
+                                    @endphp
+                                    <tr class="media-history-row" data-search-text="{{ strtolower(($mhUser->name ?? '') . ' ' . $mh->media_type . ' ' . $mh->description) }}">
+                                        <td class="text-center fw-medium text-muted">{{ $idx + 1 }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <img src="{{ $mhUser?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $mhUser?->name ?? 'User' }}" class="rounded-circle border" style="width: 34px; height: 34px; object-fit: cover;">
+                                                <div>
+                                                    <div class="fw-semibold text-dark fs-13">{{ $mhUser?->name ?? 'User' }}</div>
+                                                    <div class="text-muted fs-11">{{ $mhUser?->email ?? '-' }}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($mh->media_type === 'avatar')
+                                                <span class="badge bg-primary-subtle text-primary px-2.5 py-1 rounded-pill fw-semibold">
+                                                    <i class="ti ti-user me-1"></i> Avatar Profil
+                                                </span>
+                                            @else
+                                                <span class="badge bg-info-subtle text-info px-2.5 py-1 rounded-pill fw-semibold">
+                                                    <i class="ti ti-photo me-1"></i> Foto Sampul
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($mh->media_type === 'avatar')
+                                                <img src="{{ $mh->url }}" alt="Preview" class="rounded-circle border shadow-sm" style="width: 44px; height: 44px; object-fit: cover;">
+                                            @else
+                                                <img src="{{ $mh->url }}" alt="Preview" class="rounded border shadow-sm" style="width: 80px; height: 44px; object-fit: cover;">
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <div class="fw-semibold text-dark fs-13">{{ $mh->description ?? 'Pembaruan Media' }}</div>
+                                            @if (!empty($mh->meta_data) && is_array($mh->meta_data))
+                                                <div class="text-muted fs-11">
+                                                    @if (isset($mh->meta_data['position_y']))
+                                                        Posisi Y: {{ $mh->meta_data['position_y'] }}% &bull;
+                                                    @endif
+                                                    @if (isset($mh->meta_data['source']))
+                                                        Sumber: {{ $mh->meta_data['source'] }}
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        </td>
+                                        <td class="text-center text-nowrap fs-12 text-muted">
+                                            <div>{{ $mh->created_at ? $mh->created_at->format('d M Y H:i') . ' WIB' : '-' }}</div>
+                                            <small class="text-muted opacity-75">{{ $mh->created_at ? $mh->created_at->diffForHumans() : '' }}</small>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-xs btn-outline-primary rounded-pill btn-view-user-history d-inline-flex align-items-center gap-1" data-user-id="{{ $mhUser?->id }}" title="Lihat Riwayat Interaksi">
+                                                <i class="ti ti-history"></i>
+                                                <span>Riwayat</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center py-4 text-muted">
+                                            <i class="ti ti-photo-off fs-28 text-muted d-block mb-1"></i>
+                                            <span>Belum ada catatan riwayat pembaruan media profil.</span>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                             </tbody>
+                         </table>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+</div>
+
+<!-- MODAL DETAIL RIWAYAT INTERAKSI PENGGUNA (Rule 4 & Rule 20 Standard) -->
+<div class="modal fade" id="modalUserActivityHistory" tabindex="-1" aria-labelledby="modalUserActivityHistoryLabel" aria-hidden="true">
+ <div class="modal-dialog modal-lg modal-dialog-centered">
+     <div class="modal-content border-0 shadow-lg overflow-hidden">
+         <!-- User Cover Header Banner -->
+         <div class="position-relative overflow-hidden" id="user-history-cover-banner" style="height: 120px; background-size: cover; background-position: center 50%;">
+             <div class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark bg-opacity-50"></div>
+             <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3 shadow-sm z-3" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+
+         <div class="modal-body p-3.5 pt-0">
+             <!-- User Profile Header Summary -->
+             <div class="d-flex flex-column flex-sm-row align-items-center align-items-sm-end gap-3 mb-3 position-relative" style="margin-top: -45px; z-index: 4;">
+                 <img src="{{ asset('assets/images/users/user-default.jpg') }}" id="user-history-avatar" alt="Avatar" class="rounded-circle border border-3 border-white shadow object-fit-cover" style="width: 86px; height: 86px; background: #fff;">
+                 <div class="text-center text-sm-start flex-grow-1">
+                     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-sm-start gap-2 mb-0.5">
+                         <h5 class="modal-title fw-bold text-dark mb-0" id="user-history-name">Nama Pengguna</h5>
+                         <span class="badge bg-primary-subtle text-primary fs-xxs rounded-pill" id="user-history-role">Role</span>
+                         <span class="badge bg-success text-white fs-xxs rounded-pill d-none" id="user-history-online-badge"><i class="ti ti-circle-filled fs-8 me-1"></i>Online</span>
+                     </div>
+                     <p class="text-muted fs-12 mb-0" id="user-history-email">email@example.com</p>
+                 </div>
+             </div>
+
+             <!-- Motto Box if available -->
+             <div class="alert alert-light border py-2 px-3 mb-3 text-center fst-italic fs-12 text-muted rounded-3" id="user-history-motto-box">
+                 <i class="ti ti-quote me-1 text-primary"></i> <span id="user-history-motto">"Motto Hidup..."</span>
+             </div>
+
+             <!-- Sub-Nav Pills within Modal (Rule 17 Button Tabs) -->
+             <ul class="nav nav-pills custom-nav-pills p-1 bg-light rounded-3 mb-3" id="userHistoryModalTabs" role="tablist">
+                 <li class="nav-item" role="presentation">
+                     <button class="nav-link active d-flex align-items-center gap-1.5 fs-12 py-1 px-2.5" id="user-m-tab-friendship-btn" data-bs-toggle="pill" data-bs-target="#user-m-tab-friendship" type="button" role="tab" aria-controls="user-m-tab-friendship" aria-selected="true">
+                         <i class="ti ti-user-check"></i> <span>Pertemanan</span>
+                     </button>
+                 </li>
+                 <li class="nav-item" role="presentation">
+                     <button class="nav-link d-flex align-items-center gap-1.5 fs-12 py-1 px-2.5" id="user-m-tab-likes-btn" data-bs-toggle="pill" data-bs-target="#user-m-tab-likes" type="button" role="tab" aria-controls="user-m-tab-likes" aria-selected="false">
+                         <i class="ti ti-heart-filled text-danger"></i> <span>Suka Profil</span>
+                     </button>
+                 </li>
+                 <li class="nav-item" role="presentation">
+                     <button class="nav-link d-flex align-items-center gap-1.5 fs-12 py-1 px-2.5" id="user-m-tab-chats-btn" data-bs-toggle="pill" data-bs-target="#user-m-tab-chats" type="button" role="tab" aria-controls="user-m-tab-chats" aria-selected="false">
+                         <i class="ti ti-messages"></i> <span>Obrolan Chat</span>
+                     </button>
+                 </li>
+                 <li class="nav-item" role="presentation">
+                     <button class="nav-link d-flex align-items-center gap-1.5 fs-12 py-1 px-2.5" id="user-m-tab-media-btn" data-bs-toggle="pill" data-bs-target="#user-m-tab-media" type="button" role="tab" aria-controls="user-m-tab-media" aria-selected="false">
+                         <i class="ti ti-photo-edit"></i> <span>Avatar &amp; Sampul</span>
+                     </button>
+                 </li>
+             </ul>
+
+             <!-- Sub-Tab Content -->
+             <div class="tab-content" id="userHistoryModalTabContent">
+                 <!-- 1. Pertemanan -->
+                 <div class="tab-pane fade show active" id="user-m-tab-friendship" role="tabpanel">
+                     <div class="p-3 border rounded-3 bg-light-subtle mb-3 text-center" id="user-modal-friendship-status-box">
+                         <div class="fs-13 fw-semibold text-dark mb-1" id="user-modal-friendship-status-text">Status: Memuat...</div>
+                         <div class="fs-11 text-muted" id="user-modal-friendship-time-text">Sedang mengambil riwayat pertemanan.</div>
+                     </div>
+                     <h6 class="fs-12 fw-bold text-muted text-uppercase mb-2"><i class="ti ti-timeline me-1"></i> Linimasa Status Hubungan</h6>
+                     <div class="list-group list-group-flush border rounded-3" id="user-modal-friendship-timeline">
+                         <div class="text-center py-3 text-muted fs-12">Memuat linimasa...</div>
+                     </div>
+                 </div>
+
+                 <!-- 2. Suka Profil -->
+                 <div class="tab-pane fade" id="user-m-tab-likes" role="tabpanel">
+                     <div class="row g-2 mb-3">
+                         <div class="col-sm-6">
+                             <div class="p-3 border rounded-3 text-center bg-light-subtle">
+                                 <div class="text-muted fs-11 mb-1">Apresiasi Anda</div>
+                                 <div class="fw-bold fs-13" id="user-modal-my-like-status"><i class="ti ti-heart-off text-muted me-1"></i> Belum Disukai</div>
+                             </div>
+                         </div>
+                         <div class="col-sm-6">
+                             <div class="p-3 border rounded-3 text-center bg-light-subtle">
+                                 <div class="text-muted fs-11 mb-1">Apresiasi dari Pengguna</div>
+                                 <div class="fw-bold fs-13" id="user-modal-target-like-status"><i class="ti ti-heart-off text-muted me-1"></i> Belum Menyukai Anda</div>
+                             </div>
+                         </div>
+                     </div>
+                     <div class="alert alert-info py-2 px-3 fs-12 mb-0 d-flex align-items-center gap-2">
+                         <i class="ti ti-info-circle fs-16"></i>
+                         <span>Pengguna ini telah menerima total <strong id="user-modal-total-likes-count">0</strong> suka profil dari seluruh pengguna.</span>
+                     </div>
+                 </div>
+
+                 <!-- 3. Obrolan Chat -->
+                 <div class="tab-pane fade" id="user-m-tab-chats" role="tabpanel">
+                     <div class="border rounded-3 p-3 bg-light-subtle mb-3" style="max-height: 280px; overflow-y: auto;" id="user-modal-chat-list">
+                         <div class="text-center py-3 text-muted fs-12">Memuat riwayat chat...</div>
+                     </div>
+                     <div class="text-center">
+                         <a href="#" id="user-modal-btn-open-full-chat" class="btn btn-sm btn-primary rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-1.5">
+                             <i class="ti ti-messages"></i> <span>Buka Ruang Obrolan Penuh</span>
+                         </a>
+                     </div>
+                 </div>
+
+                 <!-- 4. Avatar & Sampul -->
+                 <div class="tab-pane fade" id="user-m-tab-media" role="tabpanel">
+                     <div class="list-group list-group-flush border rounded-3" id="user-modal-media-list" style="max-height: 280px; overflow-y: auto;">
+                         <div class="text-center py-3 text-muted fs-12">Memuat riwayat foto profil &amp; sampul...</div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+
+         <!-- Modal Footer with Responsive Action Buttons (Rule 20) -->
+         <div class="modal-footer d-flex flex-column-reverse flex-sm-row justify-content-end gap-2 bg-light py-2.5 px-3.5">
+             <button type="button" class="btn btn-sm btn-light border" data-bs-dismiss="modal">Tutup</button>
+             <a href="#" id="user-modal-action-chat-btn" class="btn btn-sm btn-primary">
+                 <i class="ti ti-messages me-1"></i> Kirim Pesan
+             </a>
+         </div>
+     </div>
+ </div>
+</div>
+
+<!-- ApexCharts Plugin & Data Bridge (Rule 1 & Rule 15 Standard) -->
+<script src="{{ asset('assets/plugins/apexcharts/apexcharts.min.js') }}"></script>
+<script>
+ window.DashboardConfig = {
+     userId: {{ auth()->id() }},
+     routes: {
+         pollDashboard: "{{ route('admin.friendships.poll-dashboard') }}",
+         userHistory: "{{ url('admin/friendships/user-history') }}",
+         toggleLike: "{{ url('admin/friendships/toggle-like') }}",
+         sendFriend: "{{ url('admin/friendships/send') }}",
+         acceptFriend: "{{ url('admin/friendships/accept') }}",
+         rejectFriend: "{{ url('admin/friendships/reject') }}",
+         cancelFriend: "{{ url('admin/friendships/cancel') }}",
+         unfriend: "{{ url('admin/friendships/unfriend') }}",
+         messagesIndex: "{{ route('admin.profil-pengguna.messages.index') }}",
+         profileIndex: "{{ route('admin.profil-pengguna.index') }}"
+     },
+     @if (auth()->user()->hasAnyRole(['superadmin', 'admin']))
+         chartDates: @json($chartDates ?? []),
+         chartLogins: @json($chartLogins ?? []),
+         chartRegistrations: @json($chartRegistrations ?? []),
+         roleLabels: @json($rolesDistribution->pluck('name')->map(fn($n) => strtoupper($n))->values() ?? []),
+         roleCounts: @json($rolesDistribution->pluck('users_count')->values() ?? [])
+     @endif
+ };
+</script>
+<script src="{{ asset('assets/js/admin/dashboard.js') }}"></script>
 @endsection

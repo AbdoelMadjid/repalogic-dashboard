@@ -10,6 +10,7 @@ use App\Models\Friendship;
 use App\Models\Message;
 use App\Models\ProfileLike;
 use App\Models\User;
+use App\Models\UserMediaHistory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -144,6 +145,27 @@ class DashboardController extends Controller
         $totalFriendsCount = $user->friends_count;
         $totalProfileLikesCount = $user->profile_likes_count;
 
+        // 11. Activity Histories for Directory Tabs
+        $friendshipHistories = Friendship::with(['sender.detail', 'receiver.detail', 'sender.roles', 'receiver.roles'])
+            ->latest('updated_at')
+            ->take(50)
+            ->get();
+
+        $profileLikeHistories = ProfileLike::with(['user.detail', 'targetUser.detail', 'user.roles', 'targetUser.roles'])
+            ->latest('created_at')
+            ->take(50)
+            ->get();
+
+        $chatHistories = Message::with(['sender.detail', 'receiver.detail', 'sender.roles', 'receiver.roles'])
+            ->latest('created_at')
+            ->take(50)
+            ->get();
+
+        $mediaHistories = UserMediaHistory::with(['user.detail', 'user.roles'])
+            ->latest('created_at')
+            ->take(50)
+            ->get();
+
         return view('dashboard', compact(
             'user',
             'greeting',
@@ -171,7 +193,11 @@ class DashboardController extends Controller
             'incomingFriendRequestsCount',
             'outgoingFriendRequestsCount',
             'totalFriendsCount',
-            'totalProfileLikesCount'
+            'totalProfileLikesCount',
+            'friendshipHistories',
+            'profileLikeHistories',
+            'chatHistories',
+            'mediaHistories'
         ));
     }
 
@@ -225,6 +251,40 @@ class DashboardController extends Controller
         $totalFriendsCount = $user->friends_count;
         $totalProfileLikesCount = $user->profile_likes_count;
 
+        // 8. Activity Histories for Directory Tabs
+        $friendshipHistories = Friendship::with(['sender.detail', 'receiver.detail', 'sender.roles', 'receiver.roles'])
+            ->where(function ($q) use ($user) {
+                $q->where('sender_id', $user->id)->orWhere('receiver_id', $user->id);
+            })
+            ->latest('updated_at')
+            ->take(50)
+            ->get();
+
+        $profileLikeHistories = ProfileLike::with(['user.detail', 'targetUser.detail', 'user.roles', 'targetUser.roles'])
+            ->where(function ($q) use ($user) {
+                $q->where('user_id', $user->id)->orWhere('target_user_id', $user->id);
+            })
+            ->latest('created_at')
+            ->take(50)
+            ->get();
+
+        $chatHistories = Message::with(['sender.detail', 'receiver.detail', 'sender.roles', 'receiver.roles'])
+            ->where(function ($q) use ($user) {
+                $q->where(function ($sq) use ($user) {
+                    $sq->where('sender_id', $user->id)->where('deleted_for_sender', false);
+                })->orWhere(function ($sq) use ($user) {
+                    $sq->where('receiver_id', $user->id)->where('deleted_for_receiver', false);
+                });
+            })
+            ->latest('created_at')
+            ->take(50)
+            ->get();
+
+        $mediaHistories = UserMediaHistory::with(['user.detail', 'user.roles'])
+            ->latest('created_at')
+            ->take(50)
+            ->get();
+
         return view('dashboard', compact(
             'user',
             'greeting',
@@ -242,7 +302,11 @@ class DashboardController extends Controller
             'incomingFriendRequestsCount',
             'outgoingFriendRequestsCount',
             'totalFriendsCount',
-            'totalProfileLikesCount'
+            'totalProfileLikesCount',
+            'friendshipHistories',
+            'profileLikeHistories',
+            'chatHistories',
+            'mediaHistories'
         ));
     }
 

@@ -45,6 +45,18 @@ class ProfilPenggunaController extends Controller
 
             $path = $request->file('avatar')->store('avatars', 'public');
             $user->avatar = $path;
+
+            \App\Models\UserMediaHistory::create([
+                'user_id' => $user->id,
+                'media_type' => 'avatar',
+                'file_path' => $path,
+                'file_name' => $request->file('avatar')->getClientOriginalName(),
+                'description' => 'Pembaruan Foto Avatar Profil',
+                'meta_data' => [
+                    'source' => 'profil_pengguna',
+                    'updated_at' => now()->toDateTimeString(),
+                ],
+            ]);
         }
 
         $user->save();
@@ -168,6 +180,20 @@ class ProfilPenggunaController extends Controller
 
             $path = $request->file('cover_image')->store('covers', 'public');
             $config->cover_image = $path;
+
+            \App\Models\UserMediaHistory::create([
+                'user_id' => $user->id,
+                'media_type' => 'cover',
+                'file_path' => $path,
+                'file_name' => $request->file('cover_image')->getClientOriginalName(),
+                'description' => 'Pembaruan Foto Sampul Banner',
+                'meta_data' => [
+                    'position_y' => (int) $request->input('cover_position_y', $config->cover_position_y ?? 50),
+                    'height' => (int) $request->input('cover_height', $config->cover_height ?? 320),
+                    'blur' => (int) $request->input('cover_blur', $config->cover_blur ?? 0),
+                    'color' => $request->input('cover_color', $config->cover_color ?? '#313a46'),
+                ],
+            ]);
         }
 
         if ($request->has('cover_position_y')) {

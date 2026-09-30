@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v3.0.6`  
-> **Terakhir Diperbarui:** 30 September 2026 13:30 WIB
+> **Versi Terbaru:** `v3.0.7`  
+> **Terakhir Diperbarui:** 30 September 2026 14:20 WIB
 
 ---
 
@@ -23,6 +23,12 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
   <tbody>
     <tr>
       <td align="center">1</td>
+      <td align="center"><strong><code>v3.0.7</code></strong></td>
+      <td align="center"><code>2026-09-30 14:20 WIB</code></td>
+      <td>Integrasi Tab Riwayat Interaksi Pengguna &amp; Media Audit Trail Engine pada Direktori Dashboard (5 Tab Interaksi: Direktori Kontak, Riwayat Pertemanan, Suka Profil, Obrolan Chat, &amp; Riwayat Avatar/Sampul; Model &amp; Tabel <code>user_media_histories</code> untuk Audit Perubahan Foto Profil/Sampul; Filter Live Search pada Seluruh Tabel Linimasa &amp; Modal Detail Interaksi Per Pengguna <code>#modalUserActivityHistory</code>)</td>
+    </tr>
+    <tr>
+      <td align="center">2</td>
       <td align="center"><strong><code>v3.0.6</code></strong></td>
       <td align="center"><code>2026-09-30 13:30 WIB</code></td>
       <td>Overhaul Desain Header Profil Pengguna, Curated Life Mottos Engine (20 Motto Inspiratif &amp; Tombol Acak Motto), Dynamic Cover Overlay Kontak Dashboard (Warna, Opasitas, Efek Blur &amp; Polling Realtime), User Form Modal Header Preview &amp; Standardisasi Default Avatar ke <code>user-default.jpg</code></td>

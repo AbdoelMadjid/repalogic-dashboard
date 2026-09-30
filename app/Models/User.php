@@ -139,6 +139,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Relationship to UserMediaHistory model (Avatar and Cover changes).
+     */
+    public function mediaHistories(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(UserMediaHistory::class, 'user_id');
+    }
+
+    /**
      * Check if user is active.
      */
     public function isActive(): bool
