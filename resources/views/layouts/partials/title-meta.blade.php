@@ -3,13 +3,84 @@
     $appName = !empty($appProfil?->app_name) ? $appProfil->app_name : config('app.name', 'REPALOGIC Dashboard');
 
     $pageTitle = $title ?? null;
-    $activeDataLang = $dataLang ?? null;
+    $activeDataLang = $data_lang ?? $dataLang ?? $titleDataLang ?? null;
+
+    $currentRoute = Route::currentRouteName();
+    $currentPath = trim(request()->path(), '/');
+    $isAdmin = request()->is('admin*') || ($currentRoute && str_starts_with($currentRoute, 'admin.'));
+
+    /**
+     * Smart bilingual data-lang resolver for page titles and menu names.
+     */
+    $resolveDataLang = function (?string $text) {
+        if (empty($text)) {
+            return null;
+        }
+
+        $trimmed = trim($text);
+        $slug = Str::slug($trimmed);
+
+        $knownMap = [
+            // Core & Root Nav
+            'admin' => 'admin',
+            'template' => 'template',
+            'dashboard' => 'dashboards',
+            'dashboards' => 'dashboards',
+            'home' => 'dashboards',
+
+            // Master Data & User Profile
+            'master-data' => 'master-data',
+            'data-utama' => 'master-data',
+            'profil-pengguna' => 'profil-pengguna',
+            'profile' => 'profil-pengguna',
+            'user-profile' => 'profil-pengguna',
+            'edit-profil' => 'profil-pengguna',
+            'messages' => 'apps-chat',
+
+            // Manajemen Pengguna
+            'manajemen-pengguna' => 'manajemen-pengguna',
+            'user-management' => 'manajemen-pengguna',
+            'data-pengguna' => 'data-pengguna',
+            'pengguna' => 'users',
+            'users' => 'users',
+            'user' => 'users',
+            'data-role-hak-akses' => 'data-role',
+            'data-role' => 'data-role',
+            'role' => 'role',
+            'roles' => 'role',
+            'data-permission' => 'data-permission',
+            'permission' => 'permission',
+            'permissions' => 'permission',
+            'data-login-pengguna' => 'data-login-pengguna',
+            'data-login' => 'data-login',
+            'akses-user' => 'akses-user',
+            'user-access' => 'akses-user',
+            'akses-role' => 'akses-role',
+            'role-access' => 'akses-role',
+
+            // Dukungan Aplikasi
+            'dukungan-aplikasi' => 'dukungan-aplikasi',
+            'app-support' => 'dukungan-aplikasi',
+            'profil-aplikasi' => 'profil-aplikasi',
+            'app-profile' => 'profil-aplikasi',
+            'manajemen-menu' => 'manajemen-menu',
+            'menu' => 'menu',
+            'konfigurasi-website' => 'konfigurasi-website',
+            'website-configuration' => 'management-config-website',
+            'fitur-aplikasi' => 'fitur-aplikasi',
+            'app-features' => 'fitur-aplikasi',
+            'backup-database' => 'backup-database',
+            'backup-db' => 'backup-db',
+            'database-backup' => 'backup-db',
+            'terjemahan-bahasa' => 'terjemahan-bahasa',
+            'management-translation' => 'management-translation',
+            'language-translation' => 'management-translation',
+        ];
+
+        return $knownMap[$slug] ?? $slug;
+    };
 
     if (!$pageTitle || !$activeDataLang) {
-        $currentRoute = Route::currentRouteName();
-        $currentPath = trim(request()->path(), '/');
-        $isAdmin = request()->is('admin*') || ($currentRoute && str_starts_with($currentRoute, 'admin.'));
-
         // 1. Try matching Database Menu for Admin pages
         if ($isAdmin) {
             try {
@@ -39,7 +110,7 @@
                             $pageTitle = $matchedMenu->name;
                         }
                         if (!$activeDataLang) {
-                            $activeDataLang = $matchedMenu->data_lang ?: \Illuminate\Support\Str::slug($matchedMenu->name);
+                            $activeDataLang = $matchedMenu->data_lang ?: $resolveDataLang($matchedMenu->name);
                         }
                     }
                 }
@@ -130,10 +201,14 @@
             $pageTitle = $knownAcronyms[$lower] ?? Str::title($clean);
         }
     }
+
+    if (!$activeDataLang && $pageTitle) {
+        $activeDataLang = $resolveDataLang($pageTitle);
+    }
 @endphp
 
 <meta charset="utf-8" />
-<title>{{ $pageTitle }} | {{ $appName }}</title>
+<title @if (!empty($activeDataLang)) data-lang="{{ $activeDataLang }}" @endif>{{ $pageTitle }} | {{ $appName }}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <script>
