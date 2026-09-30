@@ -7,76 +7,7 @@
     $currentPath = trim(request()->path(), '/');
     $isAdmin = request()->is('admin*') || ($routeName && str_starts_with($routeName, 'admin.'));
 
-    /**
-     * Smart bilingual data-lang resolver for page titles, menu names, and breadcrumbs.
-     */
-    $resolveDataLang = function (?string $text) {
-        if (empty($text)) {
-            return null;
-        }
-
-        $trimmed = trim($text);
-        $slug = Str::slug($trimmed);
-
-        $knownMap = [
-            // Core & Root Nav
-            'admin' => 'admin',
-            'template' => 'template',
-            'dashboard' => 'dashboards',
-            'dashboards' => 'dashboards',
-            'home' => 'dashboards',
-
-            // Master Data & User Profile
-            'master-data' => 'master-data',
-            'data-utama' => 'master-data',
-            'profil-pengguna' => 'profil-pengguna',
-            'profile' => 'profil-pengguna',
-            'user-profile' => 'profil-pengguna',
-            'edit-profil' => 'profil-pengguna',
-            'messages' => 'apps-chat',
-
-            // Manajemen Pengguna
-            'manajemen-pengguna' => 'manajemen-pengguna',
-            'user-management' => 'manajemen-pengguna',
-            'data-pengguna' => 'data-pengguna',
-            'pengguna' => 'users',
-            'users' => 'users',
-            'user' => 'users',
-            'data-role-hak-akses' => 'data-role',
-            'data-role' => 'data-role',
-            'role' => 'role',
-            'roles' => 'role',
-            'data-permission' => 'data-permission',
-            'permission' => 'permission',
-            'permissions' => 'permission',
-            'data-login-pengguna' => 'data-login-pengguna',
-            'data-login' => 'data-login',
-            'akses-user' => 'akses-user',
-            'user-access' => 'akses-user',
-            'akses-role' => 'akses-role',
-            'role-access' => 'akses-role',
-
-            // Dukungan Aplikasi
-            'dukungan-aplikasi' => 'dukungan-aplikasi',
-            'app-support' => 'dukungan-aplikasi',
-            'profil-aplikasi' => 'profil-aplikasi',
-            'app-profile' => 'profil-aplikasi',
-            'manajemen-menu' => 'manajemen-menu',
-            'menu' => 'menu',
-            'konfigurasi-website' => 'konfigurasi-website',
-            'website-configuration' => 'management-config-website',
-            'fitur-aplikasi' => 'fitur-aplikasi',
-            'app-features' => 'fitur-aplikasi',
-            'backup-database' => 'backup-database',
-            'backup-db' => 'backup-db',
-            'database-backup' => 'backup-db',
-            'terjemahan-bahasa' => 'terjemahan-bahasa',
-            'management-translation' => 'management-translation',
-            'language-translation' => 'management-translation',
-        ];
-
-        return $knownMap[$slug] ?? $slug;
-    };
+    $resolveDataLang = fn(?string $text) => !empty($text) ? Str::slug(trim($text)) : null;
 
     if (isset($breadcrumbs) && is_array($breadcrumbs)) {
         $breadcrumbItems = $breadcrumbs;
