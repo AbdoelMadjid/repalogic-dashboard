@@ -1,15 +1,89 @@
 @php
     $breadcrumbItems = [];
     $pageMainTitle = $title ?? null;
-    $activeDataLang = null;
+    $activeDataLang = $data_lang ?? $dataLang ?? $titleDataLang ?? null;
 
     $routeName = Route::currentRouteName();
     $currentPath = trim(request()->path(), '/');
     $isAdmin = request()->is('admin*') || ($routeName && str_starts_with($routeName, 'admin.'));
 
+    /**
+     * Smart bilingual data-lang resolver for page titles, menu names, and breadcrumbs.
+     */
+    $resolveDataLang = function (?string $text) {
+        if (empty($text)) {
+            return null;
+        }
+
+        $trimmed = trim($text);
+        $slug = Str::slug($trimmed);
+
+        $knownMap = [
+            // Core & Root Nav
+            'admin' => 'admin',
+            'template' => 'template',
+            'dashboard' => 'dashboards',
+            'dashboards' => 'dashboards',
+            'home' => 'dashboards',
+
+            // Master Data & User Profile
+            'master-data' => 'master-data',
+            'data-utama' => 'master-data',
+            'profil-pengguna' => 'profil-pengguna',
+            'profile' => 'profil-pengguna',
+            'user-profile' => 'profil-pengguna',
+            'edit-profil' => 'profil-pengguna',
+            'messages' => 'apps-chat',
+
+            // Manajemen Pengguna
+            'manajemen-pengguna' => 'manajemen-pengguna',
+            'user-management' => 'manajemen-pengguna',
+            'data-pengguna' => 'data-pengguna',
+            'pengguna' => 'users',
+            'users' => 'users',
+            'user' => 'users',
+            'data-role-hak-akses' => 'data-role',
+            'data-role' => 'data-role',
+            'role' => 'role',
+            'roles' => 'role',
+            'data-permission' => 'data-permission',
+            'permission' => 'permission',
+            'permissions' => 'permission',
+            'data-login-pengguna' => 'data-login-pengguna',
+            'data-login' => 'data-login',
+            'akses-user' => 'akses-user',
+            'user-access' => 'akses-user',
+            'akses-role' => 'akses-role',
+            'role-access' => 'akses-role',
+
+            // Dukungan Aplikasi
+            'dukungan-aplikasi' => 'dukungan-aplikasi',
+            'app-support' => 'dukungan-aplikasi',
+            'profil-aplikasi' => 'profil-aplikasi',
+            'app-profile' => 'profil-aplikasi',
+            'manajemen-menu' => 'manajemen-menu',
+            'menu' => 'menu',
+            'konfigurasi-website' => 'konfigurasi-website',
+            'website-configuration' => 'management-config-website',
+            'fitur-aplikasi' => 'fitur-aplikasi',
+            'app-features' => 'fitur-aplikasi',
+            'backup-database' => 'backup-database',
+            'backup-db' => 'backup-db',
+            'database-backup' => 'backup-db',
+            'terjemahan-bahasa' => 'terjemahan-bahasa',
+            'management-translation' => 'management-translation',
+            'language-translation' => 'management-translation',
+        ];
+
+        return $knownMap[$slug] ?? $slug;
+    };
+
     if (isset($breadcrumbs) && is_array($breadcrumbs)) {
         $breadcrumbItems = $breadcrumbs;
         $pageMainTitle = $pageMainTitle ?? 'Dashboard';
+        if (!$activeDataLang) {
+            $activeDataLang = $resolveDataLang($pageMainTitle);
+        }
 
     } elseif ($isAdmin) {
         // =========================================================================
@@ -51,15 +125,21 @@
             if (!$pageMainTitle) {
                 $pageMainTitle = $dbMenu->name;
             }
+            if (!$activeDataLang) {
+                $activeDataLang = $dbMenu->data_lang ?: $resolveDataLang($dbMenu->name);
+            }
 
             $breadcrumbItems[] = [
                 'title' => 'Admin',
+                'data_lang' => 'admin',
                 'url' => url('/admin'),
             ];
 
             if (!empty($dbMenu->category)) {
+                $catTitle = Str::title(str_replace(['-', '_'], ' ', $dbMenu->category));
                 $breadcrumbItems[] = [
-                    'title' => Str::title(str_replace(['-', '_'], ' ', $dbMenu->category)),
+                    'title' => $catTitle,
+                    'data_lang' => $resolveDataLang($dbMenu->category),
                     'url' => 'javascript:void(0);',
                 ];
             }
@@ -68,11 +148,13 @@
                 if ($dbMenu->parent->parent && !empty($dbMenu->parent->parent->name)) {
                     $breadcrumbItems[] = [
                         'title' => $dbMenu->parent->parent->name,
+                        'data_lang' => $dbMenu->parent->parent->data_lang ?: $resolveDataLang($dbMenu->parent->parent->name),
                         'url' => !empty($dbMenu->parent->parent->url) ? url($dbMenu->parent->parent->url) : 'javascript:void(0);',
                     ];
                 }
                 $breadcrumbItems[] = [
                     'title' => $dbMenu->parent->name,
+                    'data_lang' => $dbMenu->parent->data_lang ?: $resolveDataLang($dbMenu->parent->name),
                     'url' => !empty($dbMenu->parent->url) ? url($dbMenu->parent->url) : 'javascript:void(0);',
                 ];
             }
@@ -102,6 +184,7 @@
 
                 $segments[] = [
                     'title' => $formatted,
+                    'data_lang' => $resolveDataLang($seg),
                     'url' => $url,
                 ];
             }
@@ -110,13 +193,40 @@
             if (!$pageMainTitle) {
                 $pageMainTitle = is_array($lastSegment) ? $lastSegment['title'] ?? 'Dashboard' : 'Dashboard';
             }
+            if (!$activeDataLang) {
+                $activeDataLang = $resolveDataLang($pageMainTitle);
+            }
 
             $ancestorSegments = count($segments) > 1 ? array_slice($segments, 0, -1) : $segments;
 
             $breadcrumbItems = array_merge(
-                [['title' => 'Admin', 'url' => url('/admin')]],
+                [['title' => 'Admin', 'data_lang' => 'admin', 'url' => url('/admin')]],
                 $ancestorSegments
             );
+        }
+
+        // Subtitle integration for admin breadcrumbs if passed manually
+        if (!empty($subtitle)) {
+            $subtitleTitle = Str::title(str_replace(['-', '_'], ' ', $subtitle));
+            $subtitleDataLang = $subtitle_data_lang ?? $subtitleDataLang ?? $resolveDataLang($subtitle);
+            $hasSubtitleInBreadcrumbs = false;
+            foreach ($breadcrumbItems as $bItem) {
+                $bTitle = is_array($bItem) ? ($bItem['title'] ?? '') : $bItem;
+                if (strcasecmp($bTitle, $subtitle) === 0 || strcasecmp($bTitle, $subtitleTitle) === 0) {
+                    $hasSubtitleInBreadcrumbs = true;
+                    break;
+                }
+            }
+            if (!$hasSubtitleInBreadcrumbs) {
+                // If only 'Admin' exists in breadcrumbs, append the subtitle as parent category
+                if (count($breadcrumbItems) === 1) {
+                    $breadcrumbItems[] = [
+                        'title' => $subtitleTitle,
+                        'data_lang' => $subtitleDataLang,
+                        'url' => 'javascript:void(0);',
+                    ];
+                }
+            }
         }
 
     } else {
@@ -158,7 +268,7 @@
         foreach ($sidenavConfigs as $groupKey => $group) {
             if (!empty($group['items']) && is_array($group['items'])) {
                 $groupTitle = $group['title'] ?? Str::title(str_replace(['-', '_'], ' ', $groupKey));
-                $groupDataLang = $group['data_lang'] ?? null;
+                $groupDataLang = $group['data_lang'] ?? $resolveDataLang($groupTitle);
                 $found = $findHierarchy($group['items'], [
                     ['title' => $groupTitle, 'data_lang' => $groupDataLang, 'is_group' => true],
                 ]);
@@ -171,7 +281,7 @@
 
         if ($hierarchy && count($hierarchy) > 0) {
             $activeLeaf = end($hierarchy);
-            $activeDataLang = $activeLeaf['data_lang'] ?? null;
+            $activeDataLang = $activeLeaf['data_lang'] ?? $resolveDataLang($activeLeaf['title'] ?? null);
             if (!$pageMainTitle) {
                 $pageMainTitle = $activeLeaf['title'] ?? 'Dashboard';
             }
@@ -194,7 +304,7 @@
                 }
                 $breadcrumbItems[] = [
                     'title' => $nodeTitle,
-                    'data_lang' => $node['data_lang'] ?? null,
+                    'data_lang' => $node['data_lang'] ?? $resolveDataLang($nodeTitle),
                     'url' => $nodeUrl,
                 ];
             }
@@ -229,6 +339,7 @@
 
                 $segments[] = [
                     'title' => $formatted,
+                    'data_lang' => $resolveDataLang($seg),
                     'url' => $url,
                 ];
             }
@@ -237,11 +348,14 @@
             if (!$pageMainTitle) {
                 $pageMainTitle = is_array($lastSegment) ? $lastSegment['title'] ?? 'Dashboard' : 'Dashboard';
             }
+            if (!$activeDataLang) {
+                $activeDataLang = $resolveDataLang($pageMainTitle);
+            }
 
             $ancestorSegments = count($segments) > 1 ? array_slice($segments, 0, -1) : $segments;
 
             $breadcrumbItems = array_merge(
-                [['title' => 'Template', 'url' => Route::has('dashboard') ? route('dashboard') : url('/')]],
+                [['title' => 'Template', 'data_lang' => 'template', 'url' => Route::has('dashboard') ? route('dashboard') : url('/')]],
                 $ancestorSegments
             );
         }
@@ -249,6 +363,7 @@
 
     if (isset($title) && !empty($title)) {
         $pageMainTitle = $title;
+        $activeDataLang = $data_lang ?? $dataLang ?? $titleDataLang ?? $resolveDataLang($title);
     }
 @endphp
 
@@ -263,7 +378,7 @@
                 @php
                     $itemTitle = is_array($item) ? $item['title'] : $item;
                     $itemUrl = is_array($item) ? $item['url'] ?? 'javascript:void(0);' : 'javascript:void(0);';
-                    $itemDataLang = is_array($item) ? $item['data_lang'] ?? null : null;
+                    $itemDataLang = is_array($item) ? ($item['data_lang'] ?? $resolveDataLang($itemTitle)) : $resolveDataLang($itemTitle);
                 @endphp
                 @if ($loop->last)
                     <li class="breadcrumb-item active" aria-current="page"
