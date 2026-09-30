@@ -66328,11 +66328,6 @@
                                 </div>
                             </div>
                         </div> <!-- end display-->
-
-                        <div class="text-center mt-3">
-                            <a href="<?php echo route('template.components.icons.tabler'); ?>" class="btn btn-primary"><i
-                                    class="ti ti-arrow-left me-1"></i> Back to Tabler Overview</a>
-                        </div>
                     </div> <!-- end card-body-->
 
     
