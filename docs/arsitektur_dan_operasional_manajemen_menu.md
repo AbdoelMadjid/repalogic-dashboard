@@ -6,7 +6,7 @@
 > **Controller:** [`App\Http\Controllers\Admin\DukunganAplikasi\MenuController`](../app/Http/Controllers/Admin/DukunganAplikasi/MenuController.php)  
 > **Model:** [`App\Models\Admin\DukunganAplikasi\Menu`](../app/Models/Admin/DukunganAplikasi/Menu.php)  
 > **Aset Terpisah (Rule 15):** [`public/assets/css/admin/dukunganaplikasi/menu.css`](../public/assets/css/admin/dukunganaplikasi/menu.css) & [`public/assets/js/admin/dukunganaplikasi/menu.js`](../public/assets/js/admin/dukunganaplikasi/menu.js)  
-> **Terakhir Diperbarui:** 04 September 2026 09:22 WIB  
+> **Terakhir Diperbarui:** 30 September 2026 09:25 WIB  
 
 ---
 
@@ -21,9 +21,9 @@ Modul **Manajemen Menu** (*Menu Management Engine*) pada REPALOGIC Dashboard ber
 │ 1. Hierarki 3 Level Dinamis  │ 2. Drag & Drop Reordering    │ 3. Instant Status & Cascade   │
 │ (Kategori > Parent > Sub L3) │ (SortableJS Multi-Level)     │ (Category / Parent / Submenu) │
 ├──────────────────────────────┼──────────────────────────────┼───────────────────────────────┤
-│ 4. Spatie Permission Sync    │ 5. Auto Bilingual Generator  │ 6. Dynamic Sidebar Composer   │
-│ (CRUD Actions & Role Binding)│ (sidebar_menu.json Auto Sync)│ (Recursive Permission Filter) │
-└────────────────────────────────┴──────────────────────────────┴───────────────────────────────┘
+│ 4. Spatie Permission Sync    │ 5. Auto Bilingual Generator  │ 6. Dynamic Sidenav & Meta     │
+│ (CRUD Actions & Role Binding)│ (Menu::syncAllTranslations)  │ (Page Title & Browser Title)  │
+└──────────────────────────────┴──────────────────────────────┴───────────────────────────────┘
 ```
 
 ### 🌟 Fitur Utama Modul:
@@ -31,8 +31,8 @@ Modul **Manajemen Menu** (*Menu Management Engine*) pada REPALOGIC Dashboard ber
 2. **Reordering Drag & Drop Interaktif:** Menggunakan pustaka *SortableJS* dengan 3 handle khusus untuk mengubah urutan kategori, menu utama, dan sub-menu secara mulus dengan penyimpanan otomatis ke server via AJAX.
 3. **Peralihan Status Instan (*Cascading Status Toggle*):** Sakelar on/off yang mendukung pembaruan berjenjang; mematikan Kategori atau Menu Utama akan secara otomatis menonaktifkan seluruh sub-menu di bawahnya secara rekursif.
 4. **Sinkronisasi Otomatis Spatie Permission:** Setiap pembuatan/pembaruan menu otomatis mendaftarkan permission CRUD (`create`, `read`, `update`, `delete`) dan mengaitkannya ke Role yang dipilih (`superadmin`, `admin`, dll).
-5. **Generasi Kamus Bilingual Modular Otomatis:** Saat menu disimpan, model hook `Menu::syncTranslationKey()` otomatis mendaftarkan `data_lang` ke `public/assets/data/translations/id/sidebar_menu.json` dan `en/sidebar_menu.json` serta master fallback file.
-6. **Rendering Sidebar Dinamis Terpusat:** Terhubung langsung dengan `App\Http\ViewComposers\SidebarComposer` untuk menampilkan menu sesuai hak akses pengguna aktif secara real-time.
+5. **Generasi Kamus Bilingual Modular Otomatis:** Saat menu disimpan atau dieksekusi via Seeder, model hook `Menu::saved`, `Menu::deleted`, dan `Menu::syncAllTranslations()` otomatis mendaftarkan `data_lang` ke `public/assets/data/translations/id/sidebar_menu.json` dan `en/sidebar_menu.json` serta master fallback file.
+6. **Integrasi Rendering Sidebar, Breadcrumb & Title Meta:** Terhubung langsung dengan `App\Http\ViewComposers\SidebarComposer`, `page-title.blade.php`, dan `title-meta.blade.php` untuk menampilkan navigasi, breadcrumb, dan judul tab browser sesuai hak akses dan bahasa aktif secara 100% dinamis.
 
 ---
 

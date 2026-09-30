@@ -4,7 +4,7 @@
 > **Lokasi File:** `docs/ulasan_dan_evaluasi_arsitektur_aplikasi.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
 > **Rating Evaluasi:** ⭐⭐⭐⭐⭐ **(9.8 / 10 - Production Enterprise Ready)**  
-> **Terakhir Diperbarui:** 04 September 2026 11:45 WIB  
+> **Terakhir Diperbarui:** 30 September 2026 09:25 WIB  
 
 ---
 
@@ -23,19 +23,21 @@ Aplikasi ini tidak hanya berfungsi sebagai template antarmuka admin biasa, melai
 │                           5 PILAR UTAMA ARSITEKTUR REPALOGIC                                │
 ├──────────────────────────────┬──────────────────────────────┬───────────────────────────────┤
 │ 1. Rule-Based Architecture   │ 2. Separation of Concerns    │ 3. Zero-Breakage Strategies   │
-│    (15 Baku Pedoman AGENTS)  │    (Controller/Request/Model)│    (Fallback Dict & Caching)  │
+│    (22 Baku Pedoman AGENTS)  │    (Controller/Request/Model)│    (Fallback Dict & Caching)  │
 ├──────────────────────────────┼──────────────────────────────┼───────────────────────────────┤
 │ 4. Single-Page Experience    │ 5. Isolated Multi-Domains    │                               │
 │    (Instant Realtime DOM)    │    (Modular i18n Dictionaries│                               │
 └──────────────────────────────┴──────────────────────────────┴───────────────────────────────┘
 ```
 
-### 2.1 Disiplin *Rule-Based Architecture* (15 Aturan Baku `AGENTS.md`)
-Proyek ini memiliki tingkat kedisiplinan kode yang sangat tinggi melalui 15 Aturan Baku Arsitektur yang ditaati secara konsisten:
+### 2.1 Disiplin *Rule-Based Architecture* (22 Aturan Baku `AGENTS.md`)
+Proyek ini memiliki tingkat kedisiplinan kode yang sangat tinggi melalui 22 Aturan Baku Arsitektur yang ditaati secara konsisten:
 - **Pemisahan Aset Murni (Rule 15):** 100% file CSS dan JS kustom dipisahkan ke direktori eksternal `public/assets/css/admin/{kelompok}/{modul}.css` dan `public/assets/js/admin/{kelompok}/{modul}.js`. Tidak ada script atau style besar yang mengotori file Blade.
 - **Standar Hirarki View Modul (Rule 10):** Keseragaman penamaan file tanpa nested `index.blade.php`, serta penataan komponen pendukung pada folder `partials/`.
 - **Event Delegation Standard (Rule 2):** Seluruh interaksi tombol dan modal memanfaatkan delegasi event dokumen untuk memastikan fungsi tetap bekerja konsisten saat tabel dipaginasi, difilter, atau diurutkan.
 - **Pencegahan Konflik Dataset (Rule 7):** Larangan ketat penggunaan `data-target` non-numerik untuk mencegah bentrok dengan *counter engine* template bawaan.
+- **Mobile Responsive Tab Navigation & Card Headers (Rules 18-19):** Format Icon + Badge pada mode mobile dan Card Header bertingkat multi-line terpusat.
+- **Full-Width Responsive Modal Footer & Zero Redundant CSS (Rules 20-22):** Standarisasi tombol modal mobile melebar penuh serta pemanfaatan maksimal kelas bawaan Bootstrap 5 tanpa polusi CSS kustom yang rumit.
 
 ### 2.2 Pemisahan Tanggung Jawab (*Separation of Concerns*)
 - **Controllers:** Menangani alur request-response secara ramping dan delegatif.
@@ -89,7 +91,7 @@ Modul obrolan dibangun dengan standar tinggi yang setara dengan aplikasi chat mo
 ## 🌐 5. Sistem Bilingual Modular Dinamis (*Modular i18n Engine*)
 
 - Arsitektur kamus terjemahan modular yang diisolasi ke dalam **6 Domain**: `sidebar_template`, `sidebar_menu`, `topbar`, `auth`, `customizer`, dan `frontpage`.
-- Paralel loader engine (`Promise.allSettled`) dengan pergantian bahasa instan *zero page reload* (< 5ms) dan mekanisme *Pre-Hydration Anti-Flicker* pada topbar language selector.
+- Paralel loader engine (`Promise.allSettled`) dengan pergantian bahasa instan *zero page reload* (< 5ms), penyelarasan dinamis 100% dari tabel database `menus` (tanpa pemetaan hardcode), dan eliminasi flicker melalui *SessionStorage Cache Versioning (v4)*.
 
 ---
 
@@ -98,7 +100,7 @@ Modul obrolan dibangun dengan standar tinggi yang setara dengan aplikasi chat mo
 Proyek ini memiliki keunggulan kompetitif yang jarang dimiliki repositori lain pada skala serupa:
 - Dokumentasi arsitektur terperinci pada folder `docs/` dengan diagram Mermaid yang komprehensif.
 - Ketaatan penuh terhadap **Rule 11** (Kewajiban pencatatan rilis pada `changelog.blade.php` dan `riwayat_release_dan_tag.md` dengan timestamp presisi WIB).
-- Pelacakan commit konvensional yang tertata rapi sejak versi `v1.8.1` hingga rilis terbaru **`v2.8.4`**.
+- Pelacakan commit konvensional yang tertata rapi sejak versi `v1.0.0` hingga rilis terbaru **`v3.0.5`**.
 
 ---
 

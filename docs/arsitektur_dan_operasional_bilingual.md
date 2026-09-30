@@ -6,7 +6,7 @@
 > **Controller:** [`App\Http\Controllers\Admin\DukunganAplikasi\TranslationController`](../app/Http/Controllers/Admin/DukunganAplikasi/TranslationController.php)  
 > **Aset Terpisah (Rule 15):** [`public/assets/css/admin/dukunganaplikasi/translation.css`](../public/assets/css/admin/dukunganaplikasi/translation.css) & [`public/assets/js/admin/dukunganaplikasi/translation.js`](../public/assets/js/admin/dukunganaplikasi/translation.js)  
 > **Direktori Kamus Modular:** `public/assets/data/translations/id/` & `public/assets/data/translations/en/`  
-> **Terakhir Diperbarui:** 04 September 2026 09:22 WIB  
+> **Terakhir Diperbarui:** 30 September 2026 09:25 WIB  
 
 ---
 
@@ -134,23 +134,35 @@ Seluruh operasi manajemen kamus bahasa dikendalikan oleh Controller [`Translatio
 | `PUT / PATCH` | `/admin/dukunganaplikasi/translation/{key}` | `admin.dukunganaplikasi.translation.update` | Memperbarui nama key atau nilai teks terjemahan ID & EN pada modul bersangkutan. |
 | `DELETE` | `/admin/dukunganaplikasi/translation/{key}` | `admin.dukunganaplikasi.translation.destroy` | Menghapus key terjemahan dari domain modular bersangkutan. |
 
-### 4.2 Auto-Sync Model Hook ([`Menu.php`](../app/Models/Admin/DukunganAplikasi/Menu.php))
+### 4.2 Auto-Sync Model Hook & Seeder ([`Menu.php`](../app/Models/Admin/DukunganAplikasi/Menu.php))
 
-Ketika menu baru ditambahkan atau diubah di database, sistem secara otomatis mengeksekusi `Menu::syncTranslationKey()` yang menulis **hanya** ke `sidebar_menu.json` dan menyinkronkan master root file:
+Ketika menu baru ditambahkan, diubah, atau dihapus di database (baik via form GUI maupun eksekusi Seeder `php artisan db:seed`), model hook lifecycle Eloquent (`saved`, `deleted`) dan method `Menu::syncAllTranslations()` otomatis mengeksekusi sinkronisasi terjemahan ke `sidebar_menu.json` serta master root JSON files secara instan:
 
 ```php
 // app/Models/Admin/DukunganAplikasi/Menu.php
-public static function syncTranslationKey(Menu $menu): void
+protected static function booted()
 {
-    $dataLang = $menu->data_lang ?: Str::slug($menu->name);
-    if (empty($dataLang)) return;
+    static::saved(function (Menu $menu) {
+        static::syncTranslationKey($menu);
+    });
 
-    // Menulis khusus ke modular sidebar_menu.json
-    $idModularPath = public_path('assets/data/translations/id/sidebar_menu.json');
-    $enModularPath = public_path('assets/data/translations/en/sidebar_menu.json');
-    // ... update & ksort data
+    static::deleted(function (Menu $menu) {
+        static::syncAllTranslations();
+    });
 }
 ```
+
+### 4.3 Dinamisasi Penuh Komponen Navigasi & Tab Browser (Zero Hardcode)
+Sistem bilingual pada seluruh level antarmuka kini **100% dinamis** tanpa ada pemetaan statis (*hardcode*):
+- **Tab Browser (`<title data-lang="...">` pada [`title-meta.blade.php`](../resources/views/layouts/partials/title-meta.blade.php)):** Menentukan atribut `data-lang` langsung dari record database tabel `menus` (`$matchedMenu->data_lang ?: Str::slug($matchedMenu->name)`). Tab browser otomatis berganti bahasa secara real-time saat pengguna mengganti bahasa di topbar tanpa merusak nama aplikasi.
+- **Header & Breadcrumb ([`page-title.blade.php`](../resources/views/layouts/partials/page-title.blade.php)):** Mengambil judul aktif, kategori header, dan hierarki parent langsung dari database `menus` dengan atribut `data-lang` terpadu.
+- **Sidebar Menu ([`sidenav.blade.php`](../resources/views/layouts/partials/sidenav.blade.php) & [`SidebarComposer.php`](../app/Http/ViewComposers/SidebarComposer.php)):** Menampilkan `data-lang` grup kategori dan menu anak langsung dari query rekursif tabel `menus`.
+
+### 4.4 SessionStorage Cache Versioning & Auto Purge Engine (Anti-Flicker)
+Untuk mencegah terjadinya kedipan teks (*flicker*) akibat browser membaca cache translasi lama di `sessionStorage`, `I18nManager` dilengkapi dengan mekanisme **Versioned Cache Key (`__TRANS_CACHE_v4_${lang}__`)** dan fungsi pembersihan otomatis `purgeOldCaches()`:
+1. Saat halaman dimuat, `I18nManager` mendeteksi dan menghapus seluruh key cache `sessionStorage` versi usang yang tidak cocok dengan `cacheVersion`.
+2. File JSON translasi diunduh segar dari server dengan parameter cache-busting `?v=timestamp`.
+3. Teks breadcrumb dan menu tampil konsisten (*Title Case*) tanpa ada kedipan menjadi huruf kapital dari cache usang.
 
 ---
 
