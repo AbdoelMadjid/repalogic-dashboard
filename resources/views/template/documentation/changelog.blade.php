@@ -116,7 +116,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 3.0.4 -->
+                        <!-- Version 3.0.5 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -124,8 +124,38 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v3.0.4</h5>
+                                        <h5 class="fw-bold mb-0">v3.0.5</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.5</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-30 09:25 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Otomatisasi &amp; Dinamisasi Penuh Sistem Bilingual (i18n) Admin Menu &amp; Title Meta</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">100% Dynamic Database-Driven Translation:</strong> Menghapus seluruh array pemetaan statis (*hardcode*) pada [<code>page-title.blade.php</code>](file:///c:/laragon/finnally/repalogic-dashboard/resources/views/layouts/partials/page-title.blade.php) dan [<code>title-meta.blade.php</code>](file:///c:/laragon/finnally/repalogic-dashboard/resources/views/layouts/partials/title-meta.blade.php). Penentuan atribut <code>data-lang</code> kini sepenuhnya dinamis membaca field <code>data_lang</code>, <code>name</code>, dan <code>category</code> dari tabel database <code>menus</code> serta fallback slug otomatis.</li>
+                                    <li><strong class="text-dark">Auto-Sync Seeder &amp; GUI Menu ([<code>Menu.php</code>](file:///c:/laragon/finnally/repalogic-dashboard/app/Models/Admin/DukunganAplikasi/Menu.php)):</strong> Menambahkan hook Eloquent lifecycle (<code>saved</code>, <code>deleted</code>) dan method <code>Menu::syncAllTranslations()</code> sehingga setiap perubahan menu di GUI maupun saat <code>php artisan db:seed</code> otomatis menyinkronkan seluruh kamus translasi JSON (<code>sidebar_menu.json</code>, <code>id.json</code>, <code>en.json</code>).</li>
+                                    <li><strong class="text-dark">SessionStorage Cache Invalidation Engine ([<code>app.js</code>](file:///c:/laragon/finnally/repalogic-dashboard/public/assets/js/app.js)):</strong> Menambahkan versioning cache (<code>v4</code>) dan fungsi <code>purgeOldCaches()</code> pada <code>I18nManager</code> untuk mengeliminasi kedipan (*flicker*) teks breadcrumb akibat cache usang di browser pengguna.</li>
+                                    <li><strong class="text-dark">Bilingual Title Meta Browser ([<code>title-meta.blade.php</code>](file:///c:/laragon/finnally/repalogic-dashboard/resources/views/layouts/partials/title-meta.blade.php)):</strong> Mengintegrasikan dukungan atribut <code>data-lang</code> pada tag <code>&lt;title&gt;</code> HTML sehingga judul tab browser otomatis berganti bahasa secara real-time saat bahasa diubah di topbar.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark border fs-xs">Dynamic i18n</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Menu Seeder Sync</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Title Meta</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Breadcrumb</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Cache Versioning</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 3.0.4 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-check fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v3.0.4</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.4</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-30 08:02 WIB</span>
