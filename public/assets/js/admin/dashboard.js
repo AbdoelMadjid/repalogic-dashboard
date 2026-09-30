@@ -1452,7 +1452,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         mediaHtml += `
                             <div class="list-group-item px-3 py-2.5 d-flex align-items-center justify-content-between gap-2">
                                 <div class="d-flex align-items-center gap-2.5 min-w-0">
-                                    <img src="${mItem.url}" alt="Preview" class="${isAvatar ? 'rounded-circle' : 'rounded'} border shadow-sm flex-shrink-0" style="width: 44px; height: 44px; object-fit: cover;">
+                                    <div class="rounded-circle ${isAvatar ? 'bg-primary-subtle text-primary' : 'bg-info-subtle text-info'} d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px;">
+                                        <i class="ti ${isAvatar ? 'ti-user' : 'ti-photo'} fs-18"></i>
+                                    </div>
                                     <div class="min-w-0">
                                         <div class="d-flex align-items-center gap-1.5 mb-0.5">
                                             <span class="badge ${isAvatar ? 'bg-primary-subtle text-primary' : 'bg-info-subtle text-info'} fs-xxs rounded-pill">
@@ -1460,7 +1462,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                             </span>
                                             <span class="fs-12 fw-semibold text-dark text-truncate">${escapeHtml(mItem.description || 'Pembaruan')}</span>
                                         </div>
-                                        <div class="fs-11 text-muted">${mItem.created_at_human || mItem.created_at}</div>
+                                        <div class="fs-11 text-muted">
+                                            ${mItem.file_name ? `<span class="font-monospace me-1"><i class="ti ti-file fs-10"></i> ${escapeHtml(mItem.file_name)}</span> &bull; ` : ''}
+                                            ${mItem.created_at_human || mItem.created_at}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

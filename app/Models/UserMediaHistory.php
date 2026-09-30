@@ -35,17 +35,19 @@ class UserMediaHistory extends Model
     }
 
     /**
-     * Accessor for full media URL.
+     * Accessor for full media URL with safe fallback.
      */
-    public function getUrlAttribute(): string
+    public function getUrlAttribute(): ?string
     {
         if (empty($this->file_path)) {
-            return $this->media_type === 'cover'
-                ? asset('assets/images/profile-bg.jpg')
-                : asset('assets/images/users/user-default.jpg');
+            return null;
         }
 
-        if (str_starts_with($this->file_path, 'http://') || str_starts_with($this->file_path, 'https://') || str_starts_with($this->file_path, 'assets/')) {
+        if (str_starts_with($this->file_path, 'http://') || str_starts_with($this->file_path, 'https://')) {
+            return $this->file_path;
+        }
+
+        if (str_starts_with($this->file_path, 'assets/')) {
             return asset($this->file_path);
         }
 
@@ -53,6 +55,6 @@ class UserMediaHistory extends Model
             return Storage::disk('public')->url($this->file_path);
         }
 
-        return asset($this->file_path);
+        return null;
     }
 }

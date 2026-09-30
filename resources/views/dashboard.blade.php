@@ -1572,8 +1572,7 @@
                                     <th class="align-middle text-center text-nowrap" style="width: 50px;">#</th>
                                     <th class="align-middle text-center text-nowrap">Pengguna</th>
                                     <th class="align-middle text-center text-nowrap">Jenis Media</th>
-                                    <th class="align-middle text-center text-nowrap">Preview Visual</th>
-                                    <th class="align-middle text-center text-nowrap">Deskripsi Pembaruan</th>
+                                    <th class="align-middle text-center text-nowrap">Deskripsi &amp; Informasi Berkas</th>
                                     <th class="align-middle text-center text-nowrap">Waktu Pembaruan (WIB)</th>
                                     <th class="align-middle text-center text-nowrap" style="width: 100px;">Aksi</th>
                                 </tr>
@@ -1582,8 +1581,9 @@
                                 @forelse ($mediaHistories as $idx => $mh)
                                     @php
                                         $mhUser = $mh->user;
+                                        $isAvatar = $mh->media_type === 'avatar';
                                     @endphp
-                                    <tr class="media-history-row" data-search-text="{{ strtolower(($mhUser->name ?? '') . ' ' . $mh->media_type . ' ' . $mh->description) }}">
+                                    <tr class="media-history-row" data-search-text="{{ strtolower(($mhUser->name ?? '') . ' ' . $mh->media_type . ' ' . $mh->description . ' ' . ($mh->file_name ?? '')) }}">
                                         <td class="text-center fw-medium text-muted">{{ $idx + 1 }}</td>
                                         <td>
                                             <div class="d-flex align-items-center gap-2">
@@ -1595,35 +1595,30 @@
                                             </div>
                                         </td>
                                         <td class="text-center">
-                                            @if ($mh->media_type === 'avatar')
-                                                <span class="badge bg-primary-subtle text-primary px-2.5 py-1 rounded-pill fw-semibold">
-                                                    <i class="ti ti-user me-1"></i> Avatar Profil
+                                            <div class="d-inline-flex align-items-center gap-2">
+                                                <div class="rounded-circle {{ $isAvatar ? 'bg-primary-subtle text-primary' : 'bg-info-subtle text-info' }} d-inline-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                                                    <i class="ti {{ $isAvatar ? 'ti-user' : 'ti-photo' }} fs-18"></i>
+                                                </div>
+                                                <span class="badge {{ $isAvatar ? 'bg-primary-subtle text-primary' : 'bg-info-subtle text-info' }} px-2.5 py-1 rounded-pill fw-semibold">
+                                                    {{ $isAvatar ? 'Avatar Profil' : 'Foto Sampul' }}
                                                 </span>
-                                            @else
-                                                <span class="badge bg-info-subtle text-info px-2.5 py-1 rounded-pill fw-semibold">
-                                                    <i class="ti ti-photo me-1"></i> Foto Sampul
-                                                </span>
-                                            @endif
-                                        </td>
-                                        <td class="text-center">
-                                            @if ($mh->media_type === 'avatar')
-                                                <img src="{{ $mh->url }}" alt="Preview" class="rounded-circle border shadow-sm" style="width: 44px; height: 44px; object-fit: cover;">
-                                            @else
-                                                <img src="{{ $mh->url }}" alt="Preview" class="rounded border shadow-sm" style="width: 80px; height: 44px; object-fit: cover;">
-                                            @endif
+                                            </div>
                                         </td>
                                         <td>
                                             <div class="fw-semibold text-dark fs-13">{{ $mh->description ?? 'Pembaruan Media' }}</div>
-                                            @if (!empty($mh->meta_data) && is_array($mh->meta_data))
-                                                <div class="text-muted fs-11">
-                                                    @if (isset($mh->meta_data['position_y']))
-                                                        Posisi Y: {{ $mh->meta_data['position_y'] }}% &bull;
-                                                    @endif
-                                                    @if (isset($mh->meta_data['source']))
-                                                        Sumber: {{ $mh->meta_data['source'] }}
-                                                    @endif
-                                                </div>
-                                            @endif
+                                            <div class="text-muted fs-11 mt-0.5">
+                                                @if (!empty($mh->file_name))
+                                                    <span class="font-monospace text-secondary"><i class="ti ti-file me-0.5"></i>{{ $mh->file_name }}</span>
+                                                    <span class="mx-1">&bull;</span>
+                                                @endif
+                                                @if (isset($mh->meta_data['position_y']))
+                                                    <span>Posisi Y: {{ $mh->meta_data['position_y'] }}%</span>
+                                                    <span class="mx-1">&bull;</span>
+                                                @endif
+                                                @if (isset($mh->meta_data['source']))
+                                                    <span class="badge bg-light text-muted border fs-xxs">Sumber: {{ $mh->meta_data['source'] }}</span>
+                                                @endif
+                                            </div>
                                         </td>
                                         <td class="text-center text-nowrap fs-12 text-muted">
                                             <div>{{ $mh->created_at ? $mh->created_at->format('d M Y H:i') . ' WIB' : '-' }}</div>
@@ -1638,12 +1633,15 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="text-center py-4 text-muted">
+                                        <td colspan="6" class="text-center py-4 text-muted">
                                             <i class="ti ti-photo-off fs-28 text-muted d-block mb-1"></i>
                                             <span>Belum ada catatan riwayat pembaruan foto profil atau sampul Anda.</span>
                                         </td>
                                     </tr>
                                 @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                              </tbody>
                          </table>
                      </div>
