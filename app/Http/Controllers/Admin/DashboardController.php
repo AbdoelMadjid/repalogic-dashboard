@@ -145,23 +145,37 @@ class DashboardController extends Controller
         $totalFriendsCount = $user->friends_count;
         $totalProfileLikesCount = $user->profile_likes_count;
 
-        // 11. Activity Histories for Directory Tabs
+        // 11. Activity Histories for Directory Tabs (Scoped to Current Authenticated User)
         $friendshipHistories = Friendship::with(['sender.detail', 'receiver.detail', 'sender.roles', 'receiver.roles'])
+            ->where(function ($q) use ($user) {
+                $q->where('sender_id', $user->id)->orWhere('receiver_id', $user->id);
+            })
             ->latest('updated_at')
             ->take(50)
             ->get();
 
         $profileLikeHistories = ProfileLike::with(['user.detail', 'targetUser.detail', 'user.roles', 'targetUser.roles'])
+            ->where(function ($q) use ($user) {
+                $q->where('user_id', $user->id)->orWhere('target_user_id', $user->id);
+            })
             ->latest('created_at')
             ->take(50)
             ->get();
 
         $chatHistories = Message::with(['sender.detail', 'receiver.detail', 'sender.roles', 'receiver.roles'])
+            ->where(function ($q) use ($user) {
+                $q->where(function ($sq) use ($user) {
+                    $sq->where('sender_id', $user->id)->where('deleted_for_sender', false);
+                })->orWhere(function ($sq) use ($user) {
+                    $sq->where('receiver_id', $user->id)->where('deleted_for_receiver', false);
+                });
+            })
             ->latest('created_at')
             ->take(50)
             ->get();
 
         $mediaHistories = UserMediaHistory::with(['user.detail', 'user.roles'])
+            ->where('user_id', $user->id)
             ->latest('created_at')
             ->take(50)
             ->get();
@@ -281,6 +295,7 @@ class DashboardController extends Controller
             ->get();
 
         $mediaHistories = UserMediaHistory::with(['user.detail', 'user.roles'])
+            ->where('user_id', $user->id)
             ->latest('created_at')
             ->take(50)
             ->get();

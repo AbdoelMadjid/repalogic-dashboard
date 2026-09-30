@@ -1561,7 +1561,7 @@
                             </span>
                         </div>
                         <div class="d-flex align-items-center gap-2">
-                            <input type="text" id="filter-media-history-search" class="form-control form-control-sm" placeholder="Cari nama pengguna..." style="max-width: 250px;">
+                            <input type="text" id="filter-media-history-search" class="form-control form-control-sm" placeholder="Cari jenis media / deskripsi..." style="max-width: 250px;">
                         </div>
                     </div>
 
@@ -1640,7 +1640,7 @@
                                     <tr>
                                         <td colspan="7" class="text-center py-4 text-muted">
                                             <i class="ti ti-photo-off fs-28 text-muted d-block mb-1"></i>
-                                            <span>Belum ada catatan riwayat pembaruan media profil.</span>
+                                            <span>Belum ada catatan riwayat pembaruan foto profil atau sampul Anda.</span>
                                         </td>
                                     </tr>
                                 @endforelse
