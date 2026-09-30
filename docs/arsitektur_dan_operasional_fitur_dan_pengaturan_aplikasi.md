@@ -86,7 +86,7 @@ Setiap komponen Topbar Header dan grup menu Sidebar telah dioptimasi dengan arsi
   - Mode Monokrom (`#monochrome-toggler` / `topbar_monochrome`)
   - Panel Theme Settings Customizer (`#theme-settings-toggler` / `topbar_customizer` - khusus role `superadmin` & `admin`)
   - Pemilih Bahasa i18n (`#language-selector` / `topbar_language`)
-  - Template Sidebar Menu Groups (`menu_group_main`, `menu_group_apps`, dll.)
+  - Group Menu Template Sidebar Terpadu (`menu_group_template` - mengontrol seluruh menu bawaan template: Main, Apps, Pages, Layouts, Components, Documentation, dan Disabled Menu)
   - *Catatan:* Menu Spesial (*Special Menu*) kini bersifat permanen/independen di luar database toggle dan dapat diakses oleh semua role pengguna.
 
 ### 3.2 Persistensi Tab Aktif & Zero-Reload Bulk Actions

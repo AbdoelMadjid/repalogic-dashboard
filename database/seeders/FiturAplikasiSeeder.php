@@ -133,79 +133,29 @@ class FiturAplikasiSeeder extends Seeder
             // KELOMPOK: MENU GROUP SIDEBAR TEMPLATE
             // ==========================================
             [
-                'kode_fitur' => 'menu_group_main',
-                'nama_fitur' => 'Group Menu: MAIN',
+                'kode_fitur' => 'menu_group_template',
+                'nama_fitur' => 'Group Menu Template (Sidebar)',
                 'kategori' => 'menu_group',
-                'deskripsi' => 'Kelompok menu dashboard template (Analytics, CRM, dll)',
-                'icon' => 'ti ti-home',
+                'deskripsi' => 'Menampilkan atau menyembunyikan seluruh kelompok menu bawaan template di sidebar',
+                'icon' => 'ti ti-layout-sidebar',
                 'status' => false,
                 'urutan' => 12,
                 'is_system' => true,
             ],
-            [
-                'kode_fitur' => 'menu_group_apps',
-                'nama_fitur' => 'Group Menu: APPS',
-                'kategori' => 'menu_group',
-                'deskripsi' => 'Kelompok menu aplikasi template (Calendar, Chat, Email, dll)',
-                'icon' => 'ti ti-brand-hipchat',
-                'status' => false,
-                'urutan' => 13,
-                'is_system' => true,
-            ],
-            [
-                'kode_fitur' => 'menu_group_custom_pages',
-                'nama_fitur' => 'Group Menu: PAGES',
-                'kategori' => 'menu_group',
-                'deskripsi' => 'Kelompok menu halaman kustom template (Auth, Error, dll)',
-                'icon' => 'ti ti-file-description',
-                'status' => false,
-                'urutan' => 14,
-                'is_system' => true,
-            ],
-            [
-                'kode_fitur' => 'menu_group_layouts',
-                'nama_fitur' => 'Group Menu: LAYOUTS',
-                'kategori' => 'menu_group',
-                'deskripsi' => 'Kelompok menu demo layout template (Horizontal, Detached, dll)',
-                'icon' => 'ti ti-layout-grid-add',
-                'status' => false,
-                'urutan' => 15,
-                'is_system' => true,
-            ],
-            [
-                'kode_fitur' => 'menu_group_components',
-                'nama_fitur' => 'Group Menu: COMPONENTS',
-                'kategori' => 'menu_group',
-                'deskripsi' => 'Kelompok menu komponen UI template (Forms, Tables, Charts, dll)',
-                'icon' => 'ti ti-components',
-                'status' => false,
-                'urutan' => 16,
-                'is_system' => true,
-            ],
-            [
-                'kode_fitur' => 'menu_group_documentation',
-                'nama_fitur' => 'Group Menu: DOCUMENTATION',
-                'kategori' => 'menu_group',
-                'deskripsi' => 'Kelompok menu dokumentasi bawaan template & changelog',
-                'icon' => 'ti ti-books',
-                'status' => false,
-                'urutan' => 17,
-                'is_system' => true,
-            ],
-            [
-                'kode_fitur' => 'menu_group_menu_item',
-                'nama_fitur' => 'Group Menu: OTHER MENU ITEMS',
-                'kategori' => 'menu_group',
-                'deskripsi' => 'Kelompok menu bertingkat multi-level & item disabled',
-                'icon' => 'ti ti-list-details',
-                'status' => false,
-                'urutan' => 18,
-                'is_system' => true,
-            ],
         ];
 
-        // Ensure legacy special menu feature toggle is removed from database
-        FiturAplikasi::where('kode_fitur', 'menu_special_menu')->delete();
+        // Ensure legacy individual menu group feature toggles are cleaned up from database
+        $legacyKeys = [
+            'menu_special_menu',
+            'menu_group_main',
+            'menu_group_apps',
+            'menu_group_custom_pages',
+            'menu_group_layouts',
+            'menu_group_components',
+            'menu_group_documentation',
+            'menu_group_menu_item',
+        ];
+        FiturAplikasi::whereIn('kode_fitur', $legacyKeys)->delete();
 
         foreach ($features as $feat) {
             FiturAplikasi::updateOrCreate(

@@ -78,25 +78,23 @@
                 {{-- Menu Template (Bawaan Template Inspinia): Hanya untuk Role Superadmin & Admin --}}
                 @if (auth()->check() &&
                         auth()->user()->hasAnyRole(['superadmin', 'admin']))
+                    @php
+                        $isTemplateVisible = empty($appFeatures) || !empty($appFeatures->menu_group_template);
+                    @endphp
                     @foreach (['main', 'apps', 'custom-pages', 'layouts', 'components', 'documentation', 'menu-item'] as $groupKey)
                         @php
-                            $featureKey = 'menu_group_' . str_replace('-', '_', $groupKey);
-                            $isGroupVisible = empty($appFeatures) || !empty($appFeatures->$featureKey);
                             $groupConfig = config("sidenav-template.$groupKey");
                         @endphp
                         @if ($groupConfig)
                             @include('layouts.partials.mainmenu._render', [
                                 'menuGroup' => $groupConfig,
-                                'featureKey' => $featureKey,
-                                'isGroupVisible' => $isGroupVisible,
+                                'featureKey' => 'menu_group_template',
+                                'isGroupVisible' => $isTemplateVisible,
                             ])
                         @endif
                     @endforeach
 
-                    @php
-                        $isMenuItemVisible = empty($appFeatures) || !empty($appFeatures->menu_group_menu_item);
-                    @endphp
-                    <li class="side-nav-item" data-feature="menu_group_menu_item" style="{{ $isMenuItemVisible ? '' : 'display: none !important;' }}">
+                    <li class="side-nav-item" data-feature="menu_group_template" style="{{ $isTemplateVisible ? '' : 'display: none !important;' }}">
                         <a href="#" class="side-nav-link disabled">
                             <span class="menu-icon"><i class="ti ti-ban"></i></span>
                             <span class="menu-text" data-lang="disabled-menu">Disabled Menu</span>
