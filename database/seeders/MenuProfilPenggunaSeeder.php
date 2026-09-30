@@ -14,7 +14,7 @@ class MenuProfilPenggunaSeeder extends BaseMenuSeeder
         // 1. Main Menu: Profil Pengguna
         $mm = $this->createMainMenu([
             'name' => 'Profil Pengguna',
-            'category' => 'MASTER DATA',
+            'category' => 'Master Data',
             'icon' => 'ti ti-user-circle',
             'url' => 'admin/profil-pengguna',
             'route' => 'admin.profil-pengguna.index',

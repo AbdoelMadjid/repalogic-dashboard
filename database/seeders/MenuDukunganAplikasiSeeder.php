@@ -12,7 +12,7 @@ class MenuDukunganAplikasiSeeder extends BaseMenuSeeder
         // 1. Main Parent Menu: Dukungan Aplikasi
         $mm = $this->createMainMenu([
             'name' => 'Dukungan Aplikasi',
-            'category' => 'MASTER DATA',
+            'category' => 'Master Data',
             'icon' => 'ti ti-api-app',
             'url' => 'admin/dukunganaplikasi',
             'route' => 'admin.dukunganaplikasi',

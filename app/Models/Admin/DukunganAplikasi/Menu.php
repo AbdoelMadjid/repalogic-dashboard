@@ -290,7 +290,7 @@ class Menu extends Model
             'Manajemen Menu' => 'Menu Management',
             'Menu' => 'Menu',
             'Master Data' => 'Master Data',
-            'DATA UTAMA' => 'MASTER DATA',
+            'DATA UTAMA' => 'Master Data',
             'Laporan' => 'Reports',
             'Pengaturan' => 'Settings',
         ];

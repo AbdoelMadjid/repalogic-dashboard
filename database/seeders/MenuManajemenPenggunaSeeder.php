@@ -12,7 +12,7 @@ class MenuManajemenPenggunaSeeder extends BaseMenuSeeder
         // 1. Main Parent Menu: Manajemen Pengguna
         $mm = $this->createMainMenu([
             'name' => 'Manajemen Pengguna',
-            'category' => 'MASTER DATA',
+            'category' => 'Master Data',
             'icon' => 'ti ti-users-plus',
             'url' => 'admin/manajemenpengguna',
             'route' => 'admin.manajemenpengguna',
