@@ -252,7 +252,7 @@
     }
 @endphp
 
-<div class="page-title-head d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-1 gap-sm-2">
+<div class="page-title-head d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between py-2 py-sm-0 gap-1 gap-sm-2">
     <div class="flex-grow-1">
         <h4 class="page-main-title m-0" style="text-transform: none !important;"
             @if (!empty($activeDataLang)) data-lang="{{ $activeDataLang }}" @endif>{{ $pageMainTitle }}</h4>
