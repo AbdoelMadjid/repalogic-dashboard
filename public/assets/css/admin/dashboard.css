@@ -582,26 +582,67 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-.btn-history-subfilter {
-    font-size: 0.8125rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.btn-history-subfilter.active {
-    background-color: #475569 !important;
-    color: #ffffff !important;
-    border-color: #475569 !important;
-}
-
-.btn-history-subfilter.active .badge {
-    background-color: rgba(255, 255, 255, 0.25) !important;
-    color: #ffffff !important;
+#table-unified-history {
+    width: 100% !important;
+    table-layout: auto;
 }
 
 #table-unified-history tbody tr {
     transition: background-color 0.15s ease;
 }
+
+#table-unified-history td,
+#table-unified-history th {
+    vertical-align: middle;
+}
+
+/* 13. Friendship Filter Group Mobile Responsiveness (Rule 18 Standard) */
+.friendship-filter-group {
+    display: inline-flex;
+    flex-wrap: nowrap;
+}
+
+.friendship-filter-badge {
+    font-size: 11px;
+    padding: 0.2rem 0.45rem;
+    line-height: 1.1;
+    font-weight: 600;
+}
+
+.friendship-filter-group .btn.active .friendship-filter-badge.bg-primary {
+    background-color: rgba(255, 255, 255, 0.28) !important;
+    color: #ffffff !important;
+}
+
+@media (max-width: 767.98px) {
+    .friendship-filter-group {
+        display: flex !important;
+        width: 100% !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .friendship-filter-group .btn {
+        flex: 1 1 0 !important;
+        padding: 0.32rem 0.2rem !important;
+        font-size: 11px !important;
+        white-space: nowrap !important;
+        min-width: 0 !important;
+        gap: 2px !important;
+    }
+
+    .friendship-filter-group .btn i {
+        font-size: 12.5px !important;
+    }
+
+    .friendship-filter-badge {
+        font-size: 9px !important;
+        padding: 0.12rem 0.28rem !important;
+        min-width: 13px !important;
+        font-weight: 700 !important;
+        line-height: 1 !important;
+    }
+}
+
 
 
 

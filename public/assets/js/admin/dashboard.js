@@ -575,11 +575,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const contactsGrid = document.querySelector('#dashboard-contacts-grid');
     const unifiedHistoryContainer = document.querySelector('#dashboard-unified-history-container');
     const historyEmptyFilterRow = document.querySelector('#unified-history-empty-filter-row');
+    const historyLoadmoreContainer = document.querySelector('#dashboard-history-loadmore-container');
+    const historyLoadmoreBtn = document.querySelector('#dashboard-history-loadmore-btn');
+    const historyVisibleCountSpan = document.querySelector('#history-visible-count');
+    const historyTotalCountSpan = document.querySelector('#history-total-count');
+    const historyHeaderTotalCount = document.querySelector('#history-header-total-count');
+    const historyPeriodSelect = document.querySelector('#dashboard-history-period');
 
     const STEP_SIZE = 12;
     let visibleLimit = 12;
+    const HISTORY_STEP_SIZE = 10;
+    let historyVisibleLimit = 10;
     let currentFilter = 'all';
-    let currentHistorySubfilter = 'all';
     let matchedCards = [...contactCards];
 
     function getCardRank(card) {
@@ -655,33 +662,88 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function filterHistoryRows() {
+    function filterHistoryRows(isAppending = false) {
         if (!unifiedHistoryContainer) return;
         const keyword = (contactSearchInput?.value || '').toLowerCase().trim();
-        const allRows = document.querySelectorAll('.unified-history-row');
-        let visibleCount = 0;
+        const period = historyPeriodSelect?.value || 'all';
+        const allRows = Array.from(document.querySelectorAll('.unified-history-row'));
+        
+        const nowSec = Math.floor(Date.now() / 1000);
+        const startOfTodaySec = new Date().setHours(0, 0, 0, 0) / 1000;
+        const sevenDaysAgoSec = nowSec - (7 * 86400);
+        const thirtyDaysAgoSec = nowSec - (30 * 86400);
 
-        allRows.forEach(row => {
-            const category = row.getAttribute('data-history-category') || '';
+        // 1. Filter matching rows based on search text & date period
+        const matchedRows = allRows.filter(row => {
             const searchText = (row.getAttribute('data-search-text') || row.innerText || '').toLowerCase();
+            const timeSec = parseInt(row.getAttribute('data-history-time') || '0', 10);
 
-            const matchesCategory = (currentHistorySubfilter === 'all' || category === currentHistorySubfilter);
             const matchesKeyword = !keyword || searchText.includes(keyword);
 
-            if (matchesCategory && matchesKeyword) {
+            let matchesPeriod = true;
+            if (period === 'today') {
+                matchesPeriod = timeSec >= startOfTodaySec;
+            } else if (period === '7days') {
+                matchesPeriod = timeSec >= sevenDaysAgoSec;
+            } else if (period === '30days') {
+                matchesPeriod = timeSec >= thirtyDaysAgoSec;
+            }
+
+            return matchesKeyword && matchesPeriod;
+        });
+
+        const totalMatched = matchedRows.length;
+        if (historyHeaderTotalCount) historyHeaderTotalCount.textContent = totalMatched;
+        if (historyTotalCountSpan) historyTotalCountSpan.textContent = totalMatched;
+
+        let newlyRevealed = [];
+
+        // 2. Render visible rows up to limit
+        allRows.forEach(row => {
+            const matchIndex = matchedRows.indexOf(row);
+            if (matchIndex !== -1 && matchIndex < historyVisibleLimit) {
+                if (row.classList.contains('d-none')) {
+                    newlyRevealed.push(row);
+                }
                 row.classList.remove('d-none');
-                visibleCount++;
+                row.style.display = '';
             } else {
                 row.classList.add('d-none');
+                row.style.display = 'none';
             }
         });
 
+        const currentVisible = Math.min(historyVisibleLimit, totalMatched);
+        if (historyVisibleCountSpan) historyVisibleCountSpan.textContent = currentVisible;
+
+        // 3. Manage Load More button
+        if (historyLoadmoreContainer) {
+            if (currentVisible >= totalMatched || totalMatched === 0) {
+                historyLoadmoreContainer.classList.add('d-none');
+            } else {
+                historyLoadmoreContainer.classList.remove('d-none');
+                const remaining = totalMatched - currentVisible;
+                const nextStep = Math.min(HISTORY_STEP_SIZE, remaining);
+                const btnSpan = historyLoadmoreBtn?.querySelector('span');
+                if (btnSpan) {
+                    btnSpan.textContent = `Tampilkan ${nextStep} Riwayat Berikutnya`;
+                }
+            }
+        }
+
+        // 4. Manage Empty State
         if (historyEmptyFilterRow) {
-            if (visibleCount === 0 && allRows.length > 0) {
+            if (totalMatched === 0 && allRows.length > 0) {
                 historyEmptyFilterRow.classList.remove('d-none');
+                historyEmptyFilterRow.style.display = '';
             } else {
                 historyEmptyFilterRow.classList.add('d-none');
+                historyEmptyFilterRow.style.display = 'none';
             }
+        }
+
+        if (isAppending && newlyRevealed.length > 0) {
+            newlyRevealed[0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
     }
 
@@ -753,21 +815,17 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Sub-Category Filter Buttons inside Unified History View
-    document.addEventListener('click', function (e) {
-        const btnSub = e.target.closest('.btn-history-subfilter');
-        if (btnSub) {
-            e.preventDefault();
-            document.querySelectorAll('.btn-history-subfilter').forEach(b => b.classList.remove('active'));
-            btnSub.classList.add('active');
-            currentHistorySubfilter = btnSub.getAttribute('data-subfilter') || 'all';
+    if (historyPeriodSelect) {
+        historyPeriodSelect.addEventListener('change', function () {
+            historyVisibleLimit = 10;
             filterHistoryRows();
-        }
-    });
+        });
+    }
 
     if (contactSearchInput) {
         contactSearchInput.addEventListener('input', function () {
             if (currentFilter === 'history') {
+                historyVisibleLimit = 10;
                 filterHistoryRows();
             } else {
                 filterContacts();
@@ -775,15 +833,31 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Event Delegation: Klik Tombol Anak Panah ke Bawah (Rule 2 Standard)
+    // Event Delegation: Klik Tombol Load More Kontak & Riwayat (Rule 2 Standard)
     document.addEventListener('click', function (e) {
-        const btn = e.target.closest('#dashboard-contacts-loadmore-btn');
-        if (btn) {
+        const btnContact = e.target.closest('#dashboard-contacts-loadmore-btn');
+        if (btnContact) {
             e.preventDefault();
             visibleLimit += STEP_SIZE;
             renderVisibleContacts(true);
+            return;
+        }
+
+        const btnHistory = e.target.closest('#dashboard-history-loadmore-btn');
+        if (btnHistory) {
+            e.preventDefault();
+            historyVisibleLimit += HISTORY_STEP_SIZE;
+            filterHistoryRows(true);
+            return;
         }
     });
+
+    // Inisialisasi Tooltip Bootstrap (Rule 14 & Standard)
+    if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+        document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
+            try { new bootstrap.Tooltip(el); } catch(err) {}
+        });
+    }
 
     // URL Search & Filter Parameter Parsing (e.g. Dari Notifikasi Topbar: ?contact_search=Nama&filter=incoming)
     const urlParams = new URLSearchParams(window.location.search);

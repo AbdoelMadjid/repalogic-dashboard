@@ -139,12 +139,9 @@
         </div>
     </div>
 
+    <!-- 2. KPI METRIC STATS CARDS (ADMIN / USER) -->
     @if (auth()->user()->hasAnyRole(['superadmin', 'admin']))
-        <!-- ========================================================================= -->
-        <!-- 👑 DASHBOARD KHUSUS ADMINISTRATOR (SUPERADMIN & ADMIN)                    -->
-        <!-- ========================================================================= -->
-
-        <!-- 2. KPI METRIC STATS CARDS (ADMIN) -->
+        <!-- KPI CARDS UNTUK ADMINISTRATOR (SUPERADMIN & ADMIN) -->
         <div class="row g-3 mb-4">
             <!-- Card 1: Total Pengguna -->
             <div class="col-sm-6 col-xl-3">
@@ -208,7 +205,7 @@
                 </div>
             </div>
 
-            <!-- Card 4: Kesehatan Sistem & Backup DB -->
+            <!-- Card 4: Backup DB & Sistem -->
             <div class="col-sm-6 col-xl-3">
                 <div class="card kpi-card shadow-sm h-100 mb-0">
                     <div class="card-body p-3.5">
@@ -231,452 +228,8 @@
                 </div>
             </div>
         </div>
-
-        <!-- 3. GRAFIK ANALITIK APEXCHARTS (ADMIN) -->
-        <div class="row g-3 mb-4">
-            <!-- Grafik Tren Login 7 Hari -->
-            <div class="col-xl-8">
-                <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
-                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
-                            <i class="ti ti-chart-area-line text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
-                            <span>Tren Aktivitas Login &amp; Pendaftaran (7 Hari Terakhir)</span>
-                        </h5>
-                        <span class="badge bg-primary-subtle text-primary fs-xs font-monospace">Real-Time Sync</span>
-                    </div>
-                    <div class="card-body p-3">
-                        <div id="chart-logins-trend"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Grafik Donut Distribusi Role -->
-            <div class="col-xl-4">
-                <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
-                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
-                            <i class="ti ti-chart-pie text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
-                            <span>Distribusi Peran Pengguna</span>
-                        </h5>
-                        <span class="badge bg-light text-dark border fs-xs">Spatie Roles</span>
-                    </div>
-                    <div class="card-body p-3">
-                        <div id="chart-roles-donut"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 4. PUSAT AKSI TERTUNDA & PINTASAN CEPAT (ADMIN) -->
-        <div class="row g-3 mb-4">
-            <!-- Pusat Aksi Tertunda (Pending Approvals & Deactivations) -->
-            <div class="col-xl-6">
-                <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-primary text-white py-3 d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
-                        <h5 class="card-title text-white mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
-                            <i class="ti ti-bell-ringing me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
-                            <span>Pusat Tindakan &amp; Permohonan Tertunda</span>
-                        </h5>
-                        <span class="badge bg-white text-primary fw-bold font-monospace">
-                            {{ $userStats['pending'] + $userStats['pending_deactivations'] }} Menunggu
-                        </span>
-                    </div>
-                    <div class="card-body p-0">
-                        <ul class="nav nav-tabs nav-bordered px-3 pt-2 bg-light-subtle" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button type="button" class="nav-link active py-2 fs-13" id="tab-pending-approvals-btn" data-bs-toggle="tab" data-bs-target="#tab-pending-approvals" role="tab" aria-controls="tab-pending-approvals" aria-selected="true" title="Pendaftaran Baru ({{ $pendingApprovals->count() }})">
-                                    <i class="ti ti-user-plus me-0 me-md-1.5"></i>
-                                    <span class="d-none d-md-inline">Pendaftaran Baru</span>
-                                    <span class="badge bg-primary-subtle text-primary ms-1 font-monospace">{{ $pendingApprovals->count() }}</span>
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button type="button" class="nav-link py-2 fs-13" id="tab-pending-deactivations-btn" data-bs-toggle="tab" data-bs-target="#tab-pending-deactivations" role="tab" aria-controls="tab-pending-deactivations" aria-selected="false" title="Permohonan Nonaktif ({{ $pendingDeactivations->count() }})">
-                                    <i class="ti ti-user-x me-0 me-md-1.5"></i>
-                                    <span class="d-none d-md-inline">Permohonan Nonaktif</span>
-                                    <span class="badge bg-danger-subtle text-danger ms-1 font-monospace">{{ $pendingDeactivations->count() }}</span>
-                                </button>
-                            </li>
-                        </ul>
-
-                        <div class="tab-content p-3">
-                            <!-- Tab Pendaftaran Baru -->
-                            <div class="tab-pane show active" id="tab-pending-approvals">
-                                @if ($pendingApprovals->isEmpty())
-                                    <div class="text-center py-4 text-muted">
-                                        <i class="ti ti-circle-check fs-24 text-success d-block mb-1.5"></i>
-                                        <p class="fs-13 mb-0">Tidak ada pendaftaran pengguna baru yang menunggu persetujuan.</p>
-                                    </div>
-                                @else
-                                    <div class="table-responsive">
-                                        <table class="table table-hover align-middle mb-0 dashboard-mini-table">
-                                            <thead class="align-middle text-center text-nowrap">
-                                                <tr>
-                                                    <th>Pengguna</th>
-                                                    <th>Email</th>
-                                                    <th>Waktu Daftar</th>
-                                                    <th>Aksi Cepat</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($pendingApprovals as $pUser)
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-flex align-items-center gap-2">
-                                                                <img src="{{ $pUser->avatar_url }}" alt="{{ $pUser->name }}" class="dashboard-user-avatar">
-                                                                <span class="fw-semibold text-dark">{{ $pUser->name }}</span>
-                                                            </div>
-                                                        </td>
-                                                        <td class="text-muted">{{ $pUser->email }}</td>
-                                                        <td class="text-center text-muted fs-12">{{ $pUser->created_at->diffForHumans() }}</td>
-                                                        <td class="text-center">
-                                                            <form action="{{ route('admin.manajemenpengguna.users.approve', $pUser->id) }}" method="POST" class="d-inline">
-                                                                @csrf
-                                                                <button type="button" class="btn btn-xs btn-success text-white px-2 py-1 rounded btn-quick-approve-user" data-user-name="{{ $pUser->name }}" title="Setujui &amp; Aktifkan Akun">
-                                                                    <i class="ti ti-check me-1"></i>Setujui
-                                                                </button>
-                                                            </form>
-                                                            <a href="{{ route('admin.manajemenpengguna.users.index') }}" class="btn btn-xs btn-light border px-2 py-1 rounded" title="Lihat di Tabel Pengguna">
-                                                                <i class="ti ti-eye"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                @endif
-                            </div>
-
-                            <!-- Tab Permohonan Nonaktif -->
-                            <div class="tab-pane" id="tab-pending-deactivations">
-                                @if ($pendingDeactivations->isEmpty())
-                                    <div class="text-center py-4 text-muted">
-                                        <i class="ti ti-circle-check fs-24 text-success d-block mb-1.5"></i>
-                                        <p class="fs-13 mb-0">Tidak ada permohonan penonaktifan akun yang menunggu tindakan.</p>
-                                    </div>
-                                @else
-                                    <div class="table-responsive">
-                                        <table class="table table-hover align-middle mb-0 dashboard-mini-table">
-                                            <thead class="align-middle text-center text-nowrap">
-                                                <tr>
-                                                    <th>Pengguna</th>
-                                                    <th>Alasan Permohonan</th>
-                                                    <th>Diajukan</th>
-                                                    <th>Aksi Cepat</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($pendingDeactivations as $dUser)
-                                                    <tr>
-                                                        <td>
-                                                            <div class="d-flex align-items-center gap-2">
-                                                                <img src="{{ $dUser->avatar_url }}" alt="{{ $dUser->name }}" class="dashboard-user-avatar">
-                                                                <span class="fw-semibold text-dark">{{ $dUser->name }}</span>
-                                                            </div>
-                                                        </td>
-                                                        <td class="text-muted fs-12 text-truncate" style="max-width: 180px;">
-                                                            {{ $dUser->deactivation_reason ?? 'Tidak mencantumkan alasan' }}
-                                                        </td>
-                                                        <td class="text-center text-muted fs-12">{{ \Carbon\Carbon::parse($dUser->deactivation_requested_at)->diffForHumans() }}</td>
-                                                        <td class="text-center">
-                                                            <form action="{{ route('admin.manajemenpengguna.users.deactivate', $dUser->id) }}" method="POST" class="d-inline">
-                                                                @csrf
-                                                                <button type="button" class="btn btn-xs btn-danger text-white px-2 py-1 rounded btn-quick-approve-deact" data-user-name="{{ $dUser->name }}" title="Setujui Penonaktifan">
-                                                                    <i class="ti ti-check me-1"></i>Setujui
-                                                                </button>
-                                                            </form>
-                                                            <a href="{{ route('admin.manajemenpengguna.users.index') }}" class="btn btn-xs btn-light border px-2 py-1 rounded" title="Lihat di Tabel Pengguna">
-                                                                <i class="ti ti-eye"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pusat Pintasan Cepat Admin (Manajemen Pengguna & Dukungan Aplikasi) -->
-            <div class="col-xl-6">
-                <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
-                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
-                            <i class="ti ti-bolt text-warning me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
-                            <span>Pusat Akses Pintas Modul</span>
-                        </h5>
-                        <span class="badge bg-primary-subtle text-primary font-monospace">12 Modul Utama</span>
-                    </div>
-                    <div class="card-body p-0">
-                        <ul class="nav nav-tabs nav-bordered px-3 pt-2 bg-light-subtle" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button type="button" class="nav-link active py-2 fs-13" id="tab-shortcut-users-btn" data-bs-toggle="tab" data-bs-target="#tab-shortcut-users" role="tab" aria-controls="tab-shortcut-users" aria-selected="true" title="Manajemen Pengguna (6 Modul)">
-                                    <i class="ti ti-users me-0 me-md-1.5 text-primary"></i>
-                                    <span class="d-none d-md-inline">Manajemen Pengguna</span>
-                                    <span class="badge bg-primary-subtle text-primary ms-1 font-monospace">6</span>
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button type="button" class="nav-link py-2 fs-13" id="tab-shortcut-app-btn" data-bs-toggle="tab" data-bs-target="#tab-shortcut-app" role="tab" aria-controls="tab-shortcut-app" aria-selected="false" title="Dukungan Aplikasi (6 Modul)">
-                                    <i class="ti ti-settings-cog me-0 me-md-1.5 text-info"></i>
-                                    <span class="d-none d-md-inline">Dukungan Aplikasi</span>
-                                    <span class="badge bg-info-subtle text-info ms-1 font-monospace">6</span>
-                                </button>
-                            </li>
-                        </ul>
-
-                        <div class="tab-content p-3">
-                            <!-- Tab 1: Manajemen Pengguna (6 Menu) -->
-                            <div class="tab-pane show active" id="tab-shortcut-users">
-                                <div class="row g-2">
-                                    <div class="col-6 col-sm-4">
-                                        <a href="{{ route('admin.manajemenpengguna.users.index') }}" class="quick-action-tile">
-                                            <div class="quick-action-icon bg-primary-subtle text-primary">
-                                                <i class="ti ti-users"></i>
-                                            </div>
-                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Data Pengguna</span>
-                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Kelola akun user</span>
-                                        </a>
-                                    </div>
-                                    <div class="col-6 col-sm-4">
-                                        <a href="{{ route('admin.manajemenpengguna.data-login.index') }}" class="quick-action-tile">
-                                            <div class="quick-action-icon bg-success-subtle text-success">
-                                                <i class="ti ti-history"></i>
-                                            </div>
-                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Data Login</span>
-                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Log aktivitas harian</span>
-                                        </a>
-                                    </div>
-                                    <div class="col-6 col-sm-4">
-                                        <a href="{{ route('admin.manajemenpengguna.role.index') }}" class="quick-action-tile">
-                                            <div class="quick-action-icon bg-info-subtle text-info">
-                                                <i class="ti ti-shield-lock"></i>
-                                            </div>
-                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Role Pengguna</span>
-                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Peran &amp; hirarki</span>
-                                        </a>
-                                    </div>
-                                    <div class="col-6 col-sm-4">
-                                        <a href="{{ route('admin.manajemenpengguna.permission.index') }}" class="quick-action-tile">
-                                            <div class="quick-action-icon bg-warning-subtle text-warning">
-                                                <i class="ti ti-key"></i>
-                                            </div>
-                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Permission</span>
-                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Master hak izin</span>
-                                        </a>
-                                    </div>
-                                    <div class="col-6 col-sm-4">
-                                        <a href="{{ route('admin.manajemenpengguna.akses-role.index') }}" class="quick-action-tile">
-                                            <div class="quick-action-icon bg-purple-subtle text-purple">
-                                                <i class="ti ti-lock-access"></i>
-                                            </div>
-                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Akses Role</span>
-                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Matriks izin peran</span>
-                                        </a>
-                                    </div>
-                                    <div class="col-6 col-sm-4">
-                                        <a href="{{ route('admin.manajemenpengguna.akses-user.index') }}" class="quick-action-tile">
-                                            <div class="quick-action-icon bg-danger-subtle text-danger">
-                                                <i class="ti ti-user-shield"></i>
-                                            </div>
-                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Akses User</span>
-                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Izin langsung user</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Tab 2: Dukungan Aplikasi (6 Menu) -->
-                            <div class="tab-pane" id="tab-shortcut-app">
-                                <div class="row g-2">
-                                    <div class="col-6 col-sm-4">
-                                        <a href="{{ route('admin.dukunganaplikasi.profil-aplikasi.index') }}" class="quick-action-tile">
-                                            <div class="quick-action-icon bg-primary-subtle text-primary">
-                                                <i class="ti ti-id"></i>
-                                            </div>
-                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Profil Aplikasi</span>
-                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Identitas &amp; meta</span>
-                                        </a>
-                                    </div>
-                                    <div class="col-6 col-sm-4">
-                                        <a href="{{ route('admin.dukunganaplikasi.fitur-aplikasi.index') }}" class="quick-action-tile">
-                                            <div class="quick-action-icon bg-danger-subtle text-danger">
-                                                <i class="ti ti-settings-cog"></i>
-                                            </div>
-                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Fitur Aplikasi</span>
-                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Pusat kontrol sistem</span>
-                                        </a>
-                                    </div>
-                                    <div class="col-6 col-sm-4">
-                                        <a href="{{ route('admin.dukunganaplikasi.menu.index') }}" class="quick-action-tile">
-                                            <div class="quick-action-icon bg-info-subtle text-info">
-                                                <i class="ti ti-layout-sidebar"></i>
-                                            </div>
-                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Manajemen Menu</span>
-                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Navigasi sidebar</span>
-                                        </a>
-                                    </div>
-                                    <div class="col-6 col-sm-4">
-                                        <a href="{{ route('admin.dukunganaplikasi.translation.index') }}" class="quick-action-tile">
-                                            <div class="quick-action-icon bg-success-subtle text-success">
-                                                <i class="ti ti-language"></i>
-                                            </div>
-                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Kamus Bahasa</span>
-                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Bilingual i18n</span>
-                                        </a>
-                                    </div>
-                                    <div class="col-6 col-sm-4">
-                                        <a href="{{ route('admin.dukunganaplikasi.backup-db.index') }}" class="quick-action-tile">
-                                            <div class="quick-action-icon bg-warning-subtle text-warning">
-                                                <i class="ti ti-database"></i>
-                                            </div>
-                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Backup Database</span>
-                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Cadangan SQL server</span>
-                                        </a>
-                                    </div>
-                                    <div class="col-6 col-sm-4">
-                                        <a href="{{ route('admin.dukunganaplikasi.konfigurasi-website.index') }}" class="quick-action-tile">
-                                            <div class="quick-action-icon bg-purple-subtle text-purple">
-                                                <i class="ti ti-world-www"></i>
-                                            </div>
-                                            <span class="fw-semibold fs-13 text-center text-truncate w-100">Konfigurasi Web</span>
-                                            <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Tema &amp; landing page</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 5. FEED AKTIVITAS LOGIN TERKINI & PESAN (ADMIN) -->
-        <div class="row g-3 mb-4">
-            <!-- Tabel Aktivitas Login Terkini -->
-            <div class="col-xl-8">
-                <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2.5 gap-md-0">
-                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
-                            <i class="ti ti-history text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
-                            <span>Riwayat Aktivitas Login Pengguna Terkini</span>
-                        </h5>
-                        <a href="{{ route('admin.manajemenpengguna.data-login.index') }}" class="btn btn-xs btn-light border px-2.5 py-1.5 rounded" title="Lihat Semua Log">
-                            Lihat Semua Log <i class="ti ti-arrow-right ms-1"></i>
-                        </a>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0 dashboard-mini-table">
-                                <thead class="align-middle text-center text-nowrap">
-                                    <tr>
-                                        <th>Pengguna</th>
-                                        <th>Peran</th>
-                                        <th>Alamat IP</th>
-                                        <th>Perangkat / Browser</th>
-                                        <th>Waktu Masuk</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($recentLogins as $lLog)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <img src="{{ $lLog->user?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $lLog->user->name ?? 'User' }}" class="dashboard-user-avatar">
-                                                    <div>
-                                                        <span class="fw-semibold text-dark d-block">{{ $lLog->user->name ?? 'User #' . $lLog->user_id }}</span>
-                                                        <span class="text-muted fs-xxs">{{ $lLog->user->email ?? '-' }}</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-center">
-                                                @if ($lLog->user && $lLog->user->roles->isNotEmpty())
-                                                    @foreach ($lLog->user->roles as $r)
-                                                        <span class="badge bg-secondary-subtle text-dark fs-xxs">{{ strtoupper($r->name) }}</span>
-                                                    @endforeach
-                                                @else
-                                                    <span class="badge bg-light text-muted fs-xxs">-</span>
-                                                @endif
-                                            </td>
-                                            <td class="text-center font-monospace fs-12 text-muted">{{ $lLog->ip_address }}</td>
-                                            <td class="text-center text-muted fs-12">
-                                                <i class="ti ti-device-desktop me-1"></i>{{ $lLog->user_agent ? Str::limit($lLog->user_agent, 24) : 'Web Client' }}
-                                            </td>
-                                            <td class="text-center text-muted fs-12">
-                                                {{ \Carbon\Carbon::parse($lLog->login_at)->diffForHumans() }}
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center py-4 text-muted">Belum ada riwayat aktivitas login tercatat.</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pesan & Obrolan Terkini -->
-            <div class="col-xl-4">
-                <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2.5 gap-md-0">
-                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
-                            <i class="ti ti-messages text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
-                            <span>Pesan &amp; Obrolan Terkini</span>
-                        </h5>
-                        <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="btn btn-xs btn-primary bg-primary text-white px-2.5 py-1.5 rounded" title="Buka Chat Hub">
-                            Buka Chat Hub
-                        </a>
-                    </div>
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-column">
-                            @forelse ($recentMessages as $msg)
-                                @php
-                                    $isMe = $msg->sender_id === auth()->id();
-                                    $partner = $isMe ? $msg->receiver : $msg->sender;
-                                @endphp
-                                <a href="{{ route('admin.profil-pengguna.messages.index', ['user_id' => $partner->id ?? '']) }}" class="chat-preview-item">
-                                    <div class="chat-avatar-wrapper">
-                                        <img src="{{ $partner?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $partner->name ?? 'User' }}" class="chat-preview-avatar">
-                                    </div>
-                                    <div class="chat-content-box">
-                                        <div class="chat-preview-header">
-                                            <span class="chat-preview-name">{{ $partner->name ?? 'Pengguna' }}</span>
-                                            <span class="chat-preview-time"><i class="ti ti-clock me-1"></i>{{ $msg->created_at->diffForHumans() }}</span>
-                                        </div>
-                                        <p class="chat-preview-body mb-0">
-                                            @if ($isMe)
-                                                <span class="text-primary fw-semibold me-1">Anda:</span>
-                                            @endif
-                                            {{ $msg->body ?: ($msg->attachment_name ? 'Mengirim lampiran berkas' : ($msg->reason ? 'Alasan: ' . $msg->reason : 'Pesan')) }}
-                                        </p>
-                                    </div>
-                                </a>
-                            @empty
-                                <div class="text-center py-4 text-muted">
-                                    <i class="ti ti-message-off fs-24 text-muted d-block mb-1.5"></i>
-                                    <p class="fs-13 mb-0">Belum ada obrolan terkini.</p>
-                                </div>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     @else
-        <!-- ========================================================================= -->
-        <!-- 👤 DASHBOARD KHUSUS PENGGUNA UMUM (ROLE: USER)                            -->
-        <!-- ========================================================================= -->
-
-        <!-- 2. KPI METRIC STATS CARDS (USER) -->
+        <!-- KPI CARDS UNTUK PENGGUNA UMUM (ROLE: USER) -->
         <div class="row g-3 mb-4">
             <!-- Card 1: Pesan Masuk -->
             <div class="col-sm-6 col-xl-3">
@@ -759,202 +312,15 @@
                 </div>
             </div>
         </div>
-
-        <!-- 3. PUSAT PINTASAN PENGGUNA & RINGKASAN PROFIL (USER) -->
-        <div class="row g-3 mb-4">
-            <!-- Pusat Pintasan Pengguna -->
-            <div class="col-xl-7">
-                <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
-                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
-                            <i class="ti ti-bolt text-warning me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
-                            <span>Pusat Akses Pintas Pengguna</span>
-                        </h5>
-                        <span class="badge bg-light text-dark border fs-xs">Shortcuts</span>
-                    </div>
-                    <div class="card-body p-3">
-                        <div class="row g-2">
-                            <div class="col-sm-6">
-                                <a href="{{ route('admin.profil-pengguna.index') }}" class="quick-action-tile">
-                                    <div class="quick-action-icon bg-primary-subtle text-primary">
-                                        <i class="ti ti-user-edit"></i>
-                                    </div>
-                                    <span class="fw-semibold fs-13 text-center">Edit Profil &amp; Foto</span>
-                                    <span class="fs-xxs text-muted mt-0.5">Perbarui biodata dan avatar</span>
-                                </a>
-                            </div>
-                            <div class="col-sm-6">
-                                <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="quick-action-tile">
-                                    <div class="quick-action-icon bg-info-subtle text-info">
-                                        <i class="ti ti-messages"></i>
-                                    </div>
-                                    <span class="fw-semibold fs-13 text-center">Pesan &amp; Obrolan</span>
-                                    <span class="fs-xxs text-muted mt-0.5">Komunikasi dengan rekan</span>
-                                </a>
-                            </div>
-                            <div class="col-sm-6">
-                                <a href="{{ route('admin.profil-pengguna.index') }}" class="quick-action-tile">
-                                    <div class="quick-action-icon bg-success-subtle text-success">
-                                        <i class="ti ti-id"></i>
-                                    </div>
-                                    <span class="fw-semibold fs-13 text-center">Kartu Profil Saya</span>
-                                    <span class="fs-xxs text-muted mt-0.5">Lihat pratinjau publik</span>
-                                </a>
-                            </div>
-                            <div class="col-sm-6">
-                                <a href="{{ route('template.documentation.changelog') }}" class="quick-action-tile">
-                                    <div class="quick-action-icon bg-secondary-subtle text-secondary">
-                                        <i class="ti ti-git-branch"></i>
-                                    </div>
-                                    <span class="fw-semibold fs-13 text-center">Riwayat &amp; Rilis</span>
-                                    <span class="fs-xxs text-muted mt-0.5">Changelog Sistem</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Kartu Status Profil & Akun -->
-            <div class="col-xl-5">
-                <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
-                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
-                            <i class="ti ti-shield-check text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
-                            <span>Status Akun &amp; Keamanan</span>
-                        </h5>
-                        <span class="badge bg-success-subtle text-success">Aktif &amp; Terverifikasi</span>
-                    </div>
-                    <div class="card-body p-3.5">
-                        <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom">
-                            <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="rounded-circle border" style="width: 54px; height: 54px; object-fit: cover; object-position: top;">
-                            <div>
-                                <h6 class="fw-bold mb-0.5 text-dark">{{ $user->name }}</h6>
-                                <span class="text-muted fs-12 d-block mb-1">{{ $user->email }}</span>
-                                <span class="badge bg-primary-subtle text-primary fs-xxs">Pengguna Terdaftar</span>
-                            </div>
-                        </div>
-                        <div class="fs-13 text-muted">
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>Bergabung Sejak:</span>
-                                <strong class="text-dark">{{ $user->created_at->translatedFormat('d F Y') }}</strong>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>Total Sesi Masuk:</span>
-                                <strong class="text-dark">{{ $totalMyLogins }} Kali</strong>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <span>Status Keamanan:</span>
-                                <span class="text-success fw-semibold"><i class="ti ti-lock me-1"></i>Terkonfigurasi</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 4. RIWAYAT LOGIN PRIBADI & OBROLAN SAYA (USER) -->
-        <div class="row g-3 mb-4">
-            <!-- Riwayat Login Akun Sendiri -->
-            <div class="col-xl-7">
-                <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
-                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
-                            <i class="ti ti-history text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
-                            <span>Riwayat Aktivitas Masuk Akun Saya</span>
-                        </h5>
-                        <span class="badge bg-light text-dark border fs-xs">Recent Logins</span>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0 dashboard-mini-table">
-                                <thead class="align-middle text-center text-nowrap">
-                                    <tr>
-                                        <th>Alamat IP</th>
-                                        <th>Perangkat / Browser</th>
-                                        <th>Waktu Masuk</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($myRecentLogins as $mLog)
-                                        <tr>
-                                            <td class="text-center font-monospace fs-12 text-dark fw-semibold">{{ $mLog->ip_address }}</td>
-                                            <td class="text-center text-muted fs-12">
-                                                <i class="ti ti-device-desktop me-1"></i>{{ $mLog->user_agent ? Str::limit($mLog->user_agent, 28) : 'Web Client' }}
-                                            </td>
-                                            <td class="text-center text-muted fs-12">
-                                                {{ \Carbon\Carbon::parse($mLog->login_at)->translatedFormat('d M Y, H:i') }} WIB
-                                            </td>
-                                            <td class="text-center">
-                                                <span class="badge bg-success-subtle text-success fs-xxs"><i class="ti ti-check me-1"></i>Berhasil</span>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="4" class="text-center py-4 text-muted">Belum ada catatan aktivitas masuk.</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Percakapan Obrolan Terkini -->
-            <div class="col-xl-5">
-                <div class="card shadow-sm border-0 h-100 mb-0">
-                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2.5 gap-md-0">
-                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
-                            <i class="ti ti-messages text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
-                            <span>Obrolan &amp; Pesan Saya</span>
-                        </h5>
-                        <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="btn btn-xs btn-primary bg-primary text-white px-2.5 py-1.5 rounded" title="Buka Chat">
-                            Buka Chat
-                        </a>
-                    </div>
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-column">
-                            @forelse ($myRecentMessages as $msg)
-                                @php
-                                    $isMe = $msg->sender_id === auth()->id();
-                                    $partner = $isMe ? $msg->receiver : $msg->sender;
-                                @endphp
-                                <a href="{{ route('admin.profil-pengguna.messages.index', ['user_id' => $partner->id ?? '']) }}" class="chat-preview-item">
-                                    <div class="chat-avatar-wrapper">
-                                        <img src="{{ $partner?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $partner->name ?? 'User' }}" class="chat-preview-avatar">
-                                    </div>
-                                    <div class="chat-content-box">
-                                        <div class="chat-preview-header">
-                                            <span class="chat-preview-name">{{ $partner->name ?? 'Pengguna' }}</span>
-                                            <span class="chat-preview-time"><i class="ti ti-clock me-1"></i>{{ $msg->created_at->diffForHumans() }}</span>
-                                        </div>
-                                        <p class="chat-preview-body mb-0">
-                                            @if ($isMe)
-                                                <span class="text-primary fw-semibold me-1">Anda:</span>
-                                            @endif
-                                            {{ $msg->body ?: ($msg->attachment_name ? 'Mengirim lampiran berkas' : ($msg->reason ? 'Alasan: ' . $msg->reason : 'Pesan')) }}
-                                        </p>
-                                    </div>
-                                </a>
-                            @empty
-                                <div class="text-center py-4 text-muted">
-                                    <i class="ti ti-message-off fs-24 text-muted d-block mb-1.5"></i>
-                                    <p class="fs-13 mb-0">Belum ada obrolan terkini.</p>
-                                </div>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     @endif
 
-    <!-- 6. WIDGET DIREKTORI DATA PENGGUNA & KONTAK (FULL WIDTH) -->
+    <!-- 3. TATA LETAK UTAMA DASHBOARD (KIRI: DIREKTORI PENGGUNA, KANAN: WIDGET ROLE) -->
     <div class="row g-3 mb-4">
-        <div class="col-12">
-            <div class="card shadow-sm border-0 mb-0">
+        <!-- ========================================================================= -->
+        <!-- 👈 KOLOM KIRI: DIREKTORI PENGGUNA & JARINGAN PERTEMANAN                   -->
+        <!-- ========================================================================= -->
+        <div class="col-12 col-lg-7 col-xl-8 col-xxl-8">
+            <div class="card shadow-sm border-0 mb-0 h-100">
                 <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-3">
                     <div class="d-flex flex-column align-items-center align-items-md-start">
                         <h5 class="card-title mb-0 fw-bold text-dark d-flex flex-column flex-md-row align-items-center">
@@ -965,50 +331,40 @@
                     </div>
 
                     <!-- Search Input -->
-                    <div class="app-search" style="min-width: 250px;">
-                        <input type="text" id="dashboard-contact-search" class="form-control" style="padding-left: 40px !important;" placeholder="Cari nama, email, no. telepon/WA...">
+                    <div class="app-search w-100 w-md-auto" style="min-width: 220px;">
+                        <input type="text" id="dashboard-contact-search" class="form-control" style="padding-left: 40px !important;" placeholder="Cari nama, email, no. telp/WA...">
                         <i class="ti ti-search app-search-icon text-muted"></i>
                     </div>
                 </div>
 
                 <div class="card-body p-3.5">
-                    <!-- Filter Kategori Pertemanan & Tombol Semua Riwayat Terpadu (Rule 16, 17, 18, 19 Standard) -->
-                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3.5 pb-3 border-bottom">
-                        <div class="d-flex align-items-center gap-2">
-                            <span class="badge bg-light text-dark border px-2.5 py-1.5 rounded-pill fs-12 fw-medium d-none d-md-inline-flex align-items-center gap-1">
-                                <i class="ti ti-layout-grid text-primary"></i> Direktori &amp; Jaringan
-                            </span>
-                        </div>
-
-                        <div class="d-flex flex-wrap align-items-center gap-2">
-                            <div class="btn-group btn-group-sm friendship-filter-group" role="group" aria-label="Filter Pertemanan">
-                                <button type="button" class="btn btn-outline-primary active btn-friend-filter d-inline-flex align-items-center gap-1.5" data-filter="all" title="Semua Pengguna ({{ $contactUsers->count() }})">
-                                    <i class="ti ti-users"></i>
-                                    <span class="d-none d-sm-inline">Semua</span>
-                                    <span class="badge bg-primary text-white rounded-pill fs-xxs" id="filter-badge-all">{{ $contactUsers->count() }}</span>
-                                </button>
-                                <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center gap-1.5" data-filter="friends" title="Teman Saya ({{ $totalFriendsCount }})">
-                                    <i class="ti ti-user-check"></i>
-                                    <span class="d-none d-sm-inline">Teman Saya</span>
-                                    <span class="badge bg-success text-white rounded-pill fs-xxs" id="filter-badge-friends">{{ $totalFriendsCount }}</span>
-                                </button>
-                                <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center gap-1.5" data-filter="incoming" title="Ajakan Masuk ({{ $incomingFriendRequestsCount }})">
-                                    <i class="ti ti-user-plus"></i>
-                                    <span class="d-none d-sm-inline">Ajakan Masuk</span>
-                                    <span class="badge {{ $incomingFriendRequestsCount > 0 ? 'bg-danger text-white' : 'bg-secondary-subtle text-secondary' }} rounded-pill fs-xxs" id="filter-badge-incoming">{{ $incomingFriendRequestsCount }}</span>
-                                </button>
-                                <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center gap-1.5" data-filter="outgoing" title="Ajakan Terkirim ({{ $outgoingFriendRequestsCount }})">
-                                    <i class="ti ti-clock-pause"></i>
-                                    <span class="d-none d-sm-inline">Ajakan Terkirim</span>
-                                    <span class="badge {{ $outgoingFriendRequestsCount > 0 ? 'bg-warning text-dark' : 'bg-secondary-subtle text-secondary' }} rounded-pill fs-xxs" id="filter-badge-outgoing">{{ $outgoingFriendRequestsCount }}</span>
-                                </button>
-                            </div>
-
-                            <!-- Tombol Terpisah di Samping Ajakan Terkirim: Semua Riwayat (1 Klik Melihat Semua Riwayat Terpadu) -->
-                            <button type="button" class="btn btn-sm btn-outline-primary btn-friend-filter d-inline-flex align-items-center gap-1.5" data-filter="history" id="btn-filter-all-history" title="Lihat Semua Riwayat Aktivitas &amp; Interaksi ({{ $allActivityHistories->count() }})">
+                    <!-- Filter Kategori Pertemanan & Tombol Semua Riwayat Terpadu -->
+                    <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-3.5 pb-3 border-bottom">
+                        <div class="btn-group btn-group-sm friendship-filter-group w-100" role="group" aria-label="Filter Pertemanan">
+                            <button type="button" class="btn btn-outline-primary active btn-friend-filter d-inline-flex align-items-center justify-content-center gap-1" data-filter="all" title="Semua Pengguna ({{ $contactUsers->count() }})">
+                                <i class="ti ti-users"></i>
+                                <span class="d-none d-sm-inline">Semua</span>
+                                <span class="badge bg-primary text-white rounded-pill friendship-filter-badge" id="filter-badge-all">{{ $contactUsers->count() }}</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center justify-content-center gap-1" data-filter="friends" title="Teman Saya ({{ $totalFriendsCount }})">
+                                <i class="ti ti-user-check"></i>
+                                <span class="d-none d-sm-inline">Teman Saya</span>
+                                <span class="badge bg-success text-white rounded-pill friendship-filter-badge" id="filter-badge-friends">{{ $totalFriendsCount }}</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center justify-content-center gap-1" data-filter="incoming" title="Ajakan Masuk ({{ $incomingFriendRequestsCount }})">
+                                <i class="ti ti-user-plus"></i>
+                                <span class="d-none d-sm-inline">Ajakan Masuk</span>
+                                <span class="badge {{ $incomingFriendRequestsCount > 0 ? 'bg-danger text-white' : 'bg-secondary-subtle text-secondary' }} rounded-pill friendship-filter-badge" id="filter-badge-incoming">{{ $incomingFriendRequestsCount }}</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center justify-content-center gap-1" data-filter="outgoing" title="Ajakan Terkirim ({{ $outgoingFriendRequestsCount }})">
+                                <i class="ti ti-clock-pause"></i>
+                                <span class="d-none d-sm-inline">Ajakan Terkirim</span>
+                                <span class="badge {{ $outgoingFriendRequestsCount > 0 ? 'bg-warning text-dark' : 'bg-secondary-subtle text-secondary' }} rounded-pill friendship-filter-badge" id="filter-badge-outgoing">{{ $outgoingFriendRequestsCount }}</span>
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center justify-content-center gap-1" data-filter="history" id="btn-filter-all-history" title="Lihat Semua Riwayat Aktivitas &amp; Interaksi ({{ $allActivityHistories->count() }})">
                                 <i class="ti ti-history"></i>
                                 <span class="d-none d-sm-inline">Semua Riwayat</span>
-                                <span class="badge bg-primary text-white rounded-pill fs-xxs" id="filter-badge-history">{{ $allActivityHistories->count() }}</span>
+                                <span class="badge bg-primary text-white rounded-pill friendship-filter-badge" id="filter-badge-history">{{ $allActivityHistories->count() }}</span>
                             </button>
                         </div>
                     </div>
@@ -1035,7 +391,7 @@
                                 $cRgbaTop = "rgba({$cR}, {$cG}, {$cB}, " . max(0, $cAlpha - 0.25) . ")";
                                 $cBlurPx = (int) ($cUser->cover_blur ?? 0);
                             @endphp
-                            <div class="col-sm-6 col-lg-4 col-xl-3 dashboard-contact-col"
+                            <div class="col-12 col-sm-6 col-xl-6 col-xxl-4 dashboard-contact-col"
                                 data-search-name="{{ strtolower($cUser->name) }}"
                                 data-search-email="{{ strtolower($cUser->email) }}"
                                 data-search-phone="{{ strtolower($cUser->detail->telepon ?? '') }}"
@@ -1231,7 +587,7 @@
                         <p class="fs-13 mb-0">Tidak ada pengguna yang cocok dengan filter atau kriteria pencarian.</p>
                     </div>
 
-                    <!-- Tombol Anak Panah Muat Lebih Banyak (Load More Down Arrow) -->
+                    <!-- Tombol Anak Panah Muat Lebih Banyak -->
                     <div class="text-center pt-4 pb-2" id="dashboard-contacts-loadmore-container">
                         <button type="button" id="dashboard-contacts-loadmore-btn" class="btn btn-sm btn-outline-primary rounded-pill px-4 py-1.5 shadow-sm fw-semibold d-inline-flex align-items-center gap-1.5">
                             <span>Tampilkan 12 Pengguna Berikutnya</span>
@@ -1242,108 +598,109 @@
                         </div>
                     </div>
 
-                    <!-- 2. TAMPILAN TERPADU SEMUA RIWAYAT (Hanya tampil saat tombol 'Semua Riwayat' aktif) -->
+                    <!-- 2. TAMPILAN TERPADU SEMUA RIWAYAT -->
                     <div id="dashboard-unified-history-container" class="d-none">
-                        <!-- Sub-Category Filter Toolbar for History -->
-                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2.5 mb-3.5 pb-3 border-bottom">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-primary-subtle text-primary fs-12 px-2.5 py-1.5 rounded-pill fw-semibold">
+                        <!-- History Header / Info Bar with Date Range Quick Filter -->
+                        <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-between align-items-center text-center text-md-start gap-2.5 gap-md-3 py-2.5 mb-3.5 border-bottom">
+                            <!-- Baris 1: Judul Linimasa Riwayat -->
+                            <div class="d-flex align-items-center justify-content-center mb-1 mb-md-0 flex-shrink-0">
+                                <span class="badge bg-primary-subtle text-primary fs-12 px-2.5 py-1.5 rounded-pill fw-semibold text-wrap text-md-nowrap">
                                     <i class="ti ti-history me-1"></i> Linimasa Riwayat Aktivitas &amp; Interaksi Terpadu
                                 </span>
                             </div>
 
-                            <!-- Filter Kategori Riwayat -->
-                            <div class="btn-group btn-group-sm flex-wrap" role="group" aria-label="Filter Kategori Riwayat">
-                                <button type="button" class="btn btn-outline-secondary active btn-history-subfilter" data-subfilter="all">
-                                    Semua <span class="badge bg-secondary text-white rounded-pill fs-xxs ms-1">{{ $allActivityHistories->count() }}</span>
-                                </button>
-                                <button type="button" class="btn btn-outline-secondary btn-history-subfilter" data-subfilter="friendship">
-                                    <i class="ti ti-user-check text-success me-1"></i>Pertemanan <span class="badge bg-success-subtle text-success rounded-pill fs-xxs ms-1">{{ $friendshipHistories->count() }}</span>
-                                </button>
-                                <button type="button" class="btn btn-outline-secondary btn-history-subfilter" data-subfilter="like">
-                                    <i class="ti ti-heart-filled text-danger me-1"></i>Suka <span class="badge bg-danger-subtle text-danger rounded-pill fs-xxs ms-1">{{ $profileLikeHistories->count() }}</span>
-                                </button>
-                                <button type="button" class="btn btn-outline-secondary btn-history-subfilter" data-subfilter="chat">
-                                    <i class="ti ti-messages text-info me-1"></i>Chat <span class="badge bg-info-subtle text-info rounded-pill fs-xxs ms-1">{{ $chatHistories->count() }}</span>
-                                </button>
-                                <button type="button" class="btn btn-outline-secondary btn-history-subfilter" data-subfilter="media">
-                                    <i class="ti ti-photo text-purple me-1"></i>Avatar &amp; Sampul <span class="badge bg-purple-subtle text-purple rounded-pill fs-xxs ms-1">{{ $mediaHistories->count() }}</span>
-                                </button>
+                            <!-- Baris 2 & 3 di Mobile / Sisi Kanan di Desktop -->
+                            <div class="d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-end gap-2 gap-md-3 w-100 w-md-auto">
+                                <!-- Baris 2: Label Periode & Select Dropdown -->
+                                <div class="d-flex align-items-center justify-content-center gap-1.5">
+                                    <label for="dashboard-history-period" class="fs-12 text-muted mb-0 text-nowrap">
+                                        <i class="ti ti-calendar me-1"></i> Periode:
+                                    </label>
+                                    <select id="dashboard-history-period" class="form-select form-select-sm py-1 ps-2 pe-4 fs-12 fw-medium border shadow-none" style="width: auto; min-width: 160px;">
+                                        <option value="all" selected>Semua Waktu</option>
+                                        <option value="today">Hari Ini</option>
+                                        <option value="7days">7 Hari Terakhir</option>
+                                        <option value="30days">30 Hari Terakhir</option>
+                                    </select>
+                                </div>
+
+                                <!-- Baris 3: Total Riwayat -->
+                                <div class="text-center text-md-end text-muted fs-12 text-nowrap flex-shrink-0">
+                                    Total <span class="fw-bold text-dark" id="history-header-total-count">{{ $allActivityHistories->count() }}</span> riwayat
+                                </div>
                             </div>
                         </div>
 
-                        <div class="table-responsive rounded border">
-                            <table class="table table-hover align-middle mb-0" id="table-unified-history">
+                        <div class="table-responsive rounded border mt-2">
+                            <table class="table table-hover align-middle mb-0 w-100" id="table-unified-history">
                                 <thead class="table-light align-middle text-center text-nowrap">
                                     <tr>
-                                        <th class="align-middle text-center text-nowrap" style="width: 50px;">#</th>
-                                        <th class="align-middle text-center text-nowrap">Pengguna / Pihak Terkait</th>
-                                        <th class="align-middle text-center text-nowrap">Jenis Riwayat</th>
-                                        <th class="align-middle text-center text-nowrap">Keterangan &amp; Rincian Aktivitas</th>
-                                        <th class="align-middle text-center text-nowrap">Waktu (WIB)</th>
-                                        <th class="align-middle text-center text-nowrap" style="width: 90px;">Aksi</th>
+                                        <th class="align-middle text-center text-nowrap" style="width: 45px;">#</th>
+                                        <th class="align-middle text-center text-nowrap" style="width: 22%;">Pengguna / Pihak Terkait</th>
+                                        <th class="align-middle text-center text-nowrap" style="width: 16%;">Jenis Riwayat</th>
+                                        <th class="align-middle text-center" style="width: auto;">Keterangan &amp; Rincian Aktivitas</th>
+                                        <th class="align-middle text-center text-nowrap" style="width: 120px;">Waktu (WIB)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($allActivityHistories as $idx => $act)
                                         @php
                                             $u = $act->user;
+                                            $catTooltip = match($act->category) {
+                                                'friendship' => 'Aktivitas pertemanan dan ajakan terhubung antar pengguna',
+                                                'like' => 'Apresiasi suka pada profil pengguna',
+                                                'chat' => 'Interaksi pesan obrolan langsung',
+                                                'media' => 'Pembaruan foto profil avatar atau foto sampul akun',
+                                                default => 'Catatan riwayat aktivitas pengguna'
+                                            };
                                         @endphp
-                                        <tr class="unified-history-row" data-history-category="{{ $act->category }}" data-search-text="{{ $act->search_text }}">
-                                            <td class="text-center fw-medium text-muted">{{ $idx + 1 }}</td>
-                                            <td>
+                                        <tr class="unified-history-row" data-history-category="{{ $act->category }}" data-history-time="{{ $act->time ? $act->time->timestamp : 0 }}" data-search-text="{{ $act->search_text }}">
+                                            <td class="text-center fw-medium text-muted align-middle">{{ $idx + 1 }}</td>
+                                            <td class="align-middle">
                                                 <div class="d-flex align-items-center gap-2">
-                                                    <img src="{{ $u?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $u?->name ?? 'User' }}" class="rounded-circle border" style="width: 34px; height: 34px; object-fit: cover;">
-                                                    <div>
-                                                        <div class="fw-semibold text-dark fs-13">
+                                                    <img src="{{ $u?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $u?->name ?? 'User' }}" class="rounded-circle border flex-shrink-0" style="width: 34px; height: 34px; object-fit: cover;">
+                                                    <div class="min-w-0">
+                                                        <div class="fw-semibold text-dark fs-13 text-truncate">
                                                             {{ $u?->name ?? 'Pengguna' }}
                                                             @if ($u?->id === auth()->id())
                                                                 <span class="badge bg-primary-subtle text-primary fs-xxs ms-0.5">Anda</span>
                                                             @endif
                                                         </div>
-                                                        <div class="text-muted fs-11">{{ $u?->email ?? '-' }}</div>
+                                                        <div class="text-muted fs-11 text-truncate">{{ $u?->email ?? '-' }}</div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-center">
-                                                <span class="badge {{ $act->category_badge }} px-2.5 py-1 rounded-pill fw-semibold d-inline-flex align-items-center gap-1">
+                                            <td class="text-center align-middle">
+                                                <span class="badge {{ $act->category_badge }} px-2.5 py-1 rounded-pill fw-semibold d-inline-flex align-items-center gap-1 text-nowrap"
+                                                    title="{{ $catTooltip }}" data-bs-toggle="tooltip">
                                                     <i class="{{ $act->icon }}"></i> {{ $act->category_label }}
                                                 </span>
                                             </td>
-                                            <td>
-                                                <div class="fw-semibold text-dark fs-13 d-flex align-items-center gap-1.5">
+                                            <td class="align-middle">
+                                                <div class="fw-semibold text-dark fs-13 d-flex flex-wrap align-items-center gap-1.5 mb-1">
                                                     <span>{{ $act->title }}</span>
                                                     <span class="badge {{ $act->status_badge }} fs-xxs rounded-pill">{{ $act->category === 'friendship' ? 'Status' : 'Log' }}</span>
                                                 </div>
-                                                <div class="text-muted fs-12 mt-0.5" title="{{ $act->description }}">
+                                                <div class="text-muted fs-12 text-wrap lh-sm" style="word-break: break-word;">
                                                     {{ $act->description }}
                                                 </div>
                                             </td>
-                                            <td class="text-center text-nowrap fs-12 text-muted">
-                                                <div>{{ $act->time_formatted }}</div>
-                                                <small class="text-muted opacity-75">{{ $act->time_diff }}</small>
-                                            </td>
-                                            <td class="text-center">
-                                                @if ($act->category === 'chat' && !empty($act->chat_user_id))
-                                                    <a href="{{ route('admin.profil-pengguna.messages.index', ['user_id' => $act->chat_user_id]) }}" class="btn btn-xs btn-primary text-white rounded-pill d-inline-flex align-items-center gap-1" title="Buka Percakapan Chat">
-                                                        <i class="ti ti-messages"></i>
-                                                        <span>Chat</span>
-                                                    </a>
-                                                @else
-                                                    <span class="text-muted fs-12">-</span>
-                                                @endif
+                                            <td class="text-center text-nowrap align-middle">
+                                                <div class="fw-semibold text-dark fs-12">{{ $act->time ? $act->time->format('d M Y') : '-' }}</div>
+                                                <div class="text-muted fs-11">{{ $act->time ? $act->time->format('H:i') . ' WIB' : '-' }}</div>
+                                                <div class="text-muted opacity-75 fs-xxs">{{ $act->time_diff }}</div>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr id="unified-history-no-data-row">
-                                            <td colspan="6" class="text-center py-5 text-muted">
+                                            <td colspan="5" class="text-center py-5 text-muted">
                                                 <i class="ti ti-history-off fs-32 text-muted d-block mb-1.5"></i>
                                                 <p class="fs-13 mb-0">Belum ada catatan riwayat aktivitas dan interaksi tercatat.</p>
                                             </td>
                                         </tr>
                                     @endforelse
                                     <tr id="unified-history-empty-filter-row" class="d-none">
-                                        <td colspan="6" class="text-center py-5 text-muted">
+                                        <td colspan="5" class="text-center py-5 text-muted">
                                             <i class="ti ti-search-off fs-32 text-muted d-block mb-1.5"></i>
                                             <p class="fs-13 mb-0">Tidak ada riwayat aktivitas yang sesuai dengan filter atau kriteria pencarian.</p>
                                         </td>
@@ -1351,13 +708,638 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        <!-- Tombol Muat Lebih Banyak Riwayat -->
+                        <div class="text-center pt-4 mt-3 pb-2" id="dashboard-history-loadmore-container">
+                            <button type="button" id="dashboard-history-loadmore-btn" class="btn btn-sm btn-outline-primary rounded-pill px-4 py-1.5 shadow-sm fw-semibold d-inline-flex align-items-center gap-1.5">
+                                <span>Tampilkan 10 Riwayat Berikutnya</span>
+                                <i class="ti ti-chevron-down fs-16 animated-bounce-down"></i>
+                            </button>
+                            <div class="text-muted fs-12 mt-2" id="dashboard-history-loadmore-info">
+                                Menampilkan <span id="history-visible-count" class="fw-semibold text-dark">{{ min(10, $allActivityHistories->count()) }}</span> dari <span id="history-total-count" class="fw-semibold text-dark">{{ $allActivityHistories->count() }}</span> riwayat aktivitas
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- ========================================================================= -->
+        <!-- 👉 KOLOM KANAN: WIDGET-WIDGET SESUAI ROLE                                 -->
+        <!-- ========================================================================= -->
+        <div class="col-12 col-lg-5 col-xl-4 col-xxl-4">
+            <div class="d-flex flex-column gap-3">
+                @if (auth()->user()->hasAnyRole(['superadmin', 'admin']))
+                    <!-- ================================================================= -->
+                    <!-- 👑 WIDGET UNTUK ADMINISTRATOR (SUPERADMIN & ADMIN)                -->
+                    <!-- ================================================================= -->
+
+                    <!-- 1. Pusat Pintasan Cepat Admin (Manajemen Pengguna & Dukungan Aplikasi) -->
+                    <div class="card shadow-sm border-0 mb-0">
+                        <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
+                            <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                                <i class="ti ti-bolt text-warning me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                                <span>Pusat Akses Pintas Modul</span>
+                            </h5>
+                            <span class="badge bg-primary-subtle text-primary font-monospace">12 Modul Utama</span>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="nav nav-tabs nav-bordered px-3 pt-2 bg-light-subtle" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button type="button" class="nav-link active py-2 fs-13" id="tab-shortcut-users-btn" data-bs-toggle="tab" data-bs-target="#tab-shortcut-users" role="tab" aria-controls="tab-shortcut-users" aria-selected="true" title="Manajemen Pengguna (6 Modul)">
+                                        <i class="ti ti-users me-0 me-md-1.5 text-primary"></i>
+                                        <span class="d-none d-md-inline">Manajemen Pengguna</span>
+                                        <span class="badge bg-primary-subtle text-primary ms-1 font-monospace">6</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button type="button" class="nav-link py-2 fs-13" id="tab-shortcut-app-btn" data-bs-toggle="tab" data-bs-target="#tab-shortcut-app" role="tab" aria-controls="tab-shortcut-app" aria-selected="false" title="Dukungan Aplikasi (6 Modul)">
+                                        <i class="ti ti-settings-cog me-0 me-md-1.5 text-info"></i>
+                                        <span class="d-none d-md-inline">Dukungan Aplikasi</span>
+                                        <span class="badge bg-info-subtle text-info ms-1 font-monospace">6</span>
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content p-3">
+                                <!-- Tab 1: Manajemen Pengguna (6 Menu) -->
+                                <div class="tab-pane show active" id="tab-shortcut-users">
+                                    <div class="row g-2">
+                                        <div class="col-6 col-sm-4">
+                                            <a href="{{ route('admin.manajemenpengguna.users.index') }}" class="quick-action-tile">
+                                                <div class="quick-action-icon bg-primary-subtle text-primary">
+                                                    <i class="ti ti-users"></i>
+                                                </div>
+                                                <span class="fw-semibold fs-13 text-center text-truncate w-100">Data Pengguna</span>
+                                                <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Kelola user</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4">
+                                            <a href="{{ route('admin.manajemenpengguna.data-login.index') }}" class="quick-action-tile">
+                                                <div class="quick-action-icon bg-success-subtle text-success">
+                                                    <i class="ti ti-history"></i>
+                                                </div>
+                                                <span class="fw-semibold fs-13 text-center text-truncate w-100">Data Login</span>
+                                                <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Log aktivitas</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4">
+                                            <a href="{{ route('admin.manajemenpengguna.role.index') }}" class="quick-action-tile">
+                                                <div class="quick-action-icon bg-info-subtle text-info">
+                                                    <i class="ti ti-shield-lock"></i>
+                                                </div>
+                                                <span class="fw-semibold fs-13 text-center text-truncate w-100">Role Pengguna</span>
+                                                <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Peran &amp; hirarki</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4">
+                                            <a href="{{ route('admin.manajemenpengguna.permission.index') }}" class="quick-action-tile">
+                                                <div class="quick-action-icon bg-warning-subtle text-warning">
+                                                    <i class="ti ti-key"></i>
+                                                </div>
+                                                <span class="fw-semibold fs-13 text-center text-truncate w-100">Permission</span>
+                                                <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Master hak izin</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4">
+                                            <a href="{{ route('admin.manajemenpengguna.akses-role.index') }}" class="quick-action-tile">
+                                                <div class="quick-action-icon bg-purple-subtle text-purple">
+                                                    <i class="ti ti-lock-access"></i>
+                                                </div>
+                                                <span class="fw-semibold fs-13 text-center text-truncate w-100">Akses Role</span>
+                                                <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Matriks izin</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4">
+                                            <a href="{{ route('admin.manajemenpengguna.akses-user.index') }}" class="quick-action-tile">
+                                                <div class="quick-action-icon bg-danger-subtle text-danger">
+                                                    <i class="ti ti-user-shield"></i>
+                                                </div>
+                                                <span class="fw-semibold fs-13 text-center text-truncate w-100">Akses User</span>
+                                                <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Izin langsung</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tab 2: Dukungan Aplikasi (6 Menu) -->
+                                <div class="tab-pane" id="tab-shortcut-app">
+                                    <div class="row g-2">
+                                        <div class="col-6 col-sm-4">
+                                            <a href="{{ route('admin.dukunganaplikasi.profil-aplikasi.index') }}" class="quick-action-tile">
+                                                <div class="quick-action-icon bg-primary-subtle text-primary">
+                                                    <i class="ti ti-id"></i>
+                                                </div>
+                                                <span class="fw-semibold fs-13 text-center text-truncate w-100">Profil Aplikasi</span>
+                                                <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Identitas &amp; meta</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4">
+                                            <a href="{{ route('admin.dukunganaplikasi.fitur-aplikasi.index') }}" class="quick-action-tile">
+                                                <div class="quick-action-icon bg-danger-subtle text-danger">
+                                                    <i class="ti ti-settings-cog"></i>
+                                                </div>
+                                                <span class="fw-semibold fs-13 text-center text-truncate w-100">Fitur Aplikasi</span>
+                                                <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Pusat kontrol</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4">
+                                            <a href="{{ route('admin.dukunganaplikasi.menu.index') }}" class="quick-action-tile">
+                                                <div class="quick-action-icon bg-info-subtle text-info">
+                                                    <i class="ti ti-layout-sidebar"></i>
+                                                </div>
+                                                <span class="fw-semibold fs-13 text-center text-truncate w-100">Manajemen Menu</span>
+                                                <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Sidebar menu</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4">
+                                            <a href="{{ route('admin.dukunganaplikasi.translation.index') }}" class="quick-action-tile">
+                                                <div class="quick-action-icon bg-success-subtle text-success">
+                                                    <i class="ti ti-language"></i>
+                                                </div>
+                                                <span class="fw-semibold fs-13 text-center text-truncate w-100">Kamus Bahasa</span>
+                                                <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Bilingual i18n</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4">
+                                            <a href="{{ route('admin.dukunganaplikasi.backup-db.index') }}" class="quick-action-tile">
+                                                <div class="quick-action-icon bg-warning-subtle text-warning">
+                                                    <i class="ti ti-database"></i>
+                                                </div>
+                                                <span class="fw-semibold fs-13 text-center text-truncate w-100">Backup Database</span>
+                                                <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Cadangan SQL</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-sm-4">
+                                            <a href="{{ route('admin.dukunganaplikasi.konfigurasi-website.index') }}" class="quick-action-tile">
+                                                <div class="quick-action-icon bg-purple-subtle text-purple">
+                                                    <i class="ti ti-world-www"></i>
+                                                </div>
+                                                <span class="fw-semibold fs-13 text-center text-truncate w-100">Konfigurasi Web</span>
+                                                <span class="fs-xxs text-muted mt-0.5 text-truncate w-100 text-center">Tema &amp; landing</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Pusat Aksi Tertunda (Pending Approvals & Deactivations) -->
+                    <div class="card shadow-sm border-0 mb-0">
+                        <div class="card-header bg-primary text-white py-3 d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
+                            <h5 class="card-title text-white mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                                <i class="ti ti-bell-ringing me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                                <span>Pusat Tindakan &amp; Permohonan Tertunda</span>
+                            </h5>
+                            <span class="badge bg-white text-primary fw-bold font-monospace">
+                                {{ $userStats['pending'] + $userStats['pending_deactivations'] }} Menunggu
+                            </span>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="nav nav-tabs nav-bordered px-3 pt-2 bg-light-subtle" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button type="button" class="nav-link active py-2 fs-13" id="tab-pending-approvals-btn" data-bs-toggle="tab" data-bs-target="#tab-pending-approvals" role="tab" aria-controls="tab-pending-approvals" aria-selected="true" title="Pendaftaran Baru ({{ $pendingApprovals->count() }})">
+                                        <i class="ti ti-user-plus me-0 me-md-1.5"></i>
+                                        <span class="d-none d-md-inline">Pendaftaran Baru</span>
+                                        <span class="badge bg-primary-subtle text-primary ms-1 font-monospace">{{ $pendingApprovals->count() }}</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button type="button" class="nav-link py-2 fs-13" id="tab-pending-deactivations-btn" data-bs-toggle="tab" data-bs-target="#tab-pending-deactivations" role="tab" aria-controls="tab-pending-deactivations" aria-selected="false" title="Permohonan Nonaktif ({{ $pendingDeactivations->count() }})">
+                                        <i class="ti ti-user-x me-0 me-md-1.5"></i>
+                                        <span class="d-none d-md-inline">Permohonan Nonaktif</span>
+                                        <span class="badge bg-danger-subtle text-danger ms-1 font-monospace">{{ $pendingDeactivations->count() }}</span>
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content p-3">
+                                <!-- Tab Pendaftaran Baru -->
+                                <div class="tab-pane show active" id="tab-pending-approvals">
+                                    @if ($pendingApprovals->isEmpty())
+                                        <div class="text-center py-4 text-muted">
+                                            <i class="ti ti-circle-check fs-24 text-success d-block mb-1.5"></i>
+                                            <p class="fs-13 mb-0">Tidak ada pendaftaran pengguna baru yang menunggu persetujuan.</p>
+                                        </div>
+                                    @else
+                                        <div class="table-responsive">
+                                            <table class="table table-hover align-middle mb-0 dashboard-mini-table">
+                                                <thead class="align-middle text-center text-nowrap">
+                                                    <tr>
+                                                        <th>Pengguna</th>
+                                                        <th>Email</th>
+                                                        <th>Waktu</th>
+                                                        <th>Aksi Cepat</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($pendingApprovals as $pUser)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <img src="{{ $pUser->avatar_url }}" alt="{{ $pUser->name }}" class="dashboard-user-avatar">
+                                                                    <span class="fw-semibold text-dark">{{ $pUser->name }}</span>
+                                                                </div>
+                                                            </td>
+                                                            <td class="text-muted fs-12">{{ $pUser->email }}</td>
+                                                            <td class="text-center text-muted fs-12">{{ $pUser->created_at->diffForHumans() }}</td>
+                                                            <td class="text-center text-nowrap">
+                                                                <div class="d-inline-flex align-items-center gap-1">
+                                                                    <form action="{{ route('admin.manajemenpengguna.users.approve', $pUser->id) }}" method="POST" class="d-inline">
+                                                                        @csrf
+                                                                        <button type="button" class="btn btn-xs btn-success text-white px-2 py-1 rounded btn-quick-approve-user" data-user-name="{{ $pUser->name }}" title="Setujui &amp; Aktifkan Akun">
+                                                                            <i class="ti ti-check"></i>
+                                                                        </button>
+                                                                    </form>
+                                                                    <a href="{{ route('admin.manajemenpengguna.users.index') }}" class="btn btn-xs btn-light border px-2 py-1 rounded" title="Lihat di Tabel Pengguna">
+                                                                        <i class="ti ti-eye"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <!-- Tab Permohonan Nonaktif -->
+                                <div class="tab-pane" id="tab-pending-deactivations">
+                                    @if ($pendingDeactivations->isEmpty())
+                                        <div class="text-center py-4 text-muted">
+                                            <i class="ti ti-circle-check fs-24 text-success d-block mb-1.5"></i>
+                                            <p class="fs-13 mb-0">Tidak ada permohonan penonaktifan akun yang menunggu tindakan.</p>
+                                        </div>
+                                    @else
+                                        <div class="table-responsive">
+                                            <table class="table table-hover align-middle mb-0 dashboard-mini-table">
+                                                <thead class="align-middle text-center text-nowrap">
+                                                    <tr>
+                                                        <th>Pengguna</th>
+                                                        <th>Alasan Permohonan</th>
+                                                        <th>Diajukan</th>
+                                                        <th>Aksi Cepat</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($pendingDeactivations as $dUser)
+                                                        <tr>
+                                                            <td>
+                                                                <div class="d-flex align-items-center gap-2">
+                                                                    <img src="{{ $dUser->avatar_url }}" alt="{{ $dUser->name }}" class="dashboard-user-avatar">
+                                                                    <span class="fw-semibold text-dark">{{ $dUser->name }}</span>
+                                                                </div>
+                                                            </td>
+                                                            <td class="text-muted fs-12 text-truncate" style="max-width: 140px;">
+                                                                {{ $dUser->deactivation_reason ?? 'Tidak mencantumkan alasan' }}
+                                                            </td>
+                                                            <td class="text-center text-muted fs-12">{{ \Carbon\Carbon::parse($dUser->deactivation_requested_at)->diffForHumans() }}</td>
+                                                            <td class="text-center text-nowrap">
+                                                                <div class="d-inline-flex align-items-center gap-1">
+                                                                    <form action="{{ route('admin.manajemenpengguna.users.deactivate', $dUser->id) }}" method="POST" class="d-inline">
+                                                                        @csrf
+                                                                        <button type="button" class="btn btn-xs btn-danger text-white px-2 py-1 rounded btn-quick-approve-deact" data-user-name="{{ $dUser->name }}" title="Setujui Penonaktifan Akun">
+                                                                            <i class="ti ti-check"></i>
+                                                                        </button>
+                                                                    </form>
+                                                                    <a href="{{ route('admin.manajemenpengguna.users.index') }}" class="btn btn-xs btn-light border px-2 py-1 rounded" title="Lihat di Tabel Pengguna">
+                                                                        <i class="ti ti-eye"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Grafik Tren Aktivitas Login & Pendaftaran -->
+                    <div class="card shadow-sm border-0 mb-0">
+                        <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
+                            <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                                <i class="ti ti-chart-area-line text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                                <span>Tren Aktivitas Login (7 Hari Terakhir)</span>
+                            </h5>
+                            <span class="badge bg-primary-subtle text-primary fs-xs font-monospace">Real-Time Sync</span>
+                        </div>
+                        <div class="card-body p-3">
+                            <div id="chart-logins-trend"></div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Grafik Donut Distribusi Role Spatie -->
+                    <div class="card shadow-sm border-0 mb-0">
+                        <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
+                            <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                                <i class="ti ti-chart-pie text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                                <span>Distribusi Peran Pengguna</span>
+                            </h5>
+                            <span class="badge bg-light text-dark border fs-xs">Spatie Roles</span>
+                        </div>
+                        <div class="card-body p-3">
+                            <div id="chart-roles-donut"></div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Pesan & Obrolan Terkini -->
+                    <div class="card shadow-sm border-0 mb-0">
+                        <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2.5 gap-md-0">
+                            <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                                <i class="ti ti-messages text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                                <span>Pesan &amp; Obrolan Terkini</span>
+                            </h5>
+                            <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="btn btn-xs btn-primary bg-primary text-white px-2.5 py-1.5 rounded" title="Buka Chat Hub">
+                                Buka Chat Hub
+                            </a>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="d-flex flex-column">
+                                @forelse ($recentMessages as $msg)
+                                    @php
+                                        $isMe = $msg->sender_id === auth()->id();
+                                        $partner = $isMe ? $msg->receiver : $msg->sender;
+                                    @endphp
+                                    <a href="{{ route('admin.profil-pengguna.messages.index', ['user_id' => $partner->id ?? '']) }}" class="chat-preview-item">
+                                        <div class="chat-avatar-wrapper">
+                                            <img src="{{ $partner?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $partner->name ?? 'User' }}" class="chat-preview-avatar">
+                                        </div>
+                                        <div class="chat-content-box">
+                                            <div class="chat-preview-header">
+                                                <span class="chat-preview-name">{{ $partner->name ?? 'Pengguna' }}</span>
+                                                <span class="chat-preview-time"><i class="ti ti-clock me-1"></i>{{ $msg->created_at->diffForHumans() }}</span>
+                                            </div>
+                                            <p class="chat-preview-body mb-0">
+                                                @if ($isMe)
+                                                    <span class="text-primary fw-semibold me-1">Anda:</span>
+                                                @endif
+                                                {{ $msg->body ?: ($msg->attachment_name ? 'Mengirim lampiran berkas' : ($msg->reason ? 'Alasan: ' . $msg->reason : 'Pesan')) }}
+                                            </p>
+                                        </div>
+                                    </a>
+                                @empty
+                                    <div class="text-center py-4 text-muted">
+                                        <i class="ti ti-message-off fs-24 text-muted d-block mb-1.5"></i>
+                                        <p class="fs-13 mb-0">Belum ada obrolan terkini.</p>
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6. Tabel Aktivitas Login Terkini -->
+                    <div class="card shadow-sm border-0 mb-0">
+                        <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2.5 gap-md-0">
+                            <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                                <i class="ti ti-history text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                                <span>Riwayat Aktivitas Login Pengguna Terkini</span>
+                            </h5>
+                            <a href="{{ route('admin.manajemenpengguna.data-login.index') }}" class="btn btn-xs btn-light border px-2.5 py-1.5 rounded" title="Lihat Semua Log">
+                                Lihat Semua Log <i class="ti ti-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0 dashboard-mini-table">
+                                    <thead class="align-middle text-center text-nowrap">
+                                        <tr>
+                                            <th>Pengguna</th>
+                                            <th>Peran</th>
+                                            <th>Alamat IP</th>
+                                            <th>Perangkat</th>
+                                            <th>Waktu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($recentLogins as $lLog)
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <img src="{{ $lLog->user?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $lLog->user->name ?? 'User' }}" class="dashboard-user-avatar">
+                                                        <div>
+                                                            <span class="fw-semibold text-dark d-block">{{ $lLog->user->name ?? 'User #' . $lLog->user_id }}</span>
+                                                            <span class="text-muted fs-xxs">{{ $lLog->user->email ?? '-' }}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    @if ($lLog->user && $lLog->user->roles->isNotEmpty())
+                                                        @foreach ($lLog->user->roles as $r)
+                                                            <span class="badge bg-secondary-subtle text-dark fs-xxs">{{ strtoupper($r->name) }}</span>
+                                                        @endforeach
+                                                    @else
+                                                        <span class="badge bg-light text-muted fs-xxs">-</span>
+                                                    @endif
+                                                </td>
+                                                <td class="text-center font-monospace fs-12 text-muted">{{ $lLog->ip_address }}</td>
+                                                <td class="text-center text-muted fs-12">
+                                                    <i class="ti ti-device-desktop me-1"></i>{{ $lLog->user_agent ? Str::limit($lLog->user_agent, 18) : 'Web Client' }}
+                                                </td>
+                                                <td class="text-center text-muted fs-12">
+                                                    {{ \Carbon\Carbon::parse($lLog->login_at)->diffForHumans() }}
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="text-center py-4 text-muted">Belum ada riwayat aktivitas login tercatat.</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                @else
+                    <!-- ================================================================= -->
+                    <!-- 👤 WIDGET UNTUK PENGGUNA UMUM (ROLE: USER)                         -->
+                    <!-- ================================================================= -->
+
+                    <!-- 1. Pusat Pintasan Pengguna -->
+                    <div class="card shadow-sm border-0 mb-0">
+                        <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
+                            <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                                <i class="ti ti-bolt text-warning me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                                <span>Pusat Akses Pintas Pengguna</span>
+                            </h5>
+                            <span class="badge bg-light text-dark border fs-xs">Shortcuts</span>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="row g-2">
+                                <div class="col-sm-6">
+                                    <a href="{{ route('admin.profil-pengguna.index') }}" class="quick-action-tile">
+                                        <div class="quick-action-icon bg-primary-subtle text-primary">
+                                            <i class="ti ti-user-edit"></i>
+                                        </div>
+                                        <span class="fw-semibold fs-13 text-center">Edit Profil &amp; Foto</span>
+                                        <span class="fs-xxs text-muted mt-0.5">Perbarui biodata dan avatar</span>
+                                    </a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="quick-action-tile">
+                                        <div class="quick-action-icon bg-info-subtle text-info">
+                                            <i class="ti ti-messages"></i>
+                                        </div>
+                                        <span class="fw-semibold fs-13 text-center">Pesan &amp; Obrolan</span>
+                                        <span class="fs-xxs text-muted mt-0.5">Komunikasi dengan rekan</span>
+                                    </a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="{{ route('admin.profil-pengguna.index') }}" class="quick-action-tile">
+                                        <div class="quick-action-icon bg-success-subtle text-success">
+                                            <i class="ti ti-id"></i>
+                                        </div>
+                                        <span class="fw-semibold fs-13 text-center">Kartu Profil Saya</span>
+                                        <span class="fs-xxs text-muted mt-0.5">Lihat pratinjau publik</span>
+                                    </a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="{{ route('template.documentation.changelog') }}" class="quick-action-tile">
+                                        <div class="quick-action-icon bg-secondary-subtle text-secondary">
+                                            <i class="ti ti-git-branch"></i>
+                                        </div>
+                                        <span class="fw-semibold fs-13 text-center">Riwayat &amp; Rilis</span>
+                                        <span class="fs-xxs text-muted mt-0.5">Changelog Sistem</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Status Akun & Keamanan -->
+                    <div class="card shadow-sm border-0 mb-0">
+                        <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
+                            <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                                <i class="ti ti-shield-check text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                                <span>Status Akun &amp; Keamanan</span>
+                            </h5>
+                            <span class="badge bg-success-subtle text-success">Aktif &amp; Terverifikasi</span>
+                        </div>
+                        <div class="card-body p-3.5">
+                            <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom">
+                                <img src="{{ $user->avatar_url }}" alt="{{ $user->name }}" class="rounded-circle border" style="width: 54px; height: 54px; object-fit: cover; object-position: top;">
+                                <div>
+                                    <h6 class="fw-bold mb-0.5 text-dark">{{ $user->name }}</h6>
+                                    <span class="text-muted fs-12 d-block mb-1">{{ $user->email }}</span>
+                                    <span class="badge bg-primary-subtle text-primary fs-xxs">Pengguna Terdaftar</span>
+                                </div>
+                            </div>
+                            <div class="fs-13 text-muted">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Bergabung Sejak:</span>
+                                    <strong class="text-dark">{{ $user->created_at->translatedFormat('d F Y') }}</strong>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Total Sesi Masuk:</span>
+                                    <strong class="text-dark">{{ $totalMyLogins }} Kali</strong>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Status Keamanan:</span>
+                                    <span class="text-success fw-semibold"><i class="ti ti-lock me-1"></i>Terkonfigurasi</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Obrolan & Pesan Saya -->
+                    <div class="card shadow-sm border-0 mb-0">
+                        <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2.5 gap-md-0">
+                            <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                                <i class="ti ti-messages text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                                <span>Obrolan &amp; Pesan Saya</span>
+                            </h5>
+                            <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="btn btn-xs btn-primary bg-primary text-white px-2.5 py-1.5 rounded" title="Buka Chat">
+                                Buka Chat
+                            </a>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="d-flex flex-column">
+                                @forelse ($myRecentMessages as $msg)
+                                    @php
+                                        $isMe = $msg->sender_id === auth()->id();
+                                        $partner = $isMe ? $msg->receiver : $msg->sender;
+                                    @endphp
+                                    <a href="{{ route('admin.profil-pengguna.messages.index', ['user_id' => $partner->id ?? '']) }}" class="chat-preview-item">
+                                        <div class="chat-avatar-wrapper">
+                                            <img src="{{ $partner?->avatar_url ?? asset('assets/images/users/user-default.jpg') }}" alt="{{ $partner->name ?? 'User' }}" class="chat-preview-avatar">
+                                        </div>
+                                        <div class="chat-content-box">
+                                            <div class="chat-preview-header">
+                                                <span class="chat-preview-name">{{ $partner->name ?? 'Pengguna' }}</span>
+                                                <span class="chat-preview-time"><i class="ti ti-clock me-1"></i>{{ $msg->created_at->diffForHumans() }}</span>
+                                            </div>
+                                            <p class="chat-preview-body mb-0">
+                                                @if ($isMe)
+                                                    <span class="text-primary fw-semibold me-1">Anda:</span>
+                                                @endif
+                                                {{ $msg->body ?: ($msg->attachment_name ? 'Mengirim lampiran berkas' : ($msg->reason ? 'Alasan: ' . $msg->reason : 'Pesan')) }}
+                                            </p>
+                                        </div>
+                                    </a>
+                                @empty
+                                    <div class="text-center py-4 text-muted">
+                                        <i class="ti ti-message-off fs-24 text-muted d-block mb-1.5"></i>
+                                        <p class="fs-13 mb-0">Belum ada obrolan terkini.</p>
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Riwayat Aktivitas Masuk Akun Saya -->
+                    <div class="card shadow-sm border-0 mb-0">
+                        <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2 gap-md-0">
+                            <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center">
+                                <i class="ti ti-history text-primary me-0 me-md-1.5 fs-20 fs-md-16 mb-1 mb-md-0"></i>
+                                <span>Riwayat Aktivitas Masuk Akun Saya</span>
+                            </h5>
+                            <span class="badge bg-light text-dark border fs-xs">Recent Logins</span>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0 dashboard-mini-table">
+                                    <thead class="align-middle text-center text-nowrap">
+                                        <tr>
+                                            <th>Alamat IP</th>
+                                            <th>Perangkat / Browser</th>
+                                            <th>Waktu Masuk</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($myRecentLogins as $mLog)
+                                            <tr>
+                                                <td class="text-center font-monospace fs-12 text-dark fw-semibold">{{ $mLog->ip_address }}</td>
+                                                <td class="text-center text-muted fs-12">
+                                                    <i class="ti ti-device-desktop me-1"></i>{{ $mLog->user_agent ? Str::limit($mLog->user_agent, 28) : 'Web Client' }}
+                                                </td>
+                                                <td class="text-center text-muted fs-12">
+                                                    {{ \Carbon\Carbon::parse($mLog->login_at)->translatedFormat('d M Y, H:i') }} WIB
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge bg-success-subtle text-success fs-xxs"><i class="ti ti-check me-1"></i>Berhasil</span>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center py-4 text-muted">Belum ada catatan aktivitas masuk.</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
     </div>
-</div>
-</div>
 
 <!-- ApexCharts Plugin & Data Bridge (Rule 1 & Rule 15 Standard) -->
 <script src="{{ asset('assets/plugins/apexcharts/apexcharts.min.js') }}"></script>
@@ -1385,5 +1367,5 @@
      @endif
  };
 </script>
-<script src="{{ asset('assets/js/admin/dashboard.js') }}"></script>
+<script src="{{ asset('assets/js/admin/dashboard.js') }}?v={{ time() }}"></script>
 @endsection

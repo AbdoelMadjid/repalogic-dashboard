@@ -116,7 +116,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 3.0.7 -->
+                        <!-- Version 3.0.8 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -124,8 +124,40 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v3.0.7</h5>
+                                        <h5 class="fw-bold mb-0">v3.0.8</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.8</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-10-06 15:28 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Restrukturisasi Tata Letak Dashboard 2-Kolom, Paginasi Cerdas &amp; Filter Rentang Waktu Riwayat Terpadu, Tooltip Kontekstual, Serta Optimalisasi Responsivitas Mobile Penuh</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Restrukturisasi Layout Dashboard 2-Kolom (<code>dashboard.blade.php</code>):</strong> Membagi komposisi dashboard menjadi 2 kolom proporsional (Kolom Kiri <code>col-xl-8</code> untuk Direktori Pengguna &amp; Jaringan Pertemanan serta Linimasa Riwayat; Kolom Kanan <code>col-xl-4</code> untuk Pusat Akses Pintas, Riwayat Login, Obrolan, Status Akun, dan Widget Tindakan Admin).</li>
+                                    <li><strong class="text-dark">Filter Pertemanan Responsif 1-Baris Mobile:</strong> Menggabungkan 5 tombol filter pertemanan dan riwayat ke dalam satu grup tombol terpadu dengan badge ukuran compact pada mode HP agar tetap sejajar dan tidak terpecah ke baris baru.</li>
+                                    <li><strong class="text-dark">Linimasa Riwayat Terpadu Bebas Tab &amp; Filter Rentang Waktu:</strong> Menampilkan seluruh catatan riwayat pengguna yang login secara utuh dan langsung tanpa sub-tab berbelit, dilengkapi filter cepat rentang waktu (<em>Semua Waktu, Hari Ini, 7 Hari Terakhir, 30 Hari Terakhir</em>) yang tersinkronisasi dengan live search.</li>
+                                    <li><strong class="text-dark">Paginasi Load More Cerdas &amp; Tata Letak Multi-Line Responsif:</strong> Penambahan mekanisme muat bertahap (10 data per klik) dengan smooth scroll, pemformatan kolom waktu terstruktur 3 baris (tanggal, jam WIB, waktu relatif), serta teks rincian aktivitas yang wrap ke bawah secara alami tanpa scrollbar horizontal.</li>
+                                    <li><strong class="text-dark">Penyempurnaan Profil Pengguna &amp; Tooltip Kontekstual:</strong> Memperbesar ukuran avatar profil pengguna (120px desktop / 100px mobile), menghilangkan indikator status online pada avatar profil sendiri, menyematkan tooltip kontekstual pada seluruh badge jenis riwayat, serta mengubah tombol persetujuan cepat (Quick Approve) di dashboard admin menjadi icon-only dengan deskripsi hover.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark border fs-xs">2-Column Layout</span>
+                                    <span class="badge bg-light text-dark border fs-xs">History Pagination</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Date Range Filter</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Mobile Responsive Standard</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Profile Avatar Engine</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Contextual Tooltips</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 3.0.7 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-check fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v3.0.7</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.7</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-09-30 14:52 WIB</span>

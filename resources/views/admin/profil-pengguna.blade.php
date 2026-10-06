@@ -37,7 +37,6 @@
                                 <div class="hero-avatar-wrapper flex-shrink-0 text-center">
                                     <img src="{{ $user->avatar_url }}"
                                         alt="{{ $user->name }}" class="rounded-3 hero-avatar-img shadow">
-                                    <span class="hero-status-dot" title="Akun Aktif & Sedang Masuk"></span>
                                 </div>
 
                                 <div class="text-center text-md-start w-100">
