@@ -116,7 +116,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 3.0.8 -->
+                        <!-- Version 3.0.9 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -124,8 +124,39 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v3.0.8</h5>
+                                        <h5 class="fw-bold mb-0">v3.0.9</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.9</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-10-06 23:38 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Optimalisasi Responsivitas Toolbar Filter &amp; Tab Modul Dashboard Laptop, Card-Header Multi-Line Title Auto-Wrap, Penyempurnaan UserFactory &amp; Pembersihan Seeder</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Pencegahan Word-Wrap &amp; Teks 1-Baris Toolbar Filter Pertemanan:</strong> Menerapkan <code>white-space: nowrap !important;</code> dan penyesuaian compact padding pada layar laptop (768px - 1399px) agar label filter (Semua, Teman Saya, Ajakan Masuk, Ajakan Terkirim) tidak terpotong menjadi 2 baris, serta menyederhanakan tombol "Semua Riwayat" menjadi "Riwayat" yang lebih ergonomis.</li>
+                                    <li><strong class="text-dark">Tata Letak Tab Modul Simetris 50:50 &amp; Indikator Aktif Solid (<code>dashboard.blade.php</code> &amp; <code>dashboard.css</code>):</strong> Menggunakan <code>nav-justified</code> dan <code>flex-nowrap</code> pada tab widget "Pusat Akses Pintas Modul" dan "Pusat Tindakan &amp; Permohonan Tertunda", mengeliminasi padding asimetris <code>px-3</code>, serta memastikan garis penanda tab aktif (<code>border-bottom: 2px solid #3e60d5</code>) tampil solid dan presisi.</li>
+                                    <li><strong class="text-dark">Card Header Multi-Line Title Auto-Wrap &amp; Right Action Lock:</strong> Mengatur header kartu dashboard pada layar menengah/laptop agar teks judul yang panjang otomatis terlipat ke bawah (<em>auto multi-line</em>) secara alami di sisi kiri sementara badge status dan tombol aksi tetap terkunci rapi di posisi paling kanan tanpa pernah terdorong ke baris bawah.</li>
+                                    <li><strong class="text-dark">Penyempurnaan Hero Avatar Dashboard:</strong> Menghilangkan bulatan indikator status online pada hero avatar bagian atas banner dashboard untuk tampilan antarmuka yang lebih bersih dan minimalis.</li>
+                                    <li><strong class="text-dark">UserFactory Nama Asli Tanpa Gelar &amp; Pembersihan Seeder:</strong> Mengoptimalkan <code>UserFactory.php</code> agar menghasilkan kombinasi nama asli Indonesia bersih tanpa gelar akademik (seperti <em>dr., Drs., S.Kom, M.T.</em>), serta menghapus <code>UserMediaHistorySeeder</code> agar log media hanya tercatat natural saat aktivitas nyata pengguna.</li>
+                                </ul>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge bg-light text-dark border fs-xs">Filter Toolbar Fix</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Tab Justified 50:50</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Card Header Auto-Wrap</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Hero Avatar Refinement</span>
+                                    <span class="badge bg-light text-dark border fs-xs">Clean UserFactory</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Version 3.0.8 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-check fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v3.0.8</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.8</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-10-06 15:28 WIB</span>

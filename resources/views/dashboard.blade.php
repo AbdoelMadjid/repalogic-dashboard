@@ -33,7 +33,6 @@
                                 <div class="hero-avatar-wrapper flex-shrink-0 text-center">
                                     <img src="{{ $user->avatar_url }}"
                                         alt="{{ $user->name }}" class="rounded-3 hero-avatar-img shadow">
-                                    <span class="hero-status-dot" title="Akun Aktif & Sedang Masuk"></span>
                                 </div>
 
                                 @php
@@ -319,7 +318,7 @@
         <!-- ========================================================================= -->
         <!-- 👈 KOLOM KIRI: DIREKTORI PENGGUNA & JARINGAN PERTEMANAN                   -->
         <!-- ========================================================================= -->
-        <div class="col-12 col-lg-7 col-xl-8 col-xxl-8">
+        <div class="col-12 col-lg-7 col-xl-7 col-xxl-8">
             <div class="card shadow-sm border-0 mb-0 h-100">
                 <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-3">
                     <div class="d-flex flex-column align-items-center align-items-md-start">
@@ -341,29 +340,29 @@
                     <!-- Filter Kategori Pertemanan & Tombol Semua Riwayat Terpadu -->
                     <div class="d-flex flex-wrap align-items-center justify-content-start gap-2 mb-3.5 pb-3 border-bottom">
                         <div class="btn-group btn-group-sm friendship-filter-group w-100" role="group" aria-label="Filter Pertemanan">
-                            <button type="button" class="btn btn-outline-primary active btn-friend-filter d-inline-flex align-items-center justify-content-center gap-1" data-filter="all" title="Semua Pengguna ({{ $contactUsers->count() }})">
+                            <button type="button" class="btn btn-outline-primary active btn-friend-filter d-inline-flex align-items-center justify-content-center gap-1 text-nowrap" data-filter="all" title="Semua Pengguna ({{ $contactUsers->count() }})">
                                 <i class="ti ti-users"></i>
-                                <span class="d-none d-sm-inline">Semua</span>
+                                <span class="d-none d-md-inline text-nowrap">Semua</span>
                                 <span class="badge bg-primary text-white rounded-pill friendship-filter-badge" id="filter-badge-all">{{ $contactUsers->count() }}</span>
                             </button>
-                            <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center justify-content-center gap-1" data-filter="friends" title="Teman Saya ({{ $totalFriendsCount }})">
+                            <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center justify-content-center gap-1 text-nowrap" data-filter="friends" title="Teman Saya ({{ $totalFriendsCount }})">
                                 <i class="ti ti-user-check"></i>
-                                <span class="d-none d-sm-inline">Teman Saya</span>
+                                <span class="d-none d-md-inline text-nowrap">Teman Saya</span>
                                 <span class="badge bg-success text-white rounded-pill friendship-filter-badge" id="filter-badge-friends">{{ $totalFriendsCount }}</span>
                             </button>
-                            <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center justify-content-center gap-1" data-filter="incoming" title="Ajakan Masuk ({{ $incomingFriendRequestsCount }})">
+                            <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center justify-content-center gap-1 text-nowrap" data-filter="incoming" title="Ajakan Masuk ({{ $incomingFriendRequestsCount }})">
                                 <i class="ti ti-user-plus"></i>
-                                <span class="d-none d-sm-inline">Ajakan Masuk</span>
+                                <span class="d-none d-md-inline text-nowrap">Ajakan Masuk</span>
                                 <span class="badge {{ $incomingFriendRequestsCount > 0 ? 'bg-danger text-white' : 'bg-secondary-subtle text-secondary' }} rounded-pill friendship-filter-badge" id="filter-badge-incoming">{{ $incomingFriendRequestsCount }}</span>
                             </button>
-                            <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center justify-content-center gap-1" data-filter="outgoing" title="Ajakan Terkirim ({{ $outgoingFriendRequestsCount }})">
+                            <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center justify-content-center gap-1 text-nowrap" data-filter="outgoing" title="Ajakan Terkirim ({{ $outgoingFriendRequestsCount }})">
                                 <i class="ti ti-clock-pause"></i>
-                                <span class="d-none d-sm-inline">Ajakan Terkirim</span>
+                                <span class="d-none d-md-inline text-nowrap">Ajakan Terkirim</span>
                                 <span class="badge {{ $outgoingFriendRequestsCount > 0 ? 'bg-warning text-dark' : 'bg-secondary-subtle text-secondary' }} rounded-pill friendship-filter-badge" id="filter-badge-outgoing">{{ $outgoingFriendRequestsCount }}</span>
                             </button>
-                            <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center justify-content-center gap-1" data-filter="history" id="btn-filter-all-history" title="Lihat Semua Riwayat Aktivitas &amp; Interaksi ({{ $allActivityHistories->count() }})">
+                            <button type="button" class="btn btn-outline-primary btn-friend-filter d-inline-flex align-items-center justify-content-center gap-1 text-nowrap" data-filter="history" id="btn-filter-all-history" title="Riwayat Aktivitas &amp; Interaksi ({{ $allActivityHistories->count() }})">
                                 <i class="ti ti-history"></i>
-                                <span class="d-none d-sm-inline">Semua Riwayat</span>
+                                <span class="d-none d-md-inline text-nowrap">Riwayat</span>
                                 <span class="badge bg-primary text-white rounded-pill friendship-filter-badge" id="filter-badge-history">{{ $allActivityHistories->count() }}</span>
                             </button>
                         </div>
@@ -727,7 +726,7 @@
         <!-- ========================================================================= -->
         <!-- 👉 KOLOM KANAN: WIDGET-WIDGET SESUAI ROLE                                 -->
         <!-- ========================================================================= -->
-        <div class="col-12 col-lg-5 col-xl-4 col-xxl-4">
+        <div class="col-12 col-lg-5 col-xl-5 col-xxl-4">
             <div class="d-flex flex-column gap-3">
                 @if (auth()->user()->hasAnyRole(['superadmin', 'admin']))
                     <!-- ================================================================= -->
@@ -744,18 +743,18 @@
                             <span class="badge bg-primary-subtle text-primary font-monospace">12 Modul Utama</span>
                         </div>
                         <div class="card-body p-0">
-                            <ul class="nav nav-tabs nav-bordered px-3 pt-2 bg-light-subtle" role="tablist">
+                            <ul class="nav nav-tabs nav-justified nav-bordered bg-light-subtle flex-nowrap" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <button type="button" class="nav-link active py-2 fs-13" id="tab-shortcut-users-btn" data-bs-toggle="tab" data-bs-target="#tab-shortcut-users" role="tab" aria-controls="tab-shortcut-users" aria-selected="true" title="Manajemen Pengguna (6 Modul)">
+                                    <button type="button" class="nav-link active py-2 fs-13 text-nowrap" id="tab-shortcut-users-btn" data-bs-toggle="tab" data-bs-target="#tab-shortcut-users" role="tab" aria-controls="tab-shortcut-users" aria-selected="true" title="Manajemen Pengguna (6 Modul)">
                                         <i class="ti ti-users me-0 me-md-1.5 text-primary"></i>
-                                        <span class="d-none d-md-inline">Manajemen Pengguna</span>
+                                        <span class="d-none d-md-inline text-nowrap">Manajemen Pengguna</span>
                                         <span class="badge bg-primary-subtle text-primary ms-1 font-monospace">6</span>
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button type="button" class="nav-link py-2 fs-13" id="tab-shortcut-app-btn" data-bs-toggle="tab" data-bs-target="#tab-shortcut-app" role="tab" aria-controls="tab-shortcut-app" aria-selected="false" title="Dukungan Aplikasi (6 Modul)">
+                                    <button type="button" class="nav-link py-2 fs-13 text-nowrap" id="tab-shortcut-app-btn" data-bs-toggle="tab" data-bs-target="#tab-shortcut-app" role="tab" aria-controls="tab-shortcut-app" aria-selected="false" title="Dukungan Aplikasi (6 Modul)">
                                         <i class="ti ti-settings-cog me-0 me-md-1.5 text-info"></i>
-                                        <span class="d-none d-md-inline">Dukungan Aplikasi</span>
+                                        <span class="d-none d-md-inline text-nowrap">Dukungan Aplikasi</span>
                                         <span class="badge bg-info-subtle text-info ms-1 font-monospace">6</span>
                                     </button>
                                 </li>
@@ -897,18 +896,18 @@
                             </span>
                         </div>
                         <div class="card-body p-0">
-                            <ul class="nav nav-tabs nav-bordered px-3 pt-2 bg-light-subtle" role="tablist">
+                            <ul class="nav nav-tabs nav-justified nav-bordered bg-light-subtle flex-nowrap" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <button type="button" class="nav-link active py-2 fs-13" id="tab-pending-approvals-btn" data-bs-toggle="tab" data-bs-target="#tab-pending-approvals" role="tab" aria-controls="tab-pending-approvals" aria-selected="true" title="Pendaftaran Baru ({{ $pendingApprovals->count() }})">
+                                    <button type="button" class="nav-link active py-2 fs-13 text-nowrap" id="tab-pending-approvals-btn" data-bs-toggle="tab" data-bs-target="#tab-pending-approvals" role="tab" aria-controls="tab-pending-approvals" aria-selected="true" title="Pendaftaran Baru ({{ $pendingApprovals->count() }})">
                                         <i class="ti ti-user-plus me-0 me-md-1.5"></i>
-                                        <span class="d-none d-md-inline">Pendaftaran Baru</span>
+                                        <span class="d-none d-md-inline text-nowrap">Pendaftaran Baru</span>
                                         <span class="badge bg-primary-subtle text-primary ms-1 font-monospace">{{ $pendingApprovals->count() }}</span>
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button type="button" class="nav-link py-2 fs-13" id="tab-pending-deactivations-btn" data-bs-toggle="tab" data-bs-target="#tab-pending-deactivations" role="tab" aria-controls="tab-pending-deactivations" aria-selected="false" title="Permohonan Nonaktif ({{ $pendingDeactivations->count() }})">
+                                    <button type="button" class="nav-link py-2 fs-13 text-nowrap" id="tab-pending-deactivations-btn" data-bs-toggle="tab" data-bs-target="#tab-pending-deactivations" role="tab" aria-controls="tab-pending-deactivations" aria-selected="false" title="Permohonan Nonaktif ({{ $pendingDeactivations->count() }})">
                                         <i class="ti ti-user-x me-0 me-md-1.5"></i>
-                                        <span class="d-none d-md-inline">Permohonan Nonaktif</span>
+                                        <span class="d-none d-md-inline text-nowrap">Permohonan Nonaktif</span>
                                         <span class="badge bg-danger-subtle text-danger ms-1 font-monospace">{{ $pendingDeactivations->count() }}</span>
                                     </button>
                                 </li>

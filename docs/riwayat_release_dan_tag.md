@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v3.0.8`  
-> **Terakhir Diperbarui:** 06 Oktober 2026 15:28 WIB
+> **Versi Terbaru:** `v3.0.9`  
+> **Terakhir Diperbarui:** 06 Oktober 2026 23:38 WIB
 
 ---
 
@@ -23,6 +23,12 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
   <tbody>
     <tr>
       <td align="center">1</td>
+      <td align="center"><strong><code>v3.0.9</code></strong></td>
+      <td align="center"><code>2026-10-06 23:38 WIB</code></td>
+      <td>Optimalisasi Responsivitas Toolbar Filter &amp; Tab Modul Dashboard Laptop (Pencegahan Word-Wrap Filter Pertemanan, Penyederhanaan Tombol 'Riwayat', Tab Justified Simetris 50:50 Tanpa Gap Asimetris, dan Indikator Aktif Solid <code>border-bottom: 2px solid #3e60d5</code>), Card-Header Multi-Line Title Auto-Wrap di Sisi Kiri dengan Right Action/Badge Terkunci di Posisi Kanan, Pembersihan Status Dot Online Hero Avatar, UserFactory Nama Asli Tanpa Gelar Akademik, Serta Penghapusan <code>UserMediaHistorySeeder</code></td>
+    </tr>
+    <tr>
+      <td align="center">2</td>
       <td align="center"><strong><code>v3.0.8</code></strong></td>
       <td align="center"><code>2026-10-06 15:28 WIB</code></td>
       <td>Restrukturisasi Tata Letak Dashboard 2-Kolom (Direktori &amp; Riwayat <code>col-xl-8</code>, Shortcut &amp; Status <code>col-xl-4</code>), Filter Pertemanan Responsif 1-Baris Mobile, Paginasi Cerdas &amp; Load More Riwayat Aktivitas (10 Data Per Muat), Filter Rentang Waktu Terpadu (Hari Ini, 7 Hari, 30 Hari, Semua Waktu), Tooltip Kontekstual Jenis Riwayat, Pengaturan Kolom Waktu 3 Baris &amp; Teks Wrap Multi-line, Serta Pembesaran Avatar Profil (120px) Tanpa Dot Online Diri Sendiri</td>

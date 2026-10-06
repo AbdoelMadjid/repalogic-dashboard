@@ -25,7 +25,10 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $name = fake('id_ID')->name();
+        $gender = fake()->randomElement(['male', 'female']);
+        $firstName = fake('id_ID')->firstName($gender);
+        $lastName = fake('id_ID')->lastName($gender);
+        $name = "{$firstName} {$lastName}";
         $cleanUsername = Str::lower(Str::slug(preg_replace('/[^\p{L}\p{N}\s]/u', '', $name), '.'));
         $domain = fake()->randomElement(['example.com', 'gmail.com', 'yahoo.com', 'repalogic.com']);
         $email = fake()->unique()->numerify("{$cleanUsername}##@{$domain}");
