@@ -41,45 +41,45 @@
                         <span class="badge bg-info text-white font-monospace">Centralized Engine</span>
                     </div>
                     <div class="card-body p-4">
-                        <!-- Prinsip Klasifikasi SemVer -->
-                        <div class="p-3 bg-light-subtle rounded-3 border mb-3">
-                            <h6 class="fw-bold text-dark mb-2 d-flex align-items-center gap-1.5">
-                                <i class="ti ti-tag text-primary fs-16"></i>
+                        <!-- Section 1: Prinsip Klasifikasi SemVer -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                                <i class="ti ti-tag text-primary fs-18"></i>
                                 <span>Prinsip Penomoran Semantic Versioning (SemVer: <code>MAJOR.MINOR.PATCH</code>)</span>
                             </h6>
-                            <div class="row g-2">
-                                <div class="col-md-4">
-                                    <div class="p-2.5 bg-white rounded-2 border h-100">
-                                        <div class="d-flex align-items-center gap-1.5 mb-1">
-                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle fw-semibold fs-xs">
+                            <div class="row g-3">
+                                <div class="col-lg-4">
+                                    <div class="p-3 bg-light-subtle rounded-3 border h-100">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2.5 py-1.5 fw-semibold fs-12">
                                                 <i class="ti ti-rocket me-1"></i>MAJOR Release (vX.0.0)
                                             </span>
                                         </div>
-                                        <p class="fs-12 text-muted mb-0">
+                                        <p class="fs-13 text-secondary lh-base mb-0">
                                             <strong>Pembaharuan Total / Rombak Arsitektur:</strong> Perubahan skala besar, perombakan basis data inti, atau <em>breaking changes</em> (contoh: <code>v2.0.0 &rarr; v3.0.0</code>).
                                         </p>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="p-2.5 bg-white rounded-2 border h-100">
-                                        <div class="d-flex align-items-center gap-1.5 mb-1">
-                                            <span class="badge bg-info-subtle text-info border border-info-subtle fw-semibold fs-xs">
+                                <div class="col-lg-4">
+                                    <div class="p-3 bg-light-subtle rounded-3 border h-100">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="badge bg-info-subtle text-info border border-info-subtle px-2.5 py-1.5 fw-semibold fs-12">
                                                 <i class="ti ti-sparkles me-1"></i>MINOR Release (v3.X.0)
                                             </span>
                                         </div>
-                                        <p class="fs-12 text-muted mb-0">
+                                        <p class="fs-13 text-secondary lh-base mb-0">
                                             <strong>Fitur Baru &amp; Modul Tambahan:</strong> Penambahan fungsionalitas baru yang kompatibel mundur tanpa merusak fitur lama (contoh: <code>v3.1.0, v3.2.0, v3.4.0</code>).
                                         </p>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="p-2.5 bg-white rounded-2 border h-100">
-                                        <div class="d-flex align-items-center gap-1.5 mb-1">
-                                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle fw-semibold fs-xs">
+                                <div class="col-lg-4">
+                                    <div class="p-3 bg-light-subtle rounded-3 border h-100">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2.5 py-1.5 fw-semibold fs-12">
                                                 <i class="ti ti-tool me-1"></i>PATCH / Hotfix (v3.0.X)
                                             </span>
                                         </div>
-                                        <p class="fs-12 text-muted mb-0">
+                                        <p class="fs-13 text-secondary lh-base mb-0">
                                             <strong>Perbaikan Bug &amp; Optimasi:</strong> Perbaikan galat (<em>bugfix</em>), perapian responsivitas layout/UI/UX, atau patch performa kecil (contoh: <code>v3.0.8, v3.0.9</code>).
                                         </p>
                                     </div>
@@ -87,7 +87,13 @@
                             </div>
                         </div>
 
-                        <!-- 4 Langkah SOP Release -->
+                        <hr class="my-4 text-muted opacity-25">
+
+                        <!-- Section 2: 4 Langkah SOP Release -->
+                        <h6 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                            <i class="ti ti-list-check text-primary fs-18"></i>
+                            <span>4 Langkah Prosedur Eksekusi Rilis Versi</span>
+                        </h6>
                         <div class="row g-3">
                             <div class="col-md-6 col-lg-3">
                                 <div class="p-3 border rounded-3 bg-light-subtle h-100">
