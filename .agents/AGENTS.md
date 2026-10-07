@@ -58,11 +58,16 @@
 - Do NOT create a subfolder with `index.blade.php` for admin page views (e.g. use `resources/views/admin/dukunganaplikasi/translation.blade.php`, NOT `resources/views/admin/dukunganaplikasi/translation/index.blade.php`).
 - Supporting modals, form elements, and guide components MUST be placed inside the `resources/views/admin/{kelompok}/partials/` folder (e.g. `translation_form.blade.php`, `bilingual_guide_modal.blade.php`).
 
-## 11. Mandatory Changelog & Release History Update Standard
-- Whenever new features are added, updated, or modified, and before performing a git push or tag release:
-  1. Update `APP_VERSION` in `.env`, `.env.example`, and `config/app.php` (if releasing a new version).
-  2. Add the timeline entry with exact timestamp (YYYY-MM-DD HH:mm WIB) in `resources/views/template/documentation/changelog.blade.php`.
-  3. Add the release entry to the Release History table in `docs/riwayat_release_dan_tag.md`.
+## 11. Mandatory Changelog, Release History & Semantic Versioning (SemVer) Standard
+- **Semantic Versioning Principles (`vMAJOR.MINOR.PATCH`)**:
+  - 🔴 **MAJOR (`vX.0.0`)**: **Pembaharuan Total / Rombak Arsitektur** — Perubahan skala besar, perombakan basis data inti, transisi arsitektur, atau perubahan tidak kompatibel mundur (*breaking changes*).
+  - 🔵 **MINOR (`v3.X.0`)**: **Fitur Baru & Modul Tambahan** — Penambahan fungsionalitas, modul baru, atau kemampuan fitur yang tetap kompatibel mundur (*backward-compatible*).
+  - 🟢 **PATCH (`v3.0.X`)**: **Perbaikan Bug & Optimasi** — Pembenahan galat (*bugfix*), perbaikan minor responsivitas UI/UX, penyesuaian style, atau patch performa/keamanan kecil.
+- **Mandatory Release Workflow**: Whenever new features are added, updated, or modified, and before performing a git push or tag release:
+  1. Update `APP_VERSION` in `.env`, `.env.example`, and `config/app.php` according to SemVer rules.
+  2. Add the timeline entry in `resources/views/template/documentation/changelog.blade.php` with exact timestamp (YYYY-MM-DD HH:mm WIB) AND **MANDATORY SemVer Release Type Badge** (e.g. `<span class="badge bg-info-subtle text-info border border-info-subtle fw-semibold fs-xs"><i class="ti ti-sparkles me-1"></i>Minor Release (Fitur Tambahan)</span>`).
+  3. Add the release entry to the Release History table in `docs/riwayat_release_dan_tag.md` with the dedicated **Tipe Rilis** column (🔴 Major / 🔵 Minor / 🟢 Patch).
+  4. Create an annotated git tag matching the version (e.g. `git tag -a v3.4.0 -m "Release v3.4.0: ..."`) and push to remote repository.
 
 ## 12. Card Header Color & Widget Styling Standard
 - ALL main widget card headers (`<div class="card-header">`) across all pages MUST follow standardized theme styling:
