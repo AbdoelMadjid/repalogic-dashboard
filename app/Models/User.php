@@ -91,6 +91,33 @@ class User extends Authenticatable
     }
 
     /**
+     * Helper untuk mengubah teks berhuruf kapital semua (ALL CAPS) menjadi Title Case (huruf besar di awal kata).
+     */
+    public static function formatTitleCase(?string $text): string
+    {
+        if (empty($text)) {
+            return '';
+        }
+        $trimmed = trim($text);
+        // Jika berisi huruf alfabet dan seluruhnya huruf besar (ALL CAPS)
+        if (preg_match('/[a-zA-Z]/', $trimmed) && $trimmed === mb_strtoupper($trimmed, 'UTF-8')) {
+            return mb_convert_case(mb_strtolower($trimmed, 'UTF-8'), MB_CASE_TITLE, 'UTF-8');
+        }
+        return $trimmed;
+    }
+
+    /**
+     * Mutator & accessor untuk atribut name.
+     * Otomatis mengonversi nama berhuruf besar semua menjadi huruf besar di awal kata saat disimpan ke database.
+     */
+    protected function name(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            set: fn ($value) => self::formatTitleCase($value)
+        );
+    }
+
+    /**
      * Check if user has an active password reset request.
      */
     public function isPasswordResetRequested(): bool

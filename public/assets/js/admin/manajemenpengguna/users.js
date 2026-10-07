@@ -948,6 +948,206 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ==========================================
+    // EXCEL IMPORT WITH ANIMATED PROGRESS BAR
+    // ==========================================
+    const formImportUsers = document.getElementById('form-import-users');
+    const modalImportUsersEl = document.getElementById('modal-import-users');
+    const importProgressWrapper = document.getElementById('import-progress-wrapper');
+    const importProgressBar = document.getElementById('import-progress-bar');
+    const importProgressPercentage = document.getElementById('import-progress-percentage');
+    const importProgressStatusText = document.getElementById('import-progress-status-text');
+    const importProgressDetail = document.getElementById('import-progress-detail');
+    const importFileSizeInfo = document.getElementById('import-file-size-info');
+    const btnSubmitImport = document.getElementById('btnSubmitImport');
+    const btnCancelImport = document.getElementById('btn-cancel-import');
+    const btnCloseImportModal = document.getElementById('btn-close-import-modal');
+    const excelFileInput = document.getElementById('excel_file');
+
+    function formatFileSize(bytes) {
+        if (!bytes || bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    function resetImportProgress() {
+        if (importProgressWrapper) importProgressWrapper.style.display = 'none';
+        if (importProgressBar) {
+            importProgressBar.style.width = '0%';
+            importProgressBar.className = 'progress-bar progress-bar-striped progress-bar-animated bg-primary';
+        }
+        if (importProgressPercentage) importProgressPercentage.innerText = '0%';
+        if (importProgressStatusText) importProgressStatusText.innerText = 'Mengunggah berkas...';
+        if (importProgressDetail) importProgressDetail.innerText = 'Mohon tunggu, berkas sedang dikirim ke server...';
+        if (btnSubmitImport) {
+            btnSubmitImport.disabled = false;
+            btnSubmitImport.innerHTML = '<i class="ti ti-upload me-1.5"></i> Mulai Unggah & Import';
+        }
+        if (btnCancelImport) btnCancelImport.disabled = false;
+        if (btnCloseImportModal) btnCloseImportModal.disabled = false;
+    }
+
+    if (excelFileInput) {
+        excelFileInput.addEventListener('change', function() {
+            if (excelFileInput.files && excelFileInput.files[0]) {
+                const file = excelFileInput.files[0];
+                if (importFileSizeInfo) {
+                    importFileSizeInfo.innerText = formatFileSize(file.size);
+                }
+            } else {
+                if (importFileSizeInfo) importFileSizeInfo.innerText = '';
+            }
+            if (importProgressWrapper && importProgressWrapper.style.display !== 'none') {
+                resetImportProgress();
+            }
+        });
+    }
+
+    if (modalImportUsersEl) {
+        modalImportUsersEl.addEventListener('hidden.bs.modal', function() {
+            if (formImportUsers) formImportUsers.reset();
+            resetImportProgress();
+            if (importFileSizeInfo) importFileSizeInfo.innerText = '';
+        });
+    }
+
+    if (formImportUsers) {
+        formImportUsers.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (!excelFileInput || !excelFileInput.files || excelFileInput.files.length === 0) {
+                if (window.showWarning) {
+                    window.showWarning('Silakan pilih berkas Excel (.xlsx, .xls, atau .csv) terlebih dahulu.');
+                }
+                return;
+            }
+
+            const formData = new FormData(formImportUsers);
+
+            // Tampilkan Progress Bar Container
+            if (importProgressWrapper) importProgressWrapper.style.display = 'block';
+            if (importProgressBar) {
+                importProgressBar.style.width = '5%';
+                importProgressBar.className = 'progress-bar progress-bar-striped progress-bar-animated bg-primary';
+            }
+            if (importProgressPercentage) importProgressPercentage.innerText = '5%';
+            if (importProgressStatusText) importProgressStatusText.innerText = 'Mengunggah berkas ke server...';
+            if (importProgressDetail) importProgressDetail.innerText = 'Proses transfer berkas sedang berlangsung...';
+
+            if (btnSubmitImport) {
+                btnSubmitImport.disabled = true;
+                btnSubmitImport.innerHTML = '<span class="spinner-border spinner-border-sm me-1.5" role="status"></span> Memproses...';
+            }
+            if (btnCancelImport) btnCancelImport.disabled = true;
+            if (btnCloseImportModal) btnCloseImportModal.disabled = true;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', formImportUsers.action, true);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.setRequestHeader('Accept', 'application/json');
+
+            // Upload Progress Event Listener
+            xhr.upload.addEventListener('progress', function(event) {
+                if (event.lengthComputable) {
+                    const percent = Math.min(95, Math.round((event.loaded / event.total) * 95));
+                    if (importProgressBar) importProgressBar.style.width = percent + '%';
+                    if (importProgressPercentage) importProgressPercentage.innerText = percent + '%';
+                    if (percent >= 90) {
+                        if (importProgressStatusText) importProgressStatusText.innerText = 'Memproses & Mengimpor Baris Excel...';
+                        if (importProgressDetail) importProgressDetail.innerText = 'Sedang memvalidasi baris data dan menyimpan akun pengguna...';
+                    }
+                }
+            });
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    let responseJson = null;
+                    try {
+                        responseJson = JSON.parse(xhr.responseText);
+                    } catch (err) {
+                        // Response bukan JSON murni
+                    }
+
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        if (importProgressBar) {
+                            importProgressBar.style.width = '100%';
+                            importProgressBar.className = 'progress-bar bg-success';
+                        }
+                        if (importProgressPercentage) importProgressPercentage.innerText = '100%';
+                        if (importProgressStatusText) importProgressStatusText.innerText = 'Selesai!';
+                        if (importProgressDetail) importProgressDetail.innerText = 'Data pengguna berhasil diproses.';
+
+                        const message = responseJson && responseJson.message ? responseJson.message : 'Import data pengguna berhasil diproses.';
+
+                        setTimeout(function() {
+                            const modalInstance = window.bootstrap && window.bootstrap.Modal ? window.bootstrap.Modal.getInstance(modalImportUsersEl) : null;
+                            if (modalInstance) modalInstance.hide();
+
+                            if (window.showSuccess) {
+                                window.showSuccess(message, { reload: true, timer: 3000 });
+                            } else {
+                                window.location.reload();
+                            }
+                        }, 500);
+                    } else {
+                        // Error State
+                        if (importProgressBar) {
+                            importProgressBar.style.width = '100%';
+                            importProgressBar.className = 'progress-bar bg-danger';
+                        }
+                        if (importProgressPercentage) importProgressPercentage.innerText = 'Error';
+                        if (importProgressStatusText) importProgressStatusText.innerText = 'Gagal Mengunggah / Memproses';
+
+                        let errorMsg = 'Terjadi kesalahan saat memproses berkas Excel.';
+                        if (responseJson && responseJson.message) {
+                            errorMsg = responseJson.message;
+                        } else if (responseJson && responseJson.errors) {
+                            const firstKey = Object.keys(responseJson.errors)[0];
+                            errorMsg = responseJson.errors[firstKey][0] || errorMsg;
+                        }
+
+                        if (importProgressDetail) importProgressDetail.innerText = errorMsg;
+
+                        if (btnSubmitImport) {
+                            btnSubmitImport.disabled = false;
+                            btnSubmitImport.innerHTML = '<i class="ti ti-upload me-1.5"></i> Coba Unggah Lagi';
+                        }
+                        if (btnCancelImport) btnCancelImport.disabled = false;
+                        if (btnCloseImportModal) btnCloseImportModal.disabled = false;
+
+                        if (window.showError) {
+                            window.showError(errorMsg, 'Gagal Import Data');
+                        }
+                    }
+                }
+            };
+
+            xhr.onerror = function() {
+                if (importProgressBar) {
+                    importProgressBar.style.width = '100%';
+                    importProgressBar.className = 'progress-bar bg-danger';
+                }
+                if (importProgressStatusText) importProgressStatusText.innerText = 'Koneksi Terputus';
+                if (importProgressDetail) importProgressDetail.innerText = 'Gagal terhubung ke server. Periksa koneksi Anda.';
+
+                if (btnSubmitImport) {
+                    btnSubmitImport.disabled = false;
+                    btnSubmitImport.innerHTML = '<i class="ti ti-upload me-1.5"></i> Coba Unggah Lagi';
+                }
+                if (btnCancelImport) btnCancelImport.disabled = false;
+                if (btnCloseImportModal) btnCloseImportModal.disabled = false;
+
+                if (window.showError) {
+                    window.showError('Gagal terhubung ke server saat mengunggah berkas.', 'Kesalahan Jaringan');
+                }
+            };
+
+            xhr.send(formData);
+        });
+    }
+
+    // ==========================================
     // TABLE CONTROLS & INITIAL LOAD
     // ==========================================
     if (lengthSelect) {

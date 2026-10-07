@@ -547,4 +547,314 @@ class UserController extends Controller
 
         return redirect()->route('admin.manajemenpengguna.users.index');
     }
+
+    /**
+     * Download format Excel minimal untuk import data pengguna.
+     */
+    public function downloadTemplateExcel()
+    {
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Data Pengguna');
+
+        // Header Titles
+        $headers = [
+            'A1' => 'Nama Lengkap *',
+            'B1' => 'Email *',
+            'C1' => 'Password (Default: password*)',
+            'D1' => 'Role (Default: user)',
+            'E1' => 'Status (active / pending / inactive)',
+        ];
+
+        foreach ($headers as $cell => $text) {
+            $sheet->setCellValue($cell, $text);
+        }
+
+        // Header Styling
+        $headerStyle = [
+            'font' => [
+                'bold' => true,
+                'color' => ['rgb' => 'FFFFFF'],
+                'size' => 11,
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['rgb' => '1E293B'], // Slate 800
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['rgb' => 'CBD5E1'],
+                ],
+            ],
+        ];
+        $sheet->getStyle('A1:E1')->applyFromArray($headerStyle);
+        $sheet->getRowDimension(1)->setRowHeight(28);
+
+        // Sample Data Rows (Hanya 3 baris contoh murni tanpa teks catatan di bawahnya)
+        $sampleData = [
+            ['Ahmad Fadillah', 'ahmad.fadillah@example.com', 'password*', 'user', 'active'],
+            ['Siti Rahmawati', 'siti.rahmawati@example.com', 'password*', 'user', 'active'],
+            ['Budi Hartono', 'budi.hartono@example.com', 'password*', 'user', 'active'],
+        ];
+
+        $rowIdx = 2;
+        foreach ($sampleData as $row) {
+            $sheet->setCellValue('A' . $rowIdx, $row[0]);
+            $sheet->setCellValue('B' . $rowIdx, $row[1]);
+            $sheet->setCellValueExplicit('C' . $rowIdx, $row[2], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue('D' . $rowIdx, $row[3]);
+            $sheet->setCellValue('E' . $rowIdx, $row[4]);
+
+            $sheet->getStyle("A{$rowIdx}:E{$rowIdx}")->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)->getColor()->setRGB('E2E8F0');
+            $sheet->getStyle("C{$rowIdx}:E{$rowIdx}")->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getRowDimension($rowIdx)->setRowHeight(22);
+            $rowIdx++;
+        }
+
+        // Auto-fit column widths
+        foreach (range('A', 'E') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $fileName = 'format_upload_users.xlsx';
+
+        return response()->streamDownload(function () use ($writer) {
+            $writer->save('php://output');
+        }, $fileName, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+            'Cache-Control' => 'max-age=0',
+        ]);
+    }
+
+    /**
+     * Import users from uploaded Excel file (.xlsx, .xls, .csv).
+     */
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|file|mimes:xlsx,xls,csv|max:5120',
+            'duplicate_action' => 'required|in:skip,update',
+        ], [
+            'excel_file.required' => 'Silakan pilih berkas Excel atau CSV terlebih dahulu.',
+            'excel_file.mimes' => 'Berkas harus berupa format .xlsx, .xls, atau .csv.',
+            'excel_file.max' => 'Ukuran berkas maksimal 5MB.',
+        ]);
+
+        $file = $request->file('excel_file');
+        $duplicateAction = $request->input('duplicate_action', 'skip');
+
+        try {
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file->getRealPath());
+            $sheet = $spreadsheet->getActiveSheet();
+            $rows = $sheet->toArray(null, true, true, true);
+        } catch (\Throwable $e) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Gagal membaca berkas Excel: ' . $e->getMessage()
+                ], 422);
+            }
+            $this->notifyError('Gagal membaca berkas Excel: ' . $e->getMessage());
+            return redirect()->back();
+        }
+
+        if (count($rows) <= 1) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'status' => 'warning',
+                    'message' => 'Berkas Excel kosong atau tidak memiliki data pengguna.'
+                ], 422);
+            }
+            $this->notifyWarning('Berkas Excel kosong atau tidak memiliki data pengguna.');
+            return redirect()->back();
+        }
+
+        // Pastikan role 'user' tersedia
+        Role::firstOrCreate(['name' => 'user', 'guard_name' => 'web']);
+        $existingRoles = Role::pluck('name')->toArray();
+
+        $successCount = 0;
+        $updatedCount = 0;
+        $duplicateSkipCount = 0;
+        $invalidCount = 0;
+
+        // Skip header (row 1), process data rows
+        $isFirst = true;
+        foreach ($rows as $rowIndex => $row) {
+            if ($isFirst) {
+                $isFirst = false;
+                continue;
+            }
+
+            $name = trim((string) ($row['A'] ?? ''));
+            $email = strtolower(trim((string) ($row['B'] ?? '')));
+            $password = trim((string) ($row['C'] ?? ''));
+            $roleInput = trim((string) ($row['D'] ?? ''));
+            $statusInput = strtolower(trim((string) ($row['E'] ?? '')));
+
+            // Abaikan baris kosong total
+            if (empty($name) && empty($email) && empty($password) && empty($roleInput) && empty($statusInput)) {
+                continue;
+            }
+
+            // Abaikan baris teks petunjuk atau catatan (jika ada teks petunjuk di kolom A tanpa email)
+            if (empty($email) && (
+                str_starts_with(strtoupper($name), 'PETUNJUK') ||
+                preg_match('/^[0-9]+\.\s*/', $name) ||
+                str_contains(strtolower($name), 'wajib') ||
+                str_contains(strtolower($name), 'kolom')
+            )) {
+                continue;
+            }
+
+            // Jika email kosong padahal ada nama atau sebaliknya
+            if (empty($name) || empty($email)) {
+                $invalidCount++;
+                continue;
+            }
+
+            // Validasi format email
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $invalidCount++;
+                continue;
+            }
+
+            // Normalisasi Role
+            $roleName = !empty($roleInput) ? strtolower($roleInput) : 'user';
+            $rolesToAssign = array_filter(array_map('trim', explode(',', $roleName)));
+            if (empty($rolesToAssign)) {
+                $rolesToAssign = ['user'];
+            }
+
+            $validRoles = [];
+            foreach ($rolesToAssign as $r) {
+                if (in_array($r, $existingRoles)) {
+                    $validRoles[] = $r;
+                } else {
+                    $createdRole = Role::firstOrCreate(['name' => $r, 'guard_name' => 'web']);
+                    $existingRoles[] = $r;
+                    $validRoles[] = $r;
+                }
+            }
+            if (empty($validRoles)) {
+                $validRoles = ['user'];
+            }
+
+            // Normalisasi Status & Password
+            $status = in_array($statusInput, ['active', 'pending', 'inactive']) ? $statusInput : 'active';
+            $passwordVal = !empty($password) ? $password : 'password*';
+
+            // Cek apakah pengguna sudah terdaftar di database
+            $existingUser = User::where('email', $email)->first();
+
+            if ($existingUser) {
+                if ($duplicateAction === 'skip') {
+                    $duplicateSkipCount++;
+                    continue;
+                } elseif ($duplicateAction === 'update') {
+                    $updatePayload = [
+                        'name' => $name,
+                        'status' => $status,
+                    ];
+                    if (!empty($password)) {
+                        $updatePayload['password'] = Hash::make($password);
+                    }
+                    if ($status === 'active' && $existingUser->status === 'pending') {
+                        $updatePayload['approved_at'] = now();
+                        $updatePayload['approved_by'] = auth()->id();
+                    }
+                    $existingUser->update($updatePayload);
+                    $existingUser->syncRoles($validRoles);
+                    $updatedCount++;
+                    continue;
+                }
+            }
+
+            // Buat akun pengguna baru
+            $newUser = User::create([
+                'name' => $name,
+                'email' => $email,
+                'password' => Hash::make($passwordVal),
+                'status' => $status,
+                'approved_at' => $status === 'active' ? now() : null,
+                'approved_by' => $status === 'active' ? auth()->id() : null,
+            ]);
+
+            $newUser->syncRoles($validRoles);
+            $successCount++;
+        }
+
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
+        $messageParts = [];
+        if ($successCount > 0) {
+            $messageParts[] = "{$successCount} pengguna baru berhasil ditambahkan";
+        }
+        if ($updatedCount > 0) {
+            $messageParts[] = "{$updatedCount} data pengguna diperbarui";
+        }
+        if ($duplicateSkipCount > 0) {
+            $messageParts[] = "{$duplicateSkipCount} pengguna dilewati (email sudah terdaftar)";
+        }
+        if ($invalidCount > 0) {
+            $messageParts[] = "{$invalidCount} baris tidak valid (nama/email kosong atau salah format)";
+        }
+
+        $resultMsg = !empty($messageParts) ? implode(', ', $messageParts) . '.' : 'Tidak ada data pengguna yang diproses.';
+
+        // Support AJAX Response
+        if ($request->ajax() || $request->wantsJson()) {
+            if ($successCount > 0 || $updatedCount > 0) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => "Import Selesai: {$resultMsg}",
+                    'data' => [
+                        'success_count' => $successCount,
+                        'updated_count' => $updatedCount,
+                        'duplicate_skip_count' => $duplicateSkipCount,
+                        'invalid_count' => $invalidCount,
+                    ]
+                ], 200);
+            } elseif ($duplicateSkipCount > 0) {
+                return response()->json([
+                    'status' => 'warning',
+                    'message' => "Import Selesai: {$resultMsg}",
+                    'data' => [
+                        'success_count' => $successCount,
+                        'updated_count' => $updatedCount,
+                        'duplicate_skip_count' => $duplicateSkipCount,
+                        'invalid_count' => $invalidCount,
+                    ]
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Gagal Memproses Data: {$resultMsg}",
+                    'data' => [
+                        'success_count' => $successCount,
+                        'updated_count' => $updatedCount,
+                        'duplicate_skip_count' => $duplicateSkipCount,
+                        'invalid_count' => $invalidCount,
+                    ]
+                ], 422);
+            }
+        }
+
+        if ($successCount > 0 || $updatedCount > 0) {
+            $this->notifySuccess("Import Selesai: {$resultMsg}");
+        } elseif ($duplicateSkipCount > 0) {
+            $this->notifyWarning("Import Selesai: {$resultMsg}");
+        } else {
+            $this->notifyError("Gagal Memproses Data: {$resultMsg}");
+        }
+
+        return redirect()->route('admin.manajemenpengguna.users.index');
+    }
 }

@@ -116,7 +116,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 3.0.9 -->
+                        <!-- Version 3.1.0 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -124,8 +124,31 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v3.0.9</h5>
+                                        <h5 class="fw-bold mb-0">v3.1.0</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.1.0</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-10-07 09:50 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Penambahan Fitur Download Format Excel Minimal, Upload / Import Pengguna dengan Animated Progress Bar &amp; Konversi Otomatis Nama Huruf Kapital (ALL CAPS) ke Title Case pada Modul Manajemen Pengguna (<code>admin/manajemenpengguna/users</code>)</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Download Format Excel Minimal (<code>users.template-excel</code>):</strong> Menyediakan unduhan template spreadsheet (.xlsx) siap pakai dengan tabel data murni (header Slate-800, text white, bold, auto column widths) dan 3 baris data contoh realistis tanpa baris catatan ambigu agar mempermudah pengisian berkas.</li>
+                                    <li><strong class="text-dark">Upload &amp; Import Data Pengguna (<code>users.import-excel</code>):</strong> Integrasi engine parser berkas Excel (XLSX, XLS, CSV) berbasis <code>PhpSpreadsheet</code> dengan validasi baris presisi, pembuatan/atribusi Spatie Role otomatis, password default aman (<code>password*</code>), aktivasi instan status akun, dan opsi penanganan duplikasi (<em>Skip duplicate</em> vs <em>Update existing data</em>).</li>
+                                    <li><strong class="text-dark">Real-time Animated Progress Bar Upload (<code>users.js</code> &amp; <code>import_modal.blade.php</code>):</strong> Pelacakan persentase transfer berkas (0% - 100%) secara langsung via XMLHttpRequest upload progress listener dengan status tahapan pemrosesan data, integrasi notifikasi SweetAlert2, dan auto-reload halaman.</li>
+                                    <li><strong class="text-dark">Otomatisasi Title Case Nama Pengguna (<code>User.php</code> Model Mutator):</strong> Menambahkan mutator Eloquent pada atribut <code>name</code> untuk secara otomatis mengonversi nama berhuruf besar semua (ALL CAPS) menjadi huruf besar di awal kata (Title Case) saat disimpan ke database di seluruh alur sistem (Import Excel, Admin Form, Registrasi, dan Profil).</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Version 3.0.9 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-check fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v3.0.9</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.0.9</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-10-06 23:38 WIB</span>

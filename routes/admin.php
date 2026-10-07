@@ -116,6 +116,8 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
     });
 
     Route::prefix('manajemenpengguna')->name('manajemenpengguna.')->group(function () {
+        Route::get('users/template-excel', [UserController::class, 'downloadTemplateExcel'])->name('users.template-excel');
+        Route::post('users/import-excel', [UserController::class, 'importExcel'])->name('users.import-excel');
         Route::post('users/{id}/approve', [UserController::class, 'approve'])->name('users.approve');
         Route::post('users/{id}/reject-registration', [UserController::class, 'rejectRegistration'])->name('users.reject-registration');
         Route::post('users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');

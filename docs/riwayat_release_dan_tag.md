@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v3.0.9`  
-> **Terakhir Diperbarui:** 06 Oktober 2026 23:38 WIB
+> **Versi Terbaru:** `v3.1.0`  
+> **Terakhir Diperbarui:** 07 Oktober 2026 09:50 WIB
 
 ---
 
@@ -23,6 +23,12 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
   <tbody>
     <tr>
       <td align="center">1</td>
+      <td align="center"><strong><code>v3.1.0</code></strong></td>
+      <td align="center"><code>2026-10-07 09:50 WIB</code></td>
+      <td>Penambahan Fitur Download Format Excel Minimal (Template .xlsx Murni 3 Baris Contoh), Upload / Import Pengguna via Excel dengan Real-time Animated Progress Bar (0% - 100% Upload &amp; Server Processing State), serta Konversi Otomatis Nama Huruf Kapital (ALL CAPS) Menjadi Title Case pada Model <code>User</code> di Modul <code>admin/manajemenpengguna/users</code></td>
+    </tr>
+    <tr>
+      <td align="center">2</td>
       <td align="center"><strong><code>v3.0.9</code></strong></td>
       <td align="center"><code>2026-10-06 23:38 WIB</code></td>
       <td>Optimalisasi Responsivitas Toolbar Filter &amp; Tab Modul Dashboard Laptop (Pencegahan Word-Wrap Filter Pertemanan, Penyederhanaan Tombol 'Riwayat', Tab Justified Simetris 50:50 Tanpa Gap Asimetris, dan Indikator Aktif Solid <code>border-bottom: 2px solid #3e60d5</code>), Card-Header Multi-Line Title Auto-Wrap di Sisi Kiri dengan Right Action/Badge Terkunci di Posisi Kanan, Pembersihan Status Dot Online Hero Avatar, UserFactory Nama Asli Tanpa Gelar Akademik, Serta Penghapusan <code>UserMediaHistorySeeder</code></td>

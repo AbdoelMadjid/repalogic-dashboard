@@ -18,11 +18,18 @@
                                 Kelola akun pengguna aplikasi, status persetujuan registrasi, dan atribusi Peran (Role).
                             </p>
                         </div>
-                        @can('create manajemenpengguna/users')
-                            <button type="button" class="btn btn-primary btn-sm btn-user-action" data-action="create" title="Tambah Pengguna Baru">
-                                <i class="ti ti-plus me-1"></i> Tambah Pengguna Baru
-                            </button>
-                        @endcan
+                        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-end gap-2 w-100 w-md-auto mt-2 mt-md-0">
+                            @can('create manajemenpengguna/users')
+                                <button type="button" class="btn btn-outline-primary btn-sm text-nowrap" data-bs-toggle="modal" data-bs-target="#modal-import-users" title="Upload / Import Pengguna via Excel">
+                                    <i class="ti ti-file-upload me-0 me-md-1.5"></i>
+                                    <span class="d-none d-md-inline">Upload Excel</span>
+                                </button>
+                                <button type="button" class="btn btn-primary btn-sm btn-user-action text-nowrap" data-action="create" title="Tambah Pengguna Baru">
+                                    <i class="ti ti-plus me-0 me-md-1.5"></i>
+                                    <span class="d-none d-md-inline">Tambah Pengguna</span>
+                                </button>
+                            @endcan
+                        </div>
                     </div>
                     <div class="card-body">
                         @if (session('success'))
@@ -366,6 +373,9 @@
 
     <!-- BULK & QUICK ROLE ASSIGNMENT MODAL -->
     @include('admin.manajemenpengguna.partials.bulk_role_modal')
+
+    <!-- MODAL UPLOAD / IMPORT USERS EXCEL -->
+    @include('admin.manajemenpengguna.partials.import_modal')
 
     <!-- MODAL TOLAK PENDAFTARAN REGISTRASI -->
     <div class="modal fade" id="modal-reject-registration" tabindex="-1" aria-hidden="true">

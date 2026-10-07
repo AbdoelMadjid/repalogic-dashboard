@@ -78,11 +78,11 @@
     border-color: #3e60d5 !important;
 }
 
-/* Card Header & Modal Responsive Mobile */
+/* Card Header & Modal Responsive Mobile (Rule 19 & 20 Compliance) */
 @media (max-width: 767.98px) {
-    .card-header .btn-user-action {
+    .card-header .btn {
         width: 100% !important;
-        margin-top: 0.5rem;
+        margin-top: 0.25rem;
     }
 
     .modal-footer {
