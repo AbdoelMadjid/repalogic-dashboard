@@ -7,47 +7,60 @@
 
 ---
 
-## 📋 Tabel Riwayat Versi & Tag
+## 📋 Prinsip Penomoran Semantic Versioning (SemVer)
 
-Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (WIB), dan ringkasan perubahan pada proyek **REPALOGIC Dashboard**.
+Setiap tag rilis pada **REPALOGIC Dashboard** mengikuti format penomoran baku **`vMAJOR.MINOR.PATCH`**:
+- 🔴 **`MAJOR` (vX.0.0)**: **Pembaharuan Total / Rombak Arsitektur** — Perubahan skala besar, perombakan basis data, atau modifikasi yang tidak kompatibel dengan versi sebelumnya (*breaking changes*).
+- 🔵 **`MINOR` (v3.X.0)**: **Fitur Tambahan / Modul Baru** — Penambahan modul atau kemampuan baru yang kompatibel mundur (*backward-compatible new features*).
+- 🟢 **`PATCH` (v3.0.X)**: **Perbaikan Bug / Optimasi** — Pembenahan galat (*bugfix*), perbaikan minor UI/UX responsif, dan peningkatan performa (*maintenance patch*).
+
+---
+
+## 📋 Tabel Riwayat Versi & Tag
 
 <table width="100%">
   <thead>
     <tr>
-      <th width="5%" align="center">No</th>
-      <th width="12%" align="center">Tag / Versi</th>
-      <th width="20%" align="center">Waktu & Tanggal Rilis (WIB)</th>
-      <th width="63%" align="left">Deskripsi / Catatan Perubahan</th>
+      <th width="4%" align="center">No</th>
+      <th width="10%" align="center">Tag / Versi</th>
+      <th width="14%" align="center">Tipe Rilis</th>
+      <th width="18%" align="center">Waktu Rilis (WIB)</th>
+      <th width="54%" align="left">Deskripsi / Catatan Perubahan</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td align="center">1</td>
       <td align="center"><strong><code>v3.4.0</code></strong></td>
+      <td align="center"><span style="color:#0284c7;font-weight:600;">🔵 Minor (Fitur Baru)</span></td>
       <td align="center"><code>2026-10-07 12:40 WIB</code></td>
-      <td>Integrasi Two-Factor Authentication (2FA / TOTP) Berbasis RFC 6238 (Google Authenticator, Authy, Microsoft Authenticator) pada Modul Profil Pengguna &amp; Layar Tantangan Login Terdedikasi (<code>two-factor-challenge</code>), Rendering QR Code SVG Offline Murni, Enkripsi AES-256 Secret Key &amp; 8 Recovery Codes, Manajemen Kode Pemulihan (Unduh .txt &amp; Salin Clipboard), Serta Dialog Regenerasi &amp; Penonaktifan 2FA Terproteksi Kata Sandi</td>
+      <td>Integrasi Two-Factor Authentication (2FA / TOTP) Berbasis RFC 6238 (Google Authenticator, Authy, Microsoft Authenticator) pada Modul Profil Pengguna &amp; Layar Tantangan Login Terdedikasi (<code>two-factor-challenge</code>), Rendering QR Code SVG Offline Murni, Enkripsi AES-256 Secret Key &amp; 8 Recovery Codes, Manajemen Kode Pemulihan (Unduh .txt &amp; Salin Clipboard), Serta Dialog Regenerasi &amp; Penonaktifan 2FA Terproteksi Kata Sandi dan Zero-419 Auto-Recovery</td>
     </tr>
     <tr>
       <td align="center">2</td>
       <td align="center"><strong><code>v3.3.0</code></strong></td>
+      <td align="center"><span style="color:#0284c7;font-weight:600;">🔵 Minor (Fitur Baru)</span></td>
       <td align="center"><code>2026-10-07 12:10 WIB</code></td>
       <td>Implementasi Modul Riwayat Aktivitas Terpisah (<code>admin/manajemenpengguna/activity-log</code>) dengan Tabel Audit Trail <code>activity_logs</code>, Trait Universal <code>LogsActivity</code> untuk Pencatatan Otomatis Perubahan Data (Create/Update/Delete/Login/2FA) pada Model-Model Utama, Modal Visual Diff (Perbandingan Nilai Sebelum &amp; Sesudah Perubahan), Filter Komprehensif (Modul, Event, User, Rentang Waktu), Serta Pembersihan Retensi Log Berbasis Usia Hari</td>
     </tr>
     <tr>
       <td align="center">3</td>
       <td align="center"><strong><code>v3.2.0</code></strong></td>
+      <td align="center"><span style="color:#0284c7;font-weight:600;">🔵 Minor (Fitur Baru)</span></td>
       <td align="center"><code>2026-10-07 11:35 WIB</code></td>
       <td>Penambahan Fitur Scheduled Automated Database Backup (Cron Job Terjadwal Harian/Mingguan/Bulanan via <code>php artisan db:backup-scheduled</code> &amp; Laravel Scheduler), Kompresi Gzip (<code>.sql.gz</code>), Kebijakan Retensi &amp; Rotasi Otomatis (Auto-Pruning Berbasis Hari &amp; File Cap), Sinkronisasi Cloud Storage Multi-Provider (Amazon S3 / S3-Compatible via AWS SigV4 &amp; Google Drive via Service Account), Serta Integrasi Web Push Notifications (Service Worker <code>sw.js</code> &amp; <code>web-push-manager.js</code>) untuk Notifikasi Chat Real-Time &amp; Ajakan Berteman Saat Browser Diminimalkan</td>
     </tr>
     <tr>
-      <td align="center">2</td>
+      <td align="center">4</td>
       <td align="center"><strong><code>v3.1.0</code></strong></td>
+      <td align="center"><span style="color:#0284c7;font-weight:600;">🔵 Minor (Fitur Baru)</span></td>
       <td align="center"><code>2026-10-07 09:50 WIB</code></td>
       <td>Penambahan Fitur Download Format Excel Minimal (Template .xlsx Murni 3 Baris Contoh), Upload / Import Pengguna via Excel dengan Real-time Animated Progress Bar (0% - 100% Upload &amp; Server Processing State), serta Konversi Otomatis Nama Huruf Kapital (ALL CAPS) Menjadi Title Case pada Model <code>User</code> di Modul <code>admin/manajemenpengguna/users</code></td>
     </tr>
     <tr>
-      <td align="center">2</td>
+      <td align="center">5</td>
       <td align="center"><strong><code>v3.0.9</code></strong></td>
+      <td align="center"><span style="color:#64748b;font-weight:600;">🟢 Patch (Optimasi)</span></td>
       <td align="center"><code>2026-10-06 23:38 WIB</code></td>
       <td>Optimalisasi Responsivitas Toolbar Filter &amp; Tab Modul Dashboard Laptop (Pencegahan Word-Wrap Filter Pertemanan, Penyederhanaan Tombol 'Riwayat', Tab Justified Simetris 50:50 Tanpa Gap Asimetris, dan Indikator Aktif Solid <code>border-bottom: 2px solid #3e60d5</code>), Card-Header Multi-Line Title Auto-Wrap di Sisi Kiri dengan Right Action/Badge Terkunci di Posisi Kanan, Pembersihan Status Dot Online Hero Avatar, UserFactory Nama Asli Tanpa Gelar Akademik, Serta Penghapusan <code>UserMediaHistorySeeder</code></td>
     </tr>

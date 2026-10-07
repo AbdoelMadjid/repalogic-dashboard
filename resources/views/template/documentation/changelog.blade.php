@@ -36,12 +36,58 @@
                 <div class="card border border-info-subtle shadow-sm">
                     <div class="card-header bg-info-subtle py-3 d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0 fw-bold text-info-emphasis">
-                            <i class="ti ti-book me-2"></i> Standar Prosedur Pembaruan Versi Rilis / Tag (Version Release
-                            Guide)
+                            <i class="ti ti-book me-2"></i> Standar Prosedur Pembaruan Versi Rilis &amp; Prinsip Tag (SemVer Guide)
                         </h5>
                         <span class="badge bg-info text-white font-monospace">Centralized Engine</span>
                     </div>
                     <div class="card-body p-4">
+                        <!-- Prinsip Klasifikasi SemVer -->
+                        <div class="p-3 bg-light-subtle rounded-3 border mb-3">
+                            <h6 class="fw-bold text-dark mb-2 d-flex align-items-center gap-1.5">
+                                <i class="ti ti-tag text-primary fs-16"></i>
+                                <span>Prinsip Penomoran Semantic Versioning (SemVer: <code>MAJOR.MINOR.PATCH</code>)</span>
+                            </h6>
+                            <div class="row g-2">
+                                <div class="col-md-4">
+                                    <div class="p-2.5 bg-white rounded-2 border h-100">
+                                        <div class="d-flex align-items-center gap-1.5 mb-1">
+                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle fw-semibold fs-xs">
+                                                <i class="ti ti-rocket me-1"></i>MAJOR Release (vX.0.0)
+                                            </span>
+                                        </div>
+                                        <p class="fs-12 text-muted mb-0">
+                                            <strong>Pembaharuan Total / Rombak Arsitektur:</strong> Perubahan skala besar, perombakan basis data inti, atau <em>breaking changes</em> (contoh: <code>v2.0.0 &rarr; v3.0.0</code>).
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="p-2.5 bg-white rounded-2 border h-100">
+                                        <div class="d-flex align-items-center gap-1.5 mb-1">
+                                            <span class="badge bg-info-subtle text-info border border-info-subtle fw-semibold fs-xs">
+                                                <i class="ti ti-sparkles me-1"></i>MINOR Release (v3.X.0)
+                                            </span>
+                                        </div>
+                                        <p class="fs-12 text-muted mb-0">
+                                            <strong>Fitur Baru &amp; Modul Tambahan:</strong> Penambahan fungsionalitas baru yang kompatibel mundur tanpa merusak fitur lama (contoh: <code>v3.1.0, v3.2.0, v3.4.0</code>).
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="p-2.5 bg-white rounded-2 border h-100">
+                                        <div class="d-flex align-items-center gap-1.5 mb-1">
+                                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle fw-semibold fs-xs">
+                                                <i class="ti ti-tool me-1"></i>PATCH / Hotfix (v3.0.X)
+                                            </span>
+                                        </div>
+                                        <p class="fs-12 text-muted mb-0">
+                                            <strong>Perbaikan Bug &amp; Optimasi:</strong> Perbaikan galat (<em>bugfix</em>), perapian responsivitas layout/UI/UX, atau patch performa kecil (contoh: <code>v3.0.8, v3.0.9</code>).
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4 Langkah SOP Release -->
                         <div class="row g-3">
                             <div class="col-md-6 col-lg-3">
                                 <div class="p-3 border rounded-3 bg-light-subtle h-100">
@@ -65,8 +111,8 @@
                                         <h6 class="fw-bold mb-0 text-dark">2. Update Changelog View</h6>
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
-                                        Tambahkan item timeline dengan timestamp presisi WIB di
-                                        <code>resources/views/template/documentation/changelog.blade.php</code>.
+                                        Tambahkan item timeline lengkap dengan badge tipe rilis (Major/Minor/Patch) dan timestamp presisi WIB di
+                                        <code>changelog.blade.php</code>.
                                     </p>
                                 </div>
                             </div>
@@ -94,7 +140,7 @@
                                     </div>
                                     <p class="fs-13 text-muted mb-0">
                                         Lakukan commit dengan format konvensional lalu buat tag release (contoh: <code>git
-                                            tag -a v2.7.6 -m "Release v2.7.6"</code>).
+                                            tag -a v3.4.0 -m "Release v3.4.0"</code>).
                                     </p>
                                 </div>
                             </div>
@@ -123,21 +169,23 @@
                             </div>
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
-                                    <div class="d-flex align-items-center gap-2">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
                                         <h5 class="fw-bold mb-0">v3.4.0</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-info-subtle text-info border border-info-subtle fw-semibold fs-xs"><i class="ti ti-sparkles me-1"></i>Minor Release (Fitur Tambahan)</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.4.0</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-10-07 12:40 WIB</span>
                                 </div>
-                                <h6 class="fw-semibold text-dark mb-2">Integrasi Two-Factor Authentication (2FA / TOTP) Berbasis RFC 6238 Authenticator Apps pada Profil Pengguna &amp; Layar Tantangan Login Terdedikasi (<code>two-factor-challenge</code>)</h6>
+                                <h6 class="fw-semibold text-dark mb-2">Integrasi Two-Factor Authentication (2FA / TOTP) Berbasis RFC 6238 Authenticator Apps pada Profil Pengguna, Layar Tantangan Login Terdedikasi (<code>two-factor-challenge</code>), dan Resolusi Zero-419 Session Auto-Recovery</h6>
                                 <ul class="text-muted fs-14 mb-3 ps-3">
                                     <li><strong class="text-dark">RFC 6238 TOTP Engine (<code>TwoFactorAuthenticationService.php</code>):</strong> Mengintegrasikan standar industri Time-based One-Time Password yang kompatibel penuh dengan Google Authenticator, Microsoft Authenticator, Authy, dan 1Password. Menghitung kode 6-digit secara offline dengan toleransi clock drift (&plusmn;1 window / 30 detik) tanpa ketergantungan API pihak ketiga.</li>
                                     <li><strong class="text-dark">Pure Offline SVG QR Code Generation:</strong> Merender kode batang QR secara lokal via <code>BaconQrCode\Renderer\Image\SvgImageBackEnd</code> dalam format vektor SVG tajam dan cepat tanpa melakukan HTTP request ke server eksternal, menjamin keamanan privasi dan fungsionalitas di lingkungan localhost/offline.</li>
                                     <li><strong class="text-dark">Enkripsi Tingkat Tinggi (AES-256):</strong> Kunci rahasia <code>two_factor_secret</code> dan daftar 8 kode pemulihan (<em>recovery codes</em>) disimpan dalam keadaan terenkripsi penuh (<code>encrypt()</code> / <code>decrypt()</code>) pada tabel <code>users</code> serta disembunyikan dari serialisasi JSON/Array model.</li>
                                     <li><strong class="text-dark">Manajemen Kode Pemulihan Darurat:</strong> Menghasilkan 8 kode pemulihan unik berformat <code>XXXXX-XXXXX</code>. Pengguna dapat mengunduh berkas <code>.txt</code> resmi atau menyalin seluruh kode ke clipboard dengan 1 klik sebelum mengonfirmasi aktivasi 2FA. Setiap kode pemulihan hanya dapat digunakan satu kali (<em>single-use</em>) dan otomatis diganti.</li>
                                     <li><strong class="text-dark">Proteksi Verifikasi Kata Sandi:</strong> Tindakan sensitif seperti regenerasi kode pemulihan baru dan penonaktifan proteksi 2FA diwajibkan mengonfirmasi kata sandi akun terlebih dahulu untuk mencegah pembajakan sesi.</li>
-                                    <li><strong class="text-dark">Dedicated 2FA Login Challenge (<code>two-factor-challenge.blade.php</code>):</strong> Layar tantangan login elegan dengan auto-focus input 6-digit OTP, auto-submit saat 6 digit terisi penuh, toggle instan ke mode kode pemulihan darurat, serta tombol kembali ke login yang membersihkan sesi sementara.</li>
+                                    <li><strong class="text-dark">Dedicated 2FA Login Challenge (<code>two-factor-challenge.blade.php</code>):</strong> Layar tantangan login elegan dengan auto-focus input 6-digit OTP, auto-submit saat 6 digit terisi penuh, toggle instan ke mode kode pemulihan darurat, serta kartu identitas avatar hero yang minimalis.</li>
+                                    <li><strong class="text-dark">Zero-419 Session Expired Auto-Recovery (<code>bootstrap/app.php</code> &amp; <code>AuthenticatedSessionController.php</code>):</strong> Menyematkan header proteksi <code>Cache-Control: no-cache, no-store</code> pada respon halaman login untuk mencegah peramban menyajikan token CSRF usang dari disk cache/BFCACHE, serta mengintersep eksepsi 419 agar melakukan pengalihan ramah otomatis (*graceful redirect*) dengan token yang disegarkan.</li>
                                 </ul>
                             </div>
                         </div>
@@ -149,8 +197,9 @@
                             </div>
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
-                                    <div class="d-flex align-items-center gap-2">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
                                         <h5 class="fw-bold mb-0">v3.3.0</h5>
+                                        <span class="badge bg-info-subtle text-info border border-info-subtle fw-semibold fs-xs"><i class="ti ti-sparkles me-1"></i>Minor Release (Fitur Tambahan)</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.3.0</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-10-07 12:10 WIB</span>
@@ -172,8 +221,9 @@
                             </div>
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
-                                    <div class="d-flex align-items-center gap-2">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
                                         <h5 class="fw-bold mb-0">v3.2.0</h5>
+                                        <span class="badge bg-info-subtle text-info border border-info-subtle fw-semibold fs-xs"><i class="ti ti-sparkles me-1"></i>Minor Release (Fitur Tambahan)</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.2.0</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-10-07 11:35 WIB</span>
