@@ -656,6 +656,393 @@ function initProfilPengguna() {
     }
 
     initRealtimeProfileStats();
+
+    // =========================================================================
+    // 7. Two-Factor Authentication (2FA TOTP) Management
+    // =========================================================================
+    function initTwoFactorAuth() {
+        const config = window.ProfilPenggunaConfig || {};
+        const routes = config.routes || {};
+        const csrfToken = config.csrfToken;
+
+        let latestRecoveryCodes = [];
+
+        // --- A. Setup 2FA ---
+        const btnStartSetup = document.getElementById('btn-start-setup-2fa');
+        const setupModalEl = document.getElementById('modal-setup-2fa');
+        const qrContainer = document.getElementById('setup-2fa-qr-container');
+        const secretKeyInput = document.getElementById('setup-2fa-secret-key');
+        const btnCopySecretKey = document.getElementById('btn-copy-secret-key');
+        const confirmCodeInput = document.getElementById('setup-2fa-confirm-code');
+        const btnSubmitConfirm = document.getElementById('btn-submit-confirm-2fa');
+        const setupErrorAlert = document.getElementById('setup-2fa-error-alert');
+
+        const stepVerify = document.getElementById('setup-2fa-step-verify');
+        const stepRecovery = document.getElementById('setup-2fa-step-recovery');
+        const recoveryCodesList = document.getElementById('setup-2fa-recovery-codes-list');
+        const btnDoneSetup = document.getElementById('btn-done-setup-2fa');
+        const btnCancelSetup = document.getElementById('btn-cancel-setup-2fa');
+
+        if (btnStartSetup && setupModalEl) {
+            const setupModal = bootstrap.Modal.getOrCreateInstance(setupModalEl);
+
+            btnStartSetup.addEventListener('click', function() {
+                // Reset UI to step 1
+                stepVerify.classList.remove('d-none');
+                stepRecovery.classList.add('d-none');
+                btnSubmitConfirm.classList.remove('d-none');
+                btnCancelSetup.classList.remove('d-none');
+                btnDoneSetup.classList.add('d-none');
+                if (confirmCodeInput) confirmCodeInput.value = '';
+                if (setupErrorAlert) {
+                    setupErrorAlert.classList.add('d-none');
+                    setupErrorAlert.innerText = '';
+                }
+                if (qrContainer) {
+                    qrContainer.innerHTML = '<div class="spinner-border text-primary my-4" role="status"></div>';
+                }
+
+                setupModal.show();
+
+                // Fetch SVG QR Code and Secret Key
+                fetch(routes.twoFactorEnable, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        if (qrContainer) qrContainer.innerHTML = data.svg;
+                        if (secretKeyInput) secretKeyInput.value = data.secret;
+                    } else {
+                        if (setupErrorAlert) {
+                            setupErrorAlert.classList.remove('d-none');
+                            setupErrorAlert.innerText = data.message || 'Gagal membuat QR Code 2FA.';
+                        }
+                    }
+                })
+                .catch(() => {
+                    if (setupErrorAlert) {
+                        setupErrorAlert.classList.remove('d-none');
+                        setupErrorAlert.innerText = 'Terjadi kesalahan koneksi saat menyiapkan 2FA.';
+                    }
+                });
+            });
+        }
+
+        // Copy Secret Key Button
+        if (btnCopySecretKey && secretKeyInput) {
+            btnCopySecretKey.addEventListener('click', function() {
+                const key = secretKeyInput.value.replace(/\s+/g, '');
+                navigator.clipboard.writeText(key).then(() => {
+                    if (window.showToast) window.showToast('Kunci rahasia 2FA berhasil disalin!', 'success');
+                });
+            });
+        }
+
+        // Confirm 2FA Code Button
+        if (btnSubmitConfirm && confirmCodeInput) {
+            btnSubmitConfirm.addEventListener('click', function() {
+                const code = confirmCodeInput.value.trim();
+                if (!code || code.length !== 6) {
+                    if (setupErrorAlert) {
+                        setupErrorAlert.classList.remove('d-none');
+                        setupErrorAlert.innerText = 'Masukkan 6-digit kode verifikasi dari aplikasi Authenticator.';
+                    }
+                    confirmCodeInput.focus();
+                    return;
+                }
+
+                btnSubmitConfirm.disabled = true;
+                btnSubmitConfirm.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Mengonfirmasi...';
+                if (setupErrorAlert) setupErrorAlert.classList.add('d-none');
+
+                fetch(routes.twoFactorConfirm, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ code: code })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    btnSubmitConfirm.disabled = false;
+                    btnSubmitConfirm.innerHTML = '<i class="ti ti-check me-1.5"></i> Konfirmasi & Aktifkan';
+
+                    if (data.success) {
+                        latestRecoveryCodes = data.recovery_codes || [];
+
+                        // Populate recovery codes
+                        if (recoveryCodesList) {
+                            recoveryCodesList.innerHTML = latestRecoveryCodes.map(c => `
+                                <div class="recovery-code-item">${c}</div>
+                            `).join('');
+                        }
+
+                        // Switch to Step 3 (Success)
+                        stepVerify.classList.add('d-none');
+                        stepRecovery.classList.remove('d-none');
+                        btnSubmitConfirm.classList.add('d-none');
+                        btnCancelSetup.classList.add('d-none');
+                        btnDoneSetup.classList.remove('d-none');
+                    } else {
+                        if (setupErrorAlert) {
+                            setupErrorAlert.classList.remove('d-none');
+                            setupErrorAlert.innerText = data.message || 'Kode verifikasi salah.';
+                        }
+                    }
+                })
+                .catch(() => {
+                    btnSubmitConfirm.disabled = false;
+                    btnSubmitConfirm.innerHTML = '<i class="ti ti-check me-1.5"></i> Konfirmasi & Aktifkan';
+                    if (setupErrorAlert) {
+                        setupErrorAlert.classList.remove('d-none');
+                        setupErrorAlert.innerText = 'Terjadi kesalahan saat memverifikasi kode 2FA.';
+                    }
+                });
+            });
+
+            // Reload page on setup modal done to update UI status
+            if (btnDoneSetup) {
+                btnDoneSetup.addEventListener('click', function() {
+                    window.location.reload();
+                });
+            }
+        }
+
+        // Copy / Download Recovery Codes from Setup Modal
+        const btnCopyRecoveryCodes = document.getElementById('btn-copy-recovery-codes');
+        const btnDownloadRecoveryCodes = document.getElementById('btn-download-recovery-codes');
+
+        if (btnCopyRecoveryCodes) {
+            btnCopyRecoveryCodes.addEventListener('click', function() {
+                if (latestRecoveryCodes.length === 0) return;
+                const text = latestRecoveryCodes.join('\n');
+                navigator.clipboard.writeText(text).then(() => {
+                    if (window.showToast) window.showToast('8 Kode pemulihan cadangan berhasil disalin!', 'success');
+                });
+            });
+        }
+
+        if (btnDownloadRecoveryCodes) {
+            btnDownloadRecoveryCodes.addEventListener('click', function() {
+                if (latestRecoveryCodes.length === 0) return;
+                downloadRecoveryFile(latestRecoveryCodes);
+            });
+        }
+
+        // --- B. View / Regenerate Recovery Codes Modal ---
+        const btnViewRecovery = document.getElementById('btn-view-recovery-codes');
+        const modalRecoveryEl = document.getElementById('modal-recovery-codes-2fa');
+        const activeRecoveryList = document.getElementById('active-recovery-codes-list');
+
+        if (btnViewRecovery && modalRecoveryEl) {
+            const modalRecovery = bootstrap.Modal.getOrCreateInstance(modalRecoveryEl);
+
+            btnViewRecovery.addEventListener('click', function() {
+                modalRecovery.show();
+                if (activeRecoveryList) {
+                    activeRecoveryList.innerHTML = '<div class="text-center py-3 text-muted w-100"><span class="spinner-border spinner-border-sm me-1"></span> Memuat kode pemulihan...</div>';
+                }
+
+                fetch(routes.twoFactorRecoveryCodes, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && Array.isArray(data.recovery_codes)) {
+                        latestRecoveryCodes = data.recovery_codes;
+                        if (activeRecoveryList) {
+                            if (latestRecoveryCodes.length > 0) {
+                                activeRecoveryList.innerHTML = latestRecoveryCodes.map(c => `
+                                    <div class="recovery-code-item">${c}</div>
+                                `).join('');
+                            } else {
+                                activeRecoveryList.innerHTML = '<div class="text-center py-2 text-danger w-100">Semua kode pemulihan telah terpakai. Silakan buat ulang di bawah ini.</div>';
+                            }
+                        }
+                    }
+                })
+                .catch(() => {
+                    if (activeRecoveryList) {
+                        activeRecoveryList.innerHTML = '<div class="text-center py-2 text-danger w-100">Gagal memuat kode pemulihan.</div>';
+                    }
+                });
+            });
+        }
+
+        // Copy & Download Existing Recovery Codes
+        const btnCopyExistingRecovery = document.getElementById('btn-copy-existing-recovery');
+        const btnDownloadExistingRecovery = document.getElementById('btn-download-existing-recovery');
+
+        if (btnCopyExistingRecovery) {
+            btnCopyExistingRecovery.addEventListener('click', function() {
+                if (latestRecoveryCodes.length === 0) return;
+                navigator.clipboard.writeText(latestRecoveryCodes.join('\n')).then(() => {
+                    if (window.showToast) window.showToast('Kode pemulihan cadangan berhasil disalin!', 'success');
+                });
+            });
+        }
+
+        if (btnDownloadExistingRecovery) {
+            btnDownloadExistingRecovery.addEventListener('click', function() {
+                if (latestRecoveryCodes.length === 0) return;
+                downloadRecoveryFile(latestRecoveryCodes);
+            });
+        }
+
+        // Regenerate Recovery Codes Submit
+        const btnSubmitRegenerate = document.getElementById('btn-submit-regenerate-2fa');
+        const inputRegeneratePassword = document.getElementById('regenerate-2fa-password');
+        const regenerateErrorAlert = document.getElementById('regenerate-2fa-error-alert');
+
+        if (btnSubmitRegenerate && inputRegeneratePassword) {
+            btnSubmitRegenerate.addEventListener('click', function() {
+                const password = inputRegeneratePassword.value.trim();
+                if (!password) {
+                    if (regenerateErrorAlert) {
+                        regenerateErrorAlert.classList.remove('d-none');
+                        regenerateErrorAlert.innerText = 'Masukkan kata sandi akun untuk konfirmasi.';
+                    }
+                    inputRegeneratePassword.focus();
+                    return;
+                }
+
+                btnSubmitRegenerate.disabled = true;
+                if (regenerateErrorAlert) regenerateErrorAlert.classList.add('d-none');
+
+                fetch(routes.twoFactorRegenerateRecoveryCodes, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ password: password })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    btnSubmitRegenerate.disabled = false;
+                    if (data.success && Array.isArray(data.recovery_codes)) {
+                        latestRecoveryCodes = data.recovery_codes;
+                        inputRegeneratePassword.value = '';
+                        if (activeRecoveryList) {
+                            activeRecoveryList.innerHTML = latestRecoveryCodes.map(c => `
+                                <div class="recovery-code-item">${c}</div>
+                            `).join('');
+                        }
+                        if (window.showToast) window.showToast('8 Kode pemulihan baru berhasil dibuat!', 'success');
+                    } else {
+                        if (regenerateErrorAlert) {
+                            regenerateErrorAlert.classList.remove('d-none');
+                            regenerateErrorAlert.innerText = data.message || 'Kata sandi salah.';
+                        }
+                    }
+                })
+                .catch(() => {
+                    btnSubmitRegenerate.disabled = false;
+                    if (regenerateErrorAlert) {
+                        regenerateErrorAlert.classList.remove('d-none');
+                        regenerateErrorAlert.innerText = 'Terjadi kesalahan saat membuat ulang kode.';
+                    }
+                });
+            });
+        }
+
+        // --- C. Disable 2FA ---
+        const btnSubmitDisable = document.getElementById('btn-submit-disable-2fa');
+        const inputDisablePassword = document.getElementById('disable-2fa-password');
+        const disableErrorAlert = document.getElementById('disable-2fa-error-alert');
+
+        if (btnSubmitDisable && inputDisablePassword) {
+            btnSubmitDisable.addEventListener('click', function() {
+                const password = inputDisablePassword.value.trim();
+                if (!password) {
+                    if (disableErrorAlert) {
+                        disableErrorAlert.classList.remove('d-none');
+                        disableErrorAlert.innerText = 'Masukkan kata sandi Anda untuk konfirmasi.';
+                    }
+                    inputDisablePassword.focus();
+                    return;
+                }
+
+                btnSubmitDisable.disabled = true;
+                btnSubmitDisable.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Menonaktifkan...';
+                if (disableErrorAlert) disableErrorAlert.classList.add('d-none');
+
+                fetch(routes.twoFactorDisable, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ password: password })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    btnSubmitDisable.disabled = false;
+                    btnSubmitDisable.innerHTML = '<i class="ti ti-shield-off me-1.5"></i> Nonaktifkan 2FA';
+
+                    if (data.success) {
+                        if (window.showSuccess) {
+                            window.showSuccess('Two-Factor Authentication berhasil dinonaktifkan.', { reload: true });
+                        } else {
+                            window.location.reload();
+                        }
+                    } else {
+                        if (disableErrorAlert) {
+                            disableErrorAlert.classList.remove('d-none');
+                            disableErrorAlert.innerText = data.message || 'Kata sandi salah.';
+                        }
+                    }
+                })
+                .catch(() => {
+                    btnSubmitDisable.disabled = false;
+                    btnSubmitDisable.innerHTML = '<i class="ti ti-shield-off me-1.5"></i> Nonaktifkan 2FA';
+                    if (disableErrorAlert) {
+                        disableErrorAlert.classList.remove('d-none');
+                        disableErrorAlert.innerText = 'Terjadi kesalahan saat menonaktifkan 2FA.';
+                    }
+                });
+            });
+        }
+
+        // Helper: Download text file
+        function downloadRecoveryFile(codes) {
+            const content = `REPALOGIC DASHBOARD - TWO-FACTOR AUTHENTICATION RECOVERY CODES\n` +
+                            `Akun: ${window.ProfilPenggunaConfig?.userEmail || 'Pengguna'}\n` +
+                            `Tanggal: ${new Date().toLocaleString('id-ID')}\n\n` +
+                            `PERINGATAN: Simpan kode ini di tempat yang aman. Setiap kode hanya dapat digunakan 1 kali.\n\n` +
+                            codes.map((c, i) => `${i + 1}. ${c}`).join('\n') + `\n`;
+
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `repalogic-2fa-recovery-codes-${new Date().toISOString().slice(0, 10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            if (window.showToast) window.showToast('File kode pemulihan berhasil diunduh!', 'success');
+        }
+    }
+
+    initTwoFactorAuth();
 }
 
 if (document.readyState === 'loading') {

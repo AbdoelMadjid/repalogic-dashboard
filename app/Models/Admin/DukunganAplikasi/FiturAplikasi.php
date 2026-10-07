@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin\DukunganAplikasi;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
@@ -43,7 +44,7 @@ use Illuminate\Support\Facades\Cache;
  */
 class FiturAplikasi extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $table = 'fitur_aplikasi';
 

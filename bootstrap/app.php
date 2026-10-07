@@ -29,8 +29,15 @@ return Application::configure(basePath: dirname(__DIR__))
             fn (Request $request) => $request->is('api/*') || $request->expectsJson() || $request->ajax()
         );
 
-        $exceptions->render(function (TokenMismatchException $e, Request $request) {
-            if ($request->expectsJson() || $request->ajax() || $request->is('lock-screen/*')) {
+        $exceptions->render(function (\Throwable $e, Request $request) {
+            $is419 = ($e instanceof TokenMismatchException)
+                || ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpException && $e->getStatusCode() === 419);
+
+            if (! $is419) {
+                return null;
+            }
+
+            if ($request->expectsJson() || $request->ajax() || $request->is('lock-screen/*') || $request->is('api/*')) {
                 return response()->json([
                     'success' => false,
                     'session_expired' => true,
@@ -44,10 +51,11 @@ return Application::configure(basePath: dirname(__DIR__))
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
 
-                return redirect()->route('login')->with('info', 'Sesi Anda telah diakhiri.');
+                return redirect()->route('login')->with('info_message', 'Sesi Anda telah diakhiri.');
             }
 
+            // If user submitted a POST form (e.g. login) with stale token, redirect back gracefully to login with fresh token
             return redirect()->route('login')
-                ->with('error_message', 'Halaman atau sesi Anda telah kedaluwarsa. Silakan login kembali.');
+                ->with('error_message', 'Sesi keamanan formulir Anda telah diperbarui. Silakan masukkan kata sandi Anda kembali.');
         });
     })->create();

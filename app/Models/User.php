@@ -7,12 +7,19 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasRoles, Notifiable;
+    use HasFactory, HasRoles, Notifiable, LogsActivity;
+
+    protected array $activityLogIgnore = [
+        'last_login_at',
+        'last_login_point_at',
+        'login_count',
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -36,6 +43,9 @@ class User extends Authenticatable
         'login_count',
         'last_login_at',
         'last_login_point_at',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
+        'two_factor_confirmed_at',
     ];
 
     /**
@@ -46,6 +56,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
     ];
 
     /**
@@ -68,6 +80,7 @@ class User extends Authenticatable
         'last_seen_human',
         'profile_likes_count',
         'friends_count',
+        'two_factor_enabled',
     ];
 
     /**
@@ -85,9 +98,62 @@ class User extends Authenticatable
             'reactivation_requested_at' => 'datetime',
             'last_login_at' => 'datetime',
             'last_login_point_at' => 'datetime',
+            'two_factor_confirmed_at' => 'datetime',
             'login_count' => 'integer',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Determine if Two-Factor Authentication is fully confirmed and enabled.
+     */
+    public function hasEnabledTwoFactor(): bool
+    {
+        return !empty($this->two_factor_secret) && !is_null($this->two_factor_confirmed_at);
+    }
+
+    /**
+     * Accessor for two_factor_enabled boolean attribute.
+     */
+    public function getTwoFactorEnabledAttribute(): bool
+    {
+        return $this->hasEnabledTwoFactor();
+    }
+
+    /**
+     * Get decrypted recovery codes as an array.
+     */
+    public function recoveryCodes(): array
+    {
+        if (empty($this->two_factor_recovery_codes)) {
+            return [];
+        }
+
+        try {
+            return json_decode(decrypt($this->two_factor_recovery_codes), true) ?? [];
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+
+    /**
+     * Consume / replace used recovery code.
+     */
+    public function replaceRecoveryCode(string $code): bool
+    {
+        $codes = $this->recoveryCodes();
+
+        $index = array_search(trim($code), $codes, true);
+        if ($index === false) {
+            return false;
+        }
+
+        unset($codes[$index]);
+        $this->forceFill([
+            'two_factor_recovery_codes' => encrypt(json_encode(array_values($codes))),
+        ])->save();
+
+        return true;
     }
 
     /**

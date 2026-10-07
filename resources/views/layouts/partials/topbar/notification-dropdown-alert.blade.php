@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
     window.fetchNotificationsSilently = function(isUserAction = false) {
         if (isFetching) return;
         if (sessionStorage.getItem('repalogic_screen_locked') === 'true') return;
-        if (!isUserAction && document.hidden) return;
         if (!isUserAction && dropdownContent && dropdownContent.classList.contains('show')) return;
 
         isFetching = true;
@@ -77,6 +76,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (dropdownContent && data.html) {
                     dropdownContent.innerHTML = data.html;
+                }
+
+                // Web Push Notification Ingestion
+                if (window.processIncomingNotificationsForPush && Array.isArray(data.items)) {
+                    window.processIncomingNotificationsForPush(data.items);
                 }
             }
         })

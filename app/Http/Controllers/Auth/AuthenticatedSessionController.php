@@ -14,20 +14,26 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(): View
+    public function create(): \Illuminate\Http\Response|\Illuminate\View\View
     {
+        $view = 'auth.login';
+
         if (class_exists(\App\Models\Admin\DukunganAplikasi\WebsiteTheme::class)) {
             try {
                 $activeTheme = \App\Models\Admin\DukunganAplikasi\WebsiteTheme::getActiveTheme();
                 if ($activeTheme && view()->exists("website.{$activeTheme->folder}.page-signin-1")) {
-                    return view("website.{$activeTheme->folder}.page-signin-1");
+                    $view = "website.{$activeTheme->folder}.page-signin-1";
                 }
             } catch (\Exception $e) {
                 // Fallback to default auth.login
             }
         }
 
-        return view('auth.login');
+        return response()
+            ->view($view)
+            ->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', 'Fri, 01 Jan 1990 00:00:00 GMT');
     }
 
     /**
@@ -36,6 +42,10 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
+
+        if ($request->session()->has('login.id')) {
+            return redirect()->route('two-factor.login');
+        }
 
         $request->session()->regenerate();
 
@@ -62,6 +72,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('login');
     }
 }

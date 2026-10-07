@@ -84,3 +84,14 @@
         </div>
     @endforelse
 </div>
+
+<!-- Footer Action -->
+<div class="p-2 border-top bg-light-subtle d-flex align-items-center justify-content-between px-3">
+    <button type="button" class="btn btn-link btn-sm text-decoration-none p-0 text-muted fs-12 d-flex align-items-center gap-1" onclick="window.requestWebPushPermission();" title="Aktifkan Notifikasi Desktop Browser">
+        <i class="ti ti-bell-ringing fs-14 text-success"></i>
+        <span>Notifikasi Desktop</span>
+    </button>
+    <a href="{{ route('admin.profil-pengguna.messages.index') }}" class="text-success fw-semibold fs-12 text-decoration-none">
+        Buka Pesan &rarr;
+    </a>
+</div>

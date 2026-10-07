@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\DukunganAplikasi\MenuController;
 use App\Http\Controllers\Admin\DukunganAplikasi\ProfilAplikasiController;
 use App\Http\Controllers\Admin\DukunganAplikasi\TranslationController;
 use App\Http\Controllers\Admin\FriendshipController;
+use App\Http\Controllers\Admin\ManajemenPengguna\ActivityLogController;
 use App\Http\Controllers\Admin\ManajemenPengguna\AksesRoleController;
 use App\Http\Controllers\Admin\ManajemenPengguna\AksesUserController;
 use App\Http\Controllers\Admin\ManajemenPengguna\DataLoginController;
@@ -47,6 +48,13 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
         Route::post('update-motto', [ProfilPenggunaController::class, 'updateMotto'])->name('update-motto');
         Route::post('request-deactivation', [ProfilPenggunaController::class, 'requestDeactivation'])->name('request-deactivation');
         Route::post('cancel-deactivation', [ProfilPenggunaController::class, 'cancelDeactivation'])->name('cancel-deactivation');
+
+        // Two-Factor Authentication Security Settings (admin/profil-pengguna/two-factor/...)
+        Route::post('two-factor/enable', [\App\Http\Controllers\Admin\TwoFactorSecurityController::class, 'enable'])->name('two-factor.enable');
+        Route::post('two-factor/confirm', [\App\Http\Controllers\Admin\TwoFactorSecurityController::class, 'confirm'])->name('two-factor.confirm');
+        Route::post('two-factor/disable', [\App\Http\Controllers\Admin\TwoFactorSecurityController::class, 'disable'])->name('two-factor.disable');
+        Route::get('two-factor/recovery-codes', [\App\Http\Controllers\Admin\TwoFactorSecurityController::class, 'getRecoveryCodes'])->name('two-factor.recovery-codes');
+        Route::post('two-factor/regenerate-recovery-codes', [\App\Http\Controllers\Admin\TwoFactorSecurityController::class, 'regenerateRecoveryCodes'])->name('two-factor.regenerate-recovery-codes');
 
         // Fitur Pesan & Obrolan (admin/profil-pengguna/messages)
         Route::get('messages', [MessageController::class, 'index'])->name('messages.index');
@@ -98,6 +106,11 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
 
         Route::get('backup-db', [BackupDbController::class, 'index'])->name('backup-db.index');
         Route::post('backup-db/process', [BackupDbController::class, 'processBackup'])->name('backup-db.process');
+        Route::post('backup-db/save-schedule', [BackupDbController::class, 'saveSchedule'])->name('backup-db.save-schedule');
+        Route::post('backup-db/save-cloud', [BackupDbController::class, 'saveCloud'])->name('backup-db.save-cloud');
+        Route::post('backup-db/test-cloud', [BackupDbController::class, 'testCloud'])->name('backup-db.test-cloud');
+        Route::post('backup-db/run-scheduled-now', [BackupDbController::class, 'runScheduledNow'])->name('backup-db.run-scheduled-now');
+        Route::post('backup-db/sync-file/{filename}', [BackupDbController::class, 'syncFileToCloud'])->name('backup-db.sync-file');
         Route::get('backup-db/download/{filename}', [BackupDbController::class, 'download'])->name('backup-db.download');
         Route::delete('backup-db/destroy/{filename}', [BackupDbController::class, 'destroy'])->name('backup-db.destroy');
 
@@ -132,6 +145,11 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
         Route::get('data-login/{id}', [DataLoginController::class, 'show'])->whereNumber('id')->name('data-login.show');
         Route::delete('data-login/{id}', [DataLoginController::class, 'destroy'])->whereNumber('id')->name('data-login.destroy');
         Route::get('data-login', [DataLoginController::class, 'index'])->name('data-login.index');
+
+        Route::post('activity-log/clear', [ActivityLogController::class, 'clear'])->name('activity-log.clear');
+        Route::get('activity-log/{id}', [ActivityLogController::class, 'show'])->whereNumber('id')->name('activity-log.show');
+        Route::delete('activity-log/{id}', [ActivityLogController::class, 'destroy'])->whereNumber('id')->name('activity-log.destroy');
+        Route::get('activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
 
         Route::resource('role', RoleController::class);
         Route::resource('permission', PermissionController::class);

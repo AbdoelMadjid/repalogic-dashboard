@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin\DukunganAplikasi;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -9,7 +10,7 @@ use Spatie\Permission\Models\Permission;
 
 class Menu extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $table = 'menus';
 

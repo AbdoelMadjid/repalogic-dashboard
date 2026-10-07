@@ -3,10 +3,12 @@
 namespace App\Models\Admin\ManajemenPengguna;
 
 use App\Models\Admin\DukunganAplikasi\Menu;
+use App\Traits\LogsActivity;
 use Spatie\Permission\Models\Permission as SpatiePermission;
 
 class Permission extends SpatiePermission
 {
+    use LogsActivity;
     /**
      * Many-to-Many relation with Menu model via menu_permission pivot table.
      */

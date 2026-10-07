@@ -475,6 +475,13 @@
                 { timeout: 6000, enableHighAccuracy: false, maximumAge: 60000 }
             );
         }
+
+        // --- Prevent Stale Token from BFCACHE (Back-Forward Cache) ---
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
     });
     </script>
 </body>

@@ -3,21 +3,25 @@
  * Path: public/assets/css/admin/dukunganaplikasi/backup-db.css
  */
 
+/* Options and Output Cards */
 .card-option, 
-.card-output {
+.card-output,
+.card-cloud-provider {
     transition: all 0.2s ease-in-out;
     border-width: 2px !important;
 }
 
 .card-option:hover,
 .card-output:hover,
+.card-cloud-provider:hover,
 .hover-border-primary:hover {
     border-color: var(--bs-primary) !important;
     background-color: rgba(var(--bs-primary-rgb), 0.04) !important;
 }
 
 .card-option.active,
-.card-output.active {
+.card-output.active,
+.card-cloud-provider.active {
     border-color: var(--bs-primary) !important;
     background-color: rgba(var(--bs-primary-rgb), 0.04) !important;
     box-shadow: 0 4px 12px rgba(62, 96, 213, 0.12);
@@ -35,6 +39,24 @@
 
 #table-selective-list tbody tr:hover {
     background-color: rgba(62, 96, 213, 0.04);
+}
+
+/* Nav Tabs Custom Styling (Bordered standard) */
+#backupTab.nav-tabs.nav-bordered .nav-item .nav-link {
+    font-size: 0.925rem;
+    color: #64748b;
+    border-bottom: 2px solid transparent;
+}
+
+#backupTab.nav-tabs.nav-bordered .nav-item .nav-link:hover {
+    color: var(--bs-primary);
+}
+
+#backupTab.nav-tabs.nav-bordered .nav-item .nav-link.active {
+    color: var(--bs-primary) !important;
+    font-weight: 600;
+    border-bottom: 2px solid var(--bs-primary) !important;
+    background: transparent !important;
 }
 
 /* ==========================================================================

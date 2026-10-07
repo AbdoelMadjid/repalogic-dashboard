@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v3.1.0`  
-> **Terakhir Diperbarui:** 07 Oktober 2026 09:50 WIB
+> **Versi Terbaru:** `v3.4.0`  
+> **Terakhir Diperbarui:** 07 Oktober 2026 12:40 WIB
 
 ---
 
@@ -23,6 +23,24 @@ Dokumentasi lengkap mengenai setiap versi rilis, git tag, waktu rilis presisi (W
   <tbody>
     <tr>
       <td align="center">1</td>
+      <td align="center"><strong><code>v3.4.0</code></strong></td>
+      <td align="center"><code>2026-10-07 12:40 WIB</code></td>
+      <td>Integrasi Two-Factor Authentication (2FA / TOTP) Berbasis RFC 6238 (Google Authenticator, Authy, Microsoft Authenticator) pada Modul Profil Pengguna &amp; Layar Tantangan Login Terdedikasi (<code>two-factor-challenge</code>), Rendering QR Code SVG Offline Murni, Enkripsi AES-256 Secret Key &amp; 8 Recovery Codes, Manajemen Kode Pemulihan (Unduh .txt &amp; Salin Clipboard), Serta Dialog Regenerasi &amp; Penonaktifan 2FA Terproteksi Kata Sandi</td>
+    </tr>
+    <tr>
+      <td align="center">2</td>
+      <td align="center"><strong><code>v3.3.0</code></strong></td>
+      <td align="center"><code>2026-10-07 12:10 WIB</code></td>
+      <td>Implementasi Modul Riwayat Aktivitas Terpisah (<code>admin/manajemenpengguna/activity-log</code>) dengan Tabel Audit Trail <code>activity_logs</code>, Trait Universal <code>LogsActivity</code> untuk Pencatatan Otomatis Perubahan Data (Create/Update/Delete/Login/2FA) pada Model-Model Utama, Modal Visual Diff (Perbandingan Nilai Sebelum &amp; Sesudah Perubahan), Filter Komprehensif (Modul, Event, User, Rentang Waktu), Serta Pembersihan Retensi Log Berbasis Usia Hari</td>
+    </tr>
+    <tr>
+      <td align="center">3</td>
+      <td align="center"><strong><code>v3.2.0</code></strong></td>
+      <td align="center"><code>2026-10-07 11:35 WIB</code></td>
+      <td>Penambahan Fitur Scheduled Automated Database Backup (Cron Job Terjadwal Harian/Mingguan/Bulanan via <code>php artisan db:backup-scheduled</code> &amp; Laravel Scheduler), Kompresi Gzip (<code>.sql.gz</code>), Kebijakan Retensi &amp; Rotasi Otomatis (Auto-Pruning Berbasis Hari &amp; File Cap), Sinkronisasi Cloud Storage Multi-Provider (Amazon S3 / S3-Compatible via AWS SigV4 &amp; Google Drive via Service Account), Serta Integrasi Web Push Notifications (Service Worker <code>sw.js</code> &amp; <code>web-push-manager.js</code>) untuk Notifikasi Chat Real-Time &amp; Ajakan Berteman Saat Browser Diminimalkan</td>
+    </tr>
+    <tr>
+      <td align="center">2</td>
       <td align="center"><strong><code>v3.1.0</code></strong></td>
       <td align="center"><code>2026-10-07 09:50 WIB</code></td>
       <td>Penambahan Fitur Download Format Excel Minimal (Template .xlsx Murni 3 Baris Contoh), Upload / Import Pengguna via Excel dengan Real-time Animated Progress Bar (0% - 100% Upload &amp; Server Processing State), serta Konversi Otomatis Nama Huruf Kapital (ALL CAPS) Menjadi Title Case pada Model <code>User</code> di Modul <code>admin/manajemenpengguna/users</code></td>

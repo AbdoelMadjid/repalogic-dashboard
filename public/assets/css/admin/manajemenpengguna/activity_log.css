@@ -1,0 +1,102 @@
+/**
+ * Activity Log Module Styling
+ * Standardized per Repalogic Dashboard Architecture Guidelines
+ */
+
+/* Metric Cards Hover & Styling */
+.metric-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Pulse Dot */
+.badge-pulse-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: pulse-animation 1.8s infinite;
+}
+
+@keyframes pulse-animation {
+    0% {
+        box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.6);
+    }
+    70% {
+        box-shadow: 0 0 0 7px rgba(25, 135, 84, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(25, 135, 84, 0);
+    }
+}
+
+/* Diff Visualizer Styling */
+.diff-table th {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.diff-table td {
+    vertical-align: top;
+    font-size: 0.875rem;
+}
+
+.diff-value-box {
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.825rem;
+    word-break: break-all;
+    white-space: pre-wrap;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.diff-old {
+    background-color: #fff5f5;
+    color: #c53030;
+    border: 1px solid #feb2b2;
+}
+
+.diff-new {
+    background-color: #f0fff4;
+    color: #276749;
+    border: 1px solid #9ae6b4;
+}
+
+.diff-neutral {
+    background-color: #f8fafc;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+
+/* JSON Viewer Container */
+.json-viewer-container {
+    background-color: #1e293b;
+    color: #e2e8f0;
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.825rem;
+    max-height: 380px;
+    overflow: auto;
+}
+
+/* Responsiveness adjustments */
+@media (max-width: 767.98px) {
+    .card-header .btn {
+        width: 100% !important;
+        margin-top: 0.5rem;
+    }
+    
+    .modal-footer .btn {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+}

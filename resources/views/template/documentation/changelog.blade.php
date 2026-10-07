@@ -116,7 +116,7 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
-                        <!-- Version 3.1.0 -->
+                        <!-- Version 3.4.0 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
                                 <i class="ti ti-star-filled fs-xl text-primary"></i>
@@ -124,8 +124,87 @@
                             <div class="timeline-content ps-3 pb-4 w-100">
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2">
-                                        <h5 class="fw-bold mb-0">v3.1.0</h5>
+                                        <h5 class="fw-bold mb-0">v3.4.0</h5>
                                         <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.4.0</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-10-07 12:40 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Integrasi Two-Factor Authentication (2FA / TOTP) Berbasis RFC 6238 Authenticator Apps pada Profil Pengguna &amp; Layar Tantangan Login Terdedikasi (<code>two-factor-challenge</code>)</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">RFC 6238 TOTP Engine (<code>TwoFactorAuthenticationService.php</code>):</strong> Mengintegrasikan standar industri Time-based One-Time Password yang kompatibel penuh dengan Google Authenticator, Microsoft Authenticator, Authy, dan 1Password. Menghitung kode 6-digit secara offline dengan toleransi clock drift (&plusmn;1 window / 30 detik) tanpa ketergantungan API pihak ketiga.</li>
+                                    <li><strong class="text-dark">Pure Offline SVG QR Code Generation:</strong> Merender kode batang QR secara lokal via <code>BaconQrCode\Renderer\Image\SvgImageBackEnd</code> dalam format vektor SVG tajam dan cepat tanpa melakukan HTTP request ke server eksternal, menjamin keamanan privasi dan fungsionalitas di lingkungan localhost/offline.</li>
+                                    <li><strong class="text-dark">Enkripsi Tingkat Tinggi (AES-256):</strong> Kunci rahasia <code>two_factor_secret</code> dan daftar 8 kode pemulihan (<em>recovery codes</em>) disimpan dalam keadaan terenkripsi penuh (<code>encrypt()</code> / <code>decrypt()</code>) pada tabel <code>users</code> serta disembunyikan dari serialisasi JSON/Array model.</li>
+                                    <li><strong class="text-dark">Manajemen Kode Pemulihan Darurat:</strong> Menghasilkan 8 kode pemulihan unik berformat <code>XXXXX-XXXXX</code>. Pengguna dapat mengunduh berkas <code>.txt</code> resmi atau menyalin seluruh kode ke clipboard dengan 1 klik sebelum mengonfirmasi aktivasi 2FA. Setiap kode pemulihan hanya dapat digunakan satu kali (<em>single-use</em>) dan otomatis diganti.</li>
+                                    <li><strong class="text-dark">Proteksi Verifikasi Kata Sandi:</strong> Tindakan sensitif seperti regenerasi kode pemulihan baru dan penonaktifan proteksi 2FA diwajibkan mengonfirmasi kata sandi akun terlebih dahulu untuk mencegah pembajakan sesi.</li>
+                                    <li><strong class="text-dark">Dedicated 2FA Login Challenge (<code>two-factor-challenge.blade.php</code>):</strong> Layar tantangan login elegan dengan auto-focus input 6-digit OTP, auto-submit saat 6 digit terisi penuh, toggle instan ke mode kode pemulihan darurat, serta tombol kembali ke login yang membersihkan sesi sementara.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Version 3.3.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-history fs-xl text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v3.3.0</h5>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.3.0</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-10-07 12:10 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Implementasi Modul Riwayat Aktivitas Terpisah (<code>admin/manajemenpengguna/activity-log</code>) &amp; Trait Model Audit Trail Otomatis (<code>LogsActivity</code>)</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Universal Audit Trail Engine (<code>LogsActivity.php</code>):</strong> Trait Eloquent yang dapat dipasang pada model apa pun untuk mencatat setiap event <code>created</code>, <code>updated</code>, dan <code>deleted</code> secara otomatis lengkap dengan payload <code>old_values</code> dan <code>new_values</code> terstruktur.</li>
+                                    <li><strong class="text-dark">Visual Side-by-Side Diff Modal:</strong> Antarmuka perbandingan nilai atribut sebelum dan sesudah perubahan dengan penyorotan warna hijau (nilai baru) dan merah (nilai lama), menyaring atribut sensitif seperti password/remember_token/2fa secret.</li>
+                                    <li><strong class="text-dark">Multi-Dimensional Filter &amp; Pencarian Real-Time:</strong> Filter berdasarkan Modul/Kategori, Tipe Event, Pelaku Aktivitas (Pengguna), dan Rentang Waktu Terpadu.</li>
+                                    <li><strong class="text-dark">Pembersihan Retensi Log:</strong> Utilitas penghapusan log lawas berbasis batas hari (30, 60, 90 hari) dengan konfirmasi SweetAlert2 terstandar.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Version 3.2.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-database-export fs-xl text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v3.2.0</h5>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.2.0</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-10-07 11:35 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Penambahan Fitur Scheduled Automated Database Backup (Cron Job Terjadwal Harian/Mingguan/Bulanan), Kompresi Gzip, dan Sinkronisasi Cloud Storage Multi-Provider (Amazon S3 / S3-Compatible &amp; Google Drive) pada Modul Dukungan Aplikasi (<code>admin/dukunganaplikasi/backup-db</code>)</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Scheduled Automated DB Backup Engine (<code>ScheduledDatabaseBackupCommand.php</code>):</strong> Mengembangkan Artisan Command <code>php artisan db:backup-scheduled</code> yang terintegrasi langsung dengan Laravel Scheduler dan server Crontab (<code>* * * * * php artisan schedule:run</code>) untuk otomatisasi pencadangan database secara terjadwal (Harian, Mingguan, Bulanan) pada jam yang dapat dikonfigurasi fleksibel melalui GUI Admin.</li>
+                                    <li><strong class="text-dark">Penyimpanan Multi-Tier &amp; Kompresi Berkas Gzip (<code>.sql.gz</code>):</strong> Mendukung pencadangan Full Database maupun Selective Tables dengan opsi kompresi Gzip otomatis yang menghemat hingga 85-90% kapasitas disk lokal serta mempercepat transfer jaringan ke cloud storage.</li>
+                                    <li><strong class="text-dark">Kebijakan Retensi &amp; Rotasi Otomatis (Auto-Pruning):</strong> Fitur manajemen retensi berkas lokal berbasis usia hari (<em>retention days</em>) dan batas jumlah maksimum file tersimpan (<em>max file cap</em>) untuk mencegah kepenuhan ruang harddisk server secara cerdas.</li>
+                                    <li><strong class="text-dark">Integrasi Cloud Storage Sync Multi-Provider (<code>CloudBackupService.php</code>):</strong> Sinkronisasi cadangan database ke penyedia cloud storage modern tanpa dependensi berat pihak ketiga:
+                                        <ul class="ps-3 mt-1">
+                                            <li><strong>Amazon S3 &amp; S3-Compatible:</strong> Menggunakan protokol otentikasi AWS Signature Version 4 (AWS S3, MinIO, Wasabi, Cloudflare R2, DigitalOcean Spaces) dengan dukungan Path-Style &amp; Custom Endpoint.</li>
+                                            <li><strong>Google Drive API:</strong> Menggunakan Google Service Account JSON &amp; OAuth2 JWT Token Exchange untuk mengunggah berkas backup langsung ke Folder Google Drive spesifik.</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong class="text-dark">Uji Koneksi Cloud Interaktif &amp; Trigger Manual (<code>backup-db.js</code>):</strong> Menyediakan tombol <em>"Uji Koneksi Cloud Storage"</em> dengan feedback status real-time via AJAX, tombol <em>"Jalankan Backup Terjadwal Sekarang"</em> (Force Run), serta tombol <em>"Sync ke Cloud"</em> pada tabel riwayat berkas.</li>
+                                    <li><strong class="text-dark">Web Push Notifications &amp; Service Worker (<code>sw.js</code> &amp; <code>web-push-manager.js</code>):</strong> Mengembangkan arsitektur Desktop Push Notification berbasis Service Worker yang memungkinkan pengguna menerima notifikasi pesan chat masuk, ajakan berteman, dan alert persetujuan akun secara real-time meskipun browser dalam keadaan diminimalkan (<em>minimized</em>) atau sedang berada di tab lain. Dilengkapi dengan sintesis audio chime Web Audio API serta auto-focus window saat notifikasi diklik.</li>
+                                    <li><strong class="text-dark">Penyempurnaan Modal Layar Kunci (<code>lock-screen-modal.blade.php</code>):</strong> Menghilangkan tanda indikator bulat (status dot) pada avatar pengguna untuk tampilan antarmuka modal layar kunci yang lebih minimalis dan elegan.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Version 3.1.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-circle-check fs-xl text-muted"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0">v3.1.0</h5>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.1.0</span>
                                     </div>
                                     <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-10-07 09:50 WIB</span>

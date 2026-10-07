@@ -22,9 +22,11 @@ use Illuminate\Support\Facades\Cache;
  * @mixin \Illuminate\Database\Eloquent\Builder
  * @mixin \Eloquent
  */
+use App\Traits\LogsActivity;
+
 class AppSetting extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $table = 'app_settings';
 
@@ -46,6 +48,30 @@ class AppSetting extends Model
         'polling_interval' => 20,
         'sound_notification' => 1,
         'toast_notification' => 1,
+        'backup_schedule_enabled' => 0,
+        'backup_schedule_frequency' => 'daily',
+        'backup_schedule_time' => '02:00',
+        'backup_schedule_day' => '1',
+        'backup_schedule_type' => 'full',
+        'backup_schedule_tables' => '[]',
+        'backup_retention_days' => 7,
+        'backup_max_files' => 10,
+        'backup_compression' => 1,
+        'backup_include_create_db' => 1,
+        'backup_cloud_driver' => 'none',
+        'backup_cloud_s3_key' => '',
+        'backup_cloud_s3_secret' => '',
+        'backup_cloud_s3_region' => 'ap-southeast-1',
+        'backup_cloud_s3_bucket' => '',
+        'backup_cloud_s3_endpoint' => '',
+        'backup_cloud_s3_use_path_style' => 0,
+        'backup_cloud_gdrive_folder_id' => '',
+        'backup_cloud_gdrive_service_account' => '',
+        'backup_last_run_at' => null,
+        'backup_last_run_status' => null,
+        'backup_last_run_message' => null,
+        'backup_last_cloud_sync_at' => null,
+        'backup_last_cloud_sync_status' => null,
     ];
 
     /**

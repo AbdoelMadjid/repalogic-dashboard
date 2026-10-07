@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\ManajemenPengguna;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ManajemenPengguna\RoleRequest;
+use App\Models\Admin\ManajemenPengguna\ActivityLog;
 use App\Traits\HasNotification;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
@@ -123,6 +124,20 @@ class RoleController extends Controller
 
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
+        ActivityLog::log(
+            description: "Menambahkan Peran (Role) baru \"{$role->name}\"",
+            subject: $role,
+            event: 'created',
+            properties: [
+                'attributes' => [
+                    'name' => $role->name,
+                    'guard_name' => $role->guard_name,
+                    'permissions_count' => count($request->input('permissions', [])),
+                ],
+            ],
+            logName: 'role'
+        );
+
         $this->notifySuccess("Role \"{$role->name}\" berhasil ditambahkan.");
 
         return redirect()->route('admin.manajemenpengguna.role.index');
@@ -142,6 +157,7 @@ class RoleController extends Controller
     public function update(RoleRequest $request, Role $role)
     {
         $validated = $request->validated();
+        $oldName = $role->name;
 
         $role->update([
             'name' => strtolower(trim($validated['name'])),
@@ -150,6 +166,20 @@ class RoleController extends Controller
         $role->syncPermissions($request->input('permissions', []));
 
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
+        ActivityLog::log(
+            description: "Memperbarui Peran (Role) \"{$role->name}\"",
+            subject: $role,
+            event: 'updated',
+            properties: [
+                'old' => ['name' => $oldName],
+                'attributes' => [
+                    'name' => $role->name,
+                    'permissions_count' => count($request->input('permissions', [])),
+                ],
+            ],
+            logName: 'role'
+        );
 
         $this->notifySuccess("Role \"{$role->name}\" berhasil diperbarui.");
 
@@ -167,9 +197,20 @@ class RoleController extends Controller
         }
 
         $roleName = $role->name;
+        $roleId = $role->id;
         $role->delete();
 
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
+        ActivityLog::log(
+            description: "Menghapus Peran (Role) \"{$roleName}\"",
+            subject: $role,
+            event: 'deleted',
+            properties: [
+                'old' => ['id' => $roleId, 'name' => $roleName],
+            ],
+            logName: 'role'
+        );
 
         $this->notifySuccess("Role \"{$roleName}\" berhasil dihapus.");
 

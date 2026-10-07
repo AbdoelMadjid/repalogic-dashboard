@@ -126,6 +126,17 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // 5. Cek apakah Two-Factor Authentication (2FA) diaktifkan
+        if ($user->hasEnabledTwoFactor()) {
+            $this->session()->put([
+                'login.id' => $user->getKey(),
+                'login.remember' => $this->boolean('remember'),
+            ]);
+
+            RateLimiter::clear($this->throttleKey());
+            return;
+        }
+
         Auth::login($user, $this->boolean('remember'));
 
         RateLimiter::clear($this->throttleKey());

@@ -72,10 +72,16 @@
     @endforelse
 </div>
 
-<!-- Footer Link Khusus Superadmin & Admin -->
-@if (auth()->check() && auth()->user()->hasAnyRole(['superadmin', 'admin']))
-    <a href="{{ route('admin.manajemenpengguna.users.index') }}"
-        class="dropdown-item text-center text-reset text-decoration-underline link-offset-2 fw-bold notify-item border-top border-light py-2">
-        Kelola Semua Pengguna
-    </a>
-@endif
+<!-- Footer Action -->
+<div class="p-2 border-top bg-light-subtle d-flex align-items-center justify-content-between px-3">
+    <button type="button" class="btn btn-link btn-sm text-decoration-none p-0 text-muted fs-12 d-flex align-items-center gap-1" onclick="window.requestWebPushPermission();" title="Aktifkan Notifikasi Desktop Browser">
+        <i class="ti ti-bell-ringing fs-14 text-primary"></i>
+        <span>Notifikasi Desktop</span>
+    </button>
+    @if (auth()->check() && auth()->user()->hasAnyRole(['superadmin', 'admin']))
+        <a href="{{ route('admin.manajemenpengguna.users.index') }}"
+            class="text-primary fw-semibold fs-12 text-decoration-none">
+            Kelola Pengguna &rarr;
+        </a>
+    @endif
+</div>

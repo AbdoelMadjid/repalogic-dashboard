@@ -19,8 +19,6 @@
                     <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}"
                         class="rounded-circle shadow-md object-fit-cover"
                         style="width: 86px; height: 86px; border: 4px solid var(--bs-card-bg, #ffffff); box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4); object-position: top;">
-                    <span class="position-absolute bottom-0 end-0 bg-warning border border-2 border-white rounded-circle p-1"
-                        title="Status: Idle / Terkunci" style="width: 18px; height: 18px; transform: translate(-4px, -4px);"></span>
                 </div>
 
                 <!-- User Information -->

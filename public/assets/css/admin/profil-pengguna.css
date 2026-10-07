@@ -213,3 +213,44 @@
     display: inline-block;
     animation: heartBeat 0.8s ease-in-out;
 }
+
+/* 2FA QR Code & Recovery Code Styling */
+.qr-code-box {
+    display: inline-block;
+    padding: 12px;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.qr-code-box svg {
+    display: block;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto;
+}
+
+.recovery-code-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+@media (max-width: 575.98px) {
+    .recovery-code-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.recovery-code-item {
+    background-color: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #1e293b;
+    text-align: center;
+}

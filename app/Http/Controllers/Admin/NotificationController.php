@@ -28,6 +28,7 @@ class NotificationController extends Controller
             'success' => true,
             'unread_count' => $unreadCount,
             'total_count' => $notifData['total_count'],
+            'items' => $notifData['items'],
             'html' => $html,
         ]);
     }
@@ -50,6 +51,7 @@ class NotificationController extends Controller
             'success' => true,
             'unread_count' => $unreadCount,
             'total_count' => $messageData['total_count'],
+            'items' => $messageData['items'],
             'html' => $html,
         ]);
     }
