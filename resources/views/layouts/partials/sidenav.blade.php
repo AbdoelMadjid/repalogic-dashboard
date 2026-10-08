@@ -108,15 +108,18 @@
     <div class="sidenav-special-bottom">
         <ul class="side-nav mb-0">
             <li class="side-nav-item mb-0">
-                <a href="{{ Route::has('template.documentation.changelog') ? route('template.documentation.changelog') : url('template/documentation/changelog') }}" class="side-nav-link special-menu">
-                    <span class="menu-icon"><i class="ti ti-star"></i></span>
-                    <span class="menu-text" data-lang="special-menu">Special Menu</span>
+                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#aboutSystemModal" class="side-nav-link special-menu">
+                    <span class="menu-icon"><i class="ti ti-info-circle"></i></span>
+                    <span class="menu-text" data-lang="sidenav-about">Tentang Aplikasi</span>
                 </a>
             </li>
         </ul>
     </div>
 </div>
 <!-- Sidenav Menu End -->
+
+@include('layouts.partials.about-modal')
+
 
 <style>
     /* Pin Special Menu to Absolute Bottom of Sidenav Screen */

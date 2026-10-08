@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v3.5.2`  
-> **Terakhir Diperbarui:** 08 Oktober 2026 12:35 WIB
+> **Versi Terbaru:** `v3.6.0`  
+> **Terakhir Diperbarui:** 08 Oktober 2026 13:05 WIB
 
 ---
 
@@ -31,6 +31,13 @@ Setiap tag rilis pada **REPALOGIC Dashboard** mengikuti format penomoran baku **
   <tbody>
     <tr>
       <td align="center">1</td>
+      <td align="center"><strong><code>v3.6.0</code></strong></td>
+      <td align="center"><span style="color:#0284c7;font-weight:600;">🔵 Minor (Fitur Baru)</span></td>
+      <td align="center"><code>2026-10-08 13:05 WIB</code></td>
+      <td>Komponen Modal Sistem Tentang Aplikasi (<code>about-modal.blade.php</code>) Terintegrasi Penuh pada Sidenav Bottom Menggantikan Menu Spesial Statis, Rangkuman Arsitektur 10 Modul Inti Asli REPALOGIC Dashboard, Dukungan Kamus Terjemahan Modular Bilingual Dua Arah (ID &amp; EN) pada Seluruh Elemen Teks Modal, Kartu Profil Pembuat (Creator &amp; Developer), Serta Navigasi Aksi Footer Sejajar Horizontal 1-Baris</td>
+    </tr>
+    <tr>
+      <td align="center">2</td>
       <td align="center"><strong><code>v3.5.2</code></strong></td>
       <td align="center"><span style="color:#16a34a;font-weight:600;">🟢 Patch (Perbaikan)</span></td>
       <td align="center"><code>2026-10-08 12:35 WIB</code></td>

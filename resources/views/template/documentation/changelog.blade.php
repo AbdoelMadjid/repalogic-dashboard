@@ -168,6 +168,32 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
+                        <!-- Version 3.6.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-info-circle fs-xl text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <h5 class="fw-bold mb-0">v3.6.0</h5>
+                                        <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-info-subtle text-info border border-info-subtle fw-semibold fs-xs"><i class="ti ti-sparkles me-1"></i>Minor Release (Fitur Tambahan)</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.6.0</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-10-08 13:05 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Komponen Modal Sistem Tentang Aplikasi (*About System Modal*), Integrasi Penuh Sidenav Bottom, Rangkuman 10 Modul Inti Asli REPALOGIC Dashboard, &amp; Kamus Terjemahan Modular Bilingual (ID/EN)</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Komponen Modal Tentang Sistem (<code>about-modal.blade.php</code>):</strong> Merancang komponen dialog modal sistem modern (<code>modal-xl</code>) terintegrasi pada tombol pemicu <code>sidenav-special-bottom</code> menggantikan link statis sebelumnya.</li>
+                                    <li><strong class="text-dark">Rangkuman Arsitektur 10 Modul Inti Asli:</strong> Menampilkan ikhtisar menyeluruh 10 kapabilitas inti platform REPALOGIC Dashboard (<em>Auth Lifecycle &amp; Approval</em>, <em>Spatie RBAC &amp; Access Control Matrix</em>, <em>Adaptive Dashboard</em>, <em>User Profile &amp; WYSIWYG Cover</em>, <em>Social &amp; Message Hub</em>, <em>2FA TOTP Security</em>, <em>Activity Audit &amp; Forensic Login</em>, <em>6-Domain Bilingual i18n</em>, <em>3-Tier Menu Hierarchy</em>, dan <em>Maintenance Hub &amp; DB Backup</em>).</li>
+                                    <li><strong class="text-dark">Dukungan Kamus Terjemahan Modular Bilingual (ID &amp; EN):</strong> Seluruh teks judul, deskripsi, bio profil pembuat, dan kartu modul terhubung dengan atribut <code>data-lang</code> pada domain <code>topbar.json</code> sehingga berganti bahasa secara instan tanpa reload halaman.</li>
+                                    <li><strong class="text-dark">Kartu Profil Pembuat &amp; Navigasi Aksi Sejajar:</strong> Menyematkan kartu profil pembuat (*Creator &amp; Developer*) lengkap dengan badge dan bio, serta footer aksi 4-tombol sejajar horizontal (<em>Visit Repository</em>, <em>Documentation &amp; Blueprint Portal</em>, <em>Release Notes &amp; Changelog</em>, dan <em>Close</em>).</li>
+                                    <li><strong class="text-dark">Penyempurnaan Padding &amp; Versi Real-Time:</strong> Mengeliminasi class non-standar dan menggantikannya dengan padding eksplisit yang proporsional, serta rendering nomor versi dinamis dari konfigurasi sistem tanpa duplikasi prefix <code>v</code>.</li>
+                                </ul>
+                            </div>
+                        </div>
+
                         <!-- Version 3.5.2 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
@@ -177,7 +203,6 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
                                         <h5 class="fw-bold mb-0">v3.5.2</h5>
-                                        <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
                                         <span class="badge bg-success-subtle text-success border border-success-subtle fw-semibold fs-xs"><i class="ti ti-bug me-1"></i>Patch Release (Perbaikan &amp; Standardisasi)</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.5.2</span>
                                     </div>
