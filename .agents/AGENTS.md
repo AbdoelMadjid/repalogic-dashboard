@@ -189,3 +189,40 @@
 - Utamakan selalu penggunaan kelas bawaan **Bootstrap 5** (e.g. `row`, `col-*`, `g-3`, `gap-*`, `d-flex`, `card`, `form-control`, `mb-*`, `border`, `bg-*`) atau komponen template bawaan proyek.
 - **JANGAN SEKALI-KALI membuat custom CSS baru yang rumit** jika hal tersebut dapat diselesaikan secara rapi dan standar menggunakan utility class bawaan Bootstrap atau Inspinia/template proyek.
 
+## 23. DataTables Server-Side AJAX, Compact Counter & Responsive Accordion Standard
+- **Server-Side AJAX Processing**:
+  - SEMUA tabel data utama wajib menggunakan **Yajra DataTables Server-Side AJAX** (`processing: true, serverSide: true`).
+  - DILARANG menggunakan paginasi manual Blade yang menyebabkan reload halaman penuh dan mengubah URL menjadi `?page=X`.
+- **Format Info Jumlah Entri Ringkas (*Compact Info Counter*)**:
+  - Konfigurasi `language.info` pada DataTable WAJIB menggunakan format ringkas standar:
+    ```javascript
+    info: '<span class="text-muted fs-12"><span class="fw-semibold text-dark">_START_</span> - <span class="fw-semibold text-dark">_END_</span> <span class="text-muted">/ total</span> <span class="fw-semibold text-dark">_TOTAL_</span></span>',
+    infoEmpty: '<span class="text-muted fs-12">0 entri</span>',
+    infoFiltered: '<span class="text-muted fs-11">(difilter dari _MAX_ total entri)</span>',
+    ```
+- **Penataan Kontrol & Paginasi (Desktop Kanan vs Mobile Tengah)**:
+  - **Desktop (`≥ md`)**: Info entri di kiri (`dt-layout-start`), tombol navigasi paginasi berada di **ujung kanan** (`dt-layout-end`, `justify-content: flex-end; margin-left: auto;`).
+  - **Mobile (`< md`)**: Info entri di baris pertama terpusat (`text-align: center`), tombol navigasi paginasi di baris kedua **terpusat di tengah** (`justify-content: center; width: 100%;`).
+- **Responsive Akordeon Mobile (`responsive: true` dengan Toggle `▶`)**:
+  - Gunakan ekstensi DataTables Responsive dengan `responsive: { details: { type: 'inline' } }`.
+  - **Prioritas Kolom (*Responsive Priority*)**:
+    - Kolom `No` dan kolom identitas utama (misal: `Waktu & Tanggal` / `Nama`) WAJIB diset `responsivePriority: 1` agar di mode mobile selalu tampil bersamaan tanpa perlu refresh halaman.
+    - Kolom tombol `Aksi` diset `responsivePriority: 2` atau `3`.
+    - Kolom sekunder lainnya diberi prioritas berurutan (`4`, `5`, `6`, dst.) yang akan terlipat rapi ke dalam panah akordeon `▶` di mobile.
+  - JANGAN membungkus tabel dengan `<div class="table-responsive">` saat menggunakan mode responsive akordeon, agar navigasi paginasi dan info entri tidak ikut bergeser keluar layar (*off-screen*).
+  - JANGAN menulis inline `style="width: ...px"` langsung pada tag `<th>` di Blade; tentukan lebar kolom di konfigurasi JS `columns` (misal: `width: '45px'`).
+- **Kalkulasi Ulang Responsif Otomatis (*Resize Recalculation*)**:
+  - WAJIB menyertakan listener resize jendela pada script modul:
+    ```javascript
+    let resizeTimer;
+    window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+            if (dataTable) {
+                if (typeof dataTable.columns === 'function') dataTable.columns.adjust();
+                if (dataTable.responsive && typeof dataTable.responsive.recalc === 'function') dataTable.responsive.recalc();
+            }
+        }, 30);
+    });
+    ```
+

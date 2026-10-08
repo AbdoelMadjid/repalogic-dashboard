@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v3.5.0`  
-> **Terakhir Diperbarui:** 08 Oktober 2026 09:30 WIB
+> **Versi Terbaru:** `v3.5.1`  
+> **Terakhir Diperbarui:** 08 Oktober 2026 11:40 WIB
 
 ---
 
@@ -31,6 +31,13 @@ Setiap tag rilis pada **REPALOGIC Dashboard** mengikuti format penomoran baku **
   <tbody>
     <tr>
       <td align="center">1</td>
+      <td align="center"><strong><code>v3.5.1</code></strong></td>
+      <td align="center"><span style="color:#16a34a;font-weight:600;">🟢 Patch (Perbaikan)</span></td>
+      <td align="center"><code>2026-10-08 11:40 WIB</code></td>
+      <td>Standardisasi Rule 23 (DataTables Server-Side AJAX, Compact Info Counter &amp; Responsive Akordeon), Pembenahan Card Header Baseline Horizontal di Desktop, Prioritas Kolom <em>No</em> &amp; <em>Waktu</em> (<code>responsivePriority: 1</code>), Serta Penanganan Resize Recalculation Otomatis pada Transisi Layar Mobile/Desktop di Seluruh Modul</td>
+    </tr>
+    <tr>
+      <td align="center">2</td>
       <td align="center"><strong><code>v3.5.0</code></strong></td>
       <td align="center"><span style="color:#0284c7;font-weight:600;">🔵 Minor (Fitur Baru)</span></td>
       <td align="center"><code>2026-10-08 10:30 WIB</code></td>

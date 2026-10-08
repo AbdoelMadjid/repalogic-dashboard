@@ -1,6 +1,7 @@
 /**
  * Activity Log Module JavaScript
  * Standardized per Repalogic Dashboard Architecture Guidelines
+ * Supports Yajra DataTables AJAX Server-Side Processing
  */
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -23,7 +24,169 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 2. Modal Detail Populator with Event Delegation (Rule 2)
+    // 2. Initialize Yajra DataTables Server-Side AJAX
+    let dataTable = null;
+    const tableEl = document.getElementById('table-activity-logs');
+
+    if (tableEl && (window.DataTable || (window.$ && $.fn.DataTable))) {
+        const DT = window.DataTable || (window.$ && $.fn.DataTable);
+
+        dataTable = new DT(tableEl, {
+            processing: true,
+            serverSide: true,
+            responsive: {
+                details: {
+                    type: 'inline'
+                }
+            },
+            autoWidth: false,
+            pageLength: 25,
+            lengthMenu: [10, 25, 50, 100],
+            ajax: {
+                url: routes.dataUrl || window.location.pathname,
+                type: 'GET',
+                data: function (d) {
+                    const form = document.getElementById('form-filter-activity');
+                    if (form) {
+                        d.log_name = form.querySelector('[name="log_name"]')?.value || '';
+                        d.event = form.querySelector('[name="event"]')?.value || '';
+                        d.causer_id = form.querySelector('[name="causer_id"]')?.value || '';
+                        d.date_range = form.querySelector('[name="date_range"]')?.value || '';
+                        d.date_start = form.querySelector('[name="date_start"]')?.value || '';
+                        d.date_end = form.querySelector('[name="date_end"]')?.value || '';
+                        const customSearch = form.querySelector('[name="search"]')?.value;
+                        if (customSearch) {
+                            if (d.search) {
+                                d.search.value = customSearch;
+                            } else {
+                                d.search = { value: customSearch };
+                            }
+                        }
+                    }
+                }
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, responsivePriority: 1, width: '45px', className: 'text-center align-middle font-monospace fs-12' },
+                { data: 'created_at_formatted', name: 'created_at', responsivePriority: 1, className: 'align-middle' },
+                { data: 'causer_formatted', name: 'causer.name', responsivePriority: 3, className: 'align-middle' },
+                { data: 'module_formatted', name: 'log_name', responsivePriority: 5, className: 'text-center align-middle' },
+                { data: 'event_formatted', name: 'event', responsivePriority: 4, className: 'text-center align-middle' },
+                { data: 'description_formatted', name: 'description', responsivePriority: 6, className: 'align-middle' },
+                { data: 'diff_formatted', name: 'properties', orderable: false, searchable: false, responsivePriority: 7, className: 'text-center align-middle' },
+                { data: 'action', name: 'action', orderable: false, searchable: false, responsivePriority: 2, width: '90px', className: 'text-center align-middle text-nowrap' }
+            ],
+            order: [[1, 'desc']],
+            language: {
+                search: "",
+                searchPlaceholder: "Cari log...",
+                lengthMenu: "Tampilkan _MENU_ entri",
+                info: '<span class="text-muted fs-12"><span class="fw-semibold text-dark">_START_</span> - <span class="fw-semibold text-dark">_END_</span> <span class="text-muted">/ total</span> <span class="fw-semibold text-dark">_TOTAL_</span></span>',
+                infoEmpty: '<span class="text-muted fs-12">0 entri</span>',
+                infoFiltered: '<span class="text-muted fs-11">(difilter dari _MAX_ total entri)</span>',
+                zeroRecords: 'Tidak ada catatan riwayat log yang sesuai dengan kriteria.',
+                emptyTable: 'Belum ada rekaman riwayat log aktivitas yang ditemukan.',
+                paginate: {
+                    first: '<i class="ti ti-chevrons-left"></i>',
+                    previous: '<i class="ti ti-chevron-left"></i>',
+                    next: '<i class="ti ti-chevron-right"></i>',
+                    last: '<i class="ti ti-chevrons-right"></i>'
+                }
+            }
+        });
+
+        // Window resize listener to recalculate responsive columns and adjustments seamlessly
+        let resizeTimer;
+        window.addEventListener('resize', function () {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function () {
+                if (dataTable) {
+                    if (typeof dataTable.columns === 'function') {
+                        dataTable.columns.adjust();
+                    }
+                    if (dataTable.responsive && typeof dataTable.responsive.recalc === 'function') {
+                        dataTable.responsive.recalc();
+                    }
+                }
+            }, 30);
+        });
+    }
+
+    // 3. Filter Form Interactions (AJAX Draw without page reload)
+    const filterForm = document.getElementById('form-filter-activity');
+    if (filterForm) {
+        filterForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (dataTable) {
+                dataTable.draw();
+            }
+        });
+
+        // Live change on dropdown filters
+        filterForm.querySelectorAll('select').forEach(select => {
+            select.addEventListener('change', function () {
+                if (dataTable) {
+                    dataTable.draw();
+                }
+            });
+        });
+
+        // Date input change
+        filterForm.querySelectorAll('input[type="date"]').forEach(input => {
+            input.addEventListener('change', function () {
+                if (dataTable) {
+                    dataTable.draw();
+                }
+            });
+        });
+
+        // Live search with debounce
+        const searchInput = filterForm.querySelector('[name="search"]');
+        if (searchInput) {
+            let debounceTimer;
+            searchInput.addEventListener('input', function () {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    if (dataTable) {
+                        dataTable.draw();
+                    }
+                }, 350);
+            });
+        }
+    }
+
+    // 4. Reset Filter Button
+    const btnReset = document.getElementById('btn-reset-filters');
+    if (btnReset) {
+        btnReset.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (filterForm) {
+                filterForm.reset();
+                if (customDateContainer) {
+                    customDateContainer.classList.add('d-none');
+                }
+            }
+            if (dataTable) {
+                dataTable.draw();
+            }
+        });
+    }
+
+    // 5. Reload Table Button
+    const btnReload = document.getElementById('btn-reload-table');
+    if (btnReload) {
+        btnReload.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (dataTable) {
+                if (typeof dataTable.ajax?.reload === 'function') {
+                    dataTable.ajax.reload(null, false);
+                } else {
+                    dataTable.draw();
+                }
+            }
+        });
+    }
+
+    // 6. Modal Detail Populator with Event Delegation (Rule 2)
     document.addEventListener('click', function (e) {
         const btn = e.target.closest('.btn-view-detail');
         if (!btn) return;
@@ -130,7 +293,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (allKeys.length === 0) {
             emptyState.classList.remove('d-none');
-            tableContainer.classList.add('d-none');
+            tableContainer.classList.remove('d-none');
             return;
         }
 

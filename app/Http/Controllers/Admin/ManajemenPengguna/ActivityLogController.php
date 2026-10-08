@@ -25,64 +25,124 @@ class ActivityLogController extends Controller
             abort(403, 'Anda tidak memiliki hak akses untuk melihat data riwayat log aktivitas.');
         }
 
-        $query = ActivityLog::with(['causer'])->latest();
+        // Handle Yajra DataTables AJAX Server-Side Request
+        if ($request->ajax() && ($request->has('draw') || $request->wantsJson())) {
+            $query = ActivityLog::with(['causer'])->select('activity_logs.*');
 
-        $filterLogName = $request->input('log_name', '');
-        $filterEvent = $request->input('event', '');
-        $filterCauserId = $request->input('causer_id', '');
-        $filterDateRange = $request->input('date_range', '');
-        $filterDateStart = $request->input('date_start', '');
-        $filterDateEnd = $request->input('date_end', '');
-        $searchKeyword = $request->input('search', '');
+            return DataTables::of($query)
+                ->filter(function ($query) use ($request) {
+                    if ($request->filled('log_name')) {
+                        $query->where('activity_logs.log_name', $request->input('log_name'));
+                    }
+                    if ($request->filled('event')) {
+                        $query->where('activity_logs.event', $request->input('event'));
+                    }
+                    if ($request->filled('causer_id')) {
+                        $query->where('activity_logs.causer_id', $request->input('causer_id'));
+                    }
+                    if ($request->filled('date_range')) {
+                        $range = $request->input('date_range');
+                        if ($range === 'today') {
+                            $query->whereDate('activity_logs.created_at', Carbon::today());
+                        } elseif ($range === '7_days') {
+                            $query->where('activity_logs.created_at', '>=', Carbon::now()->subDays(7));
+                        } elseif ($range === '30_days') {
+                            $query->where('activity_logs.created_at', '>=', Carbon::now()->subDays(30));
+                        } elseif ($range === 'custom' && $request->filled('date_start') && $request->filled('date_end')) {
+                            $query->whereBetween('activity_logs.created_at', [
+                                Carbon::parse($request->input('date_start'))->startOfDay(),
+                                Carbon::parse($request->input('date_end'))->endOfDay(),
+                            ]);
+                        }
+                    } elseif ($request->filled('date_start') && $request->filled('date_end')) {
+                        $query->whereBetween('activity_logs.created_at', [
+                            Carbon::parse($request->input('date_start'))->startOfDay(),
+                            Carbon::parse($request->input('date_end'))->endOfDay(),
+                        ]);
+                    }
 
-        // Filter: Log Name / Modul
-        if (!empty($filterLogName)) {
-            $query->where('log_name', $filterLogName);
-        }
+                    $searchVal = $request->input('search.value');
+                    if (!empty($searchVal)) {
+                        $query->where(function ($q) use ($searchVal) {
+                            $q->where('activity_logs.description', 'like', "%{$searchVal}%")
+                                ->orWhere('activity_logs.log_name', 'like', "%{$searchVal}%")
+                                ->orWhere('activity_logs.event', 'like', "%{$searchVal}%")
+                                ->orWhere('activity_logs.ip_address', 'like', "%{$searchVal}%")
+                                ->orWhereHas('causer', function ($uq) use ($searchVal) {
+                                    $uq->where('name', 'like', "%{$searchVal}%")
+                                        ->orWhere('email', 'like', "%{$searchVal}%");
+                                });
+                        });
+                    }
+                })
+                ->addIndexColumn()
+                ->addColumn('created_at_formatted', function ($log) {
+                    return '<div class="d-flex flex-column text-start">
+                        <span class="fw-semibold text-dark fs-12">' . $log->created_at->format('Y-m-d H:i:s') . '</span>
+                        <span class="text-muted fs-11">' . $log->created_at->diffForHumans() . '</span>
+                    </div>';
+                })
+                ->addColumn('causer_formatted', function ($log) {
+                    if ($log->causer) {
+                        return '<div class="d-flex align-items-center gap-2 text-start">
+                            <img src="' . e($log->causer->avatar_url) . '" class="rounded-circle border flex-shrink-0" width="32" height="32" alt="Avatar">
+                            <div class="d-flex flex-column overflow-hidden">
+                                <span class="fw-semibold text-dark fs-12 text-truncate">' . e($log->causer->name) . '</span>
+                                <span class="text-muted fs-11 text-truncate">' . e($log->causer->email) . '</span>
+                            </div>
+                        </div>';
+                    }
+                    return '<div class="d-flex align-items-center gap-2 text-start">
+                        <img src="' . asset('assets/images/users/user-default.jpg') . '" class="rounded-circle border flex-shrink-0" width="32" height="32" alt="Avatar">
+                        <div class="d-flex flex-column overflow-hidden">
+                            <span class="fw-semibold text-dark fs-12 text-truncate">Sistem / Tamu</span>
+                            <span class="text-muted fs-11 text-truncate">' . e($log->ip_address ?: '127.0.0.1') . '</span>
+                        </div>
+                    </div>';
+                })
+                ->addColumn('module_formatted', function ($log) {
+                    return '<span class="badge bg-light text-dark border fs-11">' . e($log->log_name_label) . '</span>';
+                })
+                ->addColumn('event_formatted', function ($log) {
+                    return '<span class="badge ' . $log->event_badge_class . ' fs-11 d-inline-flex align-items-center gap-1">
+                        <i class="' . $log->event_icon . '"></i>' . ucfirst($log->event) . '
+                    </span>';
+                })
+                ->addColumn('description_formatted', function ($log) {
+                    return '<span class="fs-12 text-dark text-start d-block">' . e($log->description ?: '-') . '</span>';
+                })
+                ->addColumn('diff_formatted', function ($log) {
+                    if (!empty($log->properties)) {
+                        return '<span class="badge bg-info-subtle text-info border border-info-subtle fs-11">
+                            <i class="ti ti-diff me-1"></i>Ada Diff
+                        </span>';
+                    }
+                    return '<span class="badge bg-secondary-subtle text-secondary border fs-11">Polos</span>';
+                })
+                ->addColumn('action', function ($log) {
+                    $canDelete = auth()->user()->can('delete manajemenpengguna/activity-log');
+                    $csrf = csrf_field();
+                    $deleteUrl = route('admin.manajemenpengguna.activity-log.destroy', $log->id);
 
-        // Filter: Event
-        if (!empty($filterEvent)) {
-            $query->where('event', $filterEvent);
-        }
+                    $btn = '<div class="d-inline-flex gap-1">
+                        <button type="button" class="btn btn-sm btn-subtle-primary btn-view-detail" data-id="' . $log->id . '" title="Lihat Detail Diff Perubahan">
+                            <i class="ti ti-eye"></i>
+                        </button>';
 
-        // Filter: Actor / User
-        if (!empty($filterCauserId)) {
-            $query->where('causer_id', $filterCauserId);
-        }
-
-        // Filter: Search Keyword
-        if (!empty($searchKeyword)) {
-            $query->where(function ($q) use ($searchKeyword) {
-                $q->where('description', 'like', "%{$searchKeyword}%")
-                    ->orWhere('log_name', 'like', "%{$searchKeyword}%")
-                    ->orWhere('event', 'like', "%{$searchKeyword}%")
-                    ->orWhere('ip_address', 'like', "%{$searchKeyword}%")
-                    ->orWhereHas('causer', function ($uq) use ($searchKeyword) {
-                        $uq->where('name', 'like', "%{$searchKeyword}%")
-                            ->orWhere('email', 'like', "%{$searchKeyword}%");
-                    });
-            });
-        }
-
-        // Filter: Rentang Waktu (Date Range)
-        if (!empty($filterDateRange)) {
-            if ($filterDateRange === 'today') {
-                $query->whereDate('created_at', Carbon::today());
-            } elseif ($filterDateRange === '7_days') {
-                $query->where('created_at', '>=', Carbon::now()->subDays(7));
-            } elseif ($filterDateRange === '30_days') {
-                $query->where('created_at', '>=', Carbon::now()->subDays(30));
-            } elseif ($filterDateRange === 'custom' && !empty($filterDateStart) && !empty($filterDateEnd)) {
-                $query->whereBetween('created_at', [
-                    Carbon::parse($filterDateStart)->startOfDay(),
-                    Carbon::parse($filterDateEnd)->endOfDay(),
-                ]);
-            }
-        } elseif (!empty($filterDateStart) && !empty($filterDateEnd)) {
-            $query->whereBetween('created_at', [
-                Carbon::parse($filterDateStart)->startOfDay(),
-                Carbon::parse($filterDateEnd)->endOfDay(),
-            ]);
+                    if ($canDelete) {
+                        $btn .= '<form action="' . $deleteUrl . '" method="POST" class="d-inline" data-confirm="Hapus catatan riwayat log ini?">
+                            ' . $csrf . '
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-sm btn-subtle-danger" title="Hapus Catatan Log">
+                                <i class="ti ti-trash"></i>
+                            </button>
+                        </form>';
+                    }
+                    $btn .= '</div>';
+                    return $btn;
+                })
+                ->rawColumns(['created_at_formatted', 'causer_formatted', 'module_formatted', 'event_formatted', 'description_formatted', 'diff_formatted', 'action'])
+                ->make(true);
         }
 
         // Metrics Summary
@@ -97,8 +157,6 @@ class ActivityLogController extends Controller
         $events = ['created', 'updated', 'deleted', 'login', 'custom'];
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
 
-        $logs = $query->paginate(25)->withQueryString();
-
         return view('admin.manajemenpengguna.activity_log', compact(
             'totalLogs',
             'todayLogs',
@@ -106,15 +164,7 @@ class ActivityLogController extends Controller
             'deleteLogs',
             'modules',
             'events',
-            'users',
-            'logs',
-            'filterLogName',
-            'filterEvent',
-            'filterCauserId',
-            'filterDateRange',
-            'filterDateStart',
-            'filterDateEnd',
-            'searchKeyword'
+            'users'
         ));
     }
 

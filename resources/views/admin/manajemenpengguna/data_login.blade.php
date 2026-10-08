@@ -595,14 +595,15 @@
                         </div>
 
                         <!-- PAGINASI RIWAYAT LOGIN -->
-                        @if ($allLogins->hasPages())
-                            <div class="p-3 border-top d-flex flex-wrap justify-content-between align-items-center gap-2">
-                                <div class="fs-13 text-muted">
-                                    Menampilkan <strong>{{ $allLogins->firstItem() }}</strong> sampai <strong>{{ $allLogins->lastItem() }}</strong> dari <strong>{{ $allLogins->total() }}</strong> riwayat login
-                                </div>
-                                <div>
-                                    {{ $allLogins->links('pagination::bootstrap-5') }}
-                                </div>
+                        @if ($allLogins->total() > 0)
+                            <div class="card-footer bg-white border-top py-2.5 px-3">
+                                @if ($allLogins->hasPages())
+                                    {{ $allLogins->links() }}
+                                @else
+                                    <div class="text-muted fs-12">
+                                        <span class="fw-semibold text-dark">{{ $allLogins->firstItem() ?? 1 }}</span> - <span class="fw-semibold text-dark">{{ $allLogins->lastItem() ?? $allLogins->total() }}</span> <span class="text-muted">/ total</span> <span class="fw-semibold text-dark">{{ $allLogins->total() }}</span>
+                                    </div>
+                                @endif
                             </div>
                         @endif
                     </div>

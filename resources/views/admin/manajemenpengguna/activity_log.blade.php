@@ -1,6 +1,7 @@
 @extends('layouts.vertical', ['title' => 'Audit Trail & Log Aktivitas'])
 
 @section('content')
+    <link href="{{ asset('assets/plugins/datatables/responsive.bootstrap5.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/admin/manajemenpengguna/activity_log.css') }}" rel="stylesheet" type="text/css" />
 
     @include('layouts.partials.page-title', ['subtitle' => 'Manajemen Pengguna', 'title' => 'Log Aktivitas (Audit Trail)'])
@@ -83,16 +84,18 @@
         <!-- 2. FILTER & PENCARIAN WIDGET -->
         <div class="card border-0 shadow-sm rounded-3 mb-3">
             <form action="{{ route('admin.manajemenpengguna.activity-log.index') }}" method="GET" id="form-filter-activity">
-                <div class="card-header bg-white py-3 d-flex flex-column flex-md-row align-items-center justify-content-between text-center text-md-start gap-1 gap-md-2">
-                    <div class="d-flex align-items-center gap-2">
-                        <i class="ti ti-filter fs-20 text-primary me-0 me-md-1.5"></i>
-                        <h5 class="card-title mb-0 fw-semibold">Filter & Pencarian Log Audit</h5>
+                <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2">
+                    <div>
+                        <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center text-dark">
+                            <i class="ti ti-filter text-primary fs-22 fs-md-18 me-0 me-md-2 mb-1 mb-md-0"></i>
+                            <span>Filter & Pencarian Log Audit</span>
+                        </h5>
                     </div>
-                    <div class="d-flex align-items-center gap-2 ms-auto">
-                        <a href="{{ route('admin.manajemenpengguna.activity-log.index') }}" class="btn btn-sm btn-outline-secondary" title="Reset Semua Filter">
+                    <div class="card-header-actions d-flex align-items-center gap-2 text-nowrap flex-shrink-0">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-reset-filters" title="Reset Semua Filter">
                             <i class="ti ti-refresh me-1.5"></i>
                             <span>Reset Filter</span>
-                        </a>
+                        </button>
                         <button type="submit" class="btn btn-sm btn-primary" title="Terapkan Filter">
                             <i class="ti ti-search me-1.5"></i>
                             <span>Terapkan</span>
@@ -105,7 +108,7 @@
                             <label class="form-label fs-12 fw-semibold text-muted mb-1">
                                 <i class="ti ti-search me-1 text-primary"></i>Kata Kunci Pencarian
                             </label>
-                            <input type="text" name="search" class="form-control form-control-sm" placeholder="Cari aktivitas, nama, IP..." value="{{ $searchKeyword }}">
+                            <input type="text" name="search" class="form-control form-control-sm" placeholder="Cari aktivitas, nama, IP...">
                         </div>
 
                         <div class="col-12 col-sm-6 col-md-4 col-lg-2">
@@ -115,7 +118,7 @@
                             <select name="log_name" class="form-select form-select-sm">
                                 <option value="">Semua Modul</option>
                                 @foreach ($modules as $mod)
-                                    <option value="{{ $mod }}" {{ $filterLogName === $mod ? 'selected' : '' }}>{{ ucfirst(str_replace('_', ' ', $mod)) }}</option>
+                                    <option value="{{ $mod }}">{{ ucfirst(str_replace('_', ' ', $mod)) }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -127,7 +130,7 @@
                             <select name="event" class="form-select form-select-sm">
                                 <option value="">Semua Aksi</option>
                                 @foreach ($events as $ev)
-                                    <option value="{{ $ev }}" {{ $filterEvent === $ev ? 'selected' : '' }}>{{ ucfirst($ev) }}</option>
+                                    <option value="{{ $ev }}">{{ ucfirst($ev) }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -139,7 +142,7 @@
                             <select name="causer_id" class="form-select form-select-sm">
                                 <option value="">Semua Pengguna</option>
                                 @foreach ($users as $u)
-                                    <option value="{{ $u->id }}" {{ (string)$filterCauserId === (string)$u->id ? 'selected' : '' }}>{{ $u->name }}</option>
+                                    <option value="{{ $u->id }}">{{ $u->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -149,23 +152,23 @@
                                 <i class="ti ti-calendar me-1 text-success"></i>Rentang Waktu
                             </label>
                             <select name="date_range" class="form-select form-select-sm" id="filter-date-range">
-                                <option value="" {{ $filterDateRange === '' ? 'selected' : '' }}>Semua Waktu</option>
-                                <option value="today" {{ $filterDateRange === 'today' ? 'selected' : '' }}>Hari Ini</option>
-                                <option value="7_days" {{ $filterDateRange === '7_days' ? 'selected' : '' }}>7 Hari Terakhir</option>
-                                <option value="30_days" {{ $filterDateRange === '30_days' ? 'selected' : '' }}>30 Hari Terakhir</option>
-                                <option value="custom" {{ $filterDateRange === 'custom' ? 'selected' : '' }}>Kustom</option>
+                                <option value="">Semua Waktu</option>
+                                <option value="today">Hari Ini</option>
+                                <option value="7_days">7 Hari Terakhir</option>
+                                <option value="30_days">30 Hari Terakhir</option>
+                                <option value="custom">Kustom</option>
                             </select>
                         </div>
 
-                        <div class="col-12 col-md-6 {{ $filterDateRange === 'custom' ? '' : 'd-none' }}" id="custom-date-container">
+                        <div class="col-12 col-md-6 d-none" id="custom-date-container">
                             <div class="row g-2">
                                 <div class="col-6">
                                     <label class="form-label fs-12 fw-semibold text-muted mb-1">Dari Tanggal</label>
-                                    <input type="date" name="date_start" class="form-control form-control-sm" value="{{ $filterDateStart }}">
+                                    <input type="date" name="date_start" class="form-control form-control-sm">
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label fs-12 fw-semibold text-muted mb-1">Sampai Tanggal</label>
-                                    <input type="date" name="date_end" class="form-control form-control-sm" value="{{ $filterDateEnd }}">
+                                    <input type="date" name="date_end" class="form-control form-control-sm">
                                 </div>
                             </div>
                         </div>
@@ -176,131 +179,42 @@
 
         <!-- 3. TABEL DATA LOG AKTIVITAS -->
         <div class="card border-0 shadow-sm rounded-3 mb-4">
-            <div class="card-header bg-white py-3 d-flex flex-column flex-md-row align-items-center justify-content-between text-center text-md-start gap-1 gap-md-2">
-                <div class="d-flex align-items-center gap-2">
-                    <i class="ti ti-list-details fs-20 text-primary me-0 me-md-1.5"></i>
-                    <h5 class="card-title mb-0 fw-semibold">Daftar Rekaman Log & Audit Trail</h5>
-                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-12 ms-2 font-monospace">{{ $logs->total() }} Log</span>
+            <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2">
+                <div>
+                    <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center text-dark">
+                        <i class="ti ti-list-details text-primary fs-22 fs-md-18 me-0 me-md-2 mb-1 mb-md-0"></i>
+                        <span>Daftar Rekaman Log & Audit Trail</span>
+                    </h5>
                 </div>
-                <div class="d-flex align-items-center gap-2 ms-auto flex-shrink-0 text-nowrap">
+                <div class="card-header-actions d-flex align-items-center gap-2 text-nowrap flex-shrink-0">
                     @can('delete manajemenpengguna/activity-log')
                         <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal-clear-logs" title="Bersihkan Catatan Log">
-                            <i class="ti ti-trash me-0 me-md-1.5"></i>
-                            <span class="d-none d-md-inline">Bersihkan Log</span>
+                            <i class="ti ti-trash me-1.5"></i>
+                            <span>Bersihkan Log</span>
                         </button>
                     @endcan
-                    <a href="{{ route('admin.manajemenpengguna.activity-log.index') }}" class="btn btn-sm btn-outline-primary" title="Muat Ulang Data">
-                        <i class="ti ti-refresh me-0 me-md-1.5"></i>
-                        <span class="d-none d-md-inline">Refresh</span>
-                    </a>
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="btn-reload-table" title="Muat Ulang Data">
+                        <i class="ti ti-refresh me-1.5"></i>
+                        <span>Refresh</span>
+                    </button>
                 </div>
             </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0 w-100" id="table-activity-logs">
-                        <thead class="table-light align-middle text-center text-nowrap">
-                            <tr>
-                                <th style="width: 50px;">No</th>
-                                <th style="width: 170px;">Waktu & Tanggal</th>
-                                <th style="width: 220px;">Pelaku / Aktor</th>
-                                <th style="width: 140px;">Modul</th>
-                                <th style="width: 110px;">Aksi</th>
-                                <th>Deskripsi Aktivitas</th>
-                                <th style="width: 110px;">Perubahan</th>
-                                <th style="width: 100px;">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($logs as $index => $log)
-                                <tr>
-                                    <td class="text-center align-middle font-monospace fs-12">
-                                        {{ $logs->firstItem() + $index }}
-                                    </td>
-                                    <td class="align-middle">
-                                        <div class="d-flex flex-column">
-                                            <span class="fw-semibold text-dark fs-12">{{ $log->created_at->format('Y-m-d H:i:s') }}</span>
-                                            <span class="text-muted fs-11">{{ $log->created_at->diffForHumans() }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle">
-                                        @if ($log->causer)
-                                            <div class="d-flex align-items-center gap-2">
-                                                <img src="{{ $log->causer->avatar_url }}" class="rounded-circle border flex-shrink-0" width="32" height="32" alt="Avatar">
-                                                <div class="d-flex flex-column overflow-hidden">
-                                                    <span class="fw-semibold text-dark fs-12 text-truncate">{{ $log->causer->name }}</span>
-                                                    <span class="text-muted fs-11 text-truncate">{{ $log->causer->email }}</span>
-                                                </div>
-                                            </div>
-                                        @else
-                                            <div class="d-flex align-items-center gap-2">
-                                                <img src="{{ asset('assets/images/users/user-default.jpg') }}" class="rounded-circle border flex-shrink-0" width="32" height="32" alt="Avatar">
-                                                <div class="d-flex flex-column overflow-hidden">
-                                                    <span class="fw-semibold text-dark fs-12 text-truncate">Sistem / Tamu</span>
-                                                    <span class="text-muted fs-11 text-truncate">{{ $log->ip_address ?: '127.0.0.1' }}</span>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <span class="badge bg-light text-dark border fs-11">{{ $log->log_name_label }}</span>
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <span class="badge {{ $log->event_badge_class }} fs-11 d-inline-flex align-items-center gap-1">
-                                            <i class="{{ $log->event_icon }}"></i>{{ ucfirst($log->event) }}
-                                        </span>
-                                    </td>
-                                    <td class="align-middle">
-                                        <span class="fs-12 text-dark">{{ $log->description ?: '-' }}</span>
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        @if (!empty($log->properties))
-                                            <span class="badge bg-info-subtle text-info border border-info-subtle fs-11">
-                                                <i class="ti ti-diff me-1"></i>Ada Diff
-                                            </span>
-                                        @else
-                                            <span class="badge bg-secondary-subtle text-secondary border fs-11">Polos</span>
-                                        @endif
-                                    </td>
-                                    <td class="text-center align-middle text-nowrap">
-                                        <div class="d-inline-flex gap-1">
-                                            <button type="button" class="btn btn-sm btn-subtle-primary btn-view-detail" data-id="{{ $log->id }}" title="Lihat Detail Diff Perubahan">
-                                                <i class="ti ti-eye"></i>
-                                            </button>
-
-                                            @can('delete manajemenpengguna/activity-log')
-                                                <form action="{{ route('admin.manajemenpengguna.activity-log.destroy', $log->id) }}" method="POST" class="d-inline" data-confirm="Hapus catatan riwayat log ini?">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-subtle-danger" title="Hapus Catatan Log">
-                                                        <i class="ti ti-trash"></i>
-                                                    </button>
-                                                </form>
-                                            @endcan
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="8" class="text-center py-5 text-muted">
-                                        <i class="ti ti-database-off fs-36 text-secondary d-block mb-2"></i>
-                                        <p class="fs-13 mb-0">Belum ada rekaman riwayat log aktivitas yang ditemukan.</p>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-
-                @if ($logs->hasPages())
-                    <div class="p-3 border-top d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-                        <div class="text-muted fs-12">
-                            Menampilkan <span class="fw-semibold">{{ $logs->firstItem() ?? 0 }}</span> sampai <span class="fw-semibold">{{ $logs->lastItem() ?? 0 }}</span> dari <span class="fw-semibold">{{ $logs->total() }}</span> total entri
-                        </div>
-                        <div>
-                            {{ $logs->links() }}
-                        </div>
-                    </div>
-                @endif
+            <div class="card-body p-3">
+                <table class="table table-hover align-middle mb-0 w-100 table-custom-datatable" id="table-activity-logs">
+                    <thead class="table-light align-middle text-center text-nowrap">
+                        <tr>
+                            <th>No</th>
+                            <th>Waktu & Tanggal</th>
+                            <th>Pelaku / Aktor</th>
+                            <th>Modul</th>
+                            <th>Aksi</th>
+                            <th>Deskripsi Aktivitas</th>
+                            <th>Perubahan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -470,10 +384,18 @@
         </div>
     @endcan
 
+    <!-- DataTables Plugins -->
+    <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatables/dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatables/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatables/responsive.bootstrap5.min.js') }}"></script>
+
     <!-- DYNAMIC BACKEND DATA BRIDGE (RULE 15) -->
     <script>
         window.ActivityLogConfig = {
             routes: {
+                dataUrl: "{{ route('admin.manajemenpengguna.activity-log.index') }}",
                 showDetail: "{{ url('admin/manajemenpengguna/activity-log') }}"
             }
         };

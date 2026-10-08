@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\User;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -22,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Standarisasi Pagination Bootstrap 5 / Yajra DataTables di seluruh aplikasi
+        Paginator::useBootstrapFive();
+
         // Hanya Role 'superadmin' yang memiliki akses bebas tanpa pengaturan
         Gate::before(function (User $user, $ability) {
             return $user->hasRole('superadmin') ? true : null;

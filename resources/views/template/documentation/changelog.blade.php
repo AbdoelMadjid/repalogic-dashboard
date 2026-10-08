@@ -168,6 +168,32 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
+                        <!-- Version 3.5.1 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-table-shortcut fs-xl text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <h5 class="fw-bold mb-0">v3.5.1</h5>
+                                        <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle fw-semibold fs-xs"><i class="ti ti-bug me-1"></i>Patch Release (Perbaikan &amp; Standardisasi)</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.5.1</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-10-08 11:40 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Standardisasi Rule 23 (DataTables Server-Side AJAX, Compact Info Counter &amp; Responsive Akordeon), Pembenahan Card Header Baseline Horizontal di Desktop, dan Auto-Recalc Transisi Layar Mobile/Desktop</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Arsitektur Rule 23 DataTables Server-Side Standard:</strong> Menerapkan integrasi Yajra DataTables Server-Side AJAX penuh pada modul Log Aktivitas (<code>admin/manajemenpengguna/activity-log</code>), menghapus reload halaman utuh dan menjaga URL tetap bersih tanpa parameter <code>?page=X</code>.</li>
+                                    <li><strong class="text-dark">Format Counter Entri Ringkas (*Compact Info Counter*):</strong> Standardisasi teks info jumlah data DataTable ke format ringkas satu baris baku <code>_START_ - _END_ / total _TOTAL_</code> (contoh: <code>1 - 25 / total 57</code>) menggantikan kalimat panjang redundan.</li>
+                                    <li><strong class="text-dark">Penataan Paginasi Desktop Kanan vs Mobile Tengah:</strong> Menetapkan navigasi paginasi rata kanan penuh (<code>margin-left: auto; justify-content: flex-end</code>) pada layar desktop, serta terpusat rapi di baris kedua pada layar mobile.</li>
+                                    <li><strong class="text-dark">Responsive Akordeon Prioritas Tinggi &amp; Auto-Recalc:</strong> Mengaktifkan mode akordeon (<code>▶</code>) tanpa scroll horizontal yang memotong navigasi. Kolom <em>No</em> dan <em>Waktu &amp; Tanggal</em> diset <code>responsivePriority: 1</code> agar selalu tampil bersamaan di mobile saat resize layar bolak-balik tanpa perlu reload halaman.</li>
+                                    <li><strong class="text-dark">Pembenahan Layout Card Header (Rule 19):</strong> Memastikan seluruh judul dan tombol aksi pada card header widget berada di satu garis datar (*single-line horizontal baseline*) pada mode desktop dan bertumpuk 3-baris rapi di mode mobile.</li>
+                                </ul>
+                            </div>
+                        </div>
+
                         <!-- Version 3.5.0 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
@@ -177,7 +203,6 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
                                         <h5 class="fw-bold mb-0">v3.5.0</h5>
-                                        <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
                                         <span class="badge bg-info-subtle text-info border border-info-subtle fw-semibold fs-xs"><i class="ti ti-sparkles me-1"></i>Minor Release (Fitur Tambahan)</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.5.0</span>
                                     </div>
