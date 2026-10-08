@@ -31,7 +31,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const pollUrl = "{{ route('admin.notifications.poll') }}";
-    const pollIntervalMs = {{ ((int) \App\Models\Admin\DukunganAplikasi\AppSetting::get('polling_interval', 20)) * 1000 }};
+    const pollIntervalMs = Math.min({{ ((int) \App\Models\Admin\DukunganAplikasi\AppSetting::get('polling_interval', 20)) * 1000 }}, 8000);
     const bellBadge = document.getElementById('topbar-notif-bell-badge');
     const dropdownContent = document.getElementById('topbar-notif-dropdown-content');
     const toggleBtn = document.getElementById('topbar-notif-toggle-btn');

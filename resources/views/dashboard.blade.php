@@ -378,6 +378,13 @@
                                 $isLiked = $cUser->is_liked_by_me ?? false;
                                 $likesTotal = $cUser->profile_likes_count ?? 0;
 
+                                // Privacy & Public Controls
+                                $cAllowLikes = $cUser->getSetting('privacy.allow_likes', true);
+                                $cShowPoints = $isMe || ($cUser->getSetting('privacy.show_points', true));
+                                $cOnlineVisibility = $cUser->getSetting('chat.online_status_visibility', 'everyone');
+                                $cIsOnlineVisible = $isMe || ($cOnlineVisibility === 'everyone') || ($cOnlineVisibility === 'friends' && $fStatus === 'friends');
+                                $cEffectiveOnline = $cIsOnlineVisible ? $cUser->is_online : false;
+
                                 $cHex = ltrim($cUser->cover_color ?: '#313a46', '#');
                                 if (strlen($cHex) == 3) {
                                     $cHex = $cHex[0].$cHex[0].$cHex[1].$cHex[1].$cHex[2].$cHex[2];
@@ -397,7 +404,7 @@
                                 data-search-city="{{ strtolower($cUser->detail->kabupaten_kota ?? '') }}"
                                 data-search-job="{{ strtolower($cUser->detail->pekerjaan ?? '') }}"
                                 data-friendship-status="{{ $fStatus }}"
-                                data-is-online="{{ $cUser->is_online ? '1' : '0' }}"
+                                data-is-online="{{ $cEffectiveOnline ? '1' : '0' }}"
                                 data-is-me="{{ $isMe ? '1' : '0' }}"
                                 data-user-id="{{ $cUser->id }}">
                                 <div class="card card-h-100 border shadow-sm rounded-3 overflow-hidden mb-0 contact-grid-card">
@@ -411,10 +418,10 @@
                                         <div class="position-absolute top-0 start-0 end-0 bottom-0 p-2 d-flex flex-column justify-content-between contact-grid-cover-overlay position-relative" style="z-index: 2; background: transparent;">
                                             <!-- Top Badges (Online + Like Action) -->
                                             <div class="d-flex justify-content-between align-items-start">
-                                                <span class="badge {{ $cUser->is_online ? 'bg-success text-white' : 'bg-dark bg-opacity-75 text-white-50' }} fs-xxs py-0.5 px-1.5 rounded-pill shadow-sm"
-                                                    title="{{ $cUser->is_online ? 'Online Sekarang' : $cUser->last_seen_human }}">
-                                                    <i class="ti {{ $cUser->is_online ? 'ti-circle-filled text-white' : 'ti-clock' }} me-0.5"></i>
-                                                    {{ $cUser->is_online ? 'Online' : 'Offline' }}
+                                                <span class="badge {{ $cEffectiveOnline ? 'bg-success text-white' : 'bg-dark bg-opacity-75 text-white-50' }} fs-xxs py-0.5 px-1.5 rounded-pill shadow-sm"
+                                                    title="{{ $cEffectiveOnline ? 'Online Sekarang' : ($cIsOnlineVisible ? $cUser->last_seen_human : 'Status privat') }}">
+                                                    <i class="ti {{ $cEffectiveOnline ? 'ti-circle-filled text-white' : 'ti-clock' }} me-0.5"></i>
+                                                    {{ $cEffectiveOnline ? 'Online' : 'Offline' }}
                                                 </span>
 
                                                 <!-- Like Button / Counter Float Badge -->
@@ -422,7 +429,7 @@
                                                     <span class="badge bg-dark bg-opacity-75 text-white fs-xxs py-1 px-2 rounded-pill shadow-sm" title="Total like profil Anda">
                                                         <i class="ti ti-heart-filled text-danger me-1"></i><span class="like-count">{{ $likesTotal }}</span> Suka
                                                     </span>
-                                                @else
+                                                @elseif ($cAllowLikes)
                                                     <button type="button"
                                                         class="btn btn-xs rounded-pill contact-like-btn {{ $isLiked ? 'liked active' : '' }}"
                                                         data-user-id="{{ $cUser->id }}"
@@ -431,6 +438,10 @@
                                                         <i class="ti {{ $isLiked ? 'ti-heart-filled text-danger' : 'ti-heart text-white' }} fs-12 me-1"></i>
                                                         <span class="like-count fw-bold">{{ $likesTotal }}</span>
                                                     </button>
+                                                @else
+                                                    <span class="badge bg-dark bg-opacity-50 text-white-50 fs-xxs py-1 px-2 rounded-pill shadow-sm" title="Pengguna ini menonaktifkan fitur suka">
+                                                        <i class="ti ti-heart-off text-muted me-1"></i><span class="like-count">{{ $likesTotal }}</span>
+                                                    </span>
                                                 @endif
                                             </div>
 
@@ -505,7 +516,13 @@
                                             </li>
                                             <li class="d-flex align-items-center justify-content-between mb-1.5">
                                                 <span class="text-muted"><i class="ti ti-award me-1 text-warning"></i>Poin Login:</span>
-                                                <strong class="text-dark">{{ number_format($cUser->login_count ?? 0) }} Poin</strong>
+                                                @if ($cShowPoints)
+                                                    <strong class="text-dark">{{ number_format($cUser->login_count ?? 0) }} Poin</strong>
+                                                @else
+                                                    <span class="text-muted fw-normal fst-italic ps-2" title="Pengguna ini menyembunyikan poin login dari publik">
+                                                        <i class="ti ti-eye-off me-0.5 fs-11"></i> Privat
+                                                    </span>
+                                                @endif
                                             </li>
                                             <li class="d-flex align-items-center justify-content-between">
                                                 <span class="text-muted"><i class="ti ti-calendar me-1 text-info"></i>Bergabung:</span>
@@ -558,15 +575,28 @@
                                                     </button>
                                                 </div>
                                             @else
+                                                @php
+                                                    $cAllowFriendReq = $cUser->getSetting('privacy.allow_friend_requests', 'everyone');
+                                                    $cWhoCanMsg = $cUser->getSetting('chat.who_can_message', 'everyone');
+                                                    $cCanMsg = $cWhoCanMsg === 'everyone';
+                                                @endphp
                                                 <div class="d-flex gap-1.5 w-100">
-                                                    <button type="button" class="btn btn-sm btn-outline-primary flex-grow-1 fw-semibold d-inline-flex align-items-center justify-content-center gap-1 btn-add-friend-action"
-                                                        data-user-id="{{ $cUser->id }}" data-user-name="{{ $cUser->name }}">
-                                                        <i class="ti ti-user-plus"></i> Tambah Teman
-                                                    </button>
-                                                    <a href="{{ route('admin.profil-pengguna.messages.index', ['user_id' => $cUser->id]) }}"
-                                                        class="btn btn-sm btn-light border text-muted px-2" title="Kirim Pesan Langsung">
-                                                        <i class="ti ti-messages"></i>
-                                                    </a>
+                                                    @if ($cAllowFriendReq !== 'none')
+                                                        <button type="button" class="btn btn-sm btn-outline-primary flex-grow-1 fw-semibold d-inline-flex align-items-center justify-content-center gap-1 btn-add-friend-action"
+                                                            data-user-id="{{ $cUser->id }}" data-user-name="{{ $cUser->name }}">
+                                                            <i class="ti ti-user-plus"></i> Tambah Teman
+                                                        </button>
+                                                    @else
+                                                        <span class="btn btn-sm btn-light border text-muted flex-grow-1 fs-12 disabled" title="Pengguna ini membatasi ajakan berteman">
+                                                            <i class="ti ti-lock me-1"></i> Privat
+                                                        </span>
+                                                    @endif
+                                                    @if ($cCanMsg)
+                                                        <a href="{{ route('admin.profil-pengguna.messages.index', ['user_id' => $cUser->id]) }}"
+                                                            class="btn btn-sm btn-light border text-muted px-2" title="Kirim Pesan Langsung">
+                                                            <i class="ti ti-messages"></i>
+                                                        </a>
+                                                    @endif
                                                 </div>
                                             @endif
                                         </div>

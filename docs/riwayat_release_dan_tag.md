@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v3.4.0`  
-> **Terakhir Diperbarui:** 07 Oktober 2026 12:40 WIB
+> **Versi Terbaru:** `v3.5.0`  
+> **Terakhir Diperbarui:** 08 Oktober 2026 09:30 WIB
 
 ---
 
@@ -31,13 +31,20 @@ Setiap tag rilis pada **REPALOGIC Dashboard** mengikuti format penomoran baku **
   <tbody>
     <tr>
       <td align="center">1</td>
+      <td align="center"><strong><code>v3.5.0</code></strong></td>
+      <td align="center"><span style="color:#0284c7;font-weight:600;">🔵 Minor (Fitur Baru)</span></td>
+      <td align="center"><code>2026-10-08 10:30 WIB</code></td>
+      <td>Pusat Kendali Pengaturan Mandiri Profil Pengguna (*Unified Self-Service User Settings Hub*), Modularisasi 18 File Partials pada Modul Profil Pengguna (<code>admin/profil-pengguna</code>), Mesin Suara Real-Time Web Audio API (Pop, Ding, Chime) dengan Auto-Resume Gesture Unlock &amp; Pemicu Konsisten Saat Berbalas Pesan Langsung (TikTok Chat), Penyelarasan Konteks Privasi Publik vs Mandiri (Self-View Tetap Menampilkan Poin/Suka Pribadi &amp; Public-View Menyesuaikan Status <em>Privat</em> 5-Baris Simetris), Serta Percepatan Polling Real-Time (Chat 2s, Messages 6s, Notifications 8s) Disimpan Terstruktur pada Kolom JSON <code>user_configs.settings</code></td>
+    </tr>
+    <tr>
+      <td align="center">2</td>
       <td align="center"><strong><code>v3.4.0</code></strong></td>
       <td align="center"><span style="color:#0284c7;font-weight:600;">🔵 Minor (Fitur Baru)</span></td>
       <td align="center"><code>2026-10-07 12:40 WIB</code></td>
       <td>Integrasi Two-Factor Authentication (2FA / TOTP) Berbasis RFC 6238 (Google Authenticator, Authy, Microsoft Authenticator) pada Modul Profil Pengguna &amp; Layar Tantangan Login Terdedikasi (<code>two-factor-challenge</code>), Rendering QR Code SVG Offline Murni, Enkripsi AES-256 Secret Key &amp; 8 Recovery Codes, Manajemen Kode Pemulihan (Unduh .txt &amp; Salin Clipboard), Serta Dialog Regenerasi &amp; Penonaktifan 2FA Terproteksi Kata Sandi dan Zero-419 Auto-Recovery</td>
     </tr>
     <tr>
-      <td align="center">2</td>
+      <td align="center">3</td>
       <td align="center"><strong><code>v3.3.0</code></strong></td>
       <td align="center"><span style="color:#0284c7;font-weight:600;">🔵 Minor (Fitur Baru)</span></td>
       <td align="center"><code>2026-10-07 12:10 WIB</code></td>

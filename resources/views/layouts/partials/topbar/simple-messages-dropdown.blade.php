@@ -31,7 +31,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const pollMessagesUrl = "{{ route('admin.notifications.poll-messages') }}";
-    const pollIntervalMs = {{ ((int) \App\Models\Admin\DukunganAplikasi\AppSetting::get('polling_interval', 20)) * 1000 }};
+    const pollIntervalMs = Math.min({{ ((int) \App\Models\Admin\DukunganAplikasi\AppSetting::get('polling_interval', 20)) * 1000 }}, 6000);
     const msgBadge = document.getElementById('topbar-messages-badge');
     const msgDropdownContent = document.getElementById('topbar-messages-dropdown-content');
     const msgToggleBtn = document.getElementById('topbar-messages-toggle-btn');

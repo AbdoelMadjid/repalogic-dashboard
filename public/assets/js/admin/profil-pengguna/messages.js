@@ -852,6 +852,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     const summaryText = newLastMsg.body || (newLastMsg.attachment_type === 'image' ? '📷 [Foto / Gambar]' : (newLastMsg.attachment_type === 'voice' ? '🎙️ [Pesan Suara]' : ('📎 [' + (newLastMsg.attachment_name || 'Berkas') + ']')));
                     promoteContactToRecent(userId, summaryText, newLastMsg.time_formatted);
 
+                    // Bunyikan nada suara obrolan konsisten jika ada pesan masuk baru dari lawan bicara saat berbalas pesan
+                    if (isPolling && (newCount > lastMessageCount || (newLastId !== lastMessageId && lastMessageId !== null))) {
+                        if (!newLastMsg.is_sender) {
+                            if (typeof window.playChatAlertTone === 'function') {
+                                const soundType = window.UserAudioConfig?.chatSound || 'pop';
+                                window.playChatAlertTone(soundType);
+                            }
+                        }
+                    }
+
                     messages.forEach(function(msg) {
                         if (msg.is_pinned) {
                             pinnedMsg = msg;
@@ -1549,15 +1559,15 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(function(err) {});
     }
 
-    // 1. Polling daftar kontak & badge unread sidebar setiap 3.5 detik
-    setInterval(pollSidebarContacts, 3500);
+    // 1. Polling daftar kontak & badge unread sidebar setiap 3 detik
+    setInterval(pollSidebarContacts, 3000);
 
-    // 2. Polling obrolan aktif setiap 3.5 detik jika ada kontak yang sedang dibuka
+    // 2. Polling obrolan aktif setiap 2 detik jika ada kontak yang sedang dibuka
     setInterval(function() {
         if (activeUserId && !document.hidden) {
             loadConversation(activeUserId, true);
         }
-    }, 3500);
+    }, 2000);
 
     // ==========================================
     // EMOJI / EMOTION PICKER & INSERTION ENGINE

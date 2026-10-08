@@ -254,3 +254,50 @@
     color: #1e293b;
     text-align: center;
 }
+
+/* ==========================================================================
+   Self-Service Profile Settings Tabs (Rule 17, 18 & 22 Compliance)
+   ========================================================================== */
+.custom-profile-tabs {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.custom-profile-tabs::-webkit-scrollbar {
+    height: 4px;
+}
+
+.custom-profile-tabs::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 4px;
+}
+
+.custom-profile-tabs .nav-link {
+    color: #475569;
+    background-color: transparent;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease-in-out;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    font-size: 0.825rem;
+}
+
+.custom-profile-tabs .nav-link:hover {
+    color: #0f172a;
+    background-color: #e2e8f0;
+}
+
+.custom-profile-tabs .nav-link.active {
+    color: #ffffff !important;
+    background-color: #3b82f6 !important;
+    box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.35);
+    border-color: #3b82f6;
+}
+
+@media (max-width: 767.98px) {
+    .custom-profile-tabs .nav-link {
+        padding: 0.5rem 0.65rem;
+        font-size: 1rem;
+    }
+}
+

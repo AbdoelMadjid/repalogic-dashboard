@@ -168,6 +168,33 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
+                        <!-- Version 3.5.0 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-user-cog fs-xl text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <h5 class="fw-bold mb-0">v3.5.0</h5>
+                                        <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-info-subtle text-info border border-info-subtle fw-semibold fs-xs"><i class="ti ti-sparkles me-1"></i>Minor Release (Fitur Tambahan)</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.5.0</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-10-08 10:30 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Pusat Kendali Pengaturan Mandiri Profil Pengguna (*Unified Self-Service User Settings Hub*), Modularisasi 18 File Partials, Mesin Suara Real-Time Web Audio API, &amp; Penyelarasan Konteks Privasi Publik vs Mandiri</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Arsitektur Modular 18 File Partials:</strong> Memecah seluruh kartu, banner hero, modal identitas, dan tab formulir profil menjadi 18 berkas komponen mandiri di dalam direktori <code>resources/views/admin/profil-pengguna/partials/</code> untuk pemeliharaan terfokus dan skalabilitas tinggi.</li>
+                                    <li><strong class="text-dark">Arsitektur Tab Navigasi Bebas Hashtag (Rule 17 &amp; 18):</strong> Tata letak tab nav-pills responsif mobile (ikon saja pada layar kecil, ikon + teks pada desktop) dengan persistensi tab aktif berbasis <code>localStorage</code> tanpa mengubah hash URL browser.</li>
+                                    <li><strong class="text-dark">Mesin Suara Real-Time Web Audio API &amp; Auto-Unlock:</strong> Sintesis nada audio multi-frekuensi (Pop Message, Ding Soft, Default Chime) dengan pembukaan kunci otomatis via user gesture (<em>click/touch</em>), memutar nada konsisten saat berbalas pesan langsung (TikTok chat) maupun pemberitahuan topbar.</li>
+                                    <li><strong class="text-dark">Penyelarasan Konteks Privasi (Self-View vs Public-View):</strong> Pemilik akun selalu melihat metrik poin login dan suka di banner pribadinya, sementara pada kartu kontak direktori publik data otomatis disesuaikan dengan izin privasi dan menjaga kesimetrisan 5 baris data (status <em>Privat</em>).</li>
+                                    <li><strong class="text-dark">Percepatan Polling Real-Time:</strong> Mengoptimasi interval sinkronisasi latar belakang menjadi 2 detik pada obrolan aktif, 6 detik pada pesan topbar, dan 8 detik pada notifikasi umum untuk pengalaman real-time yang responsif tanpa lag.</li>
+                                    <li><strong class="text-dark">Penyimpanan JSON Efisien (<code>user_configs.settings</code>):</strong> Seluruh preferensi personal disimpan dan dikelola secara terpusat pada kolom JSON tanpa membebani tabel database tambahan, lengkap dengan helper method <code>getSetting()</code>, <code>setSetting()</code>, dan <code>getAllSettings()</code> pada model <code>User</code>.</li>
+                                </ul>
+                            </div>
+                        </div>
+
                         <!-- Version 3.4.0 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
@@ -177,7 +204,6 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
                                         <h5 class="fw-bold mb-0">v3.4.0</h5>
-                                        <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
                                         <span class="badge bg-info-subtle text-info border border-info-subtle fw-semibold fs-xs"><i class="ti ti-sparkles me-1"></i>Minor Release (Fitur Tambahan)</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.4.0</span>
                                     </div>

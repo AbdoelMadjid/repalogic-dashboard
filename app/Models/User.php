@@ -773,6 +773,77 @@ class User extends Authenticatable
 
         return $count;
     }
+
+    /**
+     * Get user setting value with dot notation and default fallback.
+     */
+    public function getSetting(string $key, mixed $default = null): mixed
+    {
+        $settings = $this->config?->settings ?? [];
+        return data_get($settings, $key, $default);
+    }
+
+    /**
+     * Set user setting value with dot notation and save.
+     */
+    public function setSetting(string $key, mixed $value): void
+    {
+        $config = $this->config ?? \App\Models\UserConfig::firstOrNew(['user_id' => $this->id]);
+        $settings = $config->settings ?? [];
+        data_set($settings, $key, $value);
+        $config->settings = $settings;
+        $config->save();
+    }
+
+    /**
+     * Get all user settings merged with default configuration.
+     */
+    public function getAllSettings(): array
+    {
+        $defaults = [
+            'chat' => [
+                'who_can_message' => 'everyone', // everyone, friends, none
+                'read_receipts' => true,
+                'online_status_visibility' => 'everyone', // everyone, friends, hide
+                'sound_alert' => 'pop', // default, pop, ding, mute
+                'send_on_enter' => true,
+            ],
+            'lock_screen' => [
+                'auto_lock_timeout' => 15, // 0 (disabled), 5, 15, 30, 60
+            ],
+            'appearance' => [
+                'theme_mode' => 'system', // light, dark, system
+                'sidebar_style' => 'default', // default, compact, icon
+                'table_density' => 'normal', // normal, compact
+                'reduce_motion' => false,
+            ],
+            'notifications' => [
+                'browser_push' => true,
+                'sound_chime' => true,
+                'events' => [
+                    'friend_request' => true,
+                    'profile_like' => true,
+                    'chat_message' => true,
+                    'security_alert' => true,
+                    'global_announcement' => true,
+                ],
+            ],
+            'privacy' => [
+                'profile_visibility' => 'public', // public, friends, private
+                'allow_likes' => true,
+                'show_points' => true,
+                'allow_friend_requests' => 'everyone', // everyone, friends_of_friends, none
+            ],
+            'localization' => [
+                'locale' => 'id', // id, en
+                'timezone' => 'Asia/Jakarta', // Asia/Jakarta, Asia/Makassar, Asia/Jayapura, UTC
+                'date_format' => 'DD/MM/YYYY',
+            ],
+        ];
+
+        $saved = $this->config?->settings ?? [];
+        return array_replace_recursive($defaults, is_array($saved) ? $saved : []);
+    }
 }
 
 

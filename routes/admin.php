@@ -46,6 +46,7 @@ Route::middleware(['web', 'auth'])->prefix('admin')->name('admin.')->group(funct
         Route::post('update-detail', [ProfilPenggunaController::class, 'updateDetail'])->name('update-detail');
         Route::post('update-cover', [ProfilPenggunaController::class, 'updateCover'])->name('update-cover');
         Route::post('update-motto', [ProfilPenggunaController::class, 'updateMotto'])->name('update-motto');
+        Route::post('update-settings', [ProfilPenggunaController::class, 'updateSettings'])->name('update-settings');
         Route::post('request-deactivation', [ProfilPenggunaController::class, 'requestDeactivation'])->name('request-deactivation');
         Route::post('cancel-deactivation', [ProfilPenggunaController::class, 'cancelDeactivation'])->name('cancel-deactivation');
 

@@ -1042,7 +1042,171 @@ function initProfilPengguna() {
         }
     }
 
+    // =========================================================================
+    // 6. Self-Service Settings Tabs & Interactive Helpers (Rule 17, 18 & 22)
+    // =========================================================================
+    function initSelfServiceSettings() {
+        // Tab persistence via localStorage (Rule 17: hashtag-free)
+        const profileTabButtons = document.querySelectorAll('#profileTabs button[data-bs-toggle="tab"]');
+        const activeTabKey = 'repalogic_active_profile_tab';
+
+        if (profileTabButtons.length > 0) {
+            const savedTab = localStorage.getItem(activeTabKey);
+            if (savedTab) {
+                const targetBtn = document.querySelector(`#profileTabs button[data-bs-target="${savedTab}"]`);
+                if (targetBtn) {
+                    const tabInstance = bootstrap.Tab.getOrCreateInstance(targetBtn);
+                    tabInstance.show();
+                }
+            }
+
+            profileTabButtons.forEach(btn => {
+                btn.addEventListener('shown.bs.tab', function(e) {
+                    const target = e.target.getAttribute('data-bs-target');
+                    if (target) {
+                        localStorage.setItem(activeTabKey, target);
+                    }
+                });
+            });
+        }
+
+        // Test Chat Sound Alert Helper (Synthesizer audio tone using Web Audio API)
+        function playChatAlertTone(soundType) {
+            if (!soundType || soundType === 'mute') {
+                if (window.showToast) window.showToast('Mode hening aktif (tidak ada suara).', 'info');
+                return;
+            }
+
+            try {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContextClass) {
+                    if (window.showWarning) window.showWarning('Browser tidak mendukung Web Audio API.', 'Audio Error');
+                    return;
+                }
+
+                const ctx = new AudioContextClass();
+                if (ctx.state === 'suspended') {
+                    ctx.resume();
+                }
+
+                const now = ctx.currentTime;
+
+                if (soundType === 'pop') {
+                    // Bubble Pop
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, now);
+                    osc.frequency.exponentialRampToValueAtTime(1000, now + 0.06);
+                    osc.frequency.exponentialRampToValueAtTime(250, now + 0.14);
+                    
+                    gain.gain.setValueAtTime(0.7, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.14);
+                    gain.gain.linearRampToValueAtTime(0, now + 0.15);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.16);
+                } else if (soundType === 'ding') {
+                    // Soft Bell Ding
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(1200, now);
+                    osc.frequency.exponentialRampToValueAtTime(850, now + 0.5);
+
+                    gain.gain.setValueAtTime(0.75, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.5);
+                    gain.gain.linearRampToValueAtTime(0, now + 0.52);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.53);
+                } else {
+                    // Default Chime (3-tone ascending arpeggio C5, E5, G5)
+                    const notes = [523.25, 659.25, 783.99];
+                    notes.forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        const startT = now + (idx * 0.11);
+                        const dur = 0.4;
+
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, startT);
+
+                        gain.gain.setValueAtTime(0.6, startT);
+                        gain.gain.linearRampToValueAtTime(0.01, startT + dur);
+                        gain.gain.linearRampToValueAtTime(0, startT + dur + 0.02);
+
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(startT);
+                        osc.stop(startT + dur + 0.03);
+                    });
+                }
+
+                if (window.showToast) {
+                    const chatSoundSelect = document.getElementById('chat_sound_alert_select');
+                    const selectedLabel = chatSoundSelect?.options[chatSoundSelect.selectedIndex]?.text || 'Suara Notifikasi';
+                    window.showToast('Memutar contoh nada: ' + selectedLabel, 'success', 2000);
+                }
+            } catch (err) {
+                console.warn('Audio playback error', err);
+            }
+        }
+
+        // Event Delegation for Test Chat Sound (Rule 2 Compliance)
+        document.addEventListener('click', function(e) {
+            const testSoundBtn = e.target.closest('#btn-test-chat-sound');
+            if (testSoundBtn) {
+                e.preventDefault();
+                const chatSoundSelect = document.getElementById('chat_sound_alert_select');
+                const soundType = chatSoundSelect ? chatSoundSelect.value : 'pop';
+                playChatAlertTone(soundType);
+            }
+        });
+
+        // Test Web Push Browser Notification Helper
+        const btnTestBrowserPush = document.getElementById('btn-test-browser-push');
+        const switchBrowserPush = document.getElementById('notifications_browser_push');
+
+        if (btnTestBrowserPush) {
+            btnTestBrowserPush.addEventListener('click', function() {
+                if (!('Notification' in window)) {
+                    if (window.showWarning) window.showWarning('Browser ini tidak mendukung notifikasi desktop.', 'Pemberitahuan');
+                    return;
+                }
+
+                if (Notification.permission === 'granted') {
+                    new Notification('REPALOGIC Dashboard', {
+                        body: 'Ini adalah contoh notifikasi desktop browser yang berhasil diaktifkan!',
+                        icon: window.ProfilPenggunaConfig?.avatarCurrentUrl || '/favicon.ico'
+                    });
+                    if (window.showToast) window.showToast('Notifikasi desktop browser berhasil ditampilkan!', 'success');
+                } else if (Notification.permission !== 'denied') {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            new Notification('REPALOGIC Dashboard', {
+                                body: 'Izin notifikasi desktop berhasil diberikan!',
+                                icon: window.ProfilPenggunaConfig?.avatarCurrentUrl || '/favicon.ico'
+                            });
+                            if (switchBrowserPush) switchBrowserPush.checked = true;
+                            if (window.showSuccess) window.showSuccess('Izin notifikasi desktop browser berhasil diaktifkan.', 'Berhasil!');
+                        } else {
+                            if (window.showWarning) window.showWarning('Izin notifikasi browser belum diberikan.', 'Pemberitahuan');
+                        }
+                    });
+                } else {
+                    if (window.showWarning) window.showWarning('Notifikasi browser diblokir. Harap aktifkan izin di pengaturan browser Anda.', 'Izin Ditolak');
+                }
+            });
+        }
+    }
+
     initTwoFactorAuth();
+    initSelfServiceSettings();
 }
 
 if (document.readyState === 'loading') {
