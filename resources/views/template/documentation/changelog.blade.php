@@ -168,6 +168,31 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
+                        <!-- Version 3.6.1 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-shield-lock fs-xl text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <h5 class="fw-bold mb-0">v3.6.1</h5>
+                                        <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle fw-semibold fs-xs"><i class="ti ti-bug me-1"></i>Patch Release (Perbaikan Bug &amp; Optimasi)</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.6.1</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-10-08 23:15 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Penyempurnaan Sinkronisasi Sesi Lock Screen, Penguatan Web Guard Authentication, Eliminasi Race Condition pada Background Polling Topbar, &amp; Normalisasi Domain Cookie Sesi</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Penguatan Otentikasi Web Guard (<code>LockScreenController.php</code>):</strong> Mengikat sesi pembukaan kunci secara definitif menggunakan <code>Auth::guard('web')->login($user, remember: true)</code>, sinkronisasi instan cache online pengguna (<code>user-online-{id}</code> &amp; <code>online-users-list</code>), serta pembaruan token CSRF terpusat.</li>
+                                    <li><strong class="text-dark">Pencegahan Race Condition Polling Topbar (<code>notification-dropdown-alert.blade.php</code> &amp; <code>simple-messages-dropdown.blade.php</code>):</strong> Memberikan jeda pengaman (*grace period*) pasca-unlock untuk mencegah background polling menembak sebelum cookie sesi tersimpan di browser, serta mengeliminasi hard-redirect `401` mendadak dengan mekanisme kunci layar aman (*safe fallback*).</li>
+                                    <li><strong class="text-dark">Penanda Status &amp; Waktu Unlock (<code>lock-screen-modal.blade.php</code>):</strong> Menambahkan penanda global <code>window.isScreenLocked()</code>, <code>window.__repalogic_screen_locked</code>, dan timestamp <code>window.__repalogic_just_unlocked</code> untuk sinkronisasi akurat antar-komponen.</li>
+                                    <li><strong class="text-dark">Normalisasi Domain Cookie Sesi (<code>.env</code> &amp; <code>.env.example</code>):</strong> Mengosongkan <code>SESSION_DOMAIN=</code> untuk menghindari interpretasi literal string pada driver session lokal sehingga cookie sesi tersimpan mulus tanpa penolakan browser.</li>
+                                </ul>
+                            </div>
+                        </div>
+
                         <!-- Version 3.6.0 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
@@ -177,7 +202,6 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
                                         <h5 class="fw-bold mb-0">v3.6.0</h5>
-                                        <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
                                         <span class="badge bg-info-subtle text-info border border-info-subtle fw-semibold fs-xs"><i class="ti ti-sparkles me-1"></i>Minor Release (Fitur Tambahan)</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.6.0</span>
                                     </div>

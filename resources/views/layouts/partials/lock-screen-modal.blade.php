@@ -169,6 +169,7 @@
      */
     window.lockScreen = function() {
         sessionStorage.setItem(STORAGE_KEY_LOCKED, 'true');
+        window.__repalogic_screen_locked = true;
         const modal = getModalInstance();
         if (modal) {
             modal.show();
@@ -196,6 +197,8 @@
      * Buka Kunci Modal Screen
      */
     window.unlockScreen = function() {
+        window.__repalogic_just_unlocked = Date.now();
+        window.__repalogic_screen_locked = false;
         sessionStorage.removeItem(STORAGE_KEY_LOCKED);
         const modal = getModalInstance();
         if (modal) {
@@ -204,6 +207,10 @@
         if (passwordInput) passwordInput.value = '';
         if (errorAlert) errorAlert.classList.add('d-none');
         resetIdleTimer();
+    };
+
+    window.isScreenLocked = function() {
+        return sessionStorage.getItem(STORAGE_KEY_LOCKED) === 'true' || window.__repalogic_screen_locked === true;
     };
 
     /**

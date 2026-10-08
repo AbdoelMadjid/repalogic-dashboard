@@ -41,7 +41,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.fetchNotificationsSilently = function(isUserAction = false) {
         if (isFetching) return;
-        if (sessionStorage.getItem('repalogic_screen_locked') === 'true') return;
+        if (sessionStorage.getItem('repalogic_screen_locked') === 'true' || window.__repalogic_screen_locked) return;
+        if (window.__repalogic_just_unlocked && (Date.now() - window.__repalogic_just_unlocked < 4000)) return;
         if (!isUserAction && dropdownContent && dropdownContent.classList.contains('show')) return;
 
         isFetching = true;
@@ -55,7 +56,14 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(function(response) {
             if (response.status === 401) {
-                window.location.href = "{{ route('login') }}";
+                // Abaikan 401 jika terjadi tepat saat proses unlock atau layar sedang terkunci
+                if (sessionStorage.getItem('repalogic_screen_locked') === 'true' || window.__repalogic_screen_locked || (window.__repalogic_just_unlocked && (Date.now() - window.__repalogic_just_unlocked < 10000))) {
+                    return null;
+                }
+                // Jika sesi kedaluwarsa saat background polling normal, kunci layar dengan aman tanpa merusak state halaman
+                if (typeof window.lockScreen === 'function') {
+                    window.lockScreen();
+                }
                 return null;
             }
             if (!response.ok) throw new Error('Network response was not ok');

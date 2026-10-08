@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v3.6.0`  
-> **Terakhir Diperbarui:** 08 Oktober 2026 13:05 WIB
+> **Versi Terbaru:** `v3.6.1`  
+> **Terakhir Diperbarui:** 08 Oktober 2026 23:15 WIB
 
 ---
 
@@ -31,6 +31,13 @@ Setiap tag rilis pada **REPALOGIC Dashboard** mengikuti format penomoran baku **
   <tbody>
     <tr>
       <td align="center">1</td>
+      <td align="center"><strong><code>v3.6.1</code></strong></td>
+      <td align="center"><span style="color:#16a34a;font-weight:600;">🟢 Patch (Perbaikan)</span></td>
+      <td align="center"><code>2026-10-08 23:15 WIB</code></td>
+      <td>Penyempurnaan Sinkronisasi Sesi Lock Screen (<code>LockScreenController.php</code>) Menggunakan <code>Auth::guard('web')->login($user, remember: true)</code>, Sinkronisasi Instan Cache Online Pengguna, Penambahan Penanda Global Status &amp; Waktu Unlock (<code>window.__repalogic_just_unlocked</code>), Eliminasi Race Condition Polling Topbar (<code>notification-dropdown-alert.blade.php</code> &amp; <code>simple-messages-dropdown.blade.php</code>) dengan Jeda Pengaman Pasca-Unlock, Serta Normalisasi Domain Cookie Sesi (<code>.env</code> &amp; <code>.env.example</code>)</td>
+    </tr>
+    <tr>
+      <td align="center">2</td>
       <td align="center"><strong><code>v3.6.0</code></strong></td>
       <td align="center"><span style="color:#0284c7;font-weight:600;">🔵 Minor (Fitur Baru)</span></td>
       <td align="center"><code>2026-10-08 13:05 WIB</code></td>

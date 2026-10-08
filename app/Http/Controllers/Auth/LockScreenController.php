@@ -55,10 +55,19 @@ class LockScreenController extends Controller
         }
 
         // Login atau segarkan sesi pengguna & token
-        Auth::login($user);
+        Auth::guard('web')->login($user, remember: true);
         $request->session()->regenerate();
         $request->session()->regenerateToken();
         $request->session()->put('last_activity', time());
+
+        // Sinkronisasi status online cache pengguna
+        \Illuminate\Support\Facades\Cache::put('user-online-' . $user->id, true, now()->addMinutes(5));
+        \Illuminate\Support\Facades\Cache::put('user-last-seen-' . $user->id, now()->toIso8601String(), now()->addDays(30));
+        $onlineList = \Illuminate\Support\Facades\Cache::get('online-users-list', []);
+        if (! in_array($user->id, $onlineList)) {
+            $onlineList[] = $user->id;
+            \Illuminate\Support\Facades\Cache::put('online-users-list', $onlineList, now()->addMinutes(5));
+        }
 
         return response()->json([
             'success' => true,
