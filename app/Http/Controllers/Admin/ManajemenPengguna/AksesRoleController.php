@@ -17,9 +17,55 @@ class AksesRoleController extends Controller
 
     /**
      * Display a listing of roles and their assigned Spatie permissions.
+     * Supports both Yajra DataTables AJAX and standard Blade view.
      */
     public function index(Request $request)
     {
+        if ($request->ajax() && $request->has('draw')) {
+            $roles = Role::withCount(['permissions', 'users'])->with('permissions')->get();
+
+            return \Yajra\DataTables\Facades\DataTables::of($roles)
+                ->addIndexColumn()
+                ->addColumn('name_formatted', function ($row) {
+                    $badgeClass = match ($row->name) {
+                        'superadmin' => 'bg-danger',
+                        'admin' => 'bg-primary',
+                        default => 'bg-secondary'
+                    };
+                    return "<span class='badge {$badgeClass} fs-13 py-1 px-2 text-capitalize'><i class='ti ti-shield me-1.5'></i>{$row->name}</span>";
+                })
+                ->addColumn('users_count_formatted', function ($row) {
+                    return "<span class='badge bg-light text-dark border'><i class='ti ti-users me-1.5'></i>{$row->users_count} User</span>";
+                })
+                ->addColumn('permissions_count_formatted', function ($row) {
+                    return "<span class='badge bg-info-subtle text-info border border-info-subtle'><i class='ti ti-key me-1.5'></i>{$row->permissions_count} Permission</span>";
+                })
+                ->addColumn('action', function ($row) {
+                    $roleJson = htmlspecialchars(json_encode($row->load('permissions')), ENT_QUOTES, 'UTF-8');
+                    $buttons = '<div class="d-inline-flex gap-1">';
+                    if (auth()->user()->can('read manajemenpengguna/akses-role')) {
+                        $buttons .= "<button type='button' class='btn btn-sm btn-outline-info btn-akses-role-trigger' data-action='view' data-role='{$roleJson}' title='Lihat Detail Akses'><i class='ti ti-eye'></i></button>";
+                    }
+                    if (auth()->user()->can('update manajemenpengguna/akses-role')) {
+                        $buttons .= "<button type='button' class='btn btn-sm btn-outline-primary btn-akses-role-trigger' data-action='edit' data-role='{$roleJson}' title='Atur Hak Akses'><i class='ti ti-key'></i></button>";
+                    }
+                    if (auth()->user()->can('delete manajemenpengguna/akses-role')) {
+                        if ($row->name === 'superadmin') {
+                            $buttons .= "<button type='button' class='btn btn-sm btn-outline-secondary disabled' title='Akses Superadmin tidak dapat dikosongkan'><i class='ti ti-lock'></i></button>";
+                        } else {
+                            $buttons .= "<form action='" . route('admin.manajemenpengguna.akses-role.destroy', $row->id) . "' method='POST' class='d-inline' data-confirm='Kosongkan seluruh izin permission untuk role {$row->name}?'>
+                                            " . csrf_field() . method_field('DELETE') . "
+                                            <button type='submit' class='btn btn-sm btn-outline-danger' title='Kosongkan Akses'><i class='ti ti-trash'></i></button>
+                                        </form>";
+                        }
+                    }
+                    $buttons .= '</div>';
+                    return $buttons;
+                })
+                ->rawColumns(['name_formatted', 'users_count_formatted', 'permissions_count_formatted', 'action'])
+                ->make(true);
+        }
+
         $roles = Role::withCount(['permissions', 'users'])->with('permissions')->get();
         $permissions = Permission::all();
 

@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const paginationUl = document.getElementById('table-pagination');
 
     let currentPage = 1;
-    let pageSize = 25;
+    let pageSize = 100;
 
     // ==========================================
     // DOM ELEMENTS - USER MODAL (CREATE / EDIT / VIEW)
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
         const selectedRole = roleFilter ? roleFilter.value.toLowerCase().trim() : '';
         const selectedStatus = statusFilter ? statusFilter.value.toLowerCase().trim() : '';
-        const selectedLength = lengthSelect ? lengthSelect.value : '25';
+        const selectedLength = lengthSelect ? lengthSelect.value : '100';
         pageSize = selectedLength === 'all' ? Infinity : parseInt(selectedLength, 10);
 
         let matchingRows = [];
@@ -182,11 +182,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (tableInfoBar) {
             if (totalMatching === 0) {
-                tableInfoBar.innerHTML = 'Menampilkan <strong>0</strong> pengguna';
+                tableInfoBar.innerHTML = '<span class="text-muted fs-12">0 entri</span>';
             } else if (pageSize === Infinity) {
-                tableInfoBar.innerHTML = `Menampilkan semua <strong>${totalMatching}</strong> pengguna`;
+                tableInfoBar.innerHTML = `<span class="text-muted fs-12">Menampilkan semua <span class="fw-semibold text-dark">${totalMatching}</span> pengguna</span>`;
             } else {
-                tableInfoBar.innerHTML = `Menampilkan <strong>${startIndex + 1}</strong> sampai <strong>${endIndex}</strong> dari <strong>${totalMatching}</strong> pengguna`;
+                tableInfoBar.innerHTML = `<span class="text-muted fs-12"><span class="fw-semibold text-dark">${startIndex + 1}</span> - <span class="fw-semibold text-dark">${endIndex}</span> <span class="text-muted">/ total</span> <span class="fw-semibold text-dark">${totalMatching}</span></span>`;
             }
         }
 

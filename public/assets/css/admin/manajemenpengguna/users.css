@@ -80,9 +80,19 @@
 
 /* Card Header & Modal Responsive Mobile (Rule 19 & 20 Compliance) */
 @media (max-width: 767.98px) {
-    .card-header .btn {
+    .card-header .card-header-actions {
         width: 100% !important;
-        margin-top: 0.25rem;
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+        margin-top: 0.5rem !important;
+    }
+
+    .card-header .card-header-actions .btn {
+        width: 100% !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
 
     .modal-footer {
@@ -92,6 +102,13 @@
     .modal-footer .btn {
         width: 100% !important;
         margin: 0 !important;
+    }
+
+    #table-pagination {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
     }
 }
 

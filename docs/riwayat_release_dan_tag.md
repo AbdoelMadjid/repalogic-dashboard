@@ -2,8 +2,8 @@
 
 > **Lokasi File:** `docs/riwayat_release_dan_tag.md`  
 > **Aplikasi:** REPALOGIC Dashboard  
-> **Versi Terbaru:** `v3.5.1`  
-> **Terakhir Diperbarui:** 08 Oktober 2026 11:40 WIB
+> **Versi Terbaru:** `v3.5.2`  
+> **Terakhir Diperbarui:** 08 Oktober 2026 12:35 WIB
 
 ---
 
@@ -31,6 +31,13 @@ Setiap tag rilis pada **REPALOGIC Dashboard** mengikuti format penomoran baku **
   <tbody>
     <tr>
       <td align="center">1</td>
+      <td align="center"><strong><code>v3.5.2</code></strong></td>
+      <td align="center"><span style="color:#16a34a;font-weight:600;">🟢 Patch (Perbaikan)</span></td>
+      <td align="center"><code>2026-10-08 12:35 WIB</code></td>
+      <td>Standardisasi Responsivitas Mobile Seluruh Modul Manajemen Pengguna (<code>Role</code>, <code>Permission</code>, <code>Akses Role</code>, <code>Akses User</code>, <code>Users</code>), Penyelarasan Card Header Baseline Horizontal di Desktop, Optimasi Latensi Query &amp; Eliminasi N+1 Spatie Permission di Akses User, Serta Konfigurasi Default 100 Entri per Halaman</td>
+    </tr>
+    <tr>
+      <td align="center">2</td>
       <td align="center"><strong><code>v3.5.1</code></strong></td>
       <td align="center"><span style="color:#16a34a;font-weight:600;">🟢 Patch (Perbaikan)</span></td>
       <td align="center"><code>2026-10-08 11:40 WIB</code></td>

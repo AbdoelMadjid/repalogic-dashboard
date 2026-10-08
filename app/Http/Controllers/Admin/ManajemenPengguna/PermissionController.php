@@ -43,9 +43,10 @@ class PermissionController extends Controller
                 })->toArray());
 
                 // 1. Modul / Fitur Aplikasi
-                $targetHtml = "<div class='d-flex align-items-center'><span class='badge bg-light text-dark font-monospace border fs-12 px-2 py-1 shadow-sm me-2'>{$target}</span>";
+                $targetHtml = "<div class='d-flex flex-column align-items-start gap-0.5 text-break'>
+                    <span class='badge bg-light text-dark font-monospace border fs-12 px-2 py-1 shadow-sm text-wrap text-break text-start' style='white-space: normal; word-break: break-word;'>{$target}</span>";
                 if ($linkedMenu) {
-                    $targetHtml .= "<span class='fw-medium text-muted fs-12'>({$linkedMenu->name})</span>";
+                    $targetHtml .= "<span class='fw-medium text-muted fs-11 text-wrap mt-0.5'>({$linkedMenu->name})</span>";
                 }
                 $targetHtml .= "</div>";
 
@@ -84,20 +85,21 @@ class PermissionController extends Controller
                 $countHtml = "<span class='badge bg-light text-dark border px-2 py-1 fs-12 fw-semibold'>{$permList->count()} Akses</span>";
 
                 // 5. Aksi (Detail, Edit, Hapus)
-                $actionHtml = "";
+                $actionHtml = "<div class='d-inline-flex gap-1'>";
                 $menuIdVal = $linkedMenu ? $linkedMenu->id : '';
 
                 if (auth()->user()->can('read manajemenpengguna/permission')) {
-                    $actionHtml .= "<button type='button' class='btn btn-sm btn-outline-info btn-modul-permission-trigger me-1' data-type='view' data-target='{$target}' data-menu-id='{$menuIdVal}' data-actions='{$actionsStr}' data-first-id='{$firstPermId}' title='Detail Modul'><i class='ti ti-eye'></i></button>";
+                    $actionHtml .= "<button type='button' class='btn btn-sm btn-outline-info btn-modul-permission-trigger' data-type='view' data-module='{$target}' data-menu-id='{$menuIdVal}' data-actions='{$actionsStr}' data-first-id='{$firstPermId}' title='Detail Modul'><i class='ti ti-eye'></i></button>";
                 }
                 if (auth()->user()->can('update manajemenpengguna/permission')) {
-                    $actionHtml .= "<button type='button' class='btn btn-sm btn-outline-warning btn-modul-permission-trigger me-1' data-type='edit' data-target='{$target}' data-menu-id='{$menuIdVal}' data-actions='{$actionsStr}' data-first-id='{$firstPermId}' title='Edit Modul'><i class='ti ti-edit'></i></button>";
+                    $actionHtml .= "<button type='button' class='btn btn-sm btn-outline-warning btn-modul-permission-trigger' data-type='edit' data-module='{$target}' data-menu-id='{$menuIdVal}' data-actions='{$actionsStr}' data-first-id='{$firstPermId}' title='Edit Modul'><i class='ti ti-edit'></i></button>";
                 }
                 if (auth()->user()->can('delete manajemenpengguna/permission')) {
-                    $actionHtml .= "<form action='" . route('admin.manajemenpengguna.permission.destroy', $firstPermId) . "' method='POST' class='d-inline' onsubmit='return confirm(\"Hapus seluruh izin permission untuk modul {$target}?\")'>"
+                    $actionHtml .= "<form action='" . route('admin.manajemenpengguna.permission.destroy', $firstPermId) . "' method='POST' class='d-inline' data-confirm='Hapus seluruh izin permission untuk modul {$target}?'>"
                         . csrf_field() . method_field('DELETE')
                         . "<button type='submit' class='btn btn-sm btn-outline-danger' title='Hapus Modul'><i class='ti ti-trash'></i></button></form>";
                 }
+                $actionHtml .= "</div>";
 
                 $data[] = [
                     'DT_RowIndex' => $index++,

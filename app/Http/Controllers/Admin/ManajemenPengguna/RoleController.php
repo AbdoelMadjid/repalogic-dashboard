@@ -32,32 +32,34 @@ class RoleController extends Controller
                         'admin' => 'bg-primary',
                         default => 'bg-secondary'
                     };
-                    return "<span class='badge {$badgeClass} fs-13 py-1 px-2 text-capitalize'><i class='ti ti-shield me-1'></i>{$row->name}</span>";
+                    return "<span class='badge {$badgeClass} fs-13 py-1 px-2 text-capitalize'><i class='ti ti-shield me-1.5'></i>{$row->name}</span>";
                 })
                 ->addColumn('users_count_formatted', function ($row) {
-                    return "<span class='badge bg-light text-dark border'><i class='ti ti-users me-1'></i>{$row->users_count} User</span>";
+                    return "<span class='badge bg-light text-dark border'><i class='ti ti-users me-1.5'></i>{$row->users_count} User</span>";
                 })
                 ->addColumn('permissions_count_formatted', function ($row) {
-                    return "<span class='badge bg-info-subtle text-info border border-info-subtle'><i class='ti ti-key me-1'></i>{$row->permissions_count} Permission</span>";
+                    return "<span class='badge bg-info-subtle text-info border border-info-subtle'><i class='ti ti-key me-1.5'></i>{$row->permissions_count} Permission</span>";
                 })
                 ->addColumn('action', function ($row) {
-                    $buttons = '';
+                    $roleJson = htmlspecialchars(json_encode($row->load('permissions')), ENT_QUOTES, 'UTF-8');
+                    $buttons = '<div class="d-inline-flex gap-1">';
                     if (auth()->user()->can('read manajemenpengguna/role')) {
-                        $buttons .= "<button type='button' class='btn btn-sm btn-outline-info btn-role-action me-1' data-action='view' data-role='" . json_encode($row->load('permissions')) . "' title='Detail'><i class='ti ti-eye'></i></button>";
+                        $buttons .= "<button type='button' class='btn btn-sm btn-outline-info btn-role-action' data-action='view' data-role='{$roleJson}' title='Detail'><i class='ti ti-eye'></i></button>";
                     }
                     if (auth()->user()->can('update manajemenpengguna/role')) {
-                        $buttons .= "<button type='button' class='btn btn-sm btn-outline-warning btn-role-action me-1' data-action='edit' data-role='" . json_encode($row->load('permissions')) . "' title='Edit'><i class='ti ti-edit'></i></button>";
+                        $buttons .= "<button type='button' class='btn btn-sm btn-outline-warning btn-role-action' data-action='edit' data-role='{$roleJson}' title='Edit'><i class='ti ti-edit'></i></button>";
                     }
                     if (auth()->user()->can('delete manajemenpengguna/role')) {
                         if ($row->name === 'superadmin') {
                             $buttons .= "<button type='button' class='btn btn-sm btn-outline-secondary disabled' title='Superadmin tidak dapat dihapus'><i class='ti ti-lock'></i></button>";
                         } else {
-                            $buttons .= "<form action='" . route('admin.manajemenpengguna.role.destroy', $row->id) . "' method='POST' class='d-inline' onsubmit='return confirm(\"Hapus role {$row->name}?\")'>
+                            $buttons .= "<form action='" . route('admin.manajemenpengguna.role.destroy', $row->id) . "' method='POST' class='d-inline' data-confirm='Hapus role {$row->name}?'>
                                             " . csrf_field() . method_field('DELETE') . "
                                             <button type='submit' class='btn btn-sm btn-outline-danger' title='Hapus'><i class='ti ti-trash'></i></button>
                                         </form>";
                         }
                     }
+                    $buttons .= '</div>';
                     return $buttons;
                 })
                 ->rawColumns(['name_formatted', 'users_count_formatted', 'permissions_count_formatted', 'action'])

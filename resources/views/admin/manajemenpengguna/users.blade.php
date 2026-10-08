@@ -8,8 +8,8 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2.5 gap-md-0">
-                        <div class="d-flex flex-column align-items-center align-items-md-start">
+                    <div class="card-header bg-white py-3 border-bottom d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start gap-2">
+                        <div>
                             <h5 class="card-title mb-0 fw-bold d-flex flex-column flex-md-row align-items-center text-dark">
                                 <i class="ti ti-users text-primary fs-22 fs-md-18 me-0 me-md-2 mb-1 mb-md-0"></i>
                                 <span>Data Pengguna System (User Management)</span>
@@ -18,18 +18,18 @@
                                 Kelola akun pengguna aplikasi, status persetujuan registrasi, dan atribusi Peran (Role).
                             </p>
                         </div>
-                        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-end gap-2 w-100 w-md-auto mt-2 mt-md-0">
-                            @can('create manajemenpengguna/users')
-                                <button type="button" class="btn btn-outline-primary btn-sm text-nowrap" data-bs-toggle="modal" data-bs-target="#modal-import-users" title="Upload / Import Pengguna via Excel">
-                                    <i class="ti ti-file-upload me-0 me-md-1.5"></i>
-                                    <span class="d-none d-md-inline">Upload Excel</span>
+                        @can('create manajemenpengguna/users')
+                            <div class="card-header-actions d-flex align-items-center gap-2 text-nowrap flex-shrink-0">
+                                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-import-users" title="Upload / Import Pengguna via Excel">
+                                    <i class="ti ti-file-upload me-1.5"></i>
+                                    <span>Upload Excel</span>
                                 </button>
-                                <button type="button" class="btn btn-primary btn-sm btn-user-action text-nowrap" data-action="create" title="Tambah Pengguna Baru">
-                                    <i class="ti ti-plus me-0 me-md-1.5"></i>
-                                    <span class="d-none d-md-inline">Tambah Pengguna</span>
+                                <button type="button" class="btn btn-primary btn-sm btn-user-action" data-action="create" title="Tambah Pengguna Baru">
+                                    <i class="ti ti-plus me-1.5"></i>
+                                    <span>Tambah Pengguna</span>
                                 </button>
-                            @endcan
-                        </div>
+                            </div>
+                        @endcan
                     </div>
                     <div class="card-body">
                         @if (session('success'))
@@ -56,9 +56,9 @@
                                 <label class="me-2 fs-13 text-muted mb-0 text-nowrap">Tampilkan:</label>
                                 <select id="table-length-select" class="form-select form-select-sm" style="width: 105px;">
                                     <option value="10">10 baris</option>
-                                    <option value="25" selected>25 baris</option>
+                                    <option value="25">25 baris</option>
                                     <option value="50">50 baris</option>
-                                    <option value="100">100 baris</option>
+                                    <option value="100" selected>100 baris</option>
                                     <option value="all">Semua Baris</option>
                                 </select>
                             </div>
@@ -333,12 +333,12 @@
                         </div>
 
                         <!-- FOOTER INFO & PAGINATION BAR -->
-                        <div class="row align-items-center mt-3">
-                            <div class="col-md-6 fs-13 text-muted" id="table-info-bar">
+                        <div class="row align-items-center mt-3 g-2">
+                            <div class="col-12 col-md-6 fs-13 text-muted text-center text-md-start" id="table-info-bar">
                                 Menampilkan <strong>{{ $users->count() }}</strong> pengguna
                             </div>
-                            <div class="col-md-6 d-flex justify-content-md-end mt-2 mt-md-0">
-                                <ul class="pagination pagination-sm m-0" id="table-pagination"></ul>
+                            <div class="col-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-2 mt-md-0">
+                                <ul class="pagination pagination-sm m-0 justify-content-center justify-content-md-end" id="table-pagination"></ul>
                             </div>
                         </div>
                     </div>

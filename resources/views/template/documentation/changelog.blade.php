@@ -168,6 +168,32 @@
                 </div>
                 <div class="card-body p-4">
                     <div class="timeline timeline-icon-bordered">
+                        <!-- Version 3.5.2 -->
+                        <div class="timeline-item d-flex align-items-stretch">
+                            <div class="timeline-dot">
+                                <i class="ti ti-device-mobile-check fs-xl text-primary"></i>
+                            </div>
+                            <div class="timeline-content ps-3 pb-4 w-100">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <h5 class="fw-bold mb-0">v3.5.2</h5>
+                                        <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle fw-semibold fs-xs"><i class="ti ti-bug me-1"></i>Patch Release (Perbaikan &amp; Standardisasi)</span>
+                                        <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.5.2</span>
+                                    </div>
+                                    <span class="text-muted fs-13"><i class="ti ti-clock me-1"></i> 2026-10-08 12:35 WIB</span>
+                                </div>
+                                <h6 class="fw-semibold text-dark mb-2">Standardisasi Responsivitas Mobile Seluruh Modul Manajemen Pengguna, Penyelarasan Card Header Inline Desktop vs Stacked Mobile, Optimasi Query Latensi Akses User &amp; Default 100 Entri</h6>
+                                <ul class="text-muted fs-14 mb-3 ps-3">
+                                    <li><strong class="text-dark">Standardisasi Responsivitas Mobile Modul Manajemen Pengguna (Rule 19 &amp; 20):</strong> Menerapkan tata letak responsif penuh pada modul <code>Role</code>, <code>Permission</code>, <code>Akses Role</code>, <code>Akses User</code>, dan <code>Users</code>. Tombol aksi pada card header otomatis full-width di mobile dengan label teks dan icon yang tetap tampil jelas, tanpa merusak tampilan desktop.</li>
+                                    <li><strong class="text-dark">Penyelarasan Card Header Baseline Horizontal di Desktop (Rule 16):</strong> Menstandardisasi pembungkus tombol aksi header menggunakan <code>.card-header-actions d-flex align-items-center gap-2 text-nowrap flex-shrink-0</code> sehingga di desktop tombol selalu sejajar horizontal satu garis lurus dan terpusat vertikal.</li>
+                                    <li><strong class="text-dark">Optimasi Latensi &amp; Eliminasi N+1 Query (Akses User):</strong> Memperbaiki bottleneck navigasi paginasi pada <code>AksesUserController</code> dengan memanfaatkan eager-loading bersarang <code>User::with(['roles.permissions', 'permissions'])</code> dan kalkulasi permission in-memory langsung dari relasi tanpa kueri Spatie berulang per baris, serta mengalirkan query builder langsung ke <code>DataTables::eloquent()</code> dengan SQL LIMIT server-side.</li>
+                                    <li><strong class="text-dark">Konfigurasi Default 100 Entri per Halaman:</strong> Mengubah default paginasi tabel pada modul <code>Akses User</code> dan <code>Data Pengguna (Users)</code> menjadi 100 entri untuk pengalaman manajemen data massal yang lebih cepat dan efisien.</li>
+                                    <li><strong class="text-dark">Preservasi Fitur Inti (Rule 21):</strong> Memastikan seluruh toolbar filter kustom, live search instan, dan mekanisme centang massal (<em>Bulk Role Assignment</em>) pada modul Data Pengguna tetap berjalan 100% normal.</li>
+                                </ul>
+                            </div>
+                        </div>
+
                         <!-- Version 3.5.1 -->
                         <div class="timeline-item d-flex align-items-stretch">
                             <div class="timeline-dot">
@@ -177,7 +203,6 @@
                                 <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 gap-2">
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
                                         <h5 class="fw-bold mb-0">v3.5.1</h5>
-                                        <span class="badge bg-success-subtle text-success fw-semibold fs-xs">Latest Release</span>
                                         <span class="badge bg-success-subtle text-success border border-success-subtle fw-semibold fs-xs"><i class="ti ti-bug me-1"></i>Patch Release (Perbaikan &amp; Standardisasi)</span>
                                         <span class="badge bg-secondary-subtle text-dark font-monospace fs-xs">Build: v3.5.1</span>
                                     </div>

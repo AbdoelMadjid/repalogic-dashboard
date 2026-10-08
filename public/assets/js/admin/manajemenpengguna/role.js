@@ -9,116 +9,72 @@ document.addEventListener('DOMContentLoaded', function() {
     const config = window.RoleConfig || {};
     const routes = config.routes || {};
 
-    let currentPage = 1;
-    let pageSize = 25;
+    // ==========================================
+    // 1. Initialize Yajra DataTables Server-Side AJAX (Rule 23)
+    // ==========================================
+    let dataTable = null;
+    const tableEl = document.getElementById('role-table');
 
-    const searchInput = document.getElementById('table-search-input');
-    const lengthSelect = document.getElementById('table-length-select');
-    const tableInfoBar = document.getElementById('table-info-bar');
-    const paginationUl = document.getElementById('table-pagination');
+    if (tableEl && (window.DataTable || (window.$ && $.fn.DataTable))) {
+        const DT = window.DataTable || (window.$ && $.fn.DataTable);
 
-    function updateTableDisplay() {
-        const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
-        const selectedLength = lengthSelect ? lengthSelect.value : '25';
-        pageSize = selectedLength === 'all' ? Infinity : parseInt(selectedLength, 10);
-
-        let matchingRows = [];
-        document.querySelectorAll('.role-row').forEach(row => {
-            const text = row.textContent.toLowerCase();
-            if (query === '' || text.includes(query)) {
-                matchingRows.push(row);
-            } else {
-                row.style.display = 'none';
-            }
-        });
-
-        const totalMatching = matchingRows.length;
-        const totalPages = pageSize === Infinity ? 1 : (Math.ceil(totalMatching / pageSize) || 1);
-
-        if (currentPage > totalPages) currentPage = totalPages;
-        if (currentPage < 1) currentPage = 1;
-
-        const startIndex = pageSize === Infinity ? 0 : (currentPage - 1) * pageSize;
-        const endIndex = pageSize === Infinity ? totalMatching : Math.min(startIndex + pageSize, totalMatching);
-
-        matchingRows.forEach((row, index) => {
-            if (index >= startIndex && index < endIndex) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-
-        if (tableInfoBar) {
-            if (totalMatching === 0) {
-                tableInfoBar.innerHTML = 'Menampilkan <strong>0</strong> data';
-            } else if (pageSize === Infinity) {
-                tableInfoBar.innerHTML = `Menampilkan semua <strong>${totalMatching}</strong> data`;
-            } else {
-                tableInfoBar.innerHTML = `Menampilkan <strong>${startIndex + 1}</strong> sampai <strong>${endIndex}</strong> dari <strong>${totalMatching}</strong> data`;
-            }
-        }
-
-        renderPagination(totalPages);
-    }
-
-    function renderPagination(totalPages) {
-        if (!paginationUl) return;
-
-        if (totalPages <= 1 || pageSize === Infinity) {
-            paginationUl.innerHTML = '';
-            return;
-        }
-
-        let html = '';
-        const prevDisabled = currentPage === 1 ? ' disabled' : '';
-        html += `<li class="page-item${prevDisabled}" data-page="1" title="Halaman Awal"><a class="page-link" href="javascript:void(0);"><i class="ti ti-chevrons-left fs-14"></i></a></li>`;
-        html += `<li class="page-item${prevDisabled}" data-page="${currentPage - 1}" title="Sebelumnya"><a class="page-link" href="javascript:void(0);"><i class="ti ti-chevron-left fs-14"></i></a></li>`;
-
-        let startPage = Math.max(1, currentPage - 2);
-        let endPage = Math.min(totalPages, startPage + 4);
-        if (endPage - startPage < 4) {
-            startPage = Math.max(1, endPage - 4);
-        }
-
-        for (let p = startPage; p <= endPage; p++) {
-            const activeClass = p === currentPage ? ' active' : '';
-            html += `<li class="page-item${activeClass}" data-page="${p}"><a class="page-link" href="javascript:void(0);">${p}</a></li>`;
-        }
-
-        const nextDisabled = currentPage === totalPages ? ' disabled' : '';
-        html += `<li class="page-item${nextDisabled}" data-page="${currentPage + 1}" title="Berikutnya"><a class="page-link" href="javascript:void(0);"><i class="ti ti-chevron-right fs-14"></i></a></li>`;
-        html += `<li class="page-item${nextDisabled}" data-page="${totalPages}" title="Halaman Akhir"><a class="page-link" href="javascript:void(0);"><i class="ti ti-chevrons-right fs-14"></i></a></li>`;
-
-        paginationUl.innerHTML = html;
-
-        paginationUl.querySelectorAll('.page-item:not(.disabled)').forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetPage = parseInt(this.getAttribute('data-page'), 10);
-                if (targetPage && targetPage !== currentPage) {
-                    currentPage = targetPage;
-                    updateTableDisplay();
+        dataTable = new DT(tableEl, {
+            processing: true,
+            serverSide: true,
+            responsive: {
+                details: {
+                    type: 'inline'
                 }
-            });
+            },
+            autoWidth: false,
+            pageLength: 25,
+            lengthMenu: [10, 25, 50, 100],
+            ajax: {
+                url: routes.dataUrl || window.location.pathname,
+                type: 'GET'
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, responsivePriority: 1, width: '45px', className: 'text-center align-middle font-monospace fs-12' },
+                { data: 'name_formatted', name: 'name', responsivePriority: 1, className: 'align-middle' },
+                { data: 'users_count_formatted', name: 'users_count', responsivePriority: 10002, className: 'text-center align-middle' },
+                { data: 'permissions_count_formatted', name: 'permissions_count', responsivePriority: 10003, className: 'text-center align-middle' },
+                { data: 'action', name: 'action', orderable: false, searchable: false, responsivePriority: 10001, width: '120px', className: 'text-center align-middle text-nowrap' }
+            ],
+            order: [[1, 'asc']],
+            language: {
+                search: "",
+                searchPlaceholder: "Cari role...",
+                lengthMenu: "Tampilkan _MENU_ entri",
+                info: '<span class="text-muted fs-12"><span class="fw-semibold text-dark">_START_</span> - <span class="fw-semibold text-dark">_END_</span> <span class="text-muted">/ total</span> <span class="fw-semibold text-dark">_TOTAL_</span></span>',
+                infoEmpty: '<span class="text-muted fs-12">0 entri</span>',
+                infoFiltered: '<span class="text-muted fs-11">(difilter dari _MAX_ total entri)</span>',
+                zeroRecords: 'Tidak ada data role yang sesuai.',
+                emptyTable: 'Belum ada data role yang ditemukan.',
+                paginate: {
+                    first: '<i class="ti ti-chevrons-left"></i>',
+                    previous: '<i class="ti ti-chevron-left"></i>',
+                    next: '<i class="ti ti-chevron-right"></i>',
+                    last: '<i class="ti ti-chevrons-right"></i>'
+                }
+            }
+        });
+
+        // Window resize listener to recalculate responsive columns and adjustments seamlessly (Rule 23)
+        let resizeTimer;
+        window.addEventListener('resize', function () {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function () {
+                if (dataTable) {
+                    if (typeof dataTable.columns === 'function') {
+                        dataTable.columns.adjust();
+                    }
+                    if (dataTable.responsive && typeof dataTable.responsive.recalc === 'function') {
+                        dataTable.responsive.recalc();
+                    }
+                }
+            }, 30);
         });
     }
-
-    if (lengthSelect) {
-        lengthSelect.addEventListener('change', function() {
-            currentPage = 1;
-            updateTableDisplay();
-        });
-    }
-
-    if (searchInput) {
-        searchInput.addEventListener('input', function() {
-            currentPage = 1;
-            updateTableDisplay();
-        });
-    }
-
-    updateTableDisplay();
 
     // Permission Check All Handler (Header SEMUA Checkbox)
     const checkAllPerms = document.getElementById('check_all_permissions');
@@ -263,17 +219,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         if (action === 'create') {
-            if (modalTitle) modalTitle.innerHTML = '<i class="ti ti-plus me-1"></i> Tambah Role Baru';
+            if (modalTitle) modalTitle.innerHTML = '<i class="ti ti-plus me-1.5"></i> Tambah Role Baru';
             roleForm.action = routes.store || '';
-            if (btnSubmitForm) btnSubmitForm.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Simpan Role';
+            if (btnSubmitForm) btnSubmitForm.innerHTML = '<i class="ti ti-device-floppy me-1.5"></i> Simpan Role';
             updateRowAllStates();
             updateCheckAllState();
 
         } else if (action === 'edit' && role) {
-            if (modalTitle) modalTitle.innerHTML = `<i class="ti ti-edit me-1"></i> Edit Role: ${role.name}`;
+            if (modalTitle) modalTitle.innerHTML = `<i class="ti ti-edit me-1.5"></i> Edit Role: ${role.name}`;
             roleForm.action = `${routes.base}/${role.id}`;
             if (methodSpoofingContainer) methodSpoofingContainer.innerHTML = '<input type="hidden" name="_method" value="PUT">';
-            if (btnSubmitForm) btnSubmitForm.innerHTML = '<i class="ti ti-device-floppy me-1"></i> Perbarui Role';
+            if (btnSubmitForm) btnSubmitForm.innerHTML = '<i class="ti ti-device-floppy me-1.5"></i> Perbarui Role';
             populateForm(role);
 
             const nameInput = document.getElementById('form_role_name');
@@ -282,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
         } else if (action === 'view' && role) {
-            if (modalTitle) modalTitle.innerHTML = `<i class="ti ti-eye me-1"></i> Detail Role: ${role.name}`;
+            if (modalTitle) modalTitle.innerHTML = `<i class="ti ti-eye me-1.5"></i> Detail Role: ${role.name}`;
             roleForm.action = '#';
             if (btnSubmitForm) btnSubmitForm.classList.add('d-none');
             populateForm(role);
